@@ -1,0 +1,46 @@
+.text {
+  font-family: quicksand;
+  color: var(--default-text-color);
+}
+.text-small {
+  font-size: 13px;
+}
+.text-6 {
+  font-size: 14px;
+}
+.text-5 {
+  font-size: 16px;
+}
+.text-4 {
+  font-size: 20px;
+}
+.text-3 {
+  font-size: 24px;
+}
+.text-2 {
+  font-size: 28px;
+}
+.text-1 {
+  font-size: 32px;
+}
+
+.text-bold {
+  font-weight: 700;
+}
+.text-semi_bold {
+  font-weight: 600;
+}
+.text-medium {
+  font-weight: 500;
+}
+.text-light {
+  font-weight: 300;
+}
+
+.text-red {
+  color: red;
+}
+
+.text-centering {
+  text-align: center;
+}
