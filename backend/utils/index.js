@@ -1,2 +1,3 @@
 const { readENV } = require('./read_env');
-module.exports = { readENV };
+const sql_connection = require('./sql_connector');
+module.exports = { readENV, sql_connection };
