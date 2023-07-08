@@ -1,0 +1,97 @@
+@import "assets/styles/def";
+@import "assets/styles/text";
+@import "assets/fonts/_quicksand.css";
+@import "assets/styles/padding";
+@import "assets/styles/animation";
+
+body {
+  margin: 0;
+  font-family: quicksand, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--default-text-color);
+  font-size: 14px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.flex-box {
+  display: flex;
+}
+
+.expanded {
+  flex: 1;
+  min-width: 0;
+}
+
+.fullsize {
+  width: 100%;
+  height: 100%;
+}
+
+.centering {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  background-color: transparent;
+  border-radius: 8px;
+  padding: 4px 12px;
+  border: 1px solid transparent;
+}
+
+.absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.box-shadow {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.16);
+}
+
+.page-root {
+  min-height: 100%;
+}
+
+.card {
+  border-radius: 16px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.16);
+}
+
+.MuiBackdrop-root {
+  // backdrop-filter: blur(4px);
+}
+
+.custom-tooltip{
+  font-size: 12px!important;
+  font-family: inherit !important;
+  background-color: #0ba9b4 !important;
+}

@@ -1,0 +1,19 @@
+.app-bar {
+  .display-name {
+    color: var(--appbar-text-color);
+    margin-right: 1em;
+    text-transform: none;
+    font-weight: 500;
+    font-family: quicksand;
+  }
+
+  .logo {
+    width: 40px;
+    padding: 6px;
+  }
+
+  .title {
+    color: var(--appbar-text-color);
+    font-weight: 700;
+  }
+}
