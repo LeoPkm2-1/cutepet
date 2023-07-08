@@ -1,9 +1,7 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const userRoutes = require('./userRoutes');
-const userSocialNetwork = require('./social-network');
+const userRoutes = require("./userRoutes");
 
 // Router total
-router.use('/user', userRoutes);
-router.use('/social-network', userSocialNetwork);
+router.use("/user", userRoutes);
 module.exports = router;

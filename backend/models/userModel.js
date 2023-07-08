@@ -1,29 +1,22 @@
-const { db } = require("./index");
 const { sqlQuery } = require("./index");
-const getAll = async () => {
-	let sql = `SELECT * FROM anh`;
-	return await db.query(sql).then((data) => {
-		console.log("thanhf coong", data);
-		return data;
-	});
-};
-const getAllUsers = async () => {
-	const sqlstmt = "select * from NguoiDung ;";
-	let conn = null;
-	try {
-		conn = await db.getConnection();
-		return await conn.query(sqlstmt).then((data) => {
-			// console.log(data);
-			return data;
-		});
-	} catch (error) {
-		console.log(error);
-		throw new Error(error);
-	} finally {
-		console.log("end connnect ahihi");
-		if (conn) return conn.end();
-	}
-};
+
+// const getAllUsers = async () => {
+// 	const sqlstmt = "select * from NguoiDung ;";
+// 	let conn = null;
+// 	try {
+// 		conn = await db.getConnection();
+// 		return await conn.query(sqlstmt).then((data) => {
+// 			// console.log(data);
+// 			return data;
+// 		});
+// 	} catch (error) {
+// 		console.log(error);
+// 		throw new Error(error);
+// 	} finally {
+// 		console.log("end connnect ahihi");
+// 		if (conn) return conn.end();
+// 	}
+// };
 
 const getUserByUsername = async (userName) => {
 	// console.log(userName, "2");
@@ -47,7 +40,6 @@ const getUserByUsername = async (userName) => {
 };
 
 module.exports = {
-	getAll,
-	getAllUsers,
+	// getAllUsers,
 	getUserByUsername,
 };

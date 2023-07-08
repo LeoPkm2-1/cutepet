@@ -1,5 +1,6 @@
 const mariadb = require("mariadb");
 const { readENV } = require("./../utils");
+
 const db = mariadb.createPool({
 	host: readENV("SQL_DB_HOST"),
 	user: readENV("SQL_DB_USERNAME"),
@@ -7,6 +8,7 @@ const db = mariadb.createPool({
 	database: readENV("SQL_DB_NAME"),
 	connectionLimit: 1,
 });
+
 async function sqlQuery(sqlStmt, params = []) {
 	let conn = false;
 	try {
