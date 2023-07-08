@@ -1,6 +1,3 @@
-// const { readENV } = require('./utils');
-
-// console.log(readENV('DB_USERNAME'));
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
@@ -10,15 +7,9 @@ app.use(
     extended: true,
   })
 );
-var anhRouter = require('./routes/loai');
-app.use('/anh', anhRouter);
+var rootRouter = require('./routes/index');
+app.use('/', rootRouter);
 // default route
-app.get("/", function (req, res) {
-  return res.send({ error: true, message: "hello" });
-});
-app.get("/home", function (req, res) {
-    return res.send({ name: "thuyne", age: "23" });
-  });
 
 
 // set port
