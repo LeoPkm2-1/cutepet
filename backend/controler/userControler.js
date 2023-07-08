@@ -4,6 +4,7 @@ const register = async (req, res) => {
     console.log(data, " data");
     res.send(data);
 }
+
 // For View 
 const login = (req, res) => {
 
