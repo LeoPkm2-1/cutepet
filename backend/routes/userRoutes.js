@@ -1,10 +1,11 @@
-// routes/index.js
-const express = require('express');
-const app = express();
-const getUserDataController = require('./../controllers/userController');
+var express = require("express");
+var router = express.Router();
+const userControler = require("../controllers/userControllers");
 
-app.get('/:id', (req, res) => {
-	res.send('ahihi');
-});
+router.get("/login", userControler.login);
+router.post("/logout", userControler.logout);
+router.get("/register", userControler.register);
+router.get("/all", userControler.getAllUser);
+router.get("/infor/:username", userControler.getUserByUserName);
 
-module.exports = { app };
+module.exports = router;
