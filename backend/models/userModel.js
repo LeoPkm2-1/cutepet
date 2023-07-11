@@ -19,7 +19,6 @@ const { sqlQuery } = require("./index");
 // };
 
 const getUserByUsername = async (userName) => {
-	// console.log(userName, "2");
 	const sqlStmt = "select * from NguoiDung where tai_khoan =? ";
 	const params = [userName];
 	return await sqlQuery(sqlStmt, params)
@@ -39,7 +38,31 @@ const getUserByUsername = async (userName) => {
 		});
 };
 
+const addUser = async (user) => {
+	const keys = Object.keys(user);
+	const fields = keys.join();
+	const sqlstmt = `insert into NguoiDung (` + fields + `) values (?)`;
+	const values = keys.map((key) => user[key]);
+	return await sqlQuery(sqlstmt, [values])
+		.then((data) => {
+			return {
+				status: 200,
+				message: data,
+				payload: [],
+			};
+		})
+		.catch((err) => {
+			return {
+				status: 400,
+				errno: err.errno,
+				code: err.code,
+				message: err.sqlMessage,
+			};
+		});
+};
+
 module.exports = {
 	// getAllUsers,
 	getUserByUsername,
+	addUser,
 };
