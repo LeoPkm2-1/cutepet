@@ -38,6 +38,26 @@ const getUserByUsername = async (userName) => {
 		});
 };
 
+const getUserById = async (userId) => {
+	const sqlStmt = "select * from NguoiDung where ma_nguoi_dung =? ";
+	const params = [userId];
+	return await sqlQuery(sqlStmt, params)
+		.then((data) => {
+			return {
+				status: 200,
+				payload: data,
+			};
+		})
+		.catch((err) => {
+			return {
+				status: 400,
+				errno: err.errno,
+				code: err.code,
+				message: err.sqlMessage,
+			};
+		});
+};
+
 const addUser = async (user) => {
 	const keys = Object.keys(user);
 	const fields = keys.join();
@@ -62,7 +82,7 @@ const addUser = async (user) => {
 };
 
 module.exports = {
-	// getAllUsers,
 	getUserByUsername,
+	getUserById,
 	addUser,
 };
