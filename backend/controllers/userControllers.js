@@ -1,13 +1,15 @@
 const userModel = require("../models/userModel");
+
 const { getHash } = require("./../utils");
 
 const getUserByUserName = async (req, res) => {
 	const username = req.params.username;
 	// console.log(username, "1");
-	const test = await userModel.getUserByUsername(username).then((data) => data);
-	res.json(test);
+	const user = await userModel.getUserByUsername(username).then((data) => data);
+	res.json(user);
 };
 
+// handl add new user to database
 const addUser = async (req, res) => {
 	const userInfor = req.body;
 	const username = userInfor.tai_khoan;
@@ -29,6 +31,7 @@ const addUser = async (req, res) => {
 		res.status(400).send(`username has already existed`);
 	}
 };
+
 module.exports = {
 	getUserByUserName,
 	addUser,

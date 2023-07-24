@@ -1,7 +1,9 @@
-var express = require('express');
+var express = require("express");
 var app = express();
-var bodyParser = require('body-parser');
-const router = require('./routes/index');
+var bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const router = require("./routes/index");
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(
 	bodyParser.urlencoded({
@@ -9,7 +11,7 @@ app.use(
 	})
 );
 
-app.use('/', router);
+app.use("/", router);
 
 // set port
 const PORT = 3000;
