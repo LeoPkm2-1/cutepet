@@ -1,6 +1,10 @@
 const userModel = require("../models/userModel");
 const { checkPassword, readENV, Response } = require("./../utils");
-const { genJWT, deleteProperties } = require("./../utils/loginHelper");
+const {
+	genJWT,
+	deleteProperties,
+	storeToken,
+} = require("./../utils/loginHelper");
 const handlLogin = async (req, res) => {
 	const userLoginInfor = req.body;
 	const username = userLoginInfor.tai_khoan;
@@ -12,18 +16,30 @@ const handlLogin = async (req, res) => {
 			res.status(400).send("thông tin đăng nhập không đúng");
 		} else {
 			let user = (await userModel.getUserByUsername(username)).payload[0];
-			user = deleteProperties(user, "mat_khau", "is_admin");
+			user = deleteProperties(user, "mat_khau", "is_admin", "token");
 			const lastTimeJWT = parseInt(readENV("JWT_LAST_TIME"));
 			const token = genJWT(user, lastTimeJWT);
-			res.cookie("auth_", token, {
-				maxAge: 1000 * lastTimeJWT,
-				httpOnly: true,
-				encode: String,
-				sameSite: "None",
-			});
-			res.status(200).send(
-				new Response(200, [{ token }], "Đăng nhập thành công")
-			);
+			// res.cookie("auth_", token, {
+			// 	maxAge: 1000 * lastTimeJWT,
+			// 	httpOnly: true,
+			// 	encode: String,
+			// });
+			const storeStatus = await storeToken(token, user.ma_nguoi_dung);
+			if (storeStatus.status === 200) {
+				res.status(200).send(
+					new Response(200, [{ token }], "Đăng nhập thành công")
+				);
+			} else {
+				res.status(400).json(
+					new Response(
+						400,
+						[],
+						storeStatus.message,
+						storeStatus.errno,
+						storeStatus.errcode
+					)
+				);
+			}
 		}
 	} catch (error) {
 		console.log(error);

@@ -1,4 +1,6 @@
 const { readENV } = require("./read_env.js");
+const { sqlQuery } = require("./../models/index.js");
+
 const jwt = require("jsonwebtoken");
 function deleteProperties(obj, ...properties) {
 	properties.map((propertyName) => delete obj[propertyName]);
@@ -24,4 +26,15 @@ function vertifyJWT(JWT) {
 	}
 }
 
-module.exports = { genJWT, deleteProperties, vertifyJWT };
+async function storeToken(token, userId) {
+	const sqlStmt = " UPDATE NguoiDung SET token=? WHERE ma_nguoi_dung=?;";
+	return await sqlQuery(sqlStmt, [token, userId])
+		.then((data) => {
+			return new Response(200, data, "");
+		})
+		.catch((err) => {
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+		});
+}
+
+module.exports = { genJWT, deleteProperties, vertifyJWT, storeToken };

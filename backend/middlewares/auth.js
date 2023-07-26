@@ -1,11 +1,23 @@
 const { vertifyJWT } = require("./../utils/loginHelper");
+const userModel = require("./../models/userModel");
+
 const { Response } = require("./../utils");
 
-const requireLogined = (req, res, next) => {
-	const jwtToken = req.cookies.auth_;
+const getToken = (req) => {
+	const authHeader = req.headers["authorization"];
+	const token = authHeader && authHeader.split(" ")[1];
+	return token;
+};
+
+const requireLogined = async (req, res, next) => {
+	const jwtToken = getToken(req);
 	let [decodeStatus, decoded] = [true, []];
 	if (jwtToken) {
 		[decodeStatus, decoded] = vertifyJWT(jwtToken);
+		const user = await userModel.getUserById(decoded.ma_nguoi_dung);
+		if (user.payload[0].token !== jwtToken) {
+			[decodeStatus, decoded] = [false, []];
+		}
 	} else {
 		decodeStatus = false;
 	}
@@ -14,7 +26,6 @@ const requireLogined = (req, res, next) => {
 		req.auth_decoded = {
 			...decoded,
 		};
-		// console.log(req.auth_decoded);
 		next();
 		return;
 	} else {
@@ -26,7 +37,7 @@ const requireLogined = (req, res, next) => {
 };
 
 const nonRequireLogined = (req, res, next) => {
-	const jwtToken = req.cookies.auth_;
+	const jwtToken = getToken(req);
 	let [decodeStatus, decoded] = [true, []];
 	if (jwtToken === undefined) {
 		next();
