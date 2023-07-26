@@ -10,6 +10,11 @@ const requireLogined = (req, res, next) => {
 		decodeStatus = false;
 	}
 	if (decodeStatus) {
+		// store userlogin infor for future
+		req.auth_decoded = {
+			...decoded,
+		};
+		// console.log(req.auth_decoded);
 		next();
 		return;
 	} else {
