@@ -19,8 +19,9 @@ const handlLogin = async (req, res) => {
 				maxAge: 1000 * lastTimeJWT,
 				httpOnly: true,
 				encode: String,
+				
 			});
-			res.status(200).send(new Response(200, [], "Đăng nhập thành công"));
+			res.status(200).send(new Response(200, [{token}], "Đăng nhập thành công"));
 		}
 	} catch (error) {
 		console.log(error);
