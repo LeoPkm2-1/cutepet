@@ -3,6 +3,8 @@ LOAD DATA LOCAL INFILE '/home/leo21/Documents/studying/doantotnghiep/hien_thuc/c
 
 
 LOAD DATA LOCAL INFILE '/home/leo21/Documents/studying/doantotnghiep/hien_thuc/cutepet/backend/sql/nguoidung.csv' INTO TABLE NguoiDung FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES;
+LOAD DATA LOCAL INFILE '/home/leo21/Documents/studying/doantotnghiep/hien_thuc/cutepet/backend/sql/nguoidung.csv' INTO TABLE NguoiDung FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 
 LOAD DATA LOCAL INFILE '/home/leo21/Documents/studying/doantotnghiep/hien_thuc/cutepet/backend/sql/giong.csv' INTO TABLE Giong FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES;
 LOAD DATA LOCAL INFILE '/home/leo21/Documents/studying/doantotnghiep/hien_thuc/cutepet/backend/sql/giong.csv' INTO TABLE Giong FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
+LOAD DATA LOCAL INFILE '/home/leo21/Documents/studying/doantotnghiep/hien_thuc/cutepet/backend/sql/thucung.csv' INTO TABLE ThuCung FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
