@@ -1,7 +1,22 @@
 var express = require("express");
-var router = express.Router();
+const router = express.Router();
 const userRoutes = require("./userRoutes");
+const petRoutes = require("./petRoutes");
+const giongLoaiRoutes = require("./giongLoaiRoutes");
+const userControler = require("./../controllers/userControllers");
+const { requireLogined, nonRequireLogined } = require("../middlewares/auth");
+const { handlLogin } = require("./../controllers/loginController");
+const { handleLogout } = require("./../controllers/logoutController");
 
-// Router total
+// đăng nhập - dăng ký
+router.use(["/login", "/register"], nonRequireLogined);
+router.post("/login", handlLogin);
+router.post("/register", userControler.addUser);
+// đăng xuất
+router.get("/logout", requireLogined, handleLogout);
+
+// định tuyến cho người dùng
 router.use("/user", userRoutes);
+router.use("/pet", petRoutes);
+router.use("/giongloai", giongLoaiRoutes);
 module.exports = router;

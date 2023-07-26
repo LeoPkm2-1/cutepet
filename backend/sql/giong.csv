@@ -1,0 +1,74 @@
+ma_giong,ten_giong,ma_loai
+100,giống chó khác,1
+101,Labrador Retriever,1
+102,German Shepherd,1
+103,Golden Retriever,1
+104,French Bulldog,1
+105,Bulldog,1
+106,Poodle,1
+107,Beagle,1
+108,Rottweiler,1
+109,Yorkshire Terrier,1
+110,Dachshund,1
+111,Shih Tzu,1
+112,Pomeranian,1
+113,Chihuahua,1
+114,Japanese Spitz,1
+115,Maltese,1
+116,Siberian Husky,1
+117,Shiba Inu,1
+118,Chow Chow,1
+119,Akita,1
+120,Miniature Schnauzer,1
+200,giống mèo khác,2
+201,Persian,2
+202,Maine Coon,2
+203,Siamese,2
+204,Ragdoll,2
+205,British Shorthair,2
+206,Sphynx,2
+207,Bengal,2
+208,Scottish Fold,2
+209,Abyssinian,2
+210,Birman,2
+211,Exotic Shorthair,2
+212,Siberian,2
+213,Turkish Van,2
+214,Balinese,2
+300,giống cá khác,3
+301,Betta Fish,3
+302,Goldfish ,3
+303,Neon Tetra,3
+304,Guppy,3
+305,Angelfish,3
+306,Discus Fish,3
+307,Molly Fish,3
+308,Swordtail Fish,3
+309,Platies,3
+310,Koi Carp,3
+311,Betta Fish ,3
+312,Goldfish,3
+313,Guppy ,3
+314,Siamese Algae Eater,3
+315,Cherry Barb,3
+316,Pearl Gourami,3
+317,Asian Arowana,3
+318,Moonlight Gourami,3
+319,Paradise Fish,3
+400,giống chim khác,4
+401,Budgerigar,4
+402,Cockatiel,4
+403,African Grey Parrot,4
+404,Lovebird,4
+405,Canary,4
+406,Eclectus Parrot,4
+407,Sun Conure,4
+408,Quaker Parrot ,4
+409,Cockatoo ,4
+410,Macaw ,4
+411,Indian Ringneck Parakeet,4
+412,Plum-headed Parakeet,4
+413,Java Sparrow,4
+414,Zebra Finch,4
+415,Peach-faced Lovebird,4
+416,Fischer's Lovebird,4
