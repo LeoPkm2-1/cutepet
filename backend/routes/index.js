@@ -1,6 +1,8 @@
 var express = require("express");
 const router = express.Router();
 const userRoutes = require("./userRoutes");
+const petRoutes = require("./petRoutes");
+const giongLoaiRoutes = require("./giongLoaiRoutes");
 const userControler = require("./../controllers/userControllers");
 const { requireLogined, nonRequireLogined } = require("../middlewares/auth");
 const { handlLogin } = require("./../controllers/loginController");
@@ -15,4 +17,6 @@ router.get("/logout", requireLogined, handleLogout);
 
 // định tuyến cho người dùng
 router.use("/user", userRoutes);
+router.use("/pet", petRoutes);
+router.use("/giongloai", giongLoaiRoutes);
 module.exports = router;

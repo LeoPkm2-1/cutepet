@@ -12,6 +12,9 @@ app.use(
 );
 
 app.use("/", router);
+app.get("/", (req, res) => {
+	res.send("xin chao");
+});
 
 // set port
 const PORT = 3000;

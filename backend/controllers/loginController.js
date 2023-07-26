@@ -1,5 +1,5 @@
 const userModel = require("../models/userModel");
-const { checkPassword } = require("./../utils");
+const { checkPassword, readENV, Response } = require("./../utils");
 const { genJWT, deleteProperties } = require("./../utils/loginHelper");
 const handlLogin = async (req, res) => {
 	const userLoginInfor = req.body;
@@ -13,13 +13,14 @@ const handlLogin = async (req, res) => {
 		} else {
 			let user = (await userModel.getUserByUsername(username)).payload[0];
 			user = deleteProperties(user, "mat_khau", "is_admin");
-			const token = genJWT(user, 300);
+			const lastTimeJWT = parseInt(readENV("JWT_LAST_TIME"));
+			const token = genJWT(user, lastTimeJWT);
 			res.cookie("auth_", token, {
-				maxAge: 1000 * 60 * 5,
+				maxAge: 1000 * lastTimeJWT,
 				httpOnly: true,
 				encode: String,
 			});
-			res.status(200).send("ok dang nhap thanh cong");
+			res.status(200).send(new Response(200, [], "Đăng nhập thành công"));
 		}
 	} catch (error) {
 		console.log(error);

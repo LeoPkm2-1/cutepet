@@ -1,22 +1,15 @@
 const { sqlQuery } = require("./index");
+const { Response } = require("./../utils/index");
 
 const getUserByUsername = async (userName) => {
 	const sqlStmt = "select * from NguoiDung where tai_khoan =? ";
 	const params = [userName];
 	return await sqlQuery(sqlStmt, params)
 		.then((data) => {
-			return {
-				status: 200,
-				payload: data,
-			};
+			return new Response(200, data, "");
 		})
 		.catch((err) => {
-			return {
-				status: 400,
-				errno: err.errno,
-				code: err.code,
-				message: err.sqlMessage,
-			};
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
 		});
 };
 
@@ -25,18 +18,16 @@ const getUserById = async (userId) => {
 	const params = [userId];
 	return await sqlQuery(sqlStmt, params)
 		.then((data) => {
-			return {
-				status: 200,
-				payload: data,
-			};
+			return new Response(200, data, "");
 		})
 		.catch((err) => {
-			return {
-				status: 400,
-				errno: err.errno,
-				code: err.code,
-				message: err.sqlMessage,
-			};
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+			// {
+			// 	status: 400,
+			// 	errno: err.errno,
+			// 	code: err.code,
+			// 	message: err.sqlMessage,
+			// };
 		});
 };
 
@@ -47,19 +38,16 @@ const addUser = async (user) => {
 	const values = keys.map((key) => user[key]);
 	return await sqlQuery(sqlstmt, [values])
 		.then((data) => {
-			return {
-				status: 200,
-				message: data,
-				payload: [],
-			};
+			return new Response(200, [], data);
 		})
 		.catch((err) => {
-			return {
-				status: 400,
-				errno: err.errno,
-				code: err.code,
-				message: err.sqlMessage,
-			};
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+			// {
+			// 	status: 400,
+			// 	errno: err.errno,
+			// 	code: err.code,
+			// 	message: err.sqlMessage,
+			// };
 		});
 };
 
