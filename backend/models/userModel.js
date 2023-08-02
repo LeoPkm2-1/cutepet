@@ -50,9 +50,19 @@ const addUser = async (user) => {
 			// };
 		});
 };
-
+const deleteUserToken = async (userid) => {
+	const sqlstmt = "UPDATE NguoiDung SET token='' WHERE ma_nguoi_dung=?;";
+	return await sqlQuery(sqlstmt, [userid])
+		.then((data) => {
+			return new Response(200, [], data);
+		})
+		.catch((err) => {
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+		});
+};
 module.exports = {
 	getUserByUsername,
 	getUserById,
 	addUser,
+	deleteUserToken,
 };

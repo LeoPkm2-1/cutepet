@@ -10,7 +10,8 @@ const getPetById = async (req, res) => {
 };
 
 const addPet = (req, res) => {
-	const ma_nguoi_chu = 1;
+	const userInfor = req.auth_decoded;
+	const ma_nguoi_chu = userInfor.ma_nguoi_dung;
 	console.log(req.body);
 	res.send("ahihi");
 };
