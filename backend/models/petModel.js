@@ -51,7 +51,7 @@ const addPet = async (
 		owner_id,
 	])
 		.then((data) => {
-			console.log('eheh:', data);
+			// console.log('eheh:', data);
 			return new Response(200, data, '');
 		})
 		.catch((err) => {

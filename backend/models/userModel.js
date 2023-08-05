@@ -1,12 +1,12 @@
-const { sqlQuery } = require("./index");
-const { Response } = require("./../utils/index");
+const { sqlQuery } = require('./index');
+const { Response } = require('./../utils/index');
 
 const getUserByUsername = async (userName) => {
-	const sqlStmt = "select * from NguoiDung where tai_khoan =? ";
+	const sqlStmt = 'select * from NguoiDung where tai_khoan =? ';
 	const params = [userName];
 	return await sqlQuery(sqlStmt, params)
 		.then((data) => {
-			return new Response(200, data, "");
+			return new Response(200, data, '');
 		})
 		.catch((err) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
@@ -14,11 +14,11 @@ const getUserByUsername = async (userName) => {
 };
 
 const getUserById = async (userId) => {
-	const sqlStmt = "select * from NguoiDung where ma_nguoi_dung =? ";
+	const sqlStmt = 'select * from NguoiDung where ma_nguoi_dung =? ';
 	const params = [userId];
 	return await sqlQuery(sqlStmt, params)
 		.then((data) => {
-			return new Response(200, data, "");
+			return new Response(200, data, '');
 		})
 		.catch((err) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
@@ -60,9 +60,54 @@ const deleteUserToken = async (userid) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
 		});
 };
+
+const sendRequestAddFriend = async (sender_id, recipient_id) => {
+	const sqlStmt =
+		'insert into LoiMoiKetBan (ma_nguoi_gui,ma_nguoi_nhan) values (?,?); ';
+	return await sqlQuery(sqlStmt, [sender_id, recipient_id])
+		.then((data) => {
+			return new Response(200, data, '');
+		})
+		.catch((err) => {
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+		});
+};
+
+const isFriend = async (person_id_1, person_id_2) => {
+	const sqlStmt =
+		'select Count(*) as number from LaBanBe where (ma_nguoi_dung_1,ma_nguoi_dung_2) = (?,?)';
+	return await sqlQuery(sqlStmt, [person_id_1, person_id_2])
+		.then((data) => {
+			if (Number(data[0].number) >= 1) {
+				return new Response(200, true, '');
+			}
+			return new Response(200, false, '');
+		})
+		.catch((err) => {
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+		});
+};
+
+const isSendRequestAddFriend = async (sender_id, recipient_id) => {
+	const sqlStmt =
+		'select Count(*) as number from LoiMoiKetBan where (ma_nguoi_gui,ma_nguoi_nhan) = (?,?)';
+	return await sqlQuery(sqlStmt, [sender_id, recipient_id])
+		.then((data) => {
+			if (Number(data[0].number) >= 1) {
+				return new Response(200, true, '');
+			}
+			return new Response(200, false, '');
+		})
+		.catch((err) => {
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+		});
+};
 module.exports = {
 	getUserByUsername,
 	getUserById,
 	addUser,
 	deleteUserToken,
+	sendRequestAddFriend,
+	isFriend,
+	isSendRequestAddFriend,
 };
