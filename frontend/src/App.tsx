@@ -4,7 +4,6 @@ import { SnackbarProvider } from 'notistack';
 import React, { useEffect } from 'react';
 import Routing from './Routing';
 import DialogContext from './context/DialogContext';
-
 function App() {
   // useEffect(() => {
   //   window.oncontextmenu = (e) => {
@@ -15,6 +14,7 @@ function App() {
     <Provider store={store}>
       <DialogContext>
         <SnackbarProvider
+          
           maxSnack={3}
           anchorOrigin={{
             horizontal: 'right',

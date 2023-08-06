@@ -13,12 +13,13 @@ import { UserActions } from '../redux/user';
 import AdminRouting from './admin';
 import MeRouting from './me';
 import './style.scss';
+import PageRouting from '../public-pages/page';
 
 const PrivatePagesRouting = () => {
   const dispatch = useDispatch();
   const profile = useProfile();
   useEffect(() => {
-    document.title = 'Mindfully Partner Portal';
+    document.title = 'Cute Pet';
     getDataGroups().then((data) => {
       if(data){
         dispatch(GroupsActions.setDataGroup(data))
@@ -34,26 +35,25 @@ const PrivatePagesRouting = () => {
   }, [dispatch]);
 
 
-  if (!profile) {
-    return (
-      <div className="centering" style={{ padding: '10% 0' }}>
-        <CircularProgress />
-      </div>
-    );
-  }
+  // if (!profile) {
+  //   return (
+  //     <div className="centering" style={{ padding: '10% 0' }}>
+  //       <CircularProgress />
+  //     </div>
+  //   );
+  // }
 
   return (
     <Routes>
       <Route path="admin/*" element={<AdminRouting />} />
       <Route path="me/*" element={<MeRouting />} />
-
-      <Route path="*" element={<NotMatchRouting profile={profile} />} />
+      <Route path="home/*" element={<PageRouting />} />
+      {/* <Route path="*" element={<NotMatchRouting profile={profile} />} /> */}
     </Routes>
   );
 };
 
 export default PrivatePagesRouting;
-
 const NotMatchRouting = (props: { profile: UserProfile }) => {
   return (
     <Navigate

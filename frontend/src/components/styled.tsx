@@ -77,3 +77,13 @@ export const StyledTypography = styled(Typography)`
     color: #1a2f44;
   } */
 `;
+
+export const StyledSpanTypography = styled(Typography)`
+  font-size: 14px;
+  font-weight: 700;
+  font-family:"quicksand";
+  /* :hover {
+    text-decoration: underline;
+    color: #1a2f44;
+  } */
+`;

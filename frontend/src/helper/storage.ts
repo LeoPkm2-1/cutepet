@@ -1,7 +1,7 @@
 import { Tokens } from '../models/token';
 import { v4 as uuidv4 } from 'uuid';
 
-const TOKEN_KEY = 'token';
+const TOKEN_KEY = 'accessToken';
 const DEVICE_KEY = 'device';
 const RESET_PASSWORD_KEY = 'reset-pw-ts';
 
@@ -18,7 +18,7 @@ function getDeviceId() {
 function getTokens() {
   const str = localStorage.getItem(TOKEN_KEY);
   if (str) {
-    return JSON.parse(str) as Tokens;
+    return  JSON.parse(str);
   }
   return;
 }

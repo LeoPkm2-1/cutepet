@@ -13,7 +13,8 @@ class RequestGlobal {
     }
     this.promise = Promise.resolve().then(() => {
       // TODO: check token expired and refresh here
-      const { accessToken, refreshToken } = storage.getTokens() ?? {};
+      const refreshToken  = storage.getTokens();
+      const accessToken = storage.getTokens();
       if (accessToken) {
         try {
           const { exp = 0 } = jwt_decode<any>(accessToken);
@@ -114,6 +115,7 @@ export function request<T>(
       params: options.query,
       data: options.body,
       method: options.method,
+      
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -141,8 +143,9 @@ export function authRequestWithoutExpCheck<T>(
   options: RequestOptions,
   cancelOptions?: CancelOption
 ): Promise<T> {
-  const accessToken = storage.getTokens()?.accessToken;
-
+  const accessToken = storage.getTokens();
+  console.log(accessToken, "accessToken");
+  
   return request<T>(
     {
       ...options,
@@ -153,6 +156,8 @@ export function authRequestWithoutExpCheck<T>(
     },
     cancelOptions
   ).catch((error) => {
+    console.log("Lỗi nè", error);
+    
     if (error?.error?.statusCode === 401) {
       if (store.getState().auth.mindfullyAuth) {
         // @ts-ignore

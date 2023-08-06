@@ -5,6 +5,7 @@ import { SocialProviderEnum } from '../models/auth';
 import { Tokens } from '../models/token';
 import { UserProfile } from '../models/user-profile';
 import { request, authRequest, authRequestWithoutExpCheck } from './base';
+import { Password } from '@mui/icons-material';
 
 window.moment = moment;
 
@@ -35,19 +36,38 @@ const login = (token: string, provider: SocialProviderEnum) => {
   });
 };
 
-const logout = () => {
-  const refreshToken = storage.getTokens()?.refreshToken;
-  return authRequestWithoutExpCheck<void>({
-    url: '/logout',
+const loginTest = (userName: string, password: string) => {
+  return request<any>({
+    url: '/login',
     method: 'POST',
     body: {
-      refreshToken,
+      tai_khoan: userName,
+      mat_khau: password,
+    },
+  });
+};
+const register = (ten:string, tai_khoan: string, mat_khau: string) => {
+  return request<any>({
+    url: '/register',
+    method: 'POST',
+    body: {
+      ten,
+      tai_khoan,
+      mat_khau,
     },
   });
 };
 
+const logout = () => {
+  const token = storage.getTokens();
+  return authRequestWithoutExpCheck<void>({
+    url: '/logout',
+    method: 'GET',
+  });
+};
+
 const postRefreshToken = () => {
-  const refreshToken = storage.getTokens()?.refreshToken;
+  const refreshToken = storage.getTokens();
   return authRequest<Tokens>({
     url: '/refresh-token',
     method: 'POST',
@@ -58,6 +78,8 @@ const postRefreshToken = () => {
 };
 
 const authApi = {
+  loginTest,
+  register,
   login,
   logout,
   postRefreshToken,
