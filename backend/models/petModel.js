@@ -59,9 +59,36 @@ const addPet = async (
 		});
 };
 
+async function updatePetInfor(
+	ma_thu_cung,
+	ten_thu_cung,
+	ngay_sinh,
+	gioi_tinh,
+	ghi_chu,
+	ma_giong
+) {
+	const sqlStmt = `UPDATE ThuCung
+SET ten_thu_cung = ?, ngay_sinh =?, gioi_tinh = ?, ghi_chu = ?, ma_giong = ?
+WHERE ma_thu_cung = ?;`;
+	return await sqlQuery(sqlStmt, [
+		ten_thu_cung,
+		ngay_sinh,
+		gioi_tinh,
+		ghi_chu,
+		ma_giong,
+		ma_thu_cung,
+	])
+		.then((data) => {
+			return new Response(200, data, '');
+		})
+		.catch((err) => {
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+		});
+}
 module.exports = {
 	getPetByID,
 	getAllOwnsPetOf,
 	getPetByNameAndUserID,
 	addPet,
+	updatePetInfor,
 };

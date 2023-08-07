@@ -1,5 +1,6 @@
 const petModel = require('./../models/petModel');
-const { giongLoaiMatch } = require('./../utils/petHelper');
+const { giongLoaiMatch, isOwnPet } = require('./../utils/petHelper');
+const giongLoaiModel = require('../models/giongLoaiModel');
 const { Response } = require('./../utils/index');
 
 const getPetById = async (req, res) => {
@@ -9,6 +10,7 @@ const getPetById = async (req, res) => {
 		.then((data) => data.payload[0]);
 	res.status(200).json(new Response(200, pet, ''));
 };
+
 const getAllOwnPet = async (req, res) => {
 	const userid = req.auth_decoded.ma_nguoi_dung;
 
@@ -17,6 +19,7 @@ const getAllOwnPet = async (req, res) => {
 		.then((data) => data.payload);
 	res.status(200).json(new Response(200, petlist, ''));
 };
+
 const addPet = async (req, res) => {
 	const PET_EXIST_MESSAGE = 'thú cưng đã tồn tại';
 	const PET_SPECIES_AND_GENUS_NOT_MATCH = 'loài và giống không khớp';
@@ -78,8 +81,65 @@ const addPet = async (req, res) => {
 		}
 	}
 };
+
+const updateInfor = async (req, res) => {
+	const petid = req.params.pet_id;
+	const userid = req.auth_decoded.ma_nguoi_dung;
+
+	const DONT_OWN_THIS_PET =
+		'Người dùng không thể chỉ sửa thú cưng mà không sở hữu';
+	const SPECIES_NOT_MATCH = 'giống không tồn tại';
+
+	try {
+		let flag = await isOwnPet(petid, userid);
+		if (!flag) {
+			throw new Error(DONT_OWN_THIS_PET);
+		}
+		const { ten_thu_cung, ngay_sinh, gioi_tinh, ghi_chu, ma_giong } =
+			req.body;
+		flag = await giongLoaiModel.isMaGiongExist(ma_giong);
+		if (!flag) {
+			throw new Error(SPECIES_NOT_MATCH);
+		}
+		const respone = await petModel.updatePetInfor(
+			petid,
+			ten_thu_cung,
+			ngay_sinh,
+			gioi_tinh,
+			ghi_chu,
+			ma_giong
+		);
+		if (respone.status === 200) {
+			res.status(200).json(
+				new Response(200, [], 'cập nhật thú cưng thành công')
+			);
+		} else {
+			res.status(400).json(
+				new Response(400, [], respone.message, 300, 300)
+			);
+			throw new Error(respone.message);
+		}
+	} catch (error) {
+		switch (error.message) {
+			case DONT_OWN_THIS_PET:
+				res.status(400).json(
+					new Response(400, [], DONT_OWN_THIS_PET, 300, 300)
+				);
+				return;
+			case SPECIES_NOT_MATCH:
+				res.status(400).json(
+					new Response(400, [], SPECIES_NOT_MATCH, 300, 300)
+				);
+
+			default:
+				console.log(error);
+				break;
+		}
+	}
+};
 module.exports = {
 	getPetById,
 	getAllOwnPet,
 	addPet,
+	updateInfor,
 };

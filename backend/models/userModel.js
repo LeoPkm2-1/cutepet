@@ -12,6 +12,14 @@ const getUserByUsername = async (userName) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
 		});
 };
+const getUserByEmail = async (email_address) => {
+	const sqlStmt = `select * from NguoiDung where email = ?`;
+	return await sqlQuery(sqlStmt, [email_address])
+		.then((data) => new Response(200, data, ''))
+		.catch(
+			(err) => new Response(400, [], err.sqlMessage, err.errno, err.code)
+		);
+};
 
 const getUserById = async (userId) => {
 	const sqlStmt = 'select * from NguoiDung where ma_nguoi_dung =? ';
@@ -104,6 +112,7 @@ const isSendRequestAddFriend = async (sender_id, recipient_id) => {
 };
 module.exports = {
 	getUserByUsername,
+	getUserByEmail,
 	getUserById,
 	addUser,
 	deleteUserToken,

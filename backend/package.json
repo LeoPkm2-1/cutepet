@@ -13,14 +13,14 @@
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
+    "deep-email-validator": "^0.1.21",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "imgbb-uploader": "^1.5.1",
-    "imgur": "^2.3.0",
     "jsonwebtoken": "^9.0.1",
     "mariadb": "^3.2.0",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
+    "neverbounce": "^4.4.1",
     "tslib": "^2.6.0"
   },
   "devDependencies": {

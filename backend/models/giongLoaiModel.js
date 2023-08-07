@@ -42,9 +42,23 @@ const getMaLoaiByMaGiong = async (maGiong) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
 		});
 };
+
+async function isMaGiongExist(ma_giong) {
+	ma_giong = parseInt(ma_giong);
+	return await getGiong().then((data) => {
+		if (data.status === 400) {
+			throw new Error(data.message);
+		}
+		return data.payload
+			.map((giong) => parseInt(giong.ma_giong))
+			.includes(ma_giong);
+	});
+}
+
 module.exports = {
 	getLoai,
 	getGiong,
 	getGiongByMaLoai,
 	getMaLoaiByMaGiong,
+	isMaGiongExist,
 };
