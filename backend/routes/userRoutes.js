@@ -7,7 +7,5 @@ const userControler = require('../controllers/userControllers');
 router.use(requireLogined);
 router.get('/infor/:username', userControler.getUserByUserName);
 router.post('/requestAddFriend', userControler.requestAddFriend);
-// router.post("/add", userControler.addUser);
-// router.post("/login", userControler.handlLogin);
 
 module.exports = router;
