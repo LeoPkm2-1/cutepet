@@ -5,8 +5,5 @@ async function validate_email(email_address) {
 	return check;
 }
 
-// (async function () {
-// 	const data = await validate_email('badaocvgun1y@gmail.com');
-// 	console.log(data);
-// })();
+
 module.exports = { validate_email };

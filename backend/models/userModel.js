@@ -20,10 +20,7 @@ const getUserByEmail = async (email_address) => {
 			(err) => new Response(400, [], err.sqlMessage, err.errno, err.code)
 		);
 };
-(async function () {
-	const data = await getUserByUsername('leo');
-	console.log(data);
-})();
+
 const getUserById = async (userId) => {
 	const sqlStmt = 'select * from NguoiDung where ma_nguoi_dung =? ';
 	const params = [userId];
