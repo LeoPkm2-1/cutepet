@@ -15,18 +15,23 @@ import {
 } from '@mdi/js';
 import {
   Backdrop,
+  Box,
   Button,
   ButtonProps,
   Collapse,
   SvgIcon,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Image from './Image';
 import PermissionRequired from './PermissionRequired';
 import { ScrollView } from './ScrollView';
 import { AccountType } from '../models/user';
+import authApi from '../api/auth';
+import { AuthActions } from '../redux/auth';
+import { useDispatch } from 'react-redux';
 
 interface IMenuItemData {
   key: string;
@@ -38,16 +43,28 @@ interface IMenuItemData {
 
 const menu: IMenuItemData[] = [
   {
-    key: '/admin/dashboard',
-    title: 'dashboard',
-    icon: mdiViewDashboard,
-    link: '/admin/dashboard',
+    key: '/home/mang-xa-hoi',
+    title: 'Mạng xã hội',
+    icon: mdiAccountMultiple,
+    link: '/home/mang-xa-hoi',
   },
   {
-    key: '/admin/members',
-    title: 'members',
+    key: '/home/quan-ly-thu-cung',
+    title: 'Quản lý thú cưng',
+    icon: mdiViewDashboard,
+    link: '/home/quan-ly-thu-cung',
+  },
+  {
+    key: '/admin/dat-lich',
+    title: 'Đặt lịch',
     icon: mdiAccountMultiple,
-    link: '/admin/members',
+    link: '/home/dat-lich',
+  },
+  {
+    key: '/admin/su-kien',
+    title: 'Sự kiện',
+    icon: mdiAccountMultiple,
+    link: '/home/su-kien',
   },
 ];
 
@@ -57,7 +74,8 @@ export default function SideBar(props: {
   onClose?: () => void;
 }) {
   const { pathname } = useLocation();
-
+  const naviagte = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (window.innerWidth < 1200) {
       props.onClose?.();
@@ -65,6 +83,26 @@ export default function SideBar(props: {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  function logOut(){
+  
+    authApi.logout().then(() => {
+      naviagte("/login");
+      console.log("Thành công");
+      localStorage.removeItem("accessToken")
+        
+      dispatch(AuthActions.setAuth(false));
+      
+    }).catch((err) => {
+      naviagte("/login");
+      console.log("Thất bại", err);
+      localStorage.removeItem("accessToken")
+        
+      dispatch(AuthActions.setAuth(false));
+
+    });
+    
+  }
 
   return (
     <>
@@ -77,31 +115,73 @@ export default function SideBar(props: {
       >
         <Root>
           {/* <PermissionRequired accountTypes={[]}> */}
-            <ScrollView>
-              {menu.map((item) => (
-                <MenuItem key={item.key} data={item} pathname={pathname} />
-              ))}
-            </ScrollView>
-            <div className="col pv-16">
-              <MenuItem
-                data={{
-                  key: 'help',
-                  title: 'Help',
-                  icon: mdiHelpCircle,
-                  link: '/help',
+          <Box
+            sx={{
+              display: 'flex',
+              background: '#fff',
+              padding: '20px 20px',
+              margin: '20px 10px',
+              borderRadius: '12px',
+            }}
+          >
+            <img
+              style={{
+                height: '50px',
+                width: '50px',
+                objectFit: 'cover',
+                borderRadius: '10px',
+              }}
+              src="https://i.pinimg.com/550x/bb/0b/88/bb0b88d61edeaf96ae83421cf759650e.jpg"
+            />
+            <Box
+              sx={{
+                ml: '16px',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '700',
                 }}
-                pathname={pathname}
-              />
-              <MenuItem
-                data={{
-                  key: 'feedback',
-                  title: 'feedback',
-                  icon: mdiMessageAlert,
-                  link: '/feedback',
+              >
+                Thuyen Nguyen
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '400',
+                  fontSize: '13px',
                 }}
-                pathname={pathname}
-              />
-            </div>
+              >
+                @thuyennguyen13
+              </Typography>
+            </Box>
+          </Box>
+          <ScrollView isSideBar>
+            {menu.map((item) => (
+              <MenuItem key={item.key} data={item} pathname={pathname} />
+            ))}
+          </ScrollView>
+          <div className="col pv-16">
+            <Button
+            onClick={logOut}
+              variant="contained"
+              color="inherit"
+              sx={{
+                textTransform: 'none',
+                background: '#0c4195',
+                color: '#fff',
+                borderRadius: '20px',
+                margin: '0 10px',
+                "&:hover": {
+                background: '#0c4195eb',
+
+                }
+              }}
+            >
+              Logout
+            </Button>
+          </div>
           {/* </PermissionRequired> */}
         </Root>
       </StyledCollapse>
@@ -234,9 +314,9 @@ const IconRoot = styled.span`
 `;
 
 const StyledCollapse = styled(Collapse)`
-  border-right: dashed rgba(20, 173, 165, 0.3) 1px;
+  /* border-right: dashed rgba(20, 173, 165, 0.3) 1px; */
   box-sizing: border-box;
-  background-color: #fff;
+  background-color: #f9fafb;
   @media (max-width: 1200px) {
     position: absolute;
     top: 0;
@@ -253,7 +333,7 @@ const Root = styled.div`
   padding: 8px;
   min-width: 275px;
   box-sizing: border-box;
-  background-color: #fff;
+  background-color: #f9fafb;
   height: 100%;
   /* color: var(--primary-color); */
 `;

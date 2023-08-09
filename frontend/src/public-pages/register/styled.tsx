@@ -12,7 +12,7 @@ export const Root = styled.div`
   padding: 8px;
   box-sizing: border-box;
   /* background: linear-gradient(115.71deg, #00a5c2 0%, #14ada6 100%); */
-  /* color: #fff; */
+  color: #fff;
   /* background: #8b8a8a; */
 `;
 
@@ -32,7 +32,6 @@ export const Form = styled.form`
 export const Title = styled.div`
   box-sizing: border-box;
   font-weight: 700;
-  color:#fff;
   text-align: center;
   /* margin-top: 8%; */
   font-size: 30px;

@@ -1,4 +1,11 @@
-import { Backdrop, FormHelperText, Paper, Stack, Divider } from '@mui/material';
+import {
+  Backdrop,
+  Box,
+  FormHelperText,
+  Paper,
+  Stack,
+  Divider,
+} from '@mui/material';
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -7,12 +14,16 @@ import {
 } from 'firebase/auth';
 import React, { FormEventHandler, useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { Location, Navigate, useLocation } from 'react-router-dom';
+import { Location, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import authApi from '../../api/auth';
 import { StyledFormHelperText } from '../../components/FormItem';
 import { AspectRatioImg } from '../../components/Image';
 import { ScrollView } from '../../components/ScrollView';
-import { StyledHref, StyledLink } from '../../components/styled';
+import {
+  StyledHref,
+  StyledLink,
+  StyledTypography,
+} from '../../components/styled';
 import { auth, googleProvider } from '../../firebase';
 import storage from '../../helper/storage';
 import { SocialProviderEnum } from '../../models/auth';
@@ -27,6 +38,7 @@ import {
   TextField,
   Title,
 } from './styled';
+import { useSnackbar } from 'notistack';
 
 interface ErrorObj {
   [key: string]: string | undefined;
@@ -39,7 +51,8 @@ const LoginPage = (props: P) => {
   const from = (useLocation().state as { from?: Location })?.from;
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<ErrorObj>({});
-
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
   useEffect(() => {
     document.title = 'CutePet - Login';
   }, []);
@@ -107,17 +120,41 @@ const LoginPage = (props: P) => {
   };
 
   const handleFormSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
 
-    // const email = (e.currentTarget['email'] as HTMLInputElement)?.value ?? '';
-    // const password =
-    //   (e.currentTarget['password'] as HTMLInputElement)?.value ?? '';
+    const email =
+      (e.currentTarget['user-name'] as HTMLInputElement)?.value ?? '';
+    const password =
+      (e.currentTarget['password'] as HTMLInputElement)?.value ?? '';
 
     // const errors = verifyData({ email, password });
     // if (errors) {
     //   setErrors(errors);
     //   return;
     // }
+    setIsLoading(true);
+
+    authApi
+      .loginTest(email, password)
+      .then((res) => {
+        console.log(res, " res");
+        
+        if (res?.payload[0]?.token) {
+          storage.setTokens(res.payload[0]?.token);
+          console.log("Thành còng ");
+          
+          dispatch(AuthActions.setAuth(true));
+          enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
+          navigate("/home");
+        }else {
+          enqueueSnackbar(res?.message, { variant: 'success' });
+        }
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        enqueueSnackbar('Lỗi đăng nhập. Vui lòng thử lại !', { variant: 'error' });
+      });
 
     // setIsLoading(true);
     // const auth = getAuth();
@@ -154,103 +191,152 @@ const LoginPage = (props: P) => {
   }
 
   return (
-    <Root>
-      <ScrollView
-        contentContainerProps={{
-          style: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          },
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          width: '100%',
+          height: ' 100%',
+          // background: "linear-gradient(115.71deg, #00a5c2 0%, #14ada6 100%)",
+          background: 'linear-gradient(115.71deg, #06beb6 0%, #48b1bf 100%)',
         }}
       >
-        <Title>Cute Pet</Title>
-        <Form onSubmit={handleFormSubmit}>
-          <LoginTitle>Login to your account</LoginTitle>
-          <TextField
-            name="email"
-            placeholder="Email"
-            margin="dense"
-            size="small"
-            error={!!errors.email}
-            helperText={errors.email}
-            onChange={() => {
-              if (errors.email) {
-                clearError('email');
-              }
+        <Root>
+          <ScrollView
+            contentContainerProps={{
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              },
             }}
-          />
-          <TextField
-            name="password"
-            type="password"
-            placeholder="Password"
-            margin="dense"
-            autoSave="no"
-            autoComplete="no"
-            size="small"
-            error={!!errors.password}
-            helperText={errors.password}
-            onChange={() => {
-              if (errors.password) {
-                clearError('password');
-              }
-            }}
-          />
-          {!!errors.all && (
-            <StyledFormHelperText
+          >
+            <Box
               sx={{
-                textAlign: 'center',
-                marginTop: 3,
-                color: '#ba2121',
+                display: 'flex',
+                mt: '60px',
               }}
-              error={!!errors.all}
             >
-              {errors.all}
-            </StyledFormHelperText>
-          )}
-          <div className="text-small" style={{ marginTop: 16 }}>
+              <Title>Cute</Title>
+              <StyledTypography
+                sx={{
+                  color: '#fff',
+                  backgroundColor: '#0C4195',
+                  padding: '8px 12px',
+                  borderRadius: '6px',
+                  margin: '0 10px',
+                  fontSize: '18px !important',
+                }}
+                textAlign="center"
+              >
+                pet
+              </StyledTypography>
+            </Box>
+            <Form onSubmit={handleFormSubmit}>
+              <LoginTitle>Đăng Nhập</LoginTitle>
+              <TextField
+                name="user-name"
+                placeholder="User name"
+                margin="dense"
+                size="small"
+                error={!!errors.email}
+                helperText={errors.email}
+                onChange={() => {
+                  if (errors.email) {
+                    clearError('email');
+                  }
+                }}
+              />
+              <TextField
+                name="password"
+                type="password"
+                placeholder="Password"
+                margin="dense"
+                autoSave="no"
+                autoComplete="no"
+                size="small"
+                error={!!errors.password}
+                helperText={errors.password}
+                onChange={() => {
+                  if (errors.password) {
+                    clearError('password');
+                  }
+                }}
+              />
+              {!!errors.all && (
+                <StyledFormHelperText
+                  sx={{
+                    textAlign: 'center',
+                    marginTop: 3,
+                    color: '#ba2121',
+                  }}
+                  error={!!errors.all}
+                >
+                  {errors.all}
+                </StyledFormHelperText>
+              )}
+              {/* <div className="text-small" style={{ marginTop: 16 }}>
             Not remember your password?{' '}
             <StyledLink to="/forgot-password">Forgot password</StyledLink>
-          </div>
-          <LoginButton
-            variant="contained"
-            type="submit"
+          </div> */}
+              <LoginButton
+                variant="contained"
+                type="submit"
+                sx={{
+                  marginTop: 2,
+                  textTransform: 'none',
+                }}
+                disabled={isLoading}
+              >
+                Đăng nhập ngay
+              </LoginButton>
+            </Form>
+            <Footer>
+              <div style={{ textAlign: 'center' }}>
+                Bạn chưa có tài khoản ?{' '}
+                <StyledHref href="/register">Đang ký ngay !</StyledHref>
+              </div>
+            </Footer>
+          </ScrollView>
+          <Backdrop
             sx={{
-              marginTop: 2,
-              textTransform: 'none',
+              color: '#fff',
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+              backdropFilter: 'blur(3px)',
+              background: 'rgba(0,0,0,0.16)',
+              flexDirection: 'column',
             }}
-            disabled={isLoading}
+            open={isLoading}
           >
-            Login
-          </LoginButton>
-        </Form>
-        <Footer>
-          <div style={{ textAlign: 'center' }}>
-            Need help? Contact us:{' '}
-            <StyledHref href="mailto:businesssupport@mindfully.vn">
-              businesssupport@mindfully.vn
-            </StyledHref>
-          </div>
-        </Footer>
-      </ScrollView>
-      <Backdrop
-        sx={{
-          color: '#fff',
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          backdropFilter: 'blur(3px)',
-          background: 'rgba(0,0,0,0.16)',
-          flexDirection: 'column',
-        }}
-        open={isLoading}
-      >
-        <div>
-          <AspectRatioImg
-            style={{ width: 64 }}
-            src={`${process.env.PUBLIC_URL}/assets/images/logo.png`}
+            <div>
+              <AspectRatioImg
+                style={{ width: 64 }}
+                src={`${process.env.PUBLIC_URL}/assets/images/logo.png`}
+              />
+            </div>
+          </Backdrop>
+        </Root>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            flex: 'auto',
+            justifyContent: 'center',
+            maxHeight: '100vh',
+          }}
+        >
+          <img
+            style={{
+              borderRadius: '20px',
+              maxHeight: '90vh',
+              minWidth: '500px',
+              objectFit: 'cover',
+            }}
+            src="https://i.pinimg.com/564x/86/40/8b/86408b9a79d33324ecd281554b80ed57.jpg"
           />
-        </div>
-      </Backdrop>
-    </Root>
+        </Box>
+      </Box>
+    </>
   );
 };
 

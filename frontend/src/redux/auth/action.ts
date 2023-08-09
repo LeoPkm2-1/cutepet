@@ -17,6 +17,7 @@ export const AuthActionEnum = {
 export type AuthActionEnum = Enum<typeof AuthActionEnum>;
 
 function setAuth(auth: boolean) {
+  console.log("set au nr");
   return typedAction(AuthActionEnum.SET_MINDFULLY_AUTH, auth);
 }
 
@@ -44,6 +45,8 @@ function firebaseAuthInit() {
 }
 
 function logout() {
+  console.log("Log out rồi ne");
+  
   return (dispatch: Dispatch) => {
     return authApi.logout().finally(() => {
       storage.setTokens();

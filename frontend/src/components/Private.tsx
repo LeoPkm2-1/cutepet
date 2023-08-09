@@ -9,14 +9,15 @@ type PrivateProps = ReturnType<typeof mapStateToProps>;
 // @ts-ignore
 const Private: React.FC<PrivateProps> = ({ children, auth }) => {
   const location = useLocation();
-  if (auth.firebaseAuthLoading) {
-    return (
-      <div style={{ padding: 20, display: "flex", justifyContent: "center" }}>
-        <CircularProgress />
-      </div>
-    );
-  }
-  return auth.firebaseUser && auth.mindfullyAuth ? (
+  // if (auth.firebaseAuthLoading) {
+  //   return (
+  //     <div style={{ padding: 20, display: "flex", justifyContent: "center" }}>
+  //       <CircularProgress />
+  //     </div>
+  //   );
+  // }
+  return auth.mindfullyAuth ? (
+  //  return true ? (
     children
   ) : (
     <Navigate

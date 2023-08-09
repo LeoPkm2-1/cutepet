@@ -22,6 +22,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { StyledTypography } from './styled';
 import { StyledTextField } from './FormItem';
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+
 type Props = ReturnType<typeof mapStateToProps> & {
   onHambuger?: React.MouseEventHandler<HTMLButtonElement>;
 };
@@ -159,7 +162,7 @@ const Header = (props: Props) => {
         <OrgName>Biti's Việt Nam</OrgName>
       </OrgContainer> */}
       <div>
-        <StyledTextField
+        {/* <StyledTextField
           id="outlined-start-adornment"
           size="small"
           sx={{
@@ -175,7 +178,33 @@ const Header = (props: Props) => {
               </InputAdornment>
             ),
           }}
-        />
+        /> */}
+        <Paper
+          component="form"
+          sx={{
+            height: "40px",
+            display: 'flex',
+            alignItems: 'center',
+            borderRadius: '25px',
+            marginRight:"20px",
+            background:"#b2b2b21a",
+          }}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1, pl: "10px",
+            fontFamily: "quicksand",
+            color: "#0c4195",
+            fontWeight:'600'
+           }}
+            placeholder="Search"
+            inputProps={{ 'aria-label': 'search google maps' }}
+          />
+          <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+            <SearchIcon sx={{
+              color: "#0c4195"
+            }} />
+          </IconButton>
+        </Paper>
         {/* <ProfileButton /> */}
       </div>
     </Root>
