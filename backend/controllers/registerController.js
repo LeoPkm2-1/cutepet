@@ -11,7 +11,8 @@ const handleRegister = async (req, res) => {
 	try {
 		const userInfor = req.body;
 		const username = userInfor.tai_khoan;
-		const email = userInfor.email;
+		const email = userInfor.email.toLowerCase();
+
 		// kiểm tra sự tồn tại của tài khoản
 		let user = await userModel.getUserByUsername(username);
 		let existed = true ? user.payload.length > 0 : false;

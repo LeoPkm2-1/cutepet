@@ -2,7 +2,8 @@ const { sqlQuery } = require('./index');
 const { Response } = require('./../utils/index');
 
 const getUserByUsername = async (userName) => {
-	const sqlStmt = 'select * from NguoiDung where tai_khoan =? ';
+	const sqlStmt =
+		'select * from NguoiDung where tai_khoan = ? COLLATE utf8mb4_bin';
 	const params = [userName];
 	return await sqlQuery(sqlStmt, params)
 		.then((data) => {
@@ -12,8 +13,9 @@ const getUserByUsername = async (userName) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
 		});
 };
+
 const getUserByEmail = async (email_address) => {
-	const sqlStmt = `select * from NguoiDung where email = ?`;
+	const sqlStmt = `select * from NguoiDung where email = ? COLLATE utf8mb4_unicode_ci`;
 	return await sqlQuery(sqlStmt, [email_address])
 		.then((data) => new Response(200, data, ''))
 		.catch(
