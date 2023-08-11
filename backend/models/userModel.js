@@ -1,4 +1,4 @@
-const { sqlQuery } = require('./index');
+const { sqlQuery, nonSQLQuery } = require('./index');
 const { Response } = require('./../utils/index');
 
 const getUserByUsername = async (userName) => {
@@ -22,6 +22,30 @@ const getUserByEmail = async (email_address) => {
 			(err) => new Response(400, [], err.sqlMessage, err.errno, err.code)
 		);
 };
+
+const getUserNonActiveByUsername = async (userName) => {
+	async function executor(collection, name) {
+		return await collection.find({ tai_khoan: name }).toArray();
+	}
+	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc', userName);
+};
+
+// (async function () {
+// 	const data = await getUserNonActiveByUsername('leoahihi');
+// 	console.log(data);
+// })();
+
+const getUserNonActiveByEmail = async (userEmail) => {
+	async function executor(collection) {
+		return await collection.find({ email: userEmail }).toArray();
+	}
+	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc');
+};
+
+// (async function () {
+// 	const data = await getUserNonActiveByEmail('leotest@gmail.com');
+// 	console.log(data);
+// })();
 
 const getUserById = async (userId) => {
 	const sqlStmt = 'select * from NguoiDung where ma_nguoi_dung =? ';
