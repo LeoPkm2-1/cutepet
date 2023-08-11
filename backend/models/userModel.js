@@ -31,7 +31,8 @@ const getUserNonActiveByUsername = async (userName) => {
 };
 
 // (async function () {
-// 	const data = await getUserNonActiveByUsername('leoahihi');
+// 	const data = await getUserNonActiveByUsername('leo');
+// 	console.log(data.length);
 // 	console.log(data);
 // })();
 
@@ -145,4 +146,6 @@ module.exports = {
 	sendRequestAddFriend,
 	isFriend,
 	isSendRequestAddFriend,
+	getUserNonActiveByUsername,
+	getUserNonActiveByEmail,
 };
