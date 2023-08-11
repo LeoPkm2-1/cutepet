@@ -40,16 +40,16 @@ const handleRegister = async (req, res) => {
 			mat_khau: hashedPass,
 			email: email,
 		};
-		let result = await userModel.addUser(userInforHashed);
-		if (result.status != 200) {
-			res.status(500).json(
-				new Response(500, [], result.message, 300, 300)
-			);
-			return;
-		}
-		res.status(result.status).json(
-			new Response(200, [], 'thêm người dùng thành công')
-		);
+		// let result = await userModel.addUser(userInforHashed);
+		// if (result.status != 200) {
+		// 	res.status(500).json(
+		// 		new Response(500, [], result.message, 300, 300)
+		// 	);
+		// 	return;
+		// }
+		// res.status(result.status).json(
+		// 	new Response(200, [], 'thêm người dùng thành công')
+		// );
 	} catch (error) {
 		switch (error.message) {
 			case USER_EXIST_MESS:
