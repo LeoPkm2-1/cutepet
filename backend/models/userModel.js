@@ -27,14 +27,15 @@ const getUserNonActiveByUsername = async (userName) => {
 	async function executor(collection, name) {
 		return await collection.find({ tai_khoan: name }).toArray();
 	}
-	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc', userName);
+	return await nonSQLQuery(
+		executor,
+		'NguoiDungChuaChinhThuc',
+		userName
+	).catch((err) => {
+		console.log(err);
+		throw err;
+	});
 };
-
-// (async function () {
-// 	const data = await getUserNonActiveByUsername('leo');
-// 	console.log(data.length);
-// 	console.log(data);
-// })();
 
 const getUserNonActiveByEmail = async (userEmail) => {
 	async function executor(collection) {
@@ -42,11 +43,6 @@ const getUserNonActiveByEmail = async (userEmail) => {
 	}
 	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc');
 };
-
-// (async function () {
-// 	const data = await getUserNonActiveByEmail('leotest@gmail.com');
-// 	console.log(data);
-// })();
 
 const getUserById = async (userId) => {
 	const sqlStmt = 'select * from NguoiDung where ma_nguoi_dung =? ';
@@ -85,6 +81,55 @@ const addUser = async (user) => {
 			// };
 		});
 };
+
+const addNonActiveUser = async (nonActiveUser) => {
+	async function executor(collection, param) {
+		return await collection.insertOne(param);
+	}
+	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc', nonActiveUser)
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+
+const deleteAllExpireNonActiveUser = async () => {
+	async function executor(collection) {
+		return await collection.deleteMany(
+			{
+				thoi_han: {
+					$lt: new Date(),
+				},
+			}
+			// {
+			// 	$expr: {
+			// 		$function: {
+			// 			body: function (thoi_han) {
+			// 				return new Date(thoi_han) < new Date();
+			// 			},
+			// 			args: ['$thoi_han'],
+			// 			lang: 'js',
+			// 		},
+			// 	},
+			// }
+			// {
+			// 	$where: function () {
+			// 		return new Date(this.thoi_han) < new Date();
+			// 	},
+			// }
+		);
+	}
+	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc');
+};
+
+// (async function () {
+// 	const data = await deleteAllExpireNonActiveUser();
+// 	console.log(data);
+// })();
+
+// (async function () {
+// 	const data = await addNonActiveUser({ ten: 'leo', lop1: 10 });
+// 	console.log(data);
+// })();
+
 const deleteUserToken = async (userid) => {
 	const sqlstmt = "UPDATE NguoiDung SET token='' WHERE ma_nguoi_dung=?;";
 	return await sqlQuery(sqlstmt, [userid])
@@ -148,4 +193,6 @@ module.exports = {
 	isSendRequestAddFriend,
 	getUserNonActiveByUsername,
 	getUserNonActiveByEmail,
+	addNonActiveUser,
+	deleteAllExpireNonActiveUser,
 };

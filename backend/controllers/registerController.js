@@ -3,6 +3,13 @@ const { validate_email } = require('./../utils/validate_email');
 const { getHash } = require('./../utils');
 const { Response } = require('./../utils/index');
 
+const {
+	emailSuitableForRegister,
+	usernameSuitableForRegister,
+	genVertificationString,
+	genDueTime,
+} = require('./../utils/registerHelper');
+
 // handl add new user to database
 const handleRegister = async (req, res) => {
 	const USER_EXIST_MESS = 'người dùng đã tồn tại';
@@ -14,16 +21,15 @@ const handleRegister = async (req, res) => {
 		const email = userInfor.email.toLowerCase();
 
 		// kiểm tra sự tồn tại của tài khoản
-		let user = await userModel.getUserByUsername(username);
-		let existed = true ? user.payload.length > 0 : false;
-		if (existed) {
+		await userModel.deleteAllExpireNonActiveUser();
+		const nameSuitable = await usernameSuitableForRegister(username);
+		if (!nameSuitable) {
 			// tài khoản đã tồn tại
 			throw new Error(USER_EXIST_MESS);
 		}
 		// kiểm tra sự tồn tại của email
-		user = await userModel.getUserByEmail(email);
-		existed = true ? user.payload.length > 0 : false;
-		if (existed) {
+		const emailSuitable = await emailSuitableForRegister(email);
+		if (!emailSuitable) {
 			// email đã tồn tại
 			throw new Error(EMAIL_EXISTED_MESS);
 		}
@@ -35,21 +41,31 @@ const handleRegister = async (req, res) => {
 		}
 		// tài khoản dc chấp nhận
 		const hashedPass = await getHash(userInfor['mat_khau']);
-		const userInforHashed = {
+
+		const active_code = genVertificationString();
+		// const thoi_han = genDueTime().toLocaleString(undefined, {
+		// 	timeZoneName: 'short',
+		// 	hourCycle: 'h23',
+		// });
+		const thoi_han = genDueTime();
+		const nonActiveUserInfor = {
 			...userInfor,
 			mat_khau: hashedPass,
 			email: email,
+			active_code,
+			thoi_han,
 		};
-		// let result = await userModel.addUser(userInforHashed);
-		// if (result.status != 200) {
-		// 	res.status(500).json(
-		// 		new Response(500, [], result.message, 300, 300)
-		// 	);
-		// 	return;
-		// }
-		// res.status(result.status).json(
-		// 	new Response(200, [], 'thêm người dùng thành công')
-		// );
+
+		await userModel.addNonActiveUser(nonActiveUserInfor);
+
+		res.status(200).json(
+			new Response(
+				200,
+				[],
+				'Vui lòng xác thực đăng nhập bằng email đã đăng ký để hoàn tất'
+			)
+		);
+		return;
 	} catch (error) {
 		switch (error.message) {
 			case USER_EXIST_MESS:
@@ -62,7 +78,7 @@ const handleRegister = async (req, res) => {
 				res.status(400).json(new Response(400, [], EMAIL_EXISTED_MESS));
 				return;
 			default:
-				break;
+				throw error;
 		}
 	}
 };
