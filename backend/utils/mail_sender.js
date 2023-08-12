@@ -31,7 +31,6 @@ async function sendMail(recipients, mailContent) {
 	return await transporter
 		.sendMail(mailOptions)
 		.then((info) => {
-			console.log('send ok');
 			return new Response(200, info, 'sent mail successfully');
 		})
 		.catch((error) => {
@@ -41,7 +40,7 @@ async function sendMail(recipients, mailContent) {
 }
 
 // (async function () {
-// 	const data = await sendMail('maithinhphat3110@gmail.com', {
+// 	const data = await sendMail('abc@gmail.com', {
 // 		subject: 'Hello ✔', // Subject line
 // 		text: 'Hello world?', // plain text body
 // 		html: '<b>Hello world?</b>', // html body
