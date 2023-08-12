@@ -40,6 +40,7 @@ function genVertificationString() {
 	const uniqueString = uuid.v4();
 	return uniqueString;
 }
+
 function genDueTime() {
 	const period = parseInt(readENV('ACTIVE_CODE_TIME'));
 	let current = new Date();
@@ -48,8 +49,6 @@ function genDueTime() {
 	// console.log(current.toLocaleString());
 	return current;
 }
-
-genDueTime();
 
 module.exports = {
 	emailSuitableForRegister,
