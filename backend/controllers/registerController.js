@@ -8,6 +8,7 @@ const {
 	usernameSuitableForRegister,
 	genVertificationString,
 	genDueTime,
+	sendActiveAccountMail,
 } = require('./../utils/registerHelper');
 
 // handl add new user to database
@@ -57,14 +58,20 @@ const handleRegister = async (req, res) => {
 		};
 
 		await userModel.addNonActiveUser(nonActiveUserInfor);
-
-		res.status(200).json(
-			new Response(
-				200,
-				[],
-				'Vui lòng xác thực đăng nhập bằng email đã đăng ký để hoàn tất'
-			)
-		);
+		await sendActiveAccountMail({
+			nameOfUser: userInfor.ten,
+			emailAddress: email,
+			active_code,
+		});
+		await res
+			.status(200)
+			.json(
+				new Response(
+					200,
+					[],
+					'Vui lòng xác thực đăng nhập bằng email đã đăng ký để hoàn tất'
+				)
+			);
 		return;
 	} catch (error) {
 		switch (error.message) {
