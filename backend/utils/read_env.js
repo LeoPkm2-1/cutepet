@@ -1,5 +1,4 @@
 const path = require('path');
-console.log(__dirname);
 require('dotenv').config({
 	path: __dirname + '/../.env',
 });
