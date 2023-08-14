@@ -10,12 +10,11 @@ const getDanhSachGiong = async (req, res) => {
 	res.status(200).json(new Response(200, giong, ''));
 };
 const getDanhSachGiongTheoMaLoai = async (req, res) => {
-	const ma_loai = req.body.maloai;
+	const ma_loai = req.params.ma_loai;
 	const giong = await giongloaiModel
 		.getGiongByMaLoai(ma_loai)
 		.then((data) => data.payload);
-	console.log(giong);
-	res.status(200).json(giong);
+	res.status(200).json(new Response(200, giong, ''));
 };
 module.exports = {
 	getDanhSachLoai,
