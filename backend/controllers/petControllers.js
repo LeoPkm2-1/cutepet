@@ -23,10 +23,12 @@ const getAllOwnPet = async (req, res) => {
 const addPet = async (req, res) => {
 	const PET_EXIST_MESSAGE = 'thú cưng đã tồn tại';
 	const PET_SPECIES_AND_GENUS_NOT_MATCH = 'loài và giống không khớp';
+	const PET_INSERT_OK = 'thêm thú cưng thành công';
 	try {
 		const userInfor = req.auth_decoded;
 		const ma_nguoi_chu = userInfor.ma_nguoi_dung;
 		const { ma_loai, ma_giong, ten_thu_cung } = req.body;
+		console.log('ok bat');
 		// kiểm tra tên tồn tại
 		const petInfor = await petModel
 			.getPetByNameAndUserID(ten_thu_cung, ma_nguoi_chu)
@@ -52,7 +54,20 @@ const addPet = async (req, res) => {
 			.then((data) => {
 				return data.payload;
 			});
-		res.status(200).json(new Response(200, 'thêm thành công', ''));
+		petInsertStatus.insertId = Number(petInsertStatus.insertId);
+		res.status(200).json(
+			new Response(
+				200,
+				{
+					ma_thu_cung: petInsertStatus.insertId,
+					ten_thu_cung,
+					ngay_sinh,
+					gioi_tinh,
+					ma_giong,
+				},
+				PET_INSERT_OK
+			)
+		);
 		return;
 	} catch (error) {
 		switch (error.message) {
