@@ -1,7 +1,7 @@
 use cutepet_sql;
 drop TABLE IF EXISTS Anh;
 CREATE TABLE Anh(
-    ma_anh int NULL AUTO_INCREMENT,
+    ma_anh int NOT NULL AUTO_INCREMENT,
     url VARCHAR(255) not NULL,
     ngay_cap_nhat TIMESTAMP not NULL DEFAULT NOW(),
     PRIMARY KEY(ma_anh)
@@ -73,11 +73,11 @@ CREATE TABLE LoiMoiKetBan(
 commit;
 drop TABLE if EXISTS AnhDaiDien_NguoiDung;
 CREATE TABLE AnhDaiDien_NguoiDung(
-    url varchar(255) not null,
+    ma_anh int NOT NULL,
     ma_nguoi_dung int not null,
-    CONSTRAINT fk_AnhNguoiDung_Anh Foreign key(url) references Anh(url) on UPDATE RESTRICT on DELETE RESTRICT,
+    CONSTRAINT fk_AnhNguoiDung_Anh Foreign key(ma_anh) references Anh(ma_anh) on UPDATE RESTRICT on DELETE RESTRICT,
     CONSTRAINT fk_AnhNguoiDung_NguoiDung FOREIGN KEY(ma_nguoi_dung) references NguoiDung(ma_nguoi_dung) on UPDATE RESTRICT on DELETE RESTRICT,
-    PRIMARY KEY(url)
+    PRIMARY KEY(ma_anh, ma_nguoi_dung)
 );
 commit;
 DROP TABLE if EXISTS ThuCung;
@@ -120,3 +120,12 @@ CREATE TABLE Lich(
     CONSTRAINT fk_lich_thucung FOREIGN KEY(ma_thu_cung) REFERENCES ThuCung(ma_thu_cung) on UPDATE RESTRICT on DELETE RESTRICT
 );
 commit;
+DROP TABLE if EXISTS AnhDaiDien_ThuCung;
+create TABLE AnhDaiDien_ThuCung(
+    ma_anh int NOT NULL,
+    ma_thu_cung INT NOT NULL,
+    CONSTRAINT fk_AnhThuCung_Anh FOREIGN KEY(ma_anh) REFERENCES Anh(ma_anh) on UPDATE RESTRICT on DELETE RESTRICT,
+    CONSTRAINT fk_AnhThuCung_ThuCung FOREIGN KEY(ma_thu_cung) REFERENCES ThuCung(ma_thu_cung) on UPDATE RESTRICT on DELETE RESTRICT,
+    PRIMARY KEY(ma_anh, ma_thu_cung)
+);
+COMMIT;
