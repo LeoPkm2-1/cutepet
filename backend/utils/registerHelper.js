@@ -38,6 +38,15 @@ async function emailSuitableForRegister(email) {
 	return true;
 }
 
+async function getNonActiveUserByValidActiveCode(active_code) {
+	let user = await userModel.getUserNonActiveByActiveCode(active_code);
+	// console.log('user:', user);
+	if (user.length === 0) return {};
+	user = user[0];
+	if (user.thoi_han < new Date()) return {};
+	return user;
+}
+
 function genVertificationString() {
 	const uniqueString = uuid.v4();
 	return uniqueString;
@@ -65,10 +74,10 @@ async function sendActiveAccountMail({
 			logo: 'https://petcube.com/blog/content/images/2018/04/boo-the-dog-3.jpg',
 		},
 	});
-
+	const linkAddress = `http://localhost:3001/user/confirmRegister/${active_code}`;
 	const email = {
 		body: {
-			name: `${emailAddress}`,
+			name: `${nameOfUser} (${emailAddress})`,
 			intro: 'Chào mừng bạn đã đến với 🦴 CutePet 🦴',
 			action: {
 				instructions:
@@ -76,16 +85,19 @@ async function sendActiveAccountMail({
 				button: {
 					color: '#22BC66',
 					text: 'Xác nhận đăng ký',
-					link: `https://www.google.com/`,
+					link: `${linkAddress}`,
 				},
 			},
-			outro: 'Nếu có bất kỳ thắc mắc nào xin hãy liên lạc với chúng tui qua: abc@gmail.com',
+			outro: [
+				`Nếu Nút xác nhận không hoạt động vui lòng bấm vào liên kết này: ${linkAddress}`,
+				'Nếu có bất kỳ thắc mắc nào xin hãy liên lạc với chúng tui qua: abc@gmail.com',
+			],
 		},
 	};
 	// Generate an HTML email with the provided contents
 	const emailBody = mailGenerator.generate(email);
 
-	return await sendMail('yosib18445@vreaa.com', {
+	return await sendMail(`${emailAddress}`, {
 		subject: 'xác thực đăng ký tài khoản CutePet 🐾', // Subject line
 		html: emailBody,
 	});
@@ -97,4 +109,5 @@ module.exports = {
 	genVertificationString,
 	genDueTime,
 	sendActiveAccountMail,
+	getNonActiveUserByValidActiveCode,
 };

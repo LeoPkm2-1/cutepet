@@ -44,6 +44,13 @@ const getUserNonActiveByEmail = async (userEmail) => {
 	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc');
 };
 
+const getUserNonActiveByActiveCode = async (active_code) => {
+	async function executor(collection) {
+		return await collection.find({ active_code: active_code }).toArray();
+	}
+	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc');
+};
+
 const getUserById = async (userId) => {
 	const sqlStmt = 'select * from NguoiDung where ma_nguoi_dung =? ';
 	const params = [userId];
@@ -53,12 +60,6 @@ const getUserById = async (userId) => {
 		})
 		.catch((err) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
-			// {
-			// 	status: 400,
-			// 	errno: err.errno,
-			// 	code: err.code,
-			// 	message: err.sqlMessage,
-			// };
 		});
 };
 
@@ -73,12 +74,6 @@ const addUser = async (user) => {
 		})
 		.catch((err) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
-			// {
-			// 	status: 400,
-			// 	errno: err.errno,
-			// 	code: err.code,
-			// 	message: err.sqlMessage,
-			// };
 		});
 };
 
@@ -93,42 +88,23 @@ const addNonActiveUser = async (nonActiveUser) => {
 
 const deleteAllExpireNonActiveUser = async () => {
 	async function executor(collection) {
-		return await collection.deleteMany(
-			{
-				thoi_han: {
-					$lt: new Date(),
-				},
-			}
-			// {
-			// 	$expr: {
-			// 		$function: {
-			// 			body: function (thoi_han) {
-			// 				return new Date(thoi_han) < new Date();
-			// 			},
-			// 			args: ['$thoi_han'],
-			// 			lang: 'js',
-			// 		},
-			// 	},
-			// }
-			// {
-			// 	$where: function () {
-			// 		return new Date(this.thoi_han) < new Date();
-			// 	},
-			// }
-		);
+		return await collection.deleteMany({
+			thoi_han: {
+				$lt: new Date(),
+			},
+		});
 	}
 	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc');
 };
 
-// (async function () {
-// 	const data = await deleteAllExpireNonActiveUser();
-// 	console.log(data);
-// })();
-
-// (async function () {
-// 	const data = await addNonActiveUser({ ten: 'leo', lop1: 10 });
-// 	console.log(data);
-// })();
+const deleteNonActiveUserByActiveCode = async (active_code) => {
+	async function executor(collection) {
+		return await collection.deleteMany({
+			active_code: active_code,
+		});
+	}
+	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc');
+};
 
 const deleteUserToken = async (userid) => {
 	const sqlstmt = "UPDATE NguoiDung SET token='' WHERE ma_nguoi_dung=?;";
@@ -195,4 +171,6 @@ module.exports = {
 	getUserNonActiveByEmail,
 	addNonActiveUser,
 	deleteAllExpireNonActiveUser,
+	getUserNonActiveByActiveCode,
+	deleteNonActiveUserByActiveCode,
 };

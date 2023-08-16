@@ -1,9 +1,10 @@
 use cutepet_sql;
 drop TABLE IF EXISTS Anh;
 CREATE TABLE Anh(
+    ma_anh int NULL AUTO_INCREMENT,
     url VARCHAR(255) not NULL,
     ngay_cap_nhat TIMESTAMP not NULL DEFAULT NOW(),
-    PRIMARY KEY(url)
+    PRIMARY KEY(ma_anh)
 );
 commit;
 DROP TABLE if EXISTS Loai;

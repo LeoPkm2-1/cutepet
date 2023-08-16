@@ -9,6 +9,7 @@ const {
 	genVertificationString,
 	genDueTime,
 	sendActiveAccountMail,
+	getNonActiveUserByValidActiveCode,
 } = require('./../utils/registerHelper');
 
 // handl add new user to database
@@ -90,4 +91,26 @@ const handleRegister = async (req, res) => {
 	}
 };
 
-module.exports = { handleRegister };
+const handleConfirmRegister = async (req, res) => {
+	const ACTIVE_CODE_NOT_VALID = 'mã xác thực không đúng';
+	const CONFIRM_SUCSECC_MESSAGE = 'hoàn tất xác thực đăng ký';
+	const active_code = req.query.active_code;
+	const user = await getNonActiveUserByValidActiveCode(active_code);
+	console.log('active_code:', user);
+	if (Object.keys(user).length === 0) {
+		res.status(400).json(
+			new Response(400, {}, ACTIVE_CODE_NOT_VALID, 300, 300)
+		);
+		return;
+	}
+	await userModel.addUser({
+		ten: user.ten,
+		tai_khoan: user.tai_khoan,
+		mat_khau: user.mat_khau,
+		email: user.email,
+	});
+	await userModel.deleteNonActiveUserByActiveCode(active_code);
+
+	res.status(200).json(new Response(200, [], CONFIRM_SUCSECC_MESSAGE));
+};
+module.exports = { handleRegister, handleConfirmRegister };
