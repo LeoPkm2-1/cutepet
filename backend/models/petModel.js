@@ -92,3 +92,8 @@ module.exports = {
 	addPet,
 	updatePetInfor,
 };
+
+// (async function () {
+// 	const data = await addPet('le222e', '2019-10-8', 1, 'mập lười béo', 100, 1);
+// 	console.log(data);
+// })();
