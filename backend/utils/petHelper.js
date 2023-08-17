@@ -1,5 +1,6 @@
 const giongLoaiModel = require('./../models/giongLoaiModel');
 const petModel = require('./../models/petModel');
+const anhThuCungModel = require('./../models/anhThuCungModel');
 const giongLoaiMatch = async (giongID, loaiID) => {
 	giongID = parseInt(giongID);
 	loaiID = parseInt(loaiID);
@@ -32,7 +33,18 @@ const isOwnPet = async (petid, ownerid) => {
 		});
 };
 
+const handleImageForAddPet = async (url, pet_id) => {
+	try {
+		if (typeof url === 'undefined') return undefined;
+		await anhThuCungModel.capNhatAnhDaiDienThuCung(url, pet_id);
+		return url;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 module.exports = {
 	giongLoaiMatch,
 	isOwnPet,
+	handleImageForAddPet,
 };

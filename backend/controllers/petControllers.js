@@ -1,5 +1,9 @@
 const petModel = require('./../models/petModel');
-const { giongLoaiMatch, isOwnPet } = require('./../utils/petHelper');
+const {
+	giongLoaiMatch,
+	isOwnPet,
+	handleImageForAddPet,
+} = require('./../utils/petHelper');
 const giongLoaiModel = require('../models/giongLoaiModel');
 const { Response } = require('./../utils/index');
 
@@ -28,7 +32,6 @@ const addPet = async (req, res) => {
 		const userInfor = req.auth_decoded;
 		const ma_nguoi_chu = userInfor.ma_nguoi_dung;
 		const { ma_loai, ma_giong, ten_thu_cung } = req.body;
-		console.log('ok bat');
 		// kiểm tra tên tồn tại
 		const petInfor = await petModel
 			.getPetByNameAndUserID(ten_thu_cung, ma_nguoi_chu)
@@ -41,7 +44,8 @@ const addPet = async (req, res) => {
 		if (!match) {
 			throw new Error(PET_SPECIES_AND_GENUS_NOT_MATCH);
 		}
-		const { ngay_sinh, gioi_tinh, ghi_chu } = req.body;
+		const { ngay_sinh, gioi_tinh, ghi_chu, url_anh } = req.body;
+		console.log('url:', url_anh);
 		const petInsertStatus = await petModel
 			.addPet(
 				ten_thu_cung,
@@ -54,16 +58,20 @@ const addPet = async (req, res) => {
 			.then((data) => {
 				return data.payload;
 			});
-		petInsertStatus.insertId = Number(petInsertStatus.insertId);
+		const ma_thu_cung = (petInsertStatus.insertId = Number(
+			petInsertStatus.insertId
+		));
+		await handleImageForAddPet(url_anh);
 		res.status(200).json(
 			new Response(
 				200,
 				{
-					ma_thu_cung: petInsertStatus.insertId,
+					ma_thu_cung,
 					ten_thu_cung,
 					ngay_sinh,
 					gioi_tinh,
 					ma_giong,
+					anh_dai_dien: url_anh ? url_anh : null,
 				},
 				PET_INSERT_OK
 			)

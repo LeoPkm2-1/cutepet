@@ -124,6 +124,7 @@ DROP TABLE if EXISTS AnhDaiDien_ThuCung;
 create TABLE AnhDaiDien_ThuCung(
     ma_anh int NOT NULL,
     ma_thu_cung INT NOT NULL,
+    is_active BOOLEAN DEFAULT False,
     CONSTRAINT fk_AnhThuCung_Anh FOREIGN KEY(ma_anh) REFERENCES Anh(ma_anh) on UPDATE RESTRICT on DELETE RESTRICT,
     CONSTRAINT fk_AnhThuCung_ThuCung FOREIGN KEY(ma_thu_cung) REFERENCES ThuCung(ma_thu_cung) on UPDATE RESTRICT on DELETE RESTRICT,
     PRIMARY KEY(ma_anh, ma_thu_cung)
