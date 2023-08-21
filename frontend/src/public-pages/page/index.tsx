@@ -9,6 +9,8 @@ import { Root } from './styled';
 import HomePage from './home';
 import SideBar from '../../components/SideBar';
 import MangXaHoi from './mang-xa-hoi';
+import { QuanLyThuCung } from './quan-ly-thu-cung';
+import ThemThuCung from './quan-ly-thu-cung/component/them-thu-cung';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -21,17 +23,19 @@ export default function PageRouting() {
     });
   }, [matches]);
   return (
-    <Root>
+    <Root >
       <Header
         // showHambuger={!matches}
         onHambuger={() => setDrawerOpen(!drawerOpen)}
       />
-      <div style={{ position: 'relative' }} className="row expanded">
+      <div style={{ position: 'relative', background: "#f9fafb"}} className="row expanded">
         <SideBar open={drawerOpen} mobile={!matches} onClose={closeDrawer} />
         <ScrollView>
           <div className="expanded col">
               <Routes>
                 <Route path="mang-xa-hoi" element={<MangXaHoi />} />
+                <Route path="quan-ly-thu-cung" element={<QuanLyThuCung />} />
+                <Route path="them-thu-cung" element={<ThemThuCung />} />
                 <Route path="*" element={<HomePage />} />
               </Routes> 
            </div>

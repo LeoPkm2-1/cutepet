@@ -1,5 +1,6 @@
-import { PickerOverlay } from 'filestack-react';
+import { PickerOverlay, PickerInline } from 'filestack-react';
 import { uploadMedia } from './upload';
+import UploadImage from '../../../components/upload-image';
 
 
 // Our app
@@ -14,11 +15,7 @@ export default function MangXaHoi() {
   return (
     <>
       <button onClick={handleClick}>Click</button>
-      <PickerOverlay
-        apikey={YOUR_API_KEY1}
-        onSuccess={(res:any) => console.log(res)}
-        onUploadDone={(res:any) => console.log(res)}
-      />
+      <UploadImage/>
     </>
   );
 }
