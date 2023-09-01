@@ -75,6 +75,7 @@ drop TABLE if EXISTS AnhDaiDien_NguoiDung;
 CREATE TABLE AnhDaiDien_NguoiDung(
     ma_anh int NOT NULL,
     ma_nguoi_dung int not null,
+    is_active BOOLEAN DEFAULT False,
     CONSTRAINT fk_AnhNguoiDung_Anh Foreign key(ma_anh) references Anh(ma_anh) on UPDATE RESTRICT on DELETE RESTRICT,
     CONSTRAINT fk_AnhNguoiDung_NguoiDung FOREIGN KEY(ma_nguoi_dung) references NguoiDung(ma_nguoi_dung) on UPDATE RESTRICT on DELETE RESTRICT,
     PRIMARY KEY(ma_anh, ma_nguoi_dung)

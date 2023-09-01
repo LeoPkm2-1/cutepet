@@ -9,7 +9,7 @@ const {
 // router.get("/all", userControler.getAllUser);
 router.get('/confirmRegister', handleConfirmRegister);
 router.use(requireLogined);
-router.get('/infor/:username', userControler.getUserByUserName);
+router.get('/infor/:username', userControler.userPublicInforByUserName);
 router.post('/requestAddFriend', userControler.requestAddFriend);
 
 module.exports = router;
