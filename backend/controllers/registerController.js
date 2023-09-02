@@ -11,7 +11,7 @@ const {
 	sendActiveAccountMail,
 	getNonActiveUserByValidActiveCode,
 } = require('./../utils/registerHelper');
-const { getUserPublicInforByUserName } = require('./userControllers');
+const { getUserPublicInforByUserName } = require('../utils/userHelper');
 
 // handl add new user to database
 const handleRegister = async (req, res) => {

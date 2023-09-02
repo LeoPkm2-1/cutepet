@@ -62,10 +62,7 @@ const getDSAnhDaiDienThuCung = async (ma_nguoi_dung, isOrder = -1) => {
 		);
 };
 
-// (async function () {
-// 	const data = await getDSAnhDaiDienThuCung(1);
-// 	console.log(data);
-// })();
+
 
 module.exports = {
 	AddAnhNguoiDungByMaAnh,

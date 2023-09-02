@@ -1,5 +1,5 @@
 const userModel = require('./../models/userModel');
-
+const anhNguoiDungModel = require('../models/anhNguoiDungModel')
 async function isFriend(person_id_1, person_id_2) {
 	const data = await userModel.isFriend(person_id_1, person_id_2);
 	if (data.status == 200) {
@@ -35,9 +35,34 @@ async function conditionToSendAddFriendRequest(sender_id, recipient_id) {
 		throw new Error(data.message);
 	}
 }
+async function getUserPublicInforByUserName(username) {
+	const userInfor = await userModel
+		.getUserByUsername(username)
+		.then((data) => data.payload[0]);
+	// remove sensitive infor
+	delete userInfor.mat_khau;
+	delete userInfor.token;
+	delete userInfor.is_admin;
+	const anh = await anhNguoiDungModel
+		.getAnhDaiDienHienTai(userInfor.ma_nguoi_dung)
+		.then((data) =>
+			data.payload.length > 0
+				? data.payload[0]
+				: {
+						ma_anh: null,
+						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png',
+						ngay_cap_nhat: null,
+						ma_nguoi_dung: `${userInfor.ma_nguoi_dung}`,
+						is_active: null,
+				  }
+		);
+	const userPubInfor = { ...userInfor, anh };
+	return userPubInfor;
+}
 
 module.exports = {
 	isFriend,
 	isSendRequestAddFriend,
 	conditionToSendAddFriendRequest,
+	getUserPublicInforByUserName,
 };

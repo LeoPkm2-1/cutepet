@@ -11,7 +11,10 @@ const AddAnhThuCungByMaAnh = async (ma_anh, ma_thu_cung) => {
 			// console.log('ahihi');
 			return new Response(
 				200,
-				data,
+				{
+					ma_anh:ma_anh,
+					ma_thu_cung:ma_thu_cung
+				},
 				`ảnh mã: ${ma_anh} đã thêm cho thú cưng mã: ${ma_thu_cung}`
 			);
 		})

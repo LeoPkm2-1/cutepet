@@ -3,17 +3,37 @@ const {
 	giongLoaiMatch,
 	isOwnPet,
 	handleImageForAddPet,
+	getpublicImageInfor,
 } = require('./../utils/petHelper');
 const giongLoaiModel = require('../models/giongLoaiModel');
+const anhThuCungModel = require('../models/anhThuCungModel');
 const { Response } = require('./../utils/index');
 
-const getPetById = async (req, res) => {
+
+const getInforById = async (req,res) => {
 	const petid = req.params.pet_id;
-	const pet = await petModel
-		.getPetByID(petid)
+	const petInfor = await petModel.getPetByID(petid).then((data) => {
+		if (data.payload.length <= 0) return {};
+		return data.payload[0];
+	});
+	if (Object.keys(petInfor).length <= 0) {
+		res.status(200).json(new Response(200, {}));
+		return;
+	}
+	const giong_loai = await giongLoaiModel
+		.getThongTinGiongLoaiByMaGiong(petInfor.ma_giong)
 		.then((data) => data.payload[0]);
-	res.status(200).json(new Response(200, pet, ''));
+	const anh = await getpublicImageInfor(petid, giong_loai.ma_loai);
+	delete petInfor.ma_giong;
+	res.status(200).json(
+		new Response(200, {
+			...petInfor,
+			giong_loai,
+			anh,
+		})
+	);
 };
+
 
 const getAllOwnPet = async (req, res) => {
 	const userid = req.auth_decoded.ma_nguoi_dung;
@@ -62,6 +82,10 @@ const addPet = async (req, res) => {
 			petInsertStatus.insertId
 		));
 		await handleImageForAddPet(url_anh);
+		const anhInfor = await getpublicImageInfor(ma_thu_cung, ma_loai);
+		const giong_loai = await giongLoaiModel
+			.getThongTinGiongLoaiByMaGiong(ma_giong)
+			.then((data) => data.payload[0]);
 		res.status(200).json(
 			new Response(
 				200,
@@ -70,8 +94,8 @@ const addPet = async (req, res) => {
 					ten_thu_cung,
 					ngay_sinh,
 					gioi_tinh,
-					ma_giong,
-					anh_dai_dien: url_anh ? url_anh : null,
+					giong_loai,
+					anh: anhInfor,
 				},
 				PET_INSERT_OK
 			)
@@ -161,7 +185,7 @@ const updateInfor = async (req, res) => {
 	}
 };
 module.exports = {
-	getPetById,
+	getInforById,
 	getAllOwnPet,
 	addPet,
 	updateInfor,

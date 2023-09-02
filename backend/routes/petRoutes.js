@@ -6,7 +6,7 @@ const petController = require('./../controllers/petControllers');
 
 // require login routes
 router.use(requireLogined);
-router.get('/infor/:pet_id', petController.getPetById);
+router.get('/infor/:pet_id', petController.getInforById);
 router.get('/getallowns', petController.getAllOwnPet);
 router.post('/addpet', petController.addPet);
 router.post('/capnhatthongtin/:pet_id', petController.updateInfor);

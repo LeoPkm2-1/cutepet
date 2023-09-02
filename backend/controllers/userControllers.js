@@ -11,34 +11,11 @@ const getUserByUserName = async (req, res) => {
 	res.status(200).json(new Response(200, user, ''));
 };
 
-async function getUserPublicInforByUserName(username) {
-	const userInfor = await userModel
-		.getUserByUsername(username)
-		.then((data) => data.payload[0]);
-	// remove sensitive infor
-	delete userInfor.mat_khau;
-	delete userInfor.token;
-	delete userInfor.is_admin;
-	const anh = await anhNguoiDungModel
-		.getAnhDaiDienHienTai(userInfor.ma_nguoi_dung)
-		.then((data) =>
-			data.payload.length > 0
-				? data.payload[0]
-				: {
-						ma_anh: null,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png',
-						ngay_cap_nhat: null,
-						ma_nguoi_dung: `${userInfor.ma_nguoi_dung}`,
-						is_active: null,
-				  }
-		);
-	const userPubInfor = { ...userInfor, anh };
-	return userPubInfor;
-}
+
 
 const userPublicInforByUserName = async (req, res) => {
 	const username = req.params.username;
-	const userPubInfor = await getUserPublicInforByUserName(username);
+	const userPubInfor = await userHelper.getUserPublicInforByUserName(username);
 	res.status(200).json(new Response(200, userPubInfor, ''));
 };
 
@@ -113,5 +90,4 @@ module.exports = {
 	getUserByUserName,
 	requestAddFriend,
 	userPublicInforByUserName,
-	getUserPublicInforByUserName,
 };
