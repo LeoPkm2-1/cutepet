@@ -97,12 +97,14 @@ CREATE TABLE ThuCung (
 commit;
 DROP table if EXISTS ThongTinSucKhoe;
 CREATE TABLE ThongTinSucKhoe (
+    ma_suc_khoe int NOT NULL AUTO_INCREMENT,
     ma_thu_cung int not NULL,
     thoi_gian TIMESTAMP not NULL DEFAULT NOW(),
-    can_nang FLOAT DEFAULT 0,
-    chieu_cao FLOAT DEFAULT 0,
+    can_nang FLOAT DEFAULT NULL,
+    chieu_cao FLOAT DEFAULT NULL,
     CONSTRAINT fk_suckhoe_thucung FOREIGN KEY (ma_thu_cung) REFERENCES ThuCung(ma_thu_cung) on UPDATE RESTRICT on DELETE RESTRICT,
-    PRIMARY KEY(ma_thu_cung, thoi_gian)
+    -- PRIMARY KEY(ma_thu_cung, thoi_gian)
+    PRIMARY KEY(ma_suc_khoe)
 );
 commit;
 DROP TABLE if EXISTS Lich;

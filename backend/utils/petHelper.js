@@ -1,6 +1,8 @@
 const giongLoaiModel = require('./../models/giongLoaiModel');
 const petModel = require('./../models/petModel');
 const anhThuCungModel = require('./../models/anhThuCungModel');
+const ThongTinSucKhoeModel = require('./../models/ThongTInSucKhoeModel');
+
 const giongLoaiMatch = async (giongID, loaiID) => {
 	giongID = parseInt(giongID);
 	loaiID = parseInt(loaiID);
@@ -99,10 +101,42 @@ const getpublicImageInfor = async (pet_id, ma_loai = undefined) => {
 	}
 };
 
+const handleHealthInDexForAddPet = async (pet_id, weight, height) => {
+	try {
+		if (typeof weight == 'undefined' && typeof height == 'undefined')
+			return undefined;
+		if (typeof weight == 'undefined') {
+			weight = null;
+		} else if (typeof height == 'undefined') {
+			height = null;
+		}
+		return await ThongTinSucKhoeModel.addHealthIndex({ pet_id, weight, height })
+			.then((data) => data)
+			.catch((err) => console.log(err));
+	} catch (error) {}
+};
+
+const getPublicHealthIndexInfor  = async (pet_id) =>{
+	const data =await ThongTinSucKhoeModel.getHealthIndexAtNowByPetid(pet_id).then(data=>data.payload)
+	if(data.length <=0){
+		return   {
+			ma_suc_khoe: null,
+			ma_thu_cung:pet_id,
+			thoi_gian:null,
+			can_nang:null,
+			chieu_cao:null,
+		  }
+	}
+	return data[0];
+}
+
+
 
 module.exports = {
 	giongLoaiMatch,
 	isOwnPet,
 	handleImageForAddPet,
 	getpublicImageInfor,
+	handleHealthInDexForAddPet,
+	getPublicHealthIndexInfor,
 };
