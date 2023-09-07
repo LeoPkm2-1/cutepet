@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireLogined, nonRequireLogined } = require('../middlewares/auth');
+const addFriendMid = require('../middlewares/addFriendMid')
 const userControler = require('../controllers/userControllers');
 const {
 	handleConfirmRegister,
@@ -9,7 +10,11 @@ const {
 // router.get("/all", userControler.getAllUser);
 router.get('/confirmRegister', handleConfirmRegister);
 router.use(requireLogined);
+// get user infor by username
 router.get('/infor/:username', userControler.userPublicInforByUserName);
-router.post('/requestAddFriend', userControler.requestAddFriend);
-
+// request add friend 
+router.post('/requestAddFriendById', userControler.requestAddFriend);
+router.post('/requestAddFriendByUserName',addFriendMid.convertUserNameToId ,userControler.requestAddFriend);
+// respone add friend request.
+router.post('/responeAddFriendRequestById',userControler.responeAddFriend)
 module.exports = router;

@@ -1,5 +1,8 @@
 const userModel = require('./../models/userModel');
+const loiMoiKetBanModel = require('../models/loiMoiKetBanModel');
 const anhNguoiDungModel = require('../models/anhNguoiDungModel')
+
+// return true if person 1 is friend of person 2
 async function isFriend(person_id_1, person_id_2) {
 	const data = await userModel.isFriend(person_id_1, person_id_2);
 	if (data.status == 200) {
@@ -9,7 +12,7 @@ async function isFriend(person_id_1, person_id_2) {
 }
 
 async function isSendRequestAddFriend(sender_id, recipient_id) {
-	const data = await userModel.isSendRequestAddFriend(
+	const data = await loiMoiKetBanModel.isSendRequestAddFriend(
 		sender_id,
 		recipient_id
 	);
@@ -18,18 +21,22 @@ async function isSendRequestAddFriend(sender_id, recipient_id) {
 	}
 	throw new Error(data.message);
 }
+
+// return true if sender have send request add friend to recipient 
 async function conditionToSendAddFriendRequest(sender_id, recipient_id) {
 	try {
 		const fiend = await isFriend(sender_id, recipient_id);
+		if(fiend) return false;
 		const haveSent_1 = await isSendRequestAddFriend(
 			sender_id,
 			recipient_id
 		);
+		if(haveSent_1) return false;
 		const haveSent_2 = await isSendRequestAddFriend(
 			recipient_id,
 			sender_id
 		);
-		if (fiend || haveSent_1 || haveSent_2) return false;
+		if (haveSent_2) return false;
 		return true;
 	} catch (error) {
 		throw new Error(data.message);
