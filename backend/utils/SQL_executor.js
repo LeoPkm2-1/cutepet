@@ -8,7 +8,7 @@ async function sqlQuery(sqlStmt, params = []) {
 	try {
 		conn = await db.getConnection();
 		if (conn) {
-			// console.log("Open db connect");
+			console.log("Open db connect");
 			let result = await conn.query(sqlStmt, params).then((data) => data);
 			return result;
 		}
