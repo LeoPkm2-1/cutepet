@@ -54,7 +54,6 @@ const handlLogin = async (req, res) => {
 };
 
 const checkUsernameAndPass = async (username_email, drawPassword) => {
-	console.log({username_email,drawPassword});
 	let response = isEmailForm(username_email)
 		? await userModel.getUserByEmail(username_email)
 		: await userModel.getUserByUsername(username_email);
