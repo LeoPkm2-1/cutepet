@@ -3,6 +3,7 @@ const router = express.Router();
 const userRoutes = require('./userRoutes');
 const petRoutes = require('./petRoutes');
 const giongLoaiRoutes = require('./giongLoaiRoutes');
+const postRoutes = require('./postRoutes');
 const userControler = require('./../controllers/userControllers');
 const { requireLogined, nonRequireLogined } = require('../middlewares/auth');
 const { handlLogin } = require('./../controllers/loginController');
@@ -20,4 +21,7 @@ router.get('/logout', requireLogined, handleLogout);
 router.use('/user', userRoutes);
 router.use('/pet', petRoutes);
 router.use('/giongloai', giongLoaiRoutes);
+
+// định tuyến cho bài biết
+router.use('/post', postRoutes); 
 module.exports = router;
