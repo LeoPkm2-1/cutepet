@@ -14,11 +14,14 @@ app.use(
 app.use(express.static('public'));
 // Add Access Control Allow Origin headers
 app.use((req, res, next) => {
+	// res.header(
+	// 	"Access-Control-Allow-Headers",
+	// 	"Origin, X-Requested-With, Content-Type, Accept"
+	// );
 	res.setHeader("Access-Control-Allow-Origin", "*");
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept"
-	);
+	res.setHeader("Access-Control-Allow-Credentials", "true");
+	res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+	res.setHeader("Access-Control-Allow-Headers", "Authorization,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
 	next();
 });
 

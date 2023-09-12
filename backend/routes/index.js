@@ -21,7 +21,11 @@ router.get('/logout', requireLogined, handleLogout);
 router.use('/user', userRoutes);
 router.use('/pet', petRoutes);
 router.use('/giongloai', giongLoaiRoutes);
+<<<<<<< HEAD
 
 // định tuyến cho bài biết
 router.use('/post', postRoutes); 
+=======
+router.use('/post',requireLogined,postRoutes)
+>>>>>>> 480b2941782e58795db1e4c0784ffea293895900
 module.exports = router;

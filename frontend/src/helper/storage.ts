@@ -23,7 +23,7 @@ function getTokens() {
   return;
 }
 
-function setTokens(tokens?: Tokens) {
+function setTokens(tokens?: Tokens | string) {
   if (!tokens) {
     return localStorage.removeItem(TOKEN_KEY);
   }

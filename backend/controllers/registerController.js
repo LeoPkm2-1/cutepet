@@ -61,11 +61,12 @@ const handleRegister = async (req, res) => {
 		};
 
 		await userModel.addNonActiveUser(nonActiveUserInfor);
-		await sendActiveAccountMail({
+		const data = await sendActiveAccountMail({
 			nameOfUser: userInfor.ten,
 			emailAddress: email,
 			active_code,
 		});
+		console.log(data, " Data");
 		await res
 			.status(200)
 			.json(
