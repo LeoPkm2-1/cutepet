@@ -1,11 +1,4 @@
 const petModel = require('./../models/petModel');
-// const {
-// 	giongLoaiMatch,
-// 	isOwnPet,
-// 	handleImageForAddPet,
-// 	getpublicImageInfor,
-// 	getPublicHealthIndexInfor,
-// } = require('./../utils/petHelper');
 const petHelper = require('./../utils/petHelper');
 const giongLoaiModel = require('../models/giongLoaiModel');
 const anhThuCungModel = require('../models/anhThuCungModel');
