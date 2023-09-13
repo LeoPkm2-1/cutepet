@@ -35,6 +35,8 @@
 ```
 
 ## Like viết chia sẻ trạng thái:
+`phương thức này dùng để like nếu bài post chưa được like và hủy like nếu bài post đã được like rồi`
+
 1. phương thức :
    
    POST: http://localhost:3000/post/likeStatusPost
@@ -46,12 +48,45 @@
 }
 ```
 
-3. trả về ở dưới này sẽ được nằm trong payload của **Respone**:
+3. trả về ở dưới này:
+`like`
+```javascript
+
+{
+    "status": 200,
+    "payload": {
+            "_id": "...............",
+            "postId": "...............",
+            "userLike": "..............."
+        },
+    "message": "like thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+`hủy like`
+```javascript
+
+{
+    "status": 200,
+    "payload":  {
+        "postId": ".................."
+    },
+    "message": "hủy like thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+`khi có lỗi`
 ```javascript
 {
-    post_id: ...,
-    likeBy: person_id
-    likeAt: time
+    "status": 400,
+    "payload": [],
+    "message": "hủy like thành công",
+    "errno": 300,
+    "errcode": 300
 }
 ```
 

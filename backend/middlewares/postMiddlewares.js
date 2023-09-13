@@ -1,4 +1,6 @@
 const { Response } = require('../utils');
+const postModel = require('../models/postModel');
+const postHelper = require('../utils/postHelper');
 async function preProcessAddStatusPost(req, res, next) {
 	const NOT_CONTENT_POST = `bài viết không được chấp nhận do không có nội dung`;
 	const text = req.body.text;
@@ -24,11 +26,23 @@ async function preProcessAddStatusPost(req, res, next) {
 	next();
 }
 
-async function preProcessLikeStatusPost(req, res, rext) {
+async function preProcessLikeStatusPost(req, res, next) {
+	const { post_id } = req.body;
+	const data = await postModel.getStatusPostById(post_id);
+	if (data.payload.length <= 0) {
+		res.status(400).json(
+			new Response(400, 'Bài viết không tồn tại', 300, 300, 300)
+		);
+		return;
+	}
+	const userId = req.auth_decoded.ma_nguoi_dung;
+	const hasLiked  = await postHelper.hasUserLikeTheStatusPost(userId,post_id)
+	req.body.action = hasLiked?'REMOVE_LIKE':'LIKE';
 	next();
+	return;
 }
 
 module.exports = {
 	preProcessAddStatusPost,
-	preProcessLikeStatusPost
+	preProcessLikeStatusPost,
 };

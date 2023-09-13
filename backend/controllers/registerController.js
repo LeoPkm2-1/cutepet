@@ -66,7 +66,6 @@ const handleRegister = async (req, res) => {
 			emailAddress: email,
 			active_code,
 		});
-		console.log(data, " Data");
 		await res
 			.status(200)
 			.json(
