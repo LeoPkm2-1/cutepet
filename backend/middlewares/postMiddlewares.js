@@ -1,6 +1,7 @@
 const { Response } = require('../utils');
 const postModel = require('../models/postModel');
 const postHelper = require('../utils/postHelper');
+
 async function preProcessAddStatusPost(req, res, next) {
 	const NOT_CONTENT_POST = `bài viết không được chấp nhận do không có nội dung`;
 	const text = req.body.text;
@@ -81,6 +82,13 @@ async function preProcessCmtStatusPost(req,res,next) {
 	}
 	next();
 }
+async function preProcessRelyCmtStatusPost(req,res,next){
+	const reply = req.body.reply;
+	if(typeof reply!='string'||reply=='' ){
+		res.status(400).json(new Response(400, [], 'Phản hội Bình luận không được để trống', 300, 300))
+	}
+	next();
+}
 
 module.exports = {
 	preProcessAddStatusPost,
@@ -89,4 +97,5 @@ module.exports = {
 	preProcessCmtStatusPost,
 	checkCmtStatusPostExistMid,
 	preProcessLikeCmtStatusPost,
+	preProcessRelyCmtStatusPost
 };

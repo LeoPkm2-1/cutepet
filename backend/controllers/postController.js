@@ -160,9 +160,40 @@ const toggleLikeCmtStatusController = async (req, res) => {
 	}
 };
 
+const replyCmtStatusController = async (req, res) => {
+	const reply = req.body.reply;
+	const cmt_id = req.body.cmt_id;
+	const replyBy = req.auth_decoded.ma_nguoi_dung;
+	const replyAt = new Date();
+	const numOfLike = 0;
+	const numOfReply = req.body.CMT_POST_INFOR.numOfReply;
+
+	const reply_data = {
+		cmtId: cmt_id,
+		reply,
+		replyBy,
+		replyAt,
+		numOfLike,
+	};
+	const replyProcess = await postModel.addReplyCommentStatusPost(reply_data);
+	if (replyProcess.status != 200) {
+		res.status(400).json(new Response(400, [], 'đã có lỗi xảy ra', 300, 300));
+		return;
+	}
+	await postModel.updateNumOfCommentCmtStatusPost(cmt_id, numOfReply + 1);
+	const insertedReply = await postModel.getReplyCommentStatusPostById(
+		replyProcess.payload.insertedId.toString()
+	);
+	res
+		.status(200)
+		.json(new Response(200, insertedReply.payload[0], 'reply thành công'));
+	return;
+};
+
 module.exports = {
 	addStatusPostController,
 	toggleLikeStatusController,
 	addCommentController,
 	toggleLikeCmtStatusController,
+	replyCmtStatusController,
 };

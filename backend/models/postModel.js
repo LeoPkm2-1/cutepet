@@ -95,6 +95,15 @@ const addCommentStatusPost = async (comment_data) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
+const addReplyCommentStatusPost = async (reply_data) => {
+	async function executor(collection) {
+		return await collection.insertOne(reply_data);
+	}
+	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+
 const updateNumOfLikeStatusPost = async (post_id, numOfLike) => {
 	async function executor(collection) {
 		return await collection.updateOne(
@@ -136,9 +145,9 @@ const updateNumOfCommentStatusPost = async (post_id, numOfComment) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const getCommentStatusPostById = async (post_id) => {
+const getCommentStatusPostById = async (cmt_id) => {
 	async function executor(collection) {
-		return await collection.find({ _id: new ObjectId(post_id) }).toArray();
+		return await collection.find({ _id: new ObjectId(cmt_id) }).toArray();
 	}
 	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
 		.then((data) => new Response(200, data, ''))
@@ -161,6 +170,27 @@ const getLikeCmtStatusPostInfor = async (user_id, cmt_id) => {
 // 	console.log('ahihi',data);
 // })()
 
+const updateNumOfCommentCmtStatusPost = async (cmt_id, numOfReply) => {
+	async function executor(collection) {
+		return await collection.updateOne(
+			{ _id: new ObjectId(cmt_id) },
+			{ $set: { numOfReply: numOfReply } }
+		);
+	}
+	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+
+const getReplyCommentStatusPostById = async(cmt_id)=>{
+	async function executor(collection) {
+		return await collection.find({ _id: new ObjectId(cmt_id) }).toArray();
+	}
+	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+}
+
 module.exports = {
 	addStatusPost,
 	getStatusPostById,
@@ -172,7 +202,10 @@ module.exports = {
 	updateNumOfLikeStatusPost,
 	updateNumOfLikeCmtStatusPost,
 	updateNumOfCommentStatusPost,
+	updateNumOfCommentCmtStatusPost,
 	getCommentStatusPostById,
 	getLikeCmtStatusPostInfor,
 	addLikeCmtStatusPost,
+	addReplyCommentStatusPost,
+	getReplyCommentStatusPostById
 };

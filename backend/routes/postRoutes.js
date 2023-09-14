@@ -26,4 +26,12 @@ router.post(
 	postController.toggleLikeCmtStatusController
 );
 
+router.post(
+	'/replyCommentStatusPost',
+	[postMiddle.checkCmtStatusPostExistMid,postMiddle.preProcessRelyCmtStatusPost],
+	postController.replyCmtStatusController
+)
+
+
+
 module.exports = router;
