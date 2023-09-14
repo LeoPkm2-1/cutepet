@@ -49,6 +49,7 @@
 ```
 
 3. trả về ở dưới này:
+   
 `like`
 ```javascript
 
@@ -105,11 +106,66 @@
 
 
 3. trả về
+
+`thông tin trả về dưới đây nằm trong payload của đổi tượng respone`
+
 ```javascript
 {
-    post_id: .....,
-    comment:....,
-    commentBy:person_id,
-    commentAt: time,
+        "_id": "................",
+        "postId": "................",
+        "comment": "................",
+        "commentBy": 7,
+        "commentAt": "................",
+        "numOfLike": 0,
+        "numOfReply": 0
+    },
+```
+
+## like comment viết chia sẻ trạng thái:
+
+`phương thức này dùng để like nếu bài comment chưa được like và hủy like nếu bài comment đã được like rồi`
+
+1. phương thức :
+   
+   POST: http://localhost:3000/post/likeCommentStatusPost
+   
+2. cấu trúc
+```javascript
+{
+    cmt_id: .....
+}
+```
+
+
+3. trả về ở dưới này:
+   
+`like`
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "................",
+        "cmtId": "..............",
+        "userLike": '...........',
+        "likeAt": "................"
+    },
+    "message": "like thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+
+`hủy like`
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "cmtId": "6501d6b7a7499cde4c143603"
+    },
+    "message": "hủy like thành công",
+    "errno": null,
+    "errcode": null
 }
 ```
