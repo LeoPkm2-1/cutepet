@@ -182,14 +182,37 @@ const updateNumOfCommentCmtStatusPost = async (cmt_id, numOfReply) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const getReplyCommentStatusPostById = async(cmt_id)=>{
+const getReplyCommentStatusPostById = async (replyId) => {
 	async function executor(collection) {
-		return await collection.find({ _id: new ObjectId(cmt_id) }).toArray();
+		return await collection.find({ _id: new ObjectId(replyId) }).toArray();
 	}
 	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
 		.then((data) => new Response(200, data, ''))
 		.catch((err) => new Response(400, err, '', 300, 300));
-}
+};
+
+const getReplyCommentStatusPostByStatusId = async (cmt_id) => {
+	async function executor(collection) {
+		return await collection.find({ cmtId: cmt_id }).toArray();
+	}
+	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+
+const getCommentStatusPostByPostId = async (postId) => {
+	async function executor(collection) {
+		return await collection.find({ postId: postId }).toArray();
+	}
+	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+
+(async function () {
+	const data = await getCommentStatusPostByPostId('64fd4517b00c4d6c5dc9a9ed');
+	console.log(data);
+})();
 
 module.exports = {
 	addStatusPost,
@@ -207,5 +230,7 @@ module.exports = {
 	getLikeCmtStatusPostInfor,
 	addLikeCmtStatusPost,
 	addReplyCommentStatusPost,
-	getReplyCommentStatusPostById
+	getReplyCommentStatusPostById,
+	getReplyCommentStatusPostByStatusId,
+	getCommentStatusPostByPostId,
 };
