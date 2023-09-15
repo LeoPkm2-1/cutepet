@@ -1,5 +1,5 @@
 import { UserProfile } from "../../models/user-profile";
-import { UserActionEnum, UserActionTypes } from "./action";
+import { TodoListActionTypes,TodoListActionEnum } from "./action";
 
 type UserState = {
   profile?:any;
@@ -9,16 +9,16 @@ const initState = Object.freeze<UserState>({});
 
 export default function (
   state = initState,
-  action: UserActionTypes
-): UserState {
+  action: TodoListActionTypes
+){
   switch (action.type) {
-    case UserActionEnum.SET_PROFILE: {
+    case TodoListActionEnum.SET_TODO_LIST: {
       return {
         ...state,
         profile: action.payload,
       };
     }
-    case UserActionEnum.RESET: {
+    case TodoListActionEnum.RESET: {
       return initState;
     }
     default: {

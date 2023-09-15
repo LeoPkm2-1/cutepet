@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase } from "firebase/database";
+// import firebase from "firebase";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -21,5 +22,7 @@ googleProvider.setCustomParameters({
 });
 
 const database = getDatabase(firebaseApp, process.env.REACT_APP_RTDB_URL);
+// firebase.initializeApp(firebaseConfig);
+// const storage = firebase.storage();
 
 export { auth, googleProvider, database };

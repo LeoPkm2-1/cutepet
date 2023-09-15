@@ -1,7 +1,9 @@
 import { PickerOverlay, PickerInline } from 'filestack-react';
 import { uploadMedia } from './upload';
 import UploadImage from '../../../components/upload-image';
-
+import PostComponent from './component/bai-viet';
+import { Grid } from '@mui/material';
+import CreatePost from './component/tao-bai-viet';
 
 // Our app
 export default function MangXaHoi() {
@@ -14,9 +16,18 @@ export default function MangXaHoi() {
   const YOUR_API_KEY2 = 'A1t5CK0vkR96nivu2NbNAz';
   return (
     <>
-      <button onClick={handleClick}>Click</button>
-      <UploadImage/>
+      <Grid container>
+        <Grid xs={8} item>
+          <CreatePost />
+          <PostComponent />
+          <PostComponent />
+          <PostComponent />
+        </Grid>
+        <Grid xs={4} item>
+          {' '}
+          Loi moi ket ban
+        </Grid>
+      </Grid>
     </>
   );
 }
-

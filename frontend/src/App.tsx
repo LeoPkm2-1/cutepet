@@ -5,11 +5,11 @@ import React, { useEffect } from 'react';
 import Routing from './Routing';
 import DialogContext from './context/DialogContext';
 function App() {
-  // useEffect(() => {
-  //   window.oncontextmenu = (e) => {
-  //     e.preventDefault();
-  //   };
-  // }, []);
+//   useEffect(() => {
+//     window.oncontextmenu = (e) => {
+//       e.preventDefault();
+//     };
+//   }, []);
   return (
     <Provider store={store}>
       <DialogContext>
