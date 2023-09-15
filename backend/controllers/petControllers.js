@@ -1,14 +1,33 @@
 const petModel = require('./../models/petModel');
-const { giongLoaiMatch, isOwnPet } = require('./../utils/petHelper');
+const petHelper = require('./../utils/petHelper');
 const giongLoaiModel = require('../models/giongLoaiModel');
+const anhThuCungModel = require('../models/anhThuCungModel');
 const { Response } = require('./../utils/index');
 
-const getPetById = async (req, res) => {
+const getInforById = async (req, res) => {
 	const petid = req.params.pet_id;
-	const pet = await petModel
-		.getPetByID(petid)
+	const petInfor = await petModel.getPetByID(petid).then((data) => {
+		if (data.payload.length <= 0) return {};
+		return data.payload[0];
+	});
+	if (Object.keys(petInfor).length <= 0) {
+		res.status(200).json(new Response(200, {}));
+		return;
+	}
+	const giong_loai = await giongLoaiModel
+		.getThongTinGiongLoaiByMaGiong(petInfor.ma_giong)
 		.then((data) => data.payload[0]);
-	res.status(200).json(new Response(200, pet, ''));
+	const anh = await petHelper.getpublicImageInfor(petid, giong_loai.ma_loai);
+	const thongtinsuckhoe = await petHelper.getPublicHealthIndexInfor(petid);
+	delete petInfor.ma_giong;
+	res.status(200).json(
+		new Response(200, {
+			...petInfor,
+			giong_loai,
+			anh,
+			thong_tin_suc_khoe: thongtinsuckhoe,
+		})
+	);
 };
 
 const getAllOwnPet = async (req, res) => {
@@ -27,8 +46,7 @@ const addPet = async (req, res) => {
 	try {
 		const userInfor = req.auth_decoded;
 		const ma_nguoi_chu = userInfor.ma_nguoi_dung;
-		const { ma_loai, ma_giong, ten_thu_cung } = req.body;
-		console.log('ok bat');
+		const { ma_loai, ma_giong, ten_thu_cung,can_nang,chieu_cao } = req.body;
 		// kiểm tra tên tồn tại
 		const petInfor = await petModel
 			.getPetByNameAndUserID(ten_thu_cung, ma_nguoi_chu)
@@ -37,11 +55,12 @@ const addPet = async (req, res) => {
 			throw new Error(PET_EXIST_MESSAGE);
 		}
 		// kiểm tra giống loài có phù hợp không
-		let match = await giongLoaiMatch(ma_giong, ma_loai);
+		let match = await petHelper.giongLoaiMatch(ma_giong, ma_loai);
 		if (!match) {
 			throw new Error(PET_SPECIES_AND_GENUS_NOT_MATCH);
 		}
-		const { ngay_sinh, gioi_tinh, ghi_chu } = req.body;
+		const { ngay_sinh, gioi_tinh, ghi_chu, url_anh } = req.body;
+		// console.log('url:', url_anh);
 		const petInsertStatus = await petModel
 			.addPet(
 				ten_thu_cung,
@@ -54,16 +73,27 @@ const addPet = async (req, res) => {
 			.then((data) => {
 				return data.payload;
 			});
-		petInsertStatus.insertId = Number(petInsertStatus.insertId);
+		const ma_thu_cung = (petInsertStatus.insertId = Number(
+			petInsertStatus.insertId
+		));
+		await petHelper.handleImageForAddPet(url_anh);
+		const anhInfor = await petHelper.getpublicImageInfor(ma_thu_cung, ma_loai);
+		await petHelper.handleHealthInDexForAddPet(ma_thu_cung,can_nang,chieu_cao)
+		const thongTinSucKhoe = await petHelper.getPublicHealthIndexInfor(ma_thu_cung);
+		const giong_loai = await giongLoaiModel
+			.getThongTinGiongLoaiByMaGiong(ma_giong)
+			.then((data) => data.payload[0]);
 		res.status(200).json(
 			new Response(
 				200,
 				{
-					ma_thu_cung: petInsertStatus.insertId,
+					ma_thu_cung,
 					ten_thu_cung,
 					ngay_sinh,
 					gioi_tinh,
-					ma_giong,
+					giong_loai,
+					anh: anhInfor,
+					thong_tin_suc_khoe: thongTinSucKhoe,
 				},
 				PET_INSERT_OK
 			)
@@ -106,7 +136,7 @@ const updateInfor = async (req, res) => {
 	const SPECIES_NOT_MATCH = 'giống không tồn tại';
 
 	try {
-		let flag = await isOwnPet(petid, userid);
+		let flag = await petHelper.isOwnPet(petid, userid);
 		if (!flag) {
 			throw new Error(DONT_OWN_THIS_PET);
 		}
@@ -153,7 +183,7 @@ const updateInfor = async (req, res) => {
 	}
 };
 module.exports = {
-	getPetById,
+	getInforById,
 	getAllOwnPet,
 	addPet,
 	updateInfor,
