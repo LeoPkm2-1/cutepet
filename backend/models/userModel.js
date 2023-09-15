@@ -13,6 +13,25 @@ const getUserByUsername = async (userName) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
 		});
 };
+const getUserIdByUsername = async (userName)=>{
+	const sqlStmt =
+		'select ma_nguoi_dung from NguoiDung where tai_khoan = ? COLLATE utf8mb4_bin';
+	const params = [userName];
+	return await sqlQuery(sqlStmt, params)
+		.then((data) => {
+			if(data.length>0)return data[0]
+			return {ma_nguoi_dung:undefined};
+
+		})
+		.catch((err) => {
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+		});
+}
+
+// (async function () {
+// 	const data = await getUserIdByUsername('dng');
+// 	console.log(data);
+// })()
 
 const getUserByEmail = async (email_address) => {
 	const sqlStmt = `select * from NguoiDung where email = ? COLLATE utf8mb4_unicode_ci`;
@@ -117,18 +136,6 @@ const deleteUserToken = async (userid) => {
 		});
 };
 
-const sendRequestAddFriend = async (sender_id, recipient_id) => {
-	const sqlStmt =
-		'insert into LoiMoiKetBan (ma_nguoi_gui,ma_nguoi_nhan) values (?,?); ';
-	return await sqlQuery(sqlStmt, [sender_id, recipient_id])
-		.then((data) => {
-			return new Response(200, data, '');
-		})
-		.catch((err) => {
-			return new Response(400, [], err.sqlMessage, err.errno, err.code);
-		});
-};
-
 const isFriend = async (person_id_1, person_id_2) => {
 	const sqlStmt =
 		'select Count(*) as number from LaBanBe where (ma_nguoi_dung_1,ma_nguoi_dung_2) = (?,?)';
@@ -144,29 +151,14 @@ const isFriend = async (person_id_1, person_id_2) => {
 		});
 };
 
-const isSendRequestAddFriend = async (sender_id, recipient_id) => {
-	const sqlStmt =
-		'select Count(*) as number from LoiMoiKetBan where (ma_nguoi_gui,ma_nguoi_nhan) = (?,?)';
-	return await sqlQuery(sqlStmt, [sender_id, recipient_id])
-		.then((data) => {
-			if (Number(data[0].number) >= 1) {
-				return new Response(200, true, '');
-			}
-			return new Response(200, false, '');
-		})
-		.catch((err) => {
-			return new Response(400, [], err.sqlMessage, err.errno, err.code);
-		});
-};
 module.exports = {
 	getUserByUsername,
 	getUserByEmail,
 	getUserById,
+	getUserIdByUsername,
 	addUser,
 	deleteUserToken,
-	sendRequestAddFriend,
 	isFriend,
-	isSendRequestAddFriend,
 	getUserNonActiveByUsername,
 	getUserNonActiveByEmail,
 	addNonActiveUser,

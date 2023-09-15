@@ -10,6 +10,8 @@ app.use(
 		extended: true,
 	})
 );
+// static file.
+app.use(express.static('public'));
 // Add Access Control Allow Origin headers
 app.use((req, res, next) => {
 	// res.header(
