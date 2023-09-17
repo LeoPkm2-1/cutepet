@@ -1,37 +1,59 @@
 const express = require('express');
 const postMiddle = require('../middlewares/postMiddlewares');
-const postController = require('../controllers/postController');
+const statusPostController = require('../controllers/postControllers/statusPostController');
 const router = express.Router();
 
 router.post(
-	'/addStatusPost',
+	'/statusPost/addPost',
 	postMiddle.preProcessAddStatusPost,
-	postController.addStatusPostController
+	statusPostController.addPostController
 );
 
 router.post(
-	'/likeStatusPost',
+	'/statusPost/likePost',
 	[postMiddle.checkStatusPostExistMid, postMiddle.preProcessLikeStatusPost],
-	postController.toggleLikeStatusController
+	statusPostController.toggleLikePostController
 );
 router.post(
-	'/addCommentStatusPost',
+	'/statusPost/addComment',
 	[postMiddle.checkStatusPostExistMid, postMiddle.preProcessCmtStatusPost],
-	postController.addCommentController
+	statusPostController.addCommentController
 );
 
 router.post(
-	'/likeCommentStatusPost',
-	[postMiddle.checkCmtStatusPostExistMid,postMiddle.preProcessLikeCmtStatusPost],
-	postController.toggleLikeCmtStatusController
+	'/statusPost/likeComment',
+	[
+		postMiddle.checkCmtStatusPostExistMid,
+		postMiddle.preProcessLikeCmtStatusPost,
+	],
+	statusPostController.toggleLikeCmtController
 );
 
 router.post(
-	'/replyCommentStatusPost',
-	[postMiddle.checkCmtStatusPostExistMid,postMiddle.preProcessRelyCmtStatusPost],
-	postController.replyCmtStatusController
-)
+	'/statusPost/replyComment',
+	[
+		postMiddle.checkCmtStatusPostExistMid,
+		postMiddle.preProcessRelyCmtStatusPost,
+	],
+	statusPostController.replyCmtController
+);
 
+router.get(
+	'/statusPost/getAllComment',
+	[postMiddle.checkStatusPostExistMid],
+	statusPostController.getAllCmtController
+);
 
+router.get(
+	'/statusPost/getCommentStartFrom',
+	[postMiddle.checkStatusPostExistMid, postMiddle.preProcessGetCmtStatusPost],
+	statusPostController.getCmtStartFromController
+);
+
+// router.get(
+// 	'/statusPost/getAllReply',
+// 	[postMiddle.checkCmtStatusPostExistMid],
+// 	statusPostController.getAllReplyController
+// );
 
 module.exports = router;

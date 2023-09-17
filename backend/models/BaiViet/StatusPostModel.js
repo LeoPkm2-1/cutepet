@@ -1,8 +1,8 @@
-const { sqlQuery, nonSQLQuery } = require('./index');
-const { Response } = require('./../utils/index');
+const { sqlQuery, nonSQLQuery } = require('../index');
+const { Response } = require('../../utils/index');
 const { ObjectId } = require('mongodb');
 
-const addStatusPost = async (statusPost) => {
+const addPost = async (statusPost) => {
 	async function executor(collection) {
 		return await collection.insertOne(statusPost);
 	}
@@ -11,7 +11,7 @@ const addStatusPost = async (statusPost) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const getStatusPostById = async (id) => {
+const getPostById = async (id) => {
 	async function executor(collection) {
 		return await collection.find({ _id: new ObjectId(id) }).toArray();
 	}
@@ -20,7 +20,7 @@ const getStatusPostById = async (id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const addLikeStatusPost = async (post_id, user_id) => {
+const addLikePost = async (post_id, user_id) => {
 	async function executor(collection) {
 		return await collection.insertOne({
 			postId: post_id,
@@ -33,7 +33,7 @@ const addLikeStatusPost = async (post_id, user_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const addLikeCmtStatusPost = async (cmt_id, user_id) => {
+const addLikeCmtPost = async (cmt_id, user_id) => {
 	async function executor(collection) {
 		return await collection.insertOne({
 			cmtId: cmt_id,
@@ -47,11 +47,11 @@ const addLikeCmtStatusPost = async (cmt_id, user_id) => {
 };
 
 // (async () => {
-// 	const data = await addLikeCmtStatusPost('6501d6b7a7499cde4c143603', 2);
+// 	const data = await addLikeCmtPost('6501d6b7a7499cde4c143603', 2);
 // 	console.log(data);
 // })();
 
-const removeLikeStatusPost = async (post_id, user_id) => {
+const removeLikePost = async (post_id, user_id) => {
 	async function executor(collection) {
 		return await collection.deleteOne({
 			postId: post_id,
@@ -63,7 +63,7 @@ const removeLikeStatusPost = async (post_id, user_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const removeLikeCmtStatusPost = async (cmt_id, user_id) => {
+const removeLikeCmtPost = async (cmt_id, user_id) => {
 	async function executor(collection) {
 		return await collection.deleteOne({
 			cmtId: cmt_id,
@@ -86,7 +86,7 @@ const getLikeThePostInfor = async (user_id, post_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const addCommentStatusPost = async (comment_data) => {
+const addComment = async (comment_data) => {
 	async function executor(collection) {
 		return await collection.insertOne(comment_data);
 	}
@@ -95,7 +95,7 @@ const addCommentStatusPost = async (comment_data) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const addReplyCommentStatusPost = async (reply_data) => {
+const addReplyComment = async (reply_data) => {
 	async function executor(collection) {
 		return await collection.insertOne(reply_data);
 	}
@@ -104,7 +104,7 @@ const addReplyCommentStatusPost = async (reply_data) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const updateNumOfLikeStatusPost = async (post_id, numOfLike) => {
+const updateNumOfLikePost = async (post_id, numOfLike) => {
 	async function executor(collection) {
 		return await collection.updateOne(
 			{ _id: new ObjectId(post_id) },
@@ -116,7 +116,7 @@ const updateNumOfLikeStatusPost = async (post_id, numOfLike) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const updateNumOfLikeCmtStatusPost = async (cmt_id, numOfLike) => {
+const updateNumOfLikeCmtPost = async (cmt_id, numOfLike) => {
 	async function executor(collection) {
 		return await collection.updateOne(
 			{ _id: new ObjectId(cmt_id) },
@@ -128,12 +128,7 @@ const updateNumOfLikeCmtStatusPost = async (cmt_id, numOfLike) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-// (async () => {
-// 	const data = await updateNumOfLikeCmtStatusPost('6501d6b7a7499cde4c143603',0)
-// 	console.log(data);
-// })();
-
-const updateNumOfCommentStatusPost = async (post_id, numOfComment) => {
+const updateNumOfCommentPost = async (post_id, numOfComment) => {
 	async function executor(collection) {
 		return await collection.updateOne(
 			{ _id: new ObjectId(post_id) },
@@ -145,7 +140,7 @@ const updateNumOfCommentStatusPost = async (post_id, numOfComment) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const getCommentStatusPostById = async (cmt_id) => {
+const getCommentPostById = async (cmt_id) => {
 	async function executor(collection) {
 		return await collection.find({ _id: new ObjectId(cmt_id) }).toArray();
 	}
@@ -154,7 +149,7 @@ const getCommentStatusPostById = async (cmt_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const getLikeCmtStatusPostInfor = async (user_id, cmt_id) => {
+const getLikeCmtPostInfor = async (user_id, cmt_id) => {
 	async function executor(collection) {
 		return await collection
 			.find({ userLike: user_id, cmtId: cmt_id })
@@ -165,12 +160,7 @@ const getLikeCmtStatusPostInfor = async (user_id, cmt_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-// (async () => {
-// 	const data = await getLikeCmtStatusPostInfor(7,'6501d6b7a7499cde4c143603');
-// 	console.log('ahihi',data);
-// })()
-
-const updateNumOfCommentCmtStatusPost = async (cmt_id, numOfReply) => {
+const updateNumOfCommentCmtPost = async (cmt_id, numOfReply) => {
 	async function executor(collection) {
 		return await collection.updateOne(
 			{ _id: new ObjectId(cmt_id) },
@@ -182,7 +172,7 @@ const updateNumOfCommentCmtStatusPost = async (cmt_id, numOfReply) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const getReplyCommentStatusPostById = async (replyId) => {
+const getReplyCommentById = async (replyId) => {
 	async function executor(collection) {
 		return await collection.find({ _id: new ObjectId(replyId) }).toArray();
 	}
@@ -191,7 +181,7 @@ const getReplyCommentStatusPostById = async (replyId) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const getReplyCommentStatusPostByStatusId = async (cmt_id) => {
+const getReplyCommentByCmtId = async (cmt_id) => {
 	async function executor(collection) {
 		return await collection.find({ cmtId: cmt_id }).toArray();
 	}
@@ -200,37 +190,36 @@ const getReplyCommentStatusPostByStatusId = async (cmt_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const getCommentStatusPostByPostId = async (postId) => {
+const getAllCmtByPostId = async (postId) => {
 	async function executor(collection) {
-		return await collection.find({ postId: postId }).toArray();
+		return await collection.find({ postId: postId }).sort({commentAt:-1}).toArray();
 	}
 	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
 		.then((data) => new Response(200, data, ''))
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-(async function () {
-	const data = await getCommentStatusPostByPostId('64fd4517b00c4d6c5dc9a9ed');
-	console.log(data);
-})();
+
+
+
 
 module.exports = {
-	addStatusPost,
-	getStatusPostById,
-	addCommentStatusPost,
-	addLikeStatusPost,
+	addPost,
+	getPostById,
+	addComment,
+	addLikePost,
 	getLikeThePostInfor,
-	removeLikeStatusPost,
-	removeLikeCmtStatusPost,
-	updateNumOfLikeStatusPost,
-	updateNumOfLikeCmtStatusPost,
-	updateNumOfCommentStatusPost,
-	updateNumOfCommentCmtStatusPost,
-	getCommentStatusPostById,
-	getLikeCmtStatusPostInfor,
-	addLikeCmtStatusPost,
-	addReplyCommentStatusPost,
-	getReplyCommentStatusPostById,
-	getReplyCommentStatusPostByStatusId,
-	getCommentStatusPostByPostId,
+	removeLikePost,
+	removeLikeCmtPost,
+	updateNumOfLikePost,
+	updateNumOfLikeCmtPost,
+	updateNumOfCommentPost,
+	updateNumOfCommentCmtPost,
+	getCommentPostById,
+	getLikeCmtPostInfor,
+	addLikeCmtPost,
+	addReplyComment,
+	getReplyCommentById,
+	getReplyCommentByCmtId,
+	getAllCmtByPostId,
 };
