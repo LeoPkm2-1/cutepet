@@ -33,7 +33,7 @@ async function checkStatusPostExistMid(req, res, next) {
 	if (req.method === 'GET') {
 		post_id = req.query.post_id;
 	} else if (req.method === 'POST') {
-		post_id = req.body;
+		post_id = req.body.post_id;
 	}
 	const data = await statusPostModel.getPostById(post_id);
 	if (data.payload.length <= 0) {
@@ -47,7 +47,13 @@ async function checkStatusPostExistMid(req, res, next) {
 }
 // middleware kiểm tra sự tồn tại của cmt của status post. Nếu tồn tại thì gọi next() nếu không thì trả về http respone phản hồi bình luận không tồn tại
 async function checkCmtStatusPostExistMid(req, res, next) {
-	const { cmt_id } = req.body;
+	let cmt_id = undefined;
+	if (req.method === 'GET') {
+		cmt_id = req.query.cmt_id;
+	} else if (req.method === 'POST') {
+		cmt_id = req.body.cmt_id;
+	}
+	// const { cmt_id } = req.body;
 	const data = await statusPostModel.getCommentPostById(cmt_id);
 	if (data.payload.length <= 0) {
 		res
@@ -108,7 +114,7 @@ async function preProcessRelyCmtStatusPost(req, res, next) {
 async function preProcessGetCmtStatusPost(req, res, next) {
 	const VALID_PARAM = 'tham số không hợp lệ';
 	let { post_id, index, num } = req.query;
-	console.log('before:', { post_id, index, num });
+	// console.log('before:', req.query);
 	try {
 		index = parseInt(index);
 		if (Number.isNaN(index) || index < 0) {
@@ -117,11 +123,34 @@ async function preProcessGetCmtStatusPost(req, res, next) {
 		if (typeof num != 'undefined' && Number.isNaN(parseInt(num))) {
 			throw new Error(VALID_PARAM);
 		}
-
+		
 		num = typeof num == 'undefined' ? undefined : parseInt(num);
 		if (num <= 0) throw new Error(VALID_PARAM);
-		req.query.index=index;
-		req.query.num=num;
+		req.query.index = index;
+		req.query.num = num;
+	} catch (error) {
+		res.status(400).json(new Response(400, [], VALID_PARAM, 300, 300));
+		return;
+	}
+	// console.log('after:', req.query);
+	next();
+}
+
+async function preProcessGetReplyOfCmtStatusPost(req, res, next) {
+	const VALID_PARAM = 'tham số không hợp lệ';
+	let { cmt_id, index, num } = req.query;
+	try {
+		index = parseInt(index);
+		if (Number.isNaN(index) || index < 0) {
+			throw new Error(VALID_PARAM);
+		}
+		if (typeof num != 'undefined' && Number.isNaN(parseInt(num))) {
+			throw new Error(VALID_PARAM);
+		}
+		num = typeof num == 'undefined' ? undefined : parseInt(num);
+		if (num <= 0) throw new Error(VALID_PARAM);
+		req.query.index = index;
+		req.query.num = num;
 	} catch (error) {
 		res.status(400).json(new Response(400, [], VALID_PARAM, 300, 300));
 		return;
@@ -137,4 +166,5 @@ module.exports = {
 	preProcessLikeCmtStatusPost,
 	preProcessRelyCmtStatusPost,
 	preProcessGetCmtStatusPost,
+	preProcessGetReplyOfCmtStatusPost,
 };

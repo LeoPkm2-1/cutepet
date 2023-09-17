@@ -329,3 +329,95 @@ nếu bình luận không tồn tại:
     "errcode": null
 }
 ```
+
+
+## Lấy tất cả các Phản hồi của bình luận
+
+`Phương thức này lấy tất cả các phản hồi của 1 bình luận`
+
+1. Phương thức:
+
+    GET: 'http://localhost:3000/post/statusPost/getAllReply?cmt_id=...................'
+
+    Param:
+        - cmt_id: chính là mã của bình luận 
+  
+2. trả về ở dưới này: 
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "replies": [
+            {
+                "_id": "6506c3d7655387a7f2f31f8f",
+                "cmtId": "6501dd56ae68d86a2849b3ec",
+                "reply": "ahihi",
+                "replyBy": 4,
+                "replyAt": "2023-09-17T09:16:07.611Z",
+                "numOfLike": 0
+            },
+            {
+                "_id": "6503303b194d1473c3dd746d",
+                "cmtId": "6501dd56ae68d86a2849b3ec",
+                "reply": "ahihi",
+                "replyBy": 4,
+                "replyAt": "2023-09-14T16:09:31.846Z",
+                "numOfLike": 0
+            },
+            ..................
+        ],
+        "numOfReplies": 7,
+        "numOfRemain": 0
+    },
+    "message": "lấy phản hồi thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+
+## phân trang cho phản hồi
+
+1. Phương thức:
+
+    GET: 'http://localhost:3000/post/statusPost/getReplyStartFrom?cmt_id=................&index=..........&num=........'
+
+    Param:
+
+    - cmt_id: mã của bình luận,
+    - index: lấy từ bình luận thứ mấy (thứ tự bắt đầu từ: 0,1,......)
+    - num: số lượng phản hồi lấy ra
+
+2. trả về:
+   
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "replies": [
+            {
+                "_id": "6502bdb4fd7f90a0aa52dd25",
+                "cmtId": "6501dd56ae68d86a2849b3ec",
+                "reply": "tui là Leo nè",
+                "replyBy": 5,
+                "replyAt": "2023-09-14T08:00:52.350Z",
+                "numOfLike": 0
+            },
+            {
+                "_id": "6502bd69fd7f90a0aa52dd24",
+                "cmtId": "6501dd56ae68d86a2849b3ec",
+                "reply": "hài quá",
+                "replyBy": 5,
+                "replyAt": "2023-09-14T07:59:37.892Z",
+                "numOfLike": 0
+            }
+        ],
+        "numOfReplies": 2,
+        "numOfRemain": 1
+    },
+    "message": "lấy dữ liệu thành công",
+    "errno": null,
+    "errcode": null
+}
+```

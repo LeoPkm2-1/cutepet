@@ -195,8 +195,8 @@ const replyCmtController = async (req, res) => {
 const getAllCmtController = async (req, res) => {
 	const post_id = req.query.post_id;
 	const comments = await StatusPostModel.getAllCmtByPostId(post_id)
-	.then((data) => data.payload)
-	.catch((err) => []);
+		.then((data) => data.payload)
+		.catch((err) => []);
 	const data = {
 		comments,
 		numOfComments: comments.length,
@@ -210,7 +210,20 @@ const getCmtStartFromController = async (req, res) => {
 	const AllComments = await StatusPostModel.getAllCmtByPostId(post_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
-	if (AllComments.length <= 0) res.status(200).json(new Response(200, [], ''));
+	if (AllComments.length <= 0) {
+		res.status(200).json(
+			new Response(
+				200,
+				{
+					comments: [],
+					numOfComments: 0,
+					numOfRemain: 0,
+				},
+				''
+			)
+		);
+		return;
+	}
 	if (typeof num == 'undefined') {
 		const comments = AllComments.slice(index);
 		const data = {
@@ -220,6 +233,7 @@ const getCmtStartFromController = async (req, res) => {
 		};
 
 		res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));
+		return;
 	} else {
 		const comments = AllComments.slice(index, index + num);
 		const data = {
@@ -231,12 +245,61 @@ const getCmtStartFromController = async (req, res) => {
 					: AllComments.length - (index + num),
 		};
 		res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));
+		return;
 	}
 };
 
-// const getAllReplyController = async (req,res)=>{
-// 	res.send('heheh');
-// }
+const getAllReplyController = async (req, res) => {
+	const cmt_id = req.query.cmt_id;
+	const replies = await StatusPostModel.getAllReplyCommentByCmtId(cmt_id)
+		.then((data) => data.payload)
+		.catch((err) => []);
+	const data = {
+		replies,
+		numOfReplies: replies.length,
+		numOfRemain: 0,
+	};
+	res.status(200).json(new Response(200, data, 'lấy phản hồi thành công'));
+};
+
+const getReplyStartFromController = async (req, res) => {
+	const { cmt_id, index, num } = req.query;
+	const AllReplies = await StatusPostModel.getAllReplyCommentByCmtId(cmt_id)
+		.then((data) => data.payload)
+		.catch((err) => []);
+	if (AllReplies.length <= 0) {
+		res.status(200).json(
+			new Response(200, {
+				replies: [],
+				numOfReplies: 0,
+				numOfRemain: 0,
+			})
+		);
+		return;
+	}
+	if (typeof num == 'undefined') {
+		const replies = AllReplies.slice(index);
+		const data = {
+			replies,
+			numOfReplies: replies.length,
+			numOfRemain: 0,
+		};
+		res.status(200).json(new Response(200, data, 'lấy phản hồi thành công'));
+		return;
+	} else {
+		const replies = AllReplies.slice(index, index + num);
+		const data = {
+			replies,
+			numOfReplies: replies.length,
+			numOfRemain:
+				AllReplies.length <= index + num
+					? 0
+					: AllReplies.length - (index + num),
+		};
+		res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));
+		return;
+	}
+};
 
 module.exports = {
 	addPostController,
@@ -246,5 +309,6 @@ module.exports = {
 	replyCmtController,
 	getAllCmtController,
 	getCmtStartFromController,
-	// getAllReplyController
+	getAllReplyController,
+	getReplyStartFromController,
 };

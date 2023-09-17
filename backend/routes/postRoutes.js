@@ -50,10 +50,16 @@ router.get(
 	statusPostController.getCmtStartFromController
 );
 
-// router.get(
-// 	'/statusPost/getAllReply',
-// 	[postMiddle.checkCmtStatusPostExistMid],
-// 	statusPostController.getAllReplyController
-// );
+router.get(
+	'/statusPost/getAllReply',
+	[postMiddle.checkCmtStatusPostExistMid],
+	statusPostController.getAllReplyController
+);
+
+router.get(
+	'/statusPost/getReplyStartFrom',
+	[postMiddle.checkCmtStatusPostExistMid,postMiddle.preProcessGetReplyOfCmtStatusPost],
+	statusPostController.getReplyStartFromController
+)
 
 module.exports = router;
