@@ -62,4 +62,10 @@ router.get(
 	statusPostController.getReplyStartFromController
 )
 
+router.get(
+	'/statusPost/getPost',
+	[postMiddle.checkStatusPostExistMid],
+	statusPostController.getPostController
+)
+
 module.exports = router;

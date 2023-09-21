@@ -1,4 +1,5 @@
 const StatusPostModel = require('../../models/BaiViet/StatusPostModel');
+const userHelper = require('../../utils/userHelper');
 const { Response } = require('../../utils/index');
 
 const addPostController = async (req, res) => {
@@ -301,6 +302,19 @@ const getReplyStartFromController = async (req, res) => {
 	}
 };
 
+const getPostController = async (req,res)=>{
+	const {post_id} = req.query;
+	const postData =await StatusPostModel.getPostById(post_id).then(data=>data.payload);
+	const owner_infor = await userHelper.getUserPublicInforByUserId(postData[0].owner_id);
+	const data = {
+		...postData[0],
+		owner_infor
+	}
+	res.status(200).json(new Response(200,data,'lấy dữ liệu thành công'));
+
+
+}
+
 module.exports = {
 	addPostController,
 	toggleLikePostController,
@@ -311,4 +325,5 @@ module.exports = {
 	getCmtStartFromController,
 	getAllReplyController,
 	getReplyStartFromController,
+	getPostController
 };

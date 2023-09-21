@@ -19,7 +19,7 @@ const getUserIdByUsername = async (userName)=>{
 	const params = [userName];
 	return await sqlQuery(sqlStmt, params)
 		.then((data) => {
-			if(data.length>0)return data[0]
+			if(data.length>0)return {ma_nguoi_dung:parseInt(data[0].ma_nguoi_dung)}
 			return {ma_nguoi_dung:undefined};
 
 		})
@@ -28,8 +28,22 @@ const getUserIdByUsername = async (userName)=>{
 		});
 }
 
+const getUsernameByUserId = async(user_id)=>{
+	const sqlStmt = `select tai_khoan from NguoiDung where ma_nguoi_dung = ?`;
+	const params = [user_id];
+	return await sqlQuery(sqlStmt, params)
+		.then((data) => {
+			if(data.length>0)return data[0]
+			return {tai_khoan:undefined};
+
+		})
+		.catch((err) => {
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+		});
+}
+
 // (async function () {
-// 	const data = await getUserIdByUsername('dng');
+// 	const data = await getUsernameByUserId(11);
 // 	console.log(data);
 // })()
 
@@ -165,4 +179,5 @@ module.exports = {
 	deleteAllExpireNonActiveUser,
 	getUserNonActiveByActiveCode,
 	deleteNonActiveUserByActiveCode,
+	getUsernameByUserId
 };

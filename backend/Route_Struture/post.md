@@ -421,3 +421,55 @@ nếu bình luận không tồn tại:
     "errcode": null
 }
 ```
+
+## lấy bài viết dựa vào mã của bài viết
+
+1. Phương thức:
+
+    GET: 'http://localhost:3000/post/statusPost/getReplyStartFrom?post_id=................'
+
+    Param:
+    - post_id: mã của bài viết
+  
+2. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "6503c32dde813e653e88a8f9",
+        "text": "xin chào cả nhà",
+        "postType": "status",
+        "media": {
+            "type": "images",
+            "data": [
+                "google.com",
+                "youtube.com"
+            ]
+        },
+        "createAt": "2023-09-15T02:36:29.497Z",
+        "numOfLike": 0,
+        "numOfComment": 57,
+        "owner_id": 4,
+        "owner_infor": {
+            "ma_nguoi_dung": 4,
+            "ten": "Ty",
+            "ngay_sinh": "1991-10-01T17:00:00.000Z",
+            "tai_khoan": "ty",
+            "email": "ty@gmail.com",
+            "so_dien_thoai": "0912345681",
+            "gioi_tinh": 1,
+            "anh": {
+                "ma_anh": null,
+                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                "ngay_cap_nhat": null,
+                "ma_nguoi_dung": "4",
+                "is_active": null
+            }
+        }
+    },
+    "message": "lấy dữ liệu thành công",
+    "errno": null,
+    "errcode": null
+}
+```
