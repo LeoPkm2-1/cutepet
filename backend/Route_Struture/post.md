@@ -3,7 +3,7 @@
 ## thêm bài viết chia sẻ trạng thái:
 1. phương thức :
    
-   POST: http://localhost:3000/post/addStatusPost
+   POST: http://localhost:3000/post/statusPost/addPost
 
 2. cấu trúc
 ```javascript
@@ -17,7 +17,7 @@
 }
 ```
 
-3. trả về ở dưới này sẽ được nằm trong payload của **Respone**:
+1. trả về ở dưới này sẽ được nằm trong payload của **Respone**:
 ```javascript
 {
     post_id:....,
@@ -39,7 +39,7 @@
 
 1. phương thức :
    
-   POST: http://localhost:3000/post/likeStatusPost
+   POST: http://localhost:3000/post/statusPost/likePost
    
 2. cấu trúc
 ```javascript
@@ -48,7 +48,7 @@
 }
 ```
 
-3. trả về ở dưới này:
+1. trả về ở dưới này:
    
 `like`
 ```javascript
@@ -94,7 +94,7 @@
 ## comment viết chia sẻ trạng thái:
 1. phương thức :
    
-   POST: http://localhost:3000/post/commentStatusPost
+   POST: http://localhost:3000/post/statusPost/addComment
    
 2. cấu trúc
 ```javascript
@@ -127,7 +127,7 @@
 
 1. phương thức :
    
-   POST: http://localhost:3000/post/likeCommentStatusPost
+   POST: http://localhost:3000/post/statusPost/likeComment
    
 2. cấu trúc
 ```javascript
@@ -165,6 +165,310 @@
         "cmtId": "6501d6b7a7499cde4c143603"
     },
     "message": "hủy like thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+
+## Reply comment 
+
+`phương thức này đùng để phản hồi lại bình luận của người dùng`
+
+1. phương thức:
+   
+   POST: http://localhost:3000/post/statusPost/replyComment
+
+2. cấu trúc
+
+```javascript
+{
+    cmt_id:'....................',
+    reply:'.....................',
+}
+```
+3. trả về ở dưới này:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "......................",
+        "cmtId": ".................",
+        "reply": "..........",
+        "replyBy": '..........',
+        "replyAt": "...............",
+        "numOfLike": 0
+    },
+    "message": "reply thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+nếu bình luận không tồn tại:
+
+```javascript
+{
+    "status": 400,
+    "payload": "Bình luật không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+
+## lấy tất cả các bình luận của 1 bài viết trạng thái
+
+` Phương thức này lấy tất cả các bình luận của 1 bài viết trạng thái`
+
+1. Phương thức:
+
+    GET: 'http://localhost:3000/post/statusPost/getAllComment?post_id=.......................'
+    Param:
+
+        - post_id: chính là mã bài viết
+
+2. trả về ở dưới này:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "comments": [
+            {
+                "_id": "........................",
+                "postId": ".........................",
+                "comment": "....................",
+                "commentBy": '..',
+                "commentAt": "..........................",
+                "numOfLike": '........',
+                "numOfReply": '..........'
+            },
+            {
+                "_id": "........................",
+                "postId": ".........................",
+                "comment": "....................",
+                "commentBy": '..',
+                "commentAt": "..........................",
+                "numOfLike": '........',
+                "numOfReply": '..........'
+            }
+            .......
+        ],
+        "numOfComments": '.....',
+        "numOfRemain": '......'
+    },
+    "message": "lấy dữ liệu thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## phân trang cho bình luận
+
+1. Phương thức:
+
+    GET: 'http://localhost:3000/post/statusPost/getCommentStartFrom?post_id=........&index=.........&num=........'
+
+    Param:
+
+    - post_id: mã bài post
+    - index: lấy từ comment thứ mấy, (thứ tự bắt đầu từ: 0,1,......)
+    - num: số lượng comment lấy ra
+
+2. trả về:
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "comments": [
+            {
+                "_id": "6506706fc1a6868a8bf7d4f3",
+                "postId": "6501634ea4cdef6e6afc6d2b",
+                "comment": "lori",
+                "commentBy": 8,
+                "commentAt": "2023-09-16T19:20:15.808Z",
+                "numOfLike": 0,
+                "numOfReply": 0
+            },
+            {
+                "_id": "6506706fc1a6868a8bf7d4f4",
+                "postId": "6501634ea4cdef6e6afc6d2b",
+                "comment": "lori",
+                "commentBy": 9,
+                "commentAt": "2023-09-16T18:20:15.808Z",
+                "numOfLike": 0,
+                "numOfReply": 0
+            },
+            {
+                "_id": "6506706fc1a6868a8bf7d4f5",
+                "postId": "6501634ea4cdef6e6afc6d2b",
+                "comment": "lori",
+                "commentBy": 10,
+                "commentAt": "2023-09-16T17:20:15.808Z",
+                "numOfLike": 0,
+                "numOfReply": 0
+            },
+            {
+                "_id": "6506706fc1a6868a8bf7d4f6",
+                "postId": "6501634ea4cdef6e6afc6d2b",
+                "comment": "lori",
+                "commentBy": 11,
+                "commentAt": "2023-09-16T16:20:15.808Z",
+                "numOfLike": 0,
+                "numOfReply": 0
+            }
+        ],
+        "numOfComments": 4,
+        "numOfRemain": 1
+    },
+    "message": "lấy dữ liệu thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+
+## Lấy tất cả các Phản hồi của bình luận
+
+`Phương thức này lấy tất cả các phản hồi của 1 bình luận`
+
+1. Phương thức:
+
+    GET: 'http://localhost:3000/post/statusPost/getAllReply?cmt_id=...................'
+
+    Param:
+        - cmt_id: chính là mã của bình luận 
+  
+2. trả về ở dưới này: 
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "replies": [
+            {
+                "_id": "6506c3d7655387a7f2f31f8f",
+                "cmtId": "6501dd56ae68d86a2849b3ec",
+                "reply": "ahihi",
+                "replyBy": 4,
+                "replyAt": "2023-09-17T09:16:07.611Z",
+                "numOfLike": 0
+            },
+            {
+                "_id": "6503303b194d1473c3dd746d",
+                "cmtId": "6501dd56ae68d86a2849b3ec",
+                "reply": "ahihi",
+                "replyBy": 4,
+                "replyAt": "2023-09-14T16:09:31.846Z",
+                "numOfLike": 0
+            },
+            ..................
+        ],
+        "numOfReplies": 7,
+        "numOfRemain": 0
+    },
+    "message": "lấy phản hồi thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+
+## phân trang cho phản hồi
+
+1. Phương thức:
+
+    GET: 'http://localhost:3000/post/statusPost/getReplyStartFrom?cmt_id=................&index=..........&num=........'
+
+    Param:
+
+    - cmt_id: mã của bình luận,
+    - index: lấy từ bình luận thứ mấy (thứ tự bắt đầu từ: 0,1,......)
+    - num: số lượng phản hồi lấy ra
+
+2. trả về:
+   
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "replies": [
+            {
+                "_id": "6502bdb4fd7f90a0aa52dd25",
+                "cmtId": "6501dd56ae68d86a2849b3ec",
+                "reply": "tui là Leo nè",
+                "replyBy": 5,
+                "replyAt": "2023-09-14T08:00:52.350Z",
+                "numOfLike": 0
+            },
+            {
+                "_id": "6502bd69fd7f90a0aa52dd24",
+                "cmtId": "6501dd56ae68d86a2849b3ec",
+                "reply": "hài quá",
+                "replyBy": 5,
+                "replyAt": "2023-09-14T07:59:37.892Z",
+                "numOfLike": 0
+            }
+        ],
+        "numOfReplies": 2,
+        "numOfRemain": 1
+    },
+    "message": "lấy dữ liệu thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## lấy bài viết dựa vào mã của bài viết
+
+1. Phương thức:
+
+    GET: 'http://localhost:3000/post/statusPost/getReplyStartFrom?post_id=................'
+
+    Param:
+    - post_id: mã của bài viết
+  
+2. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "6503c32dde813e653e88a8f9",
+        "text": "xin chào cả nhà",
+        "postType": "status",
+        "media": {
+            "type": "images",
+            "data": [
+                "google.com",
+                "youtube.com"
+            ]
+        },
+        "createAt": "2023-09-15T02:36:29.497Z",
+        "numOfLike": 0,
+        "numOfComment": 57,
+        "owner_id": 4,
+        "owner_infor": {
+            "ma_nguoi_dung": 4,
+            "ten": "Ty",
+            "ngay_sinh": "1991-10-01T17:00:00.000Z",
+            "tai_khoan": "ty",
+            "email": "ty@gmail.com",
+            "so_dien_thoai": "0912345681",
+            "gioi_tinh": 1,
+            "anh": {
+                "ma_anh": null,
+                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                "ngay_cap_nhat": null,
+                "ma_nguoi_dung": "4",
+                "is_active": null
+            }
+        }
+    },
+    "message": "lấy dữ liệu thành công",
     "errno": null,
     "errcode": null
 }
