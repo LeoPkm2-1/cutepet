@@ -183,7 +183,10 @@ const getReplyCommentById = async (replyId) => {
 
 const getAllReplyCommentByCmtId = async (cmt_id) => {
 	async function executor(collection) {
-		return await collection.find({ cmtId: cmt_id }).sort({replyAt:-1}).toArray();
+		return await collection
+			.find({ cmtId: cmt_id })
+			.sort({ replyAt: -1 })
+			.toArray();
 	}
 	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
 		.then((data) => new Response(200, data, ''))
@@ -192,16 +195,24 @@ const getAllReplyCommentByCmtId = async (cmt_id) => {
 
 const getAllCmtByPostId = async (postId) => {
 	async function executor(collection) {
-		return await collection.find({ postId: postId }).sort({commentAt:-1}).toArray();
+		return await collection
+			.find({ postId: postId })
+			.sort({ commentAt: -1 })
+			.toArray();
 	}
 	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
 		.then((data) => new Response(200, data, ''))
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-
-
-
+const getAllPost = async () => {
+	async function executor(collection) {
+		return await collection.find().sort({ createAt: -1 }).toArray();
+	}
+	return await nonSQLQuery(executor, 'BaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
 
 module.exports = {
 	addPost,
@@ -222,4 +233,5 @@ module.exports = {
 	getReplyCommentById,
 	getAllReplyCommentByCmtId,
 	getAllCmtByPostId,
+	getAllPost,
 };

@@ -315,6 +315,46 @@ const getPostController = async (req,res)=>{
 
 }
 
+const getPostStartFromController= async (req,res)=>{
+	const {index,num} = await req.query;
+	const AllPost = await StatusPostModel.getAllPost()
+	.then((data) => data.payload)
+	.catch((err) => []);
+	if(AllPost.length <= 0){
+		const data = {
+			posts:[],
+			numOfPosts: posts.length,
+			numOfRemain: 0,
+		};
+		res.status(200).json(
+			new Response(200, data,'lấy dữ liệu thành công')
+		);
+		return;
+	}
+	if (typeof num == 'undefined') {
+		const posts = AllPost.slice(index);
+		const data = {
+			posts,
+			numOfPosts: posts.length,
+			numOfRemain: 0,
+		};
+		res.status(200).json(new Response(200, data, 'lấy dự liệu thành công'));
+		return;
+	} else {
+		const posts = AllPost.slice(index, index + num);
+		const data ={
+			posts,
+			numOfPosts:posts.length,
+			numOfRemain:
+			AllPost.length <= index + num
+			? 0
+			: AllPost.length - (index + num),
+		}
+		res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));
+		return;
+	}
+}
+
 module.exports = {
 	addPostController,
 	toggleLikePostController,

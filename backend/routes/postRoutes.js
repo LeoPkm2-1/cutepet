@@ -68,4 +68,10 @@ router.get(
 	statusPostController.getPostController
 )
 
+router.get(
+	'/statusPost/getPostStartFrom',
+	[postMiddle.preProcessGetCmtStatusPost],
+	statusPostController.getPostStartFromController
+)
+
 module.exports = router;
