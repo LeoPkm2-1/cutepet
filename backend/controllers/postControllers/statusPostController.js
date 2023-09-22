@@ -320,7 +320,7 @@ const getPostStartFromController= async (req,res)=>{
 	const AllPost = await StatusPostModel.getAllPost()
 	.then((data) => data.payload)
 	.catch((err) => []);
-	if(AllPost.length <= 0){
+	if(AllPost.length <= 0 ||AllPost.length<=index ){
 		const data = {
 			posts:[],
 			numOfPosts: posts.length,
@@ -365,5 +365,6 @@ module.exports = {
 	getCmtStartFromController,
 	getAllReplyController,
 	getReplyStartFromController,
-	getPostController
+	getPostController,
+	getPostStartFromController,
 };
