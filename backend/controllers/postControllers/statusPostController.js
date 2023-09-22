@@ -1,6 +1,7 @@
 const StatusPostModel = require('../../models/BaiViet/StatusPostModel');
 const userHelper = require('../../utils/userHelper');
 const { Response } = require('../../utils/index');
+const statusPostHelper = require('../../utils/BaiViet/statusPostHelper');
 
 const addPostController = async (req, res) => {
 	const { text, media } = req.body;
@@ -333,6 +334,7 @@ const getPostStartFromController= async (req,res)=>{
 	}
 	if (typeof num == 'undefined') {
 		const posts = AllPost.slice(index);
+		await statusPostHelper.InsertOwnerInforOfListPosts(posts)
 		const data = {
 			posts,
 			numOfPosts: posts.length,
@@ -342,6 +344,7 @@ const getPostStartFromController= async (req,res)=>{
 		return;
 	} else {
 		const posts = AllPost.slice(index, index + num);
+		await statusPostHelper.InsertOwnerInforOfListPosts(posts)
 		const data ={
 			posts,
 			numOfPosts:posts.length,
