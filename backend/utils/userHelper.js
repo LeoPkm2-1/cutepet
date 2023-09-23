@@ -68,6 +68,11 @@ async function getUserPublicInforByUserId(user_id) {
 	return await getUserPublicInforByUserName(username);
 }
 
+async function getUserPublicInforByListIds(listIds){
+	return  Promise.all(listIds.map(async (id) => await getUserPublicInforByUserId(id)));
+}
+
+
 async function userId2Username(user_id) {
 	return await userModel
 		.getUsernameByUserId(user_id)
@@ -88,4 +93,5 @@ module.exports = {
 	userId2Username,
 	Username2UserId,
 	getUserPublicInforByUserId,
+	getUserPublicInforByListIds
 };

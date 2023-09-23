@@ -114,7 +114,6 @@ async function preProcessRelyCmtStatusPost(req, res, next) {
 async function preProcessGetCmtStatusPost(req, res, next) {
 	const VALID_PARAM = 'tham số không hợp lệ';
 	let { post_id, index, num } = req.query;
-	// console.log('before:', req.query);
 	try {
 		index = parseInt(index);
 		if (Number.isNaN(index) || index < 0) {

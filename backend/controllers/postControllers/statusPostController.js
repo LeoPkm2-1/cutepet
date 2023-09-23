@@ -1,6 +1,7 @@
 const StatusPostModel = require('../../models/BaiViet/StatusPostModel');
 const userHelper = require('../../utils/userHelper');
 const { Response } = require('../../utils/index');
+const statusPostHelper = require('../../utils/BaiViet/statusPostHelper');
 
 const addPostController = async (req, res) => {
 	const { text, media } = req.body;
@@ -198,6 +199,7 @@ const getAllCmtController = async (req, res) => {
 	const comments = await StatusPostModel.getAllCmtByPostId(post_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
+	await statusPostHelper.InsertUserCmtInforOfListCmts(comments);
 	const data = {
 		comments,
 		numOfComments: comments.length,
@@ -227,6 +229,7 @@ const getCmtStartFromController = async (req, res) => {
 	}
 	if (typeof num == 'undefined') {
 		const comments = AllComments.slice(index);
+		await statusPostHelper.InsertUserCmtInforOfListCmts(comments);
 		const data = {
 			comments,
 			numOfComments: comments.length,
@@ -237,6 +240,8 @@ const getCmtStartFromController = async (req, res) => {
 		return;
 	} else {
 		const comments = AllComments.slice(index, index + num);
+		await statusPostHelper.InsertUserCmtInforOfListCmts(comments);
+
 		const data = {
 			comments,
 			numOfComments: comments.length,
@@ -255,6 +260,7 @@ const getAllReplyController = async (req, res) => {
 	const replies = await StatusPostModel.getAllReplyCommentByCmtId(cmt_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
+	await statusPostHelper.InsertUserReplyInforOfListReplies(replies);
 	const data = {
 		replies,
 		numOfReplies: replies.length,
@@ -280,6 +286,7 @@ const getReplyStartFromController = async (req, res) => {
 	}
 	if (typeof num == 'undefined') {
 		const replies = AllReplies.slice(index);
+		await statusPostHelper.InsertUserReplyInforOfListReplies(replies);
 		const data = {
 			replies,
 			numOfReplies: replies.length,
@@ -289,6 +296,7 @@ const getReplyStartFromController = async (req, res) => {
 		return;
 	} else {
 		const replies = AllReplies.slice(index, index + num);
+		await statusPostHelper.InsertUserReplyInforOfListReplies(replies);
 		const data = {
 			replies,
 			numOfReplies: replies.length,
@@ -302,37 +310,43 @@ const getReplyStartFromController = async (req, res) => {
 	}
 };
 
-const getPostController = async (req,res)=>{
-	const {post_id} = req.query;
-	const postData =await StatusPostModel.getPostById(post_id).then(data=>data.payload);
-	const owner_infor = await userHelper.getUserPublicInforByUserId(postData[0].owner_id);
+const getPostController = async (req, res) => {
+	const { post_id } = req.query;
+	const ma_nguoi_dung = req.auth_decoded.ma_nguoi_dung;
+	const postData = await StatusPostModel.getPostById(post_id).then(
+		(data) => data.payload
+	);
+	const owner_infor = await userHelper.getUserPublicInforByUserId(
+		postData[0].owner_id
+	);
+	const hasLiked = await statusPostHelper.hasUserLikedPost_1(ma_nguoi_dung, post_id)
 	const data = {
 		...postData[0],
-		owner_infor
-	}
-	res.status(200).json(new Response(200,data,'lấy dữ liệu thành công'));
+		owner_infor,
+		hasLiked,
+	};
+	res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));
+};
 
-
-}
-
-const getPostStartFromController= async (req,res)=>{
-	const {index,num} = await req.query;
+const getPostStartFromController = async (req, res) => {
+	const { index, num } = await req.query;
+	const ma_nguoi_dung = req.auth_decoded.ma_nguoi_dung;
 	const AllPost = await StatusPostModel.getAllPost()
-	.then((data) => data.payload)
-	.catch((err) => []);
-	if(AllPost.length <= 0 ||AllPost.length<=index ){
+		.then((data) => data.payload)
+		.catch((err) => []);
+	if (AllPost.length <= 0 || AllPost.length <= index) {
 		const data = {
-			posts:[],
+			posts: [],
 			numOfPosts: posts.length,
 			numOfRemain: 0,
 		};
-		res.status(200).json(
-			new Response(200, data,'lấy dữ liệu thành công')
-		);
+		res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));
 		return;
 	}
 	if (typeof num == 'undefined') {
 		const posts = AllPost.slice(index);
+		await statusPostHelper.InsertOwnerInforOfListPosts(posts);
+		await statusPostHelper.insertUserLikePostInforOfListPosts(ma_nguoi_dung,posts);
 		const data = {
 			posts,
 			numOfPosts: posts.length,
@@ -342,18 +356,18 @@ const getPostStartFromController= async (req,res)=>{
 		return;
 	} else {
 		const posts = AllPost.slice(index, index + num);
-		const data ={
+		await statusPostHelper.InsertOwnerInforOfListPosts(posts);
+		await statusPostHelper.insertUserLikePostInforOfListPosts(ma_nguoi_dung,posts);
+		const data = {
 			posts,
-			numOfPosts:posts.length,
+			numOfPosts: posts.length,
 			numOfRemain:
-			AllPost.length <= index + num
-			? 0
-			: AllPost.length - (index + num),
-		}
+				AllPost.length <= index + num ? 0 : AllPost.length - (index + num),
+		};
 		res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));
 		return;
 	}
-}
+};
 
 module.exports = {
 	addPostController,

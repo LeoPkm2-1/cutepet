@@ -13,61 +13,51 @@ const getUserByUsername = async (userName) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
 		});
 };
-const getUserIdByUsername = async (userName)=>{
+const getUserIdByUsername = async (userName) => {
 	const sqlStmt =
 		'select ma_nguoi_dung from NguoiDung where tai_khoan = ? COLLATE utf8mb4_bin';
 	const params = [userName];
 	return await sqlQuery(sqlStmt, params)
 		.then((data) => {
-			if(data.length>0)return {ma_nguoi_dung:parseInt(data[0].ma_nguoi_dung)}
-			return {ma_nguoi_dung:undefined};
-
+			if (data.length > 0)
+				return { ma_nguoi_dung: parseInt(data[0].ma_nguoi_dung) };
+			return { ma_nguoi_dung: undefined };
 		})
 		.catch((err) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
 		});
-}
+};
 
-const getUsernameByUserId = async(user_id)=>{
+const getUsernameByUserId = async (user_id) => {
 	const sqlStmt = `select tai_khoan from NguoiDung where ma_nguoi_dung = ?`;
 	const params = [user_id];
 	return await sqlQuery(sqlStmt, params)
 		.then((data) => {
-			if(data.length>0)return data[0]
-			return {tai_khoan:undefined};
-
+			if (data.length > 0) return data[0];
+			return { tai_khoan: undefined };
 		})
 		.catch((err) => {
 			return new Response(400, [], err.sqlMessage, err.errno, err.code);
 		});
-}
-
-// (async function () {
-// 	const data = await getUsernameByUserId(11);
-// 	console.log(data);
-// })()
+};
 
 const getUserByEmail = async (email_address) => {
 	const sqlStmt = `select * from NguoiDung where email = ? COLLATE utf8mb4_unicode_ci`;
 	return await sqlQuery(sqlStmt, [email_address])
 		.then((data) => new Response(200, data, ''))
-		.catch(
-			(err) => new Response(400, [], err.sqlMessage, err.errno, err.code)
-		);
+		.catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
 };
 
 const getUserNonActiveByUsername = async (userName) => {
 	async function executor(collection, name) {
 		return await collection.find({ tai_khoan: name }).toArray();
 	}
-	return await nonSQLQuery(
-		executor,
-		'NguoiDungChuaChinhThuc',
-		userName
-	).catch((err) => {
-		console.log(err);
-		throw err;
-	});
+	return await nonSQLQuery(executor, 'NguoiDungChuaChinhThuc', userName).catch(
+		(err) => {
+			console.log(err);
+			throw err;
+		}
+	);
 };
 
 const getUserNonActiveByEmail = async (userEmail) => {
@@ -165,6 +155,28 @@ const isFriend = async (person_id_1, person_id_2) => {
 		});
 };
 
+const getUsersByListId = async (listId) => {
+	const sqlStmt = `select * from NguoiDung where ma_nguoi_dung in (?)`;
+	return await sqlQuery(sqlStmt, [listId])
+		.then((data) => {
+			return new Response(200, data, '');
+		})
+		.catch((err) => {
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+		});
+};
+
+const getUserPublicInforByListId = async (listId) => {
+	const sqlStmt = `select ma_nguoi_dung,ten,ngay_sinh,tai_khoan,email,so_dien_thoai,gioi_tinh from NguoiDung where ma_nguoi_dung in (?)`;
+	return await sqlQuery(sqlStmt, [listId])
+		.then((data) => {
+			return new Response(200, data, '');
+		})
+		.catch((err) => {
+			return new Response(400, [], err.sqlMessage, err.errno, err.code);
+		});
+};
+
 module.exports = {
 	getUserByUsername,
 	getUserByEmail,
@@ -179,5 +191,7 @@ module.exports = {
 	deleteAllExpireNonActiveUser,
 	getUserNonActiveByActiveCode,
 	deleteNonActiveUserByActiveCode,
-	getUsernameByUserId
+	getUsernameByUserId,
+	getUsersByListId,
+	getUserPublicInforByListId,
 };
