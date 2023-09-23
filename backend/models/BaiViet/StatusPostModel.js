@@ -86,6 +86,17 @@ const getLikeThePostInfor = async (user_id, post_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
+const getLikeThePostInforOfListPosts = async (user_id, listPosts) => {
+	async function executor(collection) {
+		return await collection
+			.find({ userLike: user_id, postId: { $in: listPosts } })
+			.toArray();
+	}
+	return await nonSQLQuery(executor, 'LikeBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+
 const addComment = async (comment_data) => {
 	async function executor(collection) {
 		return await collection.insertOne(comment_data);
@@ -234,4 +245,5 @@ module.exports = {
 	getAllReplyCommentByCmtId,
 	getAllCmtByPostId,
 	getAllPost,
+	getLikeThePostInforOfListPosts,
 };
