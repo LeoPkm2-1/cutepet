@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ScrollView } from '../../components/ScrollView';
 import Header from '../../components/Header';
-import PermissionRequired from '../../components/PermissionRequired';
 import PermissionError from '../../components/PermissionError';
 import { Root } from './styled';
 import HomePage from './home';

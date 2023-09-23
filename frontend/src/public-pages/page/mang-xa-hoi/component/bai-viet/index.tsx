@@ -1,10 +1,71 @@
-import { Box, Divider, Typography } from '@mui/material';
+import { Box, Divider, IconButton, InputBase, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
 import ShareIcon from '@mui/icons-material/Share';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 
-export default function PostComponent() {
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import { useEffect, useState } from 'react';
+import postApi from '../../../../../api/post';
+import { useSnackbar } from 'notistack';
+import { CommentType, StatusType } from '../../../../../models/post';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../redux';
+
+type Props = {
+  idStatus?: string;
+  status?: StatusType;
+};
+export default function PostComponent(props: Props) {
+  const [status, setStatus] = useState<StatusType | null>(null);
+  const { enqueueSnackbar } = useSnackbar();
+  const [comments, setComments] = useState<CommentType[]>([])
+  useEffect(() => {
+    if (props?.idStatus) {
+      postApi.getStatusById(props.idStatus).then((data) => {
+        console.log('data', data);
+      });
+    }
+    if (props?.status) {
+      setStatus(props?.status);
+      if(props?.status?.numOfComment > 0 && props?.status?.id){
+        postApi.getAllComment(props?.status?.id).then((data) => {
+          if(data?.status ==200){
+            const commemts = data?.payload?.comments?.map((item:any) => {
+              return {
+                photoURL: item?.userCmtInfor?.anh?.url,
+                name: item?.userCmtInfor?.ten,
+                text: item?.comment
+              } as CommentType
+            })
+            setComments(commemts);
+          }
+        })
+      }
+    }
+    // get comment
+  }, []);
+
+  function handleLike() {
+    if (status?.id) {
+      postApi
+        .likeOrUnlikeStatus(status?.id)
+        .then(() => {
+          if (status) {
+            setStatus({
+              ...status,
+              hasLiked: !status?.hasLiked,
+              numOfLike: status?.hasLiked
+                ? status?.numOfLike - 1
+                : status?.numOfLike + 1,
+            });
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err}`, { variant: 'error' });
+        });
+    }
+  }
   return (
     <>
       <Box
@@ -29,8 +90,9 @@ export default function PostComponent() {
               objectFit: 'cover',
               borderRadius: '30px',
             }}
-            src="https://i.pinimg.com/550x/bb/0b/88/bb0b88d61edeaf96ae83421cf759650e.jpg"
+            src={status?.userInfor?.avatarURL || ''}
           />
+
           <Box
             sx={{
               ml: '16px',
@@ -42,7 +104,7 @@ export default function PostComponent() {
                 fontWeight: '700',
               }}
             >
-              Thuyen Nguyen
+              {status?.userInfor?.name}
             </Typography>
             <Typography
               sx={{
@@ -52,7 +114,7 @@ export default function PostComponent() {
                 color: 'gray',
               }}
             >
-              15 giờ
+              {status?.createAt}
             </Typography>
           </Box>
         </Box>
@@ -66,19 +128,17 @@ export default function PostComponent() {
             mb: '20px',
           }}
         >
-          Bông House Studio sẽ là lựa chọn lí tưởng cho việc quay phim, chụp
-          hình của bạn. Với không gian hiện đại, thiết kế thông minh cùng gam
-          màu trắng be làm chủ đạo, Bông House Studio được trang bị đầy đủ các
-          góc chụp cùng đạo cụ đa dạng tha hồ sáng tạo.
+          {status?.text}
         </Typography>
-        <img
-          style={{
-            width: '100%',
-            objectFit: 'cover',
-          }}
-          src="https://imgt.taimienphi.vn/cf/Images/tt/2023/1/10/hinh-nen-meo-cute-ngo-nghinh-dang-yeu-nhin-la-cung-4.jpg
-            "
-        />
+        {status?.media?.data[0] && (
+          <img
+            style={{
+              width: '100%',
+              objectFit: 'cover',
+            }}
+            src={status?.media?.data[0]}
+          />
+        )}
         <Box
           sx={{
             display: 'flex',
@@ -107,7 +167,7 @@ export default function PostComponent() {
                 ml: '5px',
               }}
             >
-              230
+              {status?.numOfLike}
             </Typography>
           </Box>
 
@@ -126,7 +186,7 @@ export default function PostComponent() {
                 mr: '5px',
               }}
             >
-              20
+              {status?.numOfComment}
             </Typography>
             <SmsOutlinedIcon
               sx={{
@@ -146,9 +206,11 @@ export default function PostComponent() {
           }}
         >
           <Box
+            onClick={handleLike}
             sx={{
               display: 'flex',
               alignItems: 'center',
+              cursor: 'pointer',
             }}
           >
             <Typography
@@ -162,11 +224,19 @@ export default function PostComponent() {
             >
               Thích
             </Typography>
-            <FavoriteBorderOutlinedIcon
-              sx={{
-                color: 'gray',
-              }}
-            />
+            {status?.hasLiked ? (
+              <FavoriteIcon
+                sx={{
+                  color: '#df3731',
+                }}
+              />
+            ) : (
+              <FavoriteBorderOutlinedIcon
+                sx={{
+                  color: 'gray',
+                }}
+              />
+            )}
           </Box>
           <Box
             sx={{
@@ -215,17 +285,21 @@ export default function PostComponent() {
             />
           </Box>
         </Box>
-        <Divider sx={{ mb: "20px"}}/>
-        <Comment />
-        <Comment />
-        <Comment />
-        <Comment />
+        <Divider sx={{ mb: '20px' }} />
+        {status?.id && <CreateComment idStatus={status?.id} />}
+        {comments?.length > 0 && comments?.map((comment) => {
+          return (
+            <Comment comment={comment} />
+          )
+        })
+        }
+
       </Box>
     </>
   );
 }
 
-function Comment() {
+function Comment(props: {comment : CommentType}) {
   return (
     <>
       <Box
@@ -242,8 +316,10 @@ function Comment() {
             width: '40px',
             objectFit: 'cover',
             borderRadius: '30px',
+            minWidth: '40px',
+            minHeight: '40px',
           }}
-          src="https://i.pinimg.com/550x/bb/0b/88/bb0b88d61edeaf96ae83421cf759650e.jpg"
+          src={props.comment.photoURL}
         />
         <Box>
           <Box
@@ -261,7 +337,7 @@ function Comment() {
                 fontSize: '15px',
               }}
             >
-              Thuyen Nguyen
+              {props.comment.name}
             </Typography>
             <Typography
               sx={{
@@ -271,15 +347,14 @@ function Comment() {
                 color: '',
               }}
             >
-              Studio được trang bị đầy đủ các góc chụp cùng đạo cụ đa dạng tha
-              hồ sáng tạo.
+              {props.comment.text}
             </Typography>
           </Box>
           <Box
             sx={{
               display: 'flex',
               padding: '5px 10px 10px 20px',
-              alignItems:"center"
+              alignItems: 'center',
             }}
           >
             <Typography
@@ -322,12 +397,94 @@ function Comment() {
                 fontSize: '14px',
                 color: 'gray',
                 mr: '15px',
-                mt: '3px'
+                mt: '3px',
               }}
             >
               4 giờ
             </Typography>
           </Box>
+        </Box>
+      </Box>
+    </>
+  );
+}
+
+function CreateComment(props: { idStatus: string }) {
+  const infoUser = useSelector((state: RootState) => state.user.profile);
+  const { enqueueSnackbar } = useSnackbar();
+  const [value, setValue] = useState('');
+  function handleComment() {
+    postApi
+      .commentStatus(props.idStatus, value)
+      .then(() => {})
+      .catch((err) => {
+        enqueueSnackbar(`${err}`, { variant: 'error' });
+      });
+  }
+
+  return (
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          background: '#fff',
+          padding: '0px 20px 10px 20px',
+          borderRadius: '12px',
+        }}
+      >
+        <img
+          style={{
+            height: '40px',
+            width: '40px',
+            objectFit: 'cover',
+            borderRadius: '30px',
+            minWidth: '40px',
+            minHeight: '40px',
+          }}
+          src={infoUser?.photoURL || ''}
+        />
+        <Box
+          sx={{
+            ml: '16px',
+            background: '#f0f2f5',
+            borderRadius: '10px',
+            padding: '10px',
+            width: '100%',
+            position: 'relative',
+          }}
+        >
+          <InputBase
+            fullWidth
+            multiline
+            sx={{
+              ml: 1,
+              flex: 1,
+              fontFamily: 'quicksand',
+              fontWeight: '400',
+              fontSize: '14px',
+              paddingRight: '60px',
+            }}
+            placeholder="Bình luận của bạn ..."
+            inputProps={{ 'aria-label': 'search google maps' }}
+            value={value}
+            onChange={(e) => setValue(e.target.value as string)}
+          />
+          <IconButton
+            onClick={handleComment}
+            disabled={!value}
+            sx={{
+              position: 'absolute',
+              right: '10px',
+              bottom: '2px',
+            }}
+          >
+            <SendRoundedIcon
+              sx={{
+                color: value ? '#0062d2' : 'gray',
+                fontSize: '22px',
+              }}
+            />
+          </IconButton>
         </Box>
       </Box>
     </>

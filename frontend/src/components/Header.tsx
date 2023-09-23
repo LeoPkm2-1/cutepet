@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Image from './Image';
 import { RootState } from '../redux';
-import ProfileButton from './ProfileButton';
 import logo from '../assets/img/logo.png';
 import { Box } from '@mui/system';
 import IconButton from '@mui/material/IconButton';

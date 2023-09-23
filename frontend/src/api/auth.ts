@@ -58,31 +58,19 @@ const register = (ten:string, tai_khoan: string, mat_khau: string) => {
   });
 };
 
-const logout = () => {
-  const token = storage.getTokens();
-  return authRequestWithoutExpCheck<void>({
+const logoutUser = () => {
+  return authRequest<any>({
     url: '/logout',
     method: 'GET',
   });
 };
 
-const postRefreshToken = () => {
-  const refreshToken = storage.getTokens();
-  return authRequest<Tokens>({
-    url: '/refresh-token',
-    method: 'POST',
-    body: {
-      refreshToken,
-    },
-  });
-};
 
 const authApi = {
   loginTest,
   register,
   login,
-  logout,
-  postRefreshToken,
+  logoutUser,
 };
 
 export default authApi;

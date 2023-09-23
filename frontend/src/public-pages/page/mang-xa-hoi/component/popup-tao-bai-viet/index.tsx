@@ -3,20 +3,57 @@ import {
   Button,
   Dialog,
   Divider,
+  IconButton,
   InputBase,
   Typography,
 } from '@mui/material';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import PlaceIcon from '@mui/icons-material/Place';
+import { useRef, useState } from 'react';
+import postApi from '../../../../../api/post';
+import { useSnackbar } from 'notistack';
+import  { uploadTaskPromise } from '../../../../../api/upload';
+
+
 type Props = {
   open: boolean;
   onClose: () => void;
 };
 export default function PopUpCreatePost(props: Props) {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isFilePicked, setIsFilePicked] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [text, setText] = useState('');
+  const { enqueueSnackbar } = useSnackbar();
+
+  const changeHandler = (event: any) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  async function handleSubmit(e: any) {
+    e.preventDefault();
+    let storageUrl:string = "";
+    if (selectedFile) {
+      storageUrl =(await uploadTaskPromise(selectedFile)) as string;
+    }
+   
+    postApi.createStatus(text,"images",[storageUrl]).then(() => {
+      enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
+    }).catch((err) => {
+      console.log(err, "err");
+      enqueueSnackbar(`${err}`, { variant: "error" });
+    })
+  }
   return (
     <>
-      <Dialog onClose={props.onClose} open={props.open}>
+      <Dialog
+        onClose={() => {
+          setSelectedFile(null);
+          props.onClose();
+        }}
+        open={props.open}
+      >
         <Box
           sx={{
             minWidth: '500px',
@@ -86,12 +123,22 @@ export default function PopUpCreatePost(props: Props) {
               autoFocus
               fullWidth
               multiline
-              minRows={5}
+              minRows={3}
               maxRows={10}
               sx={{ flex: 1, padding: '0 20px', fontFamily: 'quicksand' }}
               placeholder="Chia sẽ trang thái của bạn..."
               inputProps={{ 'aria-label': 'search google maps' }}
+              value={text}
+              onChange={(e) => setText(e.target.value as string)}
             />
+            {selectedFile && (
+              <img
+                width={'100%'}
+                alt="preview image"
+                // src="https://i.pinimg.com/550x/bb/0b/88/bb0b88d61edeaf96ae83421cf759650e.jpg"
+                src={URL.createObjectURL(selectedFile)}
+              />
+            )}
           </Box>
           <Box
             sx={{
@@ -119,33 +166,53 @@ export default function PopUpCreatePost(props: Props) {
                 Thêm vào bài viết của bạn
               </Typography>
               <Box>
-                <InsertPhotoIcon
-                  sx={{
-                    fontSize: '34px',
-                    color: '#45bd62',
+                <IconButton
+                  onClick={() => {
+                    if (fileInputRef.current) {
+                      fileInputRef.current.click();
+                    }
                   }}
-                />
-                <GroupAddIcon
-                  sx={{
-                    fontSize: '34px',
-                    color: '#1877f2',
-                    m: ' 0 10px',
-                  }}
-                />
-                <PlaceIcon
-                  sx={{
-                    fontSize: '34px',
-                    color: '#f5533d',
-                  }}
-                />
+                >
+                  <InsertPhotoIcon
+                    sx={{
+                      fontSize: '34px',
+                      color: '#45bd62',
+                    }}
+                  />
+                  <input
+                    hidden
+                    ref={fileInputRef}
+                    type="file"
+                    name="file"
+                    onChange={changeHandler}
+                  />
+                </IconButton>
+                <IconButton>
+                  <GroupAddIcon
+                    sx={{
+                      fontSize: '34px',
+                      color: '#1877f2',
+                      m: ' 0 10px',
+                    }}
+                  />
+                </IconButton>
+                <IconButton>
+                  <PlaceIcon
+                    sx={{
+                      fontSize: '34px',
+                      color: '#f5533d',
+                    }}
+                  />
+                </IconButton>
               </Box>
             </Box>
             <Button
+              onClick={handleSubmit}
               fullWidth
               variant="contained"
               color="info"
               sx={{
-                m: '20px 0'
+                m: '20px 0',
               }}
             >
               Đăng

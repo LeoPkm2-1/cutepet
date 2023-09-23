@@ -4,15 +4,11 @@ import storage from "../../helper/storage";
 import { AuthActionEnum, UserActionTypes } from "./action";
 
 type AuthState = {
-  mindfullyAuth: boolean;
-  firebaseAuthLoading: boolean;
-  firebaseUser?: User | null;
+  auth: boolean;
 };
 
 const initState = Object.freeze<AuthState>({
-  mindfullyAuth: !!storage.getTokens(),
-  firebaseAuthLoading: true,
-  firebaseUser: auth.currentUser,
+  auth: !!storage.getTokens(),
 });
 
 export default function (
@@ -20,26 +16,14 @@ export default function (
   action: UserActionTypes
 ): AuthState {
   switch (action.type) {
-    case AuthActionEnum.SET_MINDFULLY_AUTH: {
+    case AuthActionEnum.SET_AUTH: {
       return {
         ...state,
-        mindfullyAuth: action.payload,
-      };
-    }
-    case AuthActionEnum.SET_FIREBASE_AUTH_LOADING: {
-      return {
-        ...state,
-        firebaseAuthLoading: action.payload,
-      };
-    }
-    case AuthActionEnum.SET_FIREBASE_USER: {
-      return {
-        ...state,
-        firebaseUser: action.payload,
+        auth: action.payload,
       };
     }
     case AuthActionEnum.RESET: {
-      return { ...initState, mindfullyAuth: false, firebaseAuthLoading: false };
+      return { ...initState, auth: false };
     }
     default: {
       return state;

@@ -1,48 +1,93 @@
-import { UploadTypes } from "../models/form";
-import { authRequest, CancelOption, request } from "./base";
+import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from '../firebase';
 
-const uploadFileToS3 = (
-  data: {
-    id: number;
-    file: File;
-    uploadType: UploadTypes;
-  },
-  cancelation?: CancelOption
-) => {
-  const fileType = data.file.type.split("/")[0];
-  return authRequest<{
-    uploadURL: string;
-    Key: string;
-  }>(
-    {
-      url: "/aws/signed-url/upload",
-      query: {
-        name: `${data.id}-${data.file.name}`,
-        contentType: fileType,
-        uploadType: data.uploadType,
-      },
-      method: "GET",
-    },
-    cancelation
-  ).then((res) => {
-    return request(
-      {
-        url: res.uploadURL,
-        method: "PUT",
-        headers: {
-          "Content-Type": data.file.type,
+async function uploadFile(file: File) {
+  // const storageRef = ref(storage, 'some-child');
+  // await uploadBytes(storageRef, file).then((snapshot) => {
+  //   console.log('Uploaded a blob or file: ', snapshot);
+  // });
+  const metadata = {
+    contentType: 'image/jpeg'
+  };
+  
+  // Upload file and metadata to the object 'images/mountains.jpg'
+  const storageRef = ref(storage, 'images/' + file.name);
+  const uploadTask =  uploadBytesResumable(storageRef, file, metadata);
+  
+  // Listen for state changes, errors, and completion of the upload.
+  await uploadTask.on('state_changed',
+    (snapshot) => {
+      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      // switch (snapshot.state) {
+      //   case 'paused':
+      //     console.log('Upload is paused');
+      //     break;
+      //   case 'running':
+      //     console.log('Upload is running');
+      //     break;
+      // }
+    }, 
+    (error) => {
+      // A full list of error codes is available at
+      // https://firebase.google.com/docs/storage/web/handle-errors
+      switch (error.code) {
+        case 'storage/unauthorized':
+          // User doesn't have permission to access the object
+          break;
+        case 'storage/canceled':
+          // User canceled the upload
+          break;
+  
+        // ...
+  
+        case 'storage/unknown':
+          // Unknown error occurred, inspect error.serverResponse
+          break;
+      }
+    }, 
+    async () => {
+      // Upload completed successfully, now we can get the download URL
+      return await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        console.log('File available at', downloadURL);
+        return downloadURL;
+      });
+    }
+  );
+}
+
+
+
+
+
+
+  // Create promise.
+  async function uploadTaskPromise(file:File) {
+    return new Promise(function(resolve, reject) {
+      const metadata = {
+        contentType: 'image/jpeg'
+      };
+      const storageRef = ref(storage, 'images/' + file.name);
+      const uploadTask =  uploadBytesResumable(storageRef, file, metadata);
+      uploadTask.on('state_changed',
+        function(snapshot) {
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          console.log('Upload is ' + progress + '% done')
         },
-        body: data.file,
-      },
-      cancelation
-    ).then(() => {
-      return res.uploadURL.split("?")[0];
-    });
-  });
-};
+        function error(err) {
+          console.log('error', err)
+          reject()
+        },
+        function complete() {
+          getDownloadURL(uploadTask.snapshot.ref).then(function(downloadURL) {
+            resolve(downloadURL)
+          })
+        }
+      )
+    })
+  }
 
-const uploadApi = {
-  uploadFileToS3,
-};
 
-export default uploadApi;
+
+export  {uploadFile, uploadTaskPromise};

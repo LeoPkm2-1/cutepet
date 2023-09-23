@@ -159,10 +159,7 @@ export function authRequestWithoutExpCheck<T>(
     console.log("Lỗi nè", error);
     
     if (error?.error?.statusCode === 401) {
-      if (store.getState().auth.mindfullyAuth) {
-        // @ts-ignore
-        store.dispatch(AuthActions.logout());
-      }
+  
     }
     throw error;
   });

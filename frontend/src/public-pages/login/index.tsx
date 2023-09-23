@@ -39,6 +39,9 @@ import {
   Title,
 } from './styled';
 import { useSnackbar } from 'notistack';
+import userApis from '../../api/user';
+import { UserProfile } from '../../models/user-profile';
+import { UserActions } from '../../redux/user';
 
 interface ErrorObj {
   [key: string]: string | undefined;
@@ -145,6 +148,18 @@ const LoginPage = (props: P) => {
           
           dispatch(AuthActions.setAuth(true));
           enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
+          userApis.getUserInfo("ty").then((data) => {
+            if(data?.status == 200){
+              const profile:UserProfile = {
+                id: data?.payload?.ma_nguoi_dung,
+                name: data?.payload?.ten,
+                email: data?.payload?.email || "",
+                age: data?.payload?.ngay_sinh || "",
+                photoURL: data?.payload?.anh?.url || "",
+              }
+              dispatch(UserActions.setProfile(profile));
+            }
+          })
           navigate("/home");
         }else {
           enqueueSnackbar(res?.message, { variant: 'success' });
@@ -153,12 +168,12 @@ const LoginPage = (props: P) => {
       })
       .catch((err) => {
 
-        storage.setTokens("thuyeb");
-        console.log("Thành còng ");
+        // storage.setTokens("thuyeb");
+        // console.log("Thành còng ");
         
-        dispatch(AuthActions.setAuth(true));
-        enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
-        navigate("/home");
+        // dispatch(AuthActions.setAuth(true));
+        // enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
+        // navigate("/home");
         // Test no server
         setIsLoading(false);
         enqueueSnackbar('Lỗi đăng nhập. Vui lòng thử lại !', { variant: 'error' });
@@ -187,7 +202,7 @@ const LoginPage = (props: P) => {
     //   });
   };
 
-  if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
+  if (props.auth.auth) {
     return (
       <Navigate
         to={{

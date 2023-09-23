@@ -3,7 +3,6 @@ import { connect, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../../redux";
 import { AspectRatioImg } from "../Image";
-import ProfileButton from "../ProfileButton";
 import "./style.scss";
 
 type Props = ReturnType<typeof mapStateToProps> & {
@@ -31,7 +30,7 @@ const AppBar = (props: Props) => {
         <span className="title">{props.title}</span>
       </div>
 
-      <ProfileButton />
+      {/* <ProfileButton /> */}
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { UserProfile } from "../../models/user-profile";
 import { UserActionEnum, UserActionTypes } from "./action";
 
 type UserState = {
-  profile?:any;
+  profile?:UserProfile;
 };
 
 const initState = Object.freeze<UserState>({});

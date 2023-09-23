@@ -160,7 +160,7 @@ const RegisterPage = (props: P) => {
     //   });
   };
 
-  if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
+  if (props.auth.auth) {
     return (
       <Navigate
         to={{
