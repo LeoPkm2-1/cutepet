@@ -11,6 +11,7 @@ import { useSnackbar } from 'notistack';
 import { CommentType, StatusType } from '../../../../../models/post';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../redux';
+import moment from 'moment';
 
 type Props = {
   idStatus?: string;
@@ -19,7 +20,8 @@ type Props = {
 export default function PostComponent(props: Props) {
   const [status, setStatus] = useState<StatusType | null>(null);
   const { enqueueSnackbar } = useSnackbar();
-  const [comments, setComments] = useState<CommentType[]>([])
+  const [comments, setComments] = useState<CommentType[]>([]);
+  const [reloadComment, setReloadComment] = useState(false);
   useEffect(() => {
     if (props?.idStatus) {
       postApi.getStatusById(props.idStatus).then((data) => {
@@ -28,23 +30,32 @@ export default function PostComponent(props: Props) {
     }
     if (props?.status) {
       setStatus(props?.status);
-      if(props?.status?.numOfComment > 0 && props?.status?.id){
-        postApi.getAllComment(props?.status?.id).then((data) => {
-          if(data?.status ==200){
-            const commemts = data?.payload?.comments?.map((item:any) => {
-              return {
-                photoURL: item?.userCmtInfor?.anh?.url,
-                name: item?.userCmtInfor?.ten,
-                text: item?.comment
-              } as CommentType
-            })
-            setComments(commemts);
-          }
-        })
-      }
     }
     // get comment
   }, []);
+
+  useEffect(() => {
+    console.log("Vảo commen 1", status , status?.numOfComment  , status?.id);
+    
+    if(status && status?.numOfComment > 0 && status?.id){
+    console.log("Vảo commen 2");
+
+      postApi.getAllComment(status?.id).then((data) => {
+        if(data?.status ==200){
+          const commemts = data?.payload?.comments?.map((item:any) => {
+            return {
+              photoURL: item?.userCmtInfor?.anh?.url,
+              name: item?.userCmtInfor?.ten,
+              text: item?.comment
+            } as CommentType
+          })
+          console.log(commemts, " comment");
+          setComments(commemts);
+        }
+      })
+    }
+
+  },[ reloadComment, status?.id])
 
   function handleLike() {
     if (status?.id) {
@@ -114,7 +125,7 @@ export default function PostComponent(props: Props) {
                 color: 'gray',
               }}
             >
-              {status?.createAt}
+              { moment(status?.createAt).format("DD-MM-YYYY")}
             </Typography>
           </Box>
         </Box>
@@ -286,8 +297,16 @@ export default function PostComponent(props: Props) {
           </Box>
         </Box>
         <Divider sx={{ mb: '20px' }} />
-        {status?.id && <CreateComment idStatus={status?.id} />}
-        {comments?.length > 0 && comments?.map((comment) => {
+        {status?.id && <CreateComment onSuccess={() => {
+           setReloadComment(!reloadComment);
+           if(status){
+             setStatus({
+              ...status,
+              numOfComment : status?.numOfComment + 1,
+             })
+           }
+        }} idStatus={status?.id} />}
+        {status?.id && comments?.length > 0 && comments?.map((comment) => {
           return (
             <Comment comment={comment} />
           )
@@ -409,14 +428,17 @@ function Comment(props: {comment : CommentType}) {
   );
 }
 
-function CreateComment(props: { idStatus: string }) {
+function CreateComment(props: { idStatus: string, onSuccess: () => void}) {
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const { enqueueSnackbar } = useSnackbar();
   const [value, setValue] = useState('');
   function handleComment() {
     postApi
       .commentStatus(props.idStatus, value)
-      .then(() => {})
+      .then(() => {
+        setValue("");
+        props?.onSuccess?.();
+      })
       .catch((err) => {
         enqueueSnackbar(`${err}`, { variant: 'error' });
       });

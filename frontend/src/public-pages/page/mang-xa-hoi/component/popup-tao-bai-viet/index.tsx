@@ -14,6 +14,9 @@ import { useRef, useState } from 'react';
 import postApi from '../../../../../api/post';
 import { useSnackbar } from 'notistack';
 import  { uploadTaskPromise } from '../../../../../api/upload';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../redux';
+import Loading from '../../../../../components/loading';
 
 
 type Props = {
@@ -26,13 +29,15 @@ export default function PopUpCreatePost(props: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [text, setText] = useState('');
   const { enqueueSnackbar } = useSnackbar();
-
+  const infoUser = useSelector((state:RootState) => state.user.profile);
+  const [isloading, setIsloading] = useState(false);
   const changeHandler = (event: any) => {
     setSelectedFile(event.target.files[0]);
   };
 
   async function handleSubmit(e: any) {
     e.preventDefault();
+    setIsloading(true);
     let storageUrl:string = "";
     if (selectedFile) {
       storageUrl =(await uploadTaskPromise(selectedFile)) as string;
@@ -40,16 +45,21 @@ export default function PopUpCreatePost(props: Props) {
    
     postApi.createStatus(text,"images",[storageUrl]).then(() => {
       enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
+      setIsloading(false);
+      setText("");
+      setSelectedFile(null);
     }).catch((err) => {
+      setIsloading(false);
       console.log(err, "err");
       enqueueSnackbar(`${err}`, { variant: "error" });
     })
   }
   return (
     <>
+     <Loading open={isloading}/>
       <Dialog
         onClose={() => {
-          setSelectedFile(null);
+          
           props.onClose();
         }}
         open={props.open}
@@ -90,8 +100,9 @@ export default function PopUpCreatePost(props: Props) {
                   width: '50px',
                   objectFit: 'cover',
                   borderRadius: '30px',
+              
                 }}
-                src="https://i.pinimg.com/550x/bb/0b/88/bb0b88d61edeaf96ae83421cf759650e.jpg"
+                src={infoUser?.photoURL || ""}
               />
               <Box
                 sx={{
@@ -104,7 +115,7 @@ export default function PopUpCreatePost(props: Props) {
                     fontWeight: '700',
                   }}
                 >
-                  Thuyen Nguyen
+                 {infoUser?.name}
                 </Typography>
                 <Typography
                   sx={{
@@ -114,7 +125,7 @@ export default function PopUpCreatePost(props: Props) {
                     color: 'gray',
                   }}
                 >
-                  15 giờ
+                  Công khai
                 </Typography>
               </Box>
             </Box>
@@ -133,6 +144,9 @@ export default function PopUpCreatePost(props: Props) {
             />
             {selectedFile && (
               <img
+                style={{
+                  marginBottom:"10px"
+                }}
                 width={'100%'}
                 alt="preview image"
                 // src="https://i.pinimg.com/550x/bb/0b/88/bb0b88d61edeaf96ae83421cf759650e.jpg"

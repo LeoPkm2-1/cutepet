@@ -1,4 +1,4 @@
-import { authRequest } from './base';
+import { authRequest, authRequestWithoutExpCheck } from './base';
 
 const createStatus = (text: string, type: string, data: string[]) => {
   return authRequest<any>({
@@ -42,8 +42,8 @@ const getStatusById = (id: string) => {
 };
 
 const getPostStartFrom = (index: number, num: number) => {
-  return authRequest<any>({
-    url: `/post/statusPost/getPostStartFrom?index=${index}&num=${num}`,
+  return authRequestWithoutExpCheck<any>({
+    url: `post/statusPost/getPostStartFrom?index=${index}&num=${num}`,
     method: 'GET',
   });
 };

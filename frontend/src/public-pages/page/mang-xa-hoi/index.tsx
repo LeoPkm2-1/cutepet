@@ -7,13 +7,15 @@ import CreatePost from './component/tao-bai-viet';
 import postApi from '../../../api/post';
 import { useEffect, useState } from 'react';
 import { StatusType } from '../../../models/post';
+import userApis from '../../../api/user';
 
 // Our app
 export default function MangXaHoi() {
   const [listPost, setListPost] = useState<StatusType[]>([]);
+  const [isLoad, setisLoad] = useState(true);
   useEffect(() => {
-    console.log("vao ne");
-    
+    console.log('vao ne');
+
     postApi.getPostStartFrom(0, 20).then((data) => {
       if (data?.status == 200) {
         console.log(data, 'data');
@@ -39,7 +41,7 @@ export default function MangXaHoi() {
         setListPost(list);
       }
     });
-  }, []);
+  }, [isLoad]);
   return (
     <>
       <Grid container>
@@ -52,7 +54,7 @@ export default function MangXaHoi() {
         </Grid>
         <Grid xs={4} item>
           {' '}
-          Loi moi ket ban
+          
         </Grid>
       </Grid>
     </>

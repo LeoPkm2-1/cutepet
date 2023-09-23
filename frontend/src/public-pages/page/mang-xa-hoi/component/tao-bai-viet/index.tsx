@@ -2,8 +2,11 @@ import { Box, Divider, InputBase, Paper, Typography } from '@mui/material';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import PopUpCreatePost from '../popup-tao-bai-viet';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../redux';
 export default function CreatePost() {
     const [open, setOpen] = useState(false);
+    const infoUser = useSelector((state:RootState) => state.user.profile)
   return (
     <>
       <Box
@@ -33,7 +36,7 @@ export default function CreatePost() {
               objectFit: 'cover',
               borderRadius: '30px',
             }}
-            src="https://i.pinimg.com/550x/bb/0b/88/bb0b88d61edeaf96ae83421cf759650e.jpg"
+            src={infoUser?.photoURL || ""}
           />
           <Paper
             component="form"

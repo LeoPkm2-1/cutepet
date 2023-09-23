@@ -337,7 +337,7 @@ const getPostStartFromController = async (req, res) => {
 	if (AllPost.length <= 0 || AllPost.length <= index) {
 		const data = {
 			posts: [],
-			numOfPosts: posts.length,
+			numOfPosts: posts?.length || 0,
 			numOfRemain: 0,
 		};
 		res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));

@@ -160,7 +160,7 @@ const LoginPage = (props: P) => {
               dispatch(UserActions.setProfile(profile));
             }
           })
-          navigate("/home");
+          navigate("/home/mang-xa-hoi");
         }else {
           enqueueSnackbar(res?.message, { variant: 'success' });
         }
@@ -202,7 +202,7 @@ const LoginPage = (props: P) => {
     //   });
   };
 
-  if (props.auth.auth) {
+  if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
     return (
       <Navigate
         to={{
