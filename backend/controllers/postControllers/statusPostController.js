@@ -388,6 +388,12 @@ const updateReplyController = async (req, res) => {
 	res.json(data);
 };
 
+const updateCommentController = async (req, res) => {
+	const { cmt_id, content } = req.body;
+	const data = await StatusPostModel.updateCommentPost(cmt_id, content);
+	res.json(data);
+}
+
 module.exports = {
 	addPostController,
 	toggleLikePostController,
@@ -401,4 +407,5 @@ module.exports = {
 	getPostController,
 	getPostStartFromController,
 	updateReplyController,
+	updateCommentController,
 };

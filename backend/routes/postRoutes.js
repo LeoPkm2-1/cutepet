@@ -81,4 +81,10 @@ router.post(
 
 )
 
+router.post(
+	'/statusPost/updateComment',
+	[postMiddle.checkCmtStatusPostExistMid,postMiddle.preProcessUpdateCmtStatusPost],
+	statusPostController.updateCommentController
+)
+
 module.exports = router;

@@ -80,13 +80,68 @@ async function checkReplyStatusPostExistMid(req, res, next) {
 }
 async function preProcessUpdateReplyStatusPost(req, res, next) {
 	const content = req.body.content;
-	if (typeof content === 'undefined' || content === null || content == '') {
+	const oldReplyInfor = req.body.REPLY_POST_INFOR;
+	if (req.auth_decoded.ma_nguoi_dung != oldReplyInfor.replyBy) {
+		res
+			.status(400)
+			.json(
+				new Response(
+					400,
+					'Bạn không có quyền chỉnh sửa phản hồi này',
+					300,
+					300,
+					300
+				)
+			);
+		return;
+	} else if (
+		typeof content === 'undefined' ||
+		content === null ||
+		content == ''
+	) {
 		res
 			.status(400)
 			.json(
 				new Response(
 					400,
 					'Nội dung thay đổi của phản hồi không hợp lệ',
+					300,
+					300,
+					300
+				)
+			);
+		return;
+	}
+	next();
+}
+
+async function preProcessUpdateCmtStatusPost(req, res, next) {
+	const content = req.body.content;
+	const oldCmtInfor = req.body.CMT_POST_INFOR;
+	if (req.auth_decoded.ma_nguoi_dung != oldCmtInfor.commentBy) {
+		res
+			.status(400)
+			.json(
+				new Response(
+					400,
+					'Bạn không có quyền chỉnh sửa bình luận này',
+					300,
+					300,
+					300
+				)
+			);
+		return;
+	} else if (
+		typeof content === 'undefined' ||
+		content === null ||
+		content == ''
+	) {
+		res
+			.status(400)
+			.json(
+				new Response(
+					400,
+					'Nội dung thay đổi của bình luận không hợp lệ',
 					300,
 					300,
 					300
@@ -201,4 +256,5 @@ module.exports = {
 	preProcessGetCmtStatusPost,
 	preProcessGetReplyOfCmtStatusPost,
 	preProcessUpdateReplyStatusPost,
+	preProcessUpdateCmtStatusPost,
 };

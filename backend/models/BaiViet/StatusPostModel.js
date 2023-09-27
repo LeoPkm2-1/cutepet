@@ -236,6 +236,22 @@ const updateReplyComment = async (replyId, content) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
+const updateCommentPost = async (cmtId, content) => {
+	async function executor(collection) {
+		return await collection.updateOne(
+			{ _id: new ObjectId(`${cmtId}`) },
+			{ $set: { comment: `${content}` ,'modifiedAt':new Date()} }
+		);
+	}
+		
+	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err)
+			return new Response(400, err, '', 300, 300)
+		});
+}
+
 module.exports = {
 	addPost,
 	getPostById,
@@ -258,4 +274,5 @@ module.exports = {
 	getAllPost,
 	getLikeThePostInforOfListPosts,
 	updateReplyComment,
+	updateCommentPost,
 };
