@@ -12,6 +12,7 @@ const addPostController = async (req, res) => {
 		createAt: new Date(),
 		numOfLike: 0,
 		numOfComment: 0,
+		modifiedAt:null,
 		owner_id: req.auth_decoded.ma_nguoi_dung,
 	};
 	const addProcess = await StatusPostModel.addPost(postStatus);
@@ -43,6 +44,7 @@ const addCommentController = async (req, res) => {
 		commentBy,
 		commentAt,
 		numOfLike,
+		modifiedAt:null,
 		numOfReply,
 	};
 	const commentProcess = await StatusPostModel.addComment(comment_data);
@@ -178,6 +180,7 @@ const replyCmtController = async (req, res) => {
 		replyBy,
 		replyAt,
 		numOfLike,
+		modifiedAt:null,
 	};
 	const replyProcess = await StatusPostModel.addReplyComment(reply_data);
 	if (replyProcess.status != 200) {
@@ -319,7 +322,10 @@ const getPostController = async (req, res) => {
 	const owner_infor = await userHelper.getUserPublicInforByUserId(
 		postData[0].owner_id
 	);
-	const hasLiked = await statusPostHelper.hasUserLikedPost_1(ma_nguoi_dung, post_id)
+	const hasLiked = await statusPostHelper.hasUserLikedPost_1(
+		ma_nguoi_dung,
+		post_id
+	);
 	const data = {
 		...postData[0],
 		owner_infor,
@@ -346,7 +352,10 @@ const getPostStartFromController = async (req, res) => {
 	if (typeof num == 'undefined') {
 		const posts = AllPost.slice(index);
 		await statusPostHelper.InsertOwnerInforOfListPosts(posts);
-		await statusPostHelper.insertUserLikePostInforOfListPosts(ma_nguoi_dung,posts);
+		await statusPostHelper.insertUserLikePostInforOfListPosts(
+			ma_nguoi_dung,
+			posts
+		);
 		const data = {
 			posts,
 			numOfPosts: posts.length,
@@ -357,7 +366,10 @@ const getPostStartFromController = async (req, res) => {
 	} else {
 		const posts = AllPost.slice(index, index + num);
 		await statusPostHelper.InsertOwnerInforOfListPosts(posts);
-		await statusPostHelper.insertUserLikePostInforOfListPosts(ma_nguoi_dung,posts);
+		await statusPostHelper.insertUserLikePostInforOfListPosts(
+			ma_nguoi_dung,
+			posts
+		);
 		const data = {
 			posts,
 			numOfPosts: posts.length,
@@ -367,6 +379,13 @@ const getPostStartFromController = async (req, res) => {
 		res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));
 		return;
 	}
+};
+
+const updateReplyController = async (req, res) => {
+	// console.log(req.body.REPLY_POST_INFOR);
+	const { reply_id, content } = req.body;
+	const data  =await  StatusPostModel.updateReplyComment(reply_id, content)
+	res.json(data);
 };
 
 module.exports = {
@@ -381,4 +400,5 @@ module.exports = {
 	getReplyStartFromController,
 	getPostController,
 	getPostStartFromController,
+	updateReplyController,
 };

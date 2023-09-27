@@ -65,6 +65,38 @@ async function checkCmtStatusPostExistMid(req, res, next) {
 	next();
 }
 
+// midlleware kiểm tra sự tồn tại của reply của status post
+async function checkReplyStatusPostExistMid(req, res, next) {
+	const reply_id = req.method == 'GET' ? req.query.reply_id : req.body.reply_id;
+	const data = await statusPostModel.getReplyCommentById(reply_id);
+	if (data.payload.length <= 0) {
+		res
+			.status(400)
+			.json(new Response(400, 'Phản hồi không tồn tại', 300, 300, 300));
+		return;
+	}
+	req.body.REPLY_POST_INFOR = data.payload[0];
+	next();
+}
+async function preProcessUpdateReplyStatusPost(req, res, next) {
+	const content = req.body.content;
+	if (typeof content === 'undefined' || content === null || content == '') {
+		res
+			.status(400)
+			.json(
+				new Response(
+					400,
+					'Nội dung thay đổi của phản hồi không hợp lệ',
+					300,
+					300,
+					300
+				)
+			);
+		return;
+	}
+	next();
+}
+
 // middleware tiền xử lý khi toggle like bài viết chia sẻ trạng thái, giả sử KHI bài viết đã TỒN TẠI
 async function preProcessLikeStatusPost(req, res, next) {
 	const { post_id } = req.body;
@@ -122,7 +154,7 @@ async function preProcessGetCmtStatusPost(req, res, next) {
 		if (typeof num != 'undefined' && Number.isNaN(parseInt(num))) {
 			throw new Error(VALID_PARAM);
 		}
-		
+
 		num = typeof num == 'undefined' ? undefined : parseInt(num);
 		if (num <= 0) throw new Error(VALID_PARAM);
 		req.query.index = index;
@@ -156,14 +188,17 @@ async function preProcessGetReplyOfCmtStatusPost(req, res, next) {
 	}
 	next();
 }
+
 module.exports = {
 	preProcessAddStatusPost,
 	preProcessLikeStatusPost,
 	checkStatusPostExistMid,
 	preProcessCmtStatusPost,
 	checkCmtStatusPostExistMid,
+	checkReplyStatusPostExistMid,
 	preProcessLikeCmtStatusPost,
 	preProcessRelyCmtStatusPost,
 	preProcessGetCmtStatusPost,
 	preProcessGetReplyOfCmtStatusPost,
+	preProcessUpdateReplyStatusPost,
 };

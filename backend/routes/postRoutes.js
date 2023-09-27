@@ -74,4 +74,11 @@ router.get(
 	statusPostController.getPostStartFromController
 )
 
+router.post(
+	'/statusPost/updateReply',
+	[postMiddle.checkReplyStatusPostExistMid,postMiddle.preProcessUpdateReplyStatusPost],
+	statusPostController.updateReplyController
+
+)
+
 module.exports = router;

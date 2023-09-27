@@ -224,6 +224,17 @@ const getAllPost = async () => {
 		.then((data) => new Response(200, data, ''))
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
+const updateReplyComment = async (replyId, content) => {
+	async function executor(collection) {
+		return await collection.updateOne(
+			{ _id: new ObjectId(`${replyId}`) },
+			{ $set: { reply: `${content}` ,'modifiedAt':new Date()} }
+		);
+	}
+	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
 
 module.exports = {
 	addPost,
@@ -246,4 +257,5 @@ module.exports = {
 	getAllCmtByPostId,
 	getAllPost,
 	getLikeThePostInforOfListPosts,
+	updateReplyComment,
 };
