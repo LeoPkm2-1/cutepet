@@ -1,30 +1,30 @@
 const express = require('express');
-const postMiddle = require('../middlewares/postMiddlewares');
+const statusPostMiddle = require('../middlewares/BaiViet/postMiddlewares');
 const statusPostController = require('../controllers/postControllers/statusPostController');
 const router = express.Router();
 
 router.post(
 	'/statusPost/addPost',
-	postMiddle.preProcessAddStatusPost,
+	statusPostMiddle.preProcessAddPost,
 	statusPostController.addPostController
 );
 
 router.post(
 	'/statusPost/likePost',
-	[postMiddle.checkStatusPostExistMid, postMiddle.preProcessLikeStatusPost],
+	[statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessLikePost],
 	statusPostController.toggleLikePostController
 );
 router.post(
 	'/statusPost/addComment',
-	[postMiddle.checkStatusPostExistMid, postMiddle.preProcessCmtStatusPost],
+	[statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessCmtPost],
 	statusPostController.addCommentController
 );
 
 router.post(
 	'/statusPost/likeComment',
 	[
-		postMiddle.checkCmtStatusPostExistMid,
-		postMiddle.preProcessLikeCmtStatusPost,
+		statusPostMiddle.checkCmtPostExistMid,
+		statusPostMiddle.preProcessLikeCmtPost,
 	],
 	statusPostController.toggleLikeCmtController
 );
@@ -32,59 +32,82 @@ router.post(
 router.post(
 	'/statusPost/replyComment',
 	[
-		postMiddle.checkCmtStatusPostExistMid,
-		postMiddle.preProcessRelyCmtStatusPost,
+		statusPostMiddle.checkCmtPostExistMid,
+		statusPostMiddle.preProcessRelyCmtPost,
 	],
 	statusPostController.replyCmtController
 );
 
 router.get(
 	'/statusPost/getAllComment',
-	[postMiddle.checkStatusPostExistMid],
+	[statusPostMiddle.checkPostExistMid],
 	statusPostController.getAllCmtController
 );
 
 router.get(
 	'/statusPost/getCommentStartFrom',
-	[postMiddle.checkStatusPostExistMid, postMiddle.preProcessGetCmtStatusPost],
+	[statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessGetCmtPost],
 	statusPostController.getCmtStartFromController
 );
 
 router.get(
 	'/statusPost/getAllReply',
-	[postMiddle.checkCmtStatusPostExistMid],
+	[statusPostMiddle.checkCmtPostExistMid],
 	statusPostController.getAllReplyController
 );
 
 router.get(
 	'/statusPost/getReplyStartFrom',
-	[postMiddle.checkCmtStatusPostExistMid,postMiddle.preProcessGetReplyOfCmtStatusPost],
+	[
+		statusPostMiddle.checkCmtPostExistMid,
+		statusPostMiddle.preProcessGetReplyOfCmtPost,
+	],
 	statusPostController.getReplyStartFromController
-)
+);
 
 router.get(
 	'/statusPost/getPost',
-	[postMiddle.checkStatusPostExistMid],
+	[statusPostMiddle.checkPostExistMid],
 	statusPostController.getPostController
-)
+);
 
 router.get(
 	'/statusPost/getPostStartFrom',
-	[postMiddle.preProcessGetCmtStatusPost],
+	[statusPostMiddle.preProcessGetCmtPost],
 	statusPostController.getPostStartFromController
-)
+);
 
 router.post(
 	'/statusPost/updateReply',
-	[postMiddle.checkReplyStatusPostExistMid,postMiddle.preProcessUpdateReplyStatusPost],
+	[
+		statusPostMiddle.checkReplyPostExistMid,
+		statusPostMiddle.preProcessUpdateReplyPost,
+	],
 	statusPostController.updateReplyController
-
-)
+);
 
 router.post(
 	'/statusPost/updateComment',
-	[postMiddle.checkCmtStatusPostExistMid,postMiddle.preProcessUpdateCmtStatusPost],
+	[
+		statusPostMiddle.checkCmtPostExistMid,
+		statusPostMiddle.preProcessUpdateCmtPost,
+	],
 	statusPostController.updateCommentController
+);
+
+router.post(
+	'/statusPost/deleteReply',
+	[
+		statusPostMiddle.checkReplyPostExistMid,
+		statusPostMiddle.preProcessDeleteReplyOFCmt,
+	],
+	statusPostController.deleteReplyController
+);
+
+router.post(
+	'/statusPost/deleteComment',
+	[statusPostMiddle.checkCmtPostExistMid],
+	statusPostController.deleteCommentController
 )
 
 module.exports = router;

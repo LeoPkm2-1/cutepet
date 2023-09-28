@@ -1,8 +1,8 @@
-const { Response } = require('../utils');
-const statusPostModel = require('../models/BaiViet/StatusPostModel');
-const postHelper = require('../utils/postHelper');
+const { Response } = require('../../utils');
+const statusPostModel = require('../../models/BaiViet/StatusPostModel');
+const postHelper = require('../../utils/postHelper');
 
-async function preProcessAddStatusPost(req, res, next) {
+async function preProcessAddPost(req, res, next) {
 	const NOT_CONTENT_POST = `bài viết không được chấp nhận do không có nội dung`;
 	const text = req.body.text;
 	const media = req.body.media;
@@ -28,7 +28,7 @@ async function preProcessAddStatusPost(req, res, next) {
 }
 
 // middleware kiểm tra sự tồi tại của bài viết chia sẽ trạng thái. Nếu tồn tại thì gọi next() nếu không thì trả về http respone phản hồi bài viết không tồn tại
-async function checkStatusPostExistMid(req, res, next) {
+async function checkPostExistMid(req, res, next) {
 	let post_id = undefined;
 	if (req.method === 'GET') {
 		post_id = req.query.post_id;
@@ -46,7 +46,7 @@ async function checkStatusPostExistMid(req, res, next) {
 	next();
 }
 // middleware kiểm tra sự tồn tại của cmt của status post. Nếu tồn tại thì gọi next() nếu không thì trả về http respone phản hồi bình luận không tồn tại
-async function checkCmtStatusPostExistMid(req, res, next) {
+async function checkCmtPostExistMid(req, res, next) {
 	let cmt_id = undefined;
 	if (req.method === 'GET') {
 		cmt_id = req.query.cmt_id;
@@ -66,7 +66,7 @@ async function checkCmtStatusPostExistMid(req, res, next) {
 }
 
 // midlleware kiểm tra sự tồn tại của reply của status post
-async function checkReplyStatusPostExistMid(req, res, next) {
+async function checkReplyPostExistMid(req, res, next) {
 	const reply_id = req.method == 'GET' ? req.query.reply_id : req.body.reply_id;
 	const data = await statusPostModel.getReplyCommentById(reply_id);
 	if (data.payload.length <= 0) {
@@ -78,7 +78,8 @@ async function checkReplyStatusPostExistMid(req, res, next) {
 	req.body.REPLY_POST_INFOR = data.payload[0];
 	next();
 }
-async function preProcessUpdateReplyStatusPost(req, res, next) {
+
+async function preProcessUpdateReplyPost(req, res, next) {
 	const content = req.body.content;
 	const oldReplyInfor = req.body.REPLY_POST_INFOR;
 	if (req.auth_decoded.ma_nguoi_dung != oldReplyInfor.replyBy) {
@@ -115,7 +116,7 @@ async function preProcessUpdateReplyStatusPost(req, res, next) {
 	next();
 }
 
-async function preProcessUpdateCmtStatusPost(req, res, next) {
+async function preProcessUpdateCmtPost(req, res, next) {
 	const content = req.body.content;
 	const oldCmtInfor = req.body.CMT_POST_INFOR;
 	if (req.auth_decoded.ma_nguoi_dung != oldCmtInfor.commentBy) {
@@ -153,7 +154,7 @@ async function preProcessUpdateCmtStatusPost(req, res, next) {
 }
 
 // middleware tiền xử lý khi toggle like bài viết chia sẻ trạng thái, giả sử KHI bài viết đã TỒN TẠI
-async function preProcessLikeStatusPost(req, res, next) {
+async function preProcessLikePost(req, res, next) {
 	const { post_id } = req.body;
 	const userId = req.auth_decoded.ma_nguoi_dung;
 	const hasLiked = await postHelper.hasUserLikeTheStatusPost(userId, post_id);
@@ -162,7 +163,7 @@ async function preProcessLikeStatusPost(req, res, next) {
 	return;
 }
 
-async function preProcessLikeCmtStatusPost(req, res, next) {
+async function preProcessLikeCmtPost(req, res, next) {
 	const { cmt_id } = req.body;
 	const userId = req.auth_decoded.ma_nguoi_dung;
 	const hasLiked = await postHelper.hasUserLikeTheCmtStatusPost(userId, cmt_id);
@@ -171,7 +172,7 @@ async function preProcessLikeCmtStatusPost(req, res, next) {
 	return;
 }
 
-async function preProcessCmtStatusPost(req, res, next) {
+async function preProcessCmtPost(req, res, next) {
 	const comment = req.body.comment;
 	if (typeof comment != 'string' || comment == '') {
 		res
@@ -180,7 +181,7 @@ async function preProcessCmtStatusPost(req, res, next) {
 	}
 	next();
 }
-async function preProcessRelyCmtStatusPost(req, res, next) {
+async function preProcessRelyCmtPost(req, res, next) {
 	const reply = req.body.reply;
 	if (typeof reply != 'string' || reply == '') {
 		res
@@ -198,7 +199,7 @@ async function preProcessRelyCmtStatusPost(req, res, next) {
 	next();
 }
 
-async function preProcessGetCmtStatusPost(req, res, next) {
+async function preProcessGetCmtPost(req, res, next) {
 	const VALID_PARAM = 'tham số không hợp lệ';
 	let { post_id, index, num } = req.query;
 	try {
@@ -222,7 +223,7 @@ async function preProcessGetCmtStatusPost(req, res, next) {
 	next();
 }
 
-async function preProcessGetReplyOfCmtStatusPost(req, res, next) {
+async function preProcessGetReplyOfCmtPost(req, res, next) {
 	const VALID_PARAM = 'tham số không hợp lệ';
 	let { cmt_id, index, num } = req.query;
 	try {
@@ -244,17 +245,31 @@ async function preProcessGetReplyOfCmtStatusPost(req, res, next) {
 	next();
 }
 
+async function preProcessDeleteReplyOFCmt(req, res, next) {
+	const replyBeforeDelete = req.body.REPLY_POST_INFOR;
+	if (req.auth_decoded.ma_nguoi_dung != replyBeforeDelete.replyBy) {
+		res
+			.status(400)
+			.json(
+				new Response(400, [], 'Bạn không có quyền xóa phản hồi này', 300, 300)
+			);
+		return;
+	}
+	next();
+}
+
 module.exports = {
-	preProcessAddStatusPost,
-	preProcessLikeStatusPost,
-	checkStatusPostExistMid,
-	preProcessCmtStatusPost,
-	checkCmtStatusPostExistMid,
-	checkReplyStatusPostExistMid,
-	preProcessLikeCmtStatusPost,
-	preProcessRelyCmtStatusPost,
-	preProcessGetCmtStatusPost,
-	preProcessGetReplyOfCmtStatusPost,
-	preProcessUpdateReplyStatusPost,
-	preProcessUpdateCmtStatusPost,
+	preProcessAddPost,
+	preProcessLikePost,
+	checkPostExistMid,
+	preProcessCmtPost,
+	checkCmtPostExistMid,
+	checkReplyPostExistMid,
+	preProcessLikeCmtPost,
+	preProcessRelyCmtPost,
+	preProcessGetCmtPost,
+	preProcessGetReplyOfCmtPost,
+	preProcessUpdateReplyPost,
+	preProcessUpdateCmtPost,
+	preProcessDeleteReplyOFCmt,
 };
