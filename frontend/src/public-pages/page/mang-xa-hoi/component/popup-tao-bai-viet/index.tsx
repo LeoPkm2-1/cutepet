@@ -48,6 +48,7 @@ export default function PopUpCreatePost(props: Props) {
       setIsloading(false);
       setText("");
       setSelectedFile(null);
+      props.onClose();
     }).catch((err) => {
       setIsloading(false);
       console.log(err, "err");
@@ -59,7 +60,6 @@ export default function PopUpCreatePost(props: Props) {
      <Loading open={isloading}/>
       <Dialog
         onClose={() => {
-          
           props.onClose();
         }}
         open={props.open}

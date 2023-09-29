@@ -8,6 +8,7 @@ import postApi from '../../../api/post';
 import { useEffect, useState } from 'react';
 import { StatusType } from '../../../models/post';
 import userApis from '../../../api/user';
+import LoiMoiKetBan from './component/loi-moi-ket-ban';
 
 // Our app
 export default function MangXaHoi() {
@@ -16,7 +17,7 @@ export default function MangXaHoi() {
   useEffect(() => {
     console.log('vao ne');
 
-    postApi.getPostStartFrom(0, 20).then((data) => {
+    postApi.getPostStartFrom(0, 10).then((data) => {
       if (data?.status == 200) {
         console.log(data, 'data');
         const list: StatusType[] = data?.payload?.posts?.map((item: any) => {
@@ -47,14 +48,16 @@ export default function MangXaHoi() {
       <Grid container>
         <Grid xs={8} item>
           <CreatePost />
+          <PostComponent idStatus={"650ef7e27eb17e17d2a64573"} />
           {listPost &&
             listPost?.map((status) => {
               return <PostComponent status={status} />;
             })}
         </Grid>
-        <Grid xs={4} item>
-          {' '}
-          
+        <Grid sx={{
+          paddingLeft:"40px"
+        }} xs={4} item>
+          <LoiMoiKetBan/>
         </Grid>
       </Grid>
     </>

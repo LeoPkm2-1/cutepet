@@ -14,27 +14,27 @@ interface LoginResponseBody {
   tokens?: Tokens;
 }
 
-const login = (token: string, provider: SocialProviderEnum) => {
-  const info = getBrowserInfo();
-  return request<LoginResponseBody>({
-    url: '/login',
-    method: 'POST',
-    body: {
-      provider: {
-        id: provider,
-        token: token,
-      },
-      device: {
-        type: 'web',
-        name: info.browserName,
-        uid: storage.getDeviceId(),
-      },
-      timezone: moment.tz.guess(),
-      locale: info.language,
-      isBusiness: true,
-    },
-  });
-};
+// const login = (token: string, provider: SocialProviderEnum) => {
+//   const info = getBrowserInfo();
+//   return request<LoginResponseBody>({
+//     url: '/login',
+//     method: 'POST',
+//     body: {
+//       provider: {
+//         id: provider,
+//         token: token,
+//       },
+//       device: {
+//         type: 'web',
+//         name: info.browserName,
+//         uid: storage.getDeviceId(),
+//       },
+//       timezone: moment.tz.guess(),
+//       locale: info.language,
+//       isBusiness: true,
+//     },
+//   });
+// };
 
 const loginTest = (userName: string, password: string) => {
   return request<any>({
@@ -69,8 +69,8 @@ const logoutUser = () => {
 const authApi = {
   loginTest,
   register,
-  login,
-  logoutUser,
+  // login,
+  // logoutUser,
 };
 
 export default authApi;

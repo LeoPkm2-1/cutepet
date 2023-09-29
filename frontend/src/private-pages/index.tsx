@@ -6,6 +6,7 @@ import { UserProfile } from '../models/user-profile';
 
 import './style.scss';
 import PageRouting from '../public-pages/page';
+import MangXaHoi from '../public-pages/page/mang-xa-hoi';
 
 const PrivatePagesRouting = () => {
   useEffect(() => {
@@ -24,6 +25,7 @@ const PrivatePagesRouting = () => {
     <Routes>
       {/* <Route path="admin/*" element={<AdminRouting />} />
       <Route path="me/*" element={<MeRouting />} /> */}
+      <Route path="mang-xa-hoi/" element={<MangXaHoi />} />
       <Route path="home/*" element={<PageRouting />} />
       {/* <Route path="*" element={<NotMatchRouting profile={profile} />} /> */}
     </Routes>
