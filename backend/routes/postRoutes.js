@@ -38,25 +38,25 @@ router.post(
 	statusPostController.replyCmtController
 );
 
-router.get(
+router.post(
 	'/statusPost/getAllComment',
 	[statusPostMiddle.checkPostExistMid],
 	statusPostController.getAllCmtController
 );
 
-router.get(
+router.post(
 	'/statusPost/getCommentStartFrom',
 	[statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessGetCmtPost],
 	statusPostController.getCmtStartFromController
 );
 
-router.get(
+router.post(
 	'/statusPost/getAllReply',
 	[statusPostMiddle.checkCmtPostExistMid],
 	statusPostController.getAllReplyController
 );
 
-router.get(
+router.post(
 	'/statusPost/getReplyStartFrom',
 	[
 		statusPostMiddle.checkCmtPostExistMid,
@@ -65,15 +65,15 @@ router.get(
 	statusPostController.getReplyStartFromController
 );
 
-router.get(
+router.post(
 	'/statusPost/getPost',
 	[statusPostMiddle.checkPostExistMid],
 	statusPostController.getPostController
 );
 
-router.get(
+router.post(
 	'/statusPost/getPostStartFrom',
-	[statusPostMiddle.preProcessGetCmtPost],
+	[statusPostMiddle.preProcessGetPostStartFrom],
 	statusPostController.getPostStartFromController
 );
 

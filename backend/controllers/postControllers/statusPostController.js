@@ -208,7 +208,7 @@ const replyCmtController = async (req, res) => {
 };
 
 const getAllCmtController = async (req, res) => {
-	const post_id = req.query.post_id;
+	const post_id = req.body.post_id;
 	const comments = await StatusPostModel.getAllCmtByPostId(post_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
@@ -222,7 +222,7 @@ const getAllCmtController = async (req, res) => {
 };
 
 const getCmtStartFromController = async (req, res) => {
-	const { post_id, index, num } = req.query;
+	const { post_id, index, num } = req.body;
 	const AllComments = await StatusPostModel.getAllCmtByPostId(post_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
@@ -269,7 +269,7 @@ const getCmtStartFromController = async (req, res) => {
 };
 
 const getAllReplyController = async (req, res) => {
-	const cmt_id = req.query.cmt_id;
+	const cmt_id = req.body.cmt_id;
 	const replies = await StatusPostModel.getAllReplyCommentByCmtId(cmt_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
@@ -283,7 +283,7 @@ const getAllReplyController = async (req, res) => {
 };
 
 const getReplyStartFromController = async (req, res) => {
-	const { cmt_id, index, num } = req.query;
+	const { cmt_id, index, num } = req.body;
 	const AllReplies = await StatusPostModel.getAllReplyCommentByCmtId(cmt_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
@@ -324,7 +324,7 @@ const getReplyStartFromController = async (req, res) => {
 };
 
 const getPostController = async (req, res) => {
-	const { post_id } = req.query;
+	const { post_id } = req.body;
 	const ma_nguoi_dung = req.auth_decoded.ma_nguoi_dung;
 	const postData = await StatusPostModel.getPostById(post_id).then(
 		(data) => data.payload
@@ -345,7 +345,7 @@ const getPostController = async (req, res) => {
 };
 
 const getPostStartFromController = async (req, res) => {
-	const { index, num } = await req.query;
+	const { index, num } = await req.body;
 	const ma_nguoi_dung = req.auth_decoded.ma_nguoi_dung;
 	const AllPost = await StatusPostModel.getAllPost()
 		.then((data) => data.payload)
@@ -353,7 +353,7 @@ const getPostStartFromController = async (req, res) => {
 	if (AllPost.length <= 0 || AllPost.length <= index) {
 		const data = {
 			posts: [],
-			numOfPosts: posts.length,
+			numOfPosts: 0,
 			numOfRemain: 0,
 		};
 		res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));

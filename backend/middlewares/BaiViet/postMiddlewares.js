@@ -201,7 +201,7 @@ async function preProcessRelyCmtPost(req, res, next) {
 
 async function preProcessGetCmtPost(req, res, next) {
 	const VALID_PARAM = 'tham số không hợp lệ';
-	let { post_id, index, num } = req.query;
+	let { post_id, index, num } = req.body;
 	try {
 		index = parseInt(index);
 		if (Number.isNaN(index) || index < 0) {
@@ -213,19 +213,18 @@ async function preProcessGetCmtPost(req, res, next) {
 
 		num = typeof num == 'undefined' ? undefined : parseInt(num);
 		if (num <= 0) throw new Error(VALID_PARAM);
-		req.query.index = index;
-		req.query.num = num;
+		req.body.index = index;
+		req.body.num = num;
 	} catch (error) {
 		res.status(400).json(new Response(400, [], VALID_PARAM, 300, 300));
 		return;
 	}
-	// console.log('after:', req.query);
 	next();
 }
 
 async function preProcessGetReplyOfCmtPost(req, res, next) {
 	const VALID_PARAM = 'tham số không hợp lệ';
-	let { cmt_id, index, num } = req.query;
+	let { cmt_id, index, num } = req.body;
 	try {
 		index = parseInt(index);
 		if (Number.isNaN(index) || index < 0) {
@@ -236,8 +235,8 @@ async function preProcessGetReplyOfCmtPost(req, res, next) {
 		}
 		num = typeof num == 'undefined' ? undefined : parseInt(num);
 		if (num <= 0) throw new Error(VALID_PARAM);
-		req.query.index = index;
-		req.query.num = num;
+		req.body.index = index;
+		req.body.num = num;
 	} catch (error) {
 		res.status(400).json(new Response(400, [], VALID_PARAM, 300, 300));
 		return;
@@ -258,6 +257,29 @@ async function preProcessDeleteReplyOFCmt(req, res, next) {
 	next();
 }
 
+async function preProcessGetPostStartFrom(req, res, next) {
+	const VALID_PARAM = 'tham số không hợp lệ';
+	let { index, num } = req.body;
+	try {
+		index = parseInt(index);
+		if (Number.isNaN(index) || index < 0) {
+			throw new Error(VALID_PARAM);
+		}
+		if (typeof num != 'undefined' && Number.isNaN(parseInt(num))) {
+			throw new Error(VALID_PARAM);
+		}
+
+		num = typeof num == 'undefined' ? undefined : parseInt(num);
+		if (num <= 0) throw new Error(VALID_PARAM);
+		req.body.index = index;
+		req.body.num = num;
+	} catch (error) {
+		res.status(400).json(new Response(400, [], VALID_PARAM, 300, 300));
+		return;
+	}
+	next();
+}
+
 module.exports = {
 	preProcessAddPost,
 	preProcessLikePost,
@@ -272,4 +294,5 @@ module.exports = {
 	preProcessUpdateReplyPost,
 	preProcessUpdateCmtPost,
 	preProcessDeleteReplyOFCmt,
+	preProcessGetPostStartFrom,
 };
