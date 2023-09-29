@@ -7,7 +7,11 @@ const { response } = require('express');
 
 const addPostController = async (req, res) => {
 	const { text, media } = req.body;
-	const postStatus = new StatusPostComposStructure.StatusPost(text,media,req.auth_decoded.ma_nguoi_dung);
+	const postStatus = new StatusPostComposStructure.StatusPost(
+		text,
+		media,
+		req.auth_decoded.ma_nguoi_dung
+	);
 	console.log(postStatus);
 	const addProcess = await StatusPostModel.addPost(postStatus);
 	if (addProcess.status != 200) {
@@ -41,7 +45,11 @@ const addCommentController = async (req, res) => {
 	// 	modifiedAt: null,
 	// 	numOfReply,
 	// };
-	const comment_data = new StatusPostComposStructure.CommentPost(post_id,comment,commentBy);
+	const comment_data = new StatusPostComposStructure.CommentPost(
+		post_id,
+		comment,
+		commentBy
+	);
 	console.log(comment_data);
 	const commentProcess = await StatusPostModel.addComment(comment_data);
 	// console.log('commentProcess',commentProcess);
@@ -178,7 +186,11 @@ const replyCmtController = async (req, res) => {
 	// 	numOfLike,
 	// 	modifiedAt: null,
 	// };
-	const reply_data = new StatusPostComposStructure.ReplyComment(cmt_id,reply,replyBy);
+	const reply_data = new StatusPostComposStructure.ReplyComment(
+		cmt_id,
+		reply,
+		replyBy
+	);
 	// console.log(reply_data);
 	const replyProcess = await StatusPostModel.addReplyComment(reply_data);
 	if (replyProcess.status != 200) {
@@ -402,7 +414,7 @@ const deleteReplyController = async (req, res) => {
 				.json(
 					new Response(
 						200,
-						{...deleteProcess.payload,reply_id},
+						{ ...deleteProcess.payload, reply_id },
 						'xóa thành công phản hồi:' + reply_id
 					)
 				);
@@ -413,20 +425,31 @@ const deleteReplyController = async (req, res) => {
 	}
 };
 
-const deleteCommentController = async(req,res)=>{
+const deleteCommentController = async (req, res) => {
 	try {
-		const {cmt_id} = req.body;
+		const { cmt_id } = req.body;
 		const deleteProcess = await Promise.all([
 			StatusPostModel.deleteAllLikeOfComment(cmt_id),
 			StatusPostModel.deleteAllReplyOfComment(cmt_id),
-		])
+		]);
 		console.log(deleteProcess);
 		await StatusPostModel.deleteCommentByCmtId(cmt_id);
-		res.send('status')
-		
+		res
+			.status(200)
+			.json(
+				new Response(200, { cmt_id }, 'xóa thành công bình luận:' + cmt_id)
+			);
 	} catch (error) {
 		console.log(error);
-		res.status(400).json(new Response(400,[],'đã có lỗi xảy ra',300,300))
+		res.status(400).json(new Response(400, [], 'đã có lỗi xảy ra', 300, 300));
+	}
+};
+
+const deletePostController = async (req, res) => {
+	try {
+		res.send("ahihi");
+	} catch (error) {
+		
 	}
 }
 
@@ -446,4 +469,5 @@ module.exports = {
 	updateCommentController,
 	deleteReplyController,
 	deleteCommentController,
+	deletePostController,
 };

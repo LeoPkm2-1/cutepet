@@ -302,6 +302,27 @@ const deleteCommentByCmtId = async(cmtId)=>{
 		});
 }
 
+const test = async (ids)=>{
+	const _idLIst = ids.map(id=>new ObjectId(id))
+	async function executor(collection){
+		return collection.deleteMany({
+			_id:{$in:_idLIst}
+		})
+	}
+	return await nonSQLQuery(executor, 'LikeBaiVietTrangThai')
+	.then((data) => new Response(200, data, ''))
+	.catch((err) => {
+		console.log(err);
+		throw new Error(err);
+		return new Response(400, err, '', 300, 300);
+	});
+}
+
+// (async()=>{
+// 	const data = await test(['303132333435363738393132','303132333435363738393133'])
+// 	console.log(data);
+// }
+// )()
 module.exports = {
 	addPost,
 	getPostById,

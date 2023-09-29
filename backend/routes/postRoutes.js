@@ -110,4 +110,10 @@ router.post(
 	statusPostController.deleteCommentController
 )
 
+router.post(
+	'/statusPost/deletePost',
+	[statusPostMiddle.checkPostExistMid],
+	statusPostController.deletePostController
+)
+
 module.exports = router;
