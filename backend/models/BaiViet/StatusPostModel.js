@@ -302,12 +302,64 @@ const deleteCommentByCmtId = async(cmtId)=>{
 		});
 }
 
-const test = async (ids)=>{
-	const _idLIst = ids.map(id=>new ObjectId(id))
+// const test = async (ids)=>{
+// 	const _idLIst = ids.map(id=>new ObjectId(id))
+// 	async function executor(collection){
+// 		return collection.deleteMany({
+// 			_id:{$in:_idLIst}
+// 		})
+// 	}
+// 	return await nonSQLQuery(executor, 'LikeBaiVietTrangThai')
+// 	.then((data) => new Response(200, data, ''))
+// 	.catch((err) => {
+// 		console.log(err);
+// 		throw new Error(err);
+// 		return new Response(400, err, '', 300, 300);
+// 	});
+// }
+
+const deleteAllReplyCmtOfPost = async(postId)=>{
 	async function executor(collection){
-		return collection.deleteMany({
-			_id:{$in:_idLIst}
-		})
+		return collection.deleteMany({postId:`${postId}`})
+	}
+	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
+	.then((data) => new Response(200, data, ''))
+	.catch((err) => {
+		console.log(err);
+		throw new Error(err);
+		return new Response(400, err, '', 300, 300);
+	});
+}
+
+const deleteAllLikeCmtsOfPost = async(postId)=>{
+	async function executor(collection) {
+		return collection.deleteMany({postId:`${postId}`})
+	}
+	return await nonSQLQuery(executor, 'LikeBinhLuanBaiVietTrangThai')
+	.then((data) => new Response(200, data, ''))
+	.catch((err) => {
+		console.log(err);
+		throw new Error(err);
+		return new Response(400, err, '', 300, 300);
+	});
+}
+
+const deleteAllCmtsOfPost = async(postId)=>{
+	async function executor(collection) {
+		return collection.deleteMany({postId:`${postId}`})
+	}
+	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
+	.then((data) => new Response(200, data, ''))
+	.catch((err) => {
+		console.log(err);
+		throw new Error(err);
+		return new Response(400, err, '', 300, 300);
+	});
+}
+
+const deleteAllLikesOfPost = async(postId)=>{
+	async function executor(collection) {
+		return collection.deleteMany({postId:`${postId}`})
 	}
 	return await nonSQLQuery(executor, 'LikeBaiVietTrangThai')
 	.then((data) => new Response(200, data, ''))
@@ -318,11 +370,19 @@ const test = async (ids)=>{
 	});
 }
 
-// (async()=>{
-// 	const data = await test(['303132333435363738393132','303132333435363738393133'])
-// 	console.log(data);
-// }
-// )()
+const deletePostById = async (postId)=>{
+	async function executor(collection) {
+		return collection.deleteOne({_id:new ObjectId(postId)})
+	}
+	return await nonSQLQuery(executor, 'BaiVietTrangThai')
+	.then((data) => new Response(200, data, ''))
+	.catch((err) => {
+		console.log(err);
+		throw new Error(err);
+		return new Response(400, err, '', 300, 300);
+	});
+}
+
 module.exports = {
 	addPost,
 	getPostById,
@@ -349,5 +409,10 @@ module.exports = {
 	deleteReplyComment,
 	deleteAllLikeOfComment,
 	deleteAllReplyOfComment,
-	deleteCommentByCmtId
+	deleteCommentByCmtId,
+	deleteAllReplyCmtOfPost,
+	deleteAllLikeCmtsOfPost,
+	deleteAllCmtsOfPost,
+	deleteAllLikesOfPost,
+	deletePostById
 };

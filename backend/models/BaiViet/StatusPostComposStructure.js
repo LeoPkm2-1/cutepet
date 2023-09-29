@@ -25,12 +25,13 @@ class CommentPost {
 
 
 class ReplyComment{
-  constructor(cmt_id,reply,replyBy){
+  constructor(cmt_id,reply,replyBy,postId){
 		this.cmtId= cmt_id;
 		this.reply=reply;
 		this.replyBy=replyBy;
 		this.replyAt=new Date();
 		this.numOfLike=0;
+		this.postId=postId;
 		this.modifiedAt= null;
   }
 }

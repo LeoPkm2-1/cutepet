@@ -177,7 +177,7 @@ const replyCmtController = async (req, res) => {
 	// const replyAt = new Date();
 	// const numOfLike = 0;
 	const numOfReply = req.body.CMT_POST_INFOR.numOfReply;
-
+	const postId=req.body.CMT_POST_INFOR.postId;
 	// const reply_data = {
 	// 	cmtId: cmt_id,
 	// 	reply,
@@ -189,9 +189,9 @@ const replyCmtController = async (req, res) => {
 	const reply_data = new StatusPostComposStructure.ReplyComment(
 		cmt_id,
 		reply,
-		replyBy
+		replyBy,
+		postId,
 	);
-	// console.log(reply_data);
 	const replyProcess = await StatusPostModel.addReplyComment(reply_data);
 	if (replyProcess.status != 200) {
 		res.status(400).json(new Response(400, [], 'đã có lỗi xảy ra', 300, 300));
@@ -447,9 +447,22 @@ const deleteCommentController = async (req, res) => {
 
 const deletePostController = async (req, res) => {
 	try {
-		res.send("ahihi");
+		const { post_id } = req.body;
+		const deleteProcess = await Promise.all([
+			// xóa bài viết
+			await StatusPostModel.deletePostById(post_id),
+			// xóa like bài viết 
+			await StatusPostModel.deleteAllLikesOfPost(post_id),
+			// xóa bình luận
+			await StatusPostModel.deleteAllCmtsOfPost(post_id),
+			 // xóa like bình luận
+			await StatusPostModel.deleteAllLikeCmtsOfPost(post_id),
+			// xóa phản hồi
+			await StatusPostModel.deleteAllReplyCmtOfPost(post_id),
+		]);
+		res.json(deleteProcess);
 	} catch (error) {
-		
+		console.log(error);
 	}
 }
 
