@@ -9,6 +9,7 @@ const REDIRECT_TO_LOGIN_MESS = "chuyển hướng tới trang đăng nhập";
 const MUST_LOGOUT = "cần đăng xuất ra trước";
 
 const getToken = (req) => {
+	console.log("gui len:",req.headers);
 	const authHeader = req.headers["authorization"];
 	const token = authHeader && authHeader.split(" ")[1];
 	return token;
@@ -17,6 +18,7 @@ const getToken = (req) => {
 const requireLogined = async (req, res, next) => {
 	try {
 		const jwtToken = getToken(req);
+		console.log("data for decode:",jwtToken);
 		let [decodeStatus, decoded] = [true, []];
 		if (!jwtToken) {
 			decodeStatus = false;
@@ -39,6 +41,7 @@ const requireLogined = async (req, res, next) => {
 			return;
 		}
 	} catch (error) {
+		console.log("err:",error);
 		if (
 			error.message === NOT_HAVING_AUTH_INFOR ||
 			error.message === NOT_VERTIFIED ||
@@ -54,6 +57,7 @@ const requireLogined = async (req, res, next) => {
 const nonRequireLogined = async (req, res, next) => {
 	try {
 		const jwtToken = getToken(req);
+		console.log("non require:",jwtToken);
 		let [decodeStatus, decoded] = [false, []];
 		if (jwtToken) {
 			[decodeStatus, decoded] = vertifyJWT(jwtToken);

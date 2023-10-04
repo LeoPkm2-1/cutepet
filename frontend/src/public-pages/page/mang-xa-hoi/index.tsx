@@ -15,8 +15,6 @@ export default function MangXaHoi() {
   const [listPost, setListPost] = useState<StatusType[]>([]);
   const [isLoad, setisLoad] = useState(true);
   useEffect(() => {
-    console.log('vao ne');
-
     postApi.getPostStartFrom(0, 10).then((data) => {
       if (data?.status == 200) {
         console.log(data, 'data');
@@ -54,10 +52,14 @@ export default function MangXaHoi() {
               return <PostComponent status={status} />;
             })}
         </Grid>
-        <Grid sx={{
-          paddingLeft:"40px"
-        }} xs={4} item>
-          <LoiMoiKetBan/>
+        <Grid
+          sx={{
+            paddingLeft: '40px',
+          }}
+          xs={4}
+          item
+        >
+          <LoiMoiKetBan />
         </Grid>
       </Grid>
     </>

@@ -16,8 +16,7 @@ const Private: React.FC<PrivateProps> = ({ children, auth }) => {
   //     </div>
   //   );
   // }
-  // return auth.mindfullyAuth ? (
-   return true ? (
+  return auth.mindfullyAuth ? (
     children
   ) : (
     <Navigate

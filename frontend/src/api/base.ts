@@ -150,6 +150,7 @@ export function authRequestWithoutExpCheck<T>(
     {
       ...options,
       headers: {
+        // Authorization: `${accessToken}`,
         Authorization: `Bearer ${accessToken}`,
         ...options.headers,
       },

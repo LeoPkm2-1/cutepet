@@ -145,14 +145,9 @@ const LoginPage = (props: P) => {
 
         if (res?.payload[0]?.token) {
           storage.setTokens(res.payload[0]?.token);
-          console.log('Thành còng ');
-
+          console.log('Thành còng token :', res.payload[0]?.token);
           dispatch(AuthActions.setAuth(true));
           enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
-          postApi.getPostStartFrom(0, 10).then((item:any) => {
-            console.log('data:', item);
-            navigate('/home/mang-xa-hoi');
-        });
           userApis.getUserInfo('ty').then((data) => {
             if (data?.status == 200) {
               const profile: UserProfile = {
@@ -165,6 +160,7 @@ const LoginPage = (props: P) => {
               dispatch(UserActions.setProfile(profile));
             }
           });
+           navigate('/home/mang-xa-hoi');
           
         } else {
           enqueueSnackbar(res?.message, { variant: 'success' });
@@ -208,8 +204,7 @@ const LoginPage = (props: P) => {
     //   });
   };
 
-  // if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
-    if (props.auth.mindfullyAuth ) {
+  if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
     return (
       <Navigate
         to={{

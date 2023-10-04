@@ -1,8 +1,10 @@
 const express = require('express');
 const postMiddle = require('../middlewares/postMiddlewares');
 const statusPostController = require('../controllers/postControllers/statusPostController');
+const { requireLogined } = require('../middlewares/auth');
 const router = express.Router();
 
+// router.use(requireLogined);
 router.post(
 	'/statusPost/addPost',
 	postMiddle.preProcessAddStatusPost,
@@ -68,7 +70,7 @@ router.get(
 	statusPostController.getPostController
 )
 
-router.get(
+router.post(
 	'/statusPost/getPostStartFrom',
 	[postMiddle.preProcessGetCmtStatusPost],
 	statusPostController.getPostStartFromController

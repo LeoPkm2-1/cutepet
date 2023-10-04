@@ -42,11 +42,16 @@ const getStatusById = (id: string) => {
 };
 
 const getPostStartFrom = (index: number, num: number) => {
-  return authRequestWithoutExpCheck<any>({
-    url: `post/statusPost/getPostStartFrom?index=${index}&num=${num}`,
-    method: 'GET',
+  return authRequest<any>({
+    url: `post/statusPost/getPostStartFrom`,
+    method: 'POST',
+    body: {
+      index,
+      num,
+    },
   });
 };
+
 
 const getAllComment = (id: string,) => {
   return authRequest<any>({
