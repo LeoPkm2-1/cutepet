@@ -13,8 +13,8 @@ router.use(requireLogined);
 // get user infor by username
 router.get('/infor/:username', userControler.userPublicInforByUserName);
 // request add friend 
-router.post('/requestAddFriendById', userControler.requestAddFriend);
-router.post('/requestAddFriendByUserName',addFriendMid.convertUserNameToId ,userControler.requestAddFriend);
+router.post('/requestAddFriendById', addFriendMid.AddByUserIdMid,userControler.requestAddFriend);
+router.post('/requestAddFriendByUserName',addFriendMid.AddByUserNameMid ,userControler.requestAddFriend);
 // respone add friend request.
 router.post('/responeAddFriendRequestById',userControler.responeAddFriend)
 module.exports = router;
