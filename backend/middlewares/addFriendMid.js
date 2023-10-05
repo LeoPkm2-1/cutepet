@@ -7,7 +7,7 @@ const AddByUserIdMid = async (req, res, next) => {
 	if (typeof tai_khoan == 'undefined') {
 		res
 			.status(400)
-			.json(new Response(400, [], 'thông tin không chính xác', 300, 300));
+			.json(new Response(400, [], 'thông tin người dùng không chính xác', 300, 300));
 		return;
 	}
 	req.body.requestUserName = tai_khoan;
@@ -19,7 +19,7 @@ const AddByUserNameMid = async (req, res, next) => {
 	if (typeof ma_nguoi_dung == 'undefined') {
 		res
 			.status(400)
-			.json(new Response(400, [], 'thông tin không chính xác', 300, 300));
+			.json(new Response(400, [], 'thông tin người dùng không chính xác', 300, 300));
 		return;
 	}
 	req.body.requestID = ma_nguoi_dung;

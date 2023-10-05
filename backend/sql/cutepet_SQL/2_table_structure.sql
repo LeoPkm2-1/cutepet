@@ -66,6 +66,7 @@ CREATE TABLE LoiMoiKetBan(
     ma_nguoi_gui int not null,
     ma_nguoi_nhan int not null,
     ngay_gui TIMESTAMP not null DEFAULT NOW(),
+    trang_thai VARCHAR(20) NOT NULL DEFAULT 'PENDING',
     CONSTRAINT fk_moiketbannggui FOREIGN KEY (ma_nguoi_gui) references NguoiDung(ma_nguoi_dung) on UPDATE RESTRICT on DELETE RESTRICT,
     CONSTRAINT fk_moiketbanngnhan FOREIGN KEY (ma_nguoi_nhan) references NguoiDung(ma_nguoi_dung) on UPDATE RESTRICT on DELETE RESTRICT,
     PRIMARY KEY(ma_nguoi_gui, ma_nguoi_nhan)

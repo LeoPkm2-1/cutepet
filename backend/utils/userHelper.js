@@ -12,7 +12,7 @@ async function isFriend(person_id_1, person_id_2) {
 }
 
 async function isSendRequestAddFriend(sender_id, recipient_id) {
-	const data = await loiMoiKetBanModel.isSendRequestAddFriend(
+	const data = await loiMoiKetBanModel.havePendingRequestAddFriend(
 		sender_id,
 		recipient_id
 	);

@@ -17,9 +17,7 @@ const getUserByUserName = async (req, res) => {
 // trả về thông tin người dụng dạng đầy đủ
 const userPublicInforByUserName = async (req, res) => {
 	const username = req.params.username;
-	const userPubInfor = await userHelper.getUserPublicInforByUserName(
-		username
-	);
+	const userPubInfor = await userHelper.getUserPublicInforByUserName(username);
 	res.status(200).json(new Response(200, userPubInfor, ''));
 };
 
@@ -37,54 +35,47 @@ const requestAddFriend = async (req, res) => {
 		if (Number.isNaN(idNguoiNhan)) {
 			throw new Error(NOT_SEND_REQUIRE_ID);
 		}
+		// người gửi và người nhận không dc trùng nhau
+		if (idNguoiGui === idNguoiNhan) {
+			throw new Error(NOT_SELF_REQUIRE_ADD_FRIEND_MESS);
+		}
 		const condition = await userHelper.conditionToSendAddFriendRequest(
 			idNguoiGui,
 			idNguoiNhan
 		);
-		// console.log('eheheh:', condition);
 		if (!condition) {
 			throw new Error(BAN_TO_SEND_REQUEST);
-		}
-		// người gửi và người nhận không dc trùng nhau
-		if (idNguoiGui === idNguoiNhan) {
-			throw new Error(NOT_SELF_REQUIRE_ADD_FRIEND_MESS);
 		}
 		const data = await loiMoiKetBanModel.sendRequestAddFriend(
 			idNguoiGui,
 			idNguoiNhan
 		);
 		if (data.status == 200) {
-			res.status(200).json(
-				new Response(200, [], 'Gửi lời mời thành công')
-			);
+			res.status(200).json(new Response(200, [], 'Gửi lời mời thành công'));
 		} else {
 			console.log(data.message);
-			res.status(400).json(
-				new Response(400, [], data.message, data.errno, data.errcode)
-			);
+			res
+				.status(400)
+				.json(new Response(400, [], data.message, data.errno, data.errcode));
 		}
 	} catch (error) {
 		switch (error.message) {
 			case NOT_SEND_REQUIRE_ID:
-				res.status(400).json(
-					new Response(400, [], NOT_SEND_REQUIRE_ID, 300, 300)
-				);
+				res
+					.status(400)
+					.json(new Response(400, [], NOT_SEND_REQUIRE_ID, 300, 300));
 				return;
 			case NOT_SELF_REQUIRE_ADD_FRIEND_MESS:
-				res.status(400).json(
-					new Response(
-						400,
-						[],
-						NOT_SELF_REQUIRE_ADD_FRIEND_MESS,
-						300,
-						300
-					)
-				);
+				res
+					.status(400)
+					.json(
+						new Response(400, [], NOT_SELF_REQUIRE_ADD_FRIEND_MESS, 300, 300)
+					);
 				return;
 			case BAN_TO_SEND_REQUEST:
-				res.status(400).json(
-					new Response(400, [], BAN_TO_SEND_REQUEST, 300, 300)
-				);
+				res
+					.status(400)
+					.json(new Response(400, [], BAN_TO_SEND_REQUEST, 300, 300));
 			default:
 				break;
 		}
@@ -108,7 +99,7 @@ const responeAddFriend = async (req, res) => {
 			throw new Error(NOT_SEND_SENDER_ID);
 		}
 		const isHaveRequest = await loiMoiKetBanModel
-			.isSendRequestAddFriend(idNguoiGui, idNguoiPhanHoi)
+			.havePendingRequestAddFriend(idNguoiGui, idNguoiPhanHoi)
 			.then((data) => data.payload);
 		if (!isHaveRequest) {
 			throw new Error(NOT_HAVE_REQUEST_ADD_FRIEND);
@@ -121,9 +112,9 @@ const responeAddFriend = async (req, res) => {
 			if (respone_infor == 'ACCEPT') {
 				// accept
 				await laBanBeModel.insertFriendShip(idNguoiGui, idNguoiPhanHoi);
-				res.status(200).json(
-					new Response(200, [], 'thêm qua hệ bạn bè thành công')
-				);
+				res
+					.status(200)
+					.json(new Response(200, [], 'thêm qua hệ bạn bè thành công'));
 			} else {
 				// reject
 				res.status(200).json(new Response(200, [], REJECT_MESSAGE));
@@ -135,21 +126,21 @@ const responeAddFriend = async (req, res) => {
 	} catch (error) {
 		switch (error.message) {
 			case NOT_SEND_SENDER_ID:
-				res.status(400).json(
-					new Response(400, [], NOT_SEND_SENDER_ID, 300, 300)
-				);
+				res
+					.status(400)
+					.json(new Response(400, [], NOT_SEND_SENDER_ID, 300, 300));
 				return;
 
 			case NOT_HAVE_REQUEST_ADD_FRIEND:
-				res.status(400).json(
-					new Response(400, [], NOT_HAVE_REQUEST_ADD_FRIEND, 300, 300)
-				);
+				res
+					.status(400)
+					.json(new Response(400, [], NOT_HAVE_REQUEST_ADD_FRIEND, 300, 300));
 				return;
 
 			case RESPONE_INFOR_NOT_TRUE:
-				res.status(400).json(
-					new Response(400, [], RESPONE_INFOR_NOT_TRUE, 300, 300)
-				);
+				res
+					.status(400)
+					.json(new Response(400, [], RESPONE_INFOR_NOT_TRUE, 300, 300));
 				return;
 			default:
 				console.log(error);
