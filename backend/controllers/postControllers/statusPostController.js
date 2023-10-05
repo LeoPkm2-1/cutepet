@@ -12,7 +12,7 @@ const addPostController = async (req, res) => {
 		media,
 		req.auth_decoded.ma_nguoi_dung
 	);
-	console.log(postStatus);
+	// console.log(postStatus);
 	const addProcess = await StatusPostModel.addPost(postStatus);
 	if (addProcess.status != 200) {
 		res.status(400).json(new Response(400, [], 'đã có lỗi xảy ra', 300, 300));
@@ -50,7 +50,7 @@ const addCommentController = async (req, res) => {
 		comment,
 		commentBy
 	);
-	console.log(comment_data);
+	// console.log(comment_data);
 	const commentProcess = await StatusPostModel.addComment(comment_data);
 	// console.log('commentProcess',commentProcess);
 	if (commentProcess.status != 200) {
@@ -177,7 +177,7 @@ const replyCmtController = async (req, res) => {
 	// const replyAt = new Date();
 	// const numOfLike = 0;
 	const numOfReply = req.body.CMT_POST_INFOR.numOfReply;
-	const postId=req.body.CMT_POST_INFOR.postId;
+	const postId = req.body.CMT_POST_INFOR.postId;
 	// const reply_data = {
 	// 	cmtId: cmt_id,
 	// 	reply,
@@ -190,14 +190,14 @@ const replyCmtController = async (req, res) => {
 		cmt_id,
 		reply,
 		replyBy,
-		postId,
+		postId
 	);
 	const replyProcess = await StatusPostModel.addReplyComment(reply_data);
 	if (replyProcess.status != 200) {
 		res.status(400).json(new Response(400, [], 'đã có lỗi xảy ra', 300, 300));
 		return;
 	}
-	await StatusPostModel.updateNumOfCommentCmtPost(cmt_id, numOfReply + 1);
+	await StatusPostModel.updateNumOfReplyInCmtPost(cmt_id, numOfReply + 1);
 	const insertedReply = await StatusPostModel.getReplyCommentById(
 		replyProcess.payload.insertedId.toString()
 	);
@@ -407,8 +407,15 @@ const updateCommentController = async (req, res) => {
 const deleteReplyController = async (req, res) => {
 	try {
 		const { reply_id } = req.body;
+		// console.log(req.body);
 		const deleteProcess = await StatusPostModel.deleteReplyComment(reply_id);
 		if (deleteProcess.payload.deletedCount == 1) {
+			const cmtId = req.body.REPLY_POST_INFOR.cmtId;
+			const cmtInfor = await StatusPostModel.getCommentPostById(cmtId).then(
+				(data) => data.payload
+			);
+			const numOfReply = cmtInfor[0].numOfReply;
+			await StatusPostModel.updateNumOfReplyInCmtPost(cmtId, numOfReply - 1);
 			res
 				.status(200)
 				.json(
@@ -432,8 +439,13 @@ const deleteCommentController = async (req, res) => {
 			StatusPostModel.deleteAllLikeOfComment(cmt_id),
 			StatusPostModel.deleteAllReplyOfComment(cmt_id),
 		]);
-		console.log(deleteProcess);
+		// console.log(deleteProcess);
 		await StatusPostModel.deleteCommentByCmtId(cmt_id);
+		const postId = req.body.CMT_POST_INFOR.postId;
+		const postInfor = await StatusPostModel.getPostById(postId).then(data=>data.payload);
+		// console.log(postInfor);
+		const numOfComment = postInfor[0].numOfComment;
+		await StatusPostModel.updateNumOfCommentPost(postId,numOfComment-1);
 		res
 			.status(200)
 			.json(
@@ -451,11 +463,11 @@ const deletePostController = async (req, res) => {
 		const deleteProcess = await Promise.all([
 			// xóa bài viết
 			await StatusPostModel.deletePostById(post_id),
-			// xóa like bài viết 
+			// xóa like bài viết
 			await StatusPostModel.deleteAllLikesOfPost(post_id),
 			// xóa bình luận
 			await StatusPostModel.deleteAllCmtsOfPost(post_id),
-			 // xóa like bình luận
+			// xóa like bình luận
 			await StatusPostModel.deleteAllLikeCmtsOfPost(post_id),
 			// xóa phản hồi
 			await StatusPostModel.deleteAllReplyCmtOfPost(post_id),
@@ -464,7 +476,7 @@ const deletePostController = async (req, res) => {
 	} catch (error) {
 		console.log(error);
 	}
-}
+};
 
 module.exports = {
 	addPostController,

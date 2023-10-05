@@ -11,9 +11,9 @@ const addPost = async (statusPost) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const getPostById = async (id) => {
+const getPostById = async (postId) => {
 	async function executor(collection) {
-		return await collection.find({ _id: new ObjectId(id) }).toArray();
+		return await collection.find({ _id: new ObjectId(postId) }).toArray();
 	}
 	return await nonSQLQuery(executor, 'BaiVietTrangThai')
 		.then((data) => new Response(200, data, ''))
@@ -171,7 +171,7 @@ const getLikeCmtPostInfor = async (user_id, cmt_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const updateNumOfCommentCmtPost = async (cmt_id, numOfReply) => {
+const updateNumOfReplyInCmtPost = async (cmt_id, numOfReply) => {
 	async function executor(collection) {
 		return await collection.updateOne(
 			{ _id: new ObjectId(cmt_id) },
@@ -383,6 +383,8 @@ const deletePostById = async (postId)=>{
 	});
 }
 
+
+
 module.exports = {
 	addPost,
 	getPostById,
@@ -394,7 +396,7 @@ module.exports = {
 	updateNumOfLikePost,
 	updateNumOfLikeCmtPost,
 	updateNumOfCommentPost,
-	updateNumOfCommentCmtPost,
+	updateNumOfReplyInCmtPost,
 	getCommentPostById,
 	getLikeCmtPostInfor,
 	addLikeCmtPost,
