@@ -72,6 +72,11 @@ async function getUserPublicInforByListIds(listIds){
 	return  Promise.all(listIds.map(async (id) => await getUserPublicInforByUserId(id)));
 }
 
+// (async () => {
+// 	const data = await getUserPublicInforByListIds([1,2,3]);
+// 	console.log(data);
+// })();
+
 
 async function userId2Username(user_id) {
 	return await userModel

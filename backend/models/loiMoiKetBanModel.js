@@ -82,12 +82,19 @@ const updatePendingRequestToReject = async (sender_id, recipient_id) => {
 		.catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
 };
 
+const getAllPendingRequest = async (recipient_id) => {
+	sqlStmt = `select * from LoiMoiKetBan where ma_nguoi_nhan = ? AND trang_thai = 'PENDING' COLLATE utf8mb4_bin`;
+	return await sqlQuery(sqlStmt, [recipient_id])
+
+}
+
 // (async function () {
-// 	const data = await updatePendingRequestToReject(3, 2);
+// 	const data = await getAllPendingRequest(1);
 // 	console.log(data);
 // })();
 
 module.exports = {
+	getAllPendingRequest,
 	sendRequestAddFriend,
 	isSendRequestAddFriend,
 	deleteRequestAddFriend,
