@@ -56,6 +56,7 @@ drop table if EXISTS LaBanBe;
 CREATE TABLE LaBanBe (
     ma_nguoi_dung_1 int not null,
     ma_nguoi_dung_2 int not null,
+    ngay_bat_dau TIMESTAMP not null DEFAULT NOW(),
     CONSTRAINT fk_BanBe1 FOREIGN KEY (ma_nguoi_dung_1) REFERENCES NguoiDung (ma_nguoi_dung) on UPDATE RESTRICT on DELETE RESTRICT,
     CONSTRAINT fk_BanBe2 FOREIGN KEY (ma_nguoi_dung_2) REFERENCES NguoiDung (ma_nguoi_dung) on UPDATE RESTRICT on DELETE RESTRICT,
     PRIMARY KEY(ma_nguoi_dung_1, ma_nguoi_dung_2)
@@ -69,7 +70,7 @@ CREATE TABLE LoiMoiKetBan(
     trang_thai VARCHAR(20) NOT NULL DEFAULT 'PENDING',
     CONSTRAINT fk_moiketbannggui FOREIGN KEY (ma_nguoi_gui) references NguoiDung(ma_nguoi_dung) on UPDATE RESTRICT on DELETE RESTRICT,
     CONSTRAINT fk_moiketbanngnhan FOREIGN KEY (ma_nguoi_nhan) references NguoiDung(ma_nguoi_dung) on UPDATE RESTRICT on DELETE RESTRICT,
-    PRIMARY KEY(ma_nguoi_gui, ma_nguoi_nhan)
+    PRIMARY KEY(ma_nguoi_gui, ma_nguoi_nhan,ngay_gui)
 );
 commit;
 drop TABLE if EXISTS AnhDaiDien_NguoiDung;

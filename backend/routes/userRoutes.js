@@ -17,4 +17,6 @@ router.post('/requestAddFriendById', addFriendMid.AddByUserIdMid,userControler.r
 router.post('/requestAddFriendByUserName',addFriendMid.AddByUserNameMid ,userControler.requestAddFriend);
 // respone add friend request.
 router.post('/responeAddFriendRequestById',userControler.responeAddFriend)
+// unfriend
+router.post('/unfriendById',addFriendMid.unFriendMidById,userControler.unFriendById)
 module.exports = router;

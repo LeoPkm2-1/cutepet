@@ -104,22 +104,23 @@ const responeAddFriend = async (req, res) => {
 		if (!isHaveRequest) {
 			throw new Error(NOT_HAVE_REQUEST_ADD_FRIEND);
 		}
-		if (respone_infor == 'REJECT' || respone_infor == 'ACCEPT') {
+		if (respone_infor == 'REJECT') {
+			await loiMoiKetBanModel.updatePendingRequestToReject(
+				idNguoiGui,
+				idNguoiPhanHoi
+			);
+			res.status(200).json(new Response(200, [], REJECT_MESSAGE));
+			return;
+		} else if (respone_infor == 'ACCEPT') {
 			await loiMoiKetBanModel.deleteRequestAddFriend(
 				idNguoiGui,
 				idNguoiPhanHoi
 			);
-			if (respone_infor == 'ACCEPT') {
-				// accept
-				await laBanBeModel.insertFriendShip(idNguoiGui, idNguoiPhanHoi);
-				res
-					.status(200)
-					.json(new Response(200, [], 'thêm qua hệ bạn bè thành công'));
-			} else {
-				// reject
-				res.status(200).json(new Response(200, [], REJECT_MESSAGE));
-				return;
-			}
+			// accept
+			await laBanBeModel.insertFriendShip(idNguoiGui, idNguoiPhanHoi);
+			res
+				.status(200)
+				.json(new Response(200, [], 'thêm qua hệ bạn bè thành công'));
 		} else {
 			throw new Error(RESPONE_INFOR_NOT_TRUE);
 		}
@@ -149,9 +150,30 @@ const responeAddFriend = async (req, res) => {
 	// res.status(200).send('ok');
 };
 
+const unFriendById = async (req, res) => {
+	const friend_id = req.body.friend_id;
+	const ma_nguoi_dung = req.auth_decoded.ma_nguoi_dung;
+	const deleteProcess = await laBanBeModel
+		.deleteFriendShip(ma_nguoi_dung, friend_id)
+		.then((data) => {
+			data.payload.insertId=parseInt(data.payload.insertId);
+			return data.payload
+		});
+	res
+		.status(200)
+		.json(
+			new Response(
+				200,
+				deleteProcess,
+				`hủy bạn bè với ${friend_id} thành công `
+			)
+		);
+};
+
 module.exports = {
 	getUserByUserName,
 	requestAddFriend,
 	userPublicInforByUserName,
 	responeAddFriend,
+	unFriendById,
 };
