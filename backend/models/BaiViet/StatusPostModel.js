@@ -33,13 +33,9 @@ const addLikePost = async (post_id, user_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const addLikeCmtPost = async (cmt_id, user_id) => {
+const addLikeCmtPost = async (likeComment) => {
 	async function executor(collection) {
-		return await collection.insertOne({
-			cmtId: cmt_id,
-			userLike: user_id,
-			likeAt: new Date(),
-		});
+		return await collection.insertOne(likeComment);
 	}
 	return await nonSQLQuery(executor, 'LikeBinhLuanBaiVietTrangThai')
 		.then((data) => new Response(200, data, ''))
@@ -301,22 +297,6 @@ const deleteCommentByCmtId = async(cmtId)=>{
 			return new Response(400, err, '', 300, 300);
 		});
 }
-
-// const test = async (ids)=>{
-// 	const _idLIst = ids.map(id=>new ObjectId(id))
-// 	async function executor(collection){
-// 		return collection.deleteMany({
-// 			_id:{$in:_idLIst}
-// 		})
-// 	}
-// 	return await nonSQLQuery(executor, 'LikeBaiVietTrangThai')
-// 	.then((data) => new Response(200, data, ''))
-// 	.catch((err) => {
-// 		console.log(err);
-// 		throw new Error(err);
-// 		return new Response(400, err, '', 300, 300);
-// 	});
-// }
 
 const deleteAllReplyCmtOfPost = async(postId)=>{
 	async function executor(collection){

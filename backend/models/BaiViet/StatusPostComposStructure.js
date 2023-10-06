@@ -23,16 +23,24 @@ class CommentPost {
 	}
 }
 
-
-class ReplyComment{
-  constructor(cmt_id,reply,replyBy,postId){
-		this.cmtId= cmt_id;
-		this.reply=reply;
-		this.replyBy=replyBy;
-		this.replyAt=new Date();
-		this.numOfLike=0;
-		this.postId=postId;
-		this.modifiedAt= null;
-  }
+class LikeComment {
+	constructor(cmt_id, likeBy, postId) {
+		this.cmtId = cmt_id;
+		this.userLike = likeBy;
+		this.postId = postId;
+		this.likeAt = new Date();
+	}
 }
-module.exports = { StatusPost, CommentPost,ReplyComment };
+
+class ReplyComment {
+	constructor(cmt_id, reply, replyBy, postId) {
+		this.cmtId = cmt_id;
+		this.reply = reply;
+		this.replyBy = replyBy;
+		this.replyAt = new Date();
+		this.numOfLike = 0;
+		this.postId = postId;
+		this.modifiedAt = null;
+	}
+}
+module.exports = { StatusPost, CommentPost, ReplyComment ,LikeComment};

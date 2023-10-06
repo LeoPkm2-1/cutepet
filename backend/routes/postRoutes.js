@@ -106,14 +106,17 @@ router.post(
 
 router.post(
 	'/statusPost/deleteComment',
-	[statusPostMiddle.checkCmtPostExistMid],
+	[
+		statusPostMiddle.checkCmtPostExistMid,
+		statusPostMiddle.preProcessDeleteComment,
+	],
 	statusPostController.deleteCommentController
-)
+);
 
 router.post(
 	'/statusPost/deletePost',
-	[statusPostMiddle.checkPostExistMid],
+	[statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessDeletePost],
 	statusPostController.deletePostController
-)
+);
 
 module.exports = router;
