@@ -461,6 +461,11 @@ const deleteCommentController = async (req, res) => {
 	}
 };
 
+const updatePostController = async (req, res) => {
+	const { post_id, text, media } = req.body;
+	res.send('ahihi')
+};
+
 const deletePostController = async (req, res) => {
 	try {
 		const { post_id } = req.body;
@@ -499,4 +504,5 @@ module.exports = {
 	deleteReplyController,
 	deleteCommentController,
 	deletePostController,
+	updatePostController,
 };

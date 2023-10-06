@@ -119,4 +119,10 @@ router.post(
 	statusPostController.deletePostController
 );
 
+router.post(
+	'/statusPost/updatePost',
+	[statusPostMiddle.checkPostExistMid],
+	statusPostController.updatePostController
+)
+
 module.exports = router;
