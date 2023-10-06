@@ -28,8 +28,21 @@ const deleteFriendShip = async (idUser_1, idUser_2) => {
 		.catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
 };
 
+const getAllFriendOfUser = async (idUser) => {
+	const sqlStmt = `select * from LaBanBe where ma_nguoi_dung_1 = ?`;
+	return await sqlQuery(sqlStmt, [idUser])
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
+};
+
+// (async () => {
+// 	const data = await getAllFriendOfUser(1);
+// 	console.log(data);
+// })();
+
 module.exports = {
 	insertFriendShip,
 	friendShipInforBetween,
 	deleteFriendShip,
+	getAllFriendOfUser,
 };
