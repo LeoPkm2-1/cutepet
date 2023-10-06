@@ -92,7 +92,7 @@ const responeAddFriend = async (req, res) => {
 				idNguoiGui,
 				idNguoiPhanHoi
 			);
-			res.status(200).json(new Response(200, [], REJECT_MESSAGE));
+			res.status(200).json(new Response(200, {accepted:false}, REJECT_MESSAGE));
 			return;
 		} else if (respone_infor == 'ACCEPT') {
 			await loiMoiKetBanModel.deleteRequestAddFriend(
@@ -103,7 +103,7 @@ const responeAddFriend = async (req, res) => {
 			await laBanBeModel.insertFriendShip(idNguoiGui, idNguoiPhanHoi);
 			res
 				.status(200)
-				.json(new Response(200, [], 'thêm qua hệ bạn bè thành công'));
+				.json(new Response(200, {accepted:true}, 'thêm qua hệ bạn bè thành công'));
 		} else {
 			throw new Error(RESPONE_INFOR_NOT_TRUE);
 		}

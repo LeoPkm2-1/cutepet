@@ -128,10 +128,12 @@ const toggleLikeCmtController = async (req, res) => {
 		const numOfLike = req.body.CMT_POST_INFOR.numOfLike;
 		// console.log('hehe',req.body.CMT_POST_INFOR);
 		if (action == 'LIKE') {
-			const likeProcess = await StatusPostModel.addLikeCmtPost(
+			const likePacket = new StatusPostComposStructure.LikeComment(
 				cmt_id,
-				userLike
+				userLike,
+				req.body.CMT_POST_INFOR.postId
 			);
+			const likeProcess = await StatusPostModel.addLikeCmtPost(likePacket);
 			if (likeProcess.status != 200) throw new Error(ERROR_HAPPEN_MESSAGE);
 
 			const likeInfor = await StatusPostModel.getLikeCmtPostInfor(
@@ -436,16 +438,18 @@ const deleteCommentController = async (req, res) => {
 	try {
 		const { cmt_id } = req.body;
 		const deleteProcess = await Promise.all([
-			StatusPostModel.deleteAllLikeOfComment(cmt_id),
-			StatusPostModel.deleteAllReplyOfComment(cmt_id),
+			await StatusPostModel.deleteAllLikeOfComment(cmt_id),
+			await StatusPostModel.deleteAllReplyOfComment(cmt_id),
 		]);
 		// console.log(deleteProcess);
 		await StatusPostModel.deleteCommentByCmtId(cmt_id);
 		const postId = req.body.CMT_POST_INFOR.postId;
-		const postInfor = await StatusPostModel.getPostById(postId).then(data=>data.payload);
+		const postInfor = await StatusPostModel.getPostById(postId).then(
+			(data) => data.payload
+		);
 		// console.log(postInfor);
 		const numOfComment = postInfor[0].numOfComment;
-		await StatusPostModel.updateNumOfCommentPost(postId,numOfComment-1);
+		await StatusPostModel.updateNumOfCommentPost(postId, numOfComment - 1);
 		res
 			.status(200)
 			.json(
@@ -455,6 +459,11 @@ const deleteCommentController = async (req, res) => {
 		console.log(error);
 		res.status(400).json(new Response(400, [], 'đã có lỗi xảy ra', 300, 300));
 	}
+};
+
+const updatePostController = async (req, res) => {
+	const { post_id, text, media } = req.body;
+	res.send('ahihi')
 };
 
 const deletePostController = async (req, res) => {
@@ -495,4 +504,5 @@ module.exports = {
 	deleteReplyController,
 	deleteCommentController,
 	deletePostController,
+	updatePostController,
 };

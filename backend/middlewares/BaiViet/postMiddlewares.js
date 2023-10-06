@@ -244,7 +244,49 @@ async function preProcessGetReplyOfCmtPost(req, res, next) {
 	next();
 }
 
+async function preProcessDeletePost(req, res, next) {
+	const postBeforeDelete = req.body.STATUS_POST_INFOR;
+	if (req.auth_decoded.ma_nguoi_dung != postBeforeDelete.owner_id) {
+		res
+			.status(400)
+			.json(
+				new Response(400, [], 'Bạn không có quyền xóa bài viết này', 300, 300)
+			);
+		return;
+	}
+	next();
+}
+
+async function preProcessDeleteComment(req, res, next) {
+	const postInfor = await statusPostModel.getPostById(
+		req.body.CMT_POST_INFOR.postId
+	).then((data) => data.payload[0]);
+	console.log({postInfor});
+	if(req.auth_decoded.ma_nguoi_dung == postInfor.owner_id){
+		next();
+		return;
+	}
+	const cmtBeforeDelete = req.body.CMT_POST_INFOR;
+	if (req.auth_decoded.ma_nguoi_dung != cmtBeforeDelete.commentBy) {
+		res
+			.status(400)
+			.json(
+				new Response(400, [], 'Bạn không có quyền xóa bình luận này', 300, 300)
+			);
+		return;
+	}
+	next();
+}
+
 async function preProcessDeleteReplyOFCmt(req, res, next) {
+	const postInfor = await statusPostModel.getPostById(
+		req.body.REPLY_POST_INFOR.postId
+	).then((data) => data.payload[0]);
+	// console.log({postInfor});
+	if(req.auth_decoded.ma_nguoi_dung == postInfor.owner_id){
+		next();
+		return;
+	}
 	const replyBeforeDelete = req.body.REPLY_POST_INFOR;
 	if (req.auth_decoded.ma_nguoi_dung != replyBeforeDelete.replyBy) {
 		res
@@ -295,4 +337,6 @@ module.exports = {
 	preProcessUpdateCmtPost,
 	preProcessDeleteReplyOFCmt,
 	preProcessGetPostStartFrom,
+	preProcessDeleteComment,
+	preProcessDeletePost,
 };
