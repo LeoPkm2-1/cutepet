@@ -1,19 +1,18 @@
 const StatusPostModel = require('../../models/BaiViet/StatusPostModel');
+const StatusPostComposStructure = require('../../models/BaiViet/StatusPostComposStructure');
 const userHelper = require('../../utils/userHelper');
 const { Response } = require('../../utils/index');
 const statusPostHelper = require('../../utils/BaiViet/statusPostHelper');
+const { response } = require('express');
 
 const addPostController = async (req, res) => {
 	const { text, media } = req.body;
-	const postStatus = {
+	const postStatus = new StatusPostComposStructure.StatusPost(
 		text,
-		postType: 'status',
 		media,
-		createAt: new Date(),
-		numOfLike: 0,
-		numOfComment: 0,
-		owner_id: req.auth_decoded.ma_nguoi_dung,
-	};
+		req.auth_decoded.ma_nguoi_dung
+	);
+	console.log(postStatus);
 	const addProcess = await StatusPostModel.addPost(postStatus);
 	if (addProcess.status != 200) {
 		res.status(400).json(new Response(400, [], 'đã có lỗi xảy ra', 300, 300));
@@ -32,19 +31,26 @@ const addCommentController = async (req, res) => {
 	const comment = req.body.comment;
 	const post_id = req.body.post_id;
 	const commentBy = req.auth_decoded.ma_nguoi_dung;
-	const commentAt = new Date();
-	const numOfLike = 0;
-	const numOfReply = 0;
+	// const commentAt = new Date();
+	// const numOfLike = 0;
+	// const numOfReply = 0;
 	const numOfComment = req.body.STATUS_POST_INFOR.numOfComment;
 
-	const comment_data = {
-		postId: post_id,
+	// const comment_data = {
+	// 	postId: post_id,
+	// 	comment,
+	// 	commentBy,
+	// 	commentAt,
+	// 	numOfLike,
+	// 	modifiedAt: null,
+	// 	numOfReply,
+	// };
+	const comment_data = new StatusPostComposStructure.CommentPost(
+		post_id,
 		comment,
-		commentBy,
-		commentAt,
-		numOfLike,
-		numOfReply,
-	};
+		commentBy
+	);
+	console.log(comment_data);
 	const commentProcess = await StatusPostModel.addComment(comment_data);
 	// console.log('commentProcess',commentProcess);
 	if (commentProcess.status != 200) {
@@ -168,17 +174,24 @@ const replyCmtController = async (req, res) => {
 	const reply = req.body.reply;
 	const cmt_id = req.body.cmt_id;
 	const replyBy = req.auth_decoded.ma_nguoi_dung;
-	const replyAt = new Date();
-	const numOfLike = 0;
+	// const replyAt = new Date();
+	// const numOfLike = 0;
 	const numOfReply = req.body.CMT_POST_INFOR.numOfReply;
-
-	const reply_data = {
-		cmtId: cmt_id,
+	const postId=req.body.CMT_POST_INFOR.postId;
+	// const reply_data = {
+	// 	cmtId: cmt_id,
+	// 	reply,
+	// 	replyBy,
+	// 	replyAt,
+	// 	numOfLike,
+	// 	modifiedAt: null,
+	// };
+	const reply_data = new StatusPostComposStructure.ReplyComment(
+		cmt_id,
 		reply,
 		replyBy,
-		replyAt,
-		numOfLike,
-	};
+		postId,
+	);
 	const replyProcess = await StatusPostModel.addReplyComment(reply_data);
 	if (replyProcess.status != 200) {
 		res.status(400).json(new Response(400, [], 'đã có lỗi xảy ra', 300, 300));
@@ -195,7 +208,7 @@ const replyCmtController = async (req, res) => {
 };
 
 const getAllCmtController = async (req, res) => {
-	const post_id = req.query.post_id;
+	const post_id = req.body.post_id;
 	const comments = await StatusPostModel.getAllCmtByPostId(post_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
@@ -209,7 +222,7 @@ const getAllCmtController = async (req, res) => {
 };
 
 const getCmtStartFromController = async (req, res) => {
-	const { post_id, index, num } = req.query;
+	const { post_id, index, num } = req.body;
 	const AllComments = await StatusPostModel.getAllCmtByPostId(post_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
@@ -256,7 +269,7 @@ const getCmtStartFromController = async (req, res) => {
 };
 
 const getAllReplyController = async (req, res) => {
-	const cmt_id = req.query.cmt_id;
+	const cmt_id = req.body.cmt_id;
 	const replies = await StatusPostModel.getAllReplyCommentByCmtId(cmt_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
@@ -270,7 +283,7 @@ const getAllReplyController = async (req, res) => {
 };
 
 const getReplyStartFromController = async (req, res) => {
-	const { cmt_id, index, num } = req.query;
+	const { cmt_id, index, num } = req.body;
 	const AllReplies = await StatusPostModel.getAllReplyCommentByCmtId(cmt_id)
 		.then((data) => data.payload)
 		.catch((err) => []);
@@ -311,7 +324,7 @@ const getReplyStartFromController = async (req, res) => {
 };
 
 const getPostController = async (req, res) => {
-	const { post_id } = req.query;
+	const { post_id } = req.body;
 	const ma_nguoi_dung = req.auth_decoded.ma_nguoi_dung;
 	const postData = await StatusPostModel.getPostById(post_id).then(
 		(data) => data.payload
@@ -319,7 +332,10 @@ const getPostController = async (req, res) => {
 	const owner_infor = await userHelper.getUserPublicInforByUserId(
 		postData[0].owner_id
 	);
-	const hasLiked = await statusPostHelper.hasUserLikedPost_1(ma_nguoi_dung, post_id)
+	const hasLiked = await statusPostHelper.hasUserLikedPost_1(
+		ma_nguoi_dung,
+		post_id
+	);
 	const data = {
 		...postData[0],
 		owner_infor,
@@ -329,7 +345,7 @@ const getPostController = async (req, res) => {
 };
 
 const getPostStartFromController = async (req, res) => {
-	const { index, num } = await req.query;
+	const { index, num } = await req.body;
 	const ma_nguoi_dung = req.auth_decoded.ma_nguoi_dung;
 	const AllPost = await StatusPostModel.getAllPost()
 		.then((data) => data.payload)
@@ -337,7 +353,7 @@ const getPostStartFromController = async (req, res) => {
 	if (AllPost.length <= 0 || AllPost.length <= index) {
 		const data = {
 			posts: [],
-			numOfPosts: posts?.length || 0,
+			numOfPosts: 0,
 			numOfRemain: 0,
 		};
 		res.status(200).json(new Response(200, data, 'lấy dữ liệu thành công'));
@@ -346,7 +362,10 @@ const getPostStartFromController = async (req, res) => {
 	if (typeof num == 'undefined') {
 		const posts = AllPost.slice(index);
 		await statusPostHelper.InsertOwnerInforOfListPosts(posts);
-		await statusPostHelper.insertUserLikePostInforOfListPosts(ma_nguoi_dung,posts);
+		await statusPostHelper.insertUserLikePostInforOfListPosts(
+			ma_nguoi_dung,
+			posts
+		);
 		const data = {
 			posts,
 			numOfPosts: posts.length,
@@ -357,7 +376,10 @@ const getPostStartFromController = async (req, res) => {
 	} else {
 		const posts = AllPost.slice(index, index + num);
 		await statusPostHelper.InsertOwnerInforOfListPosts(posts);
-		await statusPostHelper.insertUserLikePostInforOfListPosts(ma_nguoi_dung,posts);
+		await statusPostHelper.insertUserLikePostInforOfListPosts(
+			ma_nguoi_dung,
+			posts
+		);
 		const data = {
 			posts,
 			numOfPosts: posts.length,
@@ -368,6 +390,81 @@ const getPostStartFromController = async (req, res) => {
 		return;
 	}
 };
+
+const updateReplyController = async (req, res) => {
+	// console.log(req.body.REPLY_POST_INFOR);
+	const { reply_id, content } = req.body;
+	const data = await StatusPostModel.updateReplyComment(reply_id, content);
+	res.json(data);
+};
+
+const updateCommentController = async (req, res) => {
+	const { cmt_id, content } = req.body;
+	const data = await StatusPostModel.updateCommentPost(cmt_id, content);
+	res.json(data);
+};
+
+const deleteReplyController = async (req, res) => {
+	try {
+		const { reply_id } = req.body;
+		const deleteProcess = await StatusPostModel.deleteReplyComment(reply_id);
+		if (deleteProcess.payload.deletedCount == 1) {
+			res
+				.status(200)
+				.json(
+					new Response(
+						200,
+						{ ...deleteProcess.payload, reply_id },
+						'xóa thành công phản hồi:' + reply_id
+					)
+				);
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(400).json(new Response(400, [], 'đã có lỗi xảy ra', 300, 300));
+	}
+};
+
+const deleteCommentController = async (req, res) => {
+	try {
+		const { cmt_id } = req.body;
+		const deleteProcess = await Promise.all([
+			StatusPostModel.deleteAllLikeOfComment(cmt_id),
+			StatusPostModel.deleteAllReplyOfComment(cmt_id),
+		]);
+		console.log(deleteProcess);
+		await StatusPostModel.deleteCommentByCmtId(cmt_id);
+		res
+			.status(200)
+			.json(
+				new Response(200, { cmt_id }, 'xóa thành công bình luận:' + cmt_id)
+			);
+	} catch (error) {
+		console.log(error);
+		res.status(400).json(new Response(400, [], 'đã có lỗi xảy ra', 300, 300));
+	}
+};
+
+const deletePostController = async (req, res) => {
+	try {
+		const { post_id } = req.body;
+		const deleteProcess = await Promise.all([
+			// xóa bài viết
+			await StatusPostModel.deletePostById(post_id),
+			// xóa like bài viết 
+			await StatusPostModel.deleteAllLikesOfPost(post_id),
+			// xóa bình luận
+			await StatusPostModel.deleteAllCmtsOfPost(post_id),
+			 // xóa like bình luận
+			await StatusPostModel.deleteAllLikeCmtsOfPost(post_id),
+			// xóa phản hồi
+			await StatusPostModel.deleteAllReplyCmtOfPost(post_id),
+		]);
+		res.json(deleteProcess);
+	} catch (error) {
+		console.log(error);
+	}
+}
 
 module.exports = {
 	addPostController,
@@ -381,4 +478,9 @@ module.exports = {
 	getReplyStartFromController,
 	getPostController,
 	getPostStartFromController,
+	updateReplyController,
+	updateCommentController,
+	deleteReplyController,
+	deleteCommentController,
+	deletePostController,
 };
