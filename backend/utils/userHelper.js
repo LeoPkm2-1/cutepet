@@ -12,7 +12,7 @@ async function isFriend(person_id_1, person_id_2) {
 }
 
 async function isSendRequestAddFriend(sender_id, recipient_id) {
-	const data = await loiMoiKetBanModel.isSendRequestAddFriend(
+	const data = await loiMoiKetBanModel.havePendingRequestAddFriend(
 		sender_id,
 		recipient_id
 	);
@@ -71,6 +71,11 @@ async function getUserPublicInforByUserId(user_id) {
 async function getUserPublicInforByListIds(listIds){
 	return  Promise.all(listIds.map(async (id) => await getUserPublicInforByUserId(id)));
 }
+
+// (async () => {
+// 	const data = await getUserPublicInforByListIds([1,2,3]);
+// 	console.log(data);
+// })();
 
 
 async function userId2Username(user_id) {
