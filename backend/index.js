@@ -1,5 +1,18 @@
-var express = require("express");
-var app = express();
+const express = require("express");
+const { createServer } = require('node:http');
+const { join } = require('node:path');
+const { Server } = require('socket.io');
+
+const { createSocketHandler } = require("./socketHandler/index");
+const app = express();
+const server = createServer(app);
+const io = new Server(server,{
+	cors:{
+		origin:"localhost:3001",
+	}
+});
+
+
 var bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const router = require("./routes/index");
@@ -12,6 +25,7 @@ app.use(
 );
 // static file.
 app.use(express.static('public'));
+app.use(express.static('test_socket/js'));
 // Add Access Control Allow Origin headers
 app.use((req, res, next) => {
 	// res.header(
@@ -29,9 +43,15 @@ app.use("/", router);
 app.get("/", (req, res) => {
 	res.send("xin chao");
 });
+app.get("/test_socket", (req, res) => {
+	res.status(200).sendFile(join(__dirname, "test_socket", "test_socket.html"));
+});
+
+// create socket io
+createSocketHandler(io);
 
 // set port
 const PORT = 3000;
-app.listen(PORT, function () {
+server.listen(PORT, function () {
 	console.log(`Node app is running on port ${PORT}`);
 });
