@@ -4,6 +4,7 @@ function norm_userHandler(namespace_instance, io_instance) {
   // authentication
   namespace_instance.use(socketAuthenMid);
 
+	// listen on connection
 	namespace_instance.on('connection', (socket) => {
 		console.log(`norm user connected id: ${socket.id}`);
 

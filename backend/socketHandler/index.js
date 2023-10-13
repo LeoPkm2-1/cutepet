@@ -1,7 +1,7 @@
 const { norm_userHandler } = require('./norm_user');
 function createSocketHandler(io) {
 	io.use((socket, next) => {
-		console.log(`io middleware`);
+		console.log(`io middleware main namespace`);
 		console.log(socket.handshake);
 		next();
 	});
@@ -27,8 +27,8 @@ function createSocketHandler(io) {
 	});
 
 	// user namespace
-	norm_user = io.of('/norm_user');
-	norm_userHandler(norm_user, io);
+	const normUserNamespace = io.of('/norm_user');
+	norm_userHandler(normUserNamespace, io);
 }
 
 module.exports = { createSocketHandler };
