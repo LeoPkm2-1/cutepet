@@ -20,14 +20,19 @@ function norm_userHandler(namespace_instance, io_instance) {
 			console.log(`norm_user out id: ${socket.id}`);
 		});
 
-		socket.on('chat message', (msg, callBack) => {
+
+
+		// ============================== test event ==============================
+		socket.on('test chat message', (msg, callBack) => {
 			console.log('message: ' + msg);
 			callBack('SERVER OK');
 			namespace_instance.in(private_room_name).emit('TEST_ROOM_1', 'biết tui hông? ahihi 123');
 
 			// io_instance.emit('TEST_ROOM_1', 'biết tui hông');
-			// io.emit('response message', ` reps: ${msg}`);
+			// io.emit('test response message', ` reps: ${msg}`);
 		});
+
+
 	});
 
 	// ============================== test room event ==============================

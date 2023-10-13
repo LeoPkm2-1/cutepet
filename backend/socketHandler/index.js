@@ -19,9 +19,9 @@ function createSocketHandler(io) {
 			console.log(`user out id: ${socket.id}`);
 		});
 
-		socket.on('chat message', (msg, callBack) => {
+		socket.on('test chat message', (msg, callBack) => {
 			console.log('message: ' + msg);
-			io.emit('response message', ` reps: ${msg}`);
+			io.emit('test response message', ` reps: ${msg}`);
 		});
 	});
 
