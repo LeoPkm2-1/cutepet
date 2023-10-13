@@ -23,7 +23,7 @@ function norm_userHandler(namespace_instance, io_instance) {
 		socket.on('chat message', (msg, callBack) => {
 			console.log('message: ' + msg);
 			callBack('SERVER OK');
-			namespace_instance.in(private_room_name).emit('TEST_ROOM_1', 'biết tui hông? ahihi');
+			namespace_instance.in(private_room_name).emit('TEST_ROOM_1', 'biết tui hông? ahihi 123');
 
 			// io_instance.emit('TEST_ROOM_1', 'biết tui hông');
 			// io.emit('response message', ` reps: ${msg}`);
