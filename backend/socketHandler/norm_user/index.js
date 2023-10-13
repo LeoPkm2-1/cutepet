@@ -9,9 +9,11 @@ function norm_userHandler(namespace_instance, io_instance) {
 		console.log(`norm user connected id: ${socket.id}`);
 		console.log(socket.auth_decoded);
 
-		socket.join(
-			socketHelper.getPrivateRoomNameOfUser(socket.auth_decoded.ma_nguoi_dung)
+		// join private room
+		const private_room_name = socketHelper.getPrivateRoomNameOfUser(
+			socket.auth_decoded.ma_nguoi_dung
 		);
+		socket.join(private_room_name);
 
 		// listen on disconnect
 		socket.on('disconnect', () => {
@@ -21,7 +23,7 @@ function norm_userHandler(namespace_instance, io_instance) {
 		socket.on('chat message', (msg, callBack) => {
 			console.log('message: ' + msg);
 			callBack('SERVER OK');
-			namespace_instance.emit('TEST_ROOM_1', 'biết tui hông');
+			namespace_instance.in(private_room_name).emit('TEST_ROOM_1', 'biết tui hông? ahihi');
 
 			// io_instance.emit('TEST_ROOM_1', 'biết tui hông');
 			// io.emit('response message', ` reps: ${msg}`);
