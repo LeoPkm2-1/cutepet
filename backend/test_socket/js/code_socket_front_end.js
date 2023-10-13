@@ -11,10 +11,21 @@ const messages = document.getElementById('messages');
 form.addEventListener('submit',(e)=>{
   e.preventDefault();
   if(input.value){
-    socket.emit('chat message',input.value);
+    socket.emit('chat message',input.value,(msg)=>{
+      console.log(msg);
+    });
     input.value = '';
   }
 });
+
+socket.on('TEST_ROOM_1',(msg)=>{
+  msg = `TEST_ROOM_1: ${msg}`;
+  const item = document.createElement('li');
+  item.textContent = msg;
+  messages.appendChild(item);
+  window.scrollTo(0, document.body.scrollHeight);
+  console.log(msg);
+})
 
 socket.on('response message', (msg) => {
   const item = document.createElement('li');

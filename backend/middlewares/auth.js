@@ -88,6 +88,8 @@ const socketAuthenMid = (socket, next) => {
 			return;
 		}
 		console.log([decodeStatus, decoded]);
+		// add user infor to socket
+		socket.auth_decoded={...decoded, authen_token: jwtToken};
 		next();
 		return;
 	} catch (error) {

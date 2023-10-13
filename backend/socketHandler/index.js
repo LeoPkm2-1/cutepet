@@ -21,8 +21,7 @@ function createSocketHandler(io) {
 
 		socket.on('chat message', (msg, callBack) => {
 			console.log('message: ' + msg);
-			callBack('ok');
-			// io.emit('response message', ` reps: ${msg}`);
+			io.emit('response message', ` reps: ${msg}`);
 		});
 	});
 
