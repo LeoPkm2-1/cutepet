@@ -1,4 +1,8 @@
-const socket = io();
+const socket = io({
+  extraHeaders:{
+    authen_token:'xin chao tui la leo ahihi',
+  }
+});
 
 const form = document.getElementById('form');
 const input = document.getElementById('input');

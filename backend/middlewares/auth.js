@@ -1,16 +1,16 @@
-const { vertifyJWT } = require("./../utils/loginHelper");
-const userModel = require("./../models/userModel");
-const { Response } = require("./../utils");
+const { vertifyJWT } = require('./../utils/loginHelper');
+const userModel = require('./../models/userModel');
+const { Response } = require('./../utils');
 
-const NOT_HAVING_AUTH_INFOR = "not having authentication infor";
-const NOT_VERTIFIED = "NOT VERTIFIED";
-const TOKEN_NOT_MATCH = "TOKEN NOT MATCH";
-const REDIRECT_TO_LOGIN_MESS = "chuyển hướng tới trang đăng nhập";
-const MUST_LOGOUT = "cần đăng xuất ra trước";
+const NOT_HAVING_AUTH_INFOR = 'not having authentication infor';
+const NOT_VERTIFIED = 'NOT VERTIFIED';
+const TOKEN_NOT_MATCH = 'TOKEN NOT MATCH';
+const REDIRECT_TO_LOGIN_MESS = 'chuyển hướng tới trang đăng nhập';
+const MUST_LOGOUT = 'cần đăng xuất ra trước';
 
 const getToken = (req) => {
-	const authHeader = req.headers["authorization"];
-	const token = authHeader && authHeader.split(" ")[1];
+	const authHeader = req.headers['authorization'];
+	const token = authHeader && authHeader.split(' ')[1];
 	return token;
 };
 
@@ -73,4 +73,21 @@ const nonRequireLogined = async (req, res, next) => {
 	}
 };
 
-module.exports = { requireLogined, nonRequireLogined };
+const socketAuthenMid = (socket, next) => {
+	console.log('socket authen middleware');
+	const jwtToken = socket.handshake.auth.token;
+	console.log('socket');
+	console.log(jwtToken);
+	console.log(socket.handshake);
+	let [decodeStatus, decoded] = [false, []];
+	[decodeStatus, decoded] = vertifyJWT(jwtToken);
+	// [decodeStatus, decoded] = [true, { ma_nguoi_dung: 1 }];
+	if (!decodeStatus) {
+		next(new Error(NOT_VERTIFIED));
+		return;
+	}
+	console.log([decodeStatus, decoded]);
+	next();
+};
+
+module.exports = { requireLogined, nonRequireLogined,socketAuthenMid };
