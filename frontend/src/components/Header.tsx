@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { mdiMenu } from '@mdi/js';
-import { Button, SvgIcon } from '@mui/material';
+import { Button, Divider, Popover, SvgIcon } from '@mui/material';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Image from './Image';
@@ -23,7 +23,7 @@ import { StyledTypography } from './styled';
 import { StyledTextField } from './FormItem';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
-
+import react, { useState } from 'react';
 type Props = ReturnType<typeof mapStateToProps> & {
   onHambuger?: React.MouseEventHandler<HTMLButtonElement>;
 };
@@ -37,6 +37,18 @@ const pages: string[] = [
 ];
 
 const Header = (props: Props) => {
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
   return (
     <Root>
       <div
@@ -110,6 +122,7 @@ const Header = (props: Props) => {
           />
         </IconButton>
         <IconButton
+          onClick={handleClick}
           sx={{
             color: 'inherit',
             mx: '20px',
@@ -124,6 +137,18 @@ const Header = (props: Props) => {
             }}
           />
         </IconButton>
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <NotifycationComponent />
+        </Popover>
         <IconButton
           sx={{
             color: 'inherit',
@@ -181,27 +206,32 @@ const Header = (props: Props) => {
         <Paper
           component="form"
           sx={{
-            height: "40px",
+            height: '40px',
             display: 'flex',
             alignItems: 'center',
             borderRadius: '25px',
-            marginRight:"20px",
-            background:"#b2b2b21a",
+            marginRight: '20px',
+            background: '#b2b2b21a',
           }}
         >
           <InputBase
-            sx={{ ml: 1, flex: 1, pl: "10px",
-            fontFamily: "quicksand",
-            color: "#0c4195",
-            fontWeight:'600'
-           }}
+            sx={{
+              ml: 1,
+              flex: 1,
+              pl: '10px',
+              fontFamily: 'quicksand',
+              color: '#0c4195',
+              fontWeight: '600',
+            }}
             placeholder="Search"
             inputProps={{ 'aria-label': 'search google maps' }}
           />
           <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-            <SearchIcon sx={{
-              color: "#0c4195"
-            }} />
+            <SearchIcon
+              sx={{
+                color: '#0c4195',
+              }}
+            />
           </IconButton>
         </Paper>
         {/* <ProfileButton /> */}
@@ -256,3 +286,99 @@ const OrgLogo = styled(Image)`
 const OrgName = styled.span`
   font-weight: 500;
 `;
+
+function NotifycationComponent() {
+  return (
+    <>
+      <Box
+        sx={{
+          paddingBottom:"20px"
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: 'quicksand',
+            fontWeight: '700',
+            fontSize: '22px',
+            margin: '16px 0px 10px 16px',
+          }}
+        >
+          Thông báo
+        </Typography>
+        <Typography
+          sx={{
+            fontFamily: 'quicksand',
+            fontWeight: '600',
+            fontSize: '16px',
+            margin: '0px 0px 6px 16px',
+          }}
+        >
+          Tuần này
+        </Typography>
+        <NotifycationItem />
+        <NotifycationItem />
+        <NotifycationItem />
+        <NotifycationItem />
+        <Divider sx={{
+          margin:"10px 0px"
+        }} />
+        <Typography
+          sx={{
+            fontFamily: 'quicksand',
+            fontWeight: '600',
+            fontSize: '16px',
+            margin: '0px 0px 6px 16px',
+          }}
+        >
+          Tháng này
+        </Typography>
+        <NotifycationItem />
+        <NotifycationItem />
+        <NotifycationItem />
+        <NotifycationItem />
+      </Box>
+    </>
+  );
+}
+
+function NotifycationItem() {
+  return (
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          padding: '10px 16px',
+          alignItems: 'center',
+          borderRadius: '4px',
+          cursor:"pointer",
+          '&:hover': {
+            backgroundColor: '#e0e0e073',
+          },
+          transition: '0.3s',
+        }}
+      >
+        <img
+          height={50}
+          width={50}
+          style={{
+            objectFit: 'cover',
+            borderRadius: '50px',
+          }}
+          src="https://mega.com.vn/media/news/0406_anh-gai-xinh-115.jpg"
+        />
+
+        <Typography
+          sx={{
+            fontFamily: 'quicksand',
+            fontWeight: '500',
+            fontSize: '15px',
+            marginLeft: '10px',
+          }}
+        >
+          <span style={{ fontWeight: '700' }}>Linh Nguyen</span> đã nhắc bạn đến
+          1 bình luận
+        </Typography>
+      </Box>
+    </>
+  );
+}

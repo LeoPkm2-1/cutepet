@@ -4,12 +4,19 @@ import { SnackbarProvider } from 'notistack';
 import React, { useEffect } from 'react';
 import Routing from './Routing';
 import DialogContext from './context/DialogContext';
+import { socket } from './socket';
 function App() {
 //   useEffect(() => {
 //     window.oncontextmenu = (e) => {
 //       e.preventDefault();
 //     };
 //   }, []);
+useEffect (() => {
+  socket.connect();
+  return () => {
+    socket.disconnect();
+  }
+}, [])
   return (
     <Provider store={store}>
       <DialogContext>

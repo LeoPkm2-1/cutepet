@@ -89,20 +89,20 @@ export default function SideBar(props: {
   function logOut() {
     // console.log("vao ne hhfhh");
     
-    // authApi
-    //   .logoutUser()
-    //   .then(() => {
-    //     naviagte('/login');
-    //     console.log('Thành công');
-    //     localStorage.removeItem('accessToken');
-    //     dispatch(AuthActions.setAuth(false));
-    //   })
-    //   .catch((err) => {
-    //     naviagte('/login');
-    //     console.log('Thất bại', err);
-    //     localStorage.removeItem('accessToken');
-    //     dispatch(AuthActions.setAuth(false));
-    //   });
+    authApi
+      .logoutUser()
+      .then(() => {
+        naviagte('/login');
+        console.log('Thành công');
+        localStorage.removeItem('accessToken');
+        dispatch(AuthActions.setAuth(false));
+      })
+      .catch((err) => {
+        naviagte('/login');
+        console.log('Thất bại', err);
+        localStorage.removeItem('accessToken');
+        dispatch(AuthActions.setAuth(false));
+      });
   }
 
   return (

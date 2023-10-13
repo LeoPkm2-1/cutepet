@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { StatusType } from '../../../models/post';
 import userApis from '../../../api/user';
 import LoiMoiKetBan from './component/loi-moi-ket-ban';
+import { socket } from '../../../socket';
 
 // Our app
 export default function MangXaHoi() {
@@ -41,12 +42,35 @@ export default function MangXaHoi() {
       }
     });
   }, [isLoad]);
+
+  function sendEmit() {
+    socket.emit('chat-message', {
+      text: 'Chat test 1',
+      user: 'Thuyen',
+    });
+  }
+
+  useEffect(() => {
+    socket.on('new-message', (data) => {
+      console.log(data, ' Data chat from server:');
+    });
+    return () => {
+      socket.off('new-message');
+    };
+  }, []);
+
   return (
     <>
       <Grid container>
-        <Grid xs={8} item>
+        <Grid
+          sx={{
+            paddingBottom: '100px',
+          }}
+          xs={8}
+          item
+        >
+          <Button onClick={sendEmit}>CLick Send Emit Message</Button>
           <CreatePost />
-          <PostComponent idStatus={"650ef7e27eb17e17d2a64573"} />
           {listPost &&
             listPost?.map((status) => {
               return <PostComponent status={status} />;

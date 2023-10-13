@@ -34,6 +34,17 @@ const commentStatus = (post_id: string, comment: string) => {
   });
 };
 
+const replyCommentStatus = (cmt_id: string, reply: string) => {
+  return authRequest<any>({
+    url: '/post/statusPost/replyComment',
+    method: 'POST',
+    body: {
+      cmt_id,
+      reply,
+    },
+  });
+};
+
 const getStatusById = (id: string) => {
   return authRequest<any>({
     url: `/post/statusPost/getPost?post_id=${id}`,
@@ -55,8 +66,51 @@ const getPostStartFrom = (index: number, num: number) => {
 
 const getAllComment = (id: string,) => {
   return authRequest<any>({
-    url: `/post/statusPost/getAllComment?post_id=${id}`,
-    method: 'GET',
+    url: `/post/statusPost/getAllComment`,
+    method: 'POST',
+    body:{
+      post_id: id,
+    }
+  });
+};
+
+const getAllReply= (id: string,) => {
+  return authRequest<any>({
+    url: `/post/statusPost/getAllReply`,
+    method: 'POST',
+    body:{
+      cmt_id: id,
+    }
+  });
+};
+
+const removePost = (id: string) => {
+  return authRequest<any>({
+    url: `/post/statusPost/deletePost`,
+    method: 'POST',
+    body:{
+      post_id: id,
+    }
+  });
+};
+
+const removeComment = (id: string) => {
+  return authRequest<any>({
+    url: `/post/statusPost/deleteComment`,
+    method: 'POST',
+    body:{
+      cmt_id: id,
+    }
+  });
+};
+
+const removeReply = (id: string) => {
+  return authRequest<any>({
+    url: `/post/statusPost/deleteReply`,
+    method: 'POST',
+    body:{
+      reply_id: id,
+    }
   });
 };
 
@@ -66,7 +120,12 @@ const postApi = {
   commentStatus,
   getStatusById,
   getPostStartFrom,
-  getAllComment
+  getAllComment,
+  removePost,
+  replyCommentStatus,
+  getAllReply,
+  removeComment,
+  removeReply
 };
 
 export default postApi;
