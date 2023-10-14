@@ -1,14 +1,15 @@
 const { socketAuthenMid } = require('../../middlewares/auth');
 const socketHelper = require('./../../utils/socketHelper');
+const {io} = require('../../serverSetup');
+const normUserNamespace = io.of('/norm_user');
 
-// const {io} = require('../../index')
 
-function normNameSpaceSocketHander(namespace_instance, io_instance) {
+function normNameSpaceSocketHander() {
 	// authentication
-	namespace_instance.use(socketAuthenMid);
+	normUserNamespace.use(socketAuthenMid);
 
 	// listen on connection
-	namespace_instance.on('connection', (socket) => {
+	normUserNamespace.on('connection', (socket) => {
 		console.log(`norm user connected id: ${socket.id}`);
 		console.log(socket.auth_decoded);
 
@@ -27,36 +28,36 @@ function normNameSpaceSocketHander(namespace_instance, io_instance) {
 		socket.on('test chat message', (msg, callBack) => {
 			console.log('message: ' + msg);
 			callBack('SERVER OK');
-			namespace_instance
+			normUserNamespace
 				.in(private_room_name)
 				.emit('TEST_ROOM_1', 'biết tui hông? ahihi 123');
 
-			// io_instance.emit('TEST_ROOM_1', 'biết tui hông');
+			// io.emit('TEST_ROOM_1', 'biết tui hông');
 			// io.emit('test response message', ` reps: ${msg}`);
 		});
 	});
 
 	// ============================== test room event ==============================
-	namespace_instance.adapter.on('create-room', (room) => {
+	normUserNamespace.adapter.on('create-room', (room) => {
 		console.log('create-room:', room);
 	});
 
-	namespace_instance.adapter.on('delete-room', (room) => {
+	normUserNamespace.adapter.on('delete-room', (room) => {
 		console.log('delete-room:', room);
 	});
 
-	namespace_instance.adapter.on('join-room', (room, id) => {
+	normUserNamespace.adapter.on('join-room', (room, id) => {
 		console.log(`socket: ${id} has joined room: ${room}`);
 
 		// console.log('adapter.rooms:');
-		// console.log(namespace_instance.adapter.rooms);
+		// console.log(normUserNamespace.adapter.rooms);
 		// console.log('adapter.sids:');
-		// console.log(namespace_instance.adapter.sids);
+		// console.log(normUserNamespace.adapter.sids);
 	});
 
-	namespace_instance.adapter.on('leave-room', (room, id) => {
+	normUserNamespace.adapter.on('leave-room', (room, id) => {
 		console.log(`socket: ${id} has leave-room room: ${room}`);
 	});
 }
 
-module.exports = { normNameSpaceSocketHander };
+module.exports = { normNameSpaceSocketHander,normUserNamespace };

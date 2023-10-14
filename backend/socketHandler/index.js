@@ -1,7 +1,8 @@
 const { normNameSpaceSocketHander } = require('./norm_user');
+const { io } = require('../serverSetup');
 
-function createSocketHandlerOfAllNameSpace(io) {
-	console.log(io);
+function createSocketHandlerOfAllNameSpace() {
+	// console.log(io);
 	// middleware of main namespace
 	io.use((socket, next) => {
 		console.log(`io middleware main namespace`);
@@ -27,11 +28,11 @@ function createSocketHandlerOfAllNameSpace(io) {
 			io.emit('test response message', ` reps: ${msg}`);
 		});
 	});
+
 	// user socket namespace for normal user
-	const normUserNamespace = io.of('/norm_user');
+	// const normUserNamespace = io.of('/norm_user');
 	// socker hander for normal user namespace
-	normNameSpaceSocketHander(normUserNamespace, io);
-	return {normUserNamespace};
+	normNameSpaceSocketHander();
 }
 
 module.exports = { createSocketHandlerOfAllNameSpace };

@@ -1,23 +1,13 @@
-const express = require("express");
-const { createServer } = require('node:http');
+const express = require('express');
 const { join } = require('node:path');
-const { Server } = require('socket.io');
 
-const { createSocketHandlerOfAllNameSpace } = require("./socketHandler/index");
-const app = express();
-const server = createServer(app);
+const { createSocketHandlerOfAllNameSpace } = require('./socketHandler/index');
+const { app, server, io } = require('./serverSetup');
 
-const io = new Server(server,{
-	cors:{
-		origin:"http://localhost:3001",
-	}
-});
+var bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
-
-
-var bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const router = require("./routes/index");
+const router = require('./routes/index');
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(
@@ -34,28 +24,29 @@ app.use((req, res, next) => {
 	// 	"Access-Control-Allow-Headers",
 	// 	"Origin, X-Requested-With, Content-Type, Accept"
 	// );
-	res.setHeader("Access-Control-Allow-Origin", "*");
-	res.setHeader("Access-Control-Allow-Credentials", "true");
-	res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-	res.setHeader("Access-Control-Allow-Headers", "Authorization,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Credentials', 'true');
+	res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+	res.setHeader(
+		'Access-Control-Allow-Headers',
+		'Authorization,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
+	);
 	next();
 });
 
-app.use("/", router);
-app.get("/", (req, res) => {
-	res.send("xin chao");
+app.use('/', router);
+app.get('/', (req, res) => {
+	res.send('xin chao');
 });
-app.get("/test_socket", (req, res) => {
-	res.status(200).sendFile(join(__dirname, "test_socket", "test_socket.html"));
+app.get('/test_socket', (req, res) => {
+	res.status(200).sendFile(join(__dirname, 'test_socket', 'test_socket.html'));
 });
 
 // create socket io handler for all namespace
-createSocketHandlerOfAllNameSpace(io);
+createSocketHandlerOfAllNameSpace();
 
 // set port
 const PORT = 3000;
 server.listen(PORT, function () {
 	console.log(`Node app is running on port ${PORT}`);
 });
-
-module.exports = {io};
