@@ -75,7 +75,7 @@ const nonRequireLogined = async (req, res, next) => {
 
 const socketAuthenMid = (socket, next) => {
 	try {
-		console.log('socket authen middleware');
+		console.log('\n\n\nsocket authen middleware');
 		const jwtToken = socket.handshake.headers.authen_token;
 		// console.log('socket');
 		// console.log(jwtToken);

@@ -3,14 +3,16 @@ const { createServer } = require('node:http');
 const { join } = require('node:path');
 const { Server } = require('socket.io');
 
-const { createSocketHandler } = require("./socketHandler/index");
+const { createSocketHandlerOfAllNameSpace } = require("./socketHandler/index");
 const app = express();
 const server = createServer(app);
+
 const io = new Server(server,{
 	cors:{
 		origin:"http://localhost:3001",
 	}
 });
+
 
 
 var bodyParser = require("body-parser");
@@ -47,11 +49,13 @@ app.get("/test_socket", (req, res) => {
 	res.status(200).sendFile(join(__dirname, "test_socket", "test_socket.html"));
 });
 
-// create socket io
-createSocketHandler(io);
+// create socket io handler for all namespace
+createSocketHandlerOfAllNameSpace(io);
 
 // set port
 const PORT = 3000;
 server.listen(PORT, function () {
 	console.log(`Node app is running on port ${PORT}`);
 });
+
+module.exports = {io};

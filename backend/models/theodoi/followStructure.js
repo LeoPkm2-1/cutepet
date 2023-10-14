@@ -4,7 +4,7 @@ class GeneralFollow {
 		follower_Id = null,
 		createAt = new Date(),
 		dependOn = null,
-		modifiedAt = null,
+		modifiedAt = null
 	) {
 		this.type = null;
 		this.followed_Obj_Id = followed_Obj_Id;
@@ -13,7 +13,7 @@ class GeneralFollow {
 		this.dependOn = dependOn;
 		this.modifiedAt = modifiedAt;
 	}
-};
+}
 
 class FollowStatusPost extends GeneralFollow {
 	static type = 'FOLOW_STATUS_POST';
@@ -22,15 +22,31 @@ class FollowStatusPost extends GeneralFollow {
 		follower_Id = null,
 		createAt = new Date(),
 		dependOn = null,
-		modifiedAt = null,
+		modifiedAt = null
 	) {
-		super(statusPost_Id, follower_Id, createAt, dependOn,modifiedAt);
+		super(statusPost_Id, follower_Id, createAt, dependOn, modifiedAt);
 		this.type = this.constructor.type;
 	}
 	static get_type() {
 		return FollowStatusPost.type;
 	}
+}
 
-};
+class FollowUser extends GeneralFollow {
+	static type = 'FOLOW_USER';
+	constructor(
+		user_followed_Id,
+		follower_Id = null,
+		createAt = new Date(),
+		dependOn = null,
+		modifiedAt = null
+	) {
+		super(user_followed_Id, follower_Id, createAt, dependOn, modifiedAt);
+		this.type = this.constructor.type;
+	}
+	static get_type() {
+		return FollowUser.type;
+	}
+}
 
-module.exports = { FollowStatusPost };
+module.exports = { FollowStatusPost,FollowUser };
