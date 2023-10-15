@@ -5,7 +5,9 @@ const { Response } = require('../../utils/index');
 const statusPostHelper = require('../../utils/BaiViet/statusPostHelper');
 const followModel = require('../../models/theodoi/followModel');
 const followhelper = require('../../utils/theodoiHelper');
-const { test_broadcast_all, StatusPostEventManagement } = require('../../socketHandler/norm_user/statusPostEvent');
+const {
+	StatusPostEventManagement,
+} = require('./../../socketHandler/norm_user/statusPostEvent');
 
 const addPostController = async (req, res) => {
 	const { text, media } = req.body;
@@ -73,6 +75,11 @@ const addCommentController = async (req, res) => {
 
 	// thêm người dùng vào danh sách theo dõi bài viết
 	await followhelper.followStatusPost(post_id, commentBy);
+	// gửi thông báo đến người dùng
+	StatusPostEventManagement.sendCommentPostNotiToAllFollower(
+		commentBy,
+		post_id,
+	)
 
 	res
 		.status(200)
@@ -99,8 +106,11 @@ const toggleLikePostController = async (req, res) => {
 
 			// thêm người dùng vào danh sách theo dõi của bài viết status
 			await followhelper.followStatusPost(post_id, userLike);
-			// test_broadcast_all();
-			StatusPostEventManagement.sendLikePostNotiToAllFollower(userLike,post_id);
+			// gửi thông báo đến cho mọi người
+			StatusPostEventManagement.sendLikePostNotiToAllFollower(
+				userLike,
+				post_id
+			);
 
 			res.status(200).json(new Response(200, likeInfor, 'like thành công'));
 			return;

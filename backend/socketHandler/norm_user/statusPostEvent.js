@@ -29,6 +29,7 @@ class StatusPostEventManagement {
 			(user) =>
 				user.ma_nguoi_dung != sender_id && user.ma_nguoi_dung != owner_id
 		);
+		console.log('\n\nfollower_not_sender_onwer', follower_not_sender_onwer);
 
 		const senderInfor = await userHelper
 			.getUserPublicInforByUserId(sender_id)
@@ -40,6 +41,7 @@ class StatusPostEventManagement {
 					'anh',
 				])
 			);
+			console.log('\n\nsenderInfor', senderInfor);
 		const ownerInfor = await userHelper
 			.getUserPublicInforByUserId(owner_id)
 			.then((user) =>
@@ -50,7 +52,7 @@ class StatusPostEventManagement {
 					'anh',
 				])
 			);
-		console.log('senderInfor', senderInfor);
+		// console.log('\n\nownerInfor', ownerInfor);
 
 		// send nofitication to follower who is not sender and owner
 		const privateRoomNameOfUser = follower_not_sender_onwer.map((user) =>
@@ -79,6 +81,84 @@ class StatusPostEventManagement {
 					senderInfor,
 					ownerInfor,
 					likeAt,
+					true
+				)
+			);
+	}
+
+	static async sendCommentPostNotiToAllFollower(
+		comment_user_id,
+		status_post_id,
+		owner_post_id = undefined,
+		comment_At = new Date()
+	) {
+		if (typeof owner_post_id == 'undefined')
+			owner_post_id = await StatusPostModel.getOnwerIdOfPost(status_post_id);
+		// get all follower
+		let userInforList = await socketHelper.getStatusPostFollowerAndFilter(
+			status_post_id
+		);
+		if (userInforList.length == 0) return;
+
+		// follower don't contain commenter and onwer.
+		const follower_not_commenter_onwer = userInforList.filter(
+			(user) =>
+				user.ma_nguoi_dung != comment_user_id &&
+				user.ma_nguoi_dung != owner_post_id
+		);
+
+		// commenter infor
+		const commenterInfor = await userHelper
+			.getUserPublicInforByUserId(comment_user_id)
+			.then((user) =>
+				UtilsHelper.filter_keys_in_Obj(user, [
+					'ma_nguoi_dung',
+					'ten',
+					'tai_khoan',
+					'anh',
+				])
+			);
+
+		// post owner infor
+		const postOwnerInfor = await userHelper
+			.getUserPublicInforByUserId(owner_post_id)
+			.then((user) =>
+				UtilsHelper.filter_keys_in_Obj(user, [
+					'ma_nguoi_dung',
+					'ten',
+					'tai_khoan',
+					'anh',
+				])
+			);
+		// send notification to follower who is not commenter and post_owner
+		const privateRoomNameOfUser = follower_not_commenter_onwer.map((user) =>
+			socketHelper.getPrivateRoomNameOfUser(user.ma_nguoi_dung)
+		);
+		const socketOfNonCommenterAndOnwer = privateRoomNameOfUser.reduce(
+			(acc, room_name_of_user) => acc.to(room_name_of_user),
+			normUserNamespace
+		);
+
+		socketOfNonCommenterAndOnwer.emit(
+			statusPostEventStruture.CommentPostEvent.getEventName(),
+			new statusPostEventStruture.CommentPostEvent(
+				commenterInfor,
+				postOwnerInfor,
+				comment_At,
+				false
+			)
+		);
+		// send to post owner
+		const roomNameOfOwner =
+			socketHelper.getPrivateRoomNameOfUser(owner_post_id);
+		normUserNamespace
+			.to(roomNameOfOwner)
+			.emit(
+				statusPostEventStruture.CommentPostEvent.getEventName(),
+				new statusPostEventStruture.CommentPostEvent(
+					commenterInfor,
+					postOwnerInfor,
+					comment_At,
 					true
 				)
 			);
