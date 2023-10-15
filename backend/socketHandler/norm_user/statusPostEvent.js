@@ -46,6 +46,7 @@ class StatusPostEventManagement {
     // follower but not a onwer
 		let NonOwnFollowerList = userInforList.filter((user) => !user.isOwner);
 		console.log(NonOwnFollowerList);
+    // sender infor 
 		let sender_infor = await userHelper.getUserPublicInforByUserId(sender_id);
 		sender_infor = UtilsHelper.filter_keys_in_Obj(sender_infor, [
 			'ma_nguoi_dung',
