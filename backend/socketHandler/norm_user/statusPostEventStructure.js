@@ -1,5 +1,7 @@
+const notificationStructure = require('./../../models/thongbao/notificationStruture');
 class LikePostEvent {
 	static getEventName() {
+		return notificationStructure.LikeStatusPostNotification.getNotificationType();
 		return 'LIKE_STATUS_POST';
 	}
 	constructor(
@@ -18,6 +20,7 @@ class LikePostEvent {
 }
 class CommentPostEvent {
 	static getEventName() {
+		return notificationStructure.CommentStatusPostNotification.getNotificationType();
 		return 'COMMENT_STATUS_POST';
 	}
 	constructor(

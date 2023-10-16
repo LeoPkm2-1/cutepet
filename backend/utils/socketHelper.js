@@ -15,7 +15,7 @@ async function getStatusPostFollowerAndFilter(statusPost_Id) {
 	const user_id_list = followers_infor.map((follower) =>
 		parseInt(follower.follower_Id)
 	);
-	console.log('user_id_list', user_id_list);
+	// console.log('user_id_list', user_id_list);
 	let userInforList = await userHelper.getUserPublicInforByListIds(
 		user_id_list
 	);

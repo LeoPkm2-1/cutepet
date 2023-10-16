@@ -8,6 +8,10 @@ const followhelper = require('../../utils/theodoiHelper');
 const {
 	StatusPostEventManagement,
 } = require('./../../socketHandler/norm_user/statusPostEvent');
+const {
+	notifyLikePost,
+	notifyCommentPost,
+} = require('../../notificationHandler/statusPost');
 
 const addPostController = async (req, res) => {
 	const { text, media } = req.body;
@@ -41,20 +45,7 @@ const addCommentController = async (req, res) => {
 	const comment = req.body.comment;
 	const post_id = req.body.post_id;
 	const commentBy = req.auth_decoded.ma_nguoi_dung;
-	// const commentAt = new Date();
-	// const numOfLike = 0;
-	// const numOfReply = 0;
 	const numOfComment = req.body.STATUS_POST_INFOR.numOfComment;
-
-	// const comment_data = {
-	// 	postId: post_id,
-	// 	comment,
-	// 	commentBy,
-	// 	commentAt,
-	// 	numOfLike,
-	// 	modifiedAt: null,
-	// 	numOfReply,
-	// };
 	const comment_data = new StatusPostComposStructure.CommentPost(
 		post_id,
 		comment,
@@ -71,15 +62,11 @@ const addCommentController = async (req, res) => {
 	const insertedComment = await StatusPostModel.getCommentPostById(
 		commentProcess.payload.insertedId.toString()
 	);
-	// console.log('insertedComment',insertedComment);
 
 	// thêm người dùng vào danh sách theo dõi bài viết
 	await followhelper.followStatusPost(post_id, commentBy);
 	// gửi thông báo đến người dùng
-	StatusPostEventManagement.sendCommentPostNotiToAllFollower(
-		commentBy,
-		post_id,
-	)
+	notifyCommentPost(commentBy, post_id);
 
 	res
 		.status(200)
@@ -107,10 +94,7 @@ const toggleLikePostController = async (req, res) => {
 			// thêm người dùng vào danh sách theo dõi của bài viết status
 			await followhelper.followStatusPost(post_id, userLike);
 			// gửi thông báo đến cho mọi người
-			StatusPostEventManagement.sendLikePostNotiToAllFollower(
-				userLike,
-				post_id
-			);
+			notifyLikePost(userLike, post_id);
 
 			res.status(200).json(new Response(200, likeInfor, 'like thành công'));
 			return;
