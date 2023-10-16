@@ -12,8 +12,12 @@ function App() {
 //     };
 //   }, []);
 useEffect (() => {
+  console.log("Vào conect fe");
+  
   socket.connect();
   return () => {
+  console.log("Dis conect fe");
+
     socket.disconnect();
   }
 }, [])

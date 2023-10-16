@@ -51,11 +51,11 @@ export default function MangXaHoi() {
   }
 
   useEffect(() => {
-    socket.on('new-message', (data) => {
+    socket.on('response-message', (data) => {
       console.log(data, ' Data chat from server:');
     });
     return () => {
-      socket.off('new-message');
+      socket.off('response-message');
     };
   }, []);
 

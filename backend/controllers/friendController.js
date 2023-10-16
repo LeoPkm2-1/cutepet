@@ -169,9 +169,22 @@ const getRequestAddFriendList = async (req, res) => {
 	res.status(200).json(new Response(200,requestAndUserInfor,'lấy lời mời kết bạn thành công'))
 
 };
+
+const getFriendList = async (req, res) => {
+	const user_id = req.auth_decoded.ma_nguoi_dung;
+	const friendList = await laBanBeModel.getAllFriendOfUser(user_id).then((data) => data.payload);
+	if(friendList.length <= 0){
+		res.status(200).json(new Response(200,[],'không có bạn bè nào'))
+		return
+	}
+	const friend_ids = friendList.map((friend) => friend.ma_nguoi_dung_2);
+	const friends_infor = await userHelper.getUserPublicInforByListIds(friend_ids);
+	res.json(new Response(200,friends_infor,'lấy danh sách bạn bè thành công'))
+}
 module.exports = {
 	requestAddFriend,
 	responeAddFriend,
 	unFriendById,
 	getRequestAddFriendList,
+	getFriendList,
 };
