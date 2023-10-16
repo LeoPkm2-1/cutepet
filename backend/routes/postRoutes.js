@@ -1,30 +1,32 @@
 const express = require('express');
-const postMiddle = require('../middlewares/postMiddlewares');
+const statusPostMiddle = require('../middlewares/BaiViet/postMiddlewares');
 const statusPostController = require('../controllers/postControllers/statusPostController');
+const { requireLogined } = require('../middlewares/auth');
 const router = express.Router();
 
+// router.use(requireLogined);
 router.post(
 	'/statusPost/addPost',
-	postMiddle.preProcessAddStatusPost,
+	statusPostMiddle.preProcessAddPost,
 	statusPostController.addPostController
 );
 
 router.post(
 	'/statusPost/likePost',
-	[postMiddle.checkStatusPostExistMid, postMiddle.preProcessLikeStatusPost],
+	[statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessLikePost],
 	statusPostController.toggleLikePostController
 );
 router.post(
 	'/statusPost/addComment',
-	[postMiddle.checkStatusPostExistMid, postMiddle.preProcessCmtStatusPost],
+	[statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessCmtPost],
 	statusPostController.addCommentController
 );
 
 router.post(
 	'/statusPost/likeComment',
 	[
-		postMiddle.checkCmtStatusPostExistMid,
-		postMiddle.preProcessLikeCmtStatusPost,
+		statusPostMiddle.checkCmtPostExistMid,
+		statusPostMiddle.preProcessLikeCmtPost,
 	],
 	statusPostController.toggleLikeCmtController
 );
@@ -32,46 +34,97 @@ router.post(
 router.post(
 	'/statusPost/replyComment',
 	[
-		postMiddle.checkCmtStatusPostExistMid,
-		postMiddle.preProcessRelyCmtStatusPost,
+		statusPostMiddle.checkCmtPostExistMid,
+		statusPostMiddle.preProcessRelyCmtPost,
 	],
 	statusPostController.replyCmtController
 );
 
-router.get(
+router.post(
 	'/statusPost/getAllComment',
-	[postMiddle.checkStatusPostExistMid],
+	[statusPostMiddle.checkPostExistMid],
 	statusPostController.getAllCmtController
 );
 
-router.get(
+router.post(
 	'/statusPost/getCommentStartFrom',
-	[postMiddle.checkStatusPostExistMid, postMiddle.preProcessGetCmtStatusPost],
+	[statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessGetCmtPost],
 	statusPostController.getCmtStartFromController
 );
 
-router.get(
+router.post(
 	'/statusPost/getAllReply',
-	[postMiddle.checkCmtStatusPostExistMid],
+	[statusPostMiddle.checkCmtPostExistMid],
 	statusPostController.getAllReplyController
 );
 
-router.get(
+router.post(
 	'/statusPost/getReplyStartFrom',
-	[postMiddle.checkCmtStatusPostExistMid,postMiddle.preProcessGetReplyOfCmtStatusPost],
+	[
+		statusPostMiddle.checkCmtPostExistMid,
+		statusPostMiddle.preProcessGetReplyOfCmtPost,
+	],
 	statusPostController.getReplyStartFromController
-)
+);
 
-router.get(
+router.post(
 	'/statusPost/getPost',
-	[postMiddle.checkStatusPostExistMid],
+	[statusPostMiddle.checkPostExistMid],
 	statusPostController.getPostController
-)
+);
 
-router.get(
+router.post(
 	'/statusPost/getPostStartFrom',
-	[postMiddle.preProcessGetCmtStatusPost],
+	[statusPostMiddle.preProcessGetPostStartFrom],
 	statusPostController.getPostStartFromController
+);
+
+router.post(
+	'/statusPost/updateReply',
+	[
+		statusPostMiddle.checkReplyPostExistMid,
+		statusPostMiddle.preProcessUpdateReplyPost,
+	],
+	statusPostController.updateReplyController
+);
+
+router.post(
+	'/statusPost/updateComment',
+	[
+		statusPostMiddle.checkCmtPostExistMid,
+		statusPostMiddle.preProcessUpdateCmtPost,
+	],
+	statusPostController.updateCommentController
+);
+
+router.post(
+	'/statusPost/deleteReply',
+	[
+		statusPostMiddle.checkReplyPostExistMid,
+		statusPostMiddle.preProcessDeleteReplyOFCmt,
+	],
+	statusPostController.deleteReplyController
+);
+
+router.post(
+	'/statusPost/deleteComment',
+	[
+		statusPostMiddle.checkCmtPostExistMid,
+		statusPostMiddle.preProcessDeleteComment,
+	],
+	statusPostController.deleteCommentController
+);
+
+router.post(
+	'/statusPost/deletePost',
+	[statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessDeletePost],
+	statusPostController.deletePostController
+);
+
+router.post(
+	'/statusPost/updatePost',
+	[statusPostMiddle.checkPostExistMid],
+	statusPostController.updatePostController
 )
 
 module.exports = router;

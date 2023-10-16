@@ -9,14 +9,13 @@ import { useEffect, useState } from 'react';
 import { StatusType } from '../../../models/post';
 import userApis from '../../../api/user';
 import LoiMoiKetBan from './component/loi-moi-ket-ban';
+import { socket } from '../../../socket';
 
 // Our app
 export default function MangXaHoi() {
   const [listPost, setListPost] = useState<StatusType[]>([]);
   const [isLoad, setisLoad] = useState(true);
   useEffect(() => {
-    console.log('vao ne');
-
     postApi.getPostStartFrom(0, 10).then((data) => {
       if (data?.status == 200) {
         console.log(data, 'data');
@@ -43,21 +42,48 @@ export default function MangXaHoi() {
       }
     });
   }, [isLoad]);
+
+  function sendEmit() {
+    socket.emit('chat-message', {
+      text: 'Chat test 1',
+      user: 'Thuyen',
+    });
+  }
+
+  useEffect(() => {
+    socket.on('response-message', (data) => {
+      console.log(data, ' Data chat from server:');
+    });
+    return () => {
+      socket.off('response-message');
+    };
+  }, []);
+
   return (
     <>
       <Grid container>
-        <Grid xs={8} item>
+        <Grid
+          sx={{
+            paddingBottom: '100px',
+          }}
+          xs={8}
+          item
+        >
+          <Button onClick={sendEmit}>CLick Send Emit Message</Button>
           <CreatePost />
-          <PostComponent idStatus={"650ef7e27eb17e17d2a64573"} />
           {listPost &&
             listPost?.map((status) => {
               return <PostComponent status={status} />;
             })}
         </Grid>
-        <Grid sx={{
-          paddingLeft:"40px"
-        }} xs={4} item>
-          <LoiMoiKetBan/>
+        <Grid
+          sx={{
+            paddingLeft: '40px',
+          }}
+          xs={4}
+          item
+        >
+          <LoiMoiKetBan />
         </Grid>
       </Grid>
     </>

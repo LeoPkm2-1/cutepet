@@ -140,34 +140,24 @@ const LoginPage = (props: P) => {
 
     authApi
       .loginTest(email, password)
-      .then((res) => {
+      .then((res:any) => {
         console.log(res, ' res');
-
-        if (res?.payload[0]?.token) {
-          storage.setTokens(res.payload[0]?.token);
-          console.log('Thành còng ');
-
-          dispatch(AuthActions.setAuth(true));
-          enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
-          postApi.getPostStartFrom(0, 10).then((item:any) => {
-            console.log('data:', item);
-            navigate('/home/mang-xa-hoi');
-        });
-          userApis.getUserInfo('ty').then((data) => {
-            if (data?.status == 200) {
-              const profile: UserProfile = {
-                id: data?.payload?.ma_nguoi_dung,
-                name: data?.payload?.ten,
-                email: data?.payload?.email || '',
-                age: data?.payload?.ngay_sinh || '',
-                photoURL: data?.payload?.anh?.url || '',
-              };
-              dispatch(UserActions.setProfile(profile));
-            }
-          });
-          
-        } else {
-          enqueueSnackbar(res?.message, { variant: 'success' });
+        if(res?.status ==200){
+          if (res?.payload[0]?.token) {
+            storage.setTokens(res.payload[0]?.token);
+            console.log('Thành còng token :', res.payload[0]?.token);
+            dispatch(AuthActions.setAuth(true));
+            enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
+          } 
+          const profile: UserProfile = {
+            id: res?.payload[0]?.ma_nguoi_dung,
+            name: res?.payload[0]?.ten,
+            email: res?.payload[0]?.email || '',
+            age: res?.payload[0]?.ngay_sinh || '',
+            photoURL: res?.payload[0]?.anh?.url || '',
+          };
+          dispatch(UserActions.setProfile(profile));
+          navigate('/home/mang-xa-hoi');
         }
         setIsLoading(false);
       })
@@ -208,8 +198,7 @@ const LoginPage = (props: P) => {
     //   });
   };
 
-  // if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
-    if (props.auth.mindfullyAuth ) {
+  if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
     return (
       <Navigate
         to={{

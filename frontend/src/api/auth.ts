@@ -70,7 +70,7 @@ const authApi = {
   loginTest,
   register,
   // login,
-  // logoutUser,
+  logoutUser,
 };
 
 export default authApi;

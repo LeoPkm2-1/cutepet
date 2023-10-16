@@ -11,9 +11,9 @@ const addPost = async (statusPost) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const getPostById = async (id) => {
+const getPostById = async (postId) => {
 	async function executor(collection) {
-		return await collection.find({ _id: new ObjectId(id) }).toArray();
+		return await collection.find({ _id: new ObjectId(postId) }).toArray();
 	}
 	return await nonSQLQuery(executor, 'BaiVietTrangThai')
 		.then((data) => new Response(200, data, ''))
@@ -33,13 +33,9 @@ const addLikePost = async (post_id, user_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const addLikeCmtPost = async (cmt_id, user_id) => {
+const addLikeCmtPost = async (likeComment) => {
 	async function executor(collection) {
-		return await collection.insertOne({
-			cmtId: cmt_id,
-			userLike: user_id,
-			likeAt: new Date(),
-		});
+		return await collection.insertOne(likeComment);
 	}
 	return await nonSQLQuery(executor, 'LikeBinhLuanBaiVietTrangThai')
 		.then((data) => new Response(200, data, ''))
@@ -171,7 +167,7 @@ const getLikeCmtPostInfor = async (user_id, cmt_id) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
-const updateNumOfCommentCmtPost = async (cmt_id, numOfReply) => {
+const updateNumOfReplyInCmtPost = async (cmt_id, numOfReply) => {
 	async function executor(collection) {
 		return await collection.updateOne(
 			{ _id: new ObjectId(cmt_id) },
@@ -224,6 +220,150 @@ const getAllPost = async () => {
 		.then((data) => new Response(200, data, ''))
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
+const updateReplyComment = async (replyId, content) => {
+	async function executor(collection) {
+		return await collection.updateOne(
+			{ _id: new ObjectId(`${replyId}`) },
+			{ $set: { reply: `${content}`, modifiedAt: new Date() } }
+		);
+	}
+	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+
+const updateCommentPost = async (cmtId, content) => {
+	async function executor(collection) {
+		return await collection.updateOne(
+			{ _id: new ObjectId(`${cmtId}`) },
+			{ $set: { comment: `${content}`, modifiedAt: new Date() } }
+		);
+	}
+
+	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err);
+			return new Response(400, err, '', 300, 300);
+		});
+};
+
+const deleteReplyComment = async (replyId) => {
+	async function executor(collection) {
+		return await collection.deleteOne({ _id: new ObjectId(`${replyId}`) });
+	}
+	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err);
+			return new Response(400, err, '', 300, 300);
+		});
+};
+
+const deleteAllLikeOfComment = async (cmtId) => {
+	async function executor(collection) {
+		return await collection.deleteMany({ cmtId: `${cmtId}` });
+	}
+	return await nonSQLQuery(executor, 'LikeBinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err);
+			throw new Error(err);
+			return new Response(400, err, '', 300, 300);
+		});
+};
+
+const deleteAllReplyOfComment = async (cmtId) => {
+	async function executor(collection) {
+		return await collection.deleteMany({ cmtId: `${cmtId}` });
+	}
+	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err);
+			throw new Error(err);
+			return new Response(400, err, '', 300, 300);
+		});
+};
+const deleteCommentByCmtId = async(cmtId)=>{
+	async function executor(collection) {
+		return await collection.deleteOne({ _id: new ObjectId(`${cmtId}`) });
+	}
+	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err);
+			throw new Error(err);
+			return new Response(400, err, '', 300, 300);
+		});
+}
+
+const deleteAllReplyCmtOfPost = async(postId)=>{
+	async function executor(collection){
+		return collection.deleteMany({postId:`${postId}`})
+	}
+	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
+	.then((data) => new Response(200, data, ''))
+	.catch((err) => {
+		console.log(err);
+		throw new Error(err);
+		return new Response(400, err, '', 300, 300);
+	});
+}
+
+const deleteAllLikeCmtsOfPost = async(postId)=>{
+	async function executor(collection) {
+		return collection.deleteMany({postId:`${postId}`})
+	}
+	return await nonSQLQuery(executor, 'LikeBinhLuanBaiVietTrangThai')
+	.then((data) => new Response(200, data, ''))
+	.catch((err) => {
+		console.log(err);
+		throw new Error(err);
+		return new Response(400, err, '', 300, 300);
+	});
+}
+
+const deleteAllCmtsOfPost = async(postId)=>{
+	async function executor(collection) {
+		return collection.deleteMany({postId:`${postId}`})
+	}
+	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
+	.then((data) => new Response(200, data, ''))
+	.catch((err) => {
+		console.log(err);
+		throw new Error(err);
+		return new Response(400, err, '', 300, 300);
+	});
+}
+
+const deleteAllLikesOfPost = async(postId)=>{
+	async function executor(collection) {
+		return collection.deleteMany({postId:`${postId}`})
+	}
+	return await nonSQLQuery(executor, 'LikeBaiVietTrangThai')
+	.then((data) => new Response(200, data, ''))
+	.catch((err) => {
+		console.log(err);
+		throw new Error(err);
+		return new Response(400, err, '', 300, 300);
+	});
+}
+
+const deletePostById = async (postId)=>{
+	async function executor(collection) {
+		return collection.deleteOne({_id:new ObjectId(postId)})
+	}
+	return await nonSQLQuery(executor, 'BaiVietTrangThai')
+	.then((data) => new Response(200, data, ''))
+	.catch((err) => {
+		console.log(err);
+		throw new Error(err);
+		return new Response(400, err, '', 300, 300);
+	});
+}
+
+
 
 module.exports = {
 	addPost,
@@ -236,7 +376,7 @@ module.exports = {
 	updateNumOfLikePost,
 	updateNumOfLikeCmtPost,
 	updateNumOfCommentPost,
-	updateNumOfCommentCmtPost,
+	updateNumOfReplyInCmtPost,
 	getCommentPostById,
 	getLikeCmtPostInfor,
 	addLikeCmtPost,
@@ -246,4 +386,15 @@ module.exports = {
 	getAllCmtByPostId,
 	getAllPost,
 	getLikeThePostInforOfListPosts,
+	updateReplyComment,
+	updateCommentPost,
+	deleteReplyComment,
+	deleteAllLikeOfComment,
+	deleteAllReplyOfComment,
+	deleteCommentByCmtId,
+	deleteAllReplyCmtOfPost,
+	deleteAllLikeCmtsOfPost,
+	deleteAllCmtsOfPost,
+	deleteAllLikesOfPost,
+	deletePostById
 };

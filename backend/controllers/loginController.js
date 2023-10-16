@@ -1,5 +1,6 @@
 const userModel = require('../models/userModel');
 const { checkPassword, readENV, Response } = require('./../utils');
+const userHelper = require('./../utils/userHelper');
 const {
 	genJWT,
 	deleteProperties,
@@ -24,8 +25,9 @@ const handlLogin = async (req, res) => {
 		const token = genJWT(user, lastTimeJWT);
 		const storeStatus = await storeToken(token, user.ma_nguoi_dung);
 		if (storeStatus.status === 200) {
+			const userPublicInfor = await userHelper.getUserPublicInforByUserId(user.ma_nguoi_dung);
 			res.status(200).send(
-				new Response(200, [{ token }], 'Đăng nhập thành công')
+				new Response(200, [{...userPublicInfor, token }], 'Đăng nhập thành công')
 			);
 		} else {
 			res.status(400).json(

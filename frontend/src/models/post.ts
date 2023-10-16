@@ -20,4 +20,6 @@ export interface CommentType {
   photoURL: string;
   name: string;
   text: string;
+  createdAt: string;
+  id: string;
 }
