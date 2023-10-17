@@ -8,11 +8,15 @@ const filter_keys_in_Obj = (obj, keys) => {
 };
 
 const filter_keys_in_list_Objs = (arr, keys) => {
-  if (arr.length === 0) return [];
-  return arr.map((obj) => filter_keys_in_Obj(obj, keys));
-}
+	if (arr.length === 0) return [];
+	return arr.map((obj) => filter_keys_in_Obj(obj, keys));
+};
 
-module.exports = { filter_keys_in_Obj, filter_keys_in_list_Objs };
+const isDateValid = (date) => {
+	return date.toString() !== 'Invalid Date';
+};
+
+module.exports = { filter_keys_in_Obj, filter_keys_in_list_Objs, isDateValid };
 
 // let obj = {
 // 	_id: '652b43613183518b824f22b0',
