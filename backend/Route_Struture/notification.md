@@ -32,4 +32,20 @@
   + mô tả `<time_zone>` bất kỳ theo cú pháp sau:`[sign]<...><.....>:<...><...>`. trong đó `sign` là `+` hoặc `-`: vd thời gian ở múi giờ `+10:30` sẽ mô tả như sau:
   `2023-10-16T13:34:12.735+10:30`
   
-  
+## Get notifications by index and range
+(tham khảo *postman* số 18)
+
+1. phương thức :
+
+   POST: http://localhost:3000/notification/getNotificationStartFrom
+
+2. cấu trúc:
+   ```javascript
+   {
+      index: positive_number
+      num: positive_number
+   }
+   ```
+   - trong đó:
+     - index: mô tả thông báo thứ mấy
+     - num: số lượng thông báo cần lấy
