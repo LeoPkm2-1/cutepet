@@ -48,8 +48,52 @@ const getNotificationBeforeTime = async (user_id, before, range) => {
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
+const getNotificationById = async (notification_id) => {
+	async function executor(collection) {
+		return await collection.findOne({ _id: new ObjectId(notification_id) });
+	}
+	return await nonSQLQuery(executor, 'ThongBao')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+
+const updateNotificationhasReadField = async (
+	notification_id,
+	hasRead = true
+) => {
+	async function executor(collection) {
+		return await collection.updateOne(
+			{ _id: new ObjectId(notification_id) },
+			{ $set: { hasRead: hasRead } }
+		);
+	}
+	return await nonSQLQuery(executor, 'ThongBao')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+const markAllUnReadNotifToRead = async (user_id) => {
+	async function executor(collection) {
+		return await collection.updateMany(
+			{
+				$and: [{ receiver_id: user_id }, { hasRead: false }],
+			},
+			{
+				$set: {
+					hasRead: true,
+				},
+			}
+		);
+	}
+	return await nonSQLQuery(executor, 'ThongBao')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+
 module.exports = {
 	addNotification,
 	getNotificationByIndexAndRange,
 	getNotificationBeforeTime,
+	getNotificationById,
+	updateNotificationhasReadField,
+	markAllUnReadNotifToRead,
 };

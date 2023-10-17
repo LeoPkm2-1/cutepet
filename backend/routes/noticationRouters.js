@@ -20,4 +20,12 @@ router.post(
 	notificationController.getNotiBefore
 );
 
+router.post(
+	'/markAsRead',
+	notiMid.preProcessNotification,
+	notificationController.markAsRead
+);
+
+router.post('/markAllAsRead', notificationController.markAllAsRead);
+
 module.exports = router;
