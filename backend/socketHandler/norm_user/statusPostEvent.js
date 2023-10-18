@@ -19,7 +19,10 @@ class StatusPostEventManagement {
 		// don't notification when no one follow post
 		if (allFollowerInforList == null) return;
 		// 1. send notification to owner when he/she is following post
-		if (isOwnerFollowing) {
+		if (
+			isOwnerFollowing &&
+			owner_infor.ma_nguoi_dung !== sender_infor.ma_nguoi_dung
+		) {
 			const notiInforForOwner = new statusPostEventStruture.LikePostEvent(
 				sender_infor,
 				owner_infor,
@@ -61,8 +64,6 @@ class StatusPostEventManagement {
 		}
 	}
 
-
-
 	static async sendCommentPostNotiToAllFollower({
 		allFollowerInforList,
 		owner_infor,
@@ -75,7 +76,10 @@ class StatusPostEventManagement {
 		// don't notification when no one follow post
 		if (allFollowerInforList == null) return;
 		// 1. send notification to owner when he/she is following post
-		if (isOwnerFollowing) {
+		if (
+			isOwnerFollowing &&
+			owner_infor.ma_nguoi_dung !== sender_infor.ma_nguoi_dung
+		) {
 			const notiInforForOwner = new statusPostEventStruture.CommentPostEvent(
 				sender_infor,
 				owner_infor,

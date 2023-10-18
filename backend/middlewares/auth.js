@@ -23,11 +23,14 @@ const requireLogined = async (req, res, next) => {
 			throw new Error(NOT_HAVING_AUTH_INFOR);
 		}
 		[decodeStatus, decoded] = vertifyJWT(jwtToken);
-		// console.log("hehehe:", decodeStatus);
+
+		console.log("hehehe:", decodeStatus);
 		if (decodeStatus === false) {
 			throw new Error(NOT_VERTIFIED);
 		} else {
 			const user = await userModel.getUserById(decoded.ma_nguoi_dung);
+			console.log("user requi:");
+			console.log(user);
 			if (user.payload[0].token !== jwtToken) {
 				[decodeStatus, decoded] = [false, []];
 				throw new Error(TOKEN_NOT_MATCH);
@@ -78,7 +81,6 @@ const nonRequireLogined = async (req, res, next) => {
 const socketAuthenMid = (socket, next) => {
 	try {
 		console.log('\n\n\nsocket authen middleware');
-		const jwtToken = socket.handshake.headers.authen_token;
 		// console.log('socket');
 		// console.log(jwtToken);
 		// console.log(socket.handshake.headers);

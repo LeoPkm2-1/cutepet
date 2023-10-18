@@ -19,6 +19,7 @@ const getNotiBefore = async (req, res) => {
 	const notifications = await notificationModel
 		.getNotificationBeforeTime(user_id, before, num)
 		.then((data) => data.payload);
+		console.log(notifications);
 	res.status(200).json(new Response(200, notifications, ''));
 };
 

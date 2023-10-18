@@ -118,7 +118,10 @@ const notifyLikePost = async (
 	if (allFollowerInforList == null) return;
 	//1. Store notification to database
 	// 1.1 store notification infor for owner
-	if (isOwnerFollowing) {
+	if (
+		isOwnerFollowing &&
+		owner_infor.ma_nguoi_dung != sender_infor.ma_nguoi_dung
+	) {
 		const notiInforForOwner = new statusPostEventStruture.LikePostEvent(
 			sender_infor,
 			owner_infor,
@@ -190,7 +193,10 @@ const notifyCommentPost = async (
 	if (allFollowerInforList == null) return;
 	//1. Store notification to database
 	// 1.1 store notification infor for owner
-	if (isOwnerFollowing) {
+	if (
+		isOwnerFollowing &&
+		owner_infor.ma_nguoi_dung != sender_infor.ma_nguoi_dung
+	) {
 		const notiInforForOwner = new statusPostEventStruture.CommentPostEvent(
 			sender_infor,
 			owner_infor,
