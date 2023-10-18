@@ -54,17 +54,19 @@ class LikeCommentEvent {
 	constructor(
 		userLike,
 		commentOwner,
+		commentInfor,
 		likeAt = new Date(),
-		areYouCommenter = false,
-		postContainTheComment = null,
+		areYouCommenOwner = false,
+		dependOn = null,
 		message = ''
 	) {
 		this.userLike = userLike;
 		this.commentOwner = commentOwner;
-		this.message = message;
+		this.commentInfor = commentInfor;
 		this.likeAt = likeAt;
-		this.youAreOwner = areYouCommenter;
-		this.postContainTheComment = postContainTheComment;
+		this.areYouCommenOwner = areYouCommenOwner;
+		this.dependOn = dependOn;
+		this.message = message;
 	}
 }
 

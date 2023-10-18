@@ -68,7 +68,11 @@ async function prepareUserBeforeHandleNotiForStatusPost(
 	const is_Sender_following_post =
 		await theodoiHelper.hasUserFollowedStatusPost(followed_obj_id, sender_id);
 	let postInfor = await StatusPostModel.getPostById(followed_obj_id).then(
-		(data) => data.payload[0]
+		(data) => {
+			const post = data.payload[0];
+			post._id = post._id.toString();
+			return post;
+		}
 	);
 
 	postInfor = UtilsHelper.filter_keys_in_Obj(postInfor, [
@@ -243,43 +247,50 @@ const notifyCommentPost = async (
 async function prepareUserBeforeHandleNotiForCmtStatusPost(
 	sender_id,
 	comment_id,
-	owner_comment_id
+	commenter_id = undefined
 ) {
-	// get owner_id of comment if not provided
-	if (typeof owner_comment_id == 'undefined')
-		owner_comment_id = await StatusPostModel.getOnwerIdOfComment(comment_id);
-	const comment_infor = await StatusPostModel.getCommentPostById(
+	// comment infor
+	const commentInfor = await StatusPostModel.getCommentPostById(
 		comment_id
 	).then((data) => data.payload[0]);
-	const postId = comment_infor.postId;
-	const post_infor = await StatusPostModel.getPostById(postId).then(
+
+	// get commneter_id if not provided
+	if (typeof commenter_id == 'undefined') commenter_id = commentInfor.commentBy;
+	// post infor
+	const postInfor = await StatusPostModel.getPostById(commentInfor.postId).then(
 		(data) => data.payload[0]
 	);
+
 	// prepare user data
-	//       all follower in status post
 	const allFollowerInforList =
-		await socketHelper.getStatusPostFollowerAndFilter(postId);
-	// exit if dont have any follower
+		await socketHelper.getStatusPostFollowerAndFilter(commentInfor.postId);
+	// exit if don't have any follower
 	if (allFollowerInforList.length == 0)
 		return {
-			allFollowerInforList: null, // don't have any follower
-			commenterInfor: null, // owner of comment is not following so don't get infor
-			senderInfor: null, // sender is not following so don't get infor
-			postOwnerInfor: null, // owner of post is not following so don't get infor
-			followerNotSenderCommenterPostOwner: null, // others is not following so don't get infor
-			isCommenterFollowing: false, // owner of comment is not following
-			isSenderFollowing: false, //sender is not following
-			isPostOwnerFollowing: false, // owner of post is not following
+			allFollowerInforList: null, // don't have any followers
+			commentOwner_infor: null, // commenter is not following so don't get infor
+			comment_infor: null, // post don't have follower so don't get infor
+			sender_infor: null, // sender is not following so don't get infor
+			postOwner_infor: null, // postOwner is not following infor so don't get infor
+			post_infor: null, // post don't have follower so don't get infor
+			followerNotSenderCommenterPostOwner: null, // other is not following so don't get infor
+			isCommenterFollowing: false,
+			isPostOwnerFollowing: false,
+			isSenderFollowing: false,
 		};
 
-	const followerNotSenderCommenterPostOwner = allFollowerInforList.filter(
-		(user) =>
-			user.ma_nguoi_dung != sender_id &&
-			user.ma_nguoi_dung != owner_comment_id &&
-			user.ma_nguoi_dung != post_infor.owner_id
-	);
-
-	//        sender information
+	// commenter infor
+	const commentOwnerInfor = await userHelper
+		.getUserPublicInforByUserId(commenter_id)
+		.then((user) =>
+			UtilsHelper.filter_keys_in_Obj(user, [
+				'ma_nguoi_dung',
+				'ten',
+				'tai_khoan',
+				'anh',
+			])
+		);
+	// sender infor
 	const senderInfor = await userHelper
 		.getUserPublicInforByUserId(sender_id)
 		.then((user) =>
@@ -290,20 +301,9 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
 				'anh',
 			])
 		);
-	//      owner of comment information
-	const commenterInfor = await userHelper
-		.getUserPublicInforByUserId(owner_comment_id)
-		.then((user) =>
-			UtilsHelper.filter_keys_in_Obj(user, [
-				'ma_nguoi_dung',
-				'ten',
-				'tai_khoan',
-				'anh',
-			])
-		);
-	// 		owner of post information
+	// post owner infor
 	const postOwnerInfor = await userHelper
-		.getUserPublicInforByUserId(post_infor.owner_id)
+		.getUserPublicInforByUserId(postInfor.owner_id)
 		.then((user) =>
 			UtilsHelper.filter_keys_in_Obj(user, [
 				'ma_nguoi_dung',
@@ -312,125 +312,73 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
 				'anh',
 			])
 		);
-	// is commenter following post
-	const isCommenterFollowing = await theodoiHelper.hasUserFollowedStatusPost(
-		postId,
-		owner_comment_id
+	const followerNotSenderCommenterPostOwner = allFollowerInforList.filter(
+		(user) =>
+			user.ma_nguoi_dung != commentOwnerInfor.ma_nguoi_dung &&
+			user.ma_nguoi_dung != postOwnerInfor.ma_nguoi_dung &&
+			user.ma_nguoi_dung != sender_id
 	);
-	// is sender following post
-	const isSenderFollowing = await theodoiHelper.hasUserFollowedStatusPost(
-		postId,
+
+	const is_commenter_followingPost =
+		await theodoiHelper.hasUserFollowedStatusPost(
+			commentInfor.postId,
+			commenter_id
+		);
+
+	const is_postOwner_followingPost =
+		await theodoiHelper.hasUserFollowedStatusPost(
+			commentInfor.postId,
+			postOwnerInfor.ma_nguoi_dung
+		);
+	const is_Sender_followingPost = await theodoiHelper.hasUserFollowedStatusPost(
+		commentInfor.postId,
 		sender_id
 	);
-	// is owner of post following post
-	const isPostOwnerFollowing = await theodoiHelper.hasUserFollowedStatusPost(
-		postId,
-		post_infor.owner_id
-	);
 	return {
-		allFollowerInforList, // all follower
-		commenterInfor, // owner of comment infor
-		senderInfor, // sender infor
-		postOwnerInfor, // owner of post infor
-		followerNotSenderCommenterPostOwner, // others who is following the post and not contain owner or sender
-		isCommenterFollowing, // owner of comment is following
-		isSenderFollowing, //sender is following
-		isPostOwnerFollowing, // owner of post is following
+		allFollowerInforList,
+		commentOwner_infor: commentOwnerInfor,
+		comment_infor: commentInfor,
+		sender_infor: senderInfor,
+		postOwner_infor: postOwnerInfor,
+		post_infor: postInfor,
+		followerNotSenderCommenterPostOwner: followerNotSenderCommenterPostOwner,
+		isCommenterFollowing: is_commenter_followingPost,
+		isPostOwnerFollowing: is_postOwner_followingPost,
+		isSenderFollowing: is_Sender_followingPost,
 	};
 }
 
 const notifyLikeComment = async (
 	userLike_id,
 	comment_id,
-	owner_comment_id = undefined,
+	commenter_id = undefined,
 	likeAt = new Date()
 ) => {
-	// get owner_id of comment if not provided
-	if (typeof owner_comment_id == 'undefined')
-		owner_comment_id = await StatusPostModel.getOnwerIdOfComment(comment_id);
-	const comment_infor = await StatusPostModel.getCommentPostById(
-		comment_id
-	).then((data) => data.payload[0]);
-	const postId = comment_infor.postId;
-	const post_infor = await StatusPostModel.getPostById(postId).then((data) =>
-		UtilsHelper.filter_keys_in_Obj(data.payload[0], ['_id', 'postType'])
-	);
-
-	// prepare user data
 	const {
 		allFollowerInforList,
-		commenterInfor,
-		senderInfor,
-		postOwnerInfor,
+		commentOwner_infor,
+		comment_infor,
+		sender_infor,
+		postOwner_infor,
+		post_infor,
 		followerNotSenderCommenterPostOwner,
 		isCommenterFollowing,
-		isSenderFollowing,
 		isPostOwnerFollowing,
-	} = await prepareUserBeforeHandleNotiForCmtStatusPost(
+		isSenderFollowing,
+	} = prepareUserBeforeHandleNotiForCmtStatusPost(
 		userLike_id,
 		comment_id,
-		owner_comment_id
+		commenter_id
 	);
-	// exit if dont have any follower
-	if (allFollowerInforList == null) return;
-	//1. Store notification to database
+	// exit if don't have any follower
+	if (allFollowerInforList) return;
+	// 1. store notification to database
 	// 1.1 store notification infor for commenter
-	if (isCommenterFollowing) {
-		const notiInforForCommenter = new statusPostEventStruture.LikeCommentEvent(
-			senderInfor,
-			commenterInfor,
-			likeAt,
-			true,
-			{
-				...post_infor,
-				postOwnerInfor,
-			}
-		);
-		await statusPostNotificationModel.addLikeCommentNotification(
-			commenterInfor.ma_nguoi_dung,
-			notiInforForCommenter
-		);
+	if (
+		isCommenterFollowing &&
+		commentOwner_infor.ma_nguoi_dung != sender_infor.ma_nguoi_dung
+	) {
 	}
-	// 1.2 store notification infor for post owner
-	if (isPostOwnerFollowing) {
-		const notiInforForPostOwner = new statusPostEventStruture.LikeCommentEvent(
-			senderInfor,
-			commenterInfor,
-			likeAt,
-			false,
-			{
-				...post_infor,
-				postOwnerInfor,
-			}
-		);
-		await statusPostNotificationModel.addLikeCommentNotification(
-			postOwnerInfor.ma_nguoi_dung,
-			notiInforForPostOwner
-		);
-	}
-
-	// 1.3 store notfification for others
-	if (followerNotSenderCommenterPostOwner.length > 0) {
-		const notiInforForOthers = new statusPostEventStruture.LikeCommentEvent(
-			senderInfor,
-			commenterInfor,
-			likeAt,
-			false,
-			{
-				...post_infor,
-				postOwnerInfor,
-			}
-		);
-		Promise.all(
-			followerNotSenderCommenterPostOwner.map(async (user) => {
-				return await statusPostNotificationModel.addLikeCommentNotification(
-					user.ma_nguoi_dung,
-					notiInforForOthers
-				);
-			})
-		);
-	}
-	// send notification
 };
 
 module.exports = {
