@@ -26,12 +26,13 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Image from './Image';
-import PermissionRequired from './PermissionRequired';
+
 import { ScrollView } from './ScrollView';
 import { AccountType } from '../models/user';
 import authApi from '../api/auth';
 import { AuthActions } from '../redux/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux';
 
 interface IMenuItemData {
   key: string;
@@ -75,6 +76,7 @@ export default function SideBar(props: {
 }) {
   const { pathname } = useLocation();
   const naviagte = useNavigate();
+  const infoUser = useSelector((state: RootState) => state.user.profile);
   const dispatch = useDispatch();
   useEffect(() => {
     if (window.innerWidth < 1200) {
@@ -84,24 +86,23 @@ export default function SideBar(props: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  function logOut(){
-  
-    authApi.logout().then(() => {
-      naviagte("/login");
-      console.log("Thành công");
-      localStorage.removeItem("accessToken")
-        
-      dispatch(AuthActions.setAuth(false));
-      
-    }).catch((err) => {
-      naviagte("/login");
-      console.log("Thất bại", err);
-      localStorage.removeItem("accessToken")
-        
-      dispatch(AuthActions.setAuth(false));
-
-    });
+  function logOut() {
+    // console.log("vao ne hhfhh");
     
+    authApi
+      .logoutUser()
+      .then(() => {
+        naviagte('/login');
+        console.log('Thành công');
+        localStorage.removeItem('accessToken');
+        dispatch(AuthActions.setAuth(false));
+      })
+      .catch((err) => {
+        naviagte('/login');
+        console.log('Thất bại', err);
+        localStorage.removeItem('accessToken');
+        dispatch(AuthActions.setAuth(false));
+      });
   }
 
   return (
@@ -131,7 +132,7 @@ export default function SideBar(props: {
                 objectFit: 'cover',
                 borderRadius: '10px',
               }}
-              src="https://i.pinimg.com/550x/bb/0b/88/bb0b88d61edeaf96ae83421cf759650e.jpg"
+              src={infoUser?.photoURL || ''}
             />
             <Box
               sx={{
@@ -144,7 +145,7 @@ export default function SideBar(props: {
                   fontWeight: '700',
                 }}
               >
-                Thuyen Nguyen
+                {infoUser?.name}
               </Typography>
               <Typography
                 sx={{
@@ -153,7 +154,7 @@ export default function SideBar(props: {
                   fontSize: '13px',
                 }}
               >
-                @thuyennguyen13
+                {infoUser?.email}
               </Typography>
             </Box>
           </Box>
@@ -164,7 +165,7 @@ export default function SideBar(props: {
           </ScrollView>
           <div className="col pv-16">
             <Button
-            onClick={logOut}
+              onClick={logOut}
               variant="contained"
               color="inherit"
               sx={{
@@ -173,10 +174,9 @@ export default function SideBar(props: {
                 color: '#fff',
                 borderRadius: '20px',
                 margin: '0 10px',
-                "&:hover": {
-                background: '#0c4195eb',
-
-                }
+                '&:hover': {
+                  background: '#0c4195eb',
+                },
               }}
             >
               Logout

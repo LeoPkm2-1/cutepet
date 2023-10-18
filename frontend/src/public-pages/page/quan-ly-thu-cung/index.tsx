@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function QuanLyThuCung() {
   const navigate = useNavigate();
+  
   return (
     <>
       <Box
@@ -54,7 +55,7 @@ export function QuanLyThuCung() {
           </Grid>
           <Grid item xs={3}></Grid>
         </Grid>
-        <Dialog onClose={() => {}} open={true}>
+        <Dialog onClose={() => {}} open={false}>
           <Box
             sx={{
               minWidth: '400px',

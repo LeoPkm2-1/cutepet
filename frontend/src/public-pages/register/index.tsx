@@ -79,21 +79,21 @@ const RegisterPage = (props: P) => {
     userCredential: UserCredential,
     provider: SocialProviderEnum
   ) {
-    return userCredential.user
-      .getIdToken()
-      .then((token) => authApi.login(token, provider))
-      .then((res) => {
-        if (res.tokens) {
-          storage.setTokens(res.tokens);
-          dispatch(AuthActions.setAuth(true));
-          return;
-        }
-        throw Error('authenticate-failed');
-      })
-      .catch((error) => {
-        alert(error?.error?.message ?? error?.message);
-        console.error(error);
-      });
+    // return userCredential.user
+    //   .getIdToken()
+    //   .then((token) => authApi.login(token, provider))
+    //   .then((res) => {
+    //     if (res.tokens) {
+    //       storage.setTokens(res.tokens);
+    //       dispatch(AuthActions.setAuth(true));
+    //       return;
+    //     }
+    //     throw Error('authenticate-failed');
+    //   })
+    //   .catch((error) => {
+    //     alert(error?.error?.message ?? error?.message);
+    //     console.error(error);
+    //   });
   }
 
   const loginWithGoogle = () => {
@@ -160,7 +160,8 @@ const RegisterPage = (props: P) => {
     //   });
   };
 
-  if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
+  // if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
+    if (props.auth.mindfullyAuth) {
     return (
       <Navigate
         to={{

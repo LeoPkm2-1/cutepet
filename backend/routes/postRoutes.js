@@ -1,8 +1,10 @@
 const express = require('express');
 const statusPostMiddle = require('../middlewares/BaiViet/postMiddlewares');
 const statusPostController = require('../controllers/postControllers/statusPostController');
+const { requireLogined } = require('../middlewares/auth');
 const router = express.Router();
 
+// router.use(requireLogined);
 router.post(
 	'/statusPost/addPost',
 	statusPostMiddle.preProcessAddPost,

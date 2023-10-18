@@ -5,12 +5,12 @@ export function getDisplayNameFromUser(user?: User | UserProfile) {
   if (!user) {
     return 'Mindfully';
   }
-  if (user.aliasName) {
-    return user.aliasName;
-  }
-  if (user.displayName) {
-    return user.displayName;
-  }
+  // if (user.aliasName) {
+  //   return user.aliasName;
+  // }
+  // if (user.displayName) {
+  //   return user.displayName;
+  // }
   if (user.email) {
     return user.email.split('@')[0];
   }

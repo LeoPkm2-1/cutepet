@@ -14,9 +14,6 @@ type Props = {};
 
 export default function Routing(props: Props) {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(AuthActions.firebaseAuthInit());
-  }, [dispatch]);
   return (
     <BrowserRouter>
       <Routes>

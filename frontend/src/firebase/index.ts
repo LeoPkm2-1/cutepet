@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase } from "firebase/database";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -15,11 +16,13 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
-// const facebookProvider = new FacebookAuthProvider();
+// // const facebookProvider = new FacebookAuthProvider();
 googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
+const storage = getStorage(firebaseApp);
 const database = getDatabase(firebaseApp, process.env.REACT_APP_RTDB_URL);
 
-export { auth, googleProvider, database };
+export { auth, googleProvider, database,storage };
+

@@ -47,7 +47,31 @@ const addCmtPostNotification = async (
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
+const addLikeCommentNotification = async (
+	receiver_id,
+	payload,
+	createAt = new Date(),
+	title = '',
+	message = ''
+) => {
+	const notification =
+		new notificationStructure.LikeCommentStatusPostNotification(
+			receiver_id,
+			payload,
+			createAt,
+			title,
+			message
+		);
+	async function executor(collection) {
+		return await collection.insertOne(notification);
+	}
+	return await nonSQLQuery(executor, 'ThongBao')
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => new Response(400, err, '', 300, 300));
+};
+
 module.exports = {
 	addLikePostNotification,
 	addCmtPostNotification,
+	addLikeCommentNotification,
 };

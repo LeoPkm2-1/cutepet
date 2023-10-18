@@ -150,6 +150,7 @@ export function authRequestWithoutExpCheck<T>(
     {
       ...options,
       headers: {
+        // Authorization: `${accessToken}`,
         Authorization: `Bearer ${accessToken}`,
         ...options.headers,
       },
@@ -159,10 +160,7 @@ export function authRequestWithoutExpCheck<T>(
     console.log("Lỗi nè", error);
     
     if (error?.error?.statusCode === 401) {
-      if (store.getState().auth.mindfullyAuth) {
-        // @ts-ignore
-        store.dispatch(AuthActions.logout());
-      }
+  
     }
     throw error;
   });

@@ -39,6 +39,10 @@ import {
   Title,
 } from './styled';
 import { useSnackbar } from 'notistack';
+import userApis from '../../api/user';
+import { UserProfile } from '../../models/user-profile';
+import { UserActions } from '../../redux/user';
+import postApi from '../../api/post';
 
 interface ErrorObj {
   [key: string]: string | undefined;
@@ -86,38 +90,38 @@ const LoginPage = (props: P) => {
     return;
   };
 
-  function loginWithUserCredential(
-    userCredential: UserCredential,
-    provider: SocialProviderEnum
-  ) {
-    return userCredential.user
-      .getIdToken()
-      .then((token) => authApi.login(token, provider))
-      .then((res) => {
-        if (res.tokens) {
-          storage.setTokens(res.tokens);
-          dispatch(AuthActions.setAuth(true));
-          return;
-        }
-        throw Error('authenticate-failed');
-      })
-      .catch((error) => {
-        alert(error?.error?.message ?? error?.message);
-        console.error(error);
-      });
-  }
+  // function loginWithUserCredential(
+  //   userCredential: UserCredential,
+  //   provider: SocialProviderEnum
+  // ) {
+  //   return userCredential.user
+  //     .getIdToken()
+  //     .then((token) => authApi.login(token, provider))
+  //     .then((res) => {
+  //       if (res.tokens) {
+  //         storage.setTokens(res.tokens);
+  //         dispatch(AuthActions.setAuth(true));
+  //         return;
+  //       }
+  //       throw Error('authenticate-failed');
+  //     })
+  //     .catch((error) => {
+  //       alert(error?.error?.message ?? error?.message);
+  //       console.error(error);
+  //     });
+  // }
 
-  const loginWithGoogle = () => {
-    setIsLoading(true);
-    signInWithPopup(auth, googleProvider)
-      .then((result) =>
-        loginWithUserCredential(result, SocialProviderEnum.GOOGLE)
-      )
+  // const loginWithGoogle = () => {
+  //   setIsLoading(true);
+  //   signInWithPopup(auth, googleProvider)
+  //     .then((result) =>
+  //       loginWithUserCredential(result, SocialProviderEnum.GOOGLE)
+  //     )
 
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+  //     .finally(() => {
+  //       setIsLoading(false);
+  //     });
+  // };
 
   const handleFormSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -136,32 +140,39 @@ const LoginPage = (props: P) => {
 
     authApi
       .loginTest(email, password)
-      .then((res) => {
-        console.log(res, " res");
-        
-        if (res?.payload[0]?.token) {
-          storage.setTokens(res.payload[0]?.token);
-          console.log("Thành còng ");
-          
-          dispatch(AuthActions.setAuth(true));
-          enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
-          navigate("/home");
-        }else {
-          enqueueSnackbar(res?.message, { variant: 'success' });
+      .then((res:any) => {
+        console.log(res, ' res');
+        if(res?.status ==200){
+          if (res?.payload[0]?.token) {
+            storage.setTokens(res.payload[0]?.token);
+            console.log('Thành còng token :', res.payload[0]?.token);
+            dispatch(AuthActions.setAuth(true));
+            enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
+          } 
+          const profile: UserProfile = {
+            id: res?.payload[0]?.ma_nguoi_dung,
+            name: res?.payload[0]?.ten,
+            email: res?.payload[0]?.email || '',
+            age: res?.payload[0]?.ngay_sinh || '',
+            photoURL: res?.payload[0]?.anh?.url || '',
+          };
+          dispatch(UserActions.setProfile(profile));
+          navigate('/home/mang-xa-hoi');
         }
         setIsLoading(false);
       })
       .catch((err) => {
+        // storage.setTokens("thuyeb");
+        // console.log("Thành còng ");
 
-        storage.setTokens("thuyeb");
-        console.log("Thành còng ");
-        
-        dispatch(AuthActions.setAuth(true));
-        enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
-        navigate("/home");
+        // dispatch(AuthActions.setAuth(true));
+        // enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
+        // navigate("/home");
         // Test no server
         setIsLoading(false);
-        enqueueSnackbar('Lỗi đăng nhập. Vui lòng thử lại !', { variant: 'error' });
+        enqueueSnackbar('Lỗi đăng nhập. Vui lòng thử lại !', {
+          variant: 'error',
+        });
       });
 
     // setIsLoading(true);

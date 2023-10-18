@@ -11,6 +11,7 @@ class StatusPostEventManagement {
 		allFollowerInforList,
 		owner_infor,
 		sender_infor,
+		post_infor,
 		follower_not_sender_onwer,
 		isOwnerFollowing,
 		isSenderFollowing,
@@ -22,6 +23,7 @@ class StatusPostEventManagement {
 			const notiInforForOwner = new statusPostEventStruture.LikePostEvent(
 				sender_infor,
 				owner_infor,
+				post_infor,
 				new Date(),
 				true
 			);
@@ -41,6 +43,7 @@ class StatusPostEventManagement {
 			const notiInforForOthers = new statusPostEventStruture.LikePostEvent(
 				sender_infor,
 				owner_infor,
+				post_infor,
 				new Date(),
 				false
 			);
@@ -64,6 +67,7 @@ class StatusPostEventManagement {
 		allFollowerInforList,
 		owner_infor,
 		sender_infor,
+		post_infor,
 		follower_not_sender_onwer,
 		isOwnerFollowing,
 		isSenderFollowing,
@@ -75,6 +79,7 @@ class StatusPostEventManagement {
 			const notiInforForOwner = new statusPostEventStruture.CommentPostEvent(
 				sender_infor,
 				owner_infor,
+				post_infor,
 				new Date(),
 				true
 			);
@@ -94,6 +99,7 @@ class StatusPostEventManagement {
 			const notiInforForOthers = new statusPostEventStruture.CommentPostEvent(
 				sender_infor,
 				owner_infor,
+				post_infor,
 				new Date(),
 				false
 			);

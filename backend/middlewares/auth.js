@@ -39,6 +39,7 @@ const requireLogined = async (req, res, next) => {
 			return;
 		}
 	} catch (error) {
+		console.log("err:",error);
 		if (
 			error.message === NOT_HAVING_AUTH_INFOR ||
 			error.message === NOT_VERTIFIED ||
@@ -54,6 +55,7 @@ const requireLogined = async (req, res, next) => {
 const nonRequireLogined = async (req, res, next) => {
 	try {
 		const jwtToken = getToken(req);
+		console.log("non require:",jwtToken);
 		let [decodeStatus, decoded] = [false, []];
 		if (jwtToken) {
 			[decodeStatus, decoded] = vertifyJWT(jwtToken);
