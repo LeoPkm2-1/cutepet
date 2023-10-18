@@ -76,20 +76,27 @@ const nonRequireLogined = async (req, res, next) => {
 };
 
 const socketAuthenMid = (socket, next) => {
-	console.log('socket authen middleware');
-	const jwtToken = socket.handshake.auth.token;
-	console.log('socket');
-	console.log(jwtToken);
-	console.log(socket.handshake);
-	let [decodeStatus, decoded] = [false, []];
-	[decodeStatus, decoded] = vertifyJWT(jwtToken);
-	// [decodeStatus, decoded] = [true, { ma_nguoi_dung: 1 }];
-	if (!decodeStatus) {
-		next(new Error(NOT_VERTIFIED));
+	try {
+		console.log('\n\n\nsocket authen middleware');
+		const jwtToken = socket.handshake.headers.authen_token;
+		// console.log('socket');
+		console.log("jwtToken :",jwtToken);
+		console.log("header : ",socket.handshake.headers);
+		let [decodeStatus, decoded] = [false, []];
+		[decodeStatus, decoded] = vertifyJWT(jwtToken);
+		// [decodeStatus, decoded] = [true, { ma_nguoi_dung: 1 }];
+		if (!decodeStatus) {
+			next(new Error(NOT_VERTIFIED));
+			return;
+		}
+		console.log([decodeStatus, decoded]);
+		// add user infor to socket
+		socket.auth_decoded={...decoded, authen_token: jwtToken};
+		next();
 		return;
+	} catch (error) {
+		console.log(error);
 	}
-	console.log([decodeStatus, decoded]);
-	next();
 };
 
-module.exports = { requireLogined, nonRequireLogined,socketAuthenMid };
+module.exports = { requireLogined, nonRequireLogined, socketAuthenMid };
