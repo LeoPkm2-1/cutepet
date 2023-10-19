@@ -11,6 +11,7 @@ const {
 const {
 	notifyLikePost,
 	notifyCommentPost,
+	notifyLikeComment,
 } = require('../../notificationHandler/statusPost');
 
 const addPostController = async (req, res) => {
@@ -161,6 +162,8 @@ const toggleLikeCmtController = async (req, res) => {
 			// thêm người dùng vào danh sách theo dõi của bài viết status
 
 			await followhelper.followStatusPost(postId, userLike);
+			// gửi thông báo dến các người dùng đang theo dõi
+			notifyLikeComment(userLike,cmt_id);
 			res.status(200).json(new Response(200, likeInfor, 'like thành công'));
 
 			return;

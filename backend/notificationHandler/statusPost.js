@@ -252,18 +252,34 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
 	// comment infor
 	const commentInfor = await StatusPostModel.getCommentPostById(
 		comment_id
-	).then((data) => data.payload[0]);
+	).then((data) => {
+		const comment = data.payload[0];
+		comment._id = comment._id.toString();
+		return comment;
+	});
+	// console.log('check');
+	// console.log(commentInfor);
 
 	// get commneter_id if not provided
 	if (typeof commenter_id == 'undefined') commenter_id = commentInfor.commentBy;
 	// post infor
 	const postInfor = await StatusPostModel.getPostById(commentInfor.postId).then(
-		(data) => data.payload[0]
+		(data) => {
+			const post = data.payload[0];
+			post._id = post._id.toString();
+			return post;
+		}
 	);
 
 	// prepare user data
 	const allFollowerInforList =
 		await socketHelper.getStatusPostFollowerAndFilter(commentInfor.postId);
+
+	// console.log('chao cau');
+	// console.log(commentInfor.postId);
+	// console.log('chao cau 2');
+	// console.log(allFollowerInforList);
+
 	// exit if don't have any follower
 	if (allFollowerInforList.length == 0)
 		return {
@@ -290,6 +306,10 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
 				'anh',
 			])
 		);
+
+	console.log('\n\ncommentOwnerInfor');
+	console.log(commentOwnerInfor);
+
 	// sender infor
 	const senderInfor = await userHelper
 		.getUserPublicInforByUserId(sender_id)
@@ -301,6 +321,10 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
 				'anh',
 			])
 		);
+
+	console.log('\n\nsenderInfor');
+	console.log(senderInfor);
+
 	// post owner infor
 	const postOwnerInfor = await userHelper
 		.getUserPublicInforByUserId(postInfor.owner_id)
@@ -312,6 +336,10 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
 				'anh',
 			])
 		);
+
+	console.log('\n\npostOwnerInfor');
+	console.log(postOwnerInfor);
+
 	const followerNotSenderCommenterPostOwner = allFollowerInforList.filter(
 		(user) =>
 			user.ma_nguoi_dung != commentOwnerInfor.ma_nguoi_dung &&
@@ -319,21 +347,32 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
 			user.ma_nguoi_dung != sender_id
 	);
 
+	console.log('\n\nfollowerNotSenderCommenterPostOwner');
+	console.log(followerNotSenderCommenterPostOwner);
+
 	const is_commenter_followingPost =
 		await theodoiHelper.hasUserFollowedStatusPost(
 			commentInfor.postId,
 			commenter_id
 		);
 
+	console.log('\n\nis_commenter_followingPost', is_commenter_followingPost);
+
 	const is_postOwner_followingPost =
 		await theodoiHelper.hasUserFollowedStatusPost(
 			commentInfor.postId,
 			postOwnerInfor.ma_nguoi_dung
 		);
+
+	console.log('\n\nis_postOwner_followingPost', is_postOwner_followingPost);
+
 	const is_Sender_followingPost = await theodoiHelper.hasUserFollowedStatusPost(
 		commentInfor.postId,
 		sender_id
 	);
+
+	console.log('\n\nis_Sender_followingPost', is_Sender_followingPost);
+
 	return {
 		allFollowerInforList,
 		commentOwner_infor: commentOwnerInfor,
@@ -365,23 +404,115 @@ const notifyLikeComment = async (
 		isCommenterFollowing,
 		isPostOwnerFollowing,
 		isSenderFollowing,
-	} = prepareUserBeforeHandleNotiForCmtStatusPost(
+	} = await prepareUserBeforeHandleNotiForCmtStatusPost(
 		userLike_id,
 		comment_id,
 		commenter_id
 	);
+	console.log('\n\nallFollowerInforList');
+	console.log(allFollowerInforList);
+
 	// exit if don't have any follower
-	if (allFollowerInforList) return;
+	if (allFollowerInforList == null) return;
 	// 1. store notification to database
 	// 1.1 store notification infor for commenter
+	console.log('hihi');
+	// return
 	if (
 		isCommenterFollowing &&
 		commentOwner_infor.ma_nguoi_dung != sender_infor.ma_nguoi_dung
 	) {
+		const notiInforForCommenter = new statusPostEventStruture.LikeCommentEvent(
+			sender_infor,
+			commentOwner_infor,
+			comment_infor,
+			likeAt,
+			true,
+			{
+				postInfor: post_infor,
+				postOwner: postOwner_infor,
+				areYouPostOwner:
+					postOwner_infor.ma_nguoi_dung == commentOwner_infor.ma_nguoi_dung,
+			}
+		);
+		await statusPostNotificationModel.addCmtPostNotification(
+			commentOwner_infor.ma_nguoi_dung,
+			notiInforForCommenter
+		);
 	}
+
+	// 1.2 store notification infor for post owner
+	if (
+		isPostOwnerFollowing &&
+		postOwner_infor.ma_nguoi_dung != sender_infor.ma_nguoi_dung &&
+		postOwner_infor.ma_nguoi_dung != commentOwner_infor.ma_nguoi_dung
+	) {
+		const notiInforForPostOwner = new statusPostEventStruture.LikeCommentEvent(
+			sender_infor,
+			commentOwner_infor,
+			comment_infor,
+			likeAt,
+			commentOwner_infor.ma_nguoi_dung == postOwner_infor.ma_nguoi_dung,
+			{
+				postInfor: post_infor,
+				postOwner: postOwner_infor,
+				areYouPostOwner: true,
+			}
+		);
+		await statusPostNotificationModel.addLikeCommentNotification(
+			postOwner_infor.ma_nguoi_dung,
+			notiInforForPostOwner
+		);
+	}
+
+	// 1.3 store notifcation infor for others
+	if (followerNotSenderCommenterPostOwner.length > 0) {
+		const notiInforForOthers = new statusPostEventStruture.LikeCommentEvent(
+			sender_infor,
+			commentOwner_infor,
+			comment_infor,
+			likeAt,
+			false,
+			{
+				postInfor: post_infor,
+				postOwner: postOwner_infor,
+				areYouPostOwner: false,
+			}
+		);
+		console.log('xin chao 123');
+		console.log(followerNotSenderCommenterPostOwner);
+		// return;
+		Promise.all(
+			followerNotSenderCommenterPostOwner.map(async (user) => {
+				await statusPostNotificationModel.addLikeCommentNotification(
+					user.ma_nguoi_dung,
+					notiInforForOthers
+				);
+				// return await statusPostNotificationModel.addLikeCommentNotification(
+				// 	user.ma_nguoi_dung,
+				// 	'xin chao'
+				// );
+			})
+		);
+	}
+	// return;
+	// 2. send notification through socket.
+	StatusPostEventManagement.sendLikeCommentNotiToAllFollower({
+		allFollowerInforList,
+		commentOwner_infor,
+		comment_infor,
+		sender_infor,
+		postOwner_infor,
+		post_infor,
+		followerNotSenderCommenterPostOwner,
+		isCommenterFollowing,
+		isPostOwnerFollowing,
+		isSenderFollowing,
+	});
 };
 
 module.exports = {
 	notifyLikePost,
 	notifyCommentPost,
+	notifyLikeComment,
 };

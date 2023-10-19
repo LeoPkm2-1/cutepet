@@ -70,6 +70,16 @@ const addLikeCommentNotification = async (
 		.catch((err) => new Response(400, err, '', 300, 300));
 };
 
+// const a = [
+// 	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+// ];
+// Promise.all(
+// 	a.map(async (item) => {
+// 		console.log(item);
+// 		await addCmtPostNotification(item, 'xin chao');
+// 	})
+// );
+
 module.exports = {
 	addLikePostNotification,
 	addCmtPostNotification,
