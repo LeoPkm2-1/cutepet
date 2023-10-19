@@ -1,0 +1,14 @@
+[{
+  "_id": {
+    "$oid": "6530a52c3539c9a60caa0c51"
+  },
+  "cmtId": "6530136a3867474859cd5e80",
+  "reply": "10 điểm",
+  "replyBy": 2,
+  "replyAt": {
+    "$date": "2023-10-19T03:40:28.997Z"
+  },
+  "numOfLike": 0,
+  "postId": "652cdfa4d06a5e587a2541eb",
+  "modifiedAt": null
+}]

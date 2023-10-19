@@ -579,7 +579,39 @@ const notifyReplyComment = async (
 				areYouPostOwner: true,
 			}
 		);
+		await statusPostNotificationModel.addReplyCommentNotification(
+			postOwner_infor.ma_nguoi_dung,
+			notiInforForPostOwner
+		);
 	}
+
+	// 1.3 store notification infor for others
+	if (followerNotSenderCommenterPostOwner > 0) {
+		const notiInforForOthers = new statusPostEventStruture.ReplyCommentEvent(
+			sender_infor,
+			commentOwner_infor,
+			comment_infor,
+			likeAt,
+			false,
+			{
+				postInfor: post_infor,
+				postOwner: postOwner_infor,
+				areYouPostOwner: false,
+			}
+		);
+
+		Promise.all(
+			followerNotSenderCommenterPostOwner.map(async (user) => {
+				await statusPostNotificationModel.addReplyCommentNotification(
+					user.ma_nguoi_dung,
+					notiInforForOthers
+				);
+			})
+		);
+	}
+
+	// 2. send notification through socket
+	StatusPostEventManagement.sendLikePostNotiToAllFollower
 };
 
 module.exports = {

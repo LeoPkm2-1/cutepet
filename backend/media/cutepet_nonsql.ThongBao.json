@@ -1,0 +1,291 @@
+[{
+  "_id": {
+    "$oid": "65309b561e48c7ade678fbb8"
+  },
+  "type": "LIKE_COMMENT_IN_STATUS_POST",
+  "receiver_id": 8,
+  "payload": {
+    "userLike": {
+      "ma_nguoi_dung": 2,
+      "ten": "Dung",
+      "tai_khoan": "dung",
+      "anh": {
+        "ma_anh": 39,
+        "url": "www.facebook.com.vn",
+        "ngay_cap_nhat": {
+          "$date": "2023-09-01T09:52:48.000Z"
+        },
+        "ma_nguoi_dung": 2,
+        "is_active": 1
+      }
+    },
+    "commentOwner": {
+      "ma_nguoi_dung": 2,
+      "ten": "Dung",
+      "tai_khoan": "dung",
+      "anh": {
+        "ma_anh": 39,
+        "url": "www.facebook.com.vn",
+        "ngay_cap_nhat": {
+          "$date": "2023-09-01T09:52:48.000Z"
+        },
+        "ma_nguoi_dung": 2,
+        "is_active": 1
+      }
+    },
+    "commentInfor": {
+      "_id": "6530136a3867474859cd5e80",
+      "postId": "652cdfa4d06a5e587a2541eb",
+      "comment": "tôi là DUNG comment",
+      "commentBy": 2,
+      "commentAt": {
+        "$date": "2023-10-18T17:18:34.134Z"
+      },
+      "numOfLike": 1,
+      "numOfReply": 0,
+      "modifiedAt": null
+    },
+    "likeAt": {
+      "$date": "2023-10-19T02:58:30.475Z"
+    },
+    "areYouCommenOwner": false,
+    "dependOn": {
+      "postInfor": {
+        "_id": "652cdfa4d06a5e587a2541eb",
+        "text": "xin chào tui là dũng nha",
+        "postType": "status",
+        "media": {
+          "type": "images",
+          "data": [
+            "google.com",
+            "youtube.com",
+            "amazon.com"
+          ]
+        },
+        "createAt": {
+          "$date": "2023-10-16T07:00:52.048Z"
+        },
+        "numOfLike": 0,
+        "numOfComment": 2,
+        "modifiedAt": null,
+        "owner_id": 2
+      },
+      "postOwner": {
+        "ma_nguoi_dung": 2,
+        "ten": "Dung",
+        "tai_khoan": "dung",
+        "anh": {
+          "ma_anh": 39,
+          "url": "www.facebook.com.vn",
+          "ngay_cap_nhat": {
+            "$date": "2023-09-01T09:52:48.000Z"
+          },
+          "ma_nguoi_dung": 2,
+          "is_active": 1
+        }
+      },
+      "areYouPostOwner": false
+    },
+    "message": ""
+  },
+  "createAt": {
+    "$date": "2023-10-19T02:58:30.495Z"
+  },
+  "title": "",
+  "message": "",
+  "hasRead": false
+},
+{
+  "_id": {
+    "$oid": "65309b561e48c7ade678fbb9"
+  },
+  "type": "LIKE_COMMENT_IN_STATUS_POST",
+  "receiver_id": 4,
+  "payload": {
+    "userLike": {
+      "ma_nguoi_dung": 2,
+      "ten": "Dung",
+      "tai_khoan": "dung",
+      "anh": {
+        "ma_anh": 39,
+        "url": "www.facebook.com.vn",
+        "ngay_cap_nhat": {
+          "$date": "2023-09-01T09:52:48.000Z"
+        },
+        "ma_nguoi_dung": 2,
+        "is_active": 1
+      }
+    },
+    "commentOwner": {
+      "ma_nguoi_dung": 2,
+      "ten": "Dung",
+      "tai_khoan": "dung",
+      "anh": {
+        "ma_anh": 39,
+        "url": "www.facebook.com.vn",
+        "ngay_cap_nhat": {
+          "$date": "2023-09-01T09:52:48.000Z"
+        },
+        "ma_nguoi_dung": 2,
+        "is_active": 1
+      }
+    },
+    "commentInfor": {
+      "_id": "6530136a3867474859cd5e80",
+      "postId": "652cdfa4d06a5e587a2541eb",
+      "comment": "tôi là DUNG comment",
+      "commentBy": 2,
+      "commentAt": {
+        "$date": "2023-10-18T17:18:34.134Z"
+      },
+      "numOfLike": 1,
+      "numOfReply": 0,
+      "modifiedAt": null
+    },
+    "likeAt": {
+      "$date": "2023-10-19T02:58:30.475Z"
+    },
+    "areYouCommenOwner": false,
+    "dependOn": {
+      "postInfor": {
+        "_id": "652cdfa4d06a5e587a2541eb",
+        "text": "xin chào tui là dũng nha",
+        "postType": "status",
+        "media": {
+          "type": "images",
+          "data": [
+            "google.com",
+            "youtube.com",
+            "amazon.com"
+          ]
+        },
+        "createAt": {
+          "$date": "2023-10-16T07:00:52.048Z"
+        },
+        "numOfLike": 0,
+        "numOfComment": 2,
+        "modifiedAt": null,
+        "owner_id": 2
+      },
+      "postOwner": {
+        "ma_nguoi_dung": 2,
+        "ten": "Dung",
+        "tai_khoan": "dung",
+        "anh": {
+          "ma_anh": 39,
+          "url": "www.facebook.com.vn",
+          "ngay_cap_nhat": {
+            "$date": "2023-09-01T09:52:48.000Z"
+          },
+          "ma_nguoi_dung": 2,
+          "is_active": 1
+        }
+      },
+      "areYouPostOwner": false
+    },
+    "message": ""
+  },
+  "createAt": {
+    "$date": "2023-10-19T02:58:30.495Z"
+  },
+  "title": "",
+  "message": "",
+  "hasRead": false
+},
+{
+  "_id": {
+    "$oid": "65309b561e48c7ade678fbba"
+  },
+  "type": "LIKE_COMMENT_IN_STATUS_POST",
+  "receiver_id": 10,
+  "payload": {
+    "userLike": {
+      "ma_nguoi_dung": 2,
+      "ten": "Dung",
+      "tai_khoan": "dung",
+      "anh": {
+        "ma_anh": 39,
+        "url": "www.facebook.com.vn",
+        "ngay_cap_nhat": {
+          "$date": "2023-09-01T09:52:48.000Z"
+        },
+        "ma_nguoi_dung": 2,
+        "is_active": 1
+      }
+    },
+    "commentOwner": {
+      "ma_nguoi_dung": 2,
+      "ten": "Dung",
+      "tai_khoan": "dung",
+      "anh": {
+        "ma_anh": 39,
+        "url": "www.facebook.com.vn",
+        "ngay_cap_nhat": {
+          "$date": "2023-09-01T09:52:48.000Z"
+        },
+        "ma_nguoi_dung": 2,
+        "is_active": 1
+      }
+    },
+    "commentInfor": {
+      "_id": "6530136a3867474859cd5e80",
+      "postId": "652cdfa4d06a5e587a2541eb",
+      "comment": "tôi là DUNG comment",
+      "commentBy": 2,
+      "commentAt": {
+        "$date": "2023-10-18T17:18:34.134Z"
+      },
+      "numOfLike": 1,
+      "numOfReply": 0,
+      "modifiedAt": null
+    },
+    "likeAt": {
+      "$date": "2023-10-19T02:58:30.475Z"
+    },
+    "areYouCommenOwner": false,
+    "dependOn": {
+      "postInfor": {
+        "_id": "652cdfa4d06a5e587a2541eb",
+        "text": "xin chào tui là dũng nha",
+        "postType": "status",
+        "media": {
+          "type": "images",
+          "data": [
+            "google.com",
+            "youtube.com",
+            "amazon.com"
+          ]
+        },
+        "createAt": {
+          "$date": "2023-10-16T07:00:52.048Z"
+        },
+        "numOfLike": 0,
+        "numOfComment": 2,
+        "modifiedAt": null,
+        "owner_id": 2
+      },
+      "postOwner": {
+        "ma_nguoi_dung": 2,
+        "ten": "Dung",
+        "tai_khoan": "dung",
+        "anh": {
+          "ma_anh": 39,
+          "url": "www.facebook.com.vn",
+          "ngay_cap_nhat": {
+            "$date": "2023-09-01T09:52:48.000Z"
+          },
+          "ma_nguoi_dung": 2,
+          "is_active": 1
+        }
+      },
+      "areYouPostOwner": false
+    },
+    "message": ""
+  },
+  "createAt": {
+    "$date": "2023-10-19T02:58:30.495Z"
+  },
+  "title": "",
+  "message": "",
+  "hasRead": false
+}]
