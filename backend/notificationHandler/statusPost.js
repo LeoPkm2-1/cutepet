@@ -511,6 +511,77 @@ const notifyLikeComment = async (
 	});
 };
 
+const notifyReplyComment = async (
+	userReply_id,
+	comment_id,
+	commenter_id = undefined,
+	likeAt = new Date()
+) => {
+	const {
+		allFollowerInforList,
+		commentOwner_infor,
+		comment_infor,
+		sender_infor,
+		postOwner_infor,
+		post_infor,
+		followerNotSenderCommenterPostOwner,
+		isCommenterFollowing,
+		isPostOwnerFollowing,
+		isSenderFollowing,
+	} = await prepareUserBeforeHandleNotiForCmtStatusPost(
+		userReply_id,
+		comment_id,
+		commenter_id
+	);
+
+	// exit if don't have any follower
+	if (allFollowerInforList == null) return;
+	// 1. store notification to database
+	// 1.1. store notification infor for commenter
+	if (
+		isCommenterFollowing &&
+		commentOwner_infor.ma_nguoi_dung != sender_infor.ma_nguoi_dung
+	) {
+		const notiInforForCommenter = new statusPostEventStruture.ReplyCommentEvent(
+			sender_infor,
+			commentOwner_infor,
+			comment_infor,
+			likeAt,
+			true,
+			{
+				postInfor: post_infor,
+				postOwner: postOwner_infor,
+				areYouPostOwner:
+					postOwner_infor.ma_nguoi_dung == commentOwner_infor.ma_nguoi_dung,
+			}
+		);
+		await statusPostNotificationModel.addReplyCommentNotification(
+			commentOwner_infor.ma_nguoi_dung,
+			notiInforForCommenter
+		);
+	}
+
+	// 1.2 store notification infor for post owner
+	if (
+		isPostOwnerFollowing &&
+		postOwner_infor.ma_nguoi_dung != sender_infor.ma_nguoi_dung &&
+		postOwner_infor.ma_nguoi_dung != commentOwner_infor.ma_nguoi_dung
+	) {
+		const notiInforForPostOwner = new statusPostEventStruture.ReplyCommentEvent(
+			sender_infor,
+			commentOwner_infor,
+			comment_infor,
+			likeAt,
+			false,
+			{
+				postInfor: post_infor,
+				postOwner: postOwner_infor,
+				areYouPostOwner: true,
+			}
+		);
+	}
+};
+
 module.exports = {
 	notifyLikePost,
 	notifyCommentPost,

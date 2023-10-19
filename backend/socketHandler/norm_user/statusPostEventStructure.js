@@ -70,8 +70,34 @@ class LikeCommentEvent {
 	}
 }
 
+class ReplyCommentEvent {
+	static getEventName() {
+		return notificationStructure.ReplyCommentStatusPostNotification.getNotificationType()
+		return 'REPLY_COMMENT_IN_STATUS_POST';
+	}
+
+	constructor(
+		userReply,
+		commentOwner,
+		commentInfor,
+		replyAt = new Date(),
+		areYouCommenOwner = false,
+		dependOn = null,
+		message = ''
+	) {
+		this.userReply = userReply;
+		this.commentOwner = commentOwner;
+		this.commentInfor = commentInfor;
+		this.replyAt = replyAt;
+		this.areYouCommenOwner = areYouCommenOwner;
+		this.dependOn = dependOn;
+		this.message = message;
+	}
+}
+
 module.exports = {
 	LikePostEvent,
 	CommentPostEvent,
 	LikeCommentEvent,
+	ReplyCommentEvent,
 };
