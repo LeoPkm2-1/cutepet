@@ -96,7 +96,7 @@ class LikeCommentStatusPostNotification extends GeneralNotification {
 class ReplyCommentStatusPostNotification extends GeneralNotification {
 	static NOTIFICATION_TYPE = 'REPLY_COMMENT_IN_STATUS_POST';
 	static getNotificationType() {
-		return LikeCommentStatusPostNotification.NOTIFICATION_TYPE;
+		return ReplyCommentStatusPostNotification.NOTIFICATION_TYPE;
 	}
 	constructor(
 		receiver_id,
