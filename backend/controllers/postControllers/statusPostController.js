@@ -362,10 +362,15 @@ const getPostController = async (req, res) => {
     ma_nguoi_dung,
     post_id
   );
+  const isFollowed = await followhelper.hasUserFollowedStatusPost(
+    post_id,
+    ma_nguoi_dung
+  );
   const data = {
     ...postData[0],
     owner_infor,
     hasLiked,
+    isFollowed,
   };
   res.status(200).json(new Response(200, data, "lấy dữ liệu thành công"));
 };
@@ -490,6 +495,55 @@ const updatePostController = async (req, res) => {
   res.send("ahihi");
 };
 
+const unfollowPostController = async (req, res) => {
+  const { post_id } = req.body;
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const hasFollowed = await followhelper.hasUserFollowedStatusPost(
+    post_id,
+    user_id
+  );
+  if (!hasFollowed) {
+    res.status(400).json(
+      new Response(
+        400,
+        {
+          unfollowed: false,
+          message: "người dùng chưa theo dõi bài viết",
+        },
+        "bài viết chưa được theo dõi",
+        300,
+        300
+      )
+    );
+    return;
+  }
+  const unfollowProcess = await followhelper.unFollowStatusPost(
+    post_id,
+    user_id,
+    false
+  );
+  res.status(400).json(
+    new Response(
+      400,
+      {
+        unfollowed: true,
+        message: "unfollow thành công",
+      },
+      "unfollow thành công",
+      300,
+      300
+    )
+  );
+  return;
+};
+
+// const followPostController = async (req, res) => {
+//   const { post_id } = req.body;
+//   const user_id = req.auth_decoded.ma_nguoi_dung;
+//   const followProcess = await followhelper.followStatusPost(post_id, user_id);
+//   res.json(followProcess);
+// };
+
 const deletePostController = async (req, res) => {
   try {
     const { post_id } = req.body;
@@ -511,6 +565,51 @@ const deletePostController = async (req, res) => {
   }
 };
 
+const isUserFollowedPostController = async (req, res) => {
+  const { post_id } = req.body;
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const isFollowed = await followhelper.hasUserFollowedStatusPost(
+    post_id,
+    user_id
+  );
+  res.status(200).json(new Response(200, { post_id, isFollowed }, ""));
+  return;
+};
+
+const followPostController = async (req, res) => {
+  const { post_id } = req.body;
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const isFollowed = await followhelper.hasUserFollowedStatusPost(
+    post_id,
+    user_id
+  );
+  if (isFollowed) {
+    res.status(200).json(
+      new Response(
+        200,
+        {
+          post_id,
+          isFollowed,
+        },
+        "bạn đã theo doi bài viết này rồi"
+      )
+    );
+    return;
+  }
+
+  const followProcess = await followhelper.followStatusPost(post_id, user_id);
+  res.status(200).json(
+    new Response(
+      200,
+      {
+        post_id,
+        isFollowed: true,
+      },
+      "theo dõi thành công"
+    )
+  );
+};
+
 module.exports = {
   addPostController,
   toggleLikePostController,
@@ -529,4 +628,7 @@ module.exports = {
   deleteCommentController,
   deletePostController,
   updatePostController,
+  unfollowPostController,
+  isUserFollowedPostController,
+  followPostController,
 };
