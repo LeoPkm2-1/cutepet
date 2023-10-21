@@ -368,6 +368,14 @@ const getOnwerIdOfPost = async (postId) => {
 	return typeof postInfor === 'undefined' ? null : parseInt(postInfor.owner_id);
 };
 
+const getOnwerIdOfComment = async (comment_id) => {
+	const commentInfor = await getCommentPostById(comment_id).then(
+		(data) => data.payload[0]
+	);
+	return typeof commentInfor === 'undefined'
+		? null
+		: parseInt(commentInfor.commentBy);
+};
 
 
 module.exports = {
@@ -403,4 +411,5 @@ module.exports = {
 	deleteAllLikesOfPost,
 	deletePostById,
 	getOnwerIdOfPost,
+	getOnwerIdOfComment,
 };

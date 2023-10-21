@@ -7,7 +7,8 @@ const { app, server, io } = require('./serverSetup');
 var bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-const router = require('./routes/index');
+
+const router = require("./routes/index");
 var cors=require('cors');
 app.use(cookieParser());
 app.use(bodyParser.json());
