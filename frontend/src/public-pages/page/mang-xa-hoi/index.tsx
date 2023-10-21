@@ -51,13 +51,26 @@ export default function MangXaHoi() {
   }
 
   useEffect(() => {
-    socket.on('response-message', (data) => {
+    socket.on('LIKE_STATUS_POST', (data) => {
       console.log(data, ' Data chat from server:');
     });
     return () => {
       socket.off('response-message');
     };
   }, []);
+
+  useEffect(() => {
+    console.log("Nghe comment");
+    
+    socket.on('COMMENT_STATUS_POST', (data) => {
+      console.log(data, ' Data comment from server:');
+    });
+    return () => {
+      socket.off('response-message');
+    };
+  }, []);
+
+
 
   return (
     <>
