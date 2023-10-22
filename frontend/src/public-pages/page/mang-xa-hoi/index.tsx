@@ -2,7 +2,7 @@ import { PickerOverlay, PickerInline } from 'filestack-react';
 import { uploadMedia } from './upload';
 import UploadImage from '../../../components/upload-image';
 import PostComponent from './component/bai-viet';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import CreatePost from './component/tao-bai-viet';
 import postApi from '../../../api/post';
 import { useEffect, useState } from 'react';
@@ -10,13 +10,16 @@ import { StatusType } from '../../../models/post';
 import userApis from '../../../api/user';
 import LoiMoiKetBan from './component/loi-moi-ket-ban';
 import { socket } from '../../../socket';
+import { useSnackbar } from 'notistack';
+import {NotifycationItem} from '../../../components/NotificationItem';
 
 // Our app
 export default function MangXaHoi() {
   const [listPost, setListPost] = useState<StatusType[]>([]);
   const [isLoad, setisLoad] = useState(true);
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
-    postApi.getPostStartFrom(0, 10).then((data) => {
+    postApi.getPostStartFrom(0, 10).then((data:any) => {
       if (data?.status == 200) {
         console.log(data, 'data');
         const list: StatusType[] = data?.payload?.posts?.map((item: any) => {
@@ -43,27 +46,40 @@ export default function MangXaHoi() {
     });
   }, [isLoad]);
 
-  function sendEmit() {
-    socket.emit('chat-message', {
-      text: 'Chat test 1',
-      user: 'Thuyen',
-    });
-  }
+ 
 
   useEffect(() => {
+    console.log("Mở comment");
+    
     socket.on('LIKE_STATUS_POST', (data) => {
       console.log(data, ' Data chat from server:');
+      enqueueSnackbar(<NotifycationItem 
+        name={data?.userComment?.ten}
+         type="thích"
+         url = {data?.userComment?.anh?.url}
+
+      />, {
+        variant: "info",
+      });
     });
     return () => {
       socket.off('response-message');
     };
   }, []);
 
-  useEffect(() => {
-    console.log("Nghe comment");
-    
+
+
+  useEffect(() => { 
     socket.on('COMMENT_STATUS_POST', (data) => {
       console.log(data, ' Data comment from server:');
+      enqueueSnackbar(<NotifycationItem 
+        name={data?.userComment?.ten}
+         type="bình luận"
+         url = {data?.userComment?.anh?.url}
+
+      />, {
+        variant: "info",
+      });
     });
     return () => {
       socket.off('response-message');
@@ -82,7 +98,6 @@ export default function MangXaHoi() {
           xs={8}
           item
         >
-          <Button onClick={sendEmit}>CLick Send Emit Message</Button>
           <CreatePost />
           {listPost &&
             listPost?.map((status) => {
@@ -102,3 +117,5 @@ export default function MangXaHoi() {
     </>
   );
 }
+
+

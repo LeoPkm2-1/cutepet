@@ -134,7 +134,7 @@ export default function PostComponent(props: Props) {
 
   return (
     <>
-      <Button
+      {/* <Button
         onClick={() => {
           const a = [
             {
@@ -149,7 +149,7 @@ export default function PostComponent(props: Props) {
         }}
       >
         Thêm 1 comment
-      </Button>
+      </Button> */}
       {isRender && (
         <Box
           sx={{

@@ -54,17 +54,44 @@ class LikeCommentEvent {
 	constructor(
 		userLike,
 		commentOwner,
+		commentInfor,
 		likeAt = new Date(),
-		areYouCommenter = false,
-		postContainTheComment = null,
+		areYouCommenOwner = false,
+		dependOn = null,
 		message = ''
 	) {
 		this.userLike = userLike;
 		this.commentOwner = commentOwner;
-		this.message = message;
+		this.commentInfor = commentInfor;
 		this.likeAt = likeAt;
-		this.youAreOwner = areYouCommenter;
-		this.postContainTheComment = postContainTheComment;
+		this.areYouCommenOwner = areYouCommenOwner;
+		this.dependOn = dependOn;
+		this.message = message;
+	}
+}
+
+class ReplyCommentEvent {
+	static getEventName() {
+		return notificationStructure.ReplyCommentStatusPostNotification.getNotificationType()
+		return 'REPLY_COMMENT_IN_STATUS_POST';
+	}
+
+	constructor(
+		userReply,
+		commentOwner,
+		commentInfor,
+		replyAt = new Date(),
+		areYouCommenOwner = false,
+		dependOn = null,
+		message = ''
+	) {
+		this.userReply = userReply;
+		this.commentOwner = commentOwner;
+		this.commentInfor = commentInfor;
+		this.replyAt = replyAt;
+		this.areYouCommenOwner = areYouCommenOwner;
+		this.dependOn = dependOn;
+		this.message = message;
 	}
 }
 
@@ -72,4 +99,5 @@ module.exports = {
 	LikePostEvent,
 	CommentPostEvent,
 	LikeCommentEvent,
+	ReplyCommentEvent,
 };

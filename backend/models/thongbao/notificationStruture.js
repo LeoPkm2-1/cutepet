@@ -93,8 +93,33 @@ class LikeCommentStatusPostNotification extends GeneralNotification {
 	}
 }
 
+class ReplyCommentStatusPostNotification extends GeneralNotification {
+	static NOTIFICATION_TYPE = 'REPLY_COMMENT_IN_STATUS_POST';
+	static getNotificationType() {
+		return ReplyCommentStatusPostNotification.NOTIFICATION_TYPE;
+	}
+	constructor(
+		receiver_id,
+		payload,
+		createAt = new Date(),
+		title = '',
+		message = '',
+		hasRead = false
+	) {
+		super(
+			ReplyCommentStatusPostNotification.NOTIFICATION_TYPE,
+			receiver_id,
+			payload,
+			createAt,
+			title,
+			message,
+			hasRead
+		);
+	}
+}
 module.exports = {
 	LikeStatusPostNotification,
 	CommentStatusPostNotification,
 	LikeCommentStatusPostNotification,
+	ReplyCommentStatusPostNotification,
 };

@@ -23,7 +23,7 @@ useEffect (() => {
     <Provider store={store}>
       <DialogContext>
         <SnackbarProvider
-          
+          autoHideDuration={6000}
           maxSnack={3}
           anchorOrigin={{
             horizontal: 'right',
