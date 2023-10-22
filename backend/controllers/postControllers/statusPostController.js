@@ -199,6 +199,7 @@ const toggleLikeCmtController = async (req, res) => {
 };
 
 const replyCmtController = async (req, res) => {
+  console.log("Chạy hàm reply backend");
   const reply = req.body.reply;
   const cmt_id = req.body.cmt_id;
   const replyBy = req.auth_decoded.ma_nguoi_dung;
