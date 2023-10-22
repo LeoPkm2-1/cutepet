@@ -9,14 +9,17 @@ const server = createServer(app);
 
 const io = new Server(server,{
 	cors:{
-		// origin:"http://localhost:3001",
-		origin:"*",
+		origin:"http://localhost:3001",
 	}
 });
 
 
 
 module.exports = {app,server,io}
+
+
+
+
 
 
 
