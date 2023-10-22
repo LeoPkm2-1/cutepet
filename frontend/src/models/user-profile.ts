@@ -2,24 +2,10 @@ import { UserAdditionalProp } from "./user";
 
 export interface UserProfile {
   id: number;
-  displayName: string;
-  aliasName?: string;
+  name: string;
   email: string;
-  age?: number;
+  age?: string;
   photoURL?: string;
-  locale?: string;
-  timezone?: string;
-  gender?: string;
-  birthday?: string;
-  preferences?: UserPreference;
-  createdAt?: string;
-  vip?: VipObject;
-  orgs?: Array<any>;
-  anonymous: boolean;
-  timezoneName: string;
-  timezoneUTCOffset: number;
-  accountType: number;
-  additionalProp?: UserAdditionalProp;
 }
 
 

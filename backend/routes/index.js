@@ -4,7 +4,8 @@ const userRoutes = require('./userRoutes');
 const petRoutes = require('./petRoutes');
 const giongLoaiRoutes = require('./giongLoaiRoutes');
 const postRoutes = require('./postRoutes');
-const userControler = require('./../controllers/userControllers');
+const friendRoutes = require('./friendRoutes');
+const notificationRoutes = require('./noticationRouters');
 const { requireLogined, nonRequireLogined } = require('../middlewares/auth');
 const { handlLogin } = require('./../controllers/loginController');
 const { handleLogout } = require('./../controllers/logoutController');
@@ -21,5 +22,7 @@ router.get('/logout', requireLogined, handleLogout);
 router.use('/user', userRoutes);
 router.use('/pet', petRoutes);
 router.use('/giongloai', giongLoaiRoutes);
-router.use('/post',requireLogined,postRoutes)
+router.use('/post', requireLogined, postRoutes);
+router.use('/friend', requireLogined, friendRoutes);
+router.use('/notification', requireLogined, notificationRoutes);
 module.exports = router;

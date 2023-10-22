@@ -1,16 +1,16 @@
-const { vertifyJWT } = require("./../utils/loginHelper");
-const userModel = require("./../models/userModel");
-const { Response } = require("./../utils");
+const { vertifyJWT } = require('./../utils/loginHelper');
+const userModel = require('./../models/userModel');
+const { Response } = require('./../utils');
 
-const NOT_HAVING_AUTH_INFOR = "not having authentication infor";
-const NOT_VERTIFIED = "NOT VERTIFIED";
-const TOKEN_NOT_MATCH = "TOKEN NOT MATCH";
-const REDIRECT_TO_LOGIN_MESS = "chuyển hướng tới trang đăng nhập";
-const MUST_LOGOUT = "cần đăng xuất ra trước";
+const NOT_HAVING_AUTH_INFOR = 'not having authentication infor';
+const NOT_VERTIFIED = 'NOT VERTIFIED';
+const TOKEN_NOT_MATCH = 'TOKEN NOT MATCH';
+const REDIRECT_TO_LOGIN_MESS = 'chuyển hướng tới trang đăng nhập';
+const MUST_LOGOUT = 'cần đăng xuất ra trước';
 
 const getToken = (req) => {
-	const authHeader = req.headers["authorization"];
-	const token = authHeader && authHeader.split(" ")[1];
+	const authHeader = req.headers['authorization'];
+	const token = authHeader && authHeader.split(' ')[1];
 	return token;
 };
 
@@ -23,11 +23,14 @@ const requireLogined = async (req, res, next) => {
 			throw new Error(NOT_HAVING_AUTH_INFOR);
 		}
 		[decodeStatus, decoded] = vertifyJWT(jwtToken);
+
 		// console.log("hehehe:", decodeStatus);
 		if (decodeStatus === false) {
 			throw new Error(NOT_VERTIFIED);
 		} else {
 			const user = await userModel.getUserById(decoded.ma_nguoi_dung);
+			// console.log("user requi:");
+			// console.log(user);
 			if (user.payload[0].token !== jwtToken) {
 				[decodeStatus, decoded] = [false, []];
 				throw new Error(TOKEN_NOT_MATCH);
@@ -39,6 +42,7 @@ const requireLogined = async (req, res, next) => {
 			return;
 		}
 	} catch (error) {
+		console.log("err:",error);
 		if (
 			error.message === NOT_HAVING_AUTH_INFOR ||
 			error.message === NOT_VERTIFIED ||
@@ -54,6 +58,7 @@ const requireLogined = async (req, res, next) => {
 const nonRequireLogined = async (req, res, next) => {
 	try {
 		const jwtToken = getToken(req);
+		// console.log("non require:",jwtToken);
 		let [decodeStatus, decoded] = [false, []];
 		if (jwtToken) {
 			[decodeStatus, decoded] = vertifyJWT(jwtToken);
@@ -73,4 +78,24 @@ const nonRequireLogined = async (req, res, next) => {
 	}
 };
 
-module.exports = { requireLogined, nonRequireLogined };
+const socketAuthenMid = (socket, next) => {
+	try {
+		console.log('\n\n\nsocket authen middleware');
+		const jwtToken = socket.handshake.headers.authen_token;
+		let [decodeStatus, decoded] = [false, []];
+		[decodeStatus, decoded] = vertifyJWT(jwtToken);
+		// [decodeStatus, decoded] = [true, { ma_nguoi_dung: 1 }];
+		if (!decodeStatus) {
+			next(new Error(NOT_VERTIFIED));
+			return;
+		}
+		// add user infor to socket
+		socket.auth_decoded={...decoded, authen_token: jwtToken};
+		next();
+		return;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+module.exports = { requireLogined, nonRequireLogined, socketAuthenMid };

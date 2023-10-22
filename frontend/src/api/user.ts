@@ -13,15 +13,10 @@ import {
 } from "./base";
 
 const getUserInfo = (
-  userId: number | string,
-  query?: {
-    includeAdditionalProp?: boolean;
-    fieldNames?: keyof User;
-  }
+  userName: string,
 ) => {
-  return authRequest<User>({
-    url: `/users/${userId}`,
-    query,
+  return authRequest<any>({
+    url: `/user/infor/${userName}`,
     method: "GET",
   });
 };

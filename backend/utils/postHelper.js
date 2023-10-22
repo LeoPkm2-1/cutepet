@@ -1,4 +1,4 @@
-const postModel = require('../models/postModel');
+const postModel = require('../models/BaiViet/StatusPostModel');
 
 async function hasUserLikeTheStatusPost(user_id, post_id) {
 	return await postModel
@@ -10,7 +10,7 @@ async function hasUserLikeTheStatusPost(user_id, post_id) {
 
 async function hasUserLikeTheCmtStatusPost(user_id, cmt_id) {
 	return await postModel
-		.getLikeCmtStatusPostInfor(user_id, cmt_id)
+		.getLikeCmtPostInfor(user_id, cmt_id)
 		.then((data) => {
 			return data.payload.length > 0 ? true : false;
 		});

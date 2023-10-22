@@ -17,17 +17,10 @@ function setAuth(auth: boolean) {
   return typedAction(AuthActionEnum.SET_AUTH, auth);
 }
 
-function logout() {
-  return (dispatch: Dispatch) => {
-    return authApi.logout().finally(() => {
-      storage.setTokens();
-      return dispatch(typedAction(AuthActionEnum.RESET));
-    });
-  };
-}
+
 
 export type UserActionTypes =
   | ReturnType<typeof setAuth>
   | { type: typeof AuthActionEnum.RESET };
 
-export default { setAuth, logout };
+export default { setAuth };
