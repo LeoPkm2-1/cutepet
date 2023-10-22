@@ -177,9 +177,25 @@ const getUserPublicInforByListId = async (listId) => {
     });
 };
 
-const searchUsersByName = async (searchName) => {
-  const sqlStmt = `SELECT ma_nguoi_dung,ten,ngay_sinh,tai_khoan,email,so_dien_thoai,gioi_tinh from NguoiDung where ten REGEXP '^${searchName}[[:alpha:]]*'`;
-  console.log(sqlStmt);
+// const searchUsersByName = async (searchName) => {
+//   const sqlStmt = `SELECT ma_nguoi_dung,ten,ngay_sinh,tai_khoan,email,so_dien_thoai,gioi_tinh from NguoiDung where ten REGEXP '^${searchName}[[:alpha:]]*'`;
+//   console.log(sqlStmt);
+//   return await sqlQuery(sqlStmt, [])
+//     .then((data) => {
+//       return new Response(200, data, "");
+//     })
+//     .catch((err) => {
+//       return new Response(400, [], err.sqlMessage, err.errno, err.code);
+//     });
+// };
+
+const searchUserBySearchKey = async (searchKey, index = 0, range = 20) => {
+  const sqlStmt = `SELECT ma_nguoi_dung,ten,ngay_sinh,tai_khoan,email,so_dien_thoai,gioi_tinh 
+                    FROM NguoiDung 
+                    WHERE 
+                        ten REGEXP '^${searchKey}[[:alpha:]]*' OR
+                        tai_khoan REGEXP '${searchKey}[[:alpha:]]*'
+                    LIMIT ${index}, ${range}`;
   return await sqlQuery(sqlStmt, [])
     .then((data) => {
       return new Response(200, data, "");
@@ -188,7 +204,6 @@ const searchUsersByName = async (searchName) => {
       return new Response(400, [], err.sqlMessage, err.errno, err.code);
     });
 };
-
 module.exports = {
   getUserByUsername,
   getUserByEmail,
@@ -206,5 +221,6 @@ module.exports = {
   getUsernameByUserId,
   getUsersByListId,
   getUserPublicInforByListId,
-  searchUsersByName,
+  searchUserBySearchKey,
+  // searchUsersByName,
 };

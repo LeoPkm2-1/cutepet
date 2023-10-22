@@ -19,22 +19,38 @@ const userPublicInforByUserName = async (req, res) => {
 };
 
 // searchPeopleByNameController
-const searchPeopleByNameController = async (req, res) => {
-  let searchName = req.body.name;
-  console.log(searchName);
-  if (typeof searchName != "string" || searchName.trim() == "") {
+const searchPeopleController = async (req, res) => {
+  let searchKey = req.body.searchKey;
+  let index = req.body.index;
+  let num = req.body.num;
+  // console.log(searchKey);
+  if (typeof searchKey != "string" || searchKey.trim() == "") {
     res
       .status(200)
       .json(new Response(200, [], "vui lòng nhập tên người dùng hợp lệ"));
     return;
   }
-  searchName = searchName.trim();
-  const lisUser = await userModel.searchUsersByName(searchName);
-  res.json(lisUser)
+  searchKey = searchKey.trim();
+  const lisUser = await userModel
+    .searchUserBySearchKey(searchKey, index, num)
+    .then((data) => data.payload);
+  if (lisUser.length <= 0) {
+    res.status(200).json(new Response(200, lisUser, ""));
+    return;
+  }
+  const listIds = userHelper.extractListIdFromListUser(
+    lisUser,
+    "ma_nguoi_dung"
+  );
+  const listUserPubInfor = await userHelper.getUserPublicInforByListIds(
+    listIds,
+    parseInt(req.auth_decoded.ma_nguoi_dung)
+  );
+  res.status(200).json(new Response(200, listUserPubInfor, ""));
 };
 
 module.exports = {
   getUserByUserName,
   userPublicInforByUserName,
-  searchPeopleByNameController,
+  searchPeopleController,
 };
