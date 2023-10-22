@@ -1,0 +1,1636 @@
+{
+	"info": {
+		"_postman_id": "029213a7-54f0-45d7-b267-01fa3d46f755",
+		"name": "cutepet_backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21170529"
+	},
+	"item": [
+		{
+			"name": "0_login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ten",
+							"value": "nam1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "tai_khoan",
+							"value": "thanh@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "mat_khau",
+							"value": "123",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "nam1@gmail.com",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1_register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ten",
+							"value": "phatmai",
+							"type": "text"
+						},
+						{
+							"key": "tai_khoan",
+							"value": "phatmai",
+							"type": "text"
+						},
+						{
+							"key": "mat_khau",
+							"value": "123",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "thinhphatmai@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2_AddFriendByUserId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "requestID",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/friend/requestAddFriendById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"requestAddFriendById"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3_AddFriendByUserName",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "requestUserName",
+							"value": "nam",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/friend/requestAddFriendByUserName",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"requestAddFriendByUserName"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4_responeAddFriendRequestById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "senderID",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "acceptOrReject",
+							"value": "accept",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/friend/responeAddFriendRequestById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"responeAddFriendRequestById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5_unfriendById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "friend_id",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/friend/unfriendById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"unfriendById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6_getRequestAddFriendList",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/friend/getRequestAddFriendList",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"getRequestAddFriendList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7_addStatusPost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"xin chào tui là dũng nha\",\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"google.com\",\"youtube.com\",\"amazon.com\"]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/addPost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"addPost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8_likeStatusPost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "652cdfa4d06a5e587a2541eb",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/likePost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"likePost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9_addCommentStatusPost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "652cdfa4d06a5e587a2541eb",
+							"type": "text"
+						},
+						{
+							"key": "comment",
+							"value": "tôi là DUNG comment",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/addComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"addComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10_updateComment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cmt_id",
+							"value": "651ed33d06e469bf6a89ca2b",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "hihi",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/updateComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"updateComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "11_likeCommentStatusPost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cmt_id",
+							"value": "6530136a3867474859cd5e80",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/likeComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"likeComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12_replyCommentStatusPost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cmt_id",
+							"value": "6530136a3867474859cd5e80",
+							"type": "text"
+						},
+						{
+							"key": "reply",
+							"value": "10 điểm",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/replyComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"replyComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "13_updateReply",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "reply_id",
+							"value": "303132333435363738393230",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "hehse",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/updateReply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"updateReply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "14_deleteReply",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "reply_id",
+							"value": "303132333435363738393234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/deleteReply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"deleteReply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "15_deleteComment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cmt_id",
+							"value": "303132333435363738393134",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/deleteComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"deleteComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "16_deletePost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "313233343536373839303132",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/deletePost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"deletePost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "17_getFriendList",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/friend/getFriendList",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"getFriendList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "18_getNotificationStartFrom",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "index",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/notification/getNotificationStartFrom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"notification",
+						"getNotificationStartFrom"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "19_getNotificationStartFrom",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "before",
+							"value": "2023-10-19-07:30",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "100",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/notification/getNotificationBefore",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"notification",
+						"getNotificationBefore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "20_notification_markAsRead",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "notif_id",
+							"value": "652cdfd7d06a5e587a2541ef",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/notification/markAsRead",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"notification",
+						"markAsRead"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "21_notification_markAllAsRead",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/notification/markAllAsRead",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"notification",
+						"markAllAsRead"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updatePost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "313233343536373839303132",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/updatePost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"updatePost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "capnhatthongtinthucung",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjoxLCJ0ZW4iOiJOYW0iLCJuZ2F5X3NpbmgiOiIxOTkxLTA5LTI4VDE3OjAwOjAwLjAwMFoiLCJ0YWlfa2hvYW4iOiJuYW0iLCJlbWFpbCI6Im5hbUBnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY3OCIsImdpb2lfdGluaCI6MSwiaWF0IjoxNjkxOTgwODMzLCJleHAiOjE2OTE5ODM4MzN9.0lpa7HU0dz6EMoAJCnEkzvfvybDKFw4xL-0FMa4qYIOv_xOi9MPXzyNB6lQDykVwn9Hx0ZkSKGq0s42mXD1cgw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ten_thu_cung",
+							"value": "tony-2",
+							"type": "text"
+						},
+						{
+							"key": "ngay_sinh",
+							"value": "2019-10-14",
+							"type": "text"
+						},
+						{
+							"key": "gioi_tinh",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "ghi_chu",
+							"value": "mập béo lười",
+							"type": "text"
+						},
+						{
+							"key": "ma_giong",
+							"value": "202",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/pet/capnhatthongtin/18",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"pet",
+						"capnhatthongtin",
+						"18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user_confirmRegister",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/user/confirmRegister?active_code={{account_active_code}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"confirmRegister"
+					],
+					"query": [
+						{
+							"key": "active_code",
+							"value": "{{account_active_code}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user-infor",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/user/infor/ty",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"infor",
+						"ty"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pet-infor",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/pet/infor/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"pet",
+						"infor",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addpet",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ten_thu_cung",
+							"value": "testpet_2",
+							"type": "text"
+						},
+						{
+							"key": "ngay_sinh",
+							"value": "2019-10-1",
+							"type": "text"
+						},
+						{
+							"key": "gioi_tinh",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "ghi_chu",
+							"value": "con chó hay ngủ lười",
+							"type": "text"
+						},
+						{
+							"key": "ma_loai",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "ma_giong",
+							"value": "104",
+							"type": "text"
+						},
+						{
+							"key": "url_anh",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "chieu_cao",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "can_nang",
+							"value": "12",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/pet/addpet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"pet",
+						"addpet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPostBypost_id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "313233343536373839303132",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getPost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getPost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getallowns",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjoxLCJ0ZW4iOiJOYW0iLCJuZ2F5X3NpbmgiOiIxOTkxLTA5LTI4VDE3OjAwOjAwLjAwMFoiLCJ0YWlfa2hvYW4iOiJuYW0iLCJlbWFpbCI6Im5hbUBnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY3OCIsImdpb2lfdGluaCI6MSwiaWF0IjoxNjkyMDAwMzYwLCJleHAiOjE2OTIwMDMzNjB9.9u7hGNZJrG2U7PgfaK_6WnhE4IiZIeaEaayCb1tS4_ukx1smGeqyK59EEyuvszZETvQA1lGeTQaY1f6beDQ_XA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "maloai",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/pet/getallowns",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"pet",
+						"getallowns"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "danhsachgiong",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ma_loai",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/giongloai/danhsachgiong/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"giongloai",
+						"danhsachgiong",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllComment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "313233343536373839303132",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getAllComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getAllComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCommentStartFrom",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "313233343536373839303132",
+							"type": "text"
+						},
+						{
+							"key": "index",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getCommentStartFrom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getCommentStartFrom"
+					],
+					"query": [
+						{
+							"key": "num",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllReplyComment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cmt_id",
+							"value": "303132333435363738393134",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getAllReply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getAllReply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getReplyStartFrom",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cmt_id",
+							"value": "303132333435363738393135",
+							"type": "text"
+						},
+						{
+							"key": "index",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getReplyStartFrom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getReplyStartFrom"
+					],
+					"query": [
+						{
+							"key": "cmt_id",
+							"value": "6501dd56ae68d86a2849b3ec",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "3",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "3",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPostStartFrom",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "index",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getPostStartFrom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getPostStartFrom"
+					],
+					"query": [
+						{
+							"key": "num",
+							"value": "2",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

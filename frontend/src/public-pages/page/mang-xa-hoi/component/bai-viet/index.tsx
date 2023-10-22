@@ -24,6 +24,7 @@ import moment from 'moment';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { timeAgo } from '../../../../../helper/post';
 import { AirlineSeatReclineExtraOutlined } from '@mui/icons-material';
+import { socket } from '../../../../../socket';
 type Props = {
   idStatus?: string;
   status?: StatusType;
@@ -57,7 +58,11 @@ export default function PostComponent(props: Props) {
     // get comment
   }, [props?.idStatus]);
 
+
+
   useEffect(() => {
+    console.log("reload comment");
+    
     if (props.status && props.status?.id) {
       postApi.getAllComment(props.status?.id).then((data) => {
         if (data?.status == 200) {
@@ -129,7 +134,7 @@ export default function PostComponent(props: Props) {
 
   return (
     <>
-      <Button
+      {/* <Button
         onClick={() => {
           const a = [
             {
@@ -144,7 +149,7 @@ export default function PostComponent(props: Props) {
         }}
       >
         Thêm 1 comment
-      </Button>
+      </Button> */}
       {isRender && (
         <Box
           sx={{

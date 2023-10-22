@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "652cdfa4d06a5e587a2541eb"
+  },
+  "text": "xin chào tui là dũng nha",
+  "postType": "status",
+  "media": {
+    "type": "images",
+    "data": [
+      "google.com",
+      "youtube.com",
+      "amazon.com"
+    ]
+  },
+  "createAt": {
+    "$date": "2023-10-16T07:00:52.048Z"
+  },
+  "numOfLike": 0,
+  "numOfComment": 2,
+  "modifiedAt": null,
+  "owner_id": 2
+}]

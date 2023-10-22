@@ -285,7 +285,7 @@ const deleteAllReplyOfComment = async (cmtId) => {
 			return new Response(400, err, '', 300, 300);
 		});
 };
-const deleteCommentByCmtId = async(cmtId)=>{
+const deleteCommentByCmtId = async (cmtId) => {
 	async function executor(collection) {
 		return await collection.deleteOne({ _id: new ObjectId(`${cmtId}`) });
 	}
@@ -296,73 +296,86 @@ const deleteCommentByCmtId = async(cmtId)=>{
 			throw new Error(err);
 			return new Response(400, err, '', 300, 300);
 		});
-}
+};
 
-const deleteAllReplyCmtOfPost = async(postId)=>{
-	async function executor(collection){
-		return collection.deleteMany({postId:`${postId}`})
+const deleteAllReplyCmtOfPost = async (postId) => {
+	async function executor(collection) {
+		return collection.deleteMany({ postId: `${postId}` });
 	}
 	return await nonSQLQuery(executor, 'RelyBinhLuanBaiVietTrangThai')
-	.then((data) => new Response(200, data, ''))
-	.catch((err) => {
-		console.log(err);
-		throw new Error(err);
-		return new Response(400, err, '', 300, 300);
-	});
-}
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err);
+			throw new Error(err);
+			return new Response(400, err, '', 300, 300);
+		});
+};
 
-const deleteAllLikeCmtsOfPost = async(postId)=>{
+const deleteAllLikeCmtsOfPost = async (postId) => {
 	async function executor(collection) {
-		return collection.deleteMany({postId:`${postId}`})
+		return collection.deleteMany({ postId: `${postId}` });
 	}
 	return await nonSQLQuery(executor, 'LikeBinhLuanBaiVietTrangThai')
-	.then((data) => new Response(200, data, ''))
-	.catch((err) => {
-		console.log(err);
-		throw new Error(err);
-		return new Response(400, err, '', 300, 300);
-	});
-}
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err);
+			throw new Error(err);
+			return new Response(400, err, '', 300, 300);
+		});
+};
 
-const deleteAllCmtsOfPost = async(postId)=>{
+const deleteAllCmtsOfPost = async (postId) => {
 	async function executor(collection) {
-		return collection.deleteMany({postId:`${postId}`})
+		return collection.deleteMany({ postId: `${postId}` });
 	}
 	return await nonSQLQuery(executor, 'BinhLuanBaiVietTrangThai')
-	.then((data) => new Response(200, data, ''))
-	.catch((err) => {
-		console.log(err);
-		throw new Error(err);
-		return new Response(400, err, '', 300, 300);
-	});
-}
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err);
+			throw new Error(err);
+			return new Response(400, err, '', 300, 300);
+		});
+};
 
-const deleteAllLikesOfPost = async(postId)=>{
+const deleteAllLikesOfPost = async (postId) => {
 	async function executor(collection) {
-		return collection.deleteMany({postId:`${postId}`})
+		return collection.deleteMany({ postId: `${postId}` });
 	}
 	return await nonSQLQuery(executor, 'LikeBaiVietTrangThai')
-	.then((data) => new Response(200, data, ''))
-	.catch((err) => {
-		console.log(err);
-		throw new Error(err);
-		return new Response(400, err, '', 300, 300);
-	});
-}
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err);
+			throw new Error(err);
+			return new Response(400, err, '', 300, 300);
+		});
+};
 
-const deletePostById = async (postId)=>{
+const deletePostById = async (postId) => {
 	async function executor(collection) {
-		return collection.deleteOne({_id:new ObjectId(postId)})
+		return collection.deleteOne({ _id: new ObjectId(postId) });
 	}
 	return await nonSQLQuery(executor, 'BaiVietTrangThai')
-	.then((data) => new Response(200, data, ''))
-	.catch((err) => {
-		console.log(err);
-		throw new Error(err);
-		return new Response(400, err, '', 300, 300);
-	});
-}
+		.then((data) => new Response(200, data, ''))
+		.catch((err) => {
+			console.log(err);
+			throw new Error(err);
+			return new Response(400, err, '', 300, 300);
+		});
+};
 
+const getOnwerIdOfPost = async (postId) => {
+	const postInfor = await getPostById(postId).then((data) => data.payload[0]);
+	return typeof postInfor === 'undefined' ? null : parseInt(postInfor.owner_id);
+};
+
+const getOnwerIdOfComment = async (comment_id) => {
+	const commentInfor = await getCommentPostById(comment_id).then(
+		(data) => data.payload[0]
+	);
+	return typeof commentInfor === 'undefined'
+		? null
+		: parseInt(commentInfor.commentBy);
+};
 
 
 module.exports = {
@@ -396,5 +409,7 @@ module.exports = {
 	deleteAllLikeCmtsOfPost,
 	deleteAllCmtsOfPost,
 	deleteAllLikesOfPost,
-	deletePostById
+	deletePostById,
+	getOnwerIdOfPost,
+	getOnwerIdOfComment,
 };
