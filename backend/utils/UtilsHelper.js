@@ -1,22 +1,51 @@
 const filter_keys_in_Obj = (obj, keys) => {
-	if (Object.keys(obj).length === 0) return {};
-	if (keys.length === 0) return obj;
-	const exist_keys = keys.filter((key) => obj.hasOwnProperty(key));
-	result = {};
-	exist_keys.forEach((key) => (result[key] = obj[key]));
-	return result;
+  if (Object.keys(obj).length === 0) return {};
+  if (keys.length === 0) return obj;
+  const exist_keys = keys.filter((key) => obj.hasOwnProperty(key));
+  result = {};
+  exist_keys.forEach((key) => (result[key] = obj[key]));
+  return result;
 };
 
 const filter_keys_in_list_Objs = (arr, keys) => {
-	if (arr.length === 0) return [];
-	return arr.map((obj) => filter_keys_in_Obj(obj, keys));
+  if (arr.length === 0) return [];
+  return arr.map((obj) => filter_keys_in_Obj(obj, keys));
 };
+
+const extracValuesOfFieldFromListObjs = (arr, field) => {
+  if (arr.length === 0) return [];
+  return arr.map((obj) => obj[field]);
+};
+
+// (async function () {
+// 	const data = extracValuesOfFieldFromListObjs([
+// 	  { key: 1 },
+// 	  { key: 2 },
+// 	],'key');
+// 	console.log(data);
+//   })();
+
+// ( ()=> {
+// 	const arr = [
+// 		{name: 'a', age: 1,class:'a-1'},
+// 		{name: 'b', age: 2,class:'b-2'},
+// 		{name: 'c', age: 3,class:'c-3'},
+// 		{name: 'd', age: 3,class:'d-3'},
+// 	];
+// 	const data = filter_keys_in_list_Objs(arr,['class','age']);
+// 	console.log(data);
+// })()
 
 const isDateValid = (date) => {
-	return date.toString() !== 'Invalid Date';
+  return date.toString() !== "Invalid Date";
 };
 
-module.exports = { filter_keys_in_Obj, filter_keys_in_list_Objs, isDateValid };
+module.exports = {
+  filter_keys_in_Obj,
+  filter_keys_in_list_Objs,
+  isDateValid,
+  extracValuesOfFieldFromListObjs,
+};
 
 // let obj = {
 // 	_id: '652b43613183518b824f22b0',
