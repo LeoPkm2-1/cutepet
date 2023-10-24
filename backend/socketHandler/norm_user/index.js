@@ -10,8 +10,11 @@ function normNameSpaceSocketHander() {
 
 	// listen on connection
 	normUserNamespace.on('connection', (socket) => {
-		console.log(`norm user connected id: ${socket.id}`);
-		console.log(socket.auth_decoded);
+		// console.log(`norm user connected id: ${socket.id}`);
+		// console.log(socket.auth_decoded);
+
+		// handle when user connect
+		
 
 		// join private room
 		const private_room_name = socketHelper.getPrivateRoomNameOfUser(
@@ -19,9 +22,11 @@ function normNameSpaceSocketHander() {
 		);
 		socket.join(private_room_name);
 
+
 		// listen on disconnect
 		socket.on('disconnect', () => {
 			console.log(`norm_user out id: ${socket.id}`);
+			// handle when user out socket===================================================================.
 		});
 
 		// ============================== test event ==============================
