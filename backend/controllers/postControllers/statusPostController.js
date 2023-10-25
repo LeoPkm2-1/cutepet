@@ -5,9 +5,7 @@ const { Response } = require("../../utils/index");
 const statusPostHelper = require("../../utils/BaiViet/statusPostHelper");
 const followModel = require("../../models/theodoi/followModel");
 const followhelper = require("../../utils/theodoiHelper");
-const {
-  StatusPostEventManagement,
-} = require("./../../socketHandler/norm_user/statusPostEvent");
+
 const {
   notifyLikePost,
   notifyCommentPost,
