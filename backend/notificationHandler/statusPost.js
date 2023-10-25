@@ -179,7 +179,6 @@ const notifyLikePost = async (
       notiInforForOthers
     );
   }
-
 };
 
 const notifyCommentPost = async (
@@ -266,8 +265,6 @@ const notifyCommentPost = async (
       notiInforForOthers
     );
   }
-
-
 };
 
 async function prepareUserBeforeHandleNotiForCmtStatusPost(
@@ -283,8 +280,6 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
     comment._id = comment._id.toString();
     return comment;
   });
-  // console.log('check');
-  // console.log(commentInfor);
 
   // get commneter_id if not provided
   if (typeof commenter_id == "undefined") commenter_id = commentInfor.commentBy;
@@ -328,9 +323,6 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
       ])
     );
 
-  console.log("\n\ncommentOwnerInfor");
-  console.log(commentOwnerInfor);
-
   // sender infor
   const senderInfor = await userHelper
     .getUserPublicInforByUserId(sender_id)
@@ -342,9 +334,6 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
         "anh",
       ])
     );
-
-  console.log("\n\nsenderInfor");
-  console.log(senderInfor);
 
   // post owner infor
   const postOwnerInfor = await userHelper
@@ -358,9 +347,6 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
       ])
     );
 
-  console.log("\n\npostOwnerInfor");
-  console.log(postOwnerInfor);
-
   const followerNotSenderCommenterPostOwner = allFollowerInforList.filter(
     (user) =>
       user.ma_nguoi_dung != commentOwnerInfor.ma_nguoi_dung &&
@@ -368,16 +354,11 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
       user.ma_nguoi_dung != sender_id
   );
 
-  console.log("\n\nfollowerNotSenderCommenterPostOwner");
-  console.log(followerNotSenderCommenterPostOwner);
-
   const is_commenter_followingPost =
     await theodoiHelper.hasUserFollowedStatusPost(
       commentInfor.postId,
       commenter_id
     );
-
-  console.log("\n\nis_commenter_followingPost", is_commenter_followingPost);
 
   const is_postOwner_followingPost =
     await theodoiHelper.hasUserFollowedStatusPost(
@@ -385,14 +366,10 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
       postOwnerInfor.ma_nguoi_dung
     );
 
-  console.log("\n\nis_postOwner_followingPost", is_postOwner_followingPost);
-
   const is_Sender_followingPost = await theodoiHelper.hasUserFollowedStatusPost(
     commentInfor.postId,
     sender_id
   );
-
-  console.log("\n\nis_Sender_followingPost", is_Sender_followingPost);
 
   return {
     allFollowerInforList,
@@ -540,7 +517,6 @@ const notifyLikeComment = async (
     );
   }
   // return;
-
 };
 
 const notifyReplyComment = async (
@@ -673,8 +649,7 @@ const notifyReplyComment = async (
       (acc, room_name_of_user) => acc.to(room_name_of_user),
       normUserNamespace
     );
-    console.log("xin chao");
-    console.log(followerNotSenderCommenterPostOwner);
+
     socketOfOthers.emit(
       statusPostEventStruture.ReplyCommentEvent.getEventName(),
       notiInforForOthers
