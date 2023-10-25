@@ -8,7 +8,7 @@ const socketHelper = require("./../utils/socketHelper");
 const {
   genJWT,
   deleteProperties,
-  storeToken,
+  // storeToken,
 } = require("./../utils/loginHelper");
 
 const handlLogin = async (req, res) => {
@@ -27,33 +27,34 @@ const handlLogin = async (req, res) => {
     let user = deleteProperties(userInfor, "mat_khau", "is_admin", "token");
     const lastTimeJWT = parseInt(readENV("JWT_LAST_TIME"));
     const token = genJWT(user, lastTimeJWT);
-    const storeStatus = await storeToken(token, user.ma_nguoi_dung);
-    if (storeStatus.status === 200) {
-      const userPublicInfor = await userHelper.getUserPublicInforByUserId(
-        user.ma_nguoi_dung
+    // don't need to store jwt tokkent to db
+    // const storeStatus = await storeToken(token, user.ma_nguoi_dung);
+    // if (storeStatus.status === 200) {
+    const userPublicInfor = await userHelper.getUserPublicInforByUserId(
+      user.ma_nguoi_dung
+    );
+    res
+      .status(200)
+      .send(
+        new Response(
+          200,
+          [{ ...userPublicInfor, token }],
+          "Đăng nhập thành công"
+        )
       );
-      res
-        .status(200)
-        .send(
-          new Response(
-            200,
-            [{ ...userPublicInfor, token }],
-            "Đăng nhập thành công"
-          )
-        );
-    } else {
-      res
-        .status(400)
-        .json(
-          new Response(
-            400,
-            [],
-            storeStatus.message,
-            storeStatus.errno,
-            storeStatus.errcode
-          )
-        );
-    }
+    // } else {
+    //   res
+    //     .status(400)
+    //     .json(
+    //       new Response(
+    //         400,
+    //         [],
+    //         storeStatus.message,
+    //         storeStatus.errno,
+    //         storeStatus.errcode
+    //       )
+    //     );
+    // }
   } catch (error) {
     switch (error.message) {
       case INFOR_NOT_MATCH_MES:
@@ -107,7 +108,7 @@ const handleOnlineStatusOfUser = async (user_id, socketToSend) => {
   const friendOnlineIdList = await userOnlineModel
     .getOnlineUsersByListIds(friendListIds)
     .then((data) => data.payload.map((userOnline) => userOnline.userId));
-  
+
   // send notification to friends who are online at current
   const socketNameOfFriends = friendOnlineIdList.map((id) =>
     socketHelper.getPrivateRoomNameOfUser(id)
