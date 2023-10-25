@@ -2,9 +2,8 @@ const { socketAuthenMid } = require("../../middlewares/auth");
 const socketHelper = require("./../../utils/socketHelper");
 const { io } = require("../../serverSetup");
 const normUserNamespace = io.of("/norm_user");
-const {
-  handleOnlineStatusOfUser,
-} = require("./../../controllers/loginController");
+const { markUserOnline } = require("./../../controllers/loginController");
+const { markUserOffline } = require("./../../controllers/logoutController");
 
 function normNameSpaceSocketHander() {
   // authentication
@@ -12,7 +11,6 @@ function normNameSpaceSocketHander() {
 
   // listen on connection
   normUserNamespace.on("connection", (socket) => {
-
     // join private room
     const private_room_name = socketHelper.getPrivateRoomNameOfUser(
       socket.auth_decoded.ma_nguoi_dung
@@ -20,15 +18,13 @@ function normNameSpaceSocketHander() {
     socket.join(private_room_name);
 
     // handle when user connect
-    handleOnlineStatusOfUser(
-      socket.auth_decoded.ma_nguoi_dung,
-      normUserNamespace
-    );
+    markUserOnline(socket.auth_decoded.ma_nguoi_dung, normUserNamespace);
 
     // listen on disconnect
     socket.on("disconnect", () => {
-      console.log(`norm_user out id: ${socket.id}`);
       // handle when user out socket
+      markUserOffline(socket.auth_decoded.ma_nguoi_dung, normUserNamespace);
+      console.log(`norm_user out id: ${socket.id}`);
     });
 
     // ============================== test event ==============================

@@ -93,7 +93,7 @@ const isEmailForm = (username) => {
   return username.includes("@");
 };
 
-const handleOnlineStatusOfUser = async (user_id, socketToSend) => {
+const markUserOnline = async (user_id, socketToSend) => {
   // update the number of devices that user online
   await userOnlineModel.setOnlineStatusForUser(user_id, true);
   const onlineStatus = await userOnlineModel
@@ -120,4 +120,4 @@ const handleOnlineStatusOfUser = async (user_id, socketToSend) => {
   socketOfFriends.emit("USER_IS_ONLINE", { user_id: user_id });
 };
 
-module.exports = { handlLogin, handleOnlineStatusOfUser };
+module.exports = { handlLogin, markUserOnline };
