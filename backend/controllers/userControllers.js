@@ -42,10 +42,23 @@ const searchPeopleController = async (req, res) => {
     lisUser,
     "ma_nguoi_dung"
   );
-  const listUserPubInfor = await userHelper.getUserPublicInforByListIds(
-    listIds,
-    parseInt(req.auth_decoded.ma_nguoi_dung)
-  );
+  const listUserPubInfor = await userHelper
+    .getUserPublicInforByListIds(
+      listIds,
+      parseInt(req.auth_decoded.ma_nguoi_dung)
+    )
+    .then((data) =>
+      data.map((user) => {
+        const newUser = {
+          ...user,
+          isFriend: user.checkFriend.isFriend,
+        };
+        delete newUser.checkFriend;
+        return newUser;
+      })
+    );
+  // console.log('\n\n\nlistUserPubInfor');
+  // console.log(listUserPubInfor);
   res.status(200).json(new Response(200, listUserPubInfor, ""));
 };
 
