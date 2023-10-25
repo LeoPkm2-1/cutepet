@@ -1,8 +1,6 @@
 # LISTEN FOR EVENT
 
-## STATUS POST
-
-#### Like status Post:
+## 1. Like status Post:
 
 - Listen on: **LIKE_STATUS_POST** event
 - data struture:
@@ -42,9 +40,8 @@
 - **userLike**: describe **information about user** who has **liked status post**
 - **postOwner**: describe **information about user** who is **owner of status post**
 - **youAreOwner**: is post **owned by you**
--
 
-#### Comment status Post:
+## 2. Comment status Post:
 
 - Listen on: **COMMENT_STATUS_POST** event
 - data struture:
@@ -85,7 +82,7 @@
 - **postOwner** : describe **information about user** who is **owner of status post**
 - **areYouOwner** : is post **owned by you**
 
-#### Like comment in status Post
+## 3. Like comment in status Post
 
 - Listen on: **LIKE_COMMENT_IN_STATUS_POST** event
 - data structure
@@ -181,11 +178,7 @@
 - **dependOn.postOwner**: post owner information
 - **dependOn.areYouPostOwner**: is post **owned by you**
 
-
-#### Reply in comment
-
-
-
+## 4. Reply in comment
 
 - Listen on: **REPLY_COMMENT_IN_STATUS_POST** event
 - data struture:
@@ -279,6 +272,28 @@
 - **dependOn.postOwner**: post owner information
 - **dependOn.areYouPostOwner**: is post **owned by you**
 
+## 5. Login notification
 
+- Listen on: **USER_IS_ONLINE** event
+- data struture:
 
+```javascript
+{
+    "user_id": 2
+}
+```
 
+- **user_id**: id of user who has just logged in
+
+## 6. Logout notification
+
+- Listen on: **USER_IS_OFFLINE** event
+- data struture:
+
+```javascript
+{
+    "user_id": 2
+}
+```
+
+- **user_id**: id of user who has just logged out
