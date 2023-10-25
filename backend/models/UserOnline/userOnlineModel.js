@@ -41,11 +41,6 @@ const getOnlineStatusOfUser = async (user_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-// (async function () {
-//   const data = await getOnlineStatusOfUser(2);
-//   console.log(data);
-// })()
-
 const updateOnlyStatus = async (user_id, isOnline) => {
   async function executor(collection) {
     return await collection.updateOne(
@@ -75,11 +70,6 @@ const updateOnlyNumOfDevice = async (user_id, numOfDevices) => {
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
-
-// (async function () {
-//   const data = await updateOnlyNumOfDevice(8, 10);
-//   console.log(data);
-// })()
 
 const updateOnlineStatusRecord = async (
   user_id,
@@ -118,11 +108,6 @@ const updateOnlineStatusRecord = async (
   }
 };
 
-// (async function () {
-//   const data = await updateOnlineStatusRecord(8, false, 20, new Date());
-//   console.log(data);
-// })();
-
 const isUserOnline = async (user_id) => {
   async function executor(collection) {
     return await collection.findOne({ userId: user_id });
@@ -132,11 +117,6 @@ const isUserOnline = async (user_id) => {
     return data.isOnline;
   });
 };
-
-// (async function () {
-//   const data = await isUserOnline(5);
-//   console.log(data);
-// })();
 
 const setOnlineStatusForUser = async (user_id, setStatusOnline = true) => {
   try {
@@ -179,9 +159,29 @@ const setOnlineStatusForUser = async (user_id, setStatusOnline = true) => {
   }
 };
 
-(async function () {
-  await setOnlineStatusForUser(2, false);
-})();
+const getOnlineUsersByListIds = async (userListIds) => {
+  userListIds = userListIds.map((id) => parseInt(id));
+  async function executor(collection) {
+    return await collection
+      .find({
+        $and: [
+          {
+            userId: {
+              $in: userListIds,
+            },
+          },
+          {
+            isOnline: true,
+          },
+        ],
+      })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "NguoiDungDangOnline")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 
 module.exports = {
   isUserRecordedInDB,
@@ -192,4 +192,5 @@ module.exports = {
   updateOnlyNumOfDevice,
   updateOnlineStatusRecord,
   setOnlineStatusForUser,
+  getOnlineUsersByListIds,
 };
