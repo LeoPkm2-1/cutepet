@@ -466,6 +466,7 @@ nếu bình luận không tồn tại:
    Post: 'http://localhost:3000/post/statusPost/getReplyStartFrom'
 
 2. cấu trúc:
+
 ```javascript
 {
     cmt_id:mã của bình luận,
@@ -473,7 +474,6 @@ nếu bình luận không tồn tại:
     num:số lượng phản hồi lấy ra,
 }
 ```
-
 
 3. trả về:
 
@@ -549,6 +549,7 @@ nếu bình luận không tồn tại:
    POST: 'http://localhost:3000/post/statusPost/getPost
 
 2. cấu trúc:
+
 ```javascript
     {
         post_id: mã của bài viết
@@ -601,22 +602,20 @@ nếu bình luận không tồn tại:
 }
 ```
 
-
 ## phân trang cho bài viết
 
 1. Phương thức:
-   
+
    POST: http://localhost:3000/post/statusPost/getPostStartFrom
 
-   
 2. cấu trúc:
+
 ```javascript
 {
     index: lấy từ bài viết thứ mấy (thứ tự bắt đầu từ: 0,1,......),
     num: số lượng bài viết cần lấy ra, nếu là undefined thì lấy tất cả các bài viết
 }
 ```
-
 
 3. trả về:
 
@@ -664,6 +663,107 @@ nếu bình luận không tồn tại:
         "numOfRemain": 0
     },
     "message": "lấy dự liệu thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## kiếm tra xem người dùng đã follow bài biết hay chưa
+(**postman số 23**)
+
+1. Phương thức:
+
+   POST: 'http://localhost:3000/post/statusPost/isUserFollowedPost'
+
+2. cấu trúc:
+   ```javascript
+    {
+        post_id: mã của bài viết muốn kiểm tra xem follow hay chưa
+    }
+   ```
+3. trả về:
+   - khi đã theo doi bài viết
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "post_id": "65333ff5f0efa9d27e7bf163",
+        "isFollowed": true
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi chưa theo dõi bài viết
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "post_id": "65333ff5f0efa9d27e7bf163",
+        "isFollowed": false
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## đăng ký theo dõi bài viết
+(**postman số 24**)
+1. Phương thức:
+
+   POST: 'http://localhost:3000/post/statusPost/followPost'
+
+2. cấu trúc:
+```javascript
+{
+    post_id: mã của bài viết muốn đăng ký theo dõi
+}
+```
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "post_id": "65333ff5f0efa9d27e7bf163",
+        "isFollowed": true
+    },
+    "message": "theo dõi thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+
+## hủy theo dõi bài viết
+(**postman số 23**)
+
+1. Phương thức:
+   
+   'http://localhost:3000/post/statusPost/isUserFollowedPost'
+
+2. cấu trúc:
+```javascript
+{
+    post_id: mã của bài viết muốn hủy theo dõi
+}
+```
+
+3. trả về:
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "post_id": "65333ff5f0efa9d27e7bf163",
+        "isFollowed": false
+    },
+    "message": "",
     "errno": null,
     "errcode": null
 }

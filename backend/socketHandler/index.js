@@ -20,6 +20,7 @@ function createSocketHandlerOfAllNameSpace() {
 		});
 
 		socket.on('disconnect', () => {
+			console.log('\n\n\n\nthoát ra nè byebye');
 			console.log(`user out id: ${socket.id}`);
 		});
 

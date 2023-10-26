@@ -127,4 +127,23 @@ router.post(
 	statusPostController.updatePostController
 )
 
+router.post(
+	'/statusPost/isUserFollowedPost',
+	[statusPostMiddle.checkPostExistMid],
+
+	statusPostController.isUserFollowedPostController
+)
+
+router.post(
+	'/statusPost/unfollowPost',
+	[statusPostMiddle.checkPostExistMid],
+	statusPostController.unfollowPostController
+)
+
+router.post(
+	'/statusPost/followPost',
+	[statusPostMiddle.checkPostExistMid],
+	statusPostController.followPostController
+)
+
 module.exports = router;
