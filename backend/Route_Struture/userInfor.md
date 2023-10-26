@@ -2,6 +2,9 @@
 
 ## Search User
 
+(*postman số* **25**)
+
+
 1. phương thức:
 
    GET: http://localhost:3000/user/searchPeople
