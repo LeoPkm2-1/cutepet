@@ -12,6 +12,7 @@
 {
     text: String,
     visibility: "PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
+    tagUsersId: Array[id_users],
     media:
         undefined || {
             type:"video" || "images"
@@ -32,7 +33,8 @@
         undefined || {
             type:"video" || "images"
             data:[url]
-        }
+        },
+    taggedUsers:Array[users infor],
     createAt: time,
     numOfLike:0,
     numOfComment:0,
@@ -672,6 +674,7 @@ nếu bình luận không tồn tại:
 ```
 
 ## 12. kiếm tra xem người dùng đã follow bài biết hay chưa
+
 (**postman số 23**)
 
 1. Phương thức:
@@ -716,12 +719,15 @@ nếu bình luận không tồn tại:
 ```
 
 ## 13. đăng ký theo dõi bài viết
+
 (**postman số 24**)
+
 1. Phương thức:
 
    POST: 'http://localhost:3000/post/statusPost/followPost'
 
 2. cấu trúc:
+
 ```javascript
 {
     post_id: mã của bài viết muốn đăng ký theo dõi
@@ -743,15 +749,16 @@ nếu bình luận không tồn tại:
 }
 ```
 
-
 ## 14. hủy theo dõi bài viết
+
 (**postman số 23**)
 
 1. Phương thức:
-   
+
    'http://localhost:3000/post/statusPost/isUserFollowedPost'
 
 2. cấu trúc:
+
 ```javascript
 {
     post_id: mã của bài viết muốn hủy theo dõi
@@ -759,6 +766,7 @@ nếu bình luận không tồn tại:
 ```
 
 3. trả về:
+
 ```javascript
 {
     "status": 200,

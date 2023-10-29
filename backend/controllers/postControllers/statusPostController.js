@@ -14,12 +14,13 @@ const {
 } = require("../../notificationHandler/statusPost");
 
 const addPostController = async (req, res) => {
-  const { text, media, visibility } = req.body;
-  console.log({visibility});
+  const { text, media, visibility, tagUsersId } = req.body;
+  const taggedUsers = await userHelper.getUserPublicInforByListIds(tagUsersId);
   const postStatus = new StatusPostComposStructure.StatusPost(
     text,
     visibility,
     media,
+    taggedUsers,
     req.auth_decoded.ma_nguoi_dung
   );
 

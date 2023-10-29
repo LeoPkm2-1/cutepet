@@ -1,9 +1,10 @@
 class StatusPost {
-  constructor(text, visibility, media, owner_id) {
+  constructor(text, visibility, media, taggedUsers, owner_id) {
     this.text = text;
     this.postType = "status";
     this.visibility = visibility;
     this.media = media;
+    this.taggedUsers = taggedUsers;
     this.createAt = new Date();
     this.numOfLike = 0;
     this.numOfComment = 0;

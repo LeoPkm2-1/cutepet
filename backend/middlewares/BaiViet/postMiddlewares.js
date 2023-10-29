@@ -1,12 +1,18 @@
 const { Response } = require("../../utils");
 const statusPostModel = require("../../models/BaiViet/StatusPostModel");
 const postHelper = require("../../utils/postHelper");
+const banBeHelper = require("./../../utils/banbeHelper");
 
 async function preProcessAddPost(req, res, next) {
   const NOT_CONTENT_POST = `bài viết không được chấp nhận do không có nội dung`;
   const text = req.body.text;
   const visibility = String(req.body.visibility).toUpperCase();
-  req.body.visibility=visibility;
+  req.body.visibility = visibility;
+  const userTaggedIds = req.body.tagUsersId || [];
+  req.body.tagUsersId = await banBeHelper.getFriendsIdInListOfUserId(
+    req.auth_decoded.ma_nguoi_dung,
+    userTaggedIds
+  );
   const media = req.body.media;
   if (
     visibility != "PUBLIC" &&
