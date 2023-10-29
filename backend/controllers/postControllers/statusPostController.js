@@ -14,9 +14,11 @@ const {
 } = require("../../notificationHandler/statusPost");
 
 const addPostController = async (req, res) => {
-  const { text, media } = req.body;
+  const { text, media, visibility } = req.body;
+  console.log({visibility});
   const postStatus = new StatusPostComposStructure.StatusPost(
     text,
+    visibility,
     media,
     req.auth_decoded.ma_nguoi_dung
   );

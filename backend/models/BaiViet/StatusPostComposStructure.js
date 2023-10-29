@@ -1,46 +1,47 @@
 class StatusPost {
-	constructor(text, media, owner_id) {
-		this.text = text;
-		this.postType = 'status';
-		this.media = media;
-		this.createAt = new Date();
-		this.numOfLike = 0;
-		this.numOfComment = 0;
-		this.modifiedAt = null;
-		this.owner_id = owner_id;
-	}
+  constructor(text, visibility, media, owner_id) {
+    this.text = text;
+    this.postType = "status";
+    this.visibility = visibility;
+    this.media = media;
+    this.createAt = new Date();
+    this.numOfLike = 0;
+    this.numOfComment = 0;
+    this.modifiedAt = null;
+    this.owner_id = owner_id;
+  }
 }
 
 class CommentPost {
-	constructor(post_id, comment, commentBy) {
-		this.postId = post_id;
-		this.comment = comment;
-		this.commentBy = commentBy;
-		this.commentAt = new Date();
-		this.numOfLike = 0;
-		this.numOfReply = 0;
-		this.modifiedAt = null;
-	}
+  constructor(post_id, comment, commentBy) {
+    this.postId = post_id;
+    this.comment = comment;
+    this.commentBy = commentBy;
+    this.commentAt = new Date();
+    this.numOfLike = 0;
+    this.numOfReply = 0;
+    this.modifiedAt = null;
+  }
 }
 
 class LikeComment {
-	constructor(cmt_id, likeBy, postId) {
-		this.cmtId = cmt_id;
-		this.userLike = likeBy;
-		this.postId = postId;
-		this.likeAt = new Date();
-	}
+  constructor(cmt_id, likeBy, postId) {
+    this.cmtId = cmt_id;
+    this.userLike = likeBy;
+    this.postId = postId;
+    this.likeAt = new Date();
+  }
 }
 
 class ReplyComment {
-	constructor(cmt_id, reply, replyBy, postId) {
-		this.cmtId = cmt_id;
-		this.reply = reply;
-		this.replyBy = replyBy;
-		this.replyAt = new Date();
-		this.numOfLike = 0;
-		this.postId = postId;
-		this.modifiedAt = null;
-	}
+  constructor(cmt_id, reply, replyBy, postId) {
+    this.cmtId = cmt_id;
+    this.reply = reply;
+    this.replyBy = replyBy;
+    this.replyAt = new Date();
+    this.numOfLike = 0;
+    this.postId = postId;
+    this.modifiedAt = null;
+  }
 }
-module.exports = { StatusPost, CommentPost, ReplyComment ,LikeComment};
+module.exports = { StatusPost, CommentPost, ReplyComment, LikeComment };
