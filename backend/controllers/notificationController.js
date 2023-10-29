@@ -29,7 +29,7 @@ const markAsRead = async (req, res) => {
 	const notif_after_update = await notificationModel
 		.getNotificationById(notif_id)
 		.then((data) => data.payload);
-	console.log(notif_after_update);
+	// console.log(notif_after_update);
 	res
 		.status(200)
 		.json(new Response(200, notif_after_update, 'đánh dấu đã đọc thành công'));
