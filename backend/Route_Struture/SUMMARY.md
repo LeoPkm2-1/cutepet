@@ -12,3 +12,6 @@
 3. thêm event socket khi đăng bài có tag người dùng
 
     *chi tiết:* **Route_Struture/socket.md số 7**
+
+4. Thêm thú cưng 
+   *chi tiết:* **Route_Struture/pet.md số 1** và **postman số 26**
