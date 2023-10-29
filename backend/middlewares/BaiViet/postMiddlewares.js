@@ -8,8 +8,8 @@ async function preProcessAddPost(req, res, next) {
   const text = req.body.text;
   const visibility = String(req.body.visibility).toUpperCase();
   req.body.visibility = visibility;
-  const userTaggedIds = req.body.tagUsersId || [];
-  req.body.tagUsersId = await banBeHelper.getFriendsIdInListOfUserId(
+  const userTaggedIds = req.body.taggedUsersId || [];
+  req.body.taggedUsersId = await banBeHelper.getFriendsIdInListOfUserId(
     req.auth_decoded.ma_nguoi_dung,
     userTaggedIds
   );

@@ -12,7 +12,7 @@
 {
     text: String,
     visibility: "PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
-    tagUsersId: Array[id_users],
+    taggedUsersId: Array[id_users],
     media:
         undefined || {
             type:"video" || "images"
