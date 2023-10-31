@@ -58,3 +58,53 @@
     "errcode": null
 }
 ```
+
+
+## 2. xóa thú cưng
+
+1. phương thức:
+    POST: http://localhost:3000/pet/deletePet
+
+2. cấu trúc:
+   
+```javascript
+{
+    ma_thu_cung:number
+}
+```
+
+3. trả về
+    3.1. khi thú cưng không tồn tại
+    ```javascript
+    {
+        "status": 400,
+        "payload": [],
+        "message": "thú cưng không tồn tại",
+        "errno": 300,
+        "errcode": 300
+    }
+    ```
+
+    3.2. khi người xóa không phải là chủ của thú cưng đó
+
+    ```javascript
+    {
+        "status": 400,
+        "payload": [],
+        "message": "bạn không phải là chủ thú cưng",
+        "errno": 300,
+        "errcode": 300
+    }
+    ```
+    
+    3.3. khi xóa thành công
+
+    ```javascript
+    {
+        "status": 200,
+        "payload": [],
+        "message": "xóa thú cưng thành công",
+        "errno": null,
+        "errcode": null
+    }
+    ```

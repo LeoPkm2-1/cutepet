@@ -15,3 +15,5 @@
 
 4. Thêm thú cưng 
    *chi tiết:* **Route_Struture/pet.md số 1** và **postman số 26**
+5. Xóa Thú cưng 
+   *chi tiết:* **Route_Struture/pet.md số 2** và **postman số 27**

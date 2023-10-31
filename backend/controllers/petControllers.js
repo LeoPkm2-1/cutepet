@@ -1,6 +1,7 @@
 const petModel = require("./../models/petModel");
 const petHelper = require("./../utils/petHelper");
 const giongLoaiModel = require("../models/giongLoaiModel");
+const thongTinSucKhoeModel = require("../models/ThongTInSucKhoeModel");
 const anhThuCungModel = require("../models/anhThuCungModel");
 const { Response } = require("./../utils/index");
 
@@ -190,9 +191,25 @@ const updateInfor = async (req, res) => {
     }
   }
 };
+
+const deletePet = async (req, res) => {
+  try {
+    const { pet_id } = req.body;
+    // delete heath index
+    await thongTinSucKhoeModel.deleteAllHealthIndexByPetId(pet_id);
+    // delete image
+    await petHelper.deleteAllImageOfPet(pet_id);
+    // delete infor
+    await petModel.deletePetInfor(pet_id);
+    res.status(200).json(new Response(200, [], "xóa thú cưng thành công"));
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   getInforById,
   getAllOwnPet,
   addPet,
   updateInfor,
+  deletePet,
 };
