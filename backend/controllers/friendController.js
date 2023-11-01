@@ -3,6 +3,7 @@ const laBanBeModel = require("../models/laBanBeModel");
 const userHelper = require("./../utils/userHelper");
 const { Response } = require("./../utils/index");
 const userOnlineModel = require("./../models/UserOnline/userOnlineModel");
+const theodoiHelper = require("../utils/theodoiHelper");
 
 // gửi lời mời kết bạn
 const requestAddFriend = async (req, res) => {
@@ -104,6 +105,9 @@ const responeAddFriend = async (req, res) => {
       );
       // accept
       await laBanBeModel.insertFriendShip(idNguoiGui, idNguoiPhanHoi);
+      // insert follow to follow table
+      await theodoiHelper.followUser(idNguoiGui, idNguoiPhanHoi);
+      await theodoiHelper.followUser(idNguoiPhanHoi, idNguoiGui);
       res
         .status(200)
         .json(
@@ -140,14 +144,19 @@ const responeAddFriend = async (req, res) => {
 
 // xóa bạn bè
 const unFriendById = async (req, res) => {
-  const friend_id = req.body.friend_id;
-  const ma_nguoi_dung = req.auth_decoded.ma_nguoi_dung;
+  const friend_id = parseInt(req.body.friend_id);
+  const ma_nguoi_dung = parseInt(req.auth_decoded.ma_nguoi_dung);
   const deleteProcess = await laBanBeModel
     .deleteFriendShip(ma_nguoi_dung, friend_id)
     .then((data) => {
       data.payload.insertId = parseInt(data.payload.insertId);
       return data.payload;
     });
+
+  await Promise.all([
+    await theodoiHelper.unFollowUser(ma_nguoi_dung, friend_id),
+    await theodoiHelper.unFollowUser(friend_id, ma_nguoi_dung),
+  ]);
   res
     .status(200)
     .json(
