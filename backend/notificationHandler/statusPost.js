@@ -705,7 +705,6 @@ const notifyTaggedUserInStatusPost = async (
       };
     })
   );
-  console.log("heheheh");
   // send notificatin through socket
   tagged_infor_list.forEach((element) => {
     const socketRoom = socketHelper.getPrivateRoomNameOfUser(

@@ -40,8 +40,17 @@ const addPostController = async (req, res) => {
 
   // thêm người tạo bài viết vào danh sách theo dõi của bài viết
   await followhelper.followStatusPost(idOfPost, owner_id);
-  // thông báo nếu có tag
-  notifyTaggedUserInStatusPost(idOfPost, owner_id, taggedUsersId);
+  // xử lý tag
+  if (taggedUsersId.length > 0) {
+    // thêm các người dùng được tag vào danh sách người theo dõi bài viết
+    const data = await Promise.all(
+      taggedUsersId.map((userId) =>
+        followhelper.followStatusPost(idOfPost, userId)
+      )
+    );
+    // thông báo nếu có tag
+    notifyTaggedUserInStatusPost(idOfPost, owner_id, taggedUsersId);
+  }
 
   res
     .status(200)
