@@ -158,13 +158,14 @@ const deleteAllImageOfPet = async (pet_id) => {
 };
 
 const publicInforOfPet = async (petid) => {
+  petid = parseInt(petid);
   const petInfor = await petModel.getPetByID(petid).then((data) => {
     if (data.payload.length <= 0) return {};
     return data.payload[0];
   });
   if (Object.keys(petInfor).length <= 0) {
-    res.status(200).json(new Response(200, {}));
-    return;
+    // res.status(200).json(new Response(200, {}));
+    return {};
   }
   const giong_loai = await giongLoaiModel
     .getThongTinGiongLoaiByMaGiong(petInfor.ma_giong)
@@ -180,13 +181,14 @@ const publicInforOfPet = async (petid) => {
   };
 };
 
-// (async function(){
-//   const data = await publicInforOfPet(1);
-//   console.log(data);
-// })()
+const publicInforOfListPet = async (petid_list) => {
+  return await Promise.all(
+    petid_list.map(async (petid) => await publicInforOfPet(petid))
+  );
+};
 
 // (async function () {
-//  await deleteAllImageOfPet(36) ;
+//   const data = await publicInforOfListPet([1, 2,]);
 // })()
 
 module.exports = {
@@ -199,4 +201,5 @@ module.exports = {
   isPetExist,
   deleteAllImageOfPet,
   publicInforOfPet,
+  publicInforOfListPet,
 };

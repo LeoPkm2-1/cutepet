@@ -98,7 +98,7 @@ async function deletePetInfor(pet_id) {
 }
 
 // (async function () {
-//   const data = await deletePetInfor(36);
+//   const data = await getAllOwnsPetOf(2);
 //   console.log(data);
 // })();
 
