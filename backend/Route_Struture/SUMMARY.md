@@ -20,3 +20,8 @@
 
 6. lấy tất cả các thú cưng của mình
    *chi tiết:* **Route_Struture/pet.md số 3** và **postman số 28**
+
+## (01-11-2023):
+1. viết route lấy thông tin về profile của mình:
+   *chi tiết:* **Route_Struture/profile.md số 1** và **postman số 29**
+   
