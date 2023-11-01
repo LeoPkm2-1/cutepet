@@ -157,6 +157,34 @@ const deleteAllImageOfPet = async (pet_id) => {
   await anhModel.deleteListAnhByListMaAnh(ds_ma_anh);
 };
 
+const publicInforOfPet = async (petid) => {
+  const petInfor = await petModel.getPetByID(petid).then((data) => {
+    if (data.payload.length <= 0) return {};
+    return data.payload[0];
+  });
+  if (Object.keys(petInfor).length <= 0) {
+    res.status(200).json(new Response(200, {}));
+    return;
+  }
+  const giong_loai = await giongLoaiModel
+    .getThongTinGiongLoaiByMaGiong(petInfor.ma_giong)
+    .then((data) => data.payload[0]);
+  const anh = await getpublicImageInfor(petid, giong_loai.ma_loai);
+  const thongtinsuckhoe = await getPublicHealthIndexInfor(petid);
+  delete petInfor.ma_giong;
+  return {
+    ...petInfor,
+    giong_loai,
+    anh,
+    thong_tin_suc_khoe: thongtinsuckhoe,
+  };
+};
+
+// (async function(){
+//   const data = await publicInforOfPet(1);
+//   console.log(data);
+// })()
+
 // (async function () {
 //  await deleteAllImageOfPet(36) ;
 // })()
@@ -170,4 +198,5 @@ module.exports = {
   getPublicHealthIndexInfor,
   isPetExist,
   deleteAllImageOfPet,
+  publicInforOfPet,
 };

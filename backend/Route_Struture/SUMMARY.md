@@ -17,3 +17,6 @@
    *chi tiết:* **Route_Struture/pet.md số 1** và **postman số 26**
 5. Xóa Thú cưng 
    *chi tiết:* **Route_Struture/pet.md số 2** và **postman số 27**
+
+6. lấy tất cả các thú cưng của mình
+   *chi tiết:* **Route_Struture/pet.md số 3** và **postman số 28**

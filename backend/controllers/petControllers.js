@@ -7,30 +7,30 @@ const { Response } = require("./../utils/index");
 
 const getInforById = async (req, res) => {
   const petid = req.params.pet_id;
-  const petInfor = await petModel.getPetByID(petid).then((data) => {
-    if (data.payload.length <= 0) return {};
-    return data.payload[0];
-  });
-  if (Object.keys(petInfor).length <= 0) {
-    res.status(200).json(new Response(200, {}));
-    return;
-  }
-  const giong_loai = await giongLoaiModel
-    .getThongTinGiongLoaiByMaGiong(petInfor.ma_giong)
-    .then((data) => data.payload[0]);
-  const anh = await petHelper.getpublicImageInfor(petid, giong_loai.ma_loai);
-  const thongtinsuckhoe = await petHelper.getPublicHealthIndexInfor(petid);
-  delete petInfor.ma_giong;
-  res.status(200).json(
-    new Response(200, {
-      ...petInfor,
-      giong_loai,
-      anh,
-      thong_tin_suc_khoe: thongtinsuckhoe,
-    })
-  );
+  const petPublicInfor = await petHelper.publicInforOfPet(petid);
+  res.status(200).json(new Response(200, petPublicInfor, "thông tin thú cưng"));
 };
 
+const getAllMyPets = async (req, res) => {
+  const userid = req.auth_decoded.ma_nguoi_dung;
+  const listOfPetIds = await petModel
+    .getAllOwnsPetOf(userid)
+    .then((data) => data.payload)
+    .then((petlist) => petlist.map((pet) => pet.ma_thu_cung));
+  const listOfPets = await Promise.all(
+    listOfPetIds.map(async (pet_id) => {
+      const petInfor = await petHelper.publicInforOfPet(pet_id);
+      return petInfor;
+    })
+  );
+  res.status(200).json(new Response(200, listOfPets, "lấy dữ liệu thành công"));
+  return;
+};
+
+// (async function () {
+//   const data = await getAllMyPets(2);
+//   // console.log(data);
+// })();
 const getAllOwnPet = async (req, res) => {
   const userid = req.auth_decoded.ma_nguoi_dung;
 
@@ -212,4 +212,5 @@ module.exports = {
   addPet,
   updateInfor,
   deletePet,
+  getAllMyPets,
 };

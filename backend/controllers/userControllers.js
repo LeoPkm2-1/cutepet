@@ -62,8 +62,11 @@ const searchPeopleController = async (req, res) => {
   res.status(200).json(new Response(200, listUserPubInfor, ""));
 };
 
+const myProfile = async (params) => {};
+
 module.exports = {
   getUserByUserName,
   userPublicInforByUserName,
   searchPeopleController,
+  myProfile,
 };

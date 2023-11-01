@@ -11,4 +11,5 @@ router.get("/getallowns", petController.getAllOwnPet);
 router.post("/addpet", petMid.addPetMiddleWare, petController.addPet);
 router.post("/capnhatthongtin/:pet_id", petController.updateInfor);
 router.post("/deletePet", petMid.preChangePet, petController.deletePet);
+router.get("/getAllMyPets", petController.getAllMyPets);
 module.exports = router;
