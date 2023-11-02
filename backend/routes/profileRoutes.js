@@ -4,9 +4,9 @@ const profileMid = require("../middlewares/profileMid");
 
 const myController = require("../controllers/myController");
 
-router.get("/profile", myController.myProfileController);
+router.get("/myProfile", myController.myProfileController);
 router.post(
-  "/timelineBackward",
+  "/myTimelineBackward",
   profileMid.preProccessGetMyProfile,
   myController.myTimelineBackwardController
 );

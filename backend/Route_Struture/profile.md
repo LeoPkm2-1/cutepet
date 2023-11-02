@@ -4,7 +4,7 @@
 
 1. phương thức:
 
-   GET: http://localhost:3000/my/profile
+   GET: http://localhost:3000/profile/myProfile
 
 2. cấu trúc: không cần tham số
 3. trả về:
@@ -145,7 +145,7 @@
 
 1. phương thức:
 
-   POST: http://localhost:3000/my/timelineBackward
+   POST: http://localhost:3000/profile/myTimelineBackward
 
 2. cấu trúc:
 
