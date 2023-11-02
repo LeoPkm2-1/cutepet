@@ -44,10 +44,10 @@ async function userProfileController(req, res) {
   // check user is in friendzone with query user
   const laBanBe = await haveFriendShipBetween(myId, findingUserId);
   // if query user is not a friend remove sensitive data in userPublicInfor
-  if(!laBanBe){
-    userPublicInfor.email = '';
-    userPublicInfor.so_dien_thoai = '';
-    userPublicInfor.ngay_sinh = '';
+  if (!laBanBe) {
+    userPublicInfor.email = "";
+    userPublicInfor.so_dien_thoai = "";
+    userPublicInfor.ngay_sinh = "";
   }
   const danh_sach_anh_dai_dien = await anhNguoiDungModel
     .getDSAnhDaiDienNguoiDung(findingUserId)
@@ -86,8 +86,61 @@ async function myTimelineBackwardController(req, res) {
   res.status(200).json(new Response(200, posts, ""));
 }
 
+// async function userTimelineBackwardController(req, res) {
+//   const myid = req.auth_decoded.ma_nguoi_dung;
+//   const findingUserId = req.body.user_id;
+//   const { before, num } = req.body;
+//   // check user is in friendzone with query user
+//   const laBanBe = await haveFriendShipBetween(myid, findingUserId);
+//   let listOfPost = [];
+//   let timepoint = before;
+//   do {
+//     const posts = await StatusPostModel.getAllPostOfUserBeforeTime(
+//       findingUserId,
+//       timepoint,
+//       num
+//     ).then((data) => data.payload);
+//     // don't have any more post
+//     if (posts.length == 0) break;
+//     // filter to find suitable visibility
+//     const chunkPosts = posts.filter(
+//       (post) =>
+//         post.visibility == "PUBLIC" ||
+//         (post.visibility == "JUST_FRIENDS" && laBanBe) ||
+//         (post.visibility == "PRIVATE" && post.taggedUsers.includes(myid))
+//     );
+//     if (typeof listOfPost.at(-1) == "undefined")
+//       listOfPost = listOfPost.concat(chunkPosts);
+//     else listOfPost = listOfPost.concat(chunkPosts.slice(1));
+//     console.log(listOfPost);
+//     break;
+//     //   timepoint = chunkPosts.at(-1).createAt;
+//   } while (listOfPost.length < num);
+//   // console.log(listOfPost);
+//   // res.send(listOfPost.length);
+//   res.status(200).json({ listOfPost, len: listOfPost.length });
+// }
+
+async function userTimelineBackwardController(req, res) {
+  const reader_id = req.auth_decoded.ma_nguoi_dung;
+  const findingUserId = req.body.user_id;
+  const { before, num } = req.body;
+  // check user is in friendzone with query user
+  const laBanBe = await haveFriendShipBetween(reader_id, findingUserId);
+  let listOfPost = await StatusPostModel.getPostOfUserForReaderBeforeTime(
+    findingUserId,
+    reader_id,
+    laBanBe,
+    before,
+    num
+  ).then((data) => data.payload);
+  console.log("length:", listOfPost.length);
+  res.status(200).json(new Response(200, listOfPost, ""));
+}
+
 module.exports = {
   myProfileController,
   myTimelineBackwardController,
   userProfileController,
+  userTimelineBackwardController,
 };

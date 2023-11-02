@@ -229,7 +229,7 @@ const getAllPostOfUserBeforeTime = async (userId, before, num = undefined) => {
     executor = async (collection) => {
       return await collection
         .find({
-          $and: [{ owner_id: userId }, { createAt: { $lte: before } }],
+          $and: [{ owner_id: userId }, { createAt: { $lt: before } }],
         })
         .sort({ createAt: -1 })
         .toArray();
@@ -239,13 +239,148 @@ const getAllPostOfUserBeforeTime = async (userId, before, num = undefined) => {
     executor = async (collection) => {
       return await collection
         .find({
-          $and: [{ owner_id: userId }, { createAt: { $lte: before } }],
+          $and: [{ owner_id: userId }, { createAt: { $lt: before } }],
         })
         .sort({ createAt: -1 })
         .limit(num)
         .toArray();
     };
   }
+
+  return await nonSQLQuery(executor, "BaiVietTrangThai")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getPostOfUserForReaderBeforeTime = async (
+  postOnwer_id,
+  reader_id,
+  isFriend,
+  before,
+  num = undefined
+) => {
+  postOnwer_id = parseInt(postOnwer_id);
+  let executor = null;
+  if (typeof num == "undefined" && !isFriend)
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $and: [
+            { owner_id: postOnwer_id },
+            { createAt: { $lt: before } },
+            {
+              $or: [
+                { visibility: "PUBLIC" },
+                {
+                  $and: [
+                    { visibility: "PRIVATE" },
+                    {
+                      taggedUsers: {
+                        $elemMatch: {
+                          ma_nguoi_dung: reader_id,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        })
+        .sort({ createAt: -1 })
+        .toArray();
+    };
+  else if (typeof num == "undefined" && isFriend)
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $and: [
+            { owner_id: postOnwer_id },
+            { createAt: { $lt: before } },
+            {
+              $or: [
+                { visibility: "PUBLIC" },
+                { visibility: "JUST_FRIENDS" },
+                {
+                  $and: [
+                    { visibility: "PRIVATE" },
+                    {
+                      taggedUsers: {
+                        $elemMatch: {
+                          ma_nguoi_dung: reader_id,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        })
+        .sort({ createAt: -1 })
+        .toArray();
+    };
+  else if (typeof num != "undefined" && !isFriend)
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $and: [
+            { owner_id: postOnwer_id },
+            { createAt: { $lt: before } },
+            {
+              $or: [
+                { visibility: "PUBLIC" },
+                {
+                  $and: [
+                    { visibility: "PRIVATE" },
+                    {
+                      taggedUsers: {
+                        $elemMatch: {
+                          ma_nguoi_dung: reader_id,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        })
+        .sort({ createAt: -1 })
+        .limit(num)
+        .toArray();
+    };
+  else if (typeof num != "undefined" && isFriend)
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $and: [
+            { owner_id: postOnwer_id },
+            { createAt: { $lt: before } },
+            {
+              $or: [
+                { visibility: "PUBLIC" },
+                { visibility: "JUST_FRIENDS" },
+                {
+                  $and: [
+                    { visibility: "PRIVATE" },
+                    {
+                      taggedUsers: {
+                        $elemMatch: {
+                          ma_nguoi_dung: reader_id,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        })
+        .sort({ createAt: -1 })
+        .limit(num)
+        .toArray();
+    };
 
   return await nonSQLQuery(executor, "BaiVietTrangThai")
     .then((data) => new Response(200, data, ""))
@@ -449,4 +584,5 @@ module.exports = {
   getOnwerIdOfPost,
   getOnwerIdOfComment,
   getAllPostOfUserBeforeTime,
+  getPostOfUserForReaderBeforeTime,
 };
