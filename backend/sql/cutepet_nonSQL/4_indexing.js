@@ -18,5 +18,9 @@ db.RelyBinhLuanBaiVietTrangThai.createIndex({ cmtId: 1 });
 // index for Like binh luan bai viet trang thai
 db.LikeBinhLuanBaiVietTrangThai.createIndex({ cmtId: 1 });
 
+// =====================Notification ========================
+db.ThongBao.createIndex({receiver_id:-1,createAt:-1});
+db.ThongBao.createIndex({createAt:-1,receiver_id:-1});
+
 // ================= Nguoi dung Online ======================
 db.NguoiDungDangOnline.createIndex({ userId: 1 }, { unique: true });

@@ -657,9 +657,78 @@ const notifyReplyComment = async (
   }
 };
 
+const notifyTaggedUserInStatusPost = async (
+  post_id,
+  tag_user_id,
+  taggedUserListIds = []
+) => {
+  // exit if no one is tagged
+  if (taggedUserListIds.length <= 0) return;
+  // post infor
+  let postInfor = await StatusPostModel.getPostById(post_id).then((data) => {
+    const post = data.payload[0];
+    post._id = post._id.toString();
+    return post;
+  });
+  postInfor = UtilsHelper.filter_keys_in_Obj(postInfor, [
+    "_id",
+    "postType",
+    "text",
+    "createAt",
+  ]);
+  // tag user infor
+  const tag_user_infor = await userHelper.getUserPublicInforByUserId(
+    tag_user_id
+  );
+  const tagged_infor_list = await Promise.all(
+    taggedUserListIds.map(async (tagged_User_Id) => {
+      // tagged user infor
+      const taggedUser = await userHelper.getUserPublicInforByUserId(
+        tagged_User_Id
+      );
+      const tagEventInfor = new statusPostEventStruture.TagUserInPost(
+        tag_user_infor,
+        taggedUser,
+        postInfor,
+        new Date(),
+        false
+      );
+      await statusPostNotificationModel.addTagUserInPostNotification(
+        tagged_User_Id,
+        tagEventInfor
+      );
+
+      return {
+        tagged_User_Id: tagged_User_Id,
+        taggedUser: taggedUser,
+        tagEventInfor: tagEventInfor,
+      };
+    })
+  );
+  // send notificatin through socket
+  tagged_infor_list.forEach((element) => {
+    const socketRoom = socketHelper.getPrivateRoomNameOfUser(
+      element.tagged_User_Id
+    );
+    normUserNamespace
+      .to(socketRoom)
+      .emit(
+        statusPostEventStruture.TagUserInPost.getEventName(),
+        element.tagEventInfor
+      );
+  });
+};
+
+// (async  ()=> {
+//   await notifyLikePost(2,
+//     "65333ff5f0efa9d27e7bf163",
+//     2,
+//   );
+// })();
 module.exports = {
   notifyLikePost,
   notifyCommentPost,
   notifyLikeComment,
   notifyReplyComment,
+  notifyTaggedUserInStatusPost,
 };

@@ -122,9 +122,15 @@ function extractListIdFromListUser(listUser, idFieldName = "ma_nguoi_dung") {
 }
 
 // (async function () {
+//   const data = await getUserPublicInforByListIds([1000,200])
+//   console.log(data);
+// })()
+
+// (async function () {
 //   const data = extractListIdFromListUser([{ key: 1 }, { key: 2 }], "key");
 //   console.log(data);
 // })();
+
 
 module.exports = {
   isFriend,

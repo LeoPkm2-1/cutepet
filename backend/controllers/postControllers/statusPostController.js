@@ -11,13 +11,19 @@ const {
   notifyCommentPost,
   notifyLikeComment,
   notifyReplyComment,
+  notifyTaggedUserInStatusPost,
 } = require("../../notificationHandler/statusPost");
 
 const addPostController = async (req, res) => {
-  const { text, media } = req.body;
+  const { text, media, visibility, taggedUsersId } = req.body;
+  const taggedUsers = await userHelper.getUserPublicInforByListIds(
+    taggedUsersId
+  );
   const postStatus = new StatusPostComposStructure.StatusPost(
     text,
+    visibility,
     media,
+    taggedUsers,
     req.auth_decoded.ma_nguoi_dung
   );
 
@@ -34,6 +40,17 @@ const addPostController = async (req, res) => {
 
   // thêm người tạo bài viết vào danh sách theo dõi của bài viết
   await followhelper.followStatusPost(idOfPost, owner_id);
+  // xử lý tag
+  if (taggedUsersId.length > 0) {
+    // thêm các người dùng được tag vào danh sách người theo dõi bài viết
+    const data = await Promise.all(
+      taggedUsersId.map((userId) =>
+        followhelper.followStatusPost(idOfPost, userId)
+      )
+    );
+    // thông báo nếu có tag
+    notifyTaggedUserInStatusPost(idOfPost, owner_id, taggedUsersId);
+  }
 
   res
     .status(200)
