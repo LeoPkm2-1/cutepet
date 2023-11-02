@@ -1,6 +1,6 @@
 const utilHelper = require("../utils/UtilsHelper");
 const { Response } = require("../utils/index");
-const preProccessGetMyProfile = async (req, res, next) => {
+const preProccessGetMyTimeline = async (req, res, next) => {
   const VALID_PARAM = "tham số không hợp lệ";
   let { before, num } = req.body;
   try {
@@ -25,4 +25,4 @@ const preProccessGetMyProfile = async (req, res, next) => {
   next();
 };
 
-module.exports = { preProccessGetMyProfile };
+module.exports = { preProccessGetMyTimeline };

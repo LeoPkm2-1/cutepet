@@ -19,14 +19,7 @@ async function getFriendsIdInListOfUserId(yourId, list_Userids) {
     .map((user) => user.id);
 }
 
-// (async function () {
-//   const data =await getFriendsIdInListOfUserId(1, [ 55, 56, 9]);
-//   console.log(data);
-// })();
-// (async () => {
-//   const data = await haveFriendShipBetween(1, 'adasda');
-//   console.log(data);
-// })();
+
 
 module.exports = {
   haveFriendShipBetween,

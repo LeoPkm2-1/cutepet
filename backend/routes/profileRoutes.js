@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 const profileMid = require("../middlewares/profileMid");
 
-const myController = require("../controllers/myController");
+const profileController = require("../controllers/profileController");
 
-router.get("/myProfile", myController.myProfileController);
+router.post("/myProfile", profileController.myProfileController);
 router.post(
   "/myTimelineBackward",
-  profileMid.preProccessGetMyProfile,
-  myController.myTimelineBackwardController
+  profileMid.preProccessGetMyTimeline,
+  profileController.myTimelineBackwardController
 );
 
+router.post('/userProfile',profileController.userProfileController)
 module.exports = router;

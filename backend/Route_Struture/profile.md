@@ -4,26 +4,28 @@
 
 1. phương thức:
 
-   GET: http://localhost:3000/profile/myProfile
+   POST: http://localhost:3000/profile/myProfile
 
 2. cấu trúc: không cần tham số
 3. trả về:
 
 ```javascript
 {
-    "ma_nguoi_dung": 2,
-    "ten": "Dung",
-    "ngay_sinh": "1991-09-29T17:00:00.000Z",
-    "tai_khoan": "dung",
-    "email": "dung@gmail.com",
-    "so_dien_thoai": "0912345679",
-    "gioi_tinh": 1,
-    "anh": {
-        "ma_anh": 39,
-        "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
-        "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+    "thong_tin_profile_user": {
         "ma_nguoi_dung": 2,
-        "is_active": 1
+        "ten": "Dung",
+        "ngay_sinh": "1991-09-29T17:00:00.000Z",
+        "tai_khoan": "dung",
+        "email": "dung@gmail.com",
+        "so_dien_thoai": "0912345679",
+        "gioi_tinh": 1,
+        "anh": {
+            "ma_anh": 39,
+            "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
+            "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+            "ma_nguoi_dung": 2,
+            "is_active": 1
+        }
     },
     "danh_sach_anh_dai_dien": [
         {
@@ -136,6 +138,7 @@
 }
 ```
 
+- **thong_tin_profile_user**: thông tin người dùng (_ở đây là chính mình_)
 - **anh**: mô tả thông tin của hình ảnh,
   - nếu `ma_anh` mang giá trị **null** thì tức là đối tượng (người dùng hoặc thú cưng) chưa có hình ảnh, trường **url**: sẽ là giá trị mặc định mà hệ thống cấp cho đối tượng đó
 - **thong_tin_suc_khoe**: mô tả thông tin sức khỏe của thú cưng
@@ -210,3 +213,56 @@
     "errcode": null
    }
    ```
+
+## 3. lấy thông tin trang cá nhân của người dùng khác
+
+1. phương thức:
+
+   POST: http://localhost:3000/profile/userProfile
+
+2. cấu trúc:
+
+```javascript
+{
+  user_id: number;
+}
+```
+
+- **user_id**: mã của người dùng muốn lấy thông tin profile
+
+3. trả về:
+
+```javascript
+{
+    "thong_tin_profile_user": {
+        "ma_nguoi_dung": 10,
+        "ten": "Thanh",
+        "ngay_sinh": "",
+        "tai_khoan": "thanh",
+        "email": "",
+        "so_dien_thoai": "",
+        "gioi_tinh": 0,
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "10",
+            "is_active": null
+        }
+    },
+    "la_ban_be": false,
+    "danh_sach_anh_dai_dien": [],
+    "danh_sach_ban_be": [],
+    "danh_sach_thu_cung": []
+}
+```
+
+- **thong_tin_profile_user**: thông tin người dùng
+- **anh**: mô tả thông tin của hình ảnh,
+
+  - nếu `ma_anh` mang giá trị **null** thì tức là đối tượng (người dùng hoặc thú cưng) chưa có hình ảnh, trường **url**: sẽ là giá trị mặc định mà hệ thống cấp cho đối tượng đó
+
+- **la_ban_be**: nếu trả về **true** thì có chính là bạn bè với mình. Nếu **false** thì không phải là bạn bè với mình
+- **danh_sach_anh_dai_dien**:mô tả danh sách ảnh đại diện của người dùng đó
+- **danh_sach_ban_be**:mô tả danh sách bạn bè của người dùng đó.
+- **danh_sach_thu_cung**: mô tả danh sách thú cưng của người dùng đó.
