@@ -3,6 +3,8 @@ const anhNguoiDungModel = require("../models/anhNguoiDungModel");
 const laBanBeModel = require("../models/laBanBeModel");
 const petModel = require("../models/petModel");
 const petHelper = require("../utils/petHelper");
+const { Response } = require("./../utils/index");
+const StatusPostModel = require("../models/BaiViet/StatusPostModel");
 
 async function myProfileController(req, res) {
   const userid = req.auth_decoded.ma_nguoi_dung;
@@ -32,4 +34,15 @@ async function myProfileController(req, res) {
   });
 }
 
-module.exports = { myProfileController };
+async function myTimelineBackwardController(req, res) {
+  const userid = req.auth_decoded.ma_nguoi_dung;
+  const { before, num } = req.body;
+  const posts = await StatusPostModel.getAllPostOfUserBeforeTime(
+    userid,
+    before,
+    num
+  ).then((data) => data.payload);
+  res.status(200).json(new Response(200, posts, ""));
+}
+
+module.exports = { myProfileController, myTimelineBackwardController };

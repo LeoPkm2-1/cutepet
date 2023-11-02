@@ -140,3 +140,73 @@
   - nếu `ma_anh` mang giá trị **null** thì tức là đối tượng (người dùng hoặc thú cưng) chưa có hình ảnh, trường **url**: sẽ là giá trị mặc định mà hệ thống cấp cho đối tượng đó
 - **thong_tin_suc_khoe**: mô tả thông tin sức khỏe của thú cưng
   - nếu `ma_suc_khoe` mang gái trị **null** thì tức là thú cưng chưa có thông tin về sức khỏe
+
+## 2. lấy các bài viết trên time line của chính mình cho trang cá nhân
+
+1. phương thức:
+
+   POST: http://localhost:3000/my/timelineBackward
+
+2. cấu trúc:
+
+   ```javascript
+   {
+        before: time_string,
+        num: number
+   }
+   ```
+
+   - **before**: mô tả thời gian mà bài viết được đăng lên trước thời gian này
+   - **num**: số lượng bài viết cần lấy
+
+3. trả về:
+   ```javascript
+   {
+    "status": 200,
+    "payload": [
+        {
+            "_id": "65430fa7aa78ce62f7b97875",
+            "text": "xin chào tui là dũng PRIVATE",
+            "postType": "status",
+            "visibility": "PRIVATE",
+            "media": {
+                "type": "images",
+                "data": [
+                    "google.com",
+                    "youtube.com",
+                    "amazon.com"
+                ]
+            },
+            "taggedUsers": [],
+            "createAt": "2023-11-02T02:55:35.744Z",
+            "numOfLike": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 2
+        },
+        {
+            "_id": "65430f99aa78ce62f7b97873",
+            "text": "xin chào tui là dũng PUBLIC",
+            "postType": "status",
+            "visibility": "PUBLIC",
+            "media": {
+                "type": "images",
+                "data": [
+                    "google.com",
+                    "youtube.com",
+                    "amazon.com"
+                ]
+            },
+            "taggedUsers": [],
+            "createAt": "2023-11-02T02:55:21.319Z",
+            "numOfLike": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 2
+        }
+    ],
+    "message": "",
+    "errno": null,
+    "errcode": null
+   }
+   ```

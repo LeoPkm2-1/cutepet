@@ -25,3 +25,6 @@
 1. viết route lấy thông tin về profile của mình:
    *chi tiết:* **Route_Struture/profile.md số 1** và **postman số 29**
    
+## (02-11-2023):
+1. lấy các bài viết trên dòng thời gian của chính mình
+   *chi tiết:* **Route_Struture/profile.md số 2** và **postman số 30**
