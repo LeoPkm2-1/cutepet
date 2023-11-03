@@ -41,4 +41,43 @@ const notifyRequestAddFriend = async (
   }
 };
 
-module.exports = { notifyRequestAddFriend };
+const notifyAcceptAddFriend = async (
+  userAccept_id,
+  request_user_id,
+  acceptAt = new Date()
+) => {
+  const acceptUser = await userHelper.getUserPublicInforByUserId(userAccept_id);
+  const requestUser = await userHelper.getUserPublicInforByUserId(
+    request_user_id
+  );
+
+  // 1. store notification to data base
+  const EventInfor = new friendEventStructure.AcceptAddFriendEvent(
+    acceptUser,
+    requestUser,
+    acceptAt
+  );
+
+  await friendNotificationModel.addAcceptAddFriendNotification(
+    request_user_id,
+    EventInfor
+  );
+
+  const isRequestUserOnline = await userOnlineModel.isUserOnline(
+    request_user_id
+  );
+
+  if (isRequestUserOnline) {
+    const socketNameOfRequestUser =
+      socketHelper.getPrivateRoomNameOfUser(request_user_id);
+
+    normUserNamespace
+      .to(socketNameOfRequestUser)
+      .emit(
+        friendEventStructure.AcceptAddFriendEvent.getEventName(),
+        EventInfor
+      );
+  }
+};
+
+module.exports = { notifyRequestAddFriend, notifyAcceptAddFriend };

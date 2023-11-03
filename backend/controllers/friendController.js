@@ -4,7 +4,10 @@ const userHelper = require("./../utils/userHelper");
 const { Response } = require("./../utils/index");
 const userOnlineModel = require("./../models/UserOnline/userOnlineModel");
 const theodoiHelper = require("../utils/theodoiHelper");
-const { notifyRequestAddFriend } = require("../notificationHandler/friend");
+const {
+  notifyRequestAddFriend,
+  notifyAcceptAddFriend,
+} = require("../notificationHandler/friend");
 
 // gửi lời mời kết bạn
 const requestAddFriend = async (req, res) => {
@@ -110,6 +113,8 @@ const responeAddFriend = async (req, res) => {
       // insert follow to follow table
       await theodoiHelper.followUser(idNguoiGui, idNguoiPhanHoi);
       await theodoiHelper.followUser(idNguoiPhanHoi, idNguoiGui);
+      // gửi thông báo khi dc chấp nhận bạn bè
+      notifyAcceptAddFriend(idNguoiPhanHoi, idNguoiGui, new Date());
       res
         .status(200)
         .json(

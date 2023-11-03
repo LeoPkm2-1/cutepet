@@ -12,6 +12,20 @@ class RequestAddFriendEvent {
   }
 }
 
+class AcceptAddFriendEvent {
+  static getEventName() {
+    return notificationStructure.AcceptAddFriendNotification.getNotificationType();
+  }
+
+  constructor(acceptUser, requestUser, acceptAt = new Date(), message = "") {
+    this.acceptUser = acceptUser;
+    this.requestUser = requestUser;
+    this.acceptAt = acceptAt;
+    this.message = message;
+  }
+}
+
 module.exports = {
   RequestAddFriendEvent,
+  AcceptAddFriendEvent,
 };

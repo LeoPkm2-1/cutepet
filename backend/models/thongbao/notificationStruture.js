@@ -169,6 +169,32 @@ class RequestAddFriendNotification extends GeneralNotification {
   }
 }
 
+class AcceptAddFriendNotification extends GeneralNotification {
+  static NOTIFICATION_TYPE = "ACCEPT_ADD_FRIEND";
+  static getNotificationType() {
+    return AcceptAddFriendNotification.NOTIFICATION_TYPE;
+  }
+
+  constructor(
+    receiver_id,
+    payload,
+    createAt = new Date(),
+    title = "",
+    message = "",
+    hasRead = false
+  ) {
+    super(
+      AcceptAddFriendNotification.NOTIFICATION_TYPE,
+      receiver_id,
+      payload,
+      createAt,
+      title,
+      message,
+      hasRead
+    );
+  }
+}
+
 module.exports = {
   LikeStatusPostNotification,
   CommentStatusPostNotification,
@@ -176,4 +202,5 @@ module.exports = {
   ReplyCommentStatusPostNotification,
   TagUserInStatusPostNotification,
   RequestAddFriendNotification,
+  AcceptAddFriendNotification,
 };
