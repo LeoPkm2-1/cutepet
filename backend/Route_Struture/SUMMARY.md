@@ -59,3 +59,7 @@
 4. danh sách bạn bè
    
    _chi tiết:_ **Route_Struture/friend.md số 1** và **postman số 17**
+
+5. danh sách lời mời kết bạn:
+
+   _chi tiết:_ **Route_Struture/friend.md số 2** và **postman số 6**

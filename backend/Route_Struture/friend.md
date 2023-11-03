@@ -5,7 +5,7 @@
    POST: http://localhost:3000/friend/getFriendList
 
 2. cấu trúc:
-   
+
    không cần truyền tham số
 
 3. trả về:
@@ -72,3 +72,69 @@
 }
 ```
 
+## 2. lấy danh sách lời mời kết bạn
+
+1. phương thức:
+
+   POST: http://localhost:3000/friend/getRequestAddFriendList
+
+2. cấu trúc
+
+   không cần truyền tham số
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "ma_nguoi_gui": 2,
+            "ma_nguoi_nhan": 15,
+            "ngay_gui": "2023-11-03T04:04:49.000Z",
+            "trang_thai": "PENDING",
+            "thong_tin_nguoi_gui": {
+                "ma_nguoi_dung": 2,
+                "ten": "Dung",
+                "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                "tai_khoan": "dung",
+                "email": "dung@gmail.com",
+                "so_dien_thoai": "0912345679",
+                "gioi_tinh": 1,
+                "anh": {
+                    "ma_anh": 39,
+                    "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
+                    "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                    "ma_nguoi_dung": 2,
+                    "is_active": 1
+                }
+            }
+        },
+        {
+            "ma_nguoi_gui": 1,
+            "ma_nguoi_nhan": 15,
+            "ngay_gui": "2023-11-03T04:04:49.000Z",
+            "trang_thai": "PENDING",
+            "thong_tin_nguoi_gui": {
+                "ma_nguoi_dung": 1,
+                "ten": "Dung",
+                "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                "tai_khoan": "nam",
+                "email": "nam@gmail.com",
+                "so_dien_thoai": "0912345679",
+                "gioi_tinh": 1,
+                "anh": {
+                    "ma_anh": 39,
+                    "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
+                    "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                    "ma_nguoi_dung": 2,
+                    "is_active": 1
+                }
+            }
+        }
+    ],
+    "message": "lấy lời mời kết bạn thành công",
+    "errno": null,
+    "errcode": null
+}
+```
