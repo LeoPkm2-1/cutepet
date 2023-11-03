@@ -189,7 +189,7 @@
 ## 4. lấy danh sách các loài
 
 1. phương thức:
-   GET: http://localhost:3000/giongloai/danhsachloai
+   POST: http://localhost:3000/giongloai/danhsachloai
 
 2. cấu trúc:
    không cần truyền tham số
@@ -216,6 +216,51 @@
             "ma_loai": 4,
             "ten_loai": "chim"
         }
+    ],
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 5. lấy danh sách các giống của loài nào đó
+
+1. phương thức:
+   POST: http://localhost:3000/giongloai/danhsachgiongTheoLoai
+2. cấu trúc:
+
+```javascript
+{
+  ma_loai: number;
+}
+```
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "ma_giong": 100,
+            "ten_giong": "giống chó khác",
+            "ma_loai": 1
+        },
+        {
+            "ma_giong": 101,
+            "ten_giong": "Labrador Retriever",
+            "ma_loai": 1
+        },
+        {
+            "ma_giong": 102,
+            "ten_giong": "German Shepherd",
+            "ma_loai": 1
+        },
+        {
+            "ma_giong": 103,
+            "ten_giong": "Golden Retriever",
+            "ma_loai": 1
+        },
     ],
     "message": "",
     "errno": null,

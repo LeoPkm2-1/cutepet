@@ -33,3 +33,7 @@
 ## (03-11-2023):
 1. lấy các bài viết trên dòng thời gain của người khác
    *chi tiết:* **Route_Struture/profile.md số 4** và **postman số 32**
+2. lấy danh sách loài
+   *chi tiết:* **Route_Struture/pet.md số 4** và **postman số 33**
+3. lấy danh sách giống của loài nào đó
+   *chi tiết:* **Route_Struture/pet.md số 5** và **postman số 34**
