@@ -109,15 +109,18 @@ const markUserOnline = async (user_id, socketToSend) => {
     .getOnlineUsersByListIds(friendListIds)
     .then((data) => data.payload.map((userOnline) => userOnline.userId));
 
-  // send notification to friends who are online at current
-  const socketNameOfFriends = friendOnlineIdList.map((id) =>
-    socketHelper.getPrivateRoomNameOfUser(id)
-  );
-  const socketOfFriends = socketNameOfFriends.reduce(
-    (acc, room_name) => acc.to(room_name),
-    socketToSend
-  );
-  socketOfFriends.emit("USER_IS_ONLINE", { user_id: user_id });
+  // just send to notify online if and only if user have friend online
+  if (friendOnlineIdList.length > 0) {
+    // send notification to friends who are online at current
+    const socketNameOfFriends = friendOnlineIdList.map((id) =>
+      socketHelper.getPrivateRoomNameOfUser(id)
+    );
+    const socketOfFriends = socketNameOfFriends.reduce(
+      (acc, room_name) => acc.to(room_name),
+      socketToSend
+    );
+    socketOfFriends.emit("USER_IS_ONLINE", { user_id: user_id });
+  }
 };
 
 module.exports = { handlLogin, markUserOnline };
