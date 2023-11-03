@@ -134,7 +134,7 @@ async function userTimelineBackwardController(req, res) {
     before,
     num
   ).then((data) => data.payload);
-  console.log("length:", listOfPost.length);
+  // console.log("length:", listOfPost.length);
   res.status(200).json(new Response(200, listOfPost, ""));
 }
 

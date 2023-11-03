@@ -30,3 +30,6 @@
    *chi tiết:* **Route_Struture/profile.md số 2** và **postman số 30**
 2. lấy thông tin về profile của người khác:
    *chi tiết:* **Route_Struture/profile.md số 3** và **postman số 31**
+## (03-11-2023):
+1. lấy các bài viết trên dòng thời gain của người khác
+   *chi tiết:* **Route_Struture/profile.md số 4** và **postman số 32**

@@ -228,7 +228,7 @@
 }
 ```
 
-- **user_id**: mã của người dùng muốn lấy thông tin profile
+- **user_id**: mã của người dùng mà ta muốn lấy thông tin profile
 
 3. trả về:
 
@@ -266,3 +266,132 @@
 - **danh_sach_anh_dai_dien**:mô tả danh sách ảnh đại diện của người dùng đó
 - **danh_sach_ban_be**:mô tả danh sách bạn bè của người dùng đó.
 - **danh_sach_thu_cung**: mô tả danh sách thú cưng của người dùng đó.
+
+## 4. lấy các bài viết trên time line của người dùng khác
+
+1. phương thức:
+
+   POST : http://localhost:3000/profile/userTimelineBackward
+
+2. cấu trúc:
+
+```javascript
+{
+  user_id: number;
+  before: time_string,
+  num: number
+}
+```
+
+- **user_id**: mã của người dùng mà ta muốn lấy thông tin về time line
+- **before**: mô tả mốc thời gian bài viết được đăng lên trước thời gian này
+- **num**: số lượng bài viết cần lấy
+
+3. trả về :
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "_id": "6543d5d9ad43fb5cb950f519",
+            "text": "DŨNG JUST_FRIENDS - TAG - 1_1",
+            "postType": "status",
+            "visibility": "JUST_FRIENDS",
+            "media": {
+                "type": "images",
+                "data": [
+                    "google.com",
+                    "youtube.com",
+                    "amazon.com"
+                ]
+            },
+            "taggedUsers": [
+                {
+                    "ma_nguoi_dung": 9,
+                    "ten": "Hoang",
+                    "ngay_sinh": "1991-10-06T17:00:00.000Z",
+                    "tai_khoan": "hoang",
+                    "email": "hoang@gmail.com",
+                    "so_dien_thoai": "0912345686",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "9",
+                        "is_active": null
+                    }
+                }
+            ],
+            "createAt": "2023-11-02T17:01:13.890Z",
+            "numOfLike": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 2
+        },
+        {
+            "_id": "6543d5c1ad43fb5cb950f515",
+            "text": "DŨNG PUBLIC - TAG - 1_1",
+            "postType": "status",
+            "visibility": "PUBLIC",
+            "media": {
+                "type": "images",
+                "data": [
+                    "google.com",
+                    "youtube.com",
+                    "amazon.com"
+                ]
+            },
+            "taggedUsers": [
+                {
+                    "ma_nguoi_dung": 9,
+                    "ten": "Hoang",
+                    "ngay_sinh": "1991-10-06T17:00:00.000Z",
+                    "tai_khoan": "hoang",
+                    "email": "hoang@gmail.com",
+                    "so_dien_thoai": "0912345686",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "9",
+                        "is_active": null
+                    }
+                }
+            ],
+            "createAt": "2023-11-02T17:00:49.671Z",
+            "numOfLike": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 2
+        },
+        {
+            "_id": "6543a46ce7954669db8943c8",
+            "text": "Dũng PUBLIC - NON_TAG - 1",
+            "postType": "status",
+            "visibility": "PUBLIC",
+            "media": {
+                "type": "images",
+                "data": [
+                    "google.com",
+                    "youtube.com",
+                    "amazon.com"
+                ]
+            },
+            "taggedUsers": [],
+            "createAt": "2023-11-02T13:30:20.163Z",
+            "numOfLike": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 2
+        }
+    ],
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+

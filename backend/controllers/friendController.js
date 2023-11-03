@@ -207,7 +207,7 @@ const getFriendList = async (req, res) => {
   );
   await Promise.all(
     friends_infor.map(async (user) => {
-      console.log(user.ma_nguoi_dung);
+      // console.log(user.ma_nguoi_dung);
       const isOnline = await userOnlineModel.isUserOnline(user.ma_nguoi_dung);
       user.isOnline = isOnline == true ? true : false;
     })

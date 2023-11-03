@@ -59,67 +59,66 @@
 }
 ```
 
-
 ## 2. xóa thú cưng
 
 1. phương thức:
-    POST: http://localhost:3000/pet/deletePet
+   POST: http://localhost:3000/pet/deletePet
 
 2. cấu trúc:
-   
+
 ```javascript
 {
-    ma_thu_cung:number
+  ma_thu_cung: number;
 }
 ```
 
 3. trả về
-    3.1. khi thú cưng không tồn tại
-    ```javascript
-    {
-        "status": 400,
-        "payload": [],
-        "message": "thú cưng không tồn tại",
-        "errno": 300,
-        "errcode": 300
-    }
-    ```
+   3.1. khi thú cưng không tồn tại
 
-    3.2. khi người xóa không phải là chủ của thú cưng đó
+   ```javascript
+   {
+       "status": 400,
+       "payload": [],
+       "message": "thú cưng không tồn tại",
+       "errno": 300,
+       "errcode": 300
+   }
+   ```
 
-    ```javascript
-    {
-        "status": 400,
-        "payload": [],
-        "message": "bạn không phải là chủ thú cưng",
-        "errno": 300,
-        "errcode": 300
-    }
-    ```
-    
-    3.3. khi xóa thành công
+   3.2. khi người xóa không phải là chủ của thú cưng đó
 
-    ```javascript
-    {
-        "status": 200,
-        "payload": [],
-        "message": "xóa thú cưng thành công",
-        "errno": null,
-        "errcode": null
-    }
-    ```
+   ```javascript
+   {
+       "status": 400,
+       "payload": [],
+       "message": "bạn không phải là chủ thú cưng",
+       "errno": 300,
+       "errcode": 300
+   }
+   ```
 
+   3.3. khi xóa thành công
 
+   ```javascript
+   {
+       "status": 200,
+       "payload": [],
+       "message": "xóa thú cưng thành công",
+       "errno": null,
+       "errcode": null
+   }
+   ```
 
 ## 3. lấy tat cả các thú cưng của chính mình
 
 1. phương thức:
-    GET: http://localhost:3000/pet/getAllMyPets
+   GET: http://localhost:3000/pet/getAllMyPets
 
 2. cấu trúc:
-    không cần truyền tham số
+   không cần truyền tham số
 
 3. trả về :
+
 ```javascript
 {
     "status": 200,
@@ -182,6 +181,43 @@
         }
     ],
     "message": "lấy dữ liệu thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 4. lấy danh sách các loài
+
+1. phương thức:
+   GET: http://localhost:3000/giongloai/danhsachloai
+
+2. cấu trúc:
+   không cần truyền tham số
+
+3. trả về :
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "ma_loai": 1,
+            "ten_loai": "chó"
+        },
+        {
+            "ma_loai": 2,
+            "ten_loai": "mèo"
+        },
+        {
+            "ma_loai": 3,
+            "ten_loai": "cá"
+        },
+        {
+            "ma_loai": 4,
+            "ten_loai": "chim"
+        }
+    ],
+    "message": "",
     "errno": null,
     "errcode": null
 }
