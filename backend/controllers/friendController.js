@@ -4,6 +4,7 @@ const userHelper = require("./../utils/userHelper");
 const { Response } = require("./../utils/index");
 const userOnlineModel = require("./../models/UserOnline/userOnlineModel");
 const theodoiHelper = require("../utils/theodoiHelper");
+const { notifyRequestAddFriend } = require("../notificationHandler/friend");
 
 // gửi lời mời kết bạn
 const requestAddFriend = async (req, res) => {
@@ -35,6 +36,7 @@ const requestAddFriend = async (req, res) => {
       idNguoiNhan
     );
     if (data.status == 200) {
+      notifyRequestAddFriend(idNguoiGui, idNguoiNhan, new Date());
       res.status(200).json(new Response(200, [], "Gửi lời mời thành công"));
     } else {
       console.log(data.message);

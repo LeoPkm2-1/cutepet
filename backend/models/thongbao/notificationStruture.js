@@ -142,10 +142,38 @@ class TagUserInStatusPostNotification extends GeneralNotification {
     );
   }
 }
+
+class RequestAddFriendNotification extends GeneralNotification {
+  static NOTIFICATION_TYPE = "REQUEST_ADD_FRIEND";
+  static getNotificationType() {
+    return RequestAddFriendNotification.NOTIFICATION_TYPE;
+  }
+
+  constructor(
+    receiver_id,
+    payload,
+    createAt = new Date(),
+    title = "",
+    message = "",
+    hasRead = false
+  ) {
+    super(
+      RequestAddFriendNotification.NOTIFICATION_TYPE,
+      receiver_id,
+      payload,
+      createAt,
+      title,
+      message,
+      hasRead
+    );
+  }
+}
+
 module.exports = {
   LikeStatusPostNotification,
   CommentStatusPostNotification,
   LikeCommentStatusPostNotification,
   ReplyCommentStatusPostNotification,
   TagUserInStatusPostNotification,
+  RequestAddFriendNotification,
 };

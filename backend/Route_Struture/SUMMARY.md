@@ -15,51 +15,55 @@
    _chi tiết:_ **Route_Struture/socket.md số 7**
 
 4. Thêm thú cưng
-   
+
    _chi tiết:_ **Route_Struture/pet.md số 1** và **postman số 26**
 
 5. Xóa Thú cưng
-   
+
    _chi tiết:_ **Route_Struture/pet.md số 2** và **postman số 27**
 
 6. lấy tất cả các thú cưng của mình
-   
+
    _chi tiết:_ **Route_Struture/pet.md số 3** và **postman số 28**
 
 ## (01-11-2023):
 
 1. viết route lấy thông tin về profile của mình:
-   
+
    _chi tiết:_ **Route_Struture/profile.md số 1** và **postman số 29**
 
 ## (02-11-2023):
 
 1. lấy các bài viết trên dòng thời gian của chính mình
-   
+
    _chi tiết:_ **Route_Struture/profile.md số 2** và **postman số 30**
 
 2. lấy thông tin về profile của người khác:
-   
+
    _chi tiết:_ **Route_Struture/profile.md số 3** và **postman số 31**
 
 ## (03-11-2023):
 
 1. lấy các bài viết trên dòng thời gain của người khác
-   
+
    _chi tiết:_ **Route_Struture/profile.md số 4** và **postman số 32**
 
 2. lấy danh sách loài
-   
+
    _chi tiết:_ **Route_Struture/pet.md số 4** và **postman số 33**
 
 3. lấy danh sách giống của loài nào đó
-   
+
    _chi tiết:_ **Route_Struture/pet.md số 5** và **postman số 34**
 
 4. danh sách bạn bè
-   
+
    _chi tiết:_ **Route_Struture/friend.md số 1** và **postman số 17**
 
 5. danh sách lời mời kết bạn:
 
    _chi tiết:_ **Route_Struture/friend.md số 2** và **postman số 6**
+
+6. thống báo khi được gửi lời mời kết bạn:
+
+   _chi tiết:_ **Route_Struture/socket.md số 8**
