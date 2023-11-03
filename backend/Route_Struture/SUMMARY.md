@@ -67,3 +67,7 @@
 6. thống báo khi được gửi lời mời kết bạn:
 
    _chi tiết:_ **Route_Struture/socket.md số 8**
+
+7. thông báo khi được chấp nhận lời mời kết bạn:
+
+*chi tiết*: **Route_Struture/socket.md số 9**
