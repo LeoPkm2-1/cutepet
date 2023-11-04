@@ -6,6 +6,7 @@ const UtilsHelper = require("../utils/UtilsHelper");
 const statusPostEventStruture = require("../socketHandler/norm_user/statusPostEventStructure");
 const statusPostNotificationModel = require("../models/thongbao/statusPost");
 const { normUserNamespace } = require("../socketHandler/norm_user");
+const statusAndArticleModel = require("./../models/BaiViet/StatusAndArticleModel");
 
 async function prepareUserBeforeHandleNotiForStatusPost(
   sender_id,
@@ -65,13 +66,13 @@ async function prepareUserBeforeHandleNotiForStatusPost(
   );
   const is_Sender_following_post =
     await theodoiHelper.hasUserFollowedStatusPost(followed_obj_id, sender_id);
-  let postInfor = await StatusPostModel.getPostById(followed_obj_id).then(
-    (data) => {
+  let postInfor = await statusAndArticleModel
+    .getPostById(followed_obj_id)
+    .then((data) => {
       const post = data.payload[0];
       post._id = post._id.toString();
       return post;
-    }
-  );
+    });
 
   postInfor = UtilsHelper.filter_keys_in_Obj(postInfor, [
     "_id",
@@ -284,13 +285,13 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
   // get commneter_id if not provided
   if (typeof commenter_id == "undefined") commenter_id = commentInfor.commentBy;
   // post infor
-  const postInfor = await StatusPostModel.getPostById(commentInfor.postId).then(
-    (data) => {
+  const postInfor = await statusAndArticleModel
+    .getPostById(commentInfor.postId)
+    .then((data) => {
       const post = data.payload[0];
       post._id = post._id.toString();
       return post;
-    }
-  );
+    });
 
   // prepare user data
   const allFollowerInforList =
@@ -665,11 +666,13 @@ const notifyTaggedUserInStatusPost = async (
   // exit if no one is tagged
   if (taggedUserListIds.length <= 0) return;
   // post infor
-  let postInfor = await StatusPostModel.getPostById(post_id).then((data) => {
-    const post = data.payload[0];
-    post._id = post._id.toString();
-    return post;
-  });
+  let postInfor = await statusAndArticleModel
+    .getPostById(post_id)
+    .then((data) => {
+      const post = data.payload[0];
+      post._id = post._id.toString();
+      return post;
+    });
   postInfor = UtilsHelper.filter_keys_in_Obj(postInfor, [
     "_id",
     "postType",

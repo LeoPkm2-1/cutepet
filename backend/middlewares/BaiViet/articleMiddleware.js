@@ -1,3 +1,5 @@
+const statusAndArticleModel = require("./../../models/BaiViet/StatusAndArticleModel");
+const articleHelper = require("./../../utils/BaiViet/articleHelper");
 const { Response } = require("../../utils");
 const NOT_HAVE_TITLE_ERR = "Tiêu đề không được để trống";
 const NOT_HAVE_MAIN_IMG_ERR = "Bài chiase kiến thức phải có ảnh chính";
@@ -57,6 +59,80 @@ async function preProcessAddArtticle(req, res, next) {
   }
 }
 
+async function checkArticleExistMid(req, res, next) {
+  const { article_id } = req.body;
+  const data = await statusAndArticleModel.getPostById(article_id);
+  if (data.payload.length <= 0) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Bài chia sẻ kiến thức không tồn tại", 300, 300)
+      );
+  }
+  req.body.ARTICLE_INFOR = data.payload[0];
+  next();
+}
+
+// middleware tiền xử lý khi toggle like bài viết chia sẻ trạng thái, giả sử KHI bài viết đã TỒN TẠI
+async function preProcessUpVoteArticle(req, res, next) {
+  const { article_id } = req.body;
+  const userId = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const hasUpVoted = await articleHelper.hasUserUpVotedArticle(
+    userId,
+    article_id
+  );
+  // user has already upvote the article
+  if (hasUpVoted) {
+    req.body.action = "REMOVE_UPVOTE";
+    next();
+    return;
+  }
+  const hasDownVoted = false;
+  // const hasDownVoted = await articleHelper.hasUserDownVotedArticle(
+  //   userId,
+  //   article_id
+  // );
+  if (hasDownVoted) {
+    req.body.action = "REMOVE_DOWNVOTE_BEFORE_UPVOTE";
+    next();
+    return;
+  }
+  req.body.action = "JUST_UPVOTE";
+  next();
+  return;
+}
+
+async function preProcessDownVoteArticle(req, res, next) {
+  const { article_id } = req.body;
+  const userId = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const hasDownVoted = await articleHelper.hasUserDownVotedArticle(
+    userId,
+    article_id
+  );
+  // user has already downvote the article
+  if (hasDownVoted) {
+    req.body.action = "REMOVE_DOWNVOTE";
+    next();
+    return;
+  }
+  const hasUpVoted = await articleHelper.hasUserUpVotedArticle(
+    userId,
+    article_id
+  );
+  // user has already upvote the article
+  if (hasUpVoted) {
+    req.body.action = "REMOVE_UPVOTE_BEFORE_DOWNVOTE";
+    next();
+    return;
+  }
+  req.body.action = "JUST_DOWNVOTE";
+  next();
+  return;
+}
+
 module.exports = {
   preProcessAddArtticle,
+  checkArticleExistMid,
+  preProcessUpVoteArticle,
+  preProcessDownVoteArticle,
 };

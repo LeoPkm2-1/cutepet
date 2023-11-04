@@ -1,9 +1,9 @@
 var express = require("express");
 const router = express.Router();
 const statusPostRoutes = require("./statusRoutes");
-const informativenessRoutes = require("./informativenessRoutes");
+const articleRoutes = require("./articleRoutes");
 // statusPost router
 router.use("/statusPost", statusPostRoutes);
 // informative article
-router.use("/informativeness", informativenessRoutes);
+router.use("/article", articleRoutes);
 module.exports = router;

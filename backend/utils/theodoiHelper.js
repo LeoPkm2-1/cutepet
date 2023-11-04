@@ -1,7 +1,7 @@
 const followModel = require("../models/theodoi/followModel");
 const statusPostModel = require("../models/BaiViet/StatusPostModel");
 const { Response } = require("./index");
-const { __await } = require("tslib");
+const statusAndArticleModel = require("../models/BaiViet/StatusAndArticleModel");
 
 const hasFollowExisted = async (followed_Obj_Id, follower_Id, type) => {
   const data = await followModel
@@ -37,7 +37,7 @@ async function unFollowStatusPost(
   if (!stillFollowWhenUserIsOwner) {
     return await followModel.userUnFollowStatusPost(statusPost_Id, user_id);
   }
-  const post_infor = await statusPostModel
+  const post_infor = await statusAndArticleModel
     .getPostById(statusPost_Id)
     .then((data) => data.payload[0]);
   if (typeof post_infor == "undefined")

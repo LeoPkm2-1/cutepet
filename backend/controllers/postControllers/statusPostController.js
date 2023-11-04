@@ -5,7 +5,7 @@ const { Response } = require("../../utils/index");
 const statusPostHelper = require("../../utils/BaiViet/statusPostHelper");
 const followModel = require("../../models/theodoi/followModel");
 const followhelper = require("../../utils/theodoiHelper");
-
+const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 const {
   notifyLikePost,
   notifyCommentPost,
@@ -32,7 +32,7 @@ const addPostController = async (req, res) => {
     res.status(400).json(new Response(400, [], "đã có lỗi xảy ra", 300, 300));
     return;
   }
-  const insertedPost = await StatusPostModel.getPostById(
+  const insertedPost = await statusAndArticleModel.getPostById(
     addProcess.payload.insertedId
   );
   const idOfPost = insertedPost.payload[0]._id.toString();
@@ -368,9 +368,9 @@ const getReplyStartFromController = async (req, res) => {
 const getPostController = async (req, res) => {
   const { post_id } = req.body;
   const ma_nguoi_dung = req.auth_decoded.ma_nguoi_dung;
-  const postData = await StatusPostModel.getPostById(post_id).then(
-    (data) => data.payload
-  );
+  const postData = await statusAndArticleModel
+    .getPostById(post_id)
+    .then((data) => data.payload);
   const owner_infor = await userHelper.getUserPublicInforByUserId(
     postData[0].owner_id
   );
@@ -489,9 +489,9 @@ const deleteCommentController = async (req, res) => {
     // console.log(deleteProcess);
     await StatusPostModel.deleteCommentByCmtId(cmt_id);
     const postId = req.body.CMT_POST_INFOR.postId;
-    const postInfor = await StatusPostModel.getPostById(postId).then(
-      (data) => data.payload
-    );
+    const postInfor = await statusAndArticleModel
+      .getPostById(postId)
+      .then((data) => data.payload);
     // console.log(postInfor);
     const numOfComment = postInfor[0].numOfComment;
     await StatusPostModel.updateNumOfCommentPost(postId, numOfComment - 1);

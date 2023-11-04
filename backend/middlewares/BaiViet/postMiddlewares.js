@@ -2,6 +2,7 @@ const { Response } = require("../../utils");
 const statusPostModel = require("../../models/BaiViet/StatusPostModel");
 const postHelper = require("../../utils/postHelper");
 const banBeHelper = require("./../../utils/banbeHelper");
+const statusAndArticleModel = require('../../models/BaiViet/StatusAndArticleModel');
 
 async function preProcessAddPost(req, res, next) {
   const NOT_CONTENT_POST = `bài viết không được chấp nhận do không có nội dung`;
@@ -54,7 +55,7 @@ async function checkPostExistMid(req, res, next) {
   } else if (req.method === "POST") {
     post_id = req.body.post_id;
   }
-  const data = await statusPostModel.getPostById(post_id);
+  const data = await statusAndArticleModel.getPostById(post_id);
   if (data.payload.length <= 0) {
     res
       .status(400)
@@ -277,7 +278,7 @@ async function preProcessDeletePost(req, res, next) {
 }
 
 async function preProcessDeleteComment(req, res, next) {
-  const postInfor = await statusPostModel
+  const postInfor = await statusAndArticleModel
     .getPostById(req.body.CMT_POST_INFOR.postId)
     .then((data) => data.payload[0]);
   console.log({ postInfor });
@@ -298,7 +299,7 @@ async function preProcessDeleteComment(req, res, next) {
 }
 
 async function preProcessDeleteReplyOFCmt(req, res, next) {
-  const postInfor = await statusPostModel
+  const postInfor = await statusAndArticleModel
     .getPostById(req.body.REPLY_POST_INFOR.postId)
     .then((data) => data.payload[0]);
   // console.log({postInfor});

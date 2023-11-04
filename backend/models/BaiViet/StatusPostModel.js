@@ -1,6 +1,7 @@
 const { sqlQuery, nonSQLQuery } = require("../index");
 const { Response } = require("../../utils/index");
 const { ObjectId } = require("mongodb");
+const statusAndArticleModel = require('./StatusAndArticleModel')
 
 const addPost = async (statusPost) => {
   async function executor(collection) {
@@ -11,14 +12,14 @@ const addPost = async (statusPost) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-const getPostById = async (postId) => {
-  async function executor(collection) {
-    return await collection.find({ _id: new ObjectId(postId) }).toArray();
-  }
-  return await nonSQLQuery(executor, "BaiViet")
-    .then((data) => new Response(200, data, ""))
-    .catch((err) => new Response(400, err, "", 300, 300));
-};
+// const getPostById = async (postId) => {
+//   async function executor(collection) {
+//     return await collection.find({ _id: new ObjectId(postId) }).toArray();
+//   }
+//   return await nonSQLQuery(executor, "BaiViet")
+//     .then((data) => new Response(200, data, ""))
+//     .catch((err) => new Response(400, err, "", 300, 300));
+// };
 
 const addLikePost = async (post_id, user_id) => {
   async function executor(collection) {
@@ -536,7 +537,7 @@ const deletePostById = async (postId) => {
 };
 
 const getOnwerIdOfPost = async (postId) => {
-  const postInfor = await getPostById(postId).then((data) => data.payload[0]);
+  const postInfor = await statusAndArticleModel.getPostById(postId).then((data) => data.payload[0]);
   return typeof postInfor === "undefined" ? null : parseInt(postInfor.owner_id);
 };
 
@@ -551,7 +552,7 @@ const getOnwerIdOfComment = async (comment_id) => {
 
 module.exports = {
   addPost,  // 1
-  getPostById, // 2
+  // getPostById, // 2
   addComment, // 3
   addLikePost, // 4
   getLikeThePostInfor, // 5
