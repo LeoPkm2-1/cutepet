@@ -75,10 +75,21 @@ async function unFollowUser(follower_id, user_followed_id) {
   return await followModel.userUnFollowAnother(user_followed_id, follower_id);
 }
 
-// (async function () {
-//   const data = await unFollowUser(1,2)
-//   console.log(data);
-// })();
+// article
+async function hasUserFollowArticle(article_id, user_id) {
+  user_id = parseInt(user_id);
+  return await hasFollowExisted(article_id, user_id, "FOLLOW_ARTICLE");
+}
+
+async function followArticle(article_id, user_id, isUnique = true) {
+  if (!isUnique) {
+    return await followModel.userFollowArticle(article_id, user_id);
+  }
+  const hasFollowed = await hasUserFollowArticle(article_id, user_id);
+  if (!hasFollowed) {
+    return await followModel.userFollowArticle(article_id, user_id);
+  }
+}
 
 module.exports = {
   followStatusPost,
@@ -87,4 +98,6 @@ module.exports = {
   hasUserFollowedAnother,
   followUser,
   unFollowUser,
+  followArticle,
+  hasUserFollowArticle,
 };

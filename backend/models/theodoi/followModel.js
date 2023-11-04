@@ -112,10 +112,21 @@ const getOneFollowInforBetweenTwoUser = async (
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-// (async function(){
-// 	const data = await getOneFollowInforBetweenTwoUser(1,2)
-// 	console.log(data);
-// })()
+// article
+const userFollowArticle = async (article_id, user_id) => {
+  const articleFollow = new followStructure.FollowArticle(article_id, user_id);
+  async function executor(collection) {
+    return await collection.insertOne(articleFollow);
+  }
+  return await nonSQLQuery(executor, "BangTheoDoi")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// (async function () {
+//   const data = await userFollowArticle(1, 2);
+//   console.log(data);
+// })();
 
 // (async function(){
 // 	const data = await userFollowAnother(3,4)
@@ -130,4 +141,5 @@ module.exports = {
   userFollowAnother,
   userUnFollowAnother,
   getOneFollowInforBetweenTwoUser,
+  userFollowArticle,
 };
