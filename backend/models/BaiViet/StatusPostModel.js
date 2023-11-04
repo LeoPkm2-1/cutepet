@@ -6,7 +6,7 @@ const addPost = async (statusPost) => {
   async function executor(collection) {
     return await collection.insertOne(statusPost);
   }
-  return await nonSQLQuery(executor, "BaiVietTrangThai")
+  return await nonSQLQuery(executor, "BaiViet")
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
@@ -15,7 +15,7 @@ const getPostById = async (postId) => {
   async function executor(collection) {
     return await collection.find({ _id: new ObjectId(postId) }).toArray();
   }
-  return await nonSQLQuery(executor, "BaiVietTrangThai")
+  return await nonSQLQuery(executor, "BaiViet")
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
@@ -118,7 +118,7 @@ const updateNumOfLikePost = async (post_id, numOfLike) => {
       { $set: { numOfLike: numOfLike } }
     );
   }
-  return await nonSQLQuery(executor, "BaiVietTrangThai")
+  return await nonSQLQuery(executor, "BaiViet")
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
@@ -142,7 +142,7 @@ const updateNumOfCommentPost = async (post_id, numOfComment) => {
       { $set: { numOfComment: numOfComment } }
     );
   }
-  return await nonSQLQuery(executor, "BaiVietTrangThai")
+  return await nonSQLQuery(executor, "BaiViet")
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
@@ -216,7 +216,7 @@ const getAllPost = async () => {
   async function executor(collection) {
     return await collection.find().sort({ createAt: -1 }).toArray();
   }
-  return await nonSQLQuery(executor, "BaiVietTrangThai")
+  return await nonSQLQuery(executor, "BaiViet")
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
@@ -247,7 +247,7 @@ const getAllPostOfUserBeforeTime = async (userId, before, num = undefined) => {
     };
   }
 
-  return await nonSQLQuery(executor, "BaiVietTrangThai")
+  return await nonSQLQuery(executor, "BaiViet")
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
@@ -382,7 +382,7 @@ const getPostOfUserForReaderBeforeTime = async (
         .toArray();
     };
 
-  return await nonSQLQuery(executor, "BaiVietTrangThai")
+  return await nonSQLQuery(executor, "BaiViet")
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
@@ -526,7 +526,7 @@ const deletePostById = async (postId) => {
   async function executor(collection) {
     return collection.deleteOne({ _id: new ObjectId(postId) });
   }
-  return await nonSQLQuery(executor, "BaiVietTrangThai")
+  return await nonSQLQuery(executor, "BaiViet")
     .then((data) => new Response(200, data, ""))
     .catch((err) => {
       console.log(err);
@@ -550,25 +550,25 @@ const getOnwerIdOfComment = async (comment_id) => {
 };
 
 module.exports = {
-  addPost,
-  getPostById,
-  addComment,
-  addLikePost,
-  getLikeThePostInfor,
-  removeLikePost,
-  removeLikeCmtPost,
-  updateNumOfLikePost,
-  updateNumOfLikeCmtPost,
-  updateNumOfCommentPost,
-  updateNumOfReplyInCmtPost,
-  getCommentPostById,
-  getLikeCmtPostInfor,
-  addLikeCmtPost,
-  addReplyComment,
-  getReplyCommentById,
-  getAllReplyCommentByCmtId,
-  getAllCmtByPostId,
-  getAllPost,
+  addPost,  // 1
+  getPostById, // 2
+  addComment, // 3
+  addLikePost, // 4
+  getLikeThePostInfor, // 5
+  removeLikePost, // 6
+  removeLikeCmtPost,  // 8
+  updateNumOfLikePost,  // 9
+  updateNumOfLikeCmtPost, // 10
+  updateNumOfCommentPost, // 11
+  updateNumOfReplyInCmtPost,  //12
+  getCommentPostById, // 13
+  getLikeCmtPostInfor, //14
+  addLikeCmtPost, // 7
+  addReplyComment, // 12
+  getReplyCommentById,  // 
+  getAllReplyCommentByCmtId,  //
+  getAllCmtByPostId,    //
+  getAllPost, // ?
   getLikeThePostInforOfListPosts,
   updateReplyComment,
   updateCommentPost,
