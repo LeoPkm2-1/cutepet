@@ -3,7 +3,8 @@
 db.BaiVietTrangThai.insertOne({
 	_id: ObjectId('123456789012'), //313233343536373839303132
 	text: 'xoa testing',
-	postType: 'status',
+	postType: 'STATUS',
+    visibility: "PUBLIC",
 	media: {
 		type: 'images',
 		data: ['google.com', 'facebook.com'],
