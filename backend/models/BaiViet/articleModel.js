@@ -84,6 +84,12 @@ const getUpVoteOfArticleByUser = async (user_id, article_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+// (async function () {
+//   const data = await getUpVoteOfArticleByUser(10, "6545f11d264a36e0b590d15a");
+//   console.log('data');
+//   console.log(data);
+// })()
+
 // lấy thông tin downvote của người dùng cho bài viết
 const getDownVoteOfArticleByUser = async (user_id, article_id) => {
   async function executor(collection) {

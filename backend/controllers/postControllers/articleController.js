@@ -47,7 +47,9 @@ async function toggleUpVoteArticleControler(req, res) {
     const { article_id, action } = req.body;
     const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
     const numOfUpVote = req.body.ARTICLE_INFOR.numOfUpVote;
+
     if (action == "JUST_UPVOTE") {
+      // thêm thông tin upvote
       const upVoteProcess = await articleModel.addUpVote(article_id, user_id);
       // thông tin upvote
       const upVoteInfor = await articleModel
@@ -76,6 +78,22 @@ async function toggleUpVoteArticleControler(req, res) {
         )
       );
     } else if (action == "REMOVE_DOWNVOTE_BEFORE_UPVOTE") {
+      // 1. hủy downvote trước
+      // === 1.1. xóa thông tin downvote
+      const numOfDownVote = req.body.ARTICLE_INFOR.numOfDownVote;
+      await articleModel.removeDownVote(article_id, user_id);
+      // === 1.2. giảm số lượng downvote
+      await articleModel.updateNumOfDownVote(article_id, numOfDownVote - 1);
+      // 2. upvote
+      // === 2.1. thêm thông tin upvote
+      const upVoteProcess = await articleModel.addUpVote(article_id, user_id);
+      // === 2.2. thông tin upvote
+      const upVoteInfor = await articleModel
+        .getUpVoteOfArticleByUser(user_id, article_id)
+        .then((data) => data.payload);
+      // === 2.3. tăng số lượng upvote của bài viết
+      await articleModel.updateNumOfUpVote(article_id, numOfUpVote + 1);
+      res.status(200).json(new Response(200, upVoteInfor, "upvote thành công"));
     }
   } catch (error) {
     console.log(error);

@@ -87,11 +87,11 @@ async function preProcessUpVoteArticle(req, res, next) {
     next();
     return;
   }
-  const hasDownVoted = false;
-  // const hasDownVoted = await articleHelper.hasUserDownVotedArticle(
-  //   userId,
-  //   article_id
-  // );
+  const hasDownVoted = await articleHelper.hasUserDownVotedArticle(
+    userId,
+    article_id
+  );
+  // user has already downvote the article
   if (hasDownVoted) {
     req.body.action = "REMOVE_DOWNVOTE_BEFORE_UPVOTE";
     next();
