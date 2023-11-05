@@ -24,4 +24,11 @@ router.post(
   articleController.toggleDownVoteArticleControler
 );
 
+// thêm comment vào bài chia sẻ kiến thức`
+router.post(
+  "/addComment",
+  [articleMiddle.checkArticleExistMid, articleMiddle.preProcessCmtArticle],
+  articleController.addCommentController
+);
+
 module.exports = router;

@@ -69,11 +69,13 @@ async function checkArticleExistMid(req, res, next) {
         new Response(400, [], "Bài chia sẻ kiến thức không tồn tại", 300, 300)
       );
   }
+  // change type của _id từ object sang string
+  data.payload[0]._id = data.payload[0]._id.toString();
   req.body.ARTICLE_INFOR = data.payload[0];
   next();
 }
 
-// middleware tiền xử lý khi toggle like bài viết chia sẻ trạng thái, giả sử KHI bài viết đã TỒN TẠI
+// middleware tiền xử lý khi toggle upvote bài viết chia sẻ trạng thái
 async function preProcessUpVoteArticle(req, res, next) {
   const { article_id } = req.body;
   const userId = parseInt(req.auth_decoded.ma_nguoi_dung);
@@ -102,6 +104,7 @@ async function preProcessUpVoteArticle(req, res, next) {
   return;
 }
 
+// middleware tiền xử lý khi toggle downvote bài viết chia sẻ trạng thái
 async function preProcessDownVoteArticle(req, res, next) {
   const { article_id } = req.body;
   const userId = parseInt(req.auth_decoded.ma_nguoi_dung);
@@ -130,9 +133,23 @@ async function preProcessDownVoteArticle(req, res, next) {
   return;
 }
 
+// tiền xử lý khi add comment vào bài viết chia sẻ trạng thái
+async function preProcessCmtArticle(req, res, next) {
+  const comment = req.body.comment;
+  if (typeof comment != "string" || comment.trim() == "") {
+    res
+      .status(400)
+      .json(new Response(400, [], "Bình luận không được để trống", 300, 300));
+    return;
+  }
+  next();
+  return;
+}
+
 module.exports = {
   preProcessAddArtticle,
   checkArticleExistMid,
   preProcessUpVoteArticle,
   preProcessDownVoteArticle,
+  preProcessCmtArticle,
 };

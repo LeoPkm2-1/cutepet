@@ -56,7 +56,7 @@ async function toggleUpVoteArticleControler(req, res) {
         .getUpVoteOfArticleByUser(user_id, article_id)
         .then((data) => data.payload);
       // tăng số lượng upvote của bài viết
-      await articleModel.updateNumOfUpVote(article_id, numOfUpVote + 1);
+      await articleModel.updateNumOfUpVoteArticle(article_id, numOfUpVote + 1);
 
       res.status(200).json(new Response(200, upVoteInfor, "upvote thành công"));
       return;
@@ -67,7 +67,7 @@ async function toggleUpVoteArticleControler(req, res) {
         user_id
       );
       // giảm số lượng upvote
-      await articleModel.updateNumOfUpVote(article_id, numOfUpVote - 1);
+      await articleModel.updateNumOfUpVoteArticle(article_id, numOfUpVote - 1);
       res.status(200).json(
         new Response(
           200,
@@ -83,7 +83,10 @@ async function toggleUpVoteArticleControler(req, res) {
       const numOfDownVote = req.body.ARTICLE_INFOR.numOfDownVote;
       await articleModel.removeDownVote(article_id, user_id);
       // === 1.2. giảm số lượng downvote
-      await articleModel.updateNumOfDownVote(article_id, numOfDownVote - 1);
+      await articleModel.updateNumOfDownVoteArticle(
+        article_id,
+        numOfDownVote - 1
+      );
       // 2. upvote
       // === 2.1. thêm thông tin upvote
       const upVoteProcess = await articleModel.addUpVote(article_id, user_id);
@@ -92,7 +95,7 @@ async function toggleUpVoteArticleControler(req, res) {
         .getUpVoteOfArticleByUser(user_id, article_id)
         .then((data) => data.payload);
       // === 2.3. tăng số lượng upvote của bài viết
-      await articleModel.updateNumOfUpVote(article_id, numOfUpVote + 1);
+      await articleModel.updateNumOfUpVoteArticle(article_id, numOfUpVote + 1);
       res.status(200).json(new Response(200, upVoteInfor, "upvote thành công"));
     }
   } catch (error) {
@@ -116,7 +119,10 @@ async function toggleDownVoteArticleControler(req, res) {
         .getDownVoteOfArticleByUser(user_id, article_id)
         .then((data) => data.payload);
       // tăng số lượng downvote của bài viết
-      await articleModel.updateNumOfDownVote(article_id, numOfDownVote + 1);
+      await articleModel.updateNumOfDownVoteArticle(
+        article_id,
+        numOfDownVote + 1
+      );
 
       res
         .status(200)
@@ -126,7 +132,10 @@ async function toggleDownVoteArticleControler(req, res) {
       // hủy downvote trước đó
       await articleModel.removeDownVote(article_id, user_id);
       // giảm số lượng downvote
-      await articleModel.updateNumOfDownVote(article_id, numOfDownVote - 1);
+      await articleModel.updateNumOfDownVoteArticle(
+        article_id,
+        numOfDownVote - 1
+      );
       res.status(200).json(
         new Response(
           200,
@@ -142,7 +151,7 @@ async function toggleDownVoteArticleControler(req, res) {
       const numOfUpVote = req.body.ARTICLE_INFOR.numOfUpVote;
       await articleModel.removeUpVote(article_id, user_id);
       // === 1.2. giảm số lượng upvote
-      await articleModel.updateNumOfUpVote(article_id, numOfUpVote - 1);
+      await articleModel.updateNumOfUpVoteArticle(article_id, numOfUpVote - 1);
       // 2. downvote
       // === 2.1. thêm thông tin downvote
       const downVoteProcess = await articleModel.addDownVote(
@@ -154,7 +163,10 @@ async function toggleDownVoteArticleControler(req, res) {
         .getDownVoteOfArticleByUser(user_id, article_id)
         .then((data) => data.payload);
       // === 2.3. tăng số lượng downvote của bài viết
-      await articleModel.updateNumOfDownVote(article_id, numOfDownVote + 1);
+      await articleModel.updateNumOfDownVoteArticle(
+        article_id,
+        numOfDownVote + 1
+      );
       res
         .status(200)
         .json(new Response(200, downVoteInfor, "downvote thành công"));
@@ -163,8 +175,29 @@ async function toggleDownVoteArticleControler(req, res) {
     console.log(error);
   }
 }
+
+async function addCommentController(req, res) {
+  const comment = req.body.comment;
+  const article_id = req.body.article_id;
+  const commentBy = req.auth_decoded.ma_nguoi_dung;
+  const numOfComment = req.body.ARTICLE_INFOR.numOfComment;
+  const commentObj = new articleComposStructure.CommentArticle(
+    article_id,
+    comment,
+    commentBy
+  );
+  // add comment to db
+  const commentProcess = await articleModel.addComment(commentObj);
+  // update numOfComment for article
+  await articleModel.updateNumOfCommentArticle(article_id, numOfComment + 1);
+  const idOfComment = commentProcess.payload.insertedId.toString();
+  const insertedComment = await articleModel.getCommentByCmtId(idOfComment);
+
+  res.status(200).json(new Response(200, insertedComment.payload, ""));
+}
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
   toggleDownVoteArticleControler,
+  addCommentController,
 };

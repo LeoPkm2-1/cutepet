@@ -2,7 +2,7 @@ const { Response } = require("../../utils");
 const statusPostModel = require("../../models/BaiViet/StatusPostModel");
 const postHelper = require("../../utils/postHelper");
 const banBeHelper = require("./../../utils/banbeHelper");
-const statusAndArticleModel = require('../../models/BaiViet/StatusAndArticleModel');
+const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 
 async function preProcessAddPost(req, res, next) {
   const NOT_CONTENT_POST = `bài viết không được chấp nhận do không có nội dung`;
@@ -62,6 +62,8 @@ async function checkPostExistMid(req, res, next) {
       .json(new Response(400, "Bài viết không tồn tại", 300, 300, 300));
     return;
   }
+  // change type của _id từ object sang string
+  data.payload[0]._id = data.payload[0]._id.toString();
   req.body.STATUS_POST_INFOR = data.payload[0];
   next();
 }

@@ -65,12 +65,6 @@ const removeDownVote = async (article_id, user_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-// (async function () {
-//   const data = await removeDownVote('1',2);
-//   console.log('data');
-//   console.log(data);
-// })();
-
 // lấy thông tin upvote của người dùng cho bài viết
 const getUpVoteOfArticleByUser = async (user_id, article_id) => {
   async function executor(collection) {
@@ -83,12 +77,6 @@ const getUpVoteOfArticleByUser = async (user_id, article_id) => {
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
-
-// (async function () {
-//   const data = await getUpVoteOfArticleByUser(10, "6545f11d264a36e0b590d15a");
-//   console.log('data');
-//   console.log(data);
-// })()
 
 // lấy thông tin downvote của người dùng cho bài viết
 const getDownVoteOfArticleByUser = async (user_id, article_id) => {
@@ -103,14 +91,8 @@ const getDownVoteOfArticleByUser = async (user_id, article_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-// (async function () {
-//   const data = await getDownVoteOfArticleByUser(10, "6545f11d264a36e0b590d15a");
-//   console.log("data");
-//   console.log(data);
-// })()
-
 // cập nhật sồ lượng upvote của bài chia sẻ kiến thức
-const updateNumOfUpVote = async (article_id, numOfUpVote) => {
+const updateNumOfUpVoteArticle = async (article_id, numOfUpVote) => {
   async function executor(collection) {
     return await collection.updateOne(
       { _id: new ObjectId(article_id) },
@@ -122,7 +104,8 @@ const updateNumOfUpVote = async (article_id, numOfUpVote) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-const updateNumOfDownVote = async (article_id, numOfDownVote) => {
+// cập nhật sồ lượng downvote của bài chia sẻ kiến thức
+const updateNumOfDownVoteArticle = async (article_id, numOfDownVote) => {
   async function executor(collection) {
     return await collection.updateOne(
       { _id: new ObjectId(article_id) },
@@ -134,9 +117,41 @@ const updateNumOfDownVote = async (article_id, numOfDownVote) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+// thêm comment vào bài chia sẻ kiến thức
+const addComment = async (commentObj) => {
+  async function executor(collection) {
+    return await collection.insertOne(commentObj);
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// cập nhật số lượng bình luận cho bài viết chia sẻ kiến thức
+const updateNumOfCommentArticle = async (article_id, numOfComment) => {
+  async function executor(collection) {
+    return await collection.updateOne(
+      { _id: new ObjectId(article_id) },
+      { $set: { numOfComment: numOfComment } }
+    );
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getCommentByCmtId = async (cmt_id) => {
+  async function executor(collection) {
+    return await collection.findOne({ _id: new ObjectId(cmt_id) });
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // (async function () {
-//   const data = await updateNumOfDownVote("6545f11d264a36e0b590d15a", 1);
-//   console.log("donw");
+//   const data = await getCommentByCmtId("6547028316190b5702559dcd");
+//   console.log("commment ahihih");
 //   console.log(data);
 // })();
 
@@ -154,11 +169,14 @@ module.exports = {
   addArticle,
   addUpVote,
   getUpVoteOfArticleByUser,
-  updateNumOfUpVote,
+  updateNumOfUpVoteArticle,
   removeUpVote,
   addDownVote,
   getDownVoteOfArticleByUser,
-  updateNumOfDownVote,
+  updateNumOfDownVoteArticle,
   removeDownVote,
+  addComment,
+  updateNumOfCommentArticle,
+  getCommentByCmtId,
   // getPostById,
 };
