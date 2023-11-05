@@ -1,5 +1,7 @@
 const statusAndArticleModel = require("./../../models/BaiViet/StatusAndArticleModel");
+const articleModel = require("./../../models/BaiViet/articleModel");
 const articleHelper = require("./../../utils/BaiViet/articleHelper");
+const StatusAndArticleModel = require("./../../models/BaiViet/StatusAndArticleModel");
 const { Response } = require("../../utils");
 const NOT_HAVE_TITLE_ERR = "Tiêu đề không được để trống";
 const NOT_HAVE_MAIN_IMG_ERR = "Bài chiase kiến thức phải có ảnh chính";
@@ -75,6 +77,30 @@ async function checkArticleExistMid(req, res, next) {
   next();
 }
 
+async function checkCommentExistMid(req, res, next) {
+  const cmt_id = req.body.cmt_id;
+
+  // get data of comment article
+  const data = await articleModel.getCommentByCmtId(cmt_id);
+  if (data.payload == null) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Bình luận không tồn tại", 300, 300));
+    return;
+  }
+  // change type của _id từ object sang string
+  data.payload._id = data.payload._id.toString();
+  req.body.CMT_ARTICLE_INFOR = data.payload;
+  // get data of article
+  const articleInfor = await StatusAndArticleModel.getPostById(
+    data.payload.articleId
+  ).then((data) => data.payload[0]);
+  articleInfor._id = articleInfor._id.toString();
+  req.body.ARTICLE_INFOR = articleInfor;
+  // console.log(articleInfor);
+  next();
+}
+
 // middleware tiền xử lý khi toggle upvote bài viết chia sẻ trạng thái
 async function preProcessUpVoteArticle(req, res, next) {
   const { article_id } = req.body;
@@ -134,7 +160,7 @@ async function preProcessDownVoteArticle(req, res, next) {
 }
 
 // tiền xử lý khi add comment vào bài viết chia sẻ trạng thái
-async function preProcessCmtArticle(req, res, next) {
+async function preProcessAddCmtArticle(req, res, next) {
   const comment = req.body.comment;
   if (typeof comment != "string" || comment.trim() == "") {
     res
@@ -146,10 +172,24 @@ async function preProcessCmtArticle(req, res, next) {
   return;
 }
 
+// tiền xử lý khi thêm phải hồi vào bình luận của bài viết chia sẻ trạng thái
+async function preProcessAddReplyCmt(req, res, next) {
+  const reply = req.body.reply;
+  if (typeof reply != "string" || reply.trim() == "") {
+    res
+      .status(400)
+      .json(new Response(400, [], "Phải hồi không được để trống", 300, 300));
+    return;
+  }
+  next();
+}
+
 module.exports = {
   preProcessAddArtticle,
   checkArticleExistMid,
+  checkCommentExistMid,
   preProcessUpVoteArticle,
   preProcessDownVoteArticle,
-  preProcessCmtArticle,
+  preProcessAddCmtArticle,
+  preProcessAddReplyCmt,
 };

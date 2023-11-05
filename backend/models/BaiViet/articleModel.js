@@ -1,6 +1,7 @@
 const { sqlQuery, nonSQLQuery } = require("../index");
 const { Response } = require("../../utils/index");
 const { ObjectId } = require("mongodb");
+const articleComposStructure = require("./articleComposStructure");
 
 const addArticle = async (articleObj) => {
   async function executor(collection) {
@@ -127,6 +128,15 @@ const addComment = async (commentObj) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const addReply = async (replyObj) => {
+  async function executor(collection) {
+    return await collection.insertOne(replyObj);
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // cập nhật số lượng bình luận cho bài viết chia sẻ kiến thức
 const updateNumOfCommentArticle = async (article_id, numOfComment) => {
   async function executor(collection) {
@@ -140,18 +150,70 @@ const updateNumOfCommentArticle = async (article_id, numOfComment) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-const getCommentByCmtId = async (cmt_id) => {
+// cập nhật số lượng phản hồi cho bình luận
+const updateNumOfReplyComment = async (cmt_id, numOfReply) => {
   async function executor(collection) {
-    return await collection.findOne({ _id: new ObjectId(cmt_id) });
+    return await collection.updateOne(
+      { _id: new ObjectId(cmt_id) },
+      { $set: { numOfReply: numOfReply } }
+    );
   }
   return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getRowInBinhLuanTable = async (row_id, type = undefined) => {
+  let executor = null;
+  if (typeof type == "undefined") {
+    executor = async (collection) => {
+      return await collection.findOne({ _id: new ObjectId(row_id) });
+    };
+  } else {
+    executor = async (collection) => {
+      return await collection.findOne({
+        _id: new ObjectId(row_id),
+        type: type,
+      });
+    };
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) =>
+      typeof data == "undefined"
+        ? new Response(200, null, "")
+        : new Response(200, data, "")
+    )
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // (async function () {
-//   const data = await getCommentByCmtId("6547028316190b5702559dcd");
-//   console.log("commment ahihih");
+//   const data = await getRowInBinhLuanTable(
+//     "65470cd35c48d9c51077c1d9",
+//     "COMMENT_ARTICLE"
+//   );
+//   console.log("\n\nhahah");
+//   console.log(data);
+// })();
+
+const getCommentByCmtId = async (cmt_id) => {
+  return await getRowInBinhLuanTable(
+    cmt_id,
+    articleComposStructure.CommentArticle.type
+  );
+};
+
+const getReplyByReplyId = async (reply_id) => {
+  return await getRowInBinhLuanTable(
+    reply_id,
+    articleComposStructure.ReplyCommentArticle.type
+  );
+};
+
+// (async function () {
+//   const data = await getReplyByReplyId("65474e9e9b61cf9a1c874b98");
+//   console.log("reply ahihih");
+//   // const data = await getCommentByCmtId("65470cd35c48d9c51077c1d9");
+//   // console.log("Comment ahihih");
 //   console.log(data);
 // })();
 
@@ -177,6 +239,9 @@ module.exports = {
   removeDownVote,
   addComment,
   updateNumOfCommentArticle,
+  updateNumOfReplyComment,
   getCommentByCmtId,
+  addReply,
+  getReplyByReplyId,
   // getPostById,
 };

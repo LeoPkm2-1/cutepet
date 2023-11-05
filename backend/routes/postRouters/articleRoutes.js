@@ -27,8 +27,15 @@ router.post(
 // thêm comment vào bài chia sẻ kiến thức`
 router.post(
   "/addComment",
-  [articleMiddle.checkArticleExistMid, articleMiddle.preProcessCmtArticle],
+  [articleMiddle.checkArticleExistMid, articleMiddle.preProcessAddCmtArticle],
   articleController.addCommentController
+);
+
+// thêm reply của comment vào bài viết chia sẻ kiến thức
+router.post(
+  "/addReply",
+  [articleMiddle.checkCommentExistMid, articleMiddle.preProcessAddReplyCmt],
+  articleController.addReplyController
 );
 
 module.exports = router;

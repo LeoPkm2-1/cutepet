@@ -31,7 +31,23 @@ class CommentArticle {
   }
 }
 
+class ReplyCommentArticle {
+  static type = "REPLY_COMMENT_ARTICLE";
+  constructor(cmtId, reply, replyBy, articleId) {
+    this.cmtId = cmtId;
+    this.type = this.constructor.type;
+    this.reply = reply;
+    this.replyBy = replyBy;
+    this.replyAt = new Date();
+    this.articleId = articleId;
+    this.modifiedAt = null;
+    this.numOfUpVote = 0;
+    this.numOfDownVote = 0;
+  }
+}
+
 module.exports = {
   Article,
   CommentArticle,
+  ReplyCommentArticle,
 };

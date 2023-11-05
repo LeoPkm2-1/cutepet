@@ -195,9 +195,34 @@ async function addCommentController(req, res) {
 
   res.status(200).json(new Response(200, insertedComment.payload, ""));
 }
+
+async function addReplyController(req, res) {
+  const reply = req.body.reply;
+  const cmt_id = req.body.cmt_id;
+  const article_id = req.body.ARTICLE_INFOR._id;
+  const replyBy = req.auth_decoded.ma_nguoi_dung;
+  const { numOfReply } = req.body.CMT_ARTICLE_INFOR;
+
+  const replyObj = new articleComposStructure.ReplyCommentArticle(
+    cmt_id,
+    reply,
+    replyBy,
+    article_id
+  );
+  // add reply to db
+  const addReplyProcess = await articleModel.addReply(replyObj);
+  // update numOfReply for comment
+  await articleModel.updateNumOfReplyComment(cmt_id, numOfReply + 1);
+  const idOfReply = addReplyProcess.payload.insertedId.toString();
+  const insertedReply = await articleModel.getCommentByCmtId(idOfReply);
+
+  res.status(200).json(new Response(200, insertedReply.payload, ""));
+}
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
   toggleDownVoteArticleControler,
   addCommentController,
+  addReplyController,
 };
