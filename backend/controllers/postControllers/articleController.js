@@ -214,9 +214,69 @@ async function addReplyController(req, res) {
   // update numOfReply for comment
   await articleModel.updateNumOfReplyComment(cmt_id, numOfReply + 1);
   const idOfReply = addReplyProcess.payload.insertedId.toString();
-  const insertedReply = await articleModel.getCommentByCmtId(idOfReply);
+  const insertedReply = await articleModel.getReplyByReplyId(idOfReply);
 
   res.status(200).json(new Response(200, insertedReply.payload, ""));
+}
+
+async function updateReplyController(req, res) {
+  const { reply_id, content } = req.body;
+  const data = await articleModel.updateContentOfReply(reply_id, content);
+
+  res
+    .status(200)
+    .json(new Response(200, data.payload, "cập nhật phản hồi thành công"));
+}
+
+async function updateCommentController(req, res) {
+  const { cmt_id, content } = req.body;
+  const data = await articleModel.updateContentOfComment(cmt_id, content);
+  res
+    .status(200)
+    .json(new Response(200, data.payload, "cập nhật bình luận thành công"));
+}
+
+async function deleteReplyController(req, res) {
+  const { reply_id } = req.body;
+  const { numOfReply } = req.body.CMT_ARTICLE_INFOR;
+  const cmt_id = req.body.REPLY_CMT_ARTICLE_INFOR.cmtId;
+
+  const deleteProcess = await articleModel.deleteReply(reply_id);
+  console.log(deleteProcess);
+  // delete failed
+  if (deleteProcess.payload.deletedCount <= 0) {
+    res.status(400).json(new Response(400, [], "xóa phản hồi thất bại"));
+    return;
+  }
+  // delete success
+  // update num of reply in cmt
+  await articleModel.updateNumOfReplyComment(cmt_id, numOfReply - 1);
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        { ...deleteProcess.payload, reply_id },
+        "xóa phản hồi thành công"
+      )
+    );
+}
+
+async function deleteCommentController(req, res) {
+  const { cmt_id } = req.body;
+  const { numOfComment } = req.body.ARTICLE_INFOR;
+  const article_id = req.body.ARTICLE_INFOR._id;
+  await Promise.all([
+    // delete all reply
+    await articleModel.deleteAllReplyOfComment(cmt_id),
+    // delete comment
+    await articleModel.deleteComment(cmt_id),
+    // update num of comment in article
+    await articleModel.updateNumOfCommentArticle(article_id, numOfComment - 1),
+  ]);
+  res
+    .status(200)
+    .json(new Response(200, { cmt_id }, "xóa bình luận thành công"));
 }
 
 module.exports = {
@@ -225,4 +285,8 @@ module.exports = {
   toggleDownVoteArticleControler,
   addCommentController,
   addReplyController,
+  updateReplyController,
+  updateCommentController,
+  deleteReplyController,
+  deleteCommentController,
 };

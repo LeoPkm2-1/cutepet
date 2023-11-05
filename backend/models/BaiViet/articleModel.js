@@ -128,6 +128,7 @@ const addComment = async (commentObj) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+// thêm phản hồi vào bình luận của bài chia sẻ kiến thức
 const addReply = async (replyObj) => {
   async function executor(collection) {
     return await collection.insertOne(replyObj);
@@ -163,6 +164,7 @@ const updateNumOfReplyComment = async (cmt_id, numOfReply) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+// lấy thông tin 1 document trong bảng bình luận bài viết chia sẻ trạng thái
 const getRowInBinhLuanTable = async (row_id, type = undefined) => {
   let executor = null;
   if (typeof type == "undefined") {
@@ -186,15 +188,7 @@ const getRowInBinhLuanTable = async (row_id, type = undefined) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-// (async function () {
-//   const data = await getRowInBinhLuanTable(
-//     "65470cd35c48d9c51077c1d9",
-//     "COMMENT_ARTICLE"
-//   );
-//   console.log("\n\nhahah");
-//   console.log(data);
-// })();
-
+// lấy thông tin bình luận theo id
 const getCommentByCmtId = async (cmt_id) => {
   return await getRowInBinhLuanTable(
     cmt_id,
@@ -202,6 +196,7 @@ const getCommentByCmtId = async (cmt_id) => {
   );
 };
 
+// lấy thông tin phản hồi theo id
 const getReplyByReplyId = async (reply_id) => {
   return await getRowInBinhLuanTable(
     reply_id,
@@ -209,13 +204,95 @@ const getReplyByReplyId = async (reply_id) => {
   );
 };
 
+// cập nhật nội dung phản hồi
+const updateContentOfReply = async (reply_id, newContent) => {
+  async function executor(collection) {
+    return await collection.updateOne(
+      { _id: new ObjectId(reply_id) },
+      { $set: { reply: `${newContent}`, modifiedAt: new Date() } }
+    );
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// cập nhật nội dung bình luận
+const updateContentOfComment = async (cmt_id, newContent) => {
+  async function executor(collection) {
+    return await collection.updateOne(
+      { _id: new ObjectId(cmt_id) },
+      { $set: { comment: `${newContent}`, modifiedAt: new Date() } }
+    );
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// xóa phản hồi theo id phản hồi
+const deleteReply = async (reply_id) => {
+  async function executor(collection) {
+    return await collection.deleteOne({
+      _id: new ObjectId(`${reply_id}`),
+      type: articleComposStructure.ReplyCommentArticle.type,
+    });
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) => {
+      // console.log({ data });
+      return typeof data == "undefined"
+        ? new Response(200, { acknowledged: false, deletedCount: 0 }, "")
+        : new Response(200, data, "");
+    })
+    .catch((err) => {
+      console.log(err);
+      return new Response(400, err, "", 300, 300);
+    });
+};
+
+// xóa tất cả các phải hồi của một bình luận
+const deleteAllReplyOfComment = async (cmt_id) => {
+  async function executor(collection) {
+    return await collection.deleteMany({
+      cmtId: cmt_id,
+      type: articleComposStructure.ReplyCommentArticle.type,
+    });
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// xóa bình luận theo id bình luận
+const deleteComment = async (cmt_id) => {
+  async function executor(collection) {
+    return await collection.deleteOne({
+      _id: new ObjectId(cmt_id),
+      type: articleComposStructure.CommentArticle.type,
+    });
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) => {
+      return typeof data == "undefined"
+        ? new Response(200, { acknowledged: false, deletedCount: 0 }, "")
+        : new Response(200, data, "");
+    })
+    .catch((err) => {
+      console.log(err);
+      return new Response(400, err, "", 300, 300);
+    });
+};
+
 // (async function () {
-//   const data = await getReplyByReplyId("65474e9e9b61cf9a1c874b98");
-//   console.log("reply ahihih");
-//   // const data = await getCommentByCmtId("65470cd35c48d9c51077c1d9");
-//   // console.log("Comment ahihih");
+//   const data = await deleteComment('6547ae2332640f57fc5ea8e6')
 //   console.log(data);
-// })();
+// })()
+
+// (async function () {
+//   const data = await deleteAllReplyOfComment('654798b6900d6c128b841506')
+//   console.log(data);
+// })()
 
 // // get both article and status post ok
 // const getPostById = async (postId) => {
@@ -243,5 +320,10 @@ module.exports = {
   getCommentByCmtId,
   addReply,
   getReplyByReplyId,
+  updateContentOfReply,
+  updateContentOfComment,
+  deleteReply,
+  deleteAllReplyOfComment,
+  deleteComment,
   // getPostById,
 };

@@ -97,8 +97,39 @@ async function checkCommentExistMid(req, res, next) {
   ).then((data) => data.payload[0]);
   articleInfor._id = articleInfor._id.toString();
   req.body.ARTICLE_INFOR = articleInfor;
-  // console.log(articleInfor);
   next();
+}
+
+// kiểm tra sự tồn tại của reply comment
+async function checkReplyExistMid(req, res, next) {
+  const { reply_id } = req.body;
+  const replyInfor = await articleModel.getReplyByReplyId(reply_id);
+  if (replyInfor.payload == null) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Phản hồi không tồn tại", 300, 300));
+    return;
+  }
+  // change type của _id từ object sang string
+  replyInfor.payload._id = replyInfor.payload._id.toString();
+  req.body.REPLY_CMT_ARTICLE_INFOR = replyInfor.payload;
+  // get data of comment article
+  req.body.CMT_ARTICLE_INFOR = await articleModel
+    .getCommentByCmtId(replyInfor.payload.cmtId)
+    .then((data) => {
+      data.payload._id = data.payload._id.toString();
+      return data.payload;
+    });
+  // // get data of article
+  req.body.ARTICLE_INFOR = await statusAndArticleModel
+    .getPostById(replyInfor.payload.articleId)
+    .then((data) => {
+      data.payload[0]._id = data.payload[0]._id.toString();
+      return data.payload[0];
+    });
+
+  next();
+  return;
 }
 
 // middleware tiền xử lý khi toggle upvote bài viết chia sẻ trạng thái
@@ -184,6 +215,79 @@ async function preProcessAddReplyCmt(req, res, next) {
   next();
 }
 
+// tiền xử lý khi cập nhậtphản hồi của bình luận
+async function preProcessUpdateReply(req, res, next) {
+  const content = req.body.content;
+  const oldReplyInfor = req.body.REPLY_CMT_ARTICLE_INFOR;
+  if (req.auth_decoded.ma_nguoi_dung != oldReplyInfor.replyBy) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Không có quyền chỉnh sủa phản hồi", 300, 300)
+      );
+    return;
+  } else if (typeof content != "string" || content.trim() == "") {
+    res
+      .status(400)
+      .json(new Response(400, [], "Nội dung không được để trống", 300, 300));
+    return;
+  }
+  next();
+}
+
+async function preProcessUpdateComment(req, res, next) {
+  const { content } = req.body;
+  const oldCmtInfor = req.body.CMT_ARTICLE_INFOR;
+  if (req.auth_decoded.ma_nguoi_dung != oldCmtInfor.commentBy) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Không có quyền chỉnh sủa bình luận", 300, 300)
+      );
+    return;
+  } else if (typeof content != "string" || content.trim() == "") {
+    res
+      .status(400)
+      .json(new Response(400, [], "Nội dung không được để trống", 300, 300));
+    return;
+  }
+  next();
+}
+
+async function preProcessDeleteReply(req, res, next) {
+  const postInfor = req.body.ARTICLE_INFOR;
+  const oldReplyInfor = req.body.REPLY_CMT_ARTICLE_INFOR;
+  // kiểm tra quyền xóa phản hồi
+  if (
+    req.auth_decoded.ma_nguoi_dung != oldReplyInfor.replyBy &&
+    req.auth_decoded.ma_nguoi_dung != postInfor.owner_id
+  ) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Không có quyền xóa phản hồi", 300, 300));
+    return;
+  }
+  next();
+  return;
+}
+
+async function preProcessDeleteComment(req, res, next) {
+  const postInfor = req.body.ARTICLE_INFOR;
+  const cmtBeforeDelete = req.body.CMT_ARTICLE_INFOR;
+  // kiểm tra quyền xóa bình luận
+  if (
+    req.auth_decoded.ma_nguoi_dung != cmtBeforeDelete.commentBy &&
+    req.auth_decoded.ma_nguoi_dung != postInfor.owner_id
+  ) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Không có quyền xóa bình luận", 300, 300));
+    return;
+  }
+  next();
+  return;
+}
+
 module.exports = {
   preProcessAddArtticle,
   checkArticleExistMid,
@@ -192,4 +296,9 @@ module.exports = {
   preProcessDownVoteArticle,
   preProcessAddCmtArticle,
   preProcessAddReplyCmt,
+  checkReplyExistMid,
+  preProcessUpdateReply,
+  preProcessUpdateComment,
+  preProcessDeleteReply,
+  preProcessDeleteComment,
 };
