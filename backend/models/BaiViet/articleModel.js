@@ -284,8 +284,59 @@ const deleteComment = async (cmt_id) => {
     });
 };
 
+const deleteAllUpVoteOfArticle = async (article_id) => {
+  async function executor(collection) {
+    return await collection.deleteMany({ articleId: article_id });
+  }
+  return await nonSQLQuery(executor, "UpVoteBaiChiaSeKienThuc")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const deleteAllDownVoteOfArticle = async (article_id) => {
+  async function executor(collection) {
+    return await collection.deleteMany({ articleId: article_id });
+  }
+  return await nonSQLQuery(executor, "DownVoteBaiChiaSeKienThuc")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const deleteAllReplyAndCommentOfArticle = async (article_id) => {
+  async function executor(collection) {
+    return await collection.deleteMany({ articleId: article_id });
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const deleteArticle = async (article_id) => {
+  async function executor(collection) {
+    return await collection.deleteOne({
+      _id: new ObjectId(article_id),
+      postType: articleComposStructure.Article.type,
+    });
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => {
+      return typeof data == "undefined"
+        ? new Response(200, { acknowledged: false, deletedCount: 0 }, "")
+        : new Response(200, data, "");
+    })
+    .catch((err) => {
+      console.log(err);
+      return new Response(400, err, "", 300, 300);
+    });
+};
+
 // (async function () {
-//   const data = await deleteComment('6547ae2332640f57fc5ea8e6')
+//   const data = await deleteArticle("6547cdce8c7528d874292c95");
+//   console.log(data);
+// })();
+
+// (async function () {
+//   const data = await deleteAllReplyAndCommentOfArticle('6545f11d264a36e0b590d15a')
 //   console.log(data);
 // })()
 
@@ -325,5 +376,9 @@ module.exports = {
   deleteReply,
   deleteAllReplyOfComment,
   deleteComment,
+  deleteAllUpVoteOfArticle,
+  deleteAllDownVoteOfArticle,
+  deleteAllReplyAndCommentOfArticle,
+  deleteArticle,
   // getPostById,
 };

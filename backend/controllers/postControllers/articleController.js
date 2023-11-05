@@ -279,6 +279,23 @@ async function deleteCommentController(req, res) {
     .json(new Response(200, { cmt_id }, "xóa bình luận thành công"));
 }
 
+async function deleteArticleController(req, res) {
+  const { article_id } = req.body;
+  await Promise.all([
+    // delete all upvote
+    await articleModel.deleteAllUpVoteOfArticle(article_id),
+    // delete all downvote
+    await articleModel.deleteAllDownVoteOfArticle(article_id),
+    // delete all comment and reply of article
+    await articleModel.deleteAllReplyAndCommentOfArticle(article_id),
+    // delete article
+    await articleModel.deleteArticle(article_id),
+  ]);
+  res
+    .status(200)
+    .json(new Response(200, { article_id }, "xóa bài viết thành công"));
+}
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -289,4 +306,5 @@ module.exports = {
   updateCommentController,
   deleteReplyController,
   deleteCommentController,
+  deleteArticleController,
 };

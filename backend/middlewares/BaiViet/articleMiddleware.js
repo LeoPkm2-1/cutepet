@@ -70,6 +70,7 @@ async function checkArticleExistMid(req, res, next) {
       .json(
         new Response(400, [], "Bài chia sẻ kiến thức không tồn tại", 300, 300)
       );
+    return;
   }
   // change type của _id từ object sang string
   data.payload[0]._id = data.payload[0]._id.toString();
@@ -288,6 +289,19 @@ async function preProcessDeleteComment(req, res, next) {
   return;
 }
 
+async function preProcessDeleteArticle(req, res, next) {
+  const postInfor = req.body.ARTICLE_INFOR;
+  // kiểm tra quyền xóa bài viết
+  if (req.auth_decoded.ma_nguoi_dung != postInfor.owner_id) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Không có quyền xóa bài viết", 300, 300));
+    return;
+  }
+  next();
+  return;
+}
+
 module.exports = {
   preProcessAddArtticle,
   checkArticleExistMid,
@@ -301,4 +315,5 @@ module.exports = {
   preProcessUpdateComment,
   preProcessDeleteReply,
   preProcessDeleteComment,
+  preProcessDeleteArticle,
 };

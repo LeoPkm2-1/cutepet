@@ -66,4 +66,11 @@ router.post(
   articleController.deleteCommentController
 );
 
+// xóa bài viết chia sẻ kiến thức
+router.post(
+  "/deleteArticle",
+  [articleMiddle.checkArticleExistMid, articleMiddle.preProcessDeleteArticle],
+  articleController.deleteArticleController
+);
+
 module.exports = router;

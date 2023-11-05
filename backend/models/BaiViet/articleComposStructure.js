@@ -1,7 +1,8 @@
 class Article {
+  static type = "ARTICLE";
   constructor(title, main_image, intro, content, categories, owner_id) {
     this.title = title;
-    this.postType = "ARTICLE";
+    this.postType = this.constructor.type;
     this.visibility = "PUBLIC";
     this.main_image = main_image;
     this.intro = intro;
