@@ -197,7 +197,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -209,7 +209,7 @@
 					"urlencoded": [
 						{
 							"key": "senderID",
-							"value": "1",
+							"value": "10",
 							"type": "text"
 						},
 						{
@@ -328,7 +328,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"text\": \"DŨNG PRIVATE - TAG - 2_1\",\n    \"visibility\":\"PRIVATE\",\n   \"taggedUsersId\":[9,6],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"google.com\",\"youtube.com\",\"amazon.com\"]\n    }\n}",
+					"raw": "{\n    \"text\": \"dung PRIVATE test no tag_1\",\n    \"visibility\":\"PRIVATE\",\n   \"taggedUsersId\":[],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"google.com\",\"youtube.com\",\"amazon.com\"]\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -371,7 +371,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "65333ff5f0efa9d27e7bf163",
+							"value": "6546fdc3b3b48facbd063193",
 							"type": "text"
 						}
 					]
@@ -400,7 +400,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -412,12 +412,12 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "65333ff5f0efa9d27e7bf163",
+							"value": "654599ed01b55d7d2f7928dd",
 							"type": "text"
 						},
 						{
 							"key": "comment",
-							"value": "tôi là dùng comment",
+							"value": "tôi là TY 2",
 							"type": "text"
 						}
 					]
@@ -446,7 +446,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -458,12 +458,12 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "651ed33d06e469bf6a89ca2b",
+							"value": "6545b0929d829001b64f5dd0",
 							"type": "text"
 						},
 						{
 							"key": "content",
-							"value": "hihi",
+							"value": "TY update test ",
 							"type": "text"
 						}
 					]
@@ -492,7 +492,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_4}}",
 							"type": "string"
 						}
 					]
@@ -504,7 +504,7 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "653880f8489d8d8470697512",
+							"value": "6545b0839d829001b64f5dcc",
 							"type": "text"
 						}
 					]
@@ -533,7 +533,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_4}}",
 							"type": "string"
 						}
 					]
@@ -545,12 +545,12 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "653880bd489d8d847069750d",
+							"value": "6545b0a49d829001b64f5dd4",
 							"type": "text"
 						},
 						{
 							"key": "reply",
-							"value": "dung  rep in chào ",
+							"value": "Thành",
 							"type": "text"
 						}
 					]
@@ -579,7 +579,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_4}}",
 							"type": "string"
 						}
 					]
@@ -591,12 +591,12 @@
 					"urlencoded": [
 						{
 							"key": "reply_id",
-							"value": "303132333435363738393230",
+							"value": "6545a85d8f0d07ad15bd7d8d",
 							"type": "text"
 						},
 						{
 							"key": "content",
-							"value": "hehse",
+							"value": "thành rep updated rồi nha",
 							"type": "text"
 						}
 					]
@@ -625,7 +625,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -637,7 +637,7 @@
 					"urlencoded": [
 						{
 							"key": "reply_id",
-							"value": "303132333435363738393234",
+							"value": "6545ad119d829001b64f5d9e",
 							"type": "text"
 						}
 					]
@@ -678,7 +678,7 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "303132333435363738393134",
+							"value": "65459cc8bbf363cd325af860",
 							"type": "text"
 						}
 					]
@@ -719,7 +719,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "313233343536373839303132",
+							"value": "654599ed01b55d7d2f7928dd",
 							"type": "text"
 						}
 					]
@@ -1483,6 +1483,174 @@
 			"response": []
 		},
 		{
+			"name": "35_addArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_4}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"tác hại của socola\",\n    \"main_image\": \"www.image_chocolate.com\",\n    \"intro\": \"tác bài .....\",\n    \"content\": \"chocolate rất hại.....\",\n    \"categories\": [\"dog\",\"cat\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/addArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"addArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "36_upVoteArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "6545f11d264a36e0b590d15a",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/upVoteArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"upVoteArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "37_downVoteArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "6545f11d264a36e0b590d15a",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/downVoteArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"downVoteArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "38_article_addComment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "6545f11d264a36e0b590d15a",
+							"type": "text"
+						},
+						{
+							"key": "comment",
+							"value": "10 điểm",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/addComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"addComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "getReplyStartFrom",
 			"request": {
 				"auth": {
@@ -1734,28 +1902,6 @@
 					"port": "3000",
 					"path": [
 						"logout"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						""
 					]
 				}
 			},

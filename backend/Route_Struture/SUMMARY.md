@@ -70,4 +70,24 @@
 
 7. thông báo khi được chấp nhận lời mời kết bạn:
 
-*chi tiết*: **Route_Struture/socket.md số 9**
+   _chi tiết_: **Route_Struture/socket.md số 9**
+
+## (04-11-2023):
+
+1. thêm bài viết chia sẻ kiến thức:
+
+   _chi tiết:_ **Route_Struture/article.md số 1** và **postman số 35**
+
+2. toggle upvote bài viết chiase kiến thức:
+
+   _chi tiết:_ **Route_Struture/article.md số 2** và **postman số 36**
+
+3. toggle downvote bài viết chiase kiến thức:
+
+   _chi tiết:_ **Route_Struture/article.md số 3** và **postman số 37**
+
+## (05-11-2023):
+
+1. thêm bình luận cho bài viết chia sẻ kiến thức:
+
+   _chi tiết:_ **Route_Struture/article.md số 4** và **postman số 38**
