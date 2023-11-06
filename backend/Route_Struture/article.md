@@ -206,3 +206,298 @@ trong đó:
     "errcode": null
 }
 ```
+
+## 5. thêm phản hồi cho bình luận của bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/addReply
+
+2. cấu trúc:
+
+```javascript
+{
+    cmt_id: string (bắt buộc),
+    reply: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **cmt_id**: id của bình luận
+  - **reply**: nội dung phản hồi
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "6548e1700cf8cb273dfbd0ca",
+        "cmtId": "6548e1520cf8cb273dfbd0c9",
+        "type": "REPLY_COMMENT_ARTICLE",
+        "reply": "rep 2",
+        "replyBy": 8,
+        "replyAt": "2023-11-06T12:52:00.796Z",
+        "articleId": "6548b710bacf36ecfeda6421",
+        "modifiedAt": null,
+        "numOfUpVote": 0,
+        "numOfDownVote": 0
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 6. chỉnh sửa nội dung của phản hồi của bình luận
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/updateReply
+
+2. cấu trúc:
+
+```javascript
+{
+    reply_id: string (bắt buộc),
+    content: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **reply_id**: id của phản hồi
+  - **content**: nội dung được chỉnh sửa
+
+3. trả về:
+
+- khi bạn không có quyền chỉnh sửa phản hồi này
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Không có quyền chỉnh sủa phản hồi",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi chỉnh sửa thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "modifiedCount": 1,
+        "upsertedId": null,
+        "upsertedCount": 0,
+        "matchedCount": 1
+    },
+    "message": "cập nhật phản hồi thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 7. chỉnh sửa nội dung của bình luận
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/updateComment
+
+2. cấu trúc:
+
+```javascript
+{
+    cmt_id: string (bắt buộc),
+    content: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **cmt_id**: id của bình luận
+  - **content**: nội dung được chỉnh sửa
+
+3. trả về:
+
+- khi bạn không có quyền chỉnh sửa bình luận này
+
+```javascript
+{
+   "status": 400,
+   "payload": [],
+   "message": "Không có quyền chỉnh sủa bình luận",
+   "errno": 300,
+   "errcode": 300
+}
+```
+
+- khi chỉnh sửa thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "modifiedCount": 1,
+        "upsertedId": null,
+        "upsertedCount": 0,
+        "matchedCount": 1
+    },
+    "message": "cập nhật bình luận thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 8. xóa phản hồi của bình luận
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/deleteReply
+
+2. cấu trúc:
+
+```javascript
+{
+    reply_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **reply_id**: id của phản hồi muốn xóa
+
+- _chú ý_:
+- chỉ có **người tạo phản hồi** mới có quyền xóa phản hồi này
+- hoặc **chủ của bài viết** có quyền xóa phản hồi này
+
+3. trả về:
+
+- khi bạn không có quyền xóa phản hồi này
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Không có quyền xóa phản hồi",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "deletedCount": 1,
+        "reply_id": "6548e1700cf8cb273dfbd0ca"
+    },
+    "message": "xóa phản hồi thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 9. xóa bình luận của bài viết chia sẻ trạng thái
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/deleteComment
+
+2. cấu trúc:
+
+```javascript
+{
+    cmt_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **cmt_id**: id của bình luận muốn xóa
+
+3. trả về
+
+- khi bạn không có quyền xóa bình luận này
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Không có quyền xóa bình luận",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "cmt_id": "6548e1520cf8cb273dfbd0c9"
+    },
+    "message": "xóa bình luận thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 10. xóa bài viết chia sẻ trạng thái
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/deleteArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết muốn xóa
+
+3. trả về:
+
+- khi bạn không có quyền xóa bài viết này
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Không có quyền xóa bài viết",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "article_id": "6548e8d00b5ba4771a5fc15a"
+    },
+    "message": "xóa bài viết thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 11.
+
+## 12.

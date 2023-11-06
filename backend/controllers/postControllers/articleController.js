@@ -3,7 +3,7 @@ const articleModel = require("../../models/BaiViet/articleModel");
 const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 const followhelper = require("../../utils/theodoiHelper");
 const { Response } = require("../../utils");
-const { userUnFollowArticle } = require("../../models/theodoi/followModel");
+const { userUnFollowArticle, deleteAllFollowOfArticle } = require("../../models/theodoi/followModel");
 
 async function addArticleControler(req, res) {
   const { title, main_image, intro, content, categories } = req.body;

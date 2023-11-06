@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "thuy@gmail.com",
+							"value": "thanh@gmail.com",
 							"type": "text"
 						},
 						{
@@ -1490,7 +1490,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -1499,7 +1499,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"tác hại của socola\",\n    \"main_image\": \"www.image_chocolate.com\",\n    \"intro\": \"tác bài .....\",\n    \"content\": \"chocolate rất hại.....\",\n    \"categories\": [\"dog\",\"cat\"]\n}",
+					"raw": "{\n    \"title\": \"socola\",\n    \"main_image\": \"www.dog.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"chocolate rất hại.....\",\n    \"categories\": [\"dog\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1530,7 +1530,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_3}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -1542,7 +1542,7 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "6545f11d264a36e0b590d15a",
+							"value": "6548bafd1b99405ae4e72c1e",
 							"type": "text"
 						}
 					]
@@ -1571,7 +1571,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -1583,7 +1583,7 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "6545f11d264a36e0b590d15a",
+							"value": "6548bafd1b99405ae4e72c1e",
 							"type": "text"
 						}
 					]
@@ -1612,7 +1612,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_3}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -1624,12 +1624,12 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "6545f11d264a36e0b590d15a",
+							"value": "6548b710bacf36ecfeda6421",
 							"type": "text"
 						},
 						{
 							"key": "comment",
-							"value": "10 điểm",
+							"value": "test ahahah",
 							"type": "text"
 						}
 					]
@@ -1645,6 +1645,267 @@
 						"post",
 						"article",
 						"addComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "39_article_addReply",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cmt_id",
+							"value": "6548e1520cf8cb273dfbd0c9",
+							"type": "text"
+						},
+						{
+							"key": "reply",
+							"value": "rep 2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/addReply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"addReply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "40_article_updateReply",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "reply_id",
+							"value": "6548e1700cf8cb273dfbd0ca",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "10 điểm",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/updateReply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"updateReply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "41_article_updateComment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cmt_id",
+							"value": "6548e1520cf8cb273dfbd0c9",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "tốt nghiệp loại  giỏi",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/updateComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"updateComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "42_article_deleteReply",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "reply_id",
+							"value": "6548e1700cf8cb273dfbd0ca",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/deleteReply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"deleteReply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "43_article_deleteComment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cmt_id",
+							"value": "6548e1520cf8cb273dfbd0c9",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/deleteComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"deleteComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "44_article_deleteArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "6548e8d00b5ba4771a5fc15a",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/deleteArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"deleteArticle"
 					]
 				}
 			},

@@ -91,3 +91,27 @@
 1. thêm bình luận cho bài viết chia sẻ kiến thức:
 
    _chi tiết:_ **Route_Struture/article.md số 4** và **postman số 38**
+
+2. thêm phản hồi cho bình luận của bài viết chia sẻ kiến thức:
+
+   _chi tiết:_ **Route_Struture/article.md số 5** và **postman số 39**
+
+3. chỉnh sửa nội dung của phản hồi:
+
+   _chi tiết:_ **Route_Struture/article.md số 6** và **postman số 40**
+
+4. chỉnh sửa nội dung của bình luận:
+
+   _chi tiết:_ **Route_Struture/article.md số 7** và **postman số 41**
+
+5. xóa phản hồi của bình luận:
+
+   _chi tiết:_ **Route_Struture/article.md số 8** và **postman số 42**
+
+6. xóa bình luận của bài viết chia sẻ trạng thái:
+
+   _chi tiết:_ **Route_Struture/article.md số 9** và **postman số 43**
+
+7. xóa bài viết chia sẻ trạng thái:
+
+   _chi tiết:_ **Route_Struture/article.md số 10** và **postman số 44**
