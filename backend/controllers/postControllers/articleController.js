@@ -3,6 +3,7 @@ const articleModel = require("../../models/BaiViet/articleModel");
 const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 const followhelper = require("../../utils/theodoiHelper");
 const { Response } = require("../../utils");
+const { userUnFollowArticle } = require("../../models/theodoi/followModel");
 
 async function addArticleControler(req, res) {
   const { title, main_image, intro, content, categories } = req.body;
@@ -290,6 +291,8 @@ async function deleteArticleController(req, res) {
     await articleModel.deleteAllReplyAndCommentOfArticle(article_id),
     // delete article
     await articleModel.deleteArticle(article_id),
+    // delete all follow of article
+    await userUnFollowArticle(article_id, req.auth_decoded.ma_nguoi_dung),
   ]);
   res
     .status(200)

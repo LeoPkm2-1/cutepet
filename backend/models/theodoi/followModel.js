@@ -123,15 +123,21 @@ const userFollowArticle = async (article_id, user_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-// (async function () {
-//   const data = await userFollowArticle(1, 2);
-//   console.log(data);
-// })();
+const userUnFollowArticle = async (article_id, user_id) => {
+  user_id = parseInt(user_id);
+  async function executor(collection) {
+    return await collection.deleteOne({
+      type: followStructure.FollowArticle.get_type(),
+      followed_Obj_Id: article_id,
+      follower_Id: user_id,
+    });
+  }
+  return await nonSQLQuery(executor, "BangTheoDoi")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
 
-// (async function(){
-// 	const data = await userFollowAnother(3,4)
-// 	console.log(data);
-// })()
+
 
 module.exports = {
   userFollowStatusPost,
@@ -142,4 +148,5 @@ module.exports = {
   userUnFollowAnother,
   getOneFollowInforBetweenTwoUser,
   userFollowArticle,
+  userUnFollowArticle,
 };
