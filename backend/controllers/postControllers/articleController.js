@@ -292,7 +292,7 @@ async function deleteArticleController(req, res) {
     // delete article
     await articleModel.deleteArticle(article_id),
     // delete all follow of article
-    await userUnFollowArticle(article_id, req.auth_decoded.ma_nguoi_dung),
+    await deleteAllFollowOfArticle(article_id),
   ]);
   res
     .status(200)

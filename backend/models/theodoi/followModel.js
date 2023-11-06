@@ -137,6 +137,17 @@ const userUnFollowArticle = async (article_id, user_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const deleteAllFollowOfArticle = async (article_id) => {
+  async function executor(collection) {
+    return await collection.deleteMany({
+      type: followStructure.FollowArticle.get_type(),
+      followed_Obj_Id: article_id,
+    });
+  }
+  return await nonSQLQuery(executor, "BangTheoDoi")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
 
 
 module.exports = {
@@ -149,4 +160,5 @@ module.exports = {
   getOneFollowInforBetweenTwoUser,
   userFollowArticle,
   userUnFollowArticle,
+  deleteAllFollowOfArticle,
 };
