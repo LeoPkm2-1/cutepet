@@ -498,6 +498,95 @@ trong đó:
 }
 ```
 
-## 11.
+## 11. lấy bài viết chia sẻ kiến thức bằng id của bài viết
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/getArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết muốn lấy
+
+3. trả về:
+
+- khi bài viết không tồn tại
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bài chia sẻ kiến thức không tồn tại",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi lấy bài viết thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "6549106cd55fe46e0f9dd857",
+        "title": "nuôi dạy chó con",
+        "postType": "ARTICLE",
+        "visibility": "PUBLIC",
+        "main_image": "www.dog.com",
+        "intro": "xin chào .....",
+        "content": "chocolate rất hại.....",
+        "categories": [
+            "dog",
+            "cat"
+        ],
+        "createAt": "2023-11-06T16:12:28.545Z",
+        "numOfUpVote": 1,
+        "numOfDownVote": 2,
+        "numOfComment": 0,
+        "modifiedAt": null,
+        "owner_id": 8,
+        "owner_infor": {
+            "ma_nguoi_dung": 8,
+            "ten": "Susan",
+            "ngay_sinh": "1991-10-05T17:00:00.000Z",
+            "tai_khoan": "susan",
+            "email": "susan@gmail.com",
+            "so_dien_thoai": "0912345685",
+            "gioi_tinh": 0,
+            "anh": {
+                "ma_anh": null,
+                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                "ngay_cap_nhat": null,
+                "ma_nguoi_dung": "8",
+                "is_active": null
+            }
+        },
+        "hasUpVoted": true,
+        "hasDownVoted": false
+    },
+    "message": "lấy bài viết thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- trong đó:
+  - **hasUpVoted**: true nếu bạn đã upvote bài viết này, false nếu chưa
+  - **hasDownVoted**: true nếu bạn đã downvote bài viết này, false nếu chưa
+  - nếu cả **hasUpVoted** và **hasDownVoted** đều là false thì bạn chưa vote bài viết này
 
 ## 12.
+
+## 13.
+
+## 14.
+
+## 15.

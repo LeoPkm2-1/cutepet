@@ -2,8 +2,13 @@ const articleComposStructure = require("../../models/BaiViet/articleComposStruct
 const articleModel = require("../../models/BaiViet/articleModel");
 const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 const followhelper = require("../../utils/theodoiHelper");
+const userHelper = require("../../utils/userHelper");
+const articleHelper = require("../../utils/BaiViet/articleHelper");
 const { Response } = require("../../utils");
-const { userUnFollowArticle, deleteAllFollowOfArticle } = require("../../models/theodoi/followModel");
+const {
+  userUnFollowArticle,
+  deleteAllFollowOfArticle,
+} = require("../../models/theodoi/followModel");
 
 async function addArticleControler(req, res) {
   const { title, main_image, intro, content, categories } = req.body;
@@ -54,7 +59,7 @@ async function toggleUpVoteArticleControler(req, res) {
       const upVoteProcess = await articleModel.addUpVote(article_id, user_id);
       // thông tin upvote
       const upVoteInfor = await articleModel
-        .getUpVoteOfArticleByUser(user_id, article_id)
+        .getUpVoteArticleInforOfUser(user_id, article_id)
         .then((data) => data.payload);
       // tăng số lượng upvote của bài viết
       await articleModel.updateNumOfUpVoteArticle(article_id, numOfUpVote + 1);
@@ -93,7 +98,7 @@ async function toggleUpVoteArticleControler(req, res) {
       const upVoteProcess = await articleModel.addUpVote(article_id, user_id);
       // === 2.2. thông tin upvote
       const upVoteInfor = await articleModel
-        .getUpVoteOfArticleByUser(user_id, article_id)
+        .getUpVoteArticleInforOfUser(user_id, article_id)
         .then((data) => data.payload);
       // === 2.3. tăng số lượng upvote của bài viết
       await articleModel.updateNumOfUpVoteArticle(article_id, numOfUpVote + 1);
@@ -117,7 +122,7 @@ async function toggleDownVoteArticleControler(req, res) {
       );
       // thông tin downvote
       const downVoteInfor = await articleModel
-        .getDownVoteOfArticleByUser(user_id, article_id)
+        .getDownVoteArticleInforOfUser(user_id, article_id)
         .then((data) => data.payload);
       // tăng số lượng downvote của bài viết
       await articleModel.updateNumOfDownVoteArticle(
@@ -161,7 +166,7 @@ async function toggleDownVoteArticleControler(req, res) {
       );
       // === 2.2. thông tin downvote
       const downVoteInfor = await articleModel
-        .getDownVoteOfArticleByUser(user_id, article_id)
+        .getDownVoteArticleInforOfUser(user_id, article_id)
         .then((data) => data.payload);
       // === 2.3. tăng số lượng downvote của bài viết
       await articleModel.updateNumOfDownVoteArticle(
@@ -299,6 +304,30 @@ async function deleteArticleController(req, res) {
     .json(new Response(200, { article_id }, "xóa bài viết thành công"));
 }
 
+async function getArticleController(req, res, next) {
+  const { article_id } = req.body;
+  const queryUser_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const articleInfor = req.body.ARTICLE_INFOR;
+  const owner_infor = await userHelper.getUserPublicInforByUserId(
+    articleInfor.owner_id
+  );
+  const hasUpVoted = await articleHelper.hasUserUpVotedArticle(
+    queryUser_id,
+    article_id
+  );
+  const hasDownVoted = await articleHelper.hasUserDownVotedArticle(
+    queryUser_id,
+    article_id
+  );
+  const data = {
+    ...articleInfor,
+    owner_infor,
+    hasUpVoted,
+    hasDownVoted,
+  };
+  res.status(200).json(new Response(200, data, "lấy bài viết thành công"));
+}
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -310,4 +339,5 @@ module.exports = {
   deleteReplyController,
   deleteCommentController,
   deleteArticleController,
+  getArticleController,
 };

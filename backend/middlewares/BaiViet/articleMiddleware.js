@@ -63,8 +63,10 @@ async function preProcessAddArtticle(req, res, next) {
 
 async function checkArticleExistMid(req, res, next) {
   const { article_id } = req.body;
-  const data = await statusAndArticleModel.getPostById(article_id);
-  if (data.payload.length <= 0) {
+  const data = await articleModel.getArticleById(article_id)
+    .then((data) => data.payload);
+
+  if (data == null) {
     res
       .status(400)
       .json(
@@ -73,8 +75,9 @@ async function checkArticleExistMid(req, res, next) {
     return;
   }
   // change type của _id từ object sang string
-  data.payload[0]._id = data.payload[0]._id.toString();
-  req.body.ARTICLE_INFOR = data.payload[0];
+  data._id = data._id.toString();
+  req.body.ARTICLE_INFOR = data;
+  // console.log({ ARTICLE_INFOR: req.body.ARTICLE_INFOR });
   next();
 }
 

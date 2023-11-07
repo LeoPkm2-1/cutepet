@@ -367,11 +367,12 @@ const getReplyStartFromController = async (req, res) => {
 const getPostController = async (req, res) => {
   const { post_id } = req.body;
   const ma_nguoi_dung = req.auth_decoded.ma_nguoi_dung;
-  const postData = await statusAndArticleModel
-    .getPostById(post_id)
-    .then((data) => data.payload);
+  const postData = await StatusPostModel.getPostById(post_id).then(
+    (data) => data.payload
+  );
+
   const owner_infor = await userHelper.getUserPublicInforByUserId(
-    postData[0].owner_id
+    postData.owner_id
   );
   const hasLiked = await statusPostHelper.hasUserLikedPost_1(
     ma_nguoi_dung,
@@ -382,7 +383,7 @@ const getPostController = async (req, res) => {
     ma_nguoi_dung
   );
   const data = {
-    ...postData[0],
+    ...postData,
     owner_infor,
     hasLiked,
     isFollowed,

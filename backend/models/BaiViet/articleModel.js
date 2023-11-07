@@ -2,6 +2,7 @@ const { sqlQuery, nonSQLQuery } = require("../index");
 const { Response } = require("../../utils/index");
 const { ObjectId } = require("mongodb");
 const articleComposStructure = require("./articleComposStructure");
+const StatusAndArticleModel = require("./StatusAndArticleModel");
 
 const addArticle = async (articleObj) => {
   async function executor(collection) {
@@ -14,6 +15,7 @@ const addArticle = async (articleObj) => {
 
 // thêm vào bảng upvote
 const addUpVote = async (article_id, user_id) => {
+  user_id = parseInt(user_id);
   async function executor(collection) {
     return await collection.insertOne({
       articleId: article_id,
@@ -28,6 +30,7 @@ const addUpVote = async (article_id, user_id) => {
 
 // thêm vào bảng downvote
 const addDownVote = async (article_id, user_id) => {
+  user_id = parseInt(user_id);
   async function executor(collection) {
     return await collection.insertOne({
       articleId: article_id,
@@ -42,6 +45,7 @@ const addDownVote = async (article_id, user_id) => {
 
 // xóa trong bảng upvote
 const removeUpVote = async (article_id, user_id) => {
+  user_id = parseInt(user_id);
   async function executor(collection) {
     return await collection.deleteOne({
       articleId: article_id,
@@ -55,6 +59,7 @@ const removeUpVote = async (article_id, user_id) => {
 
 // xóa trong bảng downvote
 const removeDownVote = async (article_id, user_id) => {
+  user_id = parseInt(user_id);
   async function executor(collection) {
     return await collection.deleteOne({
       articleId: article_id,
@@ -67,7 +72,8 @@ const removeDownVote = async (article_id, user_id) => {
 };
 
 // lấy thông tin upvote của người dùng cho bài viết
-const getUpVoteOfArticleByUser = async (user_id, article_id) => {
+const getUpVoteArticleInforOfUser = async (user_id, article_id) => {
+  user_id = parseInt(user_id);
   async function executor(collection) {
     return await collection.findOne({
       articleId: article_id,
@@ -75,12 +81,17 @@ const getUpVoteOfArticleByUser = async (user_id, article_id) => {
     });
   }
   return await nonSQLQuery(executor, "UpVoteBaiChiaSeKienThuc")
-    .then((data) => new Response(200, data, ""))
+    .then((data) => {
+      return typeof data == "undefined"
+        ? new Response(200, null, "")
+        : new Response(200, data, "");
+    })
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
 // lấy thông tin downvote của người dùng cho bài viết
-const getDownVoteOfArticleByUser = async (user_id, article_id) => {
+const getDownVoteArticleInforOfUser = async (user_id, article_id) => {
+  user_id = parseInt(user_id);
   async function executor(collection) {
     return await collection.findOne({
       articleId: article_id,
@@ -88,7 +99,11 @@ const getDownVoteOfArticleByUser = async (user_id, article_id) => {
     });
   }
   return await nonSQLQuery(executor, "DownVoteBaiChiaSeKienThuc")
-    .then((data) => new Response(200, data, ""))
+    .then((data) => {
+      return typeof data == "undefined"
+        ? new Response(200, null, "")
+        : new Response(200, data, "");
+    })
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
@@ -330,39 +345,31 @@ const deleteArticle = async (article_id) => {
     });
 };
 
-// (async function () {
-//   const data = await deleteArticle("6547cdce8c7528d874292c95");
-//   console.log(data);
-// })();
-
-// (async function () {
-//   const data = await deleteAllReplyAndCommentOfArticle('6545f11d264a36e0b590d15a')
-//   console.log(data);
-// })()
-
-// (async function () {
-//   const data = await deleteAllReplyOfComment('654798b6900d6c128b841506')
-//   console.log(data);
-// })()
-
-// // get both article and status post ok
-// const getPostById = async (postId) => {
-//   async function executor(collection) {
-//     return await collection.find({ _id: new ObjectId(postId) }).toArray();
-//   }
-//   return await nonSQLQuery(executor, "BaiViet")
-//     .then((data) => new Response(200, data, ""))
-//     .catch((err) => new Response(400, err, "", 300, 300));
-// };
+// get only article post
+const getArticleById = async (article_id) => {
+  async function executor(collection) {
+    return await collection.findOne({
+      _id: new ObjectId(article_id),
+      postType: articleComposStructure.Article.type,
+    });
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) =>
+      typeof data == "undefined"
+        ? new Response(200, null, "")
+        : new Response(200, data, "")
+    )
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
 
 module.exports = {
   addArticle,
   addUpVote,
-  getUpVoteOfArticleByUser,
+  getUpVoteArticleInforOfUser,
   updateNumOfUpVoteArticle,
   removeUpVote,
   addDownVote,
-  getDownVoteOfArticleByUser,
+  getDownVoteArticleInforOfUser,
   updateNumOfDownVoteArticle,
   removeDownVote,
   addComment,
@@ -380,5 +387,5 @@ module.exports = {
   deleteAllDownVoteOfArticle,
   deleteAllReplyAndCommentOfArticle,
   deleteArticle,
-  // getPostById,
+  getArticleById,
 };

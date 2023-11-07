@@ -73,4 +73,11 @@ router.post(
   articleController.deleteArticleController
 );
 
+// lấy bài viết chia sẻ kiến thức bằng id bài viết
+router.post(
+  '/getArticle',
+  articleMiddle.checkArticleExistMid,
+  articleController.getArticleController
+)
+
 module.exports = router;

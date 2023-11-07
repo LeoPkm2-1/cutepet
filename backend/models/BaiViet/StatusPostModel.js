@@ -1,7 +1,8 @@
 const { sqlQuery, nonSQLQuery } = require("../index");
 const { Response } = require("../../utils/index");
 const { ObjectId } = require("mongodb");
-const statusAndArticleModel = require('./StatusAndArticleModel')
+const statusAndArticleModel = require("./StatusAndArticleModel");
+const StatusPostComposStructure = require("./StatusPostComposStructure");
 
 const addPost = async (statusPost) => {
   async function executor(collection) {
@@ -12,14 +13,28 @@ const addPost = async (statusPost) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-// const getPostById = async (postId) => {
-//   async function executor(collection) {
-//     return await collection.find({ _id: new ObjectId(postId) }).toArray();
-//   }
-//   return await nonSQLQuery(executor, "BaiViet")
-//     .then((data) => new Response(200, data, ""))
-//     .catch((err) => new Response(400, err, "", 300, 300));
-// };
+// get only status post
+const getPostById = async (postId) => {
+  async function executor(collection) {
+    return await collection.findOne({
+      _id: new ObjectId(postId),
+      postType: StatusPostComposStructure.StatusPost.type,
+    });
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) =>
+      typeof data == "undefined"
+        ? new Response(200, null, "")
+        : new Response(200, data, "")
+    )
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// (async function () {
+//   const data = await getPostById('1')
+//   console.log('hehe');
+//   console.log(data);
+// })()
 
 const addLikePost = async (post_id, user_id) => {
   async function executor(collection) {
@@ -537,7 +552,9 @@ const deletePostById = async (postId) => {
 };
 
 const getOnwerIdOfPost = async (postId) => {
-  const postInfor = await statusAndArticleModel.getPostById(postId).then((data) => data.payload[0]);
+  const postInfor = await statusAndArticleModel
+    .getPostById(postId)
+    .then((data) => data.payload[0]);
   return typeof postInfor === "undefined" ? null : parseInt(postInfor.owner_id);
 };
 
@@ -551,24 +568,24 @@ const getOnwerIdOfComment = async (comment_id) => {
 };
 
 module.exports = {
-  addPost,  // 1
-  // getPostById, // 2
+  addPost, // 1
+  getPostById, // 2
   addComment, // 3
   addLikePost, // 4
   getLikeThePostInfor, // 5
   removeLikePost, // 6
-  removeLikeCmtPost,  // 8
-  updateNumOfLikePost,  // 9
+  removeLikeCmtPost, // 8
+  updateNumOfLikePost, // 9
   updateNumOfLikeCmtPost, // 10
   updateNumOfCommentPost, // 11
-  updateNumOfReplyInCmtPost,  //12
+  updateNumOfReplyInCmtPost, //12
   getCommentPostById, // 13
   getLikeCmtPostInfor, //14
   addLikeCmtPost, // 7
   addReplyComment, // 12
-  getReplyCommentById,  // 
-  getAllReplyCommentByCmtId,  //
-  getAllCmtByPostId,    //
+  getReplyCommentById, //
+  getAllReplyCommentByCmtId, //
+  getAllCmtByPostId, //
   getAllPost, // ?
   getLikeThePostInforOfListPosts,
   updateReplyComment,

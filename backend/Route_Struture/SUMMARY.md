@@ -115,3 +115,9 @@
 7. xóa bài viết chia sẻ trạng thái:
 
    _chi tiết:_ **Route_Struture/article.md số 10** và **postman số 44**
+
+## (07-11-2023):
+
+1. lấy bài viết chia sẻ kiến thức bằng id của bài viết:
+
+   _chi tiết:_ **Route_Struture/article.md số 11** và **postman số 45**
