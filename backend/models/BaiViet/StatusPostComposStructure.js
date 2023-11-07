@@ -1,7 +1,8 @@
 class StatusPost {
+  static type = "STATUS";
   constructor(text, visibility, media, taggedUsers, owner_id) {
     this.text = text;
-    this.postType = "status";
+    this.postType = this.constructor.type;
     this.visibility = visibility;
     this.media = media;
     this.taggedUsers = taggedUsers;

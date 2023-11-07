@@ -1,0 +1,592 @@
+# imformative article
+
+## 1. thêm bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST: http://localhost:3000/post/article/addArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    title: string (bắt buộc),
+    main_image: string (bắt buộc),
+    intro: string (không bắt buộc),
+    content: string (bắt buộc),
+    categories: Array[string] (bắt buộc phải có 1 tag),
+}
+```
+
+**Ví dụ**:
+
+```javascript
+{
+    title: "tác hại của socola",
+    main_image: "www.image_chocolate.com",
+    intro: "tác bài .....",
+    content: "chocolate rất hại.....",
+    categories: ["dog","cat"]
+}
+```
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "_id": "65470fb9c431225e16c2eecb",
+            "title": "tác hại của socola",
+            "postType": "ARTICLE",
+            "visibility": "PUBLIC",
+            "main_image": "www.image_chocolate.com",
+            "intro": "tác bài .....",
+            "content": "chocolate rất hại.....",
+            "categories": [
+                "dog",
+                "cat"
+            ],
+            "createAt": "2023-11-05T03:44:57.508Z",
+            "numOfUpVote": 0,
+            "numOfDownVote": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 10
+        }
+    ],
+    "message": "thêm bài chia sẻ kiến thức thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 2. toggle upvote bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/upVoteArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+trong đó:
+
+- **article_id**: id của bài viết chiase kiến thức
+
+3. trả về:
+
+- khi vote thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "65471083c431225e16c2eecd",
+        "articleId": "6545f11d264a36e0b590d15a",
+        "userUpVote": 8,
+        "upVoteAt": "2023-11-05T03:48:19.564Z"
+    },
+    "message": "upvote thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi bỏ vote thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "articleId": "6545f11d264a36e0b590d15a"
+    },
+    "message": "hủy upvote thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 3. toggle downvote bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/downVoteArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+trong đó:
+
+- **article_id**: id của bài viết chiase kiến thức
+
+3. trả về:
+
+- khi downvote thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "65471147c431225e16c2eece",
+        "articleId": "6545f11d264a36e0b590d15a",
+        "userDownVote": 2,
+        "downVoteAt": "2023-11-05T03:51:35.240Z"
+    },
+    "message": "downvote thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi bỏ vote thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "articleId": "6545f11d264a36e0b590d15a"
+    },
+    "message": "hủy downvote thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 4. thêm bình luận cho bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/addComment
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+    content: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết chiase kiến thức
+  - **content**: nội dung bình luận
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "65470cd35c48d9c51077c1d9",
+        "articleId": "6545f11d264a36e0b590d15a",
+        "type": "COMMENT_ARTICLE",
+        "comment": "10 điểm",
+        "commentBy": 8,
+        "commentAt": "2023-11-05T03:32:35.910Z",
+        "numOfUpVote": 0,
+        "numOfDownVote": 0,
+        "numOfReply": 0,
+        "modifiedAt": null
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 5. thêm phản hồi cho bình luận của bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/addReply
+
+2. cấu trúc:
+
+```javascript
+{
+    cmt_id: string (bắt buộc),
+    reply: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **cmt_id**: id của bình luận
+  - **reply**: nội dung phản hồi
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "6548e1700cf8cb273dfbd0ca",
+        "cmtId": "6548e1520cf8cb273dfbd0c9",
+        "type": "REPLY_COMMENT_ARTICLE",
+        "reply": "rep 2",
+        "replyBy": 8,
+        "replyAt": "2023-11-06T12:52:00.796Z",
+        "articleId": "6548b710bacf36ecfeda6421",
+        "modifiedAt": null,
+        "numOfUpVote": 0,
+        "numOfDownVote": 0
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 6. chỉnh sửa nội dung của phản hồi của bình luận
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/updateReply
+
+2. cấu trúc:
+
+```javascript
+{
+    reply_id: string (bắt buộc),
+    content: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **reply_id**: id của phản hồi
+  - **content**: nội dung được chỉnh sửa
+
+3. trả về:
+
+- khi bạn không có quyền chỉnh sửa phản hồi này
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Không có quyền chỉnh sủa phản hồi",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi chỉnh sửa thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "modifiedCount": 1,
+        "upsertedId": null,
+        "upsertedCount": 0,
+        "matchedCount": 1
+    },
+    "message": "cập nhật phản hồi thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 7. chỉnh sửa nội dung của bình luận
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/updateComment
+
+2. cấu trúc:
+
+```javascript
+{
+    cmt_id: string (bắt buộc),
+    content: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **cmt_id**: id của bình luận
+  - **content**: nội dung được chỉnh sửa
+
+3. trả về:
+
+- khi bạn không có quyền chỉnh sửa bình luận này
+
+```javascript
+{
+   "status": 400,
+   "payload": [],
+   "message": "Không có quyền chỉnh sủa bình luận",
+   "errno": 300,
+   "errcode": 300
+}
+```
+
+- khi chỉnh sửa thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "modifiedCount": 1,
+        "upsertedId": null,
+        "upsertedCount": 0,
+        "matchedCount": 1
+    },
+    "message": "cập nhật bình luận thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 8. xóa phản hồi của bình luận
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/deleteReply
+
+2. cấu trúc:
+
+```javascript
+{
+    reply_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **reply_id**: id của phản hồi muốn xóa
+
+- _chú ý_:
+- chỉ có **người tạo phản hồi** mới có quyền xóa phản hồi này
+- hoặc **chủ của bài viết** có quyền xóa phản hồi này
+
+3. trả về:
+
+- khi bạn không có quyền xóa phản hồi này
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Không có quyền xóa phản hồi",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "deletedCount": 1,
+        "reply_id": "6548e1700cf8cb273dfbd0ca"
+    },
+    "message": "xóa phản hồi thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 9. xóa bình luận của bài viết chia sẻ trạng thái
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/deleteComment
+
+2. cấu trúc:
+
+```javascript
+{
+    cmt_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **cmt_id**: id của bình luận muốn xóa
+
+3. trả về
+
+- khi bạn không có quyền xóa bình luận này
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Không có quyền xóa bình luận",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "cmt_id": "6548e1520cf8cb273dfbd0c9"
+    },
+    "message": "xóa bình luận thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 10. xóa bài viết chia sẻ trạng thái
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/deleteArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết muốn xóa
+
+3. trả về:
+
+- khi bạn không có quyền xóa bài viết này
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Không có quyền xóa bài viết",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "article_id": "6548e8d00b5ba4771a5fc15a"
+    },
+    "message": "xóa bài viết thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 11. lấy bài viết chia sẻ kiến thức bằng id của bài viết
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/getArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết muốn lấy
+
+3. trả về:
+
+- khi bài viết không tồn tại
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bài chia sẻ kiến thức không tồn tại",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi lấy bài viết thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "_id": "6549106cd55fe46e0f9dd857",
+        "title": "nuôi dạy chó con",
+        "postType": "ARTICLE",
+        "visibility": "PUBLIC",
+        "main_image": "www.dog.com",
+        "intro": "xin chào .....",
+        "content": "chocolate rất hại.....",
+        "categories": [
+            "dog",
+            "cat"
+        ],
+        "createAt": "2023-11-06T16:12:28.545Z",
+        "numOfUpVote": 1,
+        "numOfDownVote": 2,
+        "numOfComment": 0,
+        "modifiedAt": null,
+        "owner_id": 8,
+        "owner_infor": {
+            "ma_nguoi_dung": 8,
+            "ten": "Susan",
+            "ngay_sinh": "1991-10-05T17:00:00.000Z",
+            "tai_khoan": "susan",
+            "email": "susan@gmail.com",
+            "so_dien_thoai": "0912345685",
+            "gioi_tinh": 0,
+            "anh": {
+                "ma_anh": null,
+                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                "ngay_cap_nhat": null,
+                "ma_nguoi_dung": "8",
+                "is_active": null
+            }
+        },
+        "hasUpVoted": true,
+        "hasDownVoted": false
+    },
+    "message": "lấy bài viết thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- trong đó:
+  - **hasUpVoted**: true nếu bạn đã upvote bài viết này, false nếu chưa
+  - **hasDownVoted**: true nếu bạn đã downvote bài viết này, false nếu chưa
+  - nếu cả **hasUpVoted** và **hasDownVoted** đều là false thì bạn chưa vote bài viết này
+
+## 12.
+
+## 13.
+
+## 14.
+
+## 15.

@@ -89,7 +89,7 @@ const getAllPendingRequest = async (recipient_id) => {
 }
 
 // (async function () {
-// 	const data = await getAllPendingRequest(1);
+// 	const data = await havePendingRequestAddFriend(15,10);
 // 	console.log(data);
 // })();
 

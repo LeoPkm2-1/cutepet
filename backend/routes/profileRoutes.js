@@ -7,9 +7,18 @@ const profileController = require("../controllers/profileController");
 router.post("/myProfile", profileController.myProfileController);
 router.post(
   "/myTimelineBackward",
-  profileMid.preProccessGetMyTimeline,
+  profileMid.preProccessGetTimeline,
   profileController.myTimelineBackwardController
 );
 
-router.post('/userProfile',profileController.userProfileController)
+router.post(
+  "/userProfile",
+  profileMid.preProccessUserProfile,
+  profileController.userProfileController
+);
+router.post(
+  "/userTimelineBackward",
+  [profileMid.preProccessUserProfile, profileMid.preProccessGetTimeline],
+  profileController.userTimelineBackwardController
+);
 module.exports = router;

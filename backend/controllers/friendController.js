@@ -4,6 +4,10 @@ const userHelper = require("./../utils/userHelper");
 const { Response } = require("./../utils/index");
 const userOnlineModel = require("./../models/UserOnline/userOnlineModel");
 const theodoiHelper = require("../utils/theodoiHelper");
+const {
+  notifyRequestAddFriend,
+  notifyAcceptAddFriend,
+} = require("../notificationHandler/friend");
 
 // gửi lời mời kết bạn
 const requestAddFriend = async (req, res) => {
@@ -35,6 +39,7 @@ const requestAddFriend = async (req, res) => {
       idNguoiNhan
     );
     if (data.status == 200) {
+      notifyRequestAddFriend(idNguoiGui, idNguoiNhan, new Date());
       res.status(200).json(new Response(200, [], "Gửi lời mời thành công"));
     } else {
       console.log(data.message);
@@ -108,6 +113,8 @@ const responeAddFriend = async (req, res) => {
       // insert follow to follow table
       await theodoiHelper.followUser(idNguoiGui, idNguoiPhanHoi);
       await theodoiHelper.followUser(idNguoiPhanHoi, idNguoiGui);
+      // gửi thông báo khi dc chấp nhận bạn bè
+      notifyAcceptAddFriend(idNguoiPhanHoi, idNguoiGui, new Date());
       res
         .status(200)
         .json(
@@ -207,7 +214,7 @@ const getFriendList = async (req, res) => {
   );
   await Promise.all(
     friends_infor.map(async (user) => {
-      console.log(user.ma_nguoi_dung);
+      // console.log(user.ma_nguoi_dung);
       const isOnline = await userOnlineModel.isUserOnline(user.ma_nguoi_dung);
       user.isOnline = isOnline == true ? true : false;
     })

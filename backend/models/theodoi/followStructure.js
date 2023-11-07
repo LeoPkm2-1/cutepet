@@ -32,6 +32,23 @@ class FollowStatusPost extends GeneralFollow {
   }
 }
 
+class FollowArticle extends GeneralFollow {
+  static type = "FOLLOW_ARTICLE";
+  constructor(
+    article_Id,
+    follower_Id = null,
+    createAt = new Date(),
+    dependOn = null,
+    modifiedAt = null
+  ) {
+    super(article_Id, follower_Id, createAt, dependOn, modifiedAt);
+    this.type = this.constructor.type;
+  }
+  static get_type() {
+    return FollowArticle.type;
+  }
+}
+
 // class FollowUser extends GeneralFollow {
 // 	static type = 'FOLOW_USER';
 // 	constructor(
@@ -70,4 +87,4 @@ class FollowUser {
   }
 }
 
-module.exports = { FollowStatusPost, FollowUser };
+module.exports = { FollowStatusPost, FollowUser, FollowArticle };

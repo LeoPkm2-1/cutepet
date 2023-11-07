@@ -1,6 +1,7 @@
 const { Response } = require('../utils');
 const statusPostModel = require('../models/BaiViet/StatusPostModel');
 const postHelper = require('../utils/postHelper');
+const statusAndArticleModel = require('../models/BaiViet/StatusAndArticleModel');
 
 async function preProcessAddStatusPost(req, res, next) {
 	const NOT_CONTENT_POST = `bài viết không được chấp nhận do không có nội dung`;
@@ -35,7 +36,7 @@ async function checkStatusPostExistMid(req, res, next) {
 	} else if (req.method === 'POST') {
 		post_id = req.body.post_id;
 	}
-	const data = await statusPostModel.getPostById(post_id);
+	const data = await statusAndArticleModel.getPostById(post_id);
 	if (data.payload.length <= 0) {
 		res
 			.status(400)

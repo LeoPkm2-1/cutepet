@@ -349,3 +349,93 @@
     "message": ""
 }
 ```
+
+## 8. thông báo khi có lời mời kết bạn
+
+- Listen on: **REQUEST_ADD_FRIEND** event
+- data structure:
+
+```javascript
+{
+    "requestUser": {
+        "ma_nguoi_dung": 10,
+        "ten": "Thanh",
+        "ngay_sinh": "1991-10-07T17:00:00.000Z",
+        "tai_khoan": "thanh",
+        "email": "thanh@gmail.com",
+        "so_dien_thoai": "0912345687",
+        "gioi_tinh": 0,
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "10",
+            "is_active": null
+        }
+    },
+    "recipient": {
+        "ma_nguoi_dung": 15,
+        "ten": "Thuy",
+        "ngay_sinh": "1991-10-11T17:00:00.000Z",
+        "tai_khoan": "thuy",
+        "email": "thuy@gmail.com",
+        "so_dien_thoai": "0912345691",
+        "gioi_tinh": 1,
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "15",
+            "is_active": null
+        }
+    },
+    "requestAt": "2023-11-03T08:11:28.397Z",
+    "message": ""
+}
+```
+
+
+
+## 9. thông báo khi được chấp nhận lời mời kết bạn 
+
+- Listen on: **ACCEPT_ADD_FRIEND** event
+- data structure:
+
+```javascript
+{
+    "acceptUser": {
+        "ma_nguoi_dung": 15,
+        "ten": "Thuy",
+        "ngay_sinh": "1991-10-11T17:00:00.000Z",
+        "tai_khoan": "thuy",
+        "email": "thuy@gmail.com",
+        "so_dien_thoai": "0912345691",
+        "gioi_tinh": 1,
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "15",
+            "is_active": null
+        }
+    },
+    "requestUser": {
+        "ma_nguoi_dung": 10,
+        "ten": "Thanh",
+        "ngay_sinh": "1991-10-07T17:00:00.000Z",
+        "tai_khoan": "thanh",
+        "email": "thanh@gmail.com",
+        "so_dien_thoai": "0912345687",
+        "gioi_tinh": 0,
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "10",
+            "is_active": null
+        }
+    },
+    "acceptAt": "2023-11-03T09:19:30.555Z",
+    "message": ""
+}
+```

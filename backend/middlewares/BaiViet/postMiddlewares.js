@@ -2,6 +2,7 @@ const { Response } = require("../../utils");
 const statusPostModel = require("../../models/BaiViet/StatusPostModel");
 const postHelper = require("../../utils/postHelper");
 const banBeHelper = require("./../../utils/banbeHelper");
+const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 
 async function preProcessAddPost(req, res, next) {
   const NOT_CONTENT_POST = `bài viết không được chấp nhận do không có nội dung`;
@@ -54,14 +55,19 @@ async function checkPostExistMid(req, res, next) {
   } else if (req.method === "POST") {
     post_id = req.body.post_id;
   }
-  const data = await statusPostModel.getPostById(post_id);
-  if (data.payload.length <= 0) {
+  const data = await statusPostModel
+    .getPostById(post_id)
+    .then((data) => data.payload);
+
+  if (data === null) {
     res
       .status(400)
       .json(new Response(400, "Bài viết không tồn tại", 300, 300, 300));
     return;
   }
-  req.body.STATUS_POST_INFOR = data.payload[0];
+  // change type của _id từ object sang string
+  data._id = data._id.toString();
+  req.body.STATUS_POST_INFOR = data;
   next();
 }
 // middleware kiểm tra sự tồn tại của cmt của status post. Nếu tồn tại thì gọi next() nếu không thì trả về http respone phản hồi bình luận không tồn tại
@@ -277,7 +283,7 @@ async function preProcessDeletePost(req, res, next) {
 }
 
 async function preProcessDeleteComment(req, res, next) {
-  const postInfor = await statusPostModel
+  const postInfor = await statusAndArticleModel
     .getPostById(req.body.CMT_POST_INFOR.postId)
     .then((data) => data.payload[0]);
   console.log({ postInfor });
@@ -298,7 +304,7 @@ async function preProcessDeleteComment(req, res, next) {
 }
 
 async function preProcessDeleteReplyOFCmt(req, res, next) {
-  const postInfor = await statusPostModel
+  const postInfor = await statusAndArticleModel
     .getPostById(req.body.REPLY_POST_INFOR.postId)
     .then((data) => data.payload[0]);
   // console.log({postInfor});

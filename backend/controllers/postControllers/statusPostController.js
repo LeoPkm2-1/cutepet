@@ -5,7 +5,7 @@ const { Response } = require("../../utils/index");
 const statusPostHelper = require("../../utils/BaiViet/statusPostHelper");
 const followModel = require("../../models/theodoi/followModel");
 const followhelper = require("../../utils/theodoiHelper");
-
+const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 const {
   notifyLikePost,
   notifyCommentPost,
@@ -32,7 +32,7 @@ const addPostController = async (req, res) => {
     res.status(400).json(new Response(400, [], "đã có lỗi xảy ra", 300, 300));
     return;
   }
-  const insertedPost = await StatusPostModel.getPostById(
+  const insertedPost = await statusAndArticleModel.getPostById(
     addProcess.payload.insertedId
   );
   const idOfPost = insertedPost.payload[0]._id.toString();
@@ -214,7 +214,6 @@ const toggleLikeCmtController = async (req, res) => {
 };
 
 const replyCmtController = async (req, res) => {
-  console.log("Chạy hàm reply backend");
   const reply = req.body.reply;
   const cmt_id = req.body.cmt_id;
   const replyBy = req.auth_decoded.ma_nguoi_dung;
@@ -371,8 +370,9 @@ const getPostController = async (req, res) => {
   const postData = await StatusPostModel.getPostById(post_id).then(
     (data) => data.payload
   );
+
   const owner_infor = await userHelper.getUserPublicInforByUserId(
-    postData[0].owner_id
+    postData.owner_id
   );
   const hasLiked = await statusPostHelper.hasUserLikedPost_1(
     ma_nguoi_dung,
@@ -383,7 +383,7 @@ const getPostController = async (req, res) => {
     ma_nguoi_dung
   );
   const data = {
-    ...postData[0],
+    ...postData,
     owner_infor,
     hasLiked,
     isFollowed,
@@ -489,9 +489,9 @@ const deleteCommentController = async (req, res) => {
     // console.log(deleteProcess);
     await StatusPostModel.deleteCommentByCmtId(cmt_id);
     const postId = req.body.CMT_POST_INFOR.postId;
-    const postInfor = await StatusPostModel.getPostById(postId).then(
-      (data) => data.payload
-    );
+    const postInfor = await statusAndArticleModel
+      .getPostById(postId)
+      .then((data) => data.payload);
     // console.log(postInfor);
     const numOfComment = postInfor[0].numOfComment;
     await StatusPostModel.updateNumOfCommentPost(postId, numOfComment - 1);
