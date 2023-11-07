@@ -11,6 +11,8 @@ import MangXaHoi from './mang-xa-hoi';
 import { QuanLyThuCung } from './quan-ly-thu-cung';
 import ThemThuCung from './quan-ly-thu-cung/component/them-thu-cung';
 import { FriendList } from './ban-be';
+import PostDetail from './mang-xa-hoi/component/post-detail';
+import TrangCaNhan from './trang-ca-nhan';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -34,9 +36,11 @@ export default function PageRouting() {
           <div className="expanded col">
               <Routes>
                 <Route path="mang-xa-hoi" element={<MangXaHoi />} />
+                <Route path="trang-ca-nhan" element={<TrangCaNhan/>} />
                 <Route path="quan-ly-thu-cung" element={<QuanLyThuCung />} />
                 <Route path="them-thu-cung" element={<ThemThuCung />} />
                 <Route path="ban-be" element={<FriendList />} />
+                <Route path="post/:id" element={<PostDetail />} />
                 <Route path="*" element={<HomePage />} />
               </Routes> 
            </div>

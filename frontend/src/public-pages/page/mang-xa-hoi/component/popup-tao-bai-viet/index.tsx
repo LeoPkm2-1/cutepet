@@ -13,11 +13,11 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { useRef, useState } from 'react';
 import postApi from '../../../../../api/post';
 import { useSnackbar } from 'notistack';
-import  { uploadTaskPromise } from '../../../../../api/upload';
+import { uploadTaskPromise } from '../../../../../api/upload';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../redux';
 import Loading from '../../../../../components/loading';
-
+import Select from '../../../../../components/Select';
 
 type Props = {
   open: boolean;
@@ -28,8 +28,9 @@ export default function PopUpCreatePost(props: Props) {
   const [isFilePicked, setIsFilePicked] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [text, setText] = useState('');
+  const [visibility , setVisibility ] = useState("PUBLIC");
   const { enqueueSnackbar } = useSnackbar();
-  const infoUser = useSelector((state:RootState) => state.user.profile);
+  const infoUser = useSelector((state: RootState) => state.user.profile);
   const [isloading, setIsloading] = useState(false);
   const changeHandler = (event: any) => {
     setSelectedFile(event.target.files[0]);
@@ -38,26 +39,29 @@ export default function PopUpCreatePost(props: Props) {
   async function handleSubmit(e: any) {
     e.preventDefault();
     setIsloading(true);
-    let storageUrl:string = "";
+    let storageUrl: string = '';
     if (selectedFile) {
-      storageUrl =(await uploadTaskPromise(selectedFile)) as string;
+      storageUrl = (await uploadTaskPromise(selectedFile)) as string;
     }
-   
-    postApi.createStatus(text,"images",[storageUrl]).then(() => {
-      enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
-      setIsloading(false);
-      setText("");
-      setSelectedFile(null);
-      props.onClose();
-    }).catch((err) => {
-      setIsloading(false);
-      console.log(err, "err");
-      enqueueSnackbar(`${err}`, { variant: "error" });
-    })
+
+    postApi
+      .createStatus(visibility, text, 'images', [storageUrl])
+      .then(() => {
+        enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
+        setIsloading(false);
+        setText('');
+        setSelectedFile(null);
+        props.onClose();
+      })
+      .catch((err) => {
+        setIsloading(false);
+        console.log(err, 'err');
+        enqueueSnackbar(`${err}`, { variant: 'error' });
+      });
   }
   return (
     <>
-     <Loading open={isloading}/>
+      <Loading open={isloading} />
       <Dialog
         onClose={() => {
           props.onClose();
@@ -92,6 +96,7 @@ export default function PopUpCreatePost(props: Props) {
                 background: '#fff',
                 padding: '20px',
                 borderRadius: '12px',
+                alignItems:"center"
               }}
             >
               <img
@@ -100,9 +105,8 @@ export default function PopUpCreatePost(props: Props) {
                   width: '50px',
                   objectFit: 'cover',
                   borderRadius: '30px',
-              
                 }}
-                src={infoUser?.photoURL || ""}
+                src={infoUser?.photoURL || ''}
               />
               <Box
                 sx={{
@@ -115,9 +119,9 @@ export default function PopUpCreatePost(props: Props) {
                     fontWeight: '700',
                   }}
                 >
-                 {infoUser?.name}
+                  {infoUser?.name}
                 </Typography>
-                <Typography
+                {/* <Typography
                   sx={{
                     fontFamily: 'quicksand',
                     fontWeight: '400',
@@ -126,7 +130,33 @@ export default function PopUpCreatePost(props: Props) {
                   }}
                 >
                   Công khai
-                </Typography>
+                </Typography> */}
+                <Select
+                sx={{
+                  marginTop:"4px",
+                  ".MuiInputBase-root":{
+                    height:"28px"
+                  }
+                }}
+                 onChange={(option) => {
+                  setVisibility(option?.value as string);
+                 }}
+                  value={visibility}
+                  options={[
+                    {
+                      value: 'PUBLIC',
+                      label: 'Công khai',
+                    },
+                    {
+                      value: 'PRIVATE',
+                      label: 'Chỉ mình bạn',
+                    },
+                    {
+                      value: 'FRIEND',
+                      label: 'Bạn bè',
+                    },
+                  ]}
+                />
               </Box>
             </Box>
 
@@ -145,7 +175,7 @@ export default function PopUpCreatePost(props: Props) {
             {selectedFile && (
               <img
                 style={{
-                  marginBottom:"10px"
+                  marginBottom: '10px',
                 }}
                 width={'100%'}
                 alt="preview image"
@@ -174,7 +204,7 @@ export default function PopUpCreatePost(props: Props) {
                   fontFamily: 'quicksand',
                   fontWeight: '500',
                   ml: '20px',
-                  mr: '40px',
+                  mr: '70px',
                 }}
               >
                 Thêm vào bài viết của bạn
@@ -210,14 +240,14 @@ export default function PopUpCreatePost(props: Props) {
                     }}
                   />
                 </IconButton>
-                <IconButton>
+                {/* <IconButton>
                   <PlaceIcon
                     sx={{
                       fontSize: '34px',
                       color: '#f5533d',
                     }}
                   />
-                </IconButton>
+                </IconButton> */}
               </Box>
             </Box>
             <Button

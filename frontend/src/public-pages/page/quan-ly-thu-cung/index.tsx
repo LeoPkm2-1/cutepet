@@ -37,7 +37,7 @@ export function QuanLyThuCung() {
           >
             <StyledButton
               onClick={() => {
-                // navigate("/home/them-thu-cung")
+                navigate("/home/them-thu-cung")
               }}
               variant="contained"
             >

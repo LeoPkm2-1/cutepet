@@ -54,10 +54,9 @@ export default function MangXaHoi() {
     socket.on('LIKE_STATUS_POST', (data) => {
       console.log(data, ' Data chat from server:');
       enqueueSnackbar(<NotifycationItem 
-        name={data?.userComment?.ten}
+        name={data?.userLike?.ten}
          type="thích"
-         url = {data?.userComment?.anh?.url}
-
+         url = {data?.userLike?.anh?.url}
       />, {
         variant: "info",
       });
@@ -66,8 +65,6 @@ export default function MangXaHoi() {
       socket.off('response-message');
     };
   }, []);
-
-
 
   useEffect(() => { 
     socket.on('COMMENT_STATUS_POST', (data) => {

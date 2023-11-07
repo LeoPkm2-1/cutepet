@@ -14,6 +14,8 @@ export interface StatusType {
   };
   hasLiked: boolean;
   text: string;
+  visibility?: string;
+  taggedUsers?: string[];
 }
 
 export interface CommentType {

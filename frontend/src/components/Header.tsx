@@ -23,8 +23,12 @@ import { StyledTypography } from './styled';
 import { StyledTextField } from './FormItem';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
-import react, { useState } from 'react';
-import  { NotifycationItemClick } from './NotificationItem';
+import react, { useEffect, useState } from 'react';
+import { NotifycationItemClick } from './NotificationItem';
+import notiApi from '../api/noti';
+import { list } from 'firebase/storage';
+import friendApi from '../api/friend';
+import { PersonComponent } from '../public-pages/page/ban-be';
 type Props = ReturnType<typeof mapStateToProps> & {
   onHambuger?: React.MouseEventHandler<HTMLButtonElement>;
 };
@@ -38,20 +42,54 @@ const pages: string[] = [
 ];
 
 const Header = (props: Props) => {
+  const [friends, setFriends] = useState<
+    {
+      name: string;
+      user: string;
+      url: string;
+    }[]
+  >([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
 
+  const [valueSearch, setValueSearch] = useState('');
   const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const handleClick1 = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl1(event.currentTarget);
+    console.log(valueSearch);
+    friendApi.searchPeople(valueSearch, 0, 10).then((data) => {
+      console.log(data, 'data');
+      if (data?.status == 200) {
+        const list = data?.payload?.map((item: any) => {
+          return {
+            name: item?.ten,
+            user: item?.tai_khoan,
+            url: item?.anh?.url,
+          };
+        });
+        setFriends(list);
+      }
+    });
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleClose1 = () => {
+    setAnchorEl1(null);
+  };
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+  const open1 = Boolean(anchorEl1);
+  const id1 = open1 ? 'simple-popover1' : undefined;
+
+  function handleSearch() {}
+
   return (
     <Root>
       <div
@@ -95,8 +133,7 @@ const Header = (props: Props) => {
           </StyledTypography>
         ))} */}
         <IconButton
-          onClick={() => navigate("/home/mang-xa-hoi")}
-
+          onClick={() => navigate('/home/mang-xa-hoi')}
           sx={{
             color: '#0C4195',
             mx: '20px',
@@ -112,7 +149,7 @@ const Header = (props: Props) => {
           />
         </IconButton>
         <IconButton
-          onClick={() => navigate("/home/ban-be")}
+          onClick={() => navigate('/home/ban-be')}
           sx={{
             color: 'inherit',
             mx: '20px',
@@ -209,37 +246,82 @@ const Header = (props: Props) => {
             ),
           }}
         /> */}
-        <Paper
-          component="form"
+        <Box sx={{}}>
+          <Paper
+            // component="form"
+            sx={{
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              borderRadius: '25px',
+              marginRight: '20px',
+              background: '#b2b2b21a',
+            }}
+          >
+            <InputBase
+              sx={{
+                ml: 1,
+                flex: 1,
+                pl: '10px',
+                fontFamily: 'quicksand',
+                color: '#0c4195',
+                fontWeight: '600',
+              }}
+              value={valueSearch}
+              onChange={(e) => {
+                setValueSearch(e.target.value as string);
+              }}
+              placeholder="Search"
+              inputProps={{ 'aria-label': 'search google maps' }}
+            />
+            <IconButton
+              onClick={handleClick1}
+              type="button"
+              sx={{ p: '10px' }}
+              aria-label="search"
+            >
+              <SearchIcon
+                sx={{
+                  color: '#0c4195',
+                }}
+              />
+            </IconButton>
+          </Paper>
+        </Box>
+        <Popover
           sx={{
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            borderRadius: '25px',
-            marginRight: '20px',
-            background: '#b2b2b21a',
+            width: '1500px',
+          }}
+          id={id1}
+          open={open1}
+          anchorEl={anchorEl1}
+          onClose={handleClose1}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
           }}
         >
-          <InputBase
-            sx={{
-              ml: 1,
-              flex: 1,
-              pl: '10px',
-              fontFamily: 'quicksand',
-              color: '#0c4195',
-              fontWeight: '600',
-            }}
-            placeholder="Search"
-            inputProps={{ 'aria-label': 'search google maps' }}
-          />
-          <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-            <SearchIcon
-              sx={{
-                color: '#0c4195',
-              }}
-            />
-          </IconButton>
-        </Paper>
+          <Box sx={{
+            width:"250px",
+            padding: "20px"
+          }}>
+            {friends?.length > 0 ? friends?.map((item) => {
+              return (
+                <PersonComponent
+                  name={item.name}
+                  user={item.user}
+                  url={item.url}
+                />
+              );
+            }) : "Không tìm thấy"}
+          </Box>
+
+          {/* <NotifycationComponent /> */}
+        </Popover>
         {/* <ProfileButton /> */}
       </div>
     </Root>
@@ -294,11 +376,59 @@ const OrgName = styled.span`
 `;
 
 function NotifycationComponent() {
+  const [noti, setNoti] = useState<
+    { name?: string; url?: string; idPost?: string; type?: string, hasRead: boolean }[]
+  >([]);
+
+  useEffect(() => {
+    notiApi.getNotificationStartFrom(0, 10).then((data:any) => {
+      console.log(data, ' data notification: ');
+      if (data?.status == 200) {
+        const list = data?.payload?.map((noti: any) => {
+          console.log(noti);
+
+          if (noti?.type == 'COMMENT_STATUS_POST') {
+            return {
+              name: noti?.payload?.userComment?.ten,
+              url: noti?.payload?.userComment?.anh?.url,
+              idPost: noti?.payload?.postInfor?._id,
+              hasRead: noti?.payload?.hasRead,
+              type: 'bình luận',
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+            };
+          }
+          if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
+            return {
+              name: noti?.payload?.userReply?.ten,
+              url: noti?.payload?.userReply?.anh?.url,
+              idPost: noti?.payload?.commentInfor?.postId,
+              hasRead: noti?.payload?.hasRead,
+              type: 'trả lời bình luận',
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+            };
+          }
+        });
+        console.log(list, 'List');
+        setNoti(list);
+      }
+    });
+  }, []);
+
   return (
     <>
       <Box
         sx={{
-          paddingBottom:"20px"
+          paddingBottom: '20px',
         }}
       >
         <Typography
@@ -321,13 +451,25 @@ function NotifycationComponent() {
         >
           Tuần này
         </Typography>
-        <NotifycationItemClick />
-        <NotifycationItemClick />
-        <NotifycationItemClick />
+        {noti?.map((item) => {
+          return (
+            <>
+              <NotifycationItemClick
+                idPost={item?.idPost}
+                name={item?.name}
+                type={item?.type}
+                url={item?.url}
+                isReaded= {item?.hasRead}
+              />
+            </>
+          );
+        })}
 
-        <Divider sx={{
-          margin:"10px 0px"
-        }} />
+        {/* <Divider
+          sx={{
+            margin: '10px 0px',
+          }}
+        />
         <Typography
           sx={{
             fontFamily: 'quicksand',
@@ -341,11 +483,8 @@ function NotifycationComponent() {
         <NotifycationItemClick />
         <NotifycationItemClick />
         <NotifycationItemClick />
-        <NotifycationItemClick />
-
+        <NotifycationItemClick /> */}
       </Box>
     </>
   );
 }
-
-
