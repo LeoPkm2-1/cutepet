@@ -124,18 +124,24 @@ async function myTimelineBackwardController(req, res) {
 async function userTimelineBackwardController(req, res) {
   const reader_id = req.auth_decoded.ma_nguoi_dung;
   const findingUserId = req.body.user_id;
-  const { before, num } = req.body;
-  // check user is in friendzone with query user
-  const laBanBe = await haveFriendShipBetween(reader_id, findingUserId);
-  let listOfPost = await StatusPostModel.getPostOfUserForReaderBeforeTime(
-    findingUserId,
-    reader_id,
-    laBanBe,
-    before,
-    num
-  ).then((data) => data.payload);
-  // console.log("length:", listOfPost.length);
-  res.status(200).json(new Response(200, listOfPost, ""));
+  if (reader_id == findingUserId) {
+    await myTimelineBackwardController(req, res);
+    return;
+  } else {
+    const { before, num } = req.body;
+    // check user is in friendzone with query user
+    const laBanBe = await haveFriendShipBetween(reader_id, findingUserId);
+    let listOfPost = await StatusPostModel.getPostOfUserForReaderBeforeTime(
+      findingUserId,
+      reader_id,
+      laBanBe,
+      before,
+      num
+    ).then((data) => data.payload);
+    // console.log("length:", listOfPost.length);
+    res.status(200).json(new Response(200, listOfPost, ""));
+    return;
+  }
 }
 
 module.exports = {
