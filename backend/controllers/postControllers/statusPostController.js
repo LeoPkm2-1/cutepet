@@ -513,7 +513,7 @@ const updatePostController = async (req, res) => {
 
 const unfollowPostController = async (req, res) => {
   const { post_id } = req.body;
-  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
   const hasFollowed = await followhelper.hasUserFollowedStatusPost(
     post_id,
     user_id
@@ -538,16 +538,14 @@ const unfollowPostController = async (req, res) => {
     user_id,
     false
   );
-  res.status(400).json(
+  res.status(200).json(
     new Response(
-      400,
+      200,
       {
         unfollowed: true,
         message: "unfollow thành công",
       },
       "unfollow thành công",
-      300,
-      300
     )
   );
   return;

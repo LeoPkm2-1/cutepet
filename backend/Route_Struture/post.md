@@ -755,7 +755,7 @@ nếu bình luận không tồn tại:
 
 1. Phương thức:
 
-   'http://localhost:3000/post/statusPost/isUserFollowedPost'
+   POST http://localhost:3000/post/statusPost/unFollowPost
 
 2. cấu trúc:
 
@@ -767,15 +767,32 @@ nếu bình luận không tồn tại:
 
 3. trả về:
 
+- khi người dùng chưa theo dõi bài viết trước đó:
+
+```javascript
+{
+    "status": 400,
+    "payload": {
+        "unfollowed": false,
+        "message": "người dùng chưa theo dõi bài viết"
+    },
+    "message": "bài viết chưa được theo dõi",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi hủy theo dõi thành công:
+
 ```javascript
 {
     "status": 200,
     "payload": {
-        "post_id": "65333ff5f0efa9d27e7bf163",
-        "isFollowed": false
+        "unfollowed": true,
+        "message": "unfollow thành công"
     },
-    "message": "",
-    "errno": null,
-    "errcode": null
+    "message": "unfollow thành công",
+    "errno": 300,
+    "errcode": 300
 }
 ```

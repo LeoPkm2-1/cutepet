@@ -328,6 +328,91 @@ async function getArticleController(req, res, next) {
   res.status(200).json(new Response(200, data, "lấy bài viết thành công"));
 }
 
+async function isUserFollowedArticleController(req, res) {
+  const { article_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const isFollowed = await followhelper.hasUserFollowArticle(
+    article_id,
+    user_id
+  );
+  res.status(200).json(new Response(200, { article_id, isFollowed }, ""));
+  return;
+}
+
+async function followArticleController(req, res) {
+  const { article_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const isFollowed = await followhelper.hasUserFollowArticle(
+    article_id,
+    user_id
+  );
+  // console.log({ isFollowed });
+  // return;
+  if (isFollowed) {
+    res.status(200).json(
+      new Response(
+        200,
+        {
+          article_id,
+          isFollowed,
+        },
+        "bạn đã theo dõi bài viết này"
+      )
+    );
+    return;
+  }
+  await followhelper.followArticle(article_id, user_id);
+  res.status(200).json(
+    new Response(
+      200,
+      {
+        article_id,
+        isFollowed: true,
+      },
+      "theo dõi bài viết thành công"
+    )
+  );
+
+  return;
+  // res.send("follow article - " + article_id);
+}
+
+async function unFollowArticleController(req, res) {
+  const { article_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const isFollowed = await followhelper.hasUserFollowArticle(
+    article_id,
+    user_id
+  );
+  if (!isFollowed) {
+    res.status(400).json(
+      new Response(
+        400,
+        {
+          unfollowed: false,
+          message: "bạn chưa theo dõi bài viết này trước đó",
+        },
+        "bạn chưa theo dõi bài viết này trước đó",
+        300,
+        300
+      )
+    );
+    return;
+  }
+  await followhelper.unFollowArticle(article_id, user_id, false);
+  res.status(200).json(
+    new Response(
+      200,
+      {
+        unfollowed: true,
+        message: "unfollow thành công",
+      },
+      "unfollow thành công"
+    )
+  );
+  return;
+}
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -340,4 +425,7 @@ module.exports = {
   deleteCommentController,
   deleteArticleController,
   getArticleController,
+  isUserFollowedArticleController,
+  followArticleController,
+  unFollowArticleController,
 };

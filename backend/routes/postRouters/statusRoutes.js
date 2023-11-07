@@ -135,7 +135,7 @@ router.post(
 );
 
 router.post(
-  "/unfollowPost",
+  "/unFollowPost",
   [statusPostMiddle.checkPostExistMid],
   statusPostController.unfollowPostController
 );

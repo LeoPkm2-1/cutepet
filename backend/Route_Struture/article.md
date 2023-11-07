@@ -583,10 +583,162 @@ trong đó:
   - **hasDownVoted**: true nếu bạn đã downvote bài viết này, false nếu chưa
   - nếu cả **hasUpVoted** và **hasDownVoted** đều là false thì bạn chưa vote bài viết này
 
-## 12.
+## 12. kiểm tra liệu người dung đã theo dõi bài viết chia sẻ kiếm thức chưa
 
-## 13.
+1. phương thức:
 
-## 14.
+   POST http://localhost:3000/post/article/isUserFollowedPost
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết muốn kiểm tra
+
+3.  trả về:
+
+    - khi người dùng đã theo dõi bài chia sẻ trạng thái:
+
+      ```javascript
+      {
+      "status": 200,
+      "payload": {
+          "article_id": "6549106cd55fe46e0f9dd857",
+          "isFollowed": true
+      },
+      "message": "",
+      "errno": null,
+      "errcode": null
+      ```
+
+    }
+
+    ````
+
+    - khi người dùng chưa theo dõi bài chia sẻ trạng thái:
+
+      ```javascript
+      {
+      "status": 200,
+      "payload": {
+          "article_id": "6549106cd55fe46e0f9dd857",
+          "isFollowed": false
+      },
+      "message": "",
+      "errno": null,
+      "errcode": null
+    ````
+
+    }
+
+    - trong đó:
+      - **article_id**: id của bài viết
+      - **isFollowed**: true nếu bạn đã theo dõi bài viết này, false nếu chưa
+
+## 13. theo dõi bài viết chia sẻ kiến thức:
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/followArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết chia sẻ kiến thức muốn theo dõi
+
+3. trả về:
+
+- khi bạn đã theo dõi bài viết này trước đó:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "article_id": "6548f00bb7221c7de43e80f6",
+        "isFollowed": true
+    },
+    "message": "bạn đã theo dõi bài viết này",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi người dùng theo dõi thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "article_id": "6548f00bb7221c7de43e80f6",
+        "isFollowed": true
+    },
+    "message": "theo dõi bài viết thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 14. bỏ theo dõi bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/unFollowArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết chia sẻ kiến thức muốn bỏ theo dõi
+
+3. trả về:
+
+- khi bạn chưa theo dõi bài viết này trước đó:
+
+```javascript
+{
+    "status": 400,
+    "payload": {
+        "unfollowed": false,
+        "message": "bạn chưa theo dõi bài viết này trước đó"
+    },
+    "message": "bạn chưa theo dõi bài viết này trước đó",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi bạn bỏ theo dõi thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "unfollowed": true,
+        "message": "unfollow thành công"
+    },
+    "message": "unfollow thành công",
+    "errno": null,
+    "errcode": null
+}
+```
 
 ## 15.

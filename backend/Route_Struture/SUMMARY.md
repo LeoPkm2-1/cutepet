@@ -121,3 +121,15 @@
 1. lấy bài viết chia sẻ kiến thức bằng id của bài viết:
 
    _chi tiết:_ **Route_Struture/article.md số 11** và **postman số 45**
+
+2. kiểm tra liệu người dung đã theo dõi bài viết chia sẻ kiếm thức chưa
+
+   _chi tiết:_ **Route_Struture/article.md số 12** và **postman số 46**
+
+3. theo dõi bài viết chia sẻ kiến thức:
+
+   _chi tiết:_ **Route_Struture/article.md số 13** và **postman số 47**
+
+4. bỏ theo doi bài viết chia sẻ kiến thức:
+
+   _chi tiết:_ **Route_Struture/article.md số 14** và **postman số 48**

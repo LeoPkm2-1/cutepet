@@ -1,5 +1,6 @@
 const followModel = require("../models/theodoi/followModel");
 const statusPostModel = require("../models/BaiViet/StatusPostModel");
+const articleModel = require("../models/BaiViet/articleModel");
 const { Response } = require("./index");
 const statusAndArticleModel = require("../models/BaiViet/StatusAndArticleModel");
 
@@ -7,8 +8,8 @@ const hasFollowExisted = async (followed_Obj_Id, follower_Id, type) => {
   const data = await followModel
     .getOneFollowInforOfUserAndObjByType(followed_Obj_Id, follower_Id, type)
     .then((data) => data.payload);
-  if (data == null) return false;
   // console.log(data);
+  if (data == null) return false;
   return true;
 };
 
@@ -91,6 +92,37 @@ async function followArticle(article_id, user_id, isUnique = true) {
   }
 }
 
+async function unFollowArticle(
+  article_id,
+  user_id,
+  stillFollowWhenUserIsOwner = true
+) {
+  if (!stillFollowWhenUserIsOwner) {
+    // console.log("000000000");
+    return await followModel.userUnFollowArticle(article_id, user_id);
+  }
+  const article_infor = await articleModel
+    .getArticleById(article_id)
+    .then((data) => data.payload);
+  // console.log({ article_infor });
+  if (article_infor == null) {
+    // console.log("2222");
+    return new Response(200, { acknowledged: true, deletedCount: 0 }, "");
+  } else if (article_infor.owner_id == user_id) {
+    // console.log("1111");
+    return new Response(200, { acknowledged: true, deletedCount: 0 }, "");
+  } else {
+    // console.log("3333");
+    return await followModel.userUnFollowArticle(article_id, user_id);
+  }
+}
+
+// (async function () {
+//   "6548f00bb7221c7de43e80f6";
+//   const data = await unFollowArticle("6548f00bb7221c7de43e80f6", 8,false);
+//   console.log(data);
+// })();
+
 module.exports = {
   followStatusPost,
   hasUserFollowedStatusPost,
@@ -99,5 +131,6 @@ module.exports = {
   followUser,
   unFollowUser,
   followArticle,
+  unFollowArticle,
   hasUserFollowArticle,
 };

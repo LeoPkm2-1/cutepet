@@ -75,9 +75,30 @@ router.post(
 
 // lấy bài viết chia sẻ kiến thức bằng id bài viết
 router.post(
-  '/getArticle',
+  "/getArticle",
   articleMiddle.checkArticleExistMid,
   articleController.getArticleController
-)
+);
+
+// kiểm tra xem người dùng đã theo dõi bài viết chia sẻ kiến thức chưa
+router.post(
+  "/isUserFollowedPost",
+  [articleMiddle.checkArticleExistMid],
+  articleController.isUserFollowedArticleController
+);
+
+// theo dõi bài viết chia sẻ kiến thức
+router.post(
+  "/followArticle",
+  [articleMiddle.checkArticleExistMid],
+  articleController.followArticleController
+);
+
+// theo bỏ dõi bài viết chia sẻ kiến thức
+router.post(
+  "/unFollowArticle",
+  [articleMiddle.checkArticleExistMid],
+  articleController.unFollowArticleController
+);
 
 module.exports = router;
