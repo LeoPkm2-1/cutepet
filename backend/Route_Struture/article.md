@@ -981,3 +981,96 @@ trong đó:
   - **comments**: danh sách chứa tất cả các bình luận của bài viết
   - **numOfComments**: số lượng bình luận của bài viết hiện tại trả về trong danh sách **comments**
   - **numOfRemain**:: số lượng bình luận còn lại của bài viết
+
+## 17. lấy tất cả các bài viết chia sẻ kiến thức trong database
+
+1. Phương thức:
+
+   POST http://localhost:3000/post/article/getAllArticleInDB
+
+2. cấu trúc:
+
+   **không yêu cầu tham số**
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "_id": "654b905a64cb740e517ad555",
+            "title": "Dùng sữa vào bủôi sáng hay buổi tối thì tốt hơn cho thú cưng",
+            "postType": "ARTICLE",
+            "visibility": "PUBLIC",
+            "main_image": "www.dogcat.com",
+            "intro": "xin chào .....",
+            "content": "các thú cưng con.....",
+            "categories": [
+                "dog",
+                "cat"
+            ],
+            "createAt": "2023-11-08T13:42:50.946Z",
+            "numOfUpVote": 0,
+            "numOfDownVote": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 2,
+            "owner_infor": {
+                "ma_nguoi_dung": 2,
+                "ten": "Dung",
+                "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                "tai_khoan": "dung",
+                "email": "dung@gmail.com",
+                "so_dien_thoai": "0912345679",
+                "gioi_tinh": 1,
+                "anh": {
+                    "ma_anh": 39,
+                    "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
+                    "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                    "ma_nguoi_dung": 2,
+                    "is_active": 1
+                }
+            }
+        },
+        {
+            "_id": "654b900c64cb740e517ad553",
+            "title": "Độ tuổi phù hợp cho thú cưng uống sữa",
+            "postType": "ARTICLE",
+            "visibility": "PUBLIC",
+            "main_image": "www.dogcat.com",
+            "intro": "xin chào .....",
+            "content": "các thú cưng con.....",
+            "categories": [
+                "dog",
+                "cat"
+            ],
+            "createAt": "2023-11-08T13:41:32.190Z",
+            "numOfUpVote": 0,
+            "numOfDownVote": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 10,
+            "owner_infor": {
+                "ma_nguoi_dung": 10,
+                "ten": "Thanh",
+                "ngay_sinh": "1991-10-07T17:00:00.000Z",
+                "tai_khoan": "thanh",
+                "email": "thanh@gmail.com",
+                "so_dien_thoai": "0912345687",
+                "gioi_tinh": 0,
+                "anh": {
+                    "ma_anh": null,
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                    "ngay_cap_nhat": null,
+                    "ma_nguoi_dung": "10",
+                    "is_active": null
+                }
+            }
+        },
+    ],
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```

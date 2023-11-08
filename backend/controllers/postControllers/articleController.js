@@ -474,6 +474,17 @@ async function getCmtStartFromController(req, res) {
   }
 }
 
+async function getAllArticleInDBController(req, res) {
+  const allArticleInDB = await articleModel
+    .getAllArticles()
+    .then((data) => data.payload)
+    .catch((err) => []);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(
+    allArticleInDB
+  );
+  res.status(200).json(new Response(200, allArticleInDB, ""));
+}
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -491,4 +502,5 @@ module.exports = {
   unFollowArticleController,
   getAllCmtOfArticleController,
   getCmtStartFromController,
+  getAllArticleInDBController,
 };

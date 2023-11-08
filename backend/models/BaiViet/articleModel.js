@@ -374,6 +374,20 @@ const getAllCommentsOfArticle = async (article_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getAllArticles = async () => {
+  async function executor(collection) {
+    return await collection
+      .find({
+        postType: articleComposStructure.Article.type,
+      })
+      .sort({ createAt: -1 })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // (async function () {
 //   const data = await getAllCommentsOfArticle("6548f00bb7221c7de43e80f6");
 //   console.log(data);
@@ -406,4 +420,5 @@ module.exports = {
   deleteArticle,
   getArticleById,
   getAllCommentsOfArticle,
+  getAllArticles,
 };

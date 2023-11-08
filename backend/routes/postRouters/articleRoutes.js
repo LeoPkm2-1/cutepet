@@ -115,4 +115,9 @@ router.post(
   articleController.getCmtStartFromController
 );
 
+router.post(
+  "/getAllArticleInDB",
+  articleController.getAllArticleInDBController
+)
+
 module.exports = router;

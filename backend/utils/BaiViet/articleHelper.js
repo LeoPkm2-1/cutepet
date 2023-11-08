@@ -98,6 +98,14 @@ async function userInfor2ListOfObjectMapByUserId(
   return listObjs;
 }
 
+async function insertUserWriteArticleInforToListOfArticle(listOfArticles) {
+  return await userInfor2ListOfObjectMapByUserId(
+    listOfArticles,
+    "owner_id",
+    "owner_infor"
+  );
+}
+
 async function insertUserCmtInforToListOfCmts(listCmts) {
   return await userInfor2ListOfObjectMapByUserId(
     listCmts,
@@ -119,5 +127,6 @@ async function insertUserCmtInforToListOfCmts(listCmts) {
 module.exports = {
   hasUserUpVotedArticle,
   hasUserDownVotedArticle,
+  insertUserWriteArticleInforToListOfArticle,
   insertUserCmtInforToListOfCmts,
 };

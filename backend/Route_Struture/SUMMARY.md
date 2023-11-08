@@ -159,3 +159,7 @@
 6. lấy bình luận của bài viết chia sẻ kiến thức theo index và num:
 
    _chi tiết:_ **[Route_Struture/article.md số 16](./article.md#16-lấy-bình-luận-theo-của-bài-viết-chia-sẻ-kiến-thức-index-và-num)** và **postman số 54**
+
+7. lấy tất cả các bài viết chia sẻ kiến thức trong database:
+
+   _chi tiết:_ **[Route_Struture/article.md số 17](./article.md#17-lấy-tất-cả-các-bài-viết-chia-sẻ-kiến-thức-trong-database)** và **postman số 55**

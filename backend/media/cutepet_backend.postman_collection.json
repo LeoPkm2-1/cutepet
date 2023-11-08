@@ -1492,7 +1492,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_3}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -1501,7 +1501,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"tại sao chó con hay cắn dép và mèo con hay cào ghế\",\n    \"main_image\": \"www.dogcat.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"các thú cưng con.....\",\n    \"categories\": [\"dog\",\"cat\"]\n}",
+					"raw": "{\n    \"title\": \"Dùng sữa vào bủôi sáng hay buổi tối thì tốt hơn cho thú cưng\",\n    \"main_image\": \"www.dogcat.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"các thú cưng con.....\",\n    \"categories\": [\"dog\",\"cat\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2373,6 +2373,37 @@
 						"post",
 						"article",
 						"getCommentStartFrom"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "55_article_getAllArticleInDB",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_4}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/post/article/getAllArticleInDB",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"getAllArticleInDB"
 					]
 				}
 			},
