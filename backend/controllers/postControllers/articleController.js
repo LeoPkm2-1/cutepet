@@ -413,6 +413,25 @@ async function unFollowArticleController(req, res) {
   return;
 }
 
+async function getAllCmtOfArticleController(req, res) {
+  const { article_id } = req.body;
+  const comments = await articleModel
+    .getAllCommentsOfArticle(article_id)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  // console.log(comments);
+  await articleHelper.insertUserCmtInforToListOfCmts(comments);
+  const data = {
+    comments,
+    numOfComments: comments.length,
+    numOfRemain: 0,
+  };
+  res
+    .status(200)
+    .json(new Response(200, data, "lấy tất cả các bài viết thành công"));
+  return;
+}
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -428,4 +447,5 @@ module.exports = {
   isUserFollowedArticleController,
   followArticleController,
   unFollowArticleController,
+  getAllCmtOfArticleController,
 };

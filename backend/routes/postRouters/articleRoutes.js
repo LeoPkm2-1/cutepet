@@ -101,4 +101,11 @@ router.post(
   articleController.unFollowArticleController
 );
 
+// lấy tất cả các bình luận của bài viết chia sẻ kiến thức
+router.post(
+  '/getAllComment',
+  [articleMiddle.checkArticleExistMid],
+  articleController.getAllCmtOfArticleController
+)
+
 module.exports = router;

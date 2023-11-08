@@ -362,6 +362,23 @@ const getArticleById = async (article_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getAllCommentsOfArticle = async (article_id) => {
+  async function executor(collection) {
+    return await collection
+      .find({ articleId: article_id })
+      .sort({ commentAt: -1 })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiChiaSeKienThuc")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// (async function () {
+//   const data = await getAllCommentsOfArticle("6548f00bb7221c7de43e80f6");
+//   console.log(data);
+// })();
+
 module.exports = {
   addArticle,
   addUpVote,
@@ -388,4 +405,5 @@ module.exports = {
   deleteAllReplyAndCommentOfArticle,
   deleteArticle,
   getArticleById,
+  getAllCommentsOfArticle,
 };

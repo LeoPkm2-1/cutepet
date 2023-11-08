@@ -76,78 +76,82 @@
 
 1. thêm bài viết chia sẻ kiến thức:
 
-   _chi tiết:_ **Route_Struture/article.md số 1** và **postman số 35**
+   _chi tiết:_ **[Route_Struture/article.md số 1](./article.md#1-thêm-bài-viết-chia-sẻ-kiến-thức)** và **postman số 35**
 
 2. toggle upvote bài viết chiase kiến thức:
 
-   _chi tiết:_ **Route_Struture/article.md số 2** và **postman số 36**
+   _chi tiết:_ **[Route_Struture/article.md số 2](./article.md#2-toggle-upvote-bài-viết-chia-sẻ-kiến-thức)** và **postman số 36**
 
 3. toggle downvote bài viết chiase kiến thức:
 
-   _chi tiết:_ **Route_Struture/article.md số 3** và **postman số 37**
+   _chi tiết:_ **[Route_Struture/article.md số 3](./article.md#3-toggle-downvote-bài-viết-chia-sẻ-kiến-thức)** và **postman số 37**
 
 ## (05-11-2023):
 
 1. thêm bình luận cho bài viết chia sẻ kiến thức:
 
-   _chi tiết:_ **Route_Struture/article.md số 4** và **postman số 38**
+   _chi tiết:_ **[Route_Struture/article.md số 4](./article.md#4-thêm-bình-luận-cho-bài-viết-chia-sẻ-kiến-thức)** và **postman số 38**
 
 2. thêm phản hồi cho bình luận của bài viết chia sẻ kiến thức:
 
-   _chi tiết:_ **Route_Struture/article.md số 5** và **postman số 39**
+   _chi tiết:_ **[Route_Struture/article.md số 5](./article.md#5-thêm-phản-hồi-cho-bình-luận-của-bài-viết-chia-sẻ-kiến-thức)** và **postman số 39**
 
 3. chỉnh sửa nội dung của phản hồi:
 
-   _chi tiết:_ **Route_Struture/article.md số 6** và **postman số 40**
+   _chi tiết:_ **[Route_Struture/article.md số 6](./article.md#6-chỉnh-sửa-nội-dung-của-phản-hồi-của-bình-luận)** và **postman số 40**
 
 4. chỉnh sửa nội dung của bình luận:
 
-   _chi tiết:_ **Route_Struture/article.md số 7** và **postman số 41**
+   _chi tiết:_ **[Route_Struture/article.md số 7](./article.md#7-chỉnh-sửa-nội-dung-của-bình-luận)** và **postman số 41**
 
 5. xóa phản hồi của bình luận:
 
-   _chi tiết:_ **Route_Struture/article.md số 8** và **postman số 42**
+   _chi tiết:_ **[Route_Struture/article.md số 8](./article.md#8-xóa-phản-hồi-của-bình-luận)** và **postman số 42**
 
 6. xóa bình luận của bài viết chia sẻ trạng thái:
 
-   _chi tiết:_ **Route_Struture/article.md số 9** và **postman số 43**
+   _chi tiết:_ **[Route_Struture/article.md số 9](./article.md#9-xóa-bình-luận-của-bài-viết-chia-sẻ-trạng-thái)** và **postman số 43**
 
 7. xóa bài viết chia sẻ trạng thái:
 
-   _chi tiết:_ **Route_Struture/article.md số 10** và **postman số 44**
+   _chi tiết:_ **[Route_Struture/article.md số 10](./article.md#10-xóa-bài-viết-chia-sẻ-trạng-thái)** và **postman số 44**
 
 ## (07-11-2023):
 
 1. lấy bài viết chia sẻ kiến thức bằng id của bài viết:
 
-   _chi tiết:_ **Route_Struture/article.md số 11** và **postman số 45**
+   _chi tiết:_ **[Route_Struture/article.md số 11](./article.md#11-lấy-bài-viết-chia-sẻ-kiến-thức-bằng-id-của-bài-viết)** và **postman số 45**
 
 2. kiểm tra liệu người dung đã theo dõi bài viết chia sẻ kiếm thức chưa
 
-   _chi tiết:_ **Route_Struture/article.md số 12** và **postman số 46**
+   _chi tiết:_ **[Route_Struture/article.md số 12](./article.md#12-kiểm-tra-liệu-người-dung-đã-theo-dõi-bài-viết-chia-sẻ-kiếm-thức-chưa)** và **postman số 46**
 
 3. theo dõi bài viết chia sẻ kiến thức:
 
-   _chi tiết:_ **Route_Struture/article.md số 13** và **postman số 47**
+   _chi tiết:_ **[Route_Struture/article.md số 13](./article.md#13-theo-dõi-bài-viết-chia-sẻ-kiến-thức)** và **postman số 47**
 
 4. bỏ theo doi bài viết chia sẻ kiến thức:
 
-   _chi tiết:_ **Route_Struture/article.md số 14** và **postman số 48**
+   _chi tiết:_ **[Route_Struture/article.md số 14](./article.md#14-bỏ-theo-dõi-bài-viết-chia-sẻ-kiến-thức)** và **postman số 48**
 
 ## (08-11-2023):
 
 1. lấy tất cả các bình luận của 1 bài viết trạng thái:
 
-   _chi tiết:_ **Route_Struture/post.md số 6** và **postman số 49**
+   _chi tiết:_ **[Route_Struture/post.md số 6](./post.md#6-lấy-tất-cả-các-bình-luận-của-1-bài-viết-trạng-thái)** và **postman số 49**
 
 2. lấy bình luận theo của bài viết theo thứ tự trước sau:
 
-   _chi tiết:_ **Route_Struture/post.md số 7** và **postman số 50**
+   _chi tiết:_ **[Route_Struture/post.md số 7](./post.md#7-phân-trang-cho-bình-luận)** và **postman số 50**
 
 3. lấy tất cả các phản hồi của bình luận:
 
-   _chi tiết:_ **Route_Struture/post.md số 8** và **postman số 51**
+   _chi tiết:_ **[Route_Struture/post.md số 8](./post.md#8-lấy-tất-cả-các-phản-hồi-của-bình-luận)** và **postman số 51**
 
 4. lấy phản hồi của bình luận theo thứ tự trước sau:
 
-   _chi tiết:_ **Route_Struture/post.md số 9** và **postman số 52**
+   _chi tiết:_ **[Route_Struture/post.md số 9](./post.md#9-phân-trang-cho-phản-hồi)** và **postman số 52**
+
+5. lấy tất cả các bình luận của bài viết chia sẻ kiến thức:
+
+   _chi tiết:_ **[Route_Struture/article.md số 15](./article.md#15-lấy-tất-cả-các-bình-luận-của-1-bài-viết-chia-sẻ-kiến-thức)** và **postman số 53**

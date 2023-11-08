@@ -741,4 +741,117 @@ trong đó:
 }
 ```
 
-## 15.
+## 15. lấy tất cả các bình luận của 1 bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/getAllComment
+
+2. cấu trúc:
+
+```javascript
+{
+  article_id: string;
+}
+```
+
+- trong đó:
+  - **article_id**: id của bài viết chia sẻ kiến thức muốn lấy ra tất cả các bình luận
+
+3. trả về:
+
+- khi không có comment nào:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "comments": [],
+        "numOfComments": 0,
+        "numOfRemain": 0
+    },
+    "message": "lấy tất cả các bài viết thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi có comment:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "comments": [
+            {
+                "_id": "654b2f3a80dd116923a40270",
+                "articleId": "6549d20b0973deaa2b1cc8f0",
+                "type": "COMMENT_ARTICLE",
+                "comment": "test cmt 2",
+                "commentBy": 2,
+                "commentAt": "2023-11-08T06:48:26.128Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfReply": 0,
+                "modifiedAt": null,
+                "userCmtInfor": {
+                    "ma_nguoi_dung": 2,
+                    "ten": "Dung",
+                    "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                    "tai_khoan": "dung",
+                    "email": "dung@gmail.com",
+                    "so_dien_thoai": "0912345679",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": 39,
+                        "url": "...........................",
+                        "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                        "ma_nguoi_dung": 2,
+                        "is_active": 1
+                    }
+                }
+            },
+            {
+                "_id": "654b2f2d80dd116923a4026f",
+                "articleId": "6549d20b0973deaa2b1cc8f0",
+                "type": "COMMENT_ARTICLE",
+                "comment": "test cmt 1",
+                "commentBy": 10,
+                "commentAt": "2023-11-08T06:48:13.408Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfReply": 0,
+                "modifiedAt": null,
+                "userCmtInfor": {
+                    "ma_nguoi_dung": 10,
+                    "ten": "Thanh",
+                    "ngay_sinh": "1991-10-07T17:00:00.000Z",
+                    "tai_khoan": "thanh",
+                    "email": "thanh@gmail.com",
+                    "so_dien_thoai": "0912345687",
+                    "gioi_tinh": 0,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "..............",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "10",
+                        "is_active": null
+                    }
+                }
+            }
+        ],
+        "numOfComments": 2,
+        "numOfRemain": 0
+    },
+    "message": "lấy tất cả các bài viết thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- trong đó:
+
+
+  - **comments**: danh sách chứa tất cả các bình luận của bài viết
+  - **numOfComments**: số lượng bình luận của bài viết hiện tại trả về  trong danh sách **comments**
+  - **numOfRemain**:: số lượng bình luận còn lại của bài viết 
