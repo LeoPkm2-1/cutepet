@@ -140,7 +140,7 @@
 
    _chi tiết:_ **[Route_Struture/post.md số 6](./post.md#6-lấy-tất-cả-các-bình-luận-của-1-bài-viết-trạng-thái)** và **postman số 49**
 
-2. lấy bình luận theo của bài viết theo thứ tự trước sau:
+2. lấy bình luận theo của bài viết trạng thái theo thứ tự trước sau:
 
    _chi tiết:_ **[Route_Struture/post.md số 7](./post.md#7-phân-trang-cho-bình-luận)** và **postman số 50**
 
@@ -155,3 +155,7 @@
 5. lấy tất cả các bình luận của bài viết chia sẻ kiến thức:
 
    _chi tiết:_ **[Route_Struture/article.md số 15](./article.md#15-lấy-tất-cả-các-bình-luận-của-1-bài-viết-chia-sẻ-kiến-thức)** và **postman số 53**
+
+6. lấy bình luận của bài viết chia sẻ kiến thức theo index và num:
+
+   _chi tiết:_ **[Route_Struture/article.md số 16](./article.md#16-lấy-bình-luận-theo-của-bài-viết-chia-sẻ-kiến-thức-index-và-num)** và **postman số 54**

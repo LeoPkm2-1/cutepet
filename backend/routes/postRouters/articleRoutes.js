@@ -103,9 +103,16 @@ router.post(
 
 // lấy tất cả các bình luận của bài viết chia sẻ kiến thức
 router.post(
-  '/getAllComment',
+  "/getAllComment",
   [articleMiddle.checkArticleExistMid],
   articleController.getAllCmtOfArticleController
-)
+);
+
+// lấy bình luận của bài viết chia sẻ kiến thức thứ tự trước sau
+router.post(
+  "/getCommentStartFrom",
+  [articleMiddle.checkArticleExistMid,articleMiddle.preProcessGetCmtByIndex],
+  articleController.getCmtStartFromController
+);
 
 module.exports = router;

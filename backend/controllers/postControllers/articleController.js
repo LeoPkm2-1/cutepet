@@ -432,6 +432,48 @@ async function getAllCmtOfArticleController(req, res) {
   return;
 }
 
+async function getCmtStartFromController(req, res) {
+  const { article_id, index, num } = req.body;
+  const AllComments = await articleModel
+    .getAllCommentsOfArticle(article_id)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  if (AllComments.length <= 0) {
+    res.status(200).json(
+      new Response(200, {
+        comments: [],
+        numOfComments: 0,
+        numOfRemain: 0,
+      })
+    );
+    return;
+  }
+  if (typeof num == "undefined") {
+    const comments = AllComments.slice(index);
+    await articleHelper.insertUserCmtInforToListOfCmts(comments);
+    const data = {
+      comments,
+      numOfComments: comments.length,
+      numOfRemain: 0,
+    };
+    res.status(200).json(new Response(200, data, "lấy bình luận thành công"));
+    return;
+  } else {
+    const comments = AllComments.slice(index, index + num);
+    await articleHelper.insertUserCmtInforToListOfCmts(comments);
+    const data = {
+      comments,
+      numOfComments: comments.length,
+      numOfRemain:
+        AllComments.length <= index + num
+          ? 0
+          : AllComments.length - (index + num),
+    };
+    res.status(200).json(new Response(200, data, "lấy bình luận thành công"));
+    return;
+  }
+}
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -448,4 +490,5 @@ module.exports = {
   followArticleController,
   unFollowArticleController,
   getAllCmtOfArticleController,
+  getCmtStartFromController,
 };

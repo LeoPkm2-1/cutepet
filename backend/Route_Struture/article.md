@@ -851,7 +851,133 @@ trong đó:
 
 - trong đó:
 
-
   - **comments**: danh sách chứa tất cả các bình luận của bài viết
-  - **numOfComments**: số lượng bình luận của bài viết hiện tại trả về  trong danh sách **comments**
-  - **numOfRemain**:: số lượng bình luận còn lại của bài viết 
+  - **numOfComments**: số lượng bình luận của bài viết hiện tại trả về trong danh sách **comments**
+  - **numOfRemain**:: số lượng bình luận còn lại của bài viết
+
+## 16. lấy bình luận theo của bài viết chia sẻ kiến thức index và num
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/getCommentStartFrom
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string,
+    index: number,
+    num: number
+}
+```
+
+- trong đó:
+  - **article_id**: id của bài chia sẻ kiến thức muốn lấy ra các bình luận
+  - **index**: mô tả vị trí của bình luận được lấy (index: bắt đầu từ 0,1,....)
+    - **num**: số lượng bình luận cần lấy ra
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "comments": [
+            {
+                "_id": "654b4b13cacfb2b68ed97a87",
+                "articleId": "654b4aa2cacfb2b68ed97a7d",
+                "type": "COMMENT_ARTICLE",
+                "comment": "chó con đáng yêu 9",
+                "commentBy": 4,
+                "commentAt": "2023-11-08T08:47:15.779Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfReply": 0,
+                "modifiedAt": null,
+                "userCmtInfor": {
+                    "ma_nguoi_dung": 4,
+                    "ten": "Ty",
+                    "ngay_sinh": "1991-10-01T17:00:00.000Z",
+                    "tai_khoan": "ty",
+                    "email": "ty@gmail.com",
+                    "so_dien_thoai": "0912345681",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "........................",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "4",
+                        "is_active": null
+                    }
+                }
+            },
+            {
+                "_id": "654b4affcacfb2b68ed97a86",
+                "articleId": "654b4aa2cacfb2b68ed97a7d",
+                "type": "COMMENT_ARTICLE",
+                "comment": "chó con đáng yêu 8",
+                "commentBy": 2,
+                "commentAt": "2023-11-08T08:46:55.872Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfReply": 0,
+                "modifiedAt": null,
+                "userCmtInfor": {
+                    "ma_nguoi_dung": 2,
+                    "ten": "Dung",
+                    "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                    "tai_khoan": "dung",
+                    "email": "dung@gmail.com",
+                    "so_dien_thoai": "0912345679",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": 39,
+                        "url": "......................",
+                        "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                        "ma_nguoi_dung": 2,
+                        "is_active": 1
+                    }
+                }
+            },
+            {
+                "_id": "654b4afbcacfb2b68ed97a85",
+                "articleId": "654b4aa2cacfb2b68ed97a7d",
+                "type": "COMMENT_ARTICLE",
+                "comment": "chó con đáng yêu 7",
+                "commentBy": 2,
+                "commentAt": "2023-11-08T08:46:51.495Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfReply": 0,
+                "modifiedAt": null,
+                "userCmtInfor": {
+                    "ma_nguoi_dung": 2,
+                    "ten": "Dung",
+                    "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                    "tai_khoan": "dung",
+                    "email": "dung@gmail.com",
+                    "so_dien_thoai": "0912345679",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": 39,
+                        "url": ".......................",
+                        "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                        "ma_nguoi_dung": 2,
+                        "is_active": 1
+                    }
+                }
+            }
+        ],
+        "numOfComments": 3,
+        "numOfRemain": 6
+    },
+    "message": "lấy bình luận thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- trong đó:
+  - **comments**: danh sách chứa tất cả các bình luận của bài viết
+  - **numOfComments**: số lượng bình luận của bài viết hiện tại trả về trong danh sách **comments**
+  - **numOfRemain**:: số lượng bình luận còn lại của bài viết

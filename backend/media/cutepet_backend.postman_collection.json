@@ -1501,7 +1501,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"test\",\n    \"main_image\": \"www.dog.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"chocolate rất hại.....\",\n    \"categories\": [\"dog\",\"cat\"]\n}",
+					"raw": "{\n    \"title\": \"tại sao chó con hay cắn dép và mèo con hay cào ghế\",\n    \"main_image\": \"www.dogcat.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"các thú cưng con.....\",\n    \"categories\": [\"dog\",\"cat\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1614,7 +1614,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token_user_4}}",
 							"type": "string"
 						}
 					]
@@ -1626,12 +1626,12 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "6548b710bacf36ecfeda6421",
+							"value": "654b4aa2cacfb2b68ed97a7d",
 							"type": "text"
 						},
 						{
 							"key": "comment",
-							"value": "test ahahah",
+							"value": "chó con đáng yêu 10",
 							"type": "text"
 						}
 					]
@@ -2281,6 +2281,98 @@
 							"value": "3",
 							"disabled": true
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "53_article_getAllComment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_4}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "6549d20b0973deaa2b1cc8f0",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/getAllComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"getAllComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "54_article_getCommentStartFrom",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "654b4aa2cacfb2b68ed97a7d",
+							"type": "text"
+						},
+						{
+							"key": "index",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/getCommentStartFrom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"getCommentStartFrom"
 					]
 				}
 			},
