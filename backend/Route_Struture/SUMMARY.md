@@ -133,3 +133,21 @@
 4. bỏ theo doi bài viết chia sẻ kiến thức:
 
    _chi tiết:_ **Route_Struture/article.md số 14** và **postman số 48**
+
+## (08-11-2023):
+
+1. lấy tất cả các bình luận của 1 bài viết trạng thái:
+
+   _chi tiết:_ **Route_Struture/post.md số 6** và **postman số 49**
+
+2. lấy bình luận theo của bài viết theo thứ tự trước sau:
+
+   _chi tiết:_ **Route_Struture/post.md số 7** và **postman số 50**
+
+3. lấy tất cả các phản hồi của bình luận:
+
+   _chi tiết:_ **Route_Struture/post.md số 8** và **postman số 51**
+
+4. lấy phản hồi của bình luận theo thứ tự trước sau:
+
+   _chi tiết:_ **Route_Struture/post.md số 9** và **postman số 52**

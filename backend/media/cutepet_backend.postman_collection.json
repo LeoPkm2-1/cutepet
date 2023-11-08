@@ -312,7 +312,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_3}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -328,7 +328,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"text\": \"Susan PRIVATE test no tag_1\",\n    \"visibility\":\"PRIVATE\",\n   \"taggedUsersId\":[],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"google.com\",\"youtube.com\",\"amazon.com\"]\n    }\n}",
+					"raw": "{\n    \"text\": \"Tý PUBLIC test no tag_1\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"google.com\",\"youtube.com\",\"amazon.com\"]\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -400,7 +400,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token_user_4}}",
 							"type": "string"
 						}
 					]
@@ -412,12 +412,12 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "654599ed01b55d7d2f7928dd",
+							"value": "654af039c82ff4c74b78f9eb",
 							"type": "text"
 						},
 						{
 							"key": "comment",
-							"value": "tôi là TY 2",
+							"value": "tôi là Thanh nha",
 							"type": "text"
 						}
 					]
@@ -938,7 +938,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -950,13 +950,13 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "65333ff5f0efa9d27e7bf163",
+							"value": "6546fdc3b3b48facbd063193",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost:3000/post/statusPost/unfollowPost",
+					"raw": "http://localhost:3000/post/statusPost/unFollowPost",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -965,7 +965,7 @@
 					"path": [
 						"post",
 						"statusPost",
-						"unfollowPost"
+						"unFollowPost"
 					]
 				}
 			},
@@ -991,7 +991,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "65333ff5f0efa9d27e7bf163",
+							"value": "6549ce22c70f618b46513185",
 							"type": "text"
 						}
 					]
@@ -1020,7 +1020,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -1032,7 +1032,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "65333ff5f0efa9d27e7bf163",
+							"value": "6546fdc3b3b48facbd063193",
 							"type": "text"
 						}
 					]
@@ -1501,7 +1501,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"nuôi dạy chó con\",\n    \"main_image\": \"www.dog.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"chocolate rất hại.....\",\n    \"categories\": [\"dog\",\"cat\"]\n}",
+					"raw": "{\n    \"title\": \"test\",\n    \"main_image\": \"www.dog.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"chocolate rất hại.....\",\n    \"categories\": [\"dog\",\"cat\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1955,7 +1955,270 @@
 			"response": []
 		},
 		{
-			"name": "getReplyStartFrom",
+			"name": "46_article_isUserFollowedPost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "6549106cd55fe46e0f9dd857",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/isUserFollowedPost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"isUserFollowedPost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "47_article_followArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "6548f00bb7221c7de43e80f6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/followArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"followArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "48_article_unFollowArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "6548f00bb7221c7de43e80f6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/unFollowArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"unFollowArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "49_getAllComment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "654af039c82ff4c74b78f9eb",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getAllComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getAllComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "50_getCommentStartFrom",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "313233343536373839303132",
+							"type": "text"
+						},
+						{
+							"key": "index",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getCommentStartFrom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getCommentStartFrom"
+					],
+					"query": [
+						{
+							"key": "num",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "51_getAllReplyComment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cmt_id",
+							"value": "303132333435363738393134",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getAllReply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getAllReply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "52_getReplyStartFrom",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -2321,146 +2584,6 @@
 					"path": [
 						"pet",
 						"getallowns"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getAllComment",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "post_id",
-							"value": "313233343536373839303132",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/post/statusPost/getAllComment",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"post",
-						"statusPost",
-						"getAllComment"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getCommentStartFrom",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "post_id",
-							"value": "313233343536373839303132",
-							"type": "text"
-						},
-						{
-							"key": "index",
-							"value": "0",
-							"type": "text"
-						},
-						{
-							"key": "num",
-							"value": "2",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/post/statusPost/getCommentStartFrom",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"post",
-						"statusPost",
-						"getCommentStartFrom"
-					],
-					"query": [
-						{
-							"key": "num",
-							"value": "",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getAllReplyComment",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "cmt_id",
-							"value": "303132333435363738393134",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/post/statusPost/getAllReply",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"post",
-						"statusPost",
-						"getAllReply"
 					]
 				}
 			},
