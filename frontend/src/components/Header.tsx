@@ -193,6 +193,9 @@ const Header = (props: Props) => {
           <NotifycationComponent />
         </Popover>
         <IconButton
+         onClick={() => {
+          navigate('/home/trang-chia-se')
+         }}
           sx={{
             color: 'inherit',
             mx: '20px',

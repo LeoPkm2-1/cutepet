@@ -41,6 +41,12 @@ export default function PostComponent(props: Props) {
   const [isComment, setIsComment] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [friendTag, setFriendTag] = useState<
+  {
+    id: string;
+    name: string;
+  }[]
+>([]);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -72,7 +78,12 @@ export default function PostComponent(props: Props) {
             hasLiked: data?.payload?.hasLiked,
             text: data?.text || '',
             visibility: data?.payload?.visibility,
-            taggedUsers: data?.payload?.taggedUsers,
+            taggedUsers: data?.payload?.taggedUsers?.map((item:any) => {
+              return {
+                id: item?.ma_nguoi_dung,
+                ten: item?.ten,
+              }
+            }),
           };
           setStatus(sta);
         }
@@ -221,7 +232,34 @@ export default function PostComponent(props: Props) {
                     fontWeight: '700',
                   }}
                 >
-                  {status?.userInfor?.name}
+                  {status?.userInfor?.name} {" "}
+                  {(status?.taggedUsers?.length || 0 ) > 0 && (
+                    <>
+                      <span
+                        style={{
+                          fontWeight: '400',
+                        }}
+                      >
+                        cùng với
+                      </span>
+
+                      {" "}
+                      {status?.taggedUsers?.map((item, index) => {
+                        if(index> 0){
+                          return (
+                            <span>
+                             {", "} {item?.name}
+                            </span>
+                          )
+                        }
+                        return (
+                          <span>
+                           {item?.name}
+                          </span>
+                        )
+                      })}
+                    </>
+                  )}
                 </Typography>
                 <Typography
                   sx={{

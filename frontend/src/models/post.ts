@@ -15,7 +15,10 @@ export interface StatusType {
   hasLiked: boolean;
   text: string;
   visibility?: string;
-  taggedUsers?: string[];
+  taggedUsers?: {
+    id: string;
+    name: string;
+  }[];
 }
 
 export interface CommentType {

@@ -39,6 +39,12 @@ export default function MangXaHoi() {
             },
             hasLiked: item?.hasLiked,
             text: item?.text,
+            taggedUsers: item?.taggedUsers?.map((tagUser:any) => {
+              return {
+                id: tagUser?.ma_nguoi_dung,
+                name: tagUser?.ten,
+              }
+            }),
           } as StatusType;
         });
         setListPost(list);

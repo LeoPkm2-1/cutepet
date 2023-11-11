@@ -19,39 +19,39 @@ const PrivatePagesRouting = () => {
   }, []);
 
   useEffect(() => {
-    // friendApi.getListFriend().then((data) => {
-    //   if (data?.status == 200) {
-    //     console.log(data);
-    //     const list = data?.payload.map((item: any) => {
-    //       return {
-    //         name: item?.ten,
-    //         user: item?.tai_khoan,
-    //         url: item?.anh?.url,
-    //         isOnline: item?.isOnline || false,
-    //         id: item?._id,
-    //       };
-    //     });
-    //     if(list?.length > 0){
-    //       dispatch(FriendActions.setFriend(list))
-    //     }
-    //   }
-    // });
+    friendApi.getListFriend().then((data) => {
+      if (data?.status == 200) {
+        console.log(data);
+        const list = data?.payload.map((item: any) => {
+          return {
+            name: item?.ten,
+            user: item?.tai_khoan,
+            url: item?.anh?.url,
+            isOnline: item?.isOnline || false,
+            id: item?.ma_nguoi_dung,
+          };
+        });
+        if(list?.length > 0){
+          dispatch(FriendActions.setFriend(list))
+        }
+      }
+    });
     
-    const data : FriendType[] = [{
-      name:"Thuyen",
-      user: "thuyennguyen12",
-      id:"1",
-      isOnline: true,
-      url: "https://image.hsv-tech.io/reebok/common/b6e2c966-0e02-4934-85a0-8096f63fd06f.webp"
-    },
-    {
-      name:"Hoang",
-      user: "thuyennguyen12",
-      id:"2",
-      isOnline: true,
-      url: "https://image.hsv-tech.io/reebok/common/b6e2c966-0e02-4934-85a0-8096f63fd06f.webp"
-    }]
-    dispatch(FriendActions.setFriend(data))
+    // const data : FriendType[] = [{
+    //   name:"Thuyen",
+    //   user: "thuyennguyen12",
+    //   id:"1",
+    //   isOnline: true,
+    //   url: "https://image.hsv-tech.io/reebok/common/b6e2c966-0e02-4934-85a0-8096f63fd06f.webp"
+    // },
+    // {
+    //   name:"Hoang",
+    //   user: "thuyennguyen12",
+    //   id:"2",
+    //   isOnline: true,
+    //   url: "https://image.hsv-tech.io/reebok/common/b6e2c966-0e02-4934-85a0-8096f63fd06f.webp"
+    // }]
+    // dispatch(FriendActions.setFriend(data))
   }, []);
 
   // if (!profile) {

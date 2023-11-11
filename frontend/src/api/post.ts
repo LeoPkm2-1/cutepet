@@ -1,12 +1,13 @@
 import { authRequest, authRequestWithoutExpCheck } from './base';
 
-const createStatus = (visibility:string, text: string, type: string, data: string[]) => {
+const createStatus = (visibility:string, text: string, taggedUsersId: string[] | number[], type: string, data: string[]) => {
   return authRequest<any>({
     url: '/post/statusPost/addPost',
     method: 'POST',
     body: {
       text: text,
       visibility,
+      taggedUsersId,
       media: {
         type: type,
         data: data,
