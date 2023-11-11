@@ -328,6 +328,163 @@ async function getArticleController(req, res, next) {
   res.status(200).json(new Response(200, data, "lấy bài viết thành công"));
 }
 
+async function isUserFollowedArticleController(req, res) {
+  const { article_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const isFollowed = await followhelper.hasUserFollowArticle(
+    article_id,
+    user_id
+  );
+  res.status(200).json(new Response(200, { article_id, isFollowed }, ""));
+  return;
+}
+
+async function followArticleController(req, res) {
+  const { article_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const isFollowed = await followhelper.hasUserFollowArticle(
+    article_id,
+    user_id
+  );
+  // console.log({ isFollowed });
+  // return;
+  if (isFollowed) {
+    res.status(200).json(
+      new Response(
+        200,
+        {
+          article_id,
+          isFollowed,
+        },
+        "bạn đã theo dõi bài viết này"
+      )
+    );
+    return;
+  }
+  await followhelper.followArticle(article_id, user_id);
+  res.status(200).json(
+    new Response(
+      200,
+      {
+        article_id,
+        isFollowed: true,
+      },
+      "theo dõi bài viết thành công"
+    )
+  );
+
+  return;
+  // res.send("follow article - " + article_id);
+}
+
+async function unFollowArticleController(req, res) {
+  const { article_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const isFollowed = await followhelper.hasUserFollowArticle(
+    article_id,
+    user_id
+  );
+  if (!isFollowed) {
+    res.status(400).json(
+      new Response(
+        400,
+        {
+          unfollowed: false,
+          message: "bạn chưa theo dõi bài viết này trước đó",
+        },
+        "bạn chưa theo dõi bài viết này trước đó",
+        300,
+        300
+      )
+    );
+    return;
+  }
+  await followhelper.unFollowArticle(article_id, user_id, false);
+  res.status(200).json(
+    new Response(
+      200,
+      {
+        unfollowed: true,
+        message: "unfollow thành công",
+      },
+      "unfollow thành công"
+    )
+  );
+  return;
+}
+
+async function getAllCmtOfArticleController(req, res) {
+  const { article_id } = req.body;
+  const comments = await articleModel
+    .getAllCommentsOfArticle(article_id)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  // console.log(comments);
+  await articleHelper.insertUserCmtInforToListOfCmts(comments);
+  const data = {
+    comments,
+    numOfComments: comments.length,
+    numOfRemain: 0,
+  };
+  res
+    .status(200)
+    .json(new Response(200, data, "lấy tất cả các bài viết thành công"));
+  return;
+}
+
+async function getCmtStartFromController(req, res) {
+  const { article_id, index, num } = req.body;
+  const AllComments = await articleModel
+    .getAllCommentsOfArticle(article_id)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  if (AllComments.length <= 0) {
+    res.status(200).json(
+      new Response(200, {
+        comments: [],
+        numOfComments: 0,
+        numOfRemain: 0,
+      })
+    );
+    return;
+  }
+  if (typeof num == "undefined") {
+    const comments = AllComments.slice(index);
+    await articleHelper.insertUserCmtInforToListOfCmts(comments);
+    const data = {
+      comments,
+      numOfComments: comments.length,
+      numOfRemain: 0,
+    };
+    res.status(200).json(new Response(200, data, "lấy bình luận thành công"));
+    return;
+  } else {
+    const comments = AllComments.slice(index, index + num);
+    await articleHelper.insertUserCmtInforToListOfCmts(comments);
+    const data = {
+      comments,
+      numOfComments: comments.length,
+      numOfRemain:
+        AllComments.length <= index + num
+          ? 0
+          : AllComments.length - (index + num),
+    };
+    res.status(200).json(new Response(200, data, "lấy bình luận thành công"));
+    return;
+  }
+}
+
+async function getAllArticleInDBController(req, res) {
+  const allArticleInDB = await articleModel
+    .getAllArticles()
+    .then((data) => data.payload)
+    .catch((err) => []);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(
+    allArticleInDB
+  );
+  res.status(200).json(new Response(200, allArticleInDB, ""));
+}
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -340,4 +497,10 @@ module.exports = {
   deleteCommentController,
   deleteArticleController,
   getArticleController,
+  isUserFollowedArticleController,
+  followArticleController,
+  unFollowArticleController,
+  getAllCmtOfArticleController,
+  getCmtStartFromController,
+  getAllArticleInDBController,
 };

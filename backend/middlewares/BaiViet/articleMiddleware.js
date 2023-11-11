@@ -63,7 +63,8 @@ async function preProcessAddArtticle(req, res, next) {
 
 async function checkArticleExistMid(req, res, next) {
   const { article_id } = req.body;
-  const data = await articleModel.getArticleById(article_id)
+  const data = await articleModel
+    .getArticleById(article_id)
     .then((data) => data.payload);
 
   if (data == null) {
@@ -305,6 +306,36 @@ async function preProcessDeleteArticle(req, res, next) {
   return;
 }
 
+async function preProcessGetCmtByIndex(req, res, next) {
+  const VALID_PARAM = "tham số không hợp lệ";
+  let { article_id, index, num } = req.body;
+  try {
+    index = parseInt(index);
+    if (Number.isNaN(index) || index < 0) {
+      throw new Error(VALID_PARAM);
+    }
+    if (typeof num != "undefined" && Number.isNaN(parseInt(num))) {
+      throw new Error(VALID_PARAM);
+    }
+
+    num = typeof num == "undefined" ? undefined : parseInt(num);
+    if (num <= 0) throw new Error(VALID_PARAM);
+    req.body.index = index;
+    req.body.num = num;
+  } catch (error) {
+    switch (error.message) {
+      case VALID_PARAM:
+        res.status(400).json(new Response(400, [], VALID_PARAM, 300, 300));
+        return;
+
+      default:
+        res.status(400).json(new Response(400, [], error.message, 300, 300));
+        return;
+    }
+  }
+  next();
+}
+
 module.exports = {
   preProcessAddArtticle,
   checkArticleExistMid,
@@ -319,4 +350,5 @@ module.exports = {
   preProcessDeleteReply,
   preProcessDeleteComment,
   preProcessDeleteArticle,
+  preProcessGetCmtByIndex,
 };

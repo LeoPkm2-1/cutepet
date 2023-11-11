@@ -583,10 +583,494 @@ trong đó:
   - **hasDownVoted**: true nếu bạn đã downvote bài viết này, false nếu chưa
   - nếu cả **hasUpVoted** và **hasDownVoted** đều là false thì bạn chưa vote bài viết này
 
-## 12.
+## 12. kiểm tra liệu người dung đã theo dõi bài viết chia sẻ kiếm thức chưa
 
-## 13.
+1. phương thức:
 
-## 14.
+   POST http://localhost:3000/post/article/isUserFollowedPost
 
-## 15.
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết muốn kiểm tra
+
+3.  trả về:
+
+    - khi người dùng đã theo dõi bài chia sẻ trạng thái:
+
+      ```javascript
+      {
+      "status": 200,
+      "payload": {
+          "article_id": "6549106cd55fe46e0f9dd857",
+          "isFollowed": true
+      },
+      "message": "",
+      "errno": null,
+      "errcode": null
+      ```
+
+    }
+
+    ````
+
+    - khi người dùng chưa theo dõi bài chia sẻ trạng thái:
+
+      ```javascript
+      {
+      "status": 200,
+      "payload": {
+          "article_id": "6549106cd55fe46e0f9dd857",
+          "isFollowed": false
+      },
+      "message": "",
+      "errno": null,
+      "errcode": null
+    ````
+
+    }
+
+    - trong đó:
+      - **article_id**: id của bài viết
+      - **isFollowed**: true nếu bạn đã theo dõi bài viết này, false nếu chưa
+
+## 13. theo dõi bài viết chia sẻ kiến thức:
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/followArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết chia sẻ kiến thức muốn theo dõi
+
+3. trả về:
+
+- khi bạn đã theo dõi bài viết này trước đó:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "article_id": "6548f00bb7221c7de43e80f6",
+        "isFollowed": true
+    },
+    "message": "bạn đã theo dõi bài viết này",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi người dùng theo dõi thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "article_id": "6548f00bb7221c7de43e80f6",
+        "isFollowed": true
+    },
+    "message": "theo dõi bài viết thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 14. bỏ theo dõi bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/unFollowArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc),
+}
+```
+
+- trong đó:
+
+  - **article_id**: id của bài viết chia sẻ kiến thức muốn bỏ theo dõi
+
+3. trả về:
+
+- khi bạn chưa theo dõi bài viết này trước đó:
+
+```javascript
+{
+    "status": 400,
+    "payload": {
+        "unfollowed": false,
+        "message": "bạn chưa theo dõi bài viết này trước đó"
+    },
+    "message": "bạn chưa theo dõi bài viết này trước đó",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi bạn bỏ theo dõi thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "unfollowed": true,
+        "message": "unfollow thành công"
+    },
+    "message": "unfollow thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 15. lấy tất cả các bình luận của 1 bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/getAllComment
+
+2. cấu trúc:
+
+```javascript
+{
+  article_id: string;
+}
+```
+
+- trong đó:
+  - **article_id**: id của bài viết chia sẻ kiến thức muốn lấy ra tất cả các bình luận
+
+3. trả về:
+
+- khi không có comment nào:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "comments": [],
+        "numOfComments": 0,
+        "numOfRemain": 0
+    },
+    "message": "lấy tất cả các bài viết thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi có comment:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "comments": [
+            {
+                "_id": "654b2f3a80dd116923a40270",
+                "articleId": "6549d20b0973deaa2b1cc8f0",
+                "type": "COMMENT_ARTICLE",
+                "comment": "test cmt 2",
+                "commentBy": 2,
+                "commentAt": "2023-11-08T06:48:26.128Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfReply": 0,
+                "modifiedAt": null,
+                "userCmtInfor": {
+                    "ma_nguoi_dung": 2,
+                    "ten": "Dung",
+                    "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                    "tai_khoan": "dung",
+                    "email": "dung@gmail.com",
+                    "so_dien_thoai": "0912345679",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": 39,
+                        "url": "...........................",
+                        "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                        "ma_nguoi_dung": 2,
+                        "is_active": 1
+                    }
+                }
+            },
+            {
+                "_id": "654b2f2d80dd116923a4026f",
+                "articleId": "6549d20b0973deaa2b1cc8f0",
+                "type": "COMMENT_ARTICLE",
+                "comment": "test cmt 1",
+                "commentBy": 10,
+                "commentAt": "2023-11-08T06:48:13.408Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfReply": 0,
+                "modifiedAt": null,
+                "userCmtInfor": {
+                    "ma_nguoi_dung": 10,
+                    "ten": "Thanh",
+                    "ngay_sinh": "1991-10-07T17:00:00.000Z",
+                    "tai_khoan": "thanh",
+                    "email": "thanh@gmail.com",
+                    "so_dien_thoai": "0912345687",
+                    "gioi_tinh": 0,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "..............",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "10",
+                        "is_active": null
+                    }
+                }
+            }
+        ],
+        "numOfComments": 2,
+        "numOfRemain": 0
+    },
+    "message": "lấy tất cả các bài viết thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- trong đó:
+
+  - **comments**: danh sách chứa tất cả các bình luận của bài viết
+  - **numOfComments**: số lượng bình luận của bài viết hiện tại trả về trong danh sách **comments**
+  - **numOfRemain**:: số lượng bình luận còn lại của bài viết
+
+## 16. lấy bình luận theo của bài viết chia sẻ kiến thức index và num
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/getCommentStartFrom
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string,
+    index: number,
+    num: number
+}
+```
+
+- trong đó:
+  - **article_id**: id của bài chia sẻ kiến thức muốn lấy ra các bình luận
+  - **index**: mô tả vị trí của bình luận được lấy (index: bắt đầu từ 0,1,....)
+    - **num**: số lượng bình luận cần lấy ra
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "comments": [
+            {
+                "_id": "654b4b13cacfb2b68ed97a87",
+                "articleId": "654b4aa2cacfb2b68ed97a7d",
+                "type": "COMMENT_ARTICLE",
+                "comment": "chó con đáng yêu 9",
+                "commentBy": 4,
+                "commentAt": "2023-11-08T08:47:15.779Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfReply": 0,
+                "modifiedAt": null,
+                "userCmtInfor": {
+                    "ma_nguoi_dung": 4,
+                    "ten": "Ty",
+                    "ngay_sinh": "1991-10-01T17:00:00.000Z",
+                    "tai_khoan": "ty",
+                    "email": "ty@gmail.com",
+                    "so_dien_thoai": "0912345681",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "........................",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "4",
+                        "is_active": null
+                    }
+                }
+            },
+            {
+                "_id": "654b4affcacfb2b68ed97a86",
+                "articleId": "654b4aa2cacfb2b68ed97a7d",
+                "type": "COMMENT_ARTICLE",
+                "comment": "chó con đáng yêu 8",
+                "commentBy": 2,
+                "commentAt": "2023-11-08T08:46:55.872Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfReply": 0,
+                "modifiedAt": null,
+                "userCmtInfor": {
+                    "ma_nguoi_dung": 2,
+                    "ten": "Dung",
+                    "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                    "tai_khoan": "dung",
+                    "email": "dung@gmail.com",
+                    "so_dien_thoai": "0912345679",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": 39,
+                        "url": "......................",
+                        "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                        "ma_nguoi_dung": 2,
+                        "is_active": 1
+                    }
+                }
+            },
+            {
+                "_id": "654b4afbcacfb2b68ed97a85",
+                "articleId": "654b4aa2cacfb2b68ed97a7d",
+                "type": "COMMENT_ARTICLE",
+                "comment": "chó con đáng yêu 7",
+                "commentBy": 2,
+                "commentAt": "2023-11-08T08:46:51.495Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfReply": 0,
+                "modifiedAt": null,
+                "userCmtInfor": {
+                    "ma_nguoi_dung": 2,
+                    "ten": "Dung",
+                    "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                    "tai_khoan": "dung",
+                    "email": "dung@gmail.com",
+                    "so_dien_thoai": "0912345679",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": 39,
+                        "url": ".......................",
+                        "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                        "ma_nguoi_dung": 2,
+                        "is_active": 1
+                    }
+                }
+            }
+        ],
+        "numOfComments": 3,
+        "numOfRemain": 6
+    },
+    "message": "lấy bình luận thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- trong đó:
+  - **comments**: danh sách chứa tất cả các bình luận của bài viết
+  - **numOfComments**: số lượng bình luận của bài viết hiện tại trả về trong danh sách **comments**
+  - **numOfRemain**:: số lượng bình luận còn lại của bài viết
+
+## 17. lấy tất cả các bài viết chia sẻ kiến thức trong database
+
+1. Phương thức:
+
+   POST http://localhost:3000/post/article/getAllArticleInDB
+
+2. cấu trúc:
+
+   **không yêu cầu tham số**
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "_id": "654b905a64cb740e517ad555",
+            "title": "Dùng sữa vào bủôi sáng hay buổi tối thì tốt hơn cho thú cưng",
+            "postType": "ARTICLE",
+            "visibility": "PUBLIC",
+            "main_image": "www.dogcat.com",
+            "intro": "xin chào .....",
+            "content": "các thú cưng con.....",
+            "categories": [
+                "dog",
+                "cat"
+            ],
+            "createAt": "2023-11-08T13:42:50.946Z",
+            "numOfUpVote": 0,
+            "numOfDownVote": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 2,
+            "owner_infor": {
+                "ma_nguoi_dung": 2,
+                "ten": "Dung",
+                "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                "tai_khoan": "dung",
+                "email": "dung@gmail.com",
+                "so_dien_thoai": "0912345679",
+                "gioi_tinh": 1,
+                "anh": {
+                    "ma_anh": 39,
+                    "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
+                    "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                    "ma_nguoi_dung": 2,
+                    "is_active": 1
+                }
+            }
+        },
+        {
+            "_id": "654b900c64cb740e517ad553",
+            "title": "Độ tuổi phù hợp cho thú cưng uống sữa",
+            "postType": "ARTICLE",
+            "visibility": "PUBLIC",
+            "main_image": "www.dogcat.com",
+            "intro": "xin chào .....",
+            "content": "các thú cưng con.....",
+            "categories": [
+                "dog",
+                "cat"
+            ],
+            "createAt": "2023-11-08T13:41:32.190Z",
+            "numOfUpVote": 0,
+            "numOfDownVote": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 10,
+            "owner_infor": {
+                "ma_nguoi_dung": 10,
+                "ten": "Thanh",
+                "ngay_sinh": "1991-10-07T17:00:00.000Z",
+                "tai_khoan": "thanh",
+                "email": "thanh@gmail.com",
+                "so_dien_thoai": "0912345687",
+                "gioi_tinh": 0,
+                "anh": {
+                    "ma_anh": null,
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                    "ngay_cap_nhat": null,
+                    "ma_nguoi_dung": "10",
+                    "is_active": null
+                }
+            }
+        },
+    ],
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```

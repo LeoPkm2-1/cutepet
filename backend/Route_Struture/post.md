@@ -305,13 +305,18 @@ nếu bình luận không tồn tại:
 
 ```javascript
 {
-    post_id: mã bài post
-    index: lấy từ comment thứ mấy, (thứ tự bắt đầu từ: 0,1,......)
-    num: số lượng comment lấy ra
+    post_id: string
+    index: number,
+    num: number,
 }
 ```
 
-3. trả về:
+- trong đó:
+  - **post_id**: mã bài viết muốn lấy bình luận
+  - **index**: lấy từ bình luận thứ mấy (thứ tự bắt đầu từ: 0,1,......)
+  - **num**: số lượng bình luận lấy ra
+
+1. trả về:
 
 ```javascript
 {
@@ -391,11 +396,14 @@ nếu bình luận không tồn tại:
 2. cấu trúc:
 
    ```javascript
-    {
-        cmt_id: chính là mã của bình luận
-    }
-
+   {
+     cmt_id: string;
+   }
    ```
+
+   - trong đó:
+
+     - **cmt_id**: mã của bình luận muốn lấy phản hồi
 
 3. trả về ở dưới này:
 
@@ -755,7 +763,7 @@ nếu bình luận không tồn tại:
 
 1. Phương thức:
 
-   'http://localhost:3000/post/statusPost/isUserFollowedPost'
+   POST http://localhost:3000/post/statusPost/unFollowPost
 
 2. cấu trúc:
 
@@ -767,15 +775,32 @@ nếu bình luận không tồn tại:
 
 3. trả về:
 
+- khi người dùng chưa theo dõi bài viết trước đó:
+
+```javascript
+{
+    "status": 400,
+    "payload": {
+        "unfollowed": false,
+        "message": "người dùng chưa theo dõi bài viết"
+    },
+    "message": "bài viết chưa được theo dõi",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi hủy theo dõi thành công:
+
 ```javascript
 {
     "status": 200,
     "payload": {
-        "post_id": "65333ff5f0efa9d27e7bf163",
-        "isFollowed": false
+        "unfollowed": true,
+        "message": "unfollow thành công"
     },
-    "message": "",
-    "errno": null,
-    "errcode": null
+    "message": "unfollow thành công",
+    "errno": 300,
+    "errcode": 300
 }
 ```
