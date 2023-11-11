@@ -119,3 +119,12 @@ export interface RTDUser {
   firebaseUid: string;
   id: number;
 }
+
+
+export interface FriendType {
+  name: string;
+  id: string;
+  user: string;
+  url: string;
+  isOnline: boolean;
+}
