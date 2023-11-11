@@ -1,6 +1,6 @@
 # Post Status:
 
-## thêm bài viết chia sẻ trạng thái:
+## 1. thêm bài viết chia sẻ trạng thái:
 
 1. phương thức :
 
@@ -11,6 +11,8 @@
 ```javascript
 {
     text: String,
+    visibility: "PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
+    taggedUsersId: Array[id_users],
     media:
         undefined || {
             type:"video" || "images"
@@ -25,11 +27,14 @@
 {
     post_id:....,
     text: String,
+    postType: "status",
+    visibility: "PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
     media:
         undefined || {
             type:"video" || "images"
             data:[url]
-        }
+        },
+    taggedUsers:Array[users infor],
     createAt: time,
     numOfLike:0,
     numOfComment:0,
@@ -37,7 +42,7 @@
 }
 ```
 
-## Like viết chia sẻ trạng thái:
+## 2. Like viết chia sẻ trạng thái:
 
 `phương thức này dùng để like nếu bài post chưa được like và hủy like nếu bài post đã được like rồi`
 
@@ -99,7 +104,7 @@
 }
 ```
 
-## comment viết chia sẻ trạng thái:
+## 3. comment viết chia sẻ trạng thái:
 
 1. phương thức :
 
@@ -130,7 +135,7 @@
     },
 ```
 
-## like comment viết chia sẻ trạng thái:
+## 4. like comment viết chia sẻ trạng thái:
 
 `phương thức này dùng để like nếu bài comment chưa được like và hủy like nếu bài comment đã được like rồi`
 
@@ -179,7 +184,7 @@
 }
 ```
 
-## Reply comment
+## 5. Reply comment
 
 `phương thức này đùng để phản hồi lại bình luận của người dùng`
 
@@ -227,7 +232,7 @@ nếu bình luận không tồn tại:
 }
 ```
 
-## lấy tất cả các bình luận của 1 bài viết trạng thái
+## 6. lấy tất cả các bình luận của 1 bài viết trạng thái
 
 ` Phương thức này lấy tất cả các bình luận của 1 bài viết trạng thái`
 
@@ -290,7 +295,7 @@ nếu bình luận không tồn tại:
 }
 ```
 
-## phân trang cho bình luận
+## 7. phân trang cho bình luận
 
 1. Phương thức:
 
@@ -300,13 +305,18 @@ nếu bình luận không tồn tại:
 
 ```javascript
 {
-    post_id: mã bài post
-    index: lấy từ comment thứ mấy, (thứ tự bắt đầu từ: 0,1,......)
-    num: số lượng comment lấy ra
+    post_id: string
+    index: number,
+    num: number,
 }
 ```
 
-3. trả về:
+- trong đó:
+  - **post_id**: mã bài viết muốn lấy bình luận
+  - **index**: lấy từ bình luận thứ mấy (thứ tự bắt đầu từ: 0,1,......)
+  - **num**: số lượng bình luận lấy ra
+
+1. trả về:
 
 ```javascript
 {
@@ -375,7 +385,7 @@ nếu bình luận không tồn tại:
 }
 ```
 
-## Lấy tất cả các Phản hồi của bình luận
+## 8. Lấy tất cả các Phản hồi của bình luận
 
 `Phương thức này lấy tất cả các phản hồi của 1 bình luận`
 
@@ -386,11 +396,14 @@ nếu bình luận không tồn tại:
 2. cấu trúc:
 
    ```javascript
-    {
-        cmt_id: chính là mã của bình luận
-    }
-
+   {
+     cmt_id: string;
+   }
    ```
+
+   - trong đó:
+
+     - **cmt_id**: mã của bình luận muốn lấy phản hồi
 
 3. trả về ở dưới này:
 
@@ -459,13 +472,14 @@ nếu bình luận không tồn tại:
 }
 ```
 
-## phân trang cho phản hồi
+## 9. phân trang cho phản hồi
 
 1. Phương thức:
 
    Post: 'http://localhost:3000/post/statusPost/getReplyStartFrom'
 
 2. cấu trúc:
+
 ```javascript
 {
     cmt_id:mã của bình luận,
@@ -473,7 +487,6 @@ nếu bình luận không tồn tại:
     num:số lượng phản hồi lấy ra,
 }
 ```
-
 
 3. trả về:
 
@@ -542,13 +555,14 @@ nếu bình luận không tồn tại:
 }
 ```
 
-## lấy bài viết dựa vào mã của bài viết
+## 10. lấy bài viết dựa vào mã của bài viết
 
 1. Phương thức:
 
    POST: 'http://localhost:3000/post/statusPost/getPost
 
 2. cấu trúc:
+
 ```javascript
     {
         post_id: mã của bài viết
@@ -601,22 +615,20 @@ nếu bình luận không tồn tại:
 }
 ```
 
-
-## phân trang cho bài viết
+## 11. phân trang cho bài viết
 
 1. Phương thức:
-   
+
    POST: http://localhost:3000/post/statusPost/getPostStartFrom
 
-   
 2. cấu trúc:
+
 ```javascript
 {
     index: lấy từ bài viết thứ mấy (thứ tự bắt đầu từ: 0,1,......),
     num: số lượng bài viết cần lấy ra, nếu là undefined thì lấy tất cả các bài viết
 }
 ```
-
 
 3. trả về:
 
@@ -666,5 +678,129 @@ nếu bình luận không tồn tại:
     "message": "lấy dự liệu thành công",
     "errno": null,
     "errcode": null
+}
+```
+
+## 12. kiếm tra xem người dùng đã follow bài biết hay chưa
+
+(**postman số 23**)
+
+1. Phương thức:
+
+   POST: 'http://localhost:3000/post/statusPost/isUserFollowedPost'
+
+2. cấu trúc:
+   ```javascript
+    {
+        post_id: mã của bài viết muốn kiểm tra xem follow hay chưa
+    }
+   ```
+3. trả về:
+   - khi đã theo doi bài viết
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "post_id": "65333ff5f0efa9d27e7bf163",
+        "isFollowed": true
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi chưa theo dõi bài viết
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "post_id": "65333ff5f0efa9d27e7bf163",
+        "isFollowed": false
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 13. đăng ký theo dõi bài viết
+
+(**postman số 24**)
+
+1. Phương thức:
+
+   POST: 'http://localhost:3000/post/statusPost/followPost'
+
+2. cấu trúc:
+
+```javascript
+{
+    post_id: mã của bài viết muốn đăng ký theo dõi
+}
+```
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "post_id": "65333ff5f0efa9d27e7bf163",
+        "isFollowed": true
+    },
+    "message": "theo dõi thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 14. hủy theo dõi bài viết
+
+(**postman số 23**)
+
+1. Phương thức:
+
+   POST http://localhost:3000/post/statusPost/unFollowPost
+
+2. cấu trúc:
+
+```javascript
+{
+    post_id: mã của bài viết muốn hủy theo dõi
+}
+```
+
+3. trả về:
+
+- khi người dùng chưa theo dõi bài viết trước đó:
+
+```javascript
+{
+    "status": 400,
+    "payload": {
+        "unfollowed": false,
+        "message": "người dùng chưa theo dõi bài viết"
+    },
+    "message": "bài viết chưa được theo dõi",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi hủy theo dõi thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "unfollowed": true,
+        "message": "unfollow thành công"
+    },
+    "message": "unfollow thành công",
+    "errno": 300,
+    "errcode": 300
 }
 ```

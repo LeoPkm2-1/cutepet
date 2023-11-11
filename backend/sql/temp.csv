@@ -1,0 +1,4 @@
+insert into NguoiDung (ma_nguoi_dung,ten,ngay_sinh,tai_khoan,mat_khau,email,so_dien_thoai,is_admin,gioi_tinh) values 
+(20,'Hưng','1991-10-12','thehung20','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','hung20@gmail.com','0912345691',0,1),
+(21,'Hải','1991-10-12','haithanh21','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','hai21@gmail.com','0912345691',0,1),
+(22,'Trí','1991-10-12','vantrithanh','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','vantri22@gmail.com','0912345691',0,1);

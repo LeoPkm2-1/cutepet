@@ -24,7 +24,7 @@ const AppBar = (props: Props) => {
             src={`${process.env.PUBLIC_URL}/assets/images/logo.png`}
           />
         </div>
-        <span className="text-medium">Mindfully</span>
+        <span className="text-medium">Cutepet</span>
       </Link>
       <div className="expanded centering">
         <span className="title">{props.title}</span>

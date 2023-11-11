@@ -5,6 +5,7 @@ import {
   Divider,
   IconButton,
   InputBase,
+  Popover,
   Typography,
 } from '@mui/material';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
@@ -13,11 +14,13 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { useRef, useState } from 'react';
 import postApi from '../../../../../api/post';
 import { useSnackbar } from 'notistack';
-import  { uploadTaskPromise } from '../../../../../api/upload';
+import { uploadTaskPromise } from '../../../../../api/upload';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../redux';
 import Loading from '../../../../../components/loading';
-
+import Select from '../../../../../components/Select';
+import React from 'react';
+import { FriendTagComponent, PersonComponent } from '../../../ban-be';
 
 type Props = {
   open: boolean;
@@ -28,9 +31,17 @@ export default function PopUpCreatePost(props: Props) {
   const [isFilePicked, setIsFilePicked] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [text, setText] = useState('');
+  const [visibility, setVisibility] = useState('PUBLIC');
   const { enqueueSnackbar } = useSnackbar();
-  const infoUser = useSelector((state:RootState) => state.user.profile);
+  const infoUser = useSelector((state: RootState) => state.user.profile);
   const [isloading, setIsloading] = useState(false);
+  const friends = useSelector((state: RootState) => state.friend.friend);
+  const [friend, setFriend] = useState<
+    {
+      id: string;
+      name: string;
+    }[]
+  >([]);
   const changeHandler = (event: any) => {
     setSelectedFile(event.target.files[0]);
   };
@@ -38,26 +49,51 @@ export default function PopUpCreatePost(props: Props) {
   async function handleSubmit(e: any) {
     e.preventDefault();
     setIsloading(true);
-    let storageUrl:string = "";
+    let storageUrl: string = '';
     if (selectedFile) {
-      storageUrl =(await uploadTaskPromise(selectedFile)) as string;
+      storageUrl = (await uploadTaskPromise(selectedFile)) as string;
     }
-   
-    postApi.createStatus(text,"images",[storageUrl]).then(() => {
-      enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
-      setIsloading(false);
-      setText("");
-      setSelectedFile(null);
-      props.onClose();
-    }).catch((err) => {
-      setIsloading(false);
-      console.log(err, "err");
-      enqueueSnackbar(`${err}`, { variant: "error" });
-    })
+
+    postApi
+      .createStatus(
+        visibility,
+        text,
+        friend.map((item) => item.id),
+        'images',
+        [storageUrl]
+      )
+      .then(() => {
+        enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
+        setIsloading(false);
+        setText('');
+        setSelectedFile(null);
+        props.onClose();
+      })
+      .catch((err) => {
+        setIsloading(false);
+        console.log(err, 'err');
+        enqueueSnackbar(`${err}`, { variant: 'error' });
+      });
   }
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
   return (
     <>
-     <Loading open={isloading}/>
+      <Loading open={isloading} />
       <Dialog
         onClose={() => {
           props.onClose();
@@ -92,6 +128,7 @@ export default function PopUpCreatePost(props: Props) {
                 background: '#fff',
                 padding: '20px',
                 borderRadius: '12px',
+                alignItems: 'center',
               }}
             >
               <img
@@ -100,9 +137,8 @@ export default function PopUpCreatePost(props: Props) {
                   width: '50px',
                   objectFit: 'cover',
                   borderRadius: '30px',
-              
                 }}
-                src={infoUser?.photoURL || ""}
+                src={infoUser?.photoURL || ''}
               />
               <Box
                 sx={{
@@ -115,9 +151,36 @@ export default function PopUpCreatePost(props: Props) {
                     fontWeight: '700',
                   }}
                 >
-                 {infoUser?.name}
+                  {infoUser?.name}{' '}
+                  {friend?.length > 0 && (
+                    <>
+                      <span
+                        style={{
+                          fontWeight: '400',
+                        }}
+                      >
+                        cùng với
+                      </span>
+
+                      {" "}
+                      {friend?.map((item, index) => {
+                        if(index> 0){
+                          return (
+                            <span>
+                             {", "} {item?.name}
+                            </span>
+                          )
+                        }
+                        return (
+                          <span>
+                           {item?.name}
+                          </span>
+                        )
+                      })}
+                    </>
+                  )}
                 </Typography>
-                <Typography
+                {/* <Typography
                   sx={{
                     fontFamily: 'quicksand',
                     fontWeight: '400',
@@ -126,7 +189,34 @@ export default function PopUpCreatePost(props: Props) {
                   }}
                 >
                   Công khai
-                </Typography>
+                </Typography> */}
+                <Select
+                  sx={{
+                    width:"120px",
+                    marginTop: '4px',
+                    '.MuiInputBase-root': {
+                      height: '28px',
+                    },
+                  }}
+                  onChange={(option) => {
+                    setVisibility(option?.value as string);
+                  }}
+                  value={visibility}
+                  options={[
+                    {
+                      value: 'PUBLIC',
+                      label: 'Công khai',
+                    },
+                    {
+                      value: 'PRIVATE',
+                      label: 'Chỉ mình tôi',
+                    },
+                    {
+                      value: 'FRIEND',
+                      label: 'Bạn bè',
+                    },
+                  ]}
+                />
               </Box>
             </Box>
 
@@ -145,7 +235,7 @@ export default function PopUpCreatePost(props: Props) {
             {selectedFile && (
               <img
                 style={{
-                  marginBottom:"10px"
+                  marginBottom: '10px',
                 }}
                 width={'100%'}
                 alt="preview image"
@@ -174,7 +264,7 @@ export default function PopUpCreatePost(props: Props) {
                   fontFamily: 'quicksand',
                   fontWeight: '500',
                   ml: '20px',
-                  mr: '40px',
+                  mr: '70px',
                 }}
               >
                 Thêm vào bài viết của bạn
@@ -201,7 +291,7 @@ export default function PopUpCreatePost(props: Props) {
                     onChange={changeHandler}
                   />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={handleClick}>
                   <GroupAddIcon
                     sx={{
                       fontSize: '34px',
@@ -210,14 +300,56 @@ export default function PopUpCreatePost(props: Props) {
                     }}
                   />
                 </IconButton>
-                <IconButton>
+                <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: '300px',
+                    }}
+                  >
+                    {friends?.map((item) => {
+                      return (
+                        <FriendTagComponent
+                          onClick={() => {
+                            handleClose();
+                            setFriend([
+                              ...friend,
+                              {
+                                id: item?.id,
+                                name: item?.name,
+                              },
+                            ]);
+                          }}
+                          id={item?.id}
+                          name={item.name}
+                          user={item.user}
+                          url={item.url}
+                          isOnline={item?.isOnline}
+                        />
+                      );
+                    })}
+                  </Box>
+                </Popover>
+                {/* <IconButton>
                   <PlaceIcon
                     sx={{
                       fontSize: '34px',
                       color: '#f5533d',
                     }}
                   />
-                </IconButton>
+                </IconButton> */}
               </Box>
             </Box>
             <Button

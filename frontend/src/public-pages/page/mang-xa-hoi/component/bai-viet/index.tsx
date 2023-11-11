@@ -25,6 +25,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { timeAgo } from '../../../../../helper/post';
 import { AirlineSeatReclineExtraOutlined } from '@mui/icons-material';
 import { socket } from '../../../../../socket';
+import LockIcon from '@mui/icons-material/Lock';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import PublicIcon from '@mui/icons-material/Public';
 type Props = {
   idStatus?: string;
   status?: StatusType;
@@ -38,6 +41,12 @@ export default function PostComponent(props: Props) {
   const [isComment, setIsComment] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [friendTag, setFriendTag] = useState<
+  {
+    id: string;
+    name: string;
+  }[]
+>([]);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -46,9 +55,38 @@ export default function PostComponent(props: Props) {
   };
 
   useEffect(() => {
+    console.log('Vào 1 nè');
+
     if (props?.idStatus) {
+      console.log('Vào 2 nè');
+
       postApi.getStatusById(props.idStatus).then((data: any) => {
         console.log('data', data);
+        if (data?.status == 200) {
+          const sta: StatusType = {
+            id: data?.payload?._id,
+            media: data?.payload?.media,
+            createAt: data?.payload?.createAt,
+            numOfLike: data?.payload?.numOfLike,
+            numOfComment: data?.payload?.numOfComment,
+            userInfor: {
+              id: data?.payload?.owner_id,
+
+              name: data?.payload?.owner_infor?.ten,
+              avatarURL: data?.payload?.owner_infor?.anh?.url,
+            },
+            hasLiked: data?.payload?.hasLiked,
+            text: data?.text || '',
+            visibility: data?.payload?.visibility,
+            taggedUsers: data?.payload?.taggedUsers?.map((item:any) => {
+              return {
+                id: item?.ma_nguoi_dung,
+                ten: item?.ten,
+              }
+            }),
+          };
+          setStatus(sta);
+        }
       });
       return;
     }
@@ -58,11 +96,9 @@ export default function PostComponent(props: Props) {
     // get comment
   }, [props?.idStatus]);
 
-
-
   useEffect(() => {
-    console.log("reload comment");
-    
+    console.log('reload comment');
+
     if (props.status && props.status?.id) {
       postApi.getAllComment(props.status?.id).then((data) => {
         if (data?.status == 200) {
@@ -113,8 +149,10 @@ export default function PostComponent(props: Props) {
   }
 
   async function handleClickComment() {
-    if (props.status && props.status?.numOfComment > 0 && props.status?.id) {
-      await postApi.getAllComment(props.status?.id).then((data) => {
+    // if (props.status && props.status?.numOfComment > 0 && props.status?.id) {
+    if (status && status?.numOfComment > 0 && status?.id) {
+      // await postApi.getAllComment(props.status?.id).then((data) => {
+      await postApi.getAllComment(status?.id).then((data) => {
         if (data?.status == 200) {
           const commemts = data?.payload?.comments?.map((item: any) => {
             return {
@@ -194,7 +232,34 @@ export default function PostComponent(props: Props) {
                     fontWeight: '700',
                   }}
                 >
-                  {status?.userInfor?.name}
+                  {status?.userInfor?.name} {" "}
+                  {(status?.taggedUsers?.length || 0 ) > 0 && (
+                    <>
+                      <span
+                        style={{
+                          fontWeight: '400',
+                        }}
+                      >
+                        cùng với
+                      </span>
+
+                      {" "}
+                      {status?.taggedUsers?.map((item, index) => {
+                        if(index> 0){
+                          return (
+                            <span>
+                             {", "} {item?.name}
+                            </span>
+                          )
+                        }
+                        return (
+                          <span>
+                           {item?.name}
+                          </span>
+                        )
+                      })}
+                    </>
+                  )}
                 </Typography>
                 <Typography
                   sx={{
@@ -202,9 +267,48 @@ export default function PostComponent(props: Props) {
                     fontWeight: '400',
                     fontSize: '13px',
                     color: 'gray',
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
-                  {moment(status?.createAt).format('DD-MM-YYYY')}
+                  <span
+                    style={{
+                      fontSize: '13px',
+                    }}
+                  >
+                    {moment(status?.createAt).format('DD-MM-YYYY')}
+                  </span>
+                  <span>
+                    {' '}
+                    {status?.visibility == 'PRIVATE' && (
+                      <LockIcon
+                        sx={{
+                          marginTop: '4px',
+                          fontSize: '15px',
+                          marginLeft: '10px',
+                        }}
+                      />
+                    )}
+                    {status?.visibility == 'FRIEND' && (
+                      <PeopleAltIcon
+                        sx={{
+                          marginTop: '4px',
+                          fontSize: '15px',
+                          marginLeft: '10px',
+                        }}
+                      />
+                    )}
+                    {status?.visibility !== 'PRIVATE' &&
+                      status?.visibility !== 'FRIEND' && (
+                        <PublicIcon
+                          sx={{
+                            marginTop: '4px',
+                            fontSize: '15px',
+                            marginLeft: '10px',
+                          }}
+                        />
+                      )}
+                  </span>
                 </Typography>
               </Box>
             </Box>
@@ -440,14 +544,19 @@ export default function PostComponent(props: Props) {
               )}
               {comments?.length > 0 &&
                 comments?.map((comment) => {
-                  return <Comment comment={comment} onRemove={() => {
-                    if (status) {
-                    setStatus({
-                      ...status,
-                      numOfComment: status?.numOfComment - 1,
-                    });
-                  }
-                  }} />;
+                  return (
+                    <Comment
+                      comment={comment}
+                      onRemove={() => {
+                        if (status) {
+                          setStatus({
+                            ...status,
+                            numOfComment: status?.numOfComment - 1,
+                          });
+                        }
+                      }}
+                    />
+                  );
                 })}
             </>
           )}
@@ -457,7 +566,7 @@ export default function PostComponent(props: Props) {
   );
 }
 
-function Comment(props: { comment: CommentType ; onRemove: () => void }) {
+function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [isReply, setIsReply] = useState(false);
   const [isReload, setIsReload] = useState(false);
   const [replys, setReplys] = useState<CommentType[]>([]);
@@ -489,8 +598,7 @@ function Comment(props: { comment: CommentType ; onRemove: () => void }) {
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    console.log("Vaao click nè");
-    
+    console.log('Vaao click nè');
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -501,8 +609,7 @@ function Comment(props: { comment: CommentType ; onRemove: () => void }) {
         if (data?.status == 200) {
           setIsFinish(false);
           props.onRemove();
-        }else{
-          
+        } else {
         }
       });
     }
@@ -674,7 +781,7 @@ function Comment(props: { comment: CommentType ; onRemove: () => void }) {
               })}
             {isReply && (
               <CreateReply
-                onSuccess={() => { 
+                onSuccess={() => {
                   setIsReload(!isReload);
                   setIsReply(false);
                 }}

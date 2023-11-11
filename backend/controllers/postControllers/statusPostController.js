@@ -5,21 +5,25 @@ const { Response } = require("../../utils/index");
 const statusPostHelper = require("../../utils/BaiViet/statusPostHelper");
 const followModel = require("../../models/theodoi/followModel");
 const followhelper = require("../../utils/theodoiHelper");
-const {
-  StatusPostEventManagement,
-} = require("./../../socketHandler/norm_user/statusPostEvent");
+const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 const {
   notifyLikePost,
   notifyCommentPost,
   notifyLikeComment,
   notifyReplyComment,
+  notifyTaggedUserInStatusPost,
 } = require("../../notificationHandler/statusPost");
 
 const addPostController = async (req, res) => {
-  const { text, media } = req.body;
+  const { text, media, visibility, taggedUsersId } = req.body;
+  const taggedUsers = await userHelper.getUserPublicInforByListIds(
+    taggedUsersId
+  );
   const postStatus = new StatusPostComposStructure.StatusPost(
     text,
+    visibility,
     media,
+    taggedUsers,
     req.auth_decoded.ma_nguoi_dung
   );
 
@@ -28,7 +32,7 @@ const addPostController = async (req, res) => {
     res.status(400).json(new Response(400, [], "đã có lỗi xảy ra", 300, 300));
     return;
   }
-  const insertedPost = await StatusPostModel.getPostById(
+  const insertedPost = await statusAndArticleModel.getPostById(
     addProcess.payload.insertedId
   );
   const idOfPost = insertedPost.payload[0]._id.toString();
@@ -36,6 +40,17 @@ const addPostController = async (req, res) => {
 
   // thêm người tạo bài viết vào danh sách theo dõi của bài viết
   await followhelper.followStatusPost(idOfPost, owner_id);
+  // xử lý tag
+  if (taggedUsersId.length > 0) {
+    // thêm các người dùng được tag vào danh sách người theo dõi bài viết
+    const data = await Promise.all(
+      taggedUsersId.map((userId) =>
+        followhelper.followStatusPost(idOfPost, userId)
+      )
+    );
+    // thông báo nếu có tag
+    notifyTaggedUserInStatusPost(idOfPost, owner_id, taggedUsersId);
+  }
 
   res
     .status(200)
@@ -199,7 +214,6 @@ const toggleLikeCmtController = async (req, res) => {
 };
 
 const replyCmtController = async (req, res) => {
-  console.log("Chạy hàm reply backend");
   const reply = req.body.reply;
   const cmt_id = req.body.cmt_id;
   const replyBy = req.auth_decoded.ma_nguoi_dung;
@@ -356,17 +370,23 @@ const getPostController = async (req, res) => {
   const postData = await StatusPostModel.getPostById(post_id).then(
     (data) => data.payload
   );
+
   const owner_infor = await userHelper.getUserPublicInforByUserId(
-    postData[0].owner_id
+    postData.owner_id
   );
   const hasLiked = await statusPostHelper.hasUserLikedPost_1(
     ma_nguoi_dung,
     post_id
   );
+  const isFollowed = await followhelper.hasUserFollowedStatusPost(
+    post_id,
+    ma_nguoi_dung
+  );
   const data = {
-    ...postData[0],
+    ...postData,
     owner_infor,
     hasLiked,
+    isFollowed,
   };
   res.status(200).json(new Response(200, data, "lấy dữ liệu thành công"));
 };
@@ -469,9 +489,9 @@ const deleteCommentController = async (req, res) => {
     // console.log(deleteProcess);
     await StatusPostModel.deleteCommentByCmtId(cmt_id);
     const postId = req.body.CMT_POST_INFOR.postId;
-    const postInfor = await StatusPostModel.getPostById(postId).then(
-      (data) => data.payload
-    );
+    const postInfor = await statusAndArticleModel
+      .getPostById(postId)
+      .then((data) => data.payload);
     // console.log(postInfor);
     const numOfComment = postInfor[0].numOfComment;
     await StatusPostModel.updateNumOfCommentPost(postId, numOfComment - 1);
@@ -490,6 +510,53 @@ const updatePostController = async (req, res) => {
   const { post_id, text, media } = req.body;
   res.send("ahihi");
 };
+
+const unfollowPostController = async (req, res) => {
+  const { post_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const hasFollowed = await followhelper.hasUserFollowedStatusPost(
+    post_id,
+    user_id
+  );
+  if (!hasFollowed) {
+    res.status(400).json(
+      new Response(
+        400,
+        {
+          unfollowed: false,
+          message: "người dùng chưa theo dõi bài viết",
+        },
+        "bài viết chưa được theo dõi",
+        300,
+        300
+      )
+    );
+    return;
+  }
+  const unfollowProcess = await followhelper.unFollowStatusPost(
+    post_id,
+    user_id,
+    false
+  );
+  res.status(200).json(
+    new Response(
+      200,
+      {
+        unfollowed: true,
+        message: "unfollow thành công",
+      },
+      "unfollow thành công",
+    )
+  );
+  return;
+};
+
+// const followPostController = async (req, res) => {
+//   const { post_id } = req.body;
+//   const user_id = req.auth_decoded.ma_nguoi_dung;
+//   const followProcess = await followhelper.followStatusPost(post_id, user_id);
+//   res.json(followProcess);
+// };
 
 const deletePostController = async (req, res) => {
   try {
@@ -512,6 +579,51 @@ const deletePostController = async (req, res) => {
   }
 };
 
+const isUserFollowedPostController = async (req, res) => {
+  const { post_id } = req.body;
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const isFollowed = await followhelper.hasUserFollowedStatusPost(
+    post_id,
+    user_id
+  );
+  res.status(200).json(new Response(200, { post_id, isFollowed }, ""));
+  return;
+};
+
+const followPostController = async (req, res) => {
+  const { post_id } = req.body;
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const isFollowed = await followhelper.hasUserFollowedStatusPost(
+    post_id,
+    user_id
+  );
+  if (isFollowed) {
+    res.status(200).json(
+      new Response(
+        200,
+        {
+          post_id,
+          isFollowed,
+        },
+        "bạn đã theo doi bài viết này rồi"
+      )
+    );
+    return;
+  }
+
+  const followProcess = await followhelper.followStatusPost(post_id, user_id);
+  res.status(200).json(
+    new Response(
+      200,
+      {
+        post_id,
+        isFollowed: true,
+      },
+      "theo dõi thành công"
+    )
+  );
+};
+
 module.exports = {
   addPostController,
   toggleLikePostController,
@@ -530,4 +642,7 @@ module.exports = {
   deleteCommentController,
   deletePostController,
   updatePostController,
+  unfollowPostController,
+  isUserFollowedPostController,
+  followPostController,
 };

@@ -11,6 +11,8 @@ router.get('/confirmRegister', handleConfirmRegister);
 router.use(requireLogined);
 // get user infor by username
 router.get('/infor/:username', userControler.userPublicInforByUserName);
-
+// search user by username or name
+router.post('/searchPeople', userControler.searchPeopleController);
+// router.post('/searchPeopleByName', userControler.searchPeopleByNameController);
 
 module.exports = router;

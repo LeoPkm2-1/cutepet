@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^40.0.0",
+    "@ckeditor/ckeditor5-react": "^6.1.0",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
     "@mdi/js": "^6.5.95",
@@ -27,6 +29,7 @@
     "filepond-plugin-image-preview": "^4.6.11",
     "filestack-react": "^4.0.1",
     "firebase": "^9.6.7",
+    "html-react-parser": "^5.0.6",
     "imgur": "^2.3.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
