@@ -163,3 +163,13 @@
 7. lấy tất cả các bài viết chia sẻ kiến thức trong database:
 
    _chi tiết:_ **[Route_Struture/article.md số 17](./article.md#17-lấy-tất-cả-các-bài-viết-chia-sẻ-kiến-thức-trong-database)** và **postman số 55**
+
+## (12-11-2023):
+
+1. trang đăng ký tài khoản
+
+   _chi tiết:_ **[Route_Struture/register.md số 1](./register.md#1-trang-đăng-ký)** và **postman số 1**
+
+2. xác nhận đăng nhập tài khoản
+
+   _chi tiết:_ **[Route_Struture/register.md số 2](./register.md#2-xác-thực-đăng-ký)** và **postman số 56**
