@@ -125,8 +125,8 @@ const toggleLikePostController = async (req, res) => {
       // update num of like
       await StatusPostModel.updateNumOfLikePost(post_id, numOfLike - 1);
 
-      // người dùng bỏ theo dõi bài viết.
-      await followhelper.unFollowStatusPost(post_id, userLike, true);
+      // // người dùng bỏ theo dõi bài viết.
+      // await followhelper.unFollowStatusPost(post_id, userLike, true);
 
       res.status(200).json(
         new Response(
@@ -192,8 +192,8 @@ const toggleLikeCmtController = async (req, res) => {
         throw new Error(ERROR_HAPPEN_MESSAGE);
       // update the num of like;
       await StatusPostModel.updateNumOfLikeCmtPost(cmt_id, numOfLike - 1);
-      // xóa người dùng ra khỏi danh sách theo doi bai viet
-      await followhelper.unFollowStatusPost(postId, userLike, true);
+      // // xóa người dùng ra khỏi danh sách theo doi bai viet
+      // await followhelper.unFollowStatusPost(postId, userLike, true);
       res
         .status(200)
         .json(new Response(200, { cmtId: cmt_id }, "hủy like thành công"));
