@@ -5,21 +5,25 @@ const { Response } = require("../../utils/index");
 const statusPostHelper = require("../../utils/BaiViet/statusPostHelper");
 const followModel = require("../../models/theodoi/followModel");
 const followhelper = require("../../utils/theodoiHelper");
-const {
-  StatusPostEventManagement,
-} = require("./../../socketHandler/norm_user/statusPostEvent");
+const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 const {
   notifyLikePost,
   notifyCommentPost,
   notifyLikeComment,
   notifyReplyComment,
+  notifyTaggedUserInStatusPost,
 } = require("../../notificationHandler/statusPost");
 
 const addPostController = async (req, res) => {
-  const { text, media } = req.body;
+  const { text, media, visibility, taggedUsersId } = req.body;
+  const taggedUsers = await userHelper.getUserPublicInforByListIds(
+    taggedUsersId
+  );
   const postStatus = new StatusPostComposStructure.StatusPost(
     text,
+    visibility,
     media,
+    taggedUsers,
     req.auth_decoded.ma_nguoi_dung
   );
 
@@ -28,7 +32,7 @@ const addPostController = async (req, res) => {
     res.status(400).json(new Response(400, [], "đã có lỗi xảy ra", 300, 300));
     return;
   }
-  const insertedPost = await StatusPostModel.getPostById(
+  const insertedPost = await statusAndArticleModel.getPostById(
     addProcess.payload.insertedId
   );
   const idOfPost = insertedPost.payload[0]._id.toString();
@@ -36,6 +40,17 @@ const addPostController = async (req, res) => {
 
   // thêm người tạo bài viết vào danh sách theo dõi của bài viết
   await followhelper.followStatusPost(idOfPost, owner_id);
+  // xử lý tag
+  if (taggedUsersId.length > 0) {
+    // thêm các người dùng được tag vào danh sách người theo dõi bài viết
+    const data = await Promise.all(
+      taggedUsersId.map((userId) =>
+        followhelper.followStatusPost(idOfPost, userId)
+      )
+    );
+    // thông báo nếu có tag
+    notifyTaggedUserInStatusPost(idOfPost, owner_id, taggedUsersId);
+  }
 
   res
     .status(200)
@@ -110,8 +125,8 @@ const toggleLikePostController = async (req, res) => {
       // update num of like
       await StatusPostModel.updateNumOfLikePost(post_id, numOfLike - 1);
 
-      // người dùng bỏ theo dõi bài viết.
-      await followhelper.unFollowStatusPost(post_id, userLike, true);
+      // // người dùng bỏ theo dõi bài viết.
+      // await followhelper.unFollowStatusPost(post_id, userLike, true);
 
       res.status(200).json(
         new Response(
@@ -177,8 +192,8 @@ const toggleLikeCmtController = async (req, res) => {
         throw new Error(ERROR_HAPPEN_MESSAGE);
       // update the num of like;
       await StatusPostModel.updateNumOfLikeCmtPost(cmt_id, numOfLike - 1);
-      // xóa người dùng ra khỏi danh sách theo doi bai viet
-      await followhelper.unFollowStatusPost(postId, userLike, true);
+      // // xóa người dùng ra khỏi danh sách theo doi bai viet
+      // await followhelper.unFollowStatusPost(postId, userLike, true);
       res
         .status(200)
         .json(new Response(200, { cmtId: cmt_id }, "hủy like thành công"));
@@ -199,7 +214,6 @@ const toggleLikeCmtController = async (req, res) => {
 };
 
 const replyCmtController = async (req, res) => {
-  console.log("Chạy hàm reply backend");
   const reply = req.body.reply;
   const cmt_id = req.body.cmt_id;
   const replyBy = req.auth_decoded.ma_nguoi_dung;
@@ -356,8 +370,9 @@ const getPostController = async (req, res) => {
   const postData = await StatusPostModel.getPostById(post_id).then(
     (data) => data.payload
   );
+
   const owner_infor = await userHelper.getUserPublicInforByUserId(
-    postData[0].owner_id
+    postData.owner_id
   );
   const hasLiked = await statusPostHelper.hasUserLikedPost_1(
     ma_nguoi_dung,
@@ -368,7 +383,7 @@ const getPostController = async (req, res) => {
     ma_nguoi_dung
   );
   const data = {
-    ...postData[0],
+    ...postData,
     owner_infor,
     hasLiked,
     isFollowed,
@@ -474,9 +489,9 @@ const deleteCommentController = async (req, res) => {
     // console.log(deleteProcess);
     await StatusPostModel.deleteCommentByCmtId(cmt_id);
     const postId = req.body.CMT_POST_INFOR.postId;
-    const postInfor = await StatusPostModel.getPostById(postId).then(
-      (data) => data.payload
-    );
+    const postInfor = await statusAndArticleModel
+      .getPostById(postId)
+      .then((data) => data.payload);
     // console.log(postInfor);
     const numOfComment = postInfor[0].numOfComment;
     await StatusPostModel.updateNumOfCommentPost(postId, numOfComment - 1);
@@ -498,7 +513,7 @@ const updatePostController = async (req, res) => {
 
 const unfollowPostController = async (req, res) => {
   const { post_id } = req.body;
-  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
   const hasFollowed = await followhelper.hasUserFollowedStatusPost(
     post_id,
     user_id
@@ -523,16 +538,14 @@ const unfollowPostController = async (req, res) => {
     user_id,
     false
   );
-  res.status(400).json(
+  res.status(200).json(
     new Response(
-      400,
+      200,
       {
         unfollowed: true,
         message: "unfollow thành công",
       },
       "unfollow thành công",
-      300,
-      300
     )
   );
   return;

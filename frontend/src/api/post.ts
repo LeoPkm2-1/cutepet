@@ -1,11 +1,13 @@
 import { authRequest, authRequestWithoutExpCheck } from './base';
 
-const createStatus = (text: string, type: string, data: string[]) => {
+const createStatus = (visibility:string, text: string, taggedUsersId: string[] | number[], type: string, data: string[]) => {
   return authRequest<any>({
     url: '/post/statusPost/addPost',
     method: 'POST',
     body: {
       text: text,
+      visibility,
+      taggedUsersId,
       media: {
         type: type,
         data: data,
@@ -45,10 +47,13 @@ const replyCommentStatus = (cmt_id: string, reply: string) => {
   });
 };
 
-const getStatusById = (id: string) => {
+const getStatusById = (post_id: string) => {
   return authRequest<any>({
-    url: `/post/statusPost/getPost?post_id=${id}`,
-    method: 'GET',
+    url: `/post/statusPost/getPost`,
+    method: 'POST',
+    body: {
+      post_id
+    }
   });
 };
 

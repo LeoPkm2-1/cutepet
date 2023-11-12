@@ -5,10 +5,8 @@ const userHelper = require("../utils/userHelper");
 const UtilsHelper = require("../utils/UtilsHelper");
 const statusPostEventStruture = require("../socketHandler/norm_user/statusPostEventStructure");
 const statusPostNotificationModel = require("../models/thongbao/statusPost");
-const {
-  StatusPostEventManagement,
-} = require("../socketHandler/norm_user/statusPostEvent");
 const { normUserNamespace } = require("../socketHandler/norm_user");
+const statusAndArticleModel = require("./../models/BaiViet/StatusAndArticleModel");
 
 async function prepareUserBeforeHandleNotiForStatusPost(
   sender_id,
@@ -68,13 +66,13 @@ async function prepareUserBeforeHandleNotiForStatusPost(
   );
   const is_Sender_following_post =
     await theodoiHelper.hasUserFollowedStatusPost(followed_obj_id, sender_id);
-  let postInfor = await StatusPostModel.getPostById(followed_obj_id).then(
-    (data) => {
+  let postInfor = await statusAndArticleModel
+    .getPostById(followed_obj_id)
+    .then((data) => {
       const post = data.payload[0];
       post._id = post._id.toString();
       return post;
-    }
-  );
+    });
 
   postInfor = UtilsHelper.filter_keys_in_Obj(postInfor, [
     "_id",
@@ -139,6 +137,17 @@ const notifyLikePost = async (
       owner_id,
       notiInforForOwner
     );
+
+    // send notification through socket to owner of post when he/she is following
+    const socketRoomNameOfOwner = socketHelper.getPrivateRoomNameOfUser(
+      owner_infor.ma_nguoi_dung
+    );
+    normUserNamespace
+      .to(socketRoomNameOfOwner)
+      .emit(
+        statusPostEventStruture.LikePostEvent.getEventName(),
+        notiInforForOwner
+      );
   }
 
   // 1.2 store notification infor for others
@@ -158,17 +167,19 @@ const notifyLikePost = async (
         );
       })
     );
+    // send notification to other followers
+    const socketRoomNameOfOthers = follower_not_sender_onwer.map((user) =>
+      socketHelper.getPrivateRoomNameOfUser(user.ma_nguoi_dung)
+    );
+    const socketOfOthers = socketRoomNameOfOthers.reduce(
+      (acc, room_name_of_user) => acc.to(room_name_of_user),
+      normUserNamespace
+    );
+    socketOfOthers.emit(
+      statusPostEventStruture.LikePostEvent.getEventName(),
+      notiInforForOthers
+    );
   }
-  // 2. send notification through socket
-  StatusPostEventManagement.sendLikePostNotiToAllFollower({
-    allFollowerInforList,
-    owner_infor,
-    sender_infor,
-    post_infor,
-    follower_not_sender_onwer,
-    isOwnerFollowing,
-    isSenderFollowing,
-  });
 };
 
 const notifyCommentPost = async (
@@ -213,6 +224,16 @@ const notifyCommentPost = async (
       owner_id,
       notiInforForOwner
     );
+    // send notification to owner of post when he/she is following through socket
+    const socketRoomNameOfOwner = socketHelper.getPrivateRoomNameOfUser(
+      owner_infor.ma_nguoi_dung
+    );
+    normUserNamespace
+      .to(socketRoomNameOfOwner)
+      .emit(
+        statusPostEventStruture.CommentPostEvent.getEventName(),
+        notiInforForOwner
+      );
   }
   // 1.2 store notification infor for others
   if (follower_not_sender_onwer.length > 0) {
@@ -231,18 +252,20 @@ const notifyCommentPost = async (
         );
       })
     );
-  }
 
-  // 2. send notification through socket
-  StatusPostEventManagement.sendCommentPostNotiToAllFollower({
-    allFollowerInforList,
-    owner_infor,
-    sender_infor,
-    post_infor,
-    follower_not_sender_onwer,
-    isOwnerFollowing,
-    isSenderFollowing,
-  });
+    // send notification to other who are following post
+    const socketRoomNameOfOthers = follower_not_sender_onwer.map((user) =>
+      socketHelper.getPrivateRoomNameOfUser(user.ma_nguoi_dung)
+    );
+    const socketOfOthers = socketRoomNameOfOthers.reduce(
+      (acc, room_name_of_user) => acc.to(room_name_of_user),
+      normUserNamespace
+    );
+    socketOfOthers.emit(
+      statusPostEventStruture.CommentPostEvent.getEventName(),
+      notiInforForOthers
+    );
+  }
 };
 
 async function prepareUserBeforeHandleNotiForCmtStatusPost(
@@ -258,28 +281,21 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
     comment._id = comment._id.toString();
     return comment;
   });
-  // console.log('check');
-  // console.log(commentInfor);
 
   // get commneter_id if not provided
   if (typeof commenter_id == "undefined") commenter_id = commentInfor.commentBy;
   // post infor
-  const postInfor = await StatusPostModel.getPostById(commentInfor.postId).then(
-    (data) => {
+  const postInfor = await statusAndArticleModel
+    .getPostById(commentInfor.postId)
+    .then((data) => {
       const post = data.payload[0];
       post._id = post._id.toString();
       return post;
-    }
-  );
+    });
 
   // prepare user data
   const allFollowerInforList =
     await socketHelper.getStatusPostFollowerAndFilter(commentInfor.postId);
-
-  // console.log('chao cau');
-  // console.log(commentInfor.postId);
-  // console.log('chao cau 2');
-  // console.log(allFollowerInforList);
 
   // exit if don't have any follower
   if (allFollowerInforList.length == 0)
@@ -308,9 +324,6 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
       ])
     );
 
-  console.log("\n\ncommentOwnerInfor");
-  console.log(commentOwnerInfor);
-
   // sender infor
   const senderInfor = await userHelper
     .getUserPublicInforByUserId(sender_id)
@@ -322,9 +335,6 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
         "anh",
       ])
     );
-
-  console.log("\n\nsenderInfor");
-  console.log(senderInfor);
 
   // post owner infor
   const postOwnerInfor = await userHelper
@@ -338,9 +348,6 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
       ])
     );
 
-  console.log("\n\npostOwnerInfor");
-  console.log(postOwnerInfor);
-
   const followerNotSenderCommenterPostOwner = allFollowerInforList.filter(
     (user) =>
       user.ma_nguoi_dung != commentOwnerInfor.ma_nguoi_dung &&
@@ -348,16 +355,11 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
       user.ma_nguoi_dung != sender_id
   );
 
-  console.log("\n\nfollowerNotSenderCommenterPostOwner");
-  console.log(followerNotSenderCommenterPostOwner);
-
   const is_commenter_followingPost =
     await theodoiHelper.hasUserFollowedStatusPost(
       commentInfor.postId,
       commenter_id
     );
-
-  console.log("\n\nis_commenter_followingPost", is_commenter_followingPost);
 
   const is_postOwner_followingPost =
     await theodoiHelper.hasUserFollowedStatusPost(
@@ -365,14 +367,10 @@ async function prepareUserBeforeHandleNotiForCmtStatusPost(
       postOwnerInfor.ma_nguoi_dung
     );
 
-  console.log("\n\nis_postOwner_followingPost", is_postOwner_followingPost);
-
   const is_Sender_followingPost = await theodoiHelper.hasUserFollowedStatusPost(
     commentInfor.postId,
     sender_id
   );
-
-  console.log("\n\nis_Sender_followingPost", is_Sender_followingPost);
 
   return {
     allFollowerInforList,
@@ -410,15 +408,11 @@ const notifyLikeComment = async (
     comment_id,
     commenter_id
   );
-  console.log("\n\nallFollowerInforList");
-  console.log(allFollowerInforList);
 
   // exit if don't have any follower
   if (allFollowerInforList == null) return;
   // 1. store notification to database
   // 1.1 store notification infor for commenter
-  console.log("hihi");
-  // return
   if (
     isCommenterFollowing &&
     commentOwner_infor.ma_nguoi_dung != sender_infor.ma_nguoi_dung
@@ -440,6 +434,17 @@ const notifyLikeComment = async (
       commentOwner_infor.ma_nguoi_dung,
       notiInforForCommenter
     );
+
+    // send notification to commenter through socket
+    const socketNameOfCommenter = socketHelper.getPrivateRoomNameOfUser(
+      commentOwner_infor.ma_nguoi_dung
+    );
+    normUserNamespace
+      .to(socketNameOfCommenter)
+      .emit(
+        statusPostEventStruture.LikeCommentEvent.getEventName(),
+        notiInforForCommenter
+      );
   }
 
   // 1.2 store notification infor for post owner
@@ -464,6 +469,16 @@ const notifyLikeComment = async (
       postOwner_infor.ma_nguoi_dung,
       notiInforForPostOwner
     );
+    // send notification to post owner
+    const socketNameOfPostOwner = socketHelper.getPrivateRoomNameOfUser(
+      postOwner_infor.ma_nguoi_dung
+    );
+    normUserNamespace
+      .to(socketNameOfPostOwner)
+      .emit(
+        statusPostEventStruture.LikeCommentEvent.getEventName(),
+        notiInforForPostOwner
+      );
   }
 
   // 1.3 store notifcation infor for others
@@ -480,36 +495,29 @@ const notifyLikeComment = async (
         areYouPostOwner: false,
       }
     );
-    console.log("xin chao 123");
-    console.log(followerNotSenderCommenterPostOwner);
-    // return;
+
     Promise.all(
       followerNotSenderCommenterPostOwner.map(async (user) => {
         await statusPostNotificationModel.addLikeCommentNotification(
           user.ma_nguoi_dung,
           notiInforForOthers
         );
-        // return await statusPostNotificationModel.addLikeCommentNotification(
-        // 	user.ma_nguoi_dung,
-        // 	'xin chao'
-        // );
       })
+    );
+    // send notification to other followers
+    const socketRoomNameOfOthers = followerNotSenderCommenterPostOwner.map(
+      (user) => socketHelper.getPrivateRoomNameOfUser(user.ma_nguoi_dung)
+    );
+    const socketOfOthers = socketRoomNameOfOthers.reduce(
+      (acc, room_name_of_user) => acc.to(room_name_of_user),
+      normUserNamespace
+    );
+    socketOfOthers.emit(
+      statusPostEventStruture.LikeCommentEvent.getEventName(),
+      notiInforForOthers
     );
   }
   // return;
-  // 2. send notification through socket.
-  StatusPostEventManagement.sendLikeCommentNotiToAllFollower({
-    allFollowerInforList,
-    commentOwner_infor,
-    comment_infor,
-    sender_infor,
-    postOwner_infor,
-    post_infor,
-    followerNotSenderCommenterPostOwner,
-    isCommenterFollowing,
-    isPostOwnerFollowing,
-    isSenderFollowing,
-  });
 };
 
 const notifyReplyComment = async (
@@ -642,8 +650,7 @@ const notifyReplyComment = async (
       (acc, room_name_of_user) => acc.to(room_name_of_user),
       normUserNamespace
     );
-    console.log('xin chao');
-    console.log(followerNotSenderCommenterPostOwner);
+
     socketOfOthers.emit(
       statusPostEventStruture.ReplyCommentEvent.getEventName(),
       notiInforForOthers
@@ -651,9 +658,80 @@ const notifyReplyComment = async (
   }
 };
 
+const notifyTaggedUserInStatusPost = async (
+  post_id,
+  tag_user_id,
+  taggedUserListIds = []
+) => {
+  // exit if no one is tagged
+  if (taggedUserListIds.length <= 0) return;
+  // post infor
+  let postInfor = await statusAndArticleModel
+    .getPostById(post_id)
+    .then((data) => {
+      const post = data.payload[0];
+      post._id = post._id.toString();
+      return post;
+    });
+  postInfor = UtilsHelper.filter_keys_in_Obj(postInfor, [
+    "_id",
+    "postType",
+    "text",
+    "createAt",
+  ]);
+  // tag user infor
+  const tag_user_infor = await userHelper.getUserPublicInforByUserId(
+    tag_user_id
+  );
+  const tagged_infor_list = await Promise.all(
+    taggedUserListIds.map(async (tagged_User_Id) => {
+      // tagged user infor
+      const taggedUser = await userHelper.getUserPublicInforByUserId(
+        tagged_User_Id
+      );
+      const tagEventInfor = new statusPostEventStruture.TagUserInPost(
+        tag_user_infor,
+        taggedUser,
+        postInfor,
+        new Date(),
+        false
+      );
+      await statusPostNotificationModel.addTagUserInPostNotification(
+        tagged_User_Id,
+        tagEventInfor
+      );
+
+      return {
+        tagged_User_Id: tagged_User_Id,
+        taggedUser: taggedUser,
+        tagEventInfor: tagEventInfor,
+      };
+    })
+  );
+  // send notificatin through socket
+  tagged_infor_list.forEach((element) => {
+    const socketRoom = socketHelper.getPrivateRoomNameOfUser(
+      element.tagged_User_Id
+    );
+    normUserNamespace
+      .to(socketRoom)
+      .emit(
+        statusPostEventStruture.TagUserInPost.getEventName(),
+        element.tagEventInfor
+      );
+  });
+};
+
+// (async  ()=> {
+//   await notifyLikePost(2,
+//     "65333ff5f0efa9d27e7bf163",
+//     2,
+//   );
+// })();
 module.exports = {
   notifyLikePost,
   notifyCommentPost,
   notifyLikeComment,
   notifyReplyComment,
+  notifyTaggedUserInStatusPost,
 };

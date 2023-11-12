@@ -194,7 +194,7 @@ const searchUserBySearchKey = async (searchKey, index = 0, range = 20) => {
                     FROM NguoiDung 
                     WHERE 
                         ten REGEXP '^${searchKey}[[:alpha:]]*' OR
-                        tai_khoan REGEXP '${searchKey}[[:alpha:]]*'
+                        tai_khoan REGEXP '^${searchKey}[[:alpha:]]*'
                     LIMIT ${index}, ${range}`;
   return await sqlQuery(sqlStmt, [])
     .then((data) => {

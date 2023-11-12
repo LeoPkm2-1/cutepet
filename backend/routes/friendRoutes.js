@@ -21,6 +21,6 @@ router.post(
 	addFriendMid.unFriendMidById,
 	friendController.unFriendById
 );
-router.get('/getRequestAddFriendList',friendController.getRequestAddFriendList)
-router.get('/getFriendList',friendController.getFriendList)
+router.post('/getRequestAddFriendList',friendController.getRequestAddFriendList)
+router.post('/getFriendList',friendController.getFriendList)
 module.exports = router;

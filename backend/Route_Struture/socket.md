@@ -1,8 +1,6 @@
 # LISTEN FOR EVENT
 
-## STATUS POST
-
-#### Like status Post:
+## 1. Like status Post:
 
 - Listen on: **LIKE_STATUS_POST** event
 - data struture:
@@ -42,9 +40,8 @@
 - **userLike**: describe **information about user** who has **liked status post**
 - **postOwner**: describe **information about user** who is **owner of status post**
 - **youAreOwner**: is post **owned by you**
--
 
-#### Comment status Post:
+## 2. Comment status Post:
 
 - Listen on: **COMMENT_STATUS_POST** event
 - data struture:
@@ -85,7 +82,7 @@
 - **postOwner** : describe **information about user** who is **owner of status post**
 - **areYouOwner** : is post **owned by you**
 
-#### Like comment in status Post
+## 3. Like comment in status Post
 
 - Listen on: **LIKE_COMMENT_IN_STATUS_POST** event
 - data structure
@@ -181,11 +178,7 @@
 - **dependOn.postOwner**: post owner information
 - **dependOn.areYouPostOwner**: is post **owned by you**
 
-
-#### Reply in comment
-
-
-
+## 4. Reply in comment
 
 - Listen on: **REPLY_COMMENT_IN_STATUS_POST** event
 - data struture:
@@ -279,6 +272,170 @@
 - **dependOn.postOwner**: post owner information
 - **dependOn.areYouPostOwner**: is post **owned by you**
 
+## 5. Login notification
+
+- Listen on: **USER_IS_ONLINE** event
+- data struture:
+
+```javascript
+{
+    "user_id": 2
+}
+```
+
+- **user_id**: id of user who has just logged in
+
+## 6. Logout notification
+
+- Listen on: **USER_IS_OFFLINE** event
+- data struture:
+
+```javascript
+{
+    "user_id": 2
+}
+```
+
+- **user_id**: id of user who has just logged out
+
+## 7. Tag user in status post notification
+
+- Listen on: **TAG_USER_IN_STATUS_POST** event
+- data structure:
+
+```javascript
+{
+    "userTag": {
+        "ma_nguoi_dung": 2,
+        "ten": "Dung",
+        "ngay_sinh": "1991-09-29T17:00:00.000Z",
+        "tai_khoan": "dung",
+        "email": "dung@gmail.com",
+        "so_dien_thoai": "0912345679",
+        "gioi_tinh": 1,
+        "anh": {
+            "ma_anh": 39,
+            "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
+            "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+            "ma_nguoi_dung": 2,
+            "is_active": 1
+        }
+    },
+    "taggedUser": {
+        "ma_nguoi_dung": 3,
+        "ten": "Teo",
+        "ngay_sinh": "1991-09-30T17:00:00.000Z",
+        "tai_khoan": "teo",
+        "email": "teo@gmail.com",
+        "so_dien_thoai": "0912345680",
+        "gioi_tinh": 1,
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "3",
+            "is_active": null
+        }
+    },
+    "postInfor": {
+        "_id": "653e77b152c970c79c0e1f28",
+        "postType": "status",
+        "text": "xin chào tui là dũng nha không vi",
+        "createAt": "2023-10-29T15:18:09.037Z"
+    },
+    "tagAt": "2023-10-29T15:18:09.048Z",
+    "areYouPostOwner": false,
+    "dependOn": null,
+    "message": ""
+}
+```
+
+## 8. thông báo khi có lời mời kết bạn
+
+- Listen on: **REQUEST_ADD_FRIEND** event
+- data structure:
+
+```javascript
+{
+    "requestUser": {
+        "ma_nguoi_dung": 10,
+        "ten": "Thanh",
+        "ngay_sinh": "1991-10-07T17:00:00.000Z",
+        "tai_khoan": "thanh",
+        "email": "thanh@gmail.com",
+        "so_dien_thoai": "0912345687",
+        "gioi_tinh": 0,
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "10",
+            "is_active": null
+        }
+    },
+    "recipient": {
+        "ma_nguoi_dung": 15,
+        "ten": "Thuy",
+        "ngay_sinh": "1991-10-11T17:00:00.000Z",
+        "tai_khoan": "thuy",
+        "email": "thuy@gmail.com",
+        "so_dien_thoai": "0912345691",
+        "gioi_tinh": 1,
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "15",
+            "is_active": null
+        }
+    },
+    "requestAt": "2023-11-03T08:11:28.397Z",
+    "message": ""
+}
+```
 
 
 
+## 9. thông báo khi được chấp nhận lời mời kết bạn 
+
+- Listen on: **ACCEPT_ADD_FRIEND** event
+- data structure:
+
+```javascript
+{
+    "acceptUser": {
+        "ma_nguoi_dung": 15,
+        "ten": "Thuy",
+        "ngay_sinh": "1991-10-11T17:00:00.000Z",
+        "tai_khoan": "thuy",
+        "email": "thuy@gmail.com",
+        "so_dien_thoai": "0912345691",
+        "gioi_tinh": 1,
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "15",
+            "is_active": null
+        }
+    },
+    "requestUser": {
+        "ma_nguoi_dung": 10,
+        "ten": "Thanh",
+        "ngay_sinh": "1991-10-07T17:00:00.000Z",
+        "tai_khoan": "thanh",
+        "email": "thanh@gmail.com",
+        "so_dien_thoai": "0912345687",
+        "gioi_tinh": 0,
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "10",
+            "is_active": null
+        }
+    },
+    "acceptAt": "2023-11-03T09:19:30.555Z",
+    "message": ""
+}
+```

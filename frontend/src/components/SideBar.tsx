@@ -117,12 +117,16 @@ export default function SideBar(props: {
         <Root>
           {/* <PermissionRequired accountTypes={[]}> */}
           <Box
+            onClick = {() => {
+              naviagte("/home/trang-ca-nhan")
+            }}
             sx={{
               display: 'flex',
               background: '#fff',
               padding: '20px 20px',
               margin: '20px 10px',
               borderRadius: '12px',
+              cursor:"pointer",
             }}
           >
             <img
@@ -158,6 +162,7 @@ export default function SideBar(props: {
               </Typography>
             </Box>
           </Box>
+
           <ScrollView isSideBar>
             {menu.map((item) => (
               <MenuItem key={item.key} data={item} pathname={pathname} />
