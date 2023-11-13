@@ -8,6 +8,7 @@ const socketHelper = require("./../utils/socketHelper");
 const {
   genJWT,
   deleteProperties,
+  checkUsernameAndPass,
   // storeToken,
 } = require("./../utils/loginHelper");
 
@@ -70,28 +71,28 @@ const handlLogin = async (req, res) => {
   }
 };
 
-const checkUsernameAndPass = async (username_email, drawPassword) => {
-  let response = isEmailForm(username_email)
-    ? await userModel.getUserByEmail(username_email)
-    : await userModel.getUserByUsername(username_email);
-  if (response.status != 200) throw new Error(response.message);
+// const checkUsernameAndPass = async (username_email, drawPassword) => {
+//   let response = isEmailForm(username_email)
+//     ? await userModel.getUserByEmail(username_email)
+//     : await userModel.getUserByUsername(username_email);
+//   if (response.status != 200) throw new Error(response.message);
 
-  const userExisted = true ? response.payload.length > 0 : false;
+//   const userExisted = true ? response.payload.length > 0 : false;
 
-  if (userExisted) {
-    const hashedPass = response.payload[0].mat_khau;
-    const match = await checkPassword(drawPassword, hashedPass);
-    const data = match
-      ? { match, userInfor: response.payload[0] }
-      : { match, userInfor: {} };
-    return data;
-  }
-  return { match: false, userInfor: {} };
-};
+//   if (userExisted) {
+//     const hashedPass = response.payload[0].mat_khau;
+//     const match = await checkPassword(drawPassword, hashedPass);
+//     const data = match
+//       ? { match, userInfor: response.payload[0] }
+//       : { match, userInfor: {} };
+//     return data;
+//   }
+//   return { match: false, userInfor: {} };
+// };
 
-const isEmailForm = (username) => {
-  return username.includes("@");
-};
+// const isEmailForm = (username) => {
+//   return username.includes("@");
+// };
 
 const markUserOnline = async (user_id, socketToSend) => {
   // update the number of devices that user online

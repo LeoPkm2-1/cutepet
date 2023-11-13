@@ -166,6 +166,19 @@ const getUsersByListId = async (listId) => {
     });
 };
 
+const updateUserPasswordByUserName = async (username, newPassword) => {
+  const sqlStmt = `UPDATE NguoiDung
+                  SET mat_khau = ?
+                  WHERE tai_khoan = ?;`;
+  return await sqlQuery(sqlStmt, [newPassword, username])
+    .then((data) => {
+      return new Response(200, data, "");
+    })
+    .catch((err) => {
+      return new Response(400, [], err.sqlMessage, err.errno, err.code);
+    });
+};
+
 const getUserPublicInforByListId = async (listId) => {
   const sqlStmt = `select ma_nguoi_dung,ten,ngay_sinh,tai_khoan,email,so_dien_thoai,gioi_tinh from NguoiDung where ma_nguoi_dung in (?)`;
   return await sqlQuery(sqlStmt, [listId])
@@ -222,5 +235,5 @@ module.exports = {
   getUsersByListId,
   getUserPublicInforByListId,
   searchUserBySearchKey,
-  // searchUsersByName,
+  updateUserPasswordByUserName,
 };

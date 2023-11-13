@@ -13,6 +13,19 @@ const addPost = async (statusPost) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const updatePost = async (postId, newPost) => {
+  async function executor(collection) {
+    return await collection.updateOne(
+      {
+        _id: new ObjectId(postId),
+      },
+      {
+        $set: newPost,
+      }
+    );
+  }
+};
+
 // get only status post
 const getPostById = async (postId) => {
   async function executor(collection) {
@@ -603,4 +616,5 @@ module.exports = {
   getOnwerIdOfComment,
   getAllPostOfUserBeforeTime,
   getPostOfUserForReaderBeforeTime,
+  updatePost,
 };

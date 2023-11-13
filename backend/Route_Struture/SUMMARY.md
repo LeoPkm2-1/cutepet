@@ -173,3 +173,7 @@
 2. xác nhận đăng nhập tài khoản
 
    _chi tiết:_ **[Route_Struture/register.md số 2](./register.md#2-xác-thực-đăng-ký)** và **postman số 56**
+
+3. chỉnh sửa bài viết chia sẻ trạng thái
+   
+   _chi tiết:_ **[Route_Struture/post.md số 15](./post.md#15-chỉnh-sửa-bài-viết-trạng-thái)** và **postman số 57**

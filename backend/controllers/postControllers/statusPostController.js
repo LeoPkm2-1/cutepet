@@ -507,8 +507,51 @@ const deleteCommentController = async (req, res) => {
 };
 
 const updatePostController = async (req, res) => {
-  const { post_id, text, media } = req.body;
-  res.send("ahihi");
+  const { post_id, text, media, visibility, taggedUsersId } = req.body;
+  const taggedUsers = await userHelper.getUserPublicInforByListIds(
+    taggedUsersId
+  );
+  if (visibility == "PRIVATE") {
+    // 1. xóa người follower cũ  và cập nhật người follower mới
+    // 1.1 delete all previous follower
+    const previousFollowerIdList = req.body.STATUS_POST_INFOR.taggedUsers.map(
+      (follower) => parseInt(follower.ma_nguoi_dung)
+    );
+    await followhelper.listOfUserUnFollowStatusPost(
+      post_id,
+      previousFollowerIdList,
+      false
+    );
+    // 1.2. add new follower
+    await Promise.all(
+      taggedUsersId.map((userId) =>
+        followhelper.followStatusPost(idOfPost, userId)
+      )
+    );
+    // thông báo nếu có tag
+    notifyTaggedUserInStatusPost(idOfPost, owner_id, taggedUsersId);
+  } else {
+    // 2. chỉ thêm người mới vào thôi
+    await Promise.all(
+      taggedUsersId.map((userId) =>
+        followhelper.followStatusPost(idOfPost, userId, true)
+      )
+    );
+  }
+
+  const updatePostStatus = new StatusPostComposStructure.StatusPost(
+    text,
+    visibility,
+    media,
+    taggedUsers,
+    req.auth_decoded.ma_nguoi_dung
+  );
+
+  await StatusPostModel.updatePost(post_id, updatePostStatus);
+
+  // cập nhật người dùng
+
+  res.status(200).json(new Response(200, [], "cập nhật thành công"));
 };
 
 const unfollowPostController = async (req, res) => {
@@ -545,7 +588,7 @@ const unfollowPostController = async (req, res) => {
         unfollowed: true,
         message: "unfollow thành công",
       },
-      "unfollow thành công",
+      "unfollow thành công"
     )
   );
   return;

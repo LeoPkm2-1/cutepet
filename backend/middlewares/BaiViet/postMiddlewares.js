@@ -9,7 +9,10 @@ async function preProcessAddPost(req, res, next) {
   const text = req.body.text;
   const visibility = String(req.body.visibility).toUpperCase();
   req.body.visibility = visibility;
-  const userTaggedIds = req.body.taggedUsersId || [];
+  let userTaggedIds = req.body.taggedUsersId || [];
+  userTaggedIds = userTaggedIds.map((id) => parseInt(id, 10));
+  // remove dulplicate
+  userTaggedIds = [...new Set(userTaggedIds)];
   req.body.taggedUsersId = await banBeHelper.getFriendsIdInListOfUserId(
     req.auth_decoded.ma_nguoi_dung,
     userTaggedIds
@@ -282,6 +285,46 @@ async function preProcessDeletePost(req, res, next) {
   next();
 }
 
+async function preProcessUpdatePost_1(req, res, next) {
+  const postBeforeUpdate = req.body.STATUS_POST_INFOR;
+  if (req.auth_decoded.ma_nguoi_dung != postBeforeUpdate.owner_id) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Bạn không có quyền xóa bài viết này", 300, 300)
+      );
+    return;
+  }
+  next();
+}
+
+async function preProcessUpdatePost_2(req, res, next) {
+  const postBeforeUpdate = req.body.STATUS_POST_INFOR;
+  // const text = req.body.text.trim() ? req.body.text.trim() : false;
+  const visibility = String(req.body.visibility).toUpperCase();
+  req.body.visibility = visibility;
+  let userTaggedIds = req.body.taggedUsersId || [];
+  userTaggedIds = userTaggedIds.map((id) => parseInt(id, 10));
+  // remove dulplicate
+  userTaggedIds = [...new Set(userTaggedIds)];
+  req.body.taggedUsersId = await banBeHelper.getFriendsIdInListOfUserId(
+    req.auth_decoded.ma_nguoi_dung,
+    userTaggedIds
+  );
+  if (
+    visibility != "PUBLIC" &&
+    visibility != "JUST_FRIENDS" &&
+    visibility != "PRIVATE"
+  ) {
+    res
+      .status(400)
+      .json(new Response(400, [], "visibility không hợp lệ", 300, 300));
+    return;
+  }
+
+  next();
+}
+
 async function preProcessDeleteComment(req, res, next) {
   const postInfor = await statusAndArticleModel
     .getPostById(req.body.CMT_POST_INFOR.postId)
@@ -364,4 +407,5 @@ module.exports = {
   preProcessGetPostStartFrom,
   preProcessDeleteComment,
   preProcessDeletePost,
+  preProcessUpdatePost_1,
 };

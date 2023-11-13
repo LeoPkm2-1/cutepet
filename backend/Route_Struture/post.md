@@ -804,3 +804,53 @@ nếu bình luận không tồn tại:
     "errcode": 300
 }
 ```
+
+## 15. chỉnh sửa bài viết trạng thái
+
+(**postman số 57**)
+
+1. phương thức:
+
+   POST http://localhost:3000/post/statusPost/updatePost
+
+2. cấu trúc:
+
+```javascript
+{
+    post_id: mã của bài viết muốn chỉnh sửa thông tin
+    text: string,
+    visibility: "PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
+    taggedUsersId: Array[id_users],
+    media:
+        undefined || {
+            type:"video" || "images"
+            data:[url]
+        }
+}
+```
+
+3. trả về:
+
+- khi bài viết không tòn tại:
+  
+```javascript
+{
+    "status": 400,
+    "payload": "Bài viết không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi bạn không có quyền cập nhật bài viết:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bạn không có quyền xóa bài viết này",
+    "errno": 300,
+    "errcode": 300
+}
+```
