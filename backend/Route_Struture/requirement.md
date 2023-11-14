@@ -62,3 +62,14 @@ tham khảo tại: **[article.md](./article.md)**
 ## 15. thêm icon xóa ảnh khi đăng bài viết chia sẻ trạng thái
 
 ## 16. khi người dùng tag thì phải bỏ đi những người dùng tag rồi tag lại
+
+## 17. đổi mật khẩu người dùng
+
+    (xem trong file summary)
+
+## 18. Sửa lại thông báo trong trang đăng nhập:
+
+    - thông báo rõ ràng hơn lỗi đó là lỗi gì không nên để chung chung là lỗi đăng nhập được:
+
+![img](./../media/img/err/Screenshot%20from%202023-11-14%2014-43-31.png)
+      - vd: không nhập mật khẩu, không nhập tài khoản, thông tin đăng nhập không chính xác

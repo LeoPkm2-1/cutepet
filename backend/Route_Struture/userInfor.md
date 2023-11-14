@@ -1,9 +1,8 @@
 # Route Structure of User
 
-## Search User
+## 1. Search User
 
-(*postman số* **25**)
-
+(_postman số_ **25**)
 
 1. phương thức:
 
@@ -70,3 +69,93 @@ trong đó:
 - **isFriend**: mô tả người dùng đó có phải là bạn bè của người đang tìm kiếm hay không. nếu là bạn bè thì là **true** ngược lại thì là **false**
 
   _vd_: trong vd trên người dùng có `ma_nguoi_dung:10` **là bạn bè** của người dùng đang tìm kiếm còn người dùng có mã `ma_nguoi_dung:15` thì **không phải là bạn bè** của người dùng đang tìm kiếm
+
+## 2. đổi mật khẩu người dùng:
+
+1. phương thức:
+
+   POST: http://localhost:3000/user/changePassword
+
+2. cấu trúc:
+
+```javascript
+{
+    old_pass:string     (bắt buộc)
+    new_pass: string    (bắt buộc)
+    confirm_pass :string    (bắt buộc)
+}
+```
+
+3. trả về:
+
+- khi không điền mật khẩu cũ:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "vui lòng nhập mật khẩu hiện tại",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi không điền mật khẩu cần thay đổi:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "vui lòng nhập mật khẩu cần thay đổi",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi không xác nhận lại mật khẩu:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "vui lòng nhập xác nhận  mật khẩu ",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi mật khẩu mới và xác nhận mật khẩu không đúng:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "mật khẩu mới và xác nhận mật khẩu không khớp",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi nhập mật khẩu hiện tại không đúng:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Mật khẩu hiện tại không đúng",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi đổi mật khẩu thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": [],
+    "message": "Đổi mật khẩu thành công",
+    "errno": null,
+    "errcode": null
+}
+```

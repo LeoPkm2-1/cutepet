@@ -177,3 +177,9 @@
 3. chỉnh sửa bài viết chia sẻ trạng thái
    
    _chi tiết:_ **[Route_Struture/post.md số 15](./post.md#15-chỉnh-sửa-bài-viết-trạng-thái)** và **postman số 57**
+
+## (14-11-2023):
+
+1. đổi mật khẩu người dùng
+
+   *chi tiết:* **[Route_Struture/userInfor.md](./userInfor.md#2-đổi-mật-khẩu-người-dùng)** và **postman số 58**
