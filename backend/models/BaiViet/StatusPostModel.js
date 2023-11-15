@@ -24,6 +24,9 @@ const updatePost = async (postId, newPost) => {
       }
     );
   }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
 };
 
 // get only status post

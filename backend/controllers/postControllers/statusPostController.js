@@ -507,51 +507,33 @@ const deleteCommentController = async (req, res) => {
 };
 
 const updatePostController = async (req, res) => {
-  const { post_id, text, media, visibility, taggedUsersId } = req.body;
-  const taggedUsers = await userHelper.getUserPublicInforByListIds(
-    taggedUsersId
+  const { post_id, text, visibility, media } = req.body;
+  const postBeforeDelete = req.body.STATUS_POST_INFOR;
+  const remainingTaggedUser =
+    visibility == "PRIVATE"
+      ? postBeforeDelete.taggedUsers.filter(
+          (user) => !req.body.UNFOLLOW_USER_ID.includes(user.ma_nguoi_dung)
+        )
+      : postBeforeDelete.taggedUsers;
+  // res.json(remainingTaggedUser);
+  let taggedUsers = await userHelper.getUserPublicInforByListIds(
+    req.body.NEW_FOLLOW_USER_ID
   );
-  if (visibility == "PRIVATE") {
-    // 1. xóa người follower cũ  và cập nhật người follower mới
-    // 1.1 delete all previous follower
-    const previousFollowerIdList = req.body.STATUS_POST_INFOR.taggedUsers.map(
-      (follower) => parseInt(follower.ma_nguoi_dung)
-    );
-    await followhelper.listOfUserUnFollowStatusPost(
-      post_id,
-      previousFollowerIdList,
-      false
-    );
-    // 1.2. add new follower
-    await Promise.all(
-      taggedUsersId.map((userId) =>
-        followhelper.followStatusPost(idOfPost, userId)
-      )
-    );
-    // thông báo nếu có tag
-    notifyTaggedUserInStatusPost(idOfPost, owner_id, taggedUsersId);
-  } else {
-    // 2. chỉ thêm người mới vào thôi
-    await Promise.all(
-      taggedUsersId.map((userId) =>
-        followhelper.followStatusPost(idOfPost, userId, true)
-      )
-    );
-  }
+  taggedUsers = remainingTaggedUser.concat(taggedUsers);
 
-  const updatePostStatus = new StatusPostComposStructure.StatusPost(
+  // delete _id field in old object post
+  delete postBeforeDelete._id;
+  const newPost = {
+    ...postBeforeDelete,
     text,
     visibility,
     media,
     taggedUsers,
-    req.auth_decoded.ma_nguoi_dung
-  );
+    modifiedAt: new Date(),
+  };
+  const updateProcess = await StatusPostModel.updatePost(post_id, newPost);
 
-  await StatusPostModel.updatePost(post_id, updatePostStatus);
-
-  // cập nhật người dùng
-
-  res.status(200).json(new Response(200, [], "cập nhật thành công"));
+  res.status(200).json(new Response(200, newPost, "cập nhật thành công"));
 };
 
 const unfollowPostController = async (req, res) => {

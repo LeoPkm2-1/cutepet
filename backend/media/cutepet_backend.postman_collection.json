@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "thanh@gmail.com",
+							"value": "thuy@gmail.com",
 							"type": "text"
 						},
 						{
@@ -68,12 +68,12 @@
 					"urlencoded": [
 						{
 							"key": "ten",
-							"value": "kien",
+							"value": "biết bố mày là ai không",
 							"type": "text"
 						},
 						{
 							"key": "tai_khoan",
-							"value": "kien",
+							"value": "khong_nha",
 							"type": "text"
 						},
 						{
@@ -371,7 +371,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "6546fdc3b3b48facbd063193",
+							"value": "6550ecdbe158c8fc09206db2",
 							"type": "text"
 						}
 					]
@@ -400,7 +400,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -412,12 +412,12 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "654af039c82ff4c74b78f9eb",
+							"value": "6550ecdbe158c8fc09206db2",
 							"type": "text"
 						},
 						{
 							"key": "comment",
-							"value": "tôi là Thanh nha",
+							"value": "tôi là dũng",
 							"type": "text"
 						}
 					]
@@ -1032,7 +1032,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "6546fdc3b3b48facbd063193",
+							"value": "6550ecdbe158c8fc09206db2",
 							"type": "text"
 						}
 					]
@@ -2410,7 +2410,37 @@
 			"response": []
 		},
 		{
-			"name": "updatePost",
+			"name": "56_user_confirmRegister",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "active_code",
+							"value": "{{account_active_code}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/confirmRegister",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"confirmRegister"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "57_update_status_Post",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -2425,14 +2455,13 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "post_id",
-							"value": "313233343536373839303132",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n    \"post_id\":\"6550ecdbe158c8fc09206db2\",\n    \"text\": \"ahihi\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[3,4,5],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa\"]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
 					"raw": "http://localhost:3000/post/statusPost/updatePost",
@@ -2445,6 +2474,56 @@
 						"post",
 						"statusPost",
 						"updatePost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "58_user_changePassword",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "old_pass",
+							"value": "123999",
+							"type": "text"
+						},
+						{
+							"key": "new_pass",
+							"value": "123",
+							"type": "text"
+						},
+						{
+							"key": "confirm_pass",
+							"value": "123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/changePassword",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"changePassword"
 					]
 				}
 			},
@@ -2506,32 +2585,6 @@
 						"pet",
 						"capnhatthongtin",
 						"18"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user_confirmRegister",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/user/confirmRegister?active_code={{account_active_code}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"confirmRegister"
-					],
-					"query": [
-						{
-							"key": "active_code",
-							"value": "{{account_active_code}}"
-						}
 					]
 				}
 			},
@@ -2648,7 +2701,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "1",
+							"value": "6550dec7bd7587177b41a789",
 							"type": "text"
 						}
 					]

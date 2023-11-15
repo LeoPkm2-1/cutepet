@@ -121,11 +121,15 @@ router.post(
   statusPostController.deletePostController
 );
 
-// router.post(
-//   "/updatePost",
-//   [statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessUpdatePost_1],
-//   // statusPostController.updatePostController
-// );
+router.post(
+  "/updatePost",
+  [
+    statusPostMiddle.checkPostExistMid,
+    statusPostMiddle.preProcessUpdatePost_1,
+    statusPostMiddle.preProcessUpdatePost_2,
+  ],
+  statusPostController.updatePostController
+);
 
 router.post(
   "/isUserFollowedPost",

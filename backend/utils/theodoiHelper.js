@@ -66,7 +66,18 @@ async function listOfUserUnFollowStatusPost(
   );
 }
 
-
+async function listOfUserFollowStatusPost(
+  statusPost_Id,
+  list_user_ids,
+  isUnique = true
+) {
+  list_user_ids = list_user_ids.map((id) => parseInt(id));
+  return await Promise.all(
+    list_user_ids.map(async (user_id) => {
+      return await followStatusPost(statusPost_Id, user_id, isUnique);
+    })
+  );
+}
 
 // user follow
 
@@ -136,8 +147,6 @@ async function unFollowArticle(
   }
 }
 
-
-
 module.exports = {
   followStatusPost,
   hasUserFollowedStatusPost,
@@ -149,4 +158,5 @@ module.exports = {
   unFollowArticle,
   hasUserFollowArticle,
   listOfUserUnFollowStatusPost,
+  listOfUserFollowStatusPost,
 };
