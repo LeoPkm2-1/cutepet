@@ -1,5 +1,6 @@
 const StatusPostModel = require("../../models/BaiViet/StatusPostModel");
 const userHelper = require("../../utils/userHelper");
+const { hasUserLikeTheStatusPost } = require("../postHelper");
 
 async function userInfor2ListOfObjectMapByUserId(
   listObjs,
@@ -62,6 +63,7 @@ async function InsertUserReplyInforOfListReplies(listReplies) {
 }
 
 async function hasUserLikedPost_1(userId, postid) {
+  userId = parseInt(userId);
   return await StatusPostModel.getLikeThePostInfor(userId, postid)
     .then((data) => {
       if (data.payload.length > 0) {
@@ -72,6 +74,11 @@ async function hasUserLikedPost_1(userId, postid) {
     })
     .catch((err) => console.log(err));
 }
+
+// (async function () {
+//   const data = await hasUserLikeTheStatusPost(4,'6550ecdbe158c8fc09206db2');
+//   console.log({data});
+// })();
 
 async function hasUserLikedListPosts_1(userId, listPostId) {
   const matching_table = {};
@@ -149,10 +156,34 @@ async function reportPost(post_id, user_report_id, isUnique = true) {
   return await StatusPostModel.reportPost(post_id, user_report_id);
 }
 
+async function hasUserCommentedPost(user_id, post_id) {
+  const data = await StatusPostModel.getCommentInforOfUserInPost(
+    user_id,
+    post_id
+  );
+  if (data.payload.length <= 0) return false;
+  return true;
+}
+
 // (async function () {
-//   const data = await reportPost("skskksksk", 4);
+//   const data = await hasUserCommentedPost(3, "6550ecdbe158c8fc09206db2");
 //   console.log(data);
 // })();
+
+async function hasUserReplyCmtInPost(user_id, post_id) {
+  const data = await StatusPostModel.getReplyInforOfUserInPost(
+    user_id,
+    post_id
+  );
+  // console.log(data);
+  if (data.payload.length <= 0) return false;
+  return true;
+}
+
+// (async function () {
+//   const data = await hasUserReplyCmtInPost(8, "6550ecdbe158c8fc09206db2");
+//   console.log({data});
+// })()
 
 module.exports = {
   InsertOwnerInforOfListPosts,
@@ -164,4 +195,6 @@ module.exports = {
   insertUserLikePostInforOfListPosts,
   hasUserReportPost,
   reportPost,
+  hasUserCommentedPost,
+  hasUserReplyCmtInPost,
 };

@@ -201,3 +201,29 @@
 4. report bài viết chia sẻ trạng thái:
 
    _chi tiết:_ **[Route_Struture/post.md](./post.md#16-report-bài-viết-chia-sẻ-trạng-thái)** và **postman số 62**
+
+5. lấy post cho new feeds của người dùng
+
+   chi tiết: **[Route_Struture/post.md](./post.md#17-lấy-bài-viết-cho-newfeed-của-1-người-dùng)** và **postman số 63**
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##

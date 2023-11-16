@@ -446,6 +446,13 @@ const getUserReportInforOfArticle = async (user_report_id, article_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+// const getReplyInforOfUserInPost = async (user_id, post_id) => {
+//   user_id = parseInt(user_id)
+//   async function executor(collection) {
+//     return await collection.find().toArray();
+//   }
+// };
+
 const getAllCategories = () => {
   return [
     "CHÓ",

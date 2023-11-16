@@ -437,6 +437,19 @@ async function preProcessGetPostStartFrom(req, res, next) {
   next();
 }
 
+async function preProccessToGetNewFeed(req, res, next) {
+  const index = parseInt(req.body.index);
+  // console.log(typeof req.body.index);
+  if (Number.isNaN(index)) {
+    res
+      .status(400)
+      .json(new Response(400, [], "tham số không hợp lệ", 300, 300));
+    return;
+  }
+  req.body.index = index;
+  next();
+}
+
 module.exports = {
   preProcessAddPost,
   preProcessLikePost,
@@ -456,4 +469,5 @@ module.exports = {
   preProcessDeletePost,
   preProcessUpdatePost_1,
   preProcessUpdatePost_2,
+  preProccessToGetNewFeed,
 };

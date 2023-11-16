@@ -156,4 +156,10 @@ router.post(
   statusPostController.reportPostController
 );
 
+router.post(
+  "/getPostForNewsfeed",
+  [statusPostMiddle.preProccessToGetNewFeed],
+  statusPostController.getPostForNewsfeedController
+);
+
 module.exports = router;

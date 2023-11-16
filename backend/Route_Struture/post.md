@@ -898,7 +898,17 @@ nếu bình luận không tồn tại:
 }
 ```
 
-##
+## 17. lấy bài viết cho newfeed của 1 người dùng
+
+1. Phương thức:
+
+   POST http://localhost:3000/post/statusPost/getPostForNewsfeed
+
+2. cấu trúc:
+   
+
+   
+3. trả về:
 
 ##
 

@@ -1,9 +1,24 @@
 // =======================POST ID=======================
+// index for Bài Viết
+db.BaiViet.createIndex({
+  postType: 1,
+  createAt: -1,
+  owner_id: -1,
+});
+
+db.BaiViet.createIndex({
+  postType: 1,
+  owner_id: -1,
+  createAt: -1,
+});
+
 // index for Reply bình luận bài viết chia sẻ trạng thái
 db.RelyBinhLuanBaiVietTrangThai.createIndex({ postId: 1 });
+db.RelyBinhLuanBaiVietTrangThai.createIndex({ postId: 1, replyBy: 1 });
 
 // index for bình luận bài viết chia sẻ trạng thái
 db.BinhLuanBaiVietTrangThai.createIndex({ postId: 1 });
+db.BinhLuanBaiVietTrangThai.createIndex({ postId: 1, commentBy: 1 });
 
 // index for like bài viết chia sẻ trạng thái
 db.LikeBaiVietTrangThai.createIndex({ postId: 1 });

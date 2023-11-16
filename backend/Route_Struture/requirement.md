@@ -113,7 +113,11 @@ tham khảo tại: **[article.md](./article.md)**
 
     (xem chi tiến trong summary)
 
-##
+## 32. cập nhật lại hàm lấy bài viết trên newFeed
+
+[(xem chi tiến trong summary (16-11-2023) mục 5)](./SUMMARY.md#16-11-2023)
+
+    (do backend đã có hàm mới để thay thế cho hàm cũ)
 
 ##
 

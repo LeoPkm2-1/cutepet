@@ -246,7 +246,12 @@ const getAllCmtByPostId = async (postId) => {
 
 const getAllPost = async () => {
   async function executor(collection) {
-    return await collection.find().sort({ createAt: -1 }).toArray();
+    return await collection
+      .find({
+        postType: StatusPostComposStructure.StatusPost.type,
+      })
+      .sort({ createAt: -1 })
+      .toArray();
   }
   return await nonSQLQuery(executor, "BaiViet")
     .then((data) => new Response(200, data, ""))
@@ -271,7 +276,11 @@ const getAllPostOfUserBeforeTime = async (userId, before, num = undefined) => {
     executor = async (collection) => {
       return await collection
         .find({
-          $and: [{ owner_id: userId }, { createAt: { $lt: before } }],
+          $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
+            { owner_id: userId },
+            { createAt: { $lt: before } },
+          ],
         })
         .sort({ createAt: -1 })
         .limit(num)
@@ -298,6 +307,7 @@ const getPostOfUserForReaderBeforeTime = async (
       return await collection
         .find({
           $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
             { owner_id: postOnwer_id },
             { createAt: { $lt: before } },
             {
@@ -327,6 +337,7 @@ const getPostOfUserForReaderBeforeTime = async (
       return await collection
         .find({
           $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
             { owner_id: postOnwer_id },
             { createAt: { $lt: before } },
             {
@@ -357,6 +368,7 @@ const getPostOfUserForReaderBeforeTime = async (
       return await collection
         .find({
           $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
             { owner_id: postOnwer_id },
             { createAt: { $lt: before } },
             {
@@ -387,6 +399,7 @@ const getPostOfUserForReaderBeforeTime = async (
       return await collection
         .find({
           $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
             { owner_id: postOnwer_id },
             { createAt: { $lt: before } },
             {
@@ -568,11 +581,14 @@ const deletePostById = async (postId) => {
 };
 
 const getOnwerIdOfPost = async (postId) => {
-  const postInfor = await statusAndArticleModel
-    .getPostById(postId)
-    .then((data) => data.payload[0]);
-  return typeof postInfor === "undefined" ? null : parseInt(postInfor.owner_id);
+  const postInfor = await getPostById(postId).then((data) => data.payload);
+  return postInfor == null ? null : parseInt(postInfor.owner_id);
 };
+
+// (async function () {
+//   const data = await getOnwerIdOfPost('6550dec7bd7587177b41a789')
+//   console.log(data);
+// })()
 
 const getOnwerIdOfComment = async (comment_id) => {
   const commentInfor = await getCommentPostById(comment_id).then(
@@ -611,8 +627,38 @@ const getUserReportInforOfPost = async (user_report_id, post_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getCommentInforOfUserInPost = async (user_id, post_id) => {
+  user_id = parseInt(user_id);
+  async function executor(collection) {
+    return await collection
+      .find({
+        postId: post_id,
+        commentBy: user_id,
+      })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "BinhLuanBaiVietTrangThai")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getReplyInforOfUserInPost = async (user_id, post_id) => {
+  user_id = parseInt(user_id);
+  async function executor(collection) {
+    return await collection
+      .find({
+        postId: post_id,
+        replyBy: user_id,
+      })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "RelyBinhLuanBaiVietTrangThai")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // (async function () {
-//   const data = await getUserReportInforOfPost(2,'12');
+//   const data = await getCommentInforOfUserInPost(2,'6550ecdbe158c8fc09206db2');
 //   console.log(data);
 // })();
 
@@ -655,4 +701,6 @@ module.exports = {
   updatePost,
   reportPost,
   getUserReportInforOfPost,
+  getCommentInforOfUserInPost,
+  getReplyInforOfUserInPost,
 };
