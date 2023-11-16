@@ -100,3 +100,18 @@ tham khảo tại: **[article.md](./article.md)**
 ## 27. bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức
 
 ## 28. handle ảnh bìa cho bài viết chia sẻ kiến thức
+
+## 29. chỉnh sửa bài viết chia sẻ kiến thức.
+
+    (xem chi tiến trong summary)
+
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##

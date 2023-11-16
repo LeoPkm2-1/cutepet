@@ -184,9 +184,12 @@
 
    _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#2-đổi-mật-khẩu-người-dùng)** và **postman số 58**
 
-
 ## (16-11-2023)
 
 1. lấy danh sách chứ tên của tất cả các thể loại hợp lệ của bài viết chia sẻ kiến thức
 
    _chi tiết_ **[Route_Struture/article.md](./article.md#18-danh-sách-tên-của-tất-cả-các-thể-loại-trong-bài-viết-chia-sẻ-kiến-thức)** và **postman số 59**
+
+1. chỉnh sửa bài viết chia sẻ kiến thức
+
+   _chi tiết:_ **[Route_Struture/article.md](./article.md#19-chỉnh-sửa-bài-viết-chia-sẻ-kiến-thức)** và **postman số 60**

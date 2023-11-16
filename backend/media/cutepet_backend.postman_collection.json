@@ -1501,7 +1501,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Dùng sữa vào bủôi sáng hay buổi tối thì tốt hơn cho thú cưng\",\n    \"main_image\": \"www.dogcat.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"các thú cưng con.....\",\n    \"categories\": [\"dog\",\"cat\"]\n}",
+					"raw": "{\n    \"title\": \"liệu cho mèo con 3 tháng tuối uống sửa có tốt không\",\n    \"main_image\": \"www.dogcat.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"các thú cưng con.....\",\n    \"categories\": [\"dog\",\"cat\",\"Mèo con\",\"chế độ ăn uống\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2524,6 +2524,77 @@
 					"path": [
 						"user",
 						"changePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "59_article_AllAvailableCategories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/post/article/AllAvailableCategories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"AllAvailableCategories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "60_article_editArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"article_id\":\"65555eee151a2e67690ca296\",\n    \"title\": \"cách cho mèo  uống sữa đúng cách\",\n    \"main_image\": \"https://imgt.taimienphi.vn/cf/Images/tt/2023/1/10/hinh-nen-meo-cute-ngo-nghinh-dang-yeu-nhin-la-cung-4.jpg\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"các thú cưng con.....\",\n    \"categories\": [\"Mèo\",\"Mèo con\",\"chế độ ăn uống\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/editArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"editArticle"
 					]
 				}
 			},
