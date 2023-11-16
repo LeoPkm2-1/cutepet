@@ -111,13 +111,19 @@ router.post(
 // lấy bình luận của bài viết chia sẻ kiến thức thứ tự trước sau
 router.post(
   "/getCommentStartFrom",
-  [articleMiddle.checkArticleExistMid,articleMiddle.preProcessGetCmtByIndex],
+  [articleMiddle.checkArticleExistMid, articleMiddle.preProcessGetCmtByIndex],
   articleController.getCmtStartFromController
 );
-
+// lấy tất các các bài viết chia sẻ kiến thức trong DB
 router.post(
   "/getAllArticleInDB",
   articleController.getAllArticleInDBController
-)
+);
+
+// lấy tất cả các thể loại của bài viết chiase kiến thức
+router.post(
+  "/AllAvailableCategories",
+  articleController.getAllCategoriesController
+);
 
 module.exports = router;

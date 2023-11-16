@@ -175,11 +175,18 @@
    _chi tiết:_ **[Route_Struture/register.md số 2](./register.md#2-xác-thực-đăng-ký)** và **postman số 56**
 
 3. chỉnh sửa bài viết chia sẻ trạng thái
-   
+
    _chi tiết:_ **[Route_Struture/post.md số 15](./post.md#15-chỉnh-sửa-bài-viết-trạng-thái)** và **postman số 57**
 
 ## (14-11-2023):
 
 1. đổi mật khẩu người dùng
 
-   *chi tiết:* **[Route_Struture/userInfor.md](./userInfor.md#2-đổi-mật-khẩu-người-dùng)** và **postman số 58**
+   _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#2-đổi-mật-khẩu-người-dùng)** và **postman số 58**
+
+
+## (16-11-2023)
+
+1. lấy danh sách chứ tên của tất cả các thể loại hợp lệ của bài viết chia sẻ kiến thức
+
+   _chi tiết_ **[Route_Struture/article.md](./article.md#18-danh-sách-tên-của-tất-cả-các-thể-loại-trong-bài-viết-chia-sẻ-kiến-thức)** và **postman số 59**

@@ -485,6 +485,15 @@ async function getAllArticleInDBController(req, res) {
   res.status(200).json(new Response(200, allArticleInDB, ""));
 }
 
+async function getAllCategoriesController(req, res) {
+  const allCategories = await articleModel.getAllCategories();
+  res
+    .status(200)
+    .json(
+      new Response(200, allCategories, "lấy danh sách các thể loại thành công")
+    );
+}
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -503,4 +512,5 @@ module.exports = {
   getAllCmtOfArticleController,
   getCmtStartFromController,
   getAllArticleInDBController,
+  getAllCategoriesController,
 };

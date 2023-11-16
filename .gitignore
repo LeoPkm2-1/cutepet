@@ -3,3 +3,4 @@ backend/test/
 backend/.env
 frontend/node_modules
 .prettierignore
+backend/notebook/get_data/ref/

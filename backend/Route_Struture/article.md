@@ -1074,3 +1074,40 @@ trong đó:
     "errcode": null
 }
 ```
+
+## 18 danh sách tên của tất cả các thể loại trong bài viết chia sẻ kiến thức
+
+1. Phương thức:
+
+   POST http://localhost:3000/post/article/AllAvailableCategories
+
+2. cấu trúc:
+
+   không yêu cầu tham số
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        "CHÓ",
+        "CHÓ CON",
+        "CHÓ TRƯỞNG THÀNH",
+        "CHÓ LỚN TUỔI",
+        "GIỐNG LOÀI",
+        "MÈO",
+        "MÈO CON",
+        "MÈO TRƯỞNG THÀNH",
+        "MÈO LỚN TUỔI",
+        "DỊ ỨNG",
+        "CÁCH CHĂM SÓC",
+        "BỆNH",
+        "CHẾ ĐỘ ĂN UỐNG",
+        "HÀNH VI & KỸ NĂNG"
+    ],
+    "message": "lấy danh sách các thể loại thành công",
+    "errno": null,
+    "errcode": null
+}
+```

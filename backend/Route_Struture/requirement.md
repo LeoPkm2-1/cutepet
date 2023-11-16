@@ -73,3 +73,11 @@ tham khảo tại: **[article.md](./article.md)**
 
 ![img](./../media/img/err/Screenshot%20from%202023-11-14%2014-43-31.png)
       - vd: không nhập mật khẩu, không nhập tài khoản, thông tin đăng nhập không chính xác
+
+## 19. Thêm tính năng chỉnh sửa bài viết chia sẻ trạng thái
+
+    (xem trong file summary)
+
+## 20. sửa lại danh sách các thể loại của bài viết chia sẻ kiến thức
+
+    (xem trong file summary)

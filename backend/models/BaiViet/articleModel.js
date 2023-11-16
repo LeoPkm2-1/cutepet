@@ -388,6 +388,25 @@ const getAllArticles = async () => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getAllCategories = () => {
+  return [
+    "CHÓ",
+    "CHÓ CON",
+    "CHÓ TRƯỞNG THÀNH",
+    "CHÓ LỚN TUỔI",
+    "GIỐNG LOÀI",
+    "MÈO",
+    "MÈO CON",
+    "MÈO TRƯỞNG THÀNH",
+    "MÈO LỚN TUỔI",
+    "DỊ ỨNG",
+    "CÁCH CHĂM SÓC",
+    "BỆNH",
+    "CHẾ ĐỘ ĂN UỐNG",
+    "HÀNH VI & KỸ NĂNG",
+  ];
+};
+
 // (async function () {
 //   const data = await getAllCommentsOfArticle("6548f00bb7221c7de43e80f6");
 //   console.log(data);
@@ -421,4 +440,5 @@ module.exports = {
   getArticleById,
   getAllCommentsOfArticle,
   getAllArticles,
+  getAllCategories,
 };
