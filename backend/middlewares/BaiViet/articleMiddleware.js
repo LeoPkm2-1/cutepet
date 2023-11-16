@@ -22,12 +22,12 @@ function filterCategoryList(categories) {
     category = category.toUpperCase();
     return category;
   });
-  console.log(categories);
+  // console.log(categories);
   categories = Array.from(new Set(categories));
   categories = categories.filter((element) =>
     articleModel.getAllCategories().includes(element)
   );
-  
+
   return categories;
 }
 
@@ -363,6 +363,20 @@ async function preProcessGetCmtByIndex(req, res, next) {
   next();
 }
 
+async function preProcessEditArticle(req, res, next) {
+  const articleBeforeEdit = req.body.ARTICLE_INFOR;
+  const userId = req.auth_decoded.ma_nguoi_dung;
+  if (userId != articleBeforeEdit.owner_id) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Bạn không có quyền xóa bài viết này", 300, 300)
+      );
+    return;
+  }
+  next();
+}
+
 module.exports = {
   preProcessAddArtticle,
   checkArticleExistMid,
@@ -378,4 +392,5 @@ module.exports = {
   preProcessDeleteComment,
   preProcessDeleteArticle,
   preProcessGetCmtByIndex,
+  preProcessEditArticle,
 };

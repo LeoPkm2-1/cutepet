@@ -388,6 +388,37 @@ const getAllArticles = async () => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getArticleOfUser = async (user_id) => {
+  async function executor(collection) {
+    return await collection
+      .find({
+        postType: articleComposStructure.Article.type,
+        owner_id: user_id,
+      })
+      .sort({ createAt: -1 })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const updateArticle = async (article_id, edited_Article_Obj) => {
+  async function executor(collection) {
+    return await collection.updateOne(
+      {
+        _id: new ObjectId(article_id),
+      },
+      {
+        $set: edited_Article_Obj,
+      }
+    );
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 const getAllCategories = () => {
   return [
     "CHÓ",
@@ -441,4 +472,6 @@ module.exports = {
   getAllCommentsOfArticle,
   getAllArticles,
   getAllCategories,
+  getArticleOfUser,
+  updateArticle,
 };

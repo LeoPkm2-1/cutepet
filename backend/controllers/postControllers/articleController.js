@@ -494,6 +494,45 @@ async function getAllCategoriesController(req, res) {
     );
 }
 
+async function getMyArticlesController(req, res) {
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const myArticles = await articleModel.getArticleOfUser(user_id);
+  res
+    .status(200)
+    .json(
+      new Response(200, myArticles.payload, "lấy danh sách bài viết thành công")
+    );
+}
+
+async function editArticleController(req, res) {
+  const articleBeforeEdit = req.body.ARTICLE_INFOR;
+  const { article_id, title, main_image, intro, content, categories } =
+    req.body;
+  // delete _id field in old object post
+  delete articleBeforeEdit._id;
+  const newArticle = {
+    ...articleBeforeEdit,
+    title,
+    main_image,
+    intro,
+    content,
+    categories,
+    modifiedAt: new Date(),
+  };
+
+  const editProcess = await articleModel.updateArticle(article_id, newArticle);
+
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        newArticle,
+        "cập nhật bài chia sẻ trạng thái thành công"
+      )
+    );
+}
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -513,4 +552,6 @@ module.exports = {
   getCmtStartFromController,
   getAllArticleInDBController,
   getAllCategoriesController,
+  getMyArticlesController,
+  editArticleController,
 };

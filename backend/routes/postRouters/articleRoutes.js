@@ -126,4 +126,18 @@ router.post(
   articleController.getAllCategoriesController
 );
 
+// danh sách bài viết chia sẻ kiến thức của chính mình
+router.post("/getMyArticles", articleController.getMyArticlesController);
+
+// chỉnh sửa danh sách chia sẻ bài viết
+router.post(
+  "/editArticle",
+  [
+    articleMiddle.checkArticleExistMid,
+    articleMiddle.preProcessEditArticle,
+    articleMiddle.preProcessAddArtticle,
+  ],
+  articleController.editArticleController
+);
+
 module.exports = router;

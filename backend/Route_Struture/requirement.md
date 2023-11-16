@@ -88,3 +88,15 @@ tham khảo tại: **[article.md](./article.md)**
 ## 22. thêm tính năng chỉnh sửa bài viết chia sẻ trạng thái
 
     (xem trong file summary)
+
+## 23. thêm nút xóa ảnh khi đăng bài trạng thái
+
+## 24. resize lại ảnh khi đăng bài viết chia sẻ kiến thức
+
+## 25. hiện category lúc đọc bài viết chia sẻ kiến thức
+
+## 26. đổi lại icon article trên navbar
+
+## 27. bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức
+
+## 28. handle ảnh bìa cho bài viết chia sẻ kiến thức
