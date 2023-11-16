@@ -105,13 +105,26 @@ tham khảo tại: **[article.md](./article.md)**
 
     (xem chi tiến trong summary)
 
+## 30. report bài viết chia sẻ kiến thức.
+
+    (xem chi tiến trong summary)
+
+## 31. report bài viết chia sẻ trạng thái.
+
+    (xem chi tiến trong summary)
+
 ##
+
 ##
+
 ##
+
 ##
+
 ##
+
 ##
+
 ##
-##
-##
+
 ##

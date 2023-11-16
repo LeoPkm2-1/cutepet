@@ -2601,6 +2601,88 @@
 			"response": []
 		},
 		{
+			"name": "61_article_reportArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "65555eee151a2e67690ca296",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/reportArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"reportArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "62_statusPost_reportPost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "654fae52a09d67af78165cb9",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/reportPost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"reportPost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "capnhatthongtinthucung",
 			"request": {
 				"auth": {

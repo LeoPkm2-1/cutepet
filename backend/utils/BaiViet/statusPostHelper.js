@@ -111,6 +111,49 @@ function extractListIdFromListPost(listPosts) {
   return listId;
 }
 
+async function hasUserReportPost(user_report_id, post_id) {
+  const data = await StatusPostModel.getUserReportInforOfPost(
+    user_report_id,
+    post_id
+  );
+  if (data.payload == null) return false;
+  return true;
+}
+
+async function reportPost(post_id, user_report_id, isUnique = true) {
+  if (!isUnique) {
+    const reportProcess = await StatusPostModel.reportPost(
+      post_id,
+      user_report_id
+    );
+    return reportProcess;
+  }
+
+  const hasReport = await hasUserReportPost(user_report_id, post_id);
+  if (hasReport) {
+    const reportInfor = await StatusPostModel.getUserReportInforOfPost(
+      user_report_id,
+      post_id
+    ).then((data) => data.payload);
+    return {
+      status: 200,
+      payload: {
+        acknowledged: true,
+        insertedId: reportInfor._id.toString(),
+      },
+      message: "",
+      errno: null,
+      errcode: null,
+    };
+  }
+  return await StatusPostModel.reportPost(post_id, user_report_id);
+}
+
+// (async function () {
+//   const data = await reportPost("skskksksk", 4);
+//   console.log(data);
+// })();
+
 module.exports = {
   InsertOwnerInforOfListPosts,
   InsertUserCmtInforOfListCmts,
@@ -119,4 +162,6 @@ module.exports = {
   hasUserLikedListPosts_1,
   extractListIdFromListPost,
   insertUserLikePostInforOfListPosts,
+  hasUserReportPost,
+  reportPost,
 };

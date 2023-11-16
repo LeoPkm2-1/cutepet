@@ -419,6 +419,33 @@ const updateArticle = async (article_id, edited_Article_Obj) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const reportArticle = async (article_id, user_report_id) => {
+  user_report_id = parseInt(user_report_id);
+  const reportObject = new articleComposStructure.ReportArticle(
+    article_id,
+    user_report_id
+  );
+  async function executor(collection) {
+    return await collection.insertOne(reportObject);
+  }
+  return await nonSQLQuery(executor, "Report")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getUserReportInforOfArticle = async (user_report_id, article_id) => {
+  user_report_id = parseInt(user_report_id);
+  async function executor(collection) {
+    return await collection.findOne({
+      articleId: article_id,
+      reportBy: user_report_id,
+    });
+  }
+  return await nonSQLQuery(executor, "Report")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 const getAllCategories = () => {
   return [
     "CHÓ",
@@ -474,4 +501,6 @@ module.exports = {
   getAllCategories,
   getArticleOfUser,
   updateArticle,
+  reportArticle,
+  getUserReportInforOfArticle,
 };

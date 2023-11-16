@@ -114,19 +114,49 @@ async function insertUserCmtInforToListOfCmts(listCmts) {
   );
 }
 
-// (async function () {
-//   const a = await insertUserCmtInforToListOfCmts(data);
-//   console.log(a);
-// })()
+async function hasUserReportArticle(user_report_id, article_id) {
+  const data = await articleModel.getUserReportInforOfArticle(
+    user_report_id,
+    article_id
+  );
+  if (data.payload == null) return false;
+  return true;
+}
 
-// (async function () {
-//   const a = await userInfor2ListOfObjectMapByUserId(data, "commentBy", "ahihi");
-//   console.log(a);
-// })();
+async function reportArticle(article_id, user_report_id, isUnique = true) {
+  if (!isUnique) {
+    const reportProcess = await articleModel.reportArticle(
+      article_id,
+      user_report_id
+    );
+    return reportProcess;
+  }
+
+  const hasReport = await hasUserReportArticle(user_report_id, article_id);
+  if (hasReport) {
+    const reportInfor = await articleModel
+      .getUserReportInforOfArticle(user_report_id, article_id)
+      .then((data) => data.payload);
+    // console.log(reportInfor);
+    return {
+      status: 200,
+      payload: {
+        acknowledged: true,
+        insertedId: reportInfor._id.toString(),
+      },
+      message: "",
+      errno: null,
+      errcode: null,
+    };
+  }
+  return await articleModel.reportArticle(article_id, user_report_id);
+}
 
 module.exports = {
   hasUserUpVotedArticle,
   hasUserDownVotedArticle,
   insertUserWriteArticleInforToListOfArticle,
   insertUserCmtInforToListOfCmts,
+  reportArticle,
+  hasUserReportArticle,
 };

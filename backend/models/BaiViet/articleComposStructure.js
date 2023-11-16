@@ -47,8 +47,21 @@ class ReplyCommentArticle {
   }
 }
 
+class ReportArticle {
+  static type = "REPORT_ARTICLE";
+  constructor(articleId, reportBy) {
+    this.type = this.constructor.type;
+    this.articleId = articleId;
+    this.reportBy = reportBy;
+    this.handleStatus = "PENDING";
+    this.reportAt = new Date();
+    this.handleAt = null;
+  }
+}
+
 module.exports = {
   Article,
   CommentArticle,
   ReplyCommentArticle,
+  ReportArticle,
 };

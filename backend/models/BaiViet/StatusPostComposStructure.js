@@ -46,4 +46,23 @@ class ReplyComment {
     this.modifiedAt = null;
   }
 }
-module.exports = { StatusPost, CommentPost, ReplyComment, LikeComment };
+
+class ReportPost {
+  static type = "REPORT_STATUS_POST";
+  constructor(postId, reportBy) {
+    this.type = this.constructor.type;
+    this.postId = postId;
+    this.reportBy = reportBy;
+    this.handleStatus = "PENDING";
+    this.reportAt = new Date();
+    this.handleAt = null;
+  }
+}
+
+module.exports = {
+  StatusPost,
+  CommentPost,
+  ReplyComment,
+  LikeComment,
+  ReportPost,
+};

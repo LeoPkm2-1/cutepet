@@ -832,7 +832,7 @@ nếu bình luận không tồn tại:
 3. trả về:
 
 - khi bài viết không tòn tại:
-  
+
 ```javascript
 {
     "status": 400,
@@ -854,3 +854,62 @@ nếu bình luận không tồn tại:
     "errcode": 300
 }
 ```
+
+## 16. report bài viết chia sẻ trạng thái
+
+1. phương thức:
+
+   POST: http://localhost:3000/post/statusPost/reportPost
+
+2. cấu trúc:
+
+```javascript
+{
+    post_id: string (bắt buộc)
+}
+```
+
+3. trả về:
+
+- khi bài viết không tồn tại:
+
+```javascript
+{
+    "status": 400,
+    "payload": "Bài viết không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi báo cáo thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "insertedId": "6555c41df3ea8cfc9d63b289"
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##

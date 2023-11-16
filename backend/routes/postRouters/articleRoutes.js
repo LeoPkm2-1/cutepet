@@ -140,4 +140,11 @@ router.post(
   articleController.editArticleController
 );
 
+// tố cáo bài viết chia sẻ trạng thái
+router.post(
+  "/reportArticle",
+  [articleMiddle.checkArticleExistMid],
+  articleController.reportArticleController
+);
+
 module.exports = router;

@@ -190,6 +190,14 @@
 
    _chi tiết_ **[Route_Struture/article.md](./article.md#18-danh-sách-tên-của-tất-cả-các-thể-loại-trong-bài-viết-chia-sẻ-kiến-thức)** và **postman số 59**
 
-1. chỉnh sửa bài viết chia sẻ kiến thức
+2. chỉnh sửa bài viết chia sẻ kiến thức
 
    _chi tiết:_ **[Route_Struture/article.md](./article.md#19-chỉnh-sửa-bài-viết-chia-sẻ-kiến-thức)** và **postman số 60**
+
+3. report bài viết chia sẻ kiến thức:
+
+   _chi tiết:_ **[Route_Struture/article.md](./article.md#20-report-bài-viết-chia-sẻ-kiến-thức)** và **postman số 61**
+
+4. report bài viết chia sẻ trạng thái:
+
+   _chi tiết:_ **[Route_Struture/post.md](./post.md#16-report-bài-viết-chia-sẻ-trạng-thái)** và **postman số 62**

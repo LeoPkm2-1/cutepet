@@ -1146,6 +1146,7 @@ trong đó:
 ```
 
 - khi tiêu đề không tồn tại
+
 ```javascript
   {
   "status": 400,
@@ -1182,6 +1183,7 @@ trong đó:
 ```
 
 - khi chỉnh sửa thành công
+
 ```javascript
 {
     "status": 200,
@@ -1210,7 +1212,48 @@ trong đó:
 }
 ```
 
-##
+## 20. report bài viết chia sẻ kiến thức
+
+1. Phương thức:
+
+   POST http://localhost:3000/post/article/reportArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc)
+}
+```
+
+3. trả về:
+
+- khi bài viết không tồn tại
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bài chia sẻ kiến thức không tồn tại",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi báo cáo thành cộng:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "insertedId": "6555c604f3ea8cfc9d63b28a"
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
 
 ##
 
@@ -1225,4 +1268,7 @@ trong đó:
 ##
 
 ##
-````
+
+```
+
+```

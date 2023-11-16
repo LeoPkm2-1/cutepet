@@ -583,6 +583,39 @@ const getOnwerIdOfComment = async (comment_id) => {
     : parseInt(commentInfor.commentBy);
 };
 
+const reportPost = async (post_id, user_report_id) => {
+  user_report_id = parseInt(user_report_id);
+  const reportObject = new StatusPostComposStructure.ReportPost(
+    post_id,
+    user_report_id
+  );
+  // console.log(reportObject);
+  async function executor(collection) {
+    return await collection.insertOne(reportObject);
+  }
+  return await nonSQLQuery(executor, "Report")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getUserReportInforOfPost = async (user_report_id, post_id) => {
+  user_report_id = parseInt(user_report_id);
+  async function executor(collection) {
+    return await collection.findOne({
+      postId: post_id,
+      reportBy: user_report_id,
+    });
+  }
+  return await nonSQLQuery(executor, "Report")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// (async function () {
+//   const data = await getUserReportInforOfPost(2,'12');
+//   console.log(data);
+// })();
+
 module.exports = {
   addPost, // 1
   getPostById, // 2
@@ -620,4 +653,6 @@ module.exports = {
   getAllPostOfUserBeforeTime,
   getPostOfUserForReaderBeforeTime,
   updatePost,
+  reportPost,
+  getUserReportInforOfPost,
 };

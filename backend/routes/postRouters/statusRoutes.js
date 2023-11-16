@@ -150,4 +150,10 @@ router.post(
   statusPostController.followPostController
 );
 
+router.post(
+  "/reportPost",
+  [statusPostMiddle.checkPostExistMid],
+  statusPostController.reportPostController
+);
+
 module.exports = router;

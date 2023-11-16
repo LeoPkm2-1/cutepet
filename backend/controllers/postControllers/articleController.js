@@ -533,6 +533,17 @@ async function editArticleController(req, res) {
     );
 }
 
+const reportArticleController = async (req, res) => {
+  const { article_id } = req.body;
+  const user_report_id = req.auth_decoded.ma_nguoi_dung;
+  const reportProcess = await articleHelper.reportArticle(
+    article_id,
+    user_report_id,
+    true
+  );
+  res.status(200).json(reportProcess);
+};
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -554,4 +565,5 @@ module.exports = {
   getAllCategoriesController,
   getMyArticlesController,
   editArticleController,
+  reportArticleController,
 };

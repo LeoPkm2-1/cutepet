@@ -649,6 +649,17 @@ const followPostController = async (req, res) => {
   );
 };
 
+const reportPostController = async (req, res) => {
+  const { post_id } = req.body;
+  const user_report_id = req.auth_decoded.ma_nguoi_dung;
+  const reportProcess = await statusPostHelper.reportPost(
+    post_id,
+    user_report_id,
+    true
+  );
+  res.status(200).json(reportProcess);
+};
+
 module.exports = {
   addPostController,
   toggleLikePostController,
@@ -670,4 +681,5 @@ module.exports = {
   unfollowPostController,
   isUserFollowedPostController,
   followPostController,
+  reportPostController,
 };
