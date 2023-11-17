@@ -28,5 +28,11 @@ router.post(
   userMid.updateAvatarMid,
   userControler.updateAvatarController
 );
+// cập nhật lại thông tin cá nhân của người dùng
+router.post(
+  "/updateInfor",
+  userMid.updateBasicInforMid,
+  userControler.updateBasicInforController
+);
 
 module.exports = router;

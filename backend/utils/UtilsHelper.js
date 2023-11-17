@@ -40,11 +40,17 @@ const isDateValid = (date) => {
   return date.toString() !== "Invalid Date";
 };
 
+const isPhoneNumberValid = (phone_number) => {
+  const numericStringPattern = /^\d{4,12}$/;
+  return numericStringPattern.test(phone_number);
+};
+
 module.exports = {
   filter_keys_in_Obj,
   filter_keys_in_list_Objs,
   isDateValid,
   extracValuesOfFieldFromListObjs,
+  isPhoneNumberValid,
 };
 
 // let obj = {

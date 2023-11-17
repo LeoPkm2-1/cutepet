@@ -1,4 +1,4 @@
-[
+db.BaiViet.insertMany([
   {
     _id: new ObjectId("123456789012123456789012"),
     text: "du lịch cùng sa sa 2",
@@ -361,4 +361,4 @@
     owner_id: 20,
     test: 1,
   },
-]
+]);

@@ -217,6 +217,31 @@ const searchUserBySearchKey = async (searchKey, index = 0, range = 20) => {
       return new Response(400, [], err.sqlMessage, err.errno, err.code);
     });
 };
+
+const updateUserBasicInfor = async (
+  ma_nguoi_dung,
+  { ten, ngay_sinh, so_dien_thoai, gioi_tinh }
+) => {
+  const sqlStmt = `UPDATE NguoiDung SET 
+                          ten = ?, 
+                          ngay_sinh = ?, 
+                          so_dien_thoai = ?, 
+                          gioi_tinh = ? 
+                        WHERE 
+                          ma_nguoi_dung = ?;`;
+  // console.log({ ten, ngay_sinh, so_dien_thoai, gioi_tinh });
+  // return;
+  return await sqlQuery(sqlStmt, [
+    ten,
+    ngay_sinh,
+    so_dien_thoai,
+    gioi_tinh,
+    ma_nguoi_dung,
+  ])
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
+};
+
 module.exports = {
   getUserByUsername,
   getUserByEmail,
@@ -236,4 +261,5 @@ module.exports = {
   getUserPublicInforByListId,
   searchUserBySearchKey,
   updateUserPasswordByUserName,
+  updateUserBasicInfor,
 };

@@ -100,6 +100,28 @@ const updateAvatarController = async (req, res) => {
     );
 };
 
+const updateBasicInforController = async (req, res) => {
+  const { ten, ngay_sinh, so_dien_thoai, gioi_tinh } = req.body;
+  const update_userId = parseInt(req.auth_decoded.ma_nguoi_dung);
+  // console.log({ ten, ngay_sinh, so_dien_thoai, gioi_tinh });
+  const process = await userModel
+    .updateUserBasicInfor(update_userId, {
+      ten,
+      ngay_sinh: `${ngay_sinh.getFullYear()}-${
+        ngay_sinh.getMonth() + 1
+      }-${ngay_sinh.getDate()}`,
+      so_dien_thoai,
+      gioi_tinh,
+    })
+    .then((data) => data.payload);
+  process.insertId = Number(process.insertId);
+  // console.log(process);
+  // res.send("ahihi");
+  res
+    .status(200)
+    .json(new Response(200, process, "cập nhật thông tin cá nhân thành công"));
+};
+
 const myProfile = async (params) => {};
 
 module.exports = {
@@ -109,4 +131,5 @@ module.exports = {
   myProfile,
   changePasswordController,
   updateAvatarController,
+  updateBasicInforController,
 };
