@@ -21,4 +21,12 @@ router.post(
   userControler.changePasswordController
 );
 
+// cập nhật thông tin người dùng:
+// cập nhật ảnh đại diện
+router.post(
+  "/updateAvatar",
+  userMid.updateAvatarMid,
+  userControler.updateAvatarController
+);
+
 module.exports = router;

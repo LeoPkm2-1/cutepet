@@ -3,6 +3,7 @@ const userHelper = require("./../utils/userHelper");
 const loginHelper = require("./../utils/loginHelper");
 const { getHash } = require("./../utils/hash");
 const { Response } = require("./../utils/index");
+const anhNguoiDungModel = require("../models/anhNguoiDungModel");
 
 // gọi để model để lấy thông tin người dùng trong bảng người dùng
 const getUserByUserName = async (req, res) => {
@@ -83,6 +84,22 @@ const changePasswordController = async (req, res) => {
   res.status(200).json(new Response(200, [], "Đổi mật khẩu thành công"));
 };
 
+const updateAvatarController = async (req, res) => {
+  const { url_anh } = req.body;
+  const userId = parseInt(req.auth_decoded.ma_nguoi_dung);
+  // res.send(`${url_anh}`);
+  const updateAvatarProcess = await anhNguoiDungModel
+    .CapNhatAnhDaiDienNguoiDung(url_anh, userId)
+    .then((data) => data.payload);
+  updateAvatarProcess.insertId = Number(updateAvatarProcess.insertId);
+  // console.log(updateAvatarProcess);
+  res
+    .status(200)
+    .json(
+      new Response(200, updateAvatarProcess, "cập nhật ảnh đại diện thành công")
+    );
+};
+
 const myProfile = async (params) => {};
 
 module.exports = {
@@ -91,4 +108,5 @@ module.exports = {
   searchPeopleController,
   myProfile,
   changePasswordController,
+  updateAvatarController,
 };

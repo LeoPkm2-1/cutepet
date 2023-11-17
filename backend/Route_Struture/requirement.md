@@ -121,7 +121,23 @@ tham khảo tại: **[article.md](./article.md)**
 
     (do backend đã có hàm mới để thay thế cho hàm cũ)
 
-##
+## 33. trang cập nhật thông tin người dùng
+
+1. **yêu cầu:**
+
+- thiết kế:
+  Thiếu kế giống như hình sau:
+
+       chia việc cập nhật thông tin người dung ra làm 2 phân riêng biệt:
+          +  cập nhật ảnh đại diện
+          +  cập nhật thông tin người dùng
+
+  ![img](./../media/img/err/img7.png)
+
+2. **thực hiện:**
+
+   - cập nhật hình ảnh đại diện của người dùng [chi tiết tại đây](./userInfor.md#3-cập-nhật-ảnh-đại-diện-cho-người-dùng).
+   - cập nhật thông tin người dùng.
 
 ##
 

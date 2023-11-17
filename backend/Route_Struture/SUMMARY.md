@@ -206,7 +206,11 @@
 
    chi tiết: **[Route_Struture/post.md](./post.md#17-lấy-bài-viết-cho-newfeed-của-1-người-dùng)** và **postman số 63**
 
-##
+## (17-11-2023)
+
+1. cập nhật ảnh đại diện cho người dùng:
+
+   _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#3-cập-nhật-ảnh-đại-diện-cho-người-dùng)** và **postman số 64**
 
 ##
 

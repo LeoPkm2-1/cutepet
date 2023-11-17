@@ -159,3 +159,63 @@ trong đó:
     "errcode": null
 }
 ```
+
+## 3. cập nhật ảnh đại diện cho người dùng:
+
+1. phương thức:
+
+   POST: http://localhost:3000/user/updateAvatar
+
+2. cấu trúc:
+
+```javascript
+{
+    url_anh: string (bắt buộc)
+}
+```
+
+3. trả về:
+
+- khi thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "affectedRows": 1,
+        "insertId": 0,
+        "warningStatus": 0
+    },
+    "message": "cập nhật ảnh đại diện thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi ảnh không hợp lệ
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "vui lòng nhập url ảnh",
+    "errno": null,
+    "errcode": null
+}
+```
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##

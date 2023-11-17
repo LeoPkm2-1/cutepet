@@ -29,6 +29,16 @@ const changePasswordMid = async (req, res, next) => {
   next();
 };
 
+const updateAvatarMid = async (req, res, next) => {
+  const { url_anh } = req.body;
+  if (typeof url_anh != "string" || url_anh.trim() == "") {
+    res.status(400).json(new Response(400, [], "vui lòng nhập url ảnh"));
+    return;
+  }
+  next();
+};
+
 module.exports = {
   changePasswordMid,
+  updateAvatarMid,
 };

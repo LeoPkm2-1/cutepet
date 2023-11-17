@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "thuy@gmail.com",
+							"value": "kien@gmail.com",
 							"type": "text"
 						},
 						{
@@ -359,7 +359,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -400,7 +400,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -417,7 +417,7 @@
 						},
 						{
 							"key": "comment",
-							"value": "tôi là dũng",
+							"value": "tôi là tý",
 							"type": "text"
 						}
 					]
@@ -533,7 +533,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -545,12 +545,12 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "6545b0a49d829001b64f5dd4",
+							"value": "655441ccedfafc2f29403170",
 							"type": "text"
 						},
 						{
 							"key": "reply",
-							"value": "Thành",
+							"value": "susan Repl",
 							"type": "text"
 						}
 					]
@@ -1361,7 +1361,7 @@
 					"urlencoded": [
 						{
 							"key": "user_id",
-							"value": "2",
+							"value": "1",
 							"type": "text"
 						}
 					]
@@ -2677,6 +2677,87 @@
 						"post",
 						"statusPost",
 						"reportPost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "63_statusPost_getPostForNewsfeed",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "index",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getPostForNewsfeed",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getPostForNewsfeed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "64_user_updateAvatar",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "url_anh",
+							"value": "https://storage.googleapis.com/pod_public/1300/159184.jpg",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/updateAvatar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"updateAvatar"
 					]
 				}
 			},
