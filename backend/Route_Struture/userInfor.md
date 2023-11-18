@@ -325,7 +325,7 @@ trong đó:
 - trong đó:
   - **ten**: tên người dùng chứ từ 1 dến 32 ký tự có thể là tiếng việt hoặc tiếng anh
 
-1. trả về:
+3. trả về:
 
 - khi không nhập tên người dùng:
 
