@@ -204,9 +204,236 @@ trong đó:
 }
 ```
 
-##
+## 4. cập nhật thông tin người dùng:
 
-##
+1. phương thức:
+
+   POST: http://localhost:3000/user/updateInfor
+
+2. cấu trúc:
+
+```javascript
+{
+    ten: string (bắt buộc)
+    ngay_sinh: string (YYYY-MM-DD) || undefined
+    so_dien_thoai: string (chuỗi các số từ 4 -> 12 số) || undefined
+    gioi_tinh: number (0,1)||undefined
+}
+```
+
+- trong đó:
+  - **gioi_tinh**: 1 là nam, 0 là nữ, còn undefined là giới tính khác
+  - **ngay_sinh**: nếu không nhập ngày sinh thì để là undefined. Nếu nhập ngày sinh thì phải để ở dạng là **string** có định dạng **YYYY-MM-DD**
+  - **so_dien_thoai**: là một string chứa chuỗi các số có từ **4->12** số
+  - **ten**: chỉ bao gồm các ký tự trong bảng chữ cái, có thể là tiếng việt hoặc tiếng anh và chứa 32 ký tự
+
+3. trả về:
+
+- khi thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "affectedRows": 1,
+        "insertId": 0,
+        "warningStatus": 0
+    },
+    "message": "cập nhật thông tin cá nhân thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi không nhập tên:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "vui lòng nhập tên người dùng",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi ngày sinh không hợp lệ:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "ngày sinh không hợp lệ",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi số điện thoại với format không hợp lệ:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "số điện thoại không hợp lệ",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi giới tính không hợp lệ:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "giới tính không hợp lệ",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi tên chứa ký tự không hợp lệ:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "tên chứa các ký tự không hợp lệ",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+## 5. đăng ký tài khoản
+
+1. phương thức:
+
+   POST http://localhost:3000/register
+
+2. cấu trúc:
+
+```javascript
+{
+    ten: string (bắt buộc)
+    tai_khoan: string (bắt buộc)
+    mat_khau: string (bắt buộc)
+    email: string (bắt buộc)
+}
+```
+
+- trong đó:
+  - **ten**: tên người dùng chứ từ 1 dến 32 ký tự có thể là tiếng việt hoặc tiếng anh
+
+1. trả về:
+
+- khi không nhập tên người dùng:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Vui lòng nhập tên người dùng",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi không nhập tài khoan người dung:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Vui lòng nhập tên đăng nhập",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi không nhập mật khẩu:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Vui lòng nhập mật khẩu",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi không nhập email:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Vui lòng nhập email",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi nhập tên không đúng định dạng:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "tên chứa các ký tự không hợp lệ",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi nhập tài khoản email không đúng định dạng:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "email không hợp lệ",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi tài khoản đã tồn tại rồi:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "người dùng đã tồn tại",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi email đã tồn tại rồi:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "email đã tồn tại",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi đăng ký thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": "94153e31-b574-498e-98fc-6765b9eb47fe",
+    "message": "Vui lòng xác thực đăng nhập bằng email đã đăng ký để hoàn tất",
+    "errno": null,
+    "errcode": null
+}
+```
 
 ##
 

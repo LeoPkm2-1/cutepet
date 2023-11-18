@@ -43,7 +43,14 @@ const updateBasicInforMid = async (req, res, next) => {
   let { ten, ngay_sinh, so_dien_thoai, gioi_tinh } = req.body;
   // kiểm tra tên
   if (typeof ten != "string" || ten.trim() == "") {
-    res.status(400).json(new Response(400, [], "vui lòng nhập tên người dùng"));
+    res
+      .status(400)
+      .json(new Response(400, [], "vui lòng nhập tên người dùng", 300, 300));
+    return;
+  } else if (!UtilsHelper.isValidVietnameseName(ten.trim())) {
+    res
+      .status(400)
+      .json(new Response(400, [], "tên chứa các ký tự không hợp lệ", 300, 300));
     return;
   }
   // kiểm tra ngày sinh
@@ -53,7 +60,9 @@ const updateBasicInforMid = async (req, res, next) => {
     typeof ngay_sinh != "string" ||
     !UtilsHelper.isDateValid(new Date(ngay_sinh))
   ) {
-    res.status(400).json(new Response(400, [], "ngày sinh không hợp lệ"));
+    res
+      .status(400)
+      .json(new Response(400, [], "ngày sinh không hợp lệ", 300, 300));
     return;
   } else {
     req.body.ngay_sinh = ngay_sinh = new Date(ngay_sinh);
@@ -66,7 +75,9 @@ const updateBasicInforMid = async (req, res, next) => {
     typeof so_dien_thoai != "string" ||
     !UtilsHelper.isPhoneNumberValid(so_dien_thoai.trim())
   ) {
-    res.status(400).json(new Response(400, [], "số điện thoại không hợp lệ"));
+    res
+      .status(400)
+      .json(new Response(400, [], "số điện thoại không hợp lệ", 300, 300));
     return;
   } else {
     req.body.so_dien_thoai = so_dien_thoai = so_dien_thoai.trim();
@@ -80,7 +91,9 @@ const updateBasicInforMid = async (req, res, next) => {
   ) {
     // 1. là nam
     // 0. là nữ
-    res.status(400).json(new Response(400, [], "giới tính không hợp lệ"));
+    res
+      .status(400)
+      .json(new Response(400, [], "giới tính không hợp lệ", 300, 300));
     return;
   } else {
     req.body.gioi_tinh = parseInt(gioi_tinh);

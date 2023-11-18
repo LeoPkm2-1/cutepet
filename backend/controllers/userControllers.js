@@ -107,9 +107,12 @@ const updateBasicInforController = async (req, res) => {
   const process = await userModel
     .updateUserBasicInfor(update_userId, {
       ten,
-      ngay_sinh: `${ngay_sinh.getFullYear()}-${
-        ngay_sinh.getMonth() + 1
-      }-${ngay_sinh.getDate()}`,
+      ngay_sinh:
+        ngay_sinh != null
+          ? `${ngay_sinh.getFullYear()}-${
+              ngay_sinh.getMonth() + 1
+            }-${ngay_sinh.getDate()}`
+          : null,
       so_dien_thoai,
       gioi_tinh,
     })

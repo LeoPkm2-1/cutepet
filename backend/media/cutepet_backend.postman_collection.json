@@ -68,7 +68,7 @@
 					"urlencoded": [
 						{
 							"key": "ten",
-							"value": "biết bố mày là ai không",
+							"value": "biết bố mày là ai không222",
 							"type": "text"
 						},
 						{
@@ -2743,7 +2743,7 @@
 					"urlencoded": [
 						{
 							"key": "url_anh",
-							"value": "https://storage.googleapis.com/pod_public/1300/159184.jpg",
+							"value": "                       ",
 							"type": "text"
 						}
 					]
@@ -2758,6 +2758,61 @@
 					"path": [
 						"user",
 						"updateAvatar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "65_user_updateInfor",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ten",
+							"value": "kien 3",
+							"type": "text"
+						},
+						{
+							"key": "ngay_sinh",
+							"value": "2000-10-18",
+							"type": "text"
+						},
+						{
+							"key": "so_dien_thoai",
+							"value": "01222",
+							"type": "text"
+						},
+						{
+							"key": "gioi_tinh",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/updateInfor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"updateInfor"
 					]
 				}
 			},
@@ -2840,7 +2895,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/user/infor/ty",
+					"raw": "http://localhost:3000/user/infor/susan",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2849,7 +2904,7 @@
 					"path": [
 						"user",
 						"infor",
-						"ty"
+						"susan"
 					]
 				}
 			},

@@ -45,12 +45,19 @@ const isPhoneNumberValid = (phone_number) => {
   return numericStringPattern.test(phone_number);
 };
 
+const isValidVietnameseName = (name) => {
+  // check both Vietnamese and English characters
+  const vietnameseNamePattern = /^[\p{L} ]{1,32}$/u;
+  return vietnameseNamePattern.test(name);
+};
+
 module.exports = {
   filter_keys_in_Obj,
   filter_keys_in_list_Objs,
   isDateValid,
   extracValuesOfFieldFromListObjs,
   isPhoneNumberValid,
+  isValidVietnameseName,
 };
 
 // let obj = {

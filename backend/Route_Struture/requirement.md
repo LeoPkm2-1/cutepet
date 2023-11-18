@@ -59,6 +59,8 @@ tham khảo tại: **[article.md](./article.md)**
 
 ## 14. người dùng đã đăng nhập thành công thì chặn vào trang `đăng nhập` và `đăng ký`
 
+- trong trang đăng ký  tên phải chỉ chứa tối đa 32 ký tự, có thể là tiếng việt hoặc tiếng anh. [chi tiết tại đây](./userInfor.md#5-đăng-ký-tài-khoản)
+
 ## 15. thêm icon xóa ảnh khi đăng bài viết chia sẻ trạng thái
 
 ## 16. khi người dùng tag thì phải bỏ đi những người dùng tag rồi tag lại
@@ -137,7 +139,8 @@ tham khảo tại: **[article.md](./article.md)**
 2. **thực hiện:**
 
    - cập nhật hình ảnh đại diện của người dùng [chi tiết tại đây](./userInfor.md#3-cập-nhật-ảnh-đại-diện-cho-người-dùng).
-   - cập nhật thông tin người dùng.
+
+   - cập nhật thông tin người dùng [chi tiết tại đây](./userInfor.md#4-cập-nhật-thông-tin-người-dùng).
 
 ##
 

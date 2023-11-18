@@ -2,6 +2,7 @@ const userModel = require("./../models/userModel");
 const { validate_email } = require("./../utils/validate_email");
 const { getHash } = require("./../utils");
 const { Response } = require("./../utils/index");
+const UtilsHelper = require("./../utils/UtilsHelper");
 
 const {
   emailSuitableForRegister,
@@ -19,10 +20,15 @@ const handleRegister = async (req, res) => {
   const USER_EXIST_MESS = "người dùng đã tồn tại";
   const INVALID_EMAIL_MESS = "email không hợp lệ";
   const EMAIL_EXISTED_MESS = "email đã tồn tại";
+  const INVALID_NAME_MESS = "tên chứa các ký tự không hợp lệ";
   try {
     const userInfor = req.body;
     const username = userInfor.tai_khoan;
     const email = userInfor.email.toLowerCase();
+
+    if (!UtilsHelper.isValidVietnameseName(userInfor.ten)) {
+      throw new Error(INVALID_NAME_MESS);
+    }
 
     // kiểm tra sự tồn tại của tài khoản
     await userModel.deleteAllExpireNonActiveUser();
@@ -71,8 +77,7 @@ const handleRegister = async (req, res) => {
       emailAddress: email,
       active_code,
     });
-	// console.log('\n\nheee:\n\n');
-	// console.log({data});
+
     await res
       .status(200)
       .json(
@@ -93,6 +98,11 @@ const handleRegister = async (req, res) => {
         return;
       case EMAIL_EXISTED_MESS:
         res.status(400).json(new Response(400, [], EMAIL_EXISTED_MESS));
+        return;
+      case INVALID_NAME_MESS:
+        res
+          .status(400)
+          .json(new Response(400, [], INVALID_NAME_MESS, 300, 300));
         return;
       default:
         throw error;

@@ -212,7 +212,13 @@
 
    _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#3-cập-nhật-ảnh-đại-diện-cho-người-dùng)** và **postman số 64**
 
-##
+## (18-11-2023)
+
+1. cập nhật thông tin cá nhân cho người dùng:
+
+   _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#4-cập-nhật-thông-tin-người-dùng)** và **postman số 65**
+
+
 
 ##
 
