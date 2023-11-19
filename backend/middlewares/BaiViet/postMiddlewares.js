@@ -4,6 +4,8 @@ const postHelper = require("../../utils/postHelper");
 const banBeHelper = require("./../../utils/banbeHelper");
 const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 const followhelper = require("./../../utils/theodoiHelper");
+
+// middle ware kiểm tra tiền sử lý để thêm bài viết
 async function preProcessAddPost(req, res, next) {
   const NOT_CONTENT_POST = `bài viết không được chấp nhận do không có nội dung`;
   const text = req.body.text;
@@ -45,7 +47,14 @@ async function preProcessAddPost(req, res, next) {
 
   if (flag == 2) {
     res.status(400).json(new Response(400, [], NOT_CONTENT_POST, 300, 300));
+    return;
   }
+
+  if (text.trim() == "" && media.data[0].trim() == "") {
+    res.status(400).json(new Response(400, [], NOT_CONTENT_POST, 300, 300));
+    return;
+  }
+  req.body.text = text.trim();
 
   next();
 }

@@ -7,6 +7,7 @@ const statusPostEventStruture = require("../socketHandler/norm_user/statusPostEv
 const statusPostNotificationModel = require("../models/thongbao/statusPost");
 const { normUserNamespace } = require("../socketHandler/norm_user");
 const statusAndArticleModel = require("./../models/BaiViet/StatusAndArticleModel");
+const laBanBeModel = require("../models/laBanBeModel");
 
 async function prepareUserBeforeHandleNotiForStatusPost(
   sender_id,
@@ -722,16 +723,94 @@ const notifyTaggedUserInStatusPost = async (
   });
 };
 
-// (async  ()=> {
-//   await notifyLikePost(2,
-//     "65333ff5f0efa9d27e7bf163",
-//     2,
-//   );
-// })();
+const pulicPostInforOfUserView = async (post_id) => {
+  const postData = await StatusPostModel.getPostById(post_id).then(
+    (data) => data.payload
+  );
+  postData._id = postData._id.toString();
+
+  const owner_infor = await userHelper.getUserPublicInforByUserId(
+    postData.owner_id
+  );
+
+  return {
+    ...postData,
+    owner_infor,
+    hasLiked: false,
+  };
+};
+
+const notifyHaveNewStatusPost = async (postId, PostOnwer_Id) => {
+  const listFriendIds = await laBanBeModel
+    .getAllFriendIdsOfUser(PostOnwer_Id)
+    .then((data) =>
+      data.payload.length <= 0
+        ? []
+        : data.payload.map((friendObj) => parseInt(friendObj.friend_id))
+    );
+
+  const postData = await pulicPostInforOfUserView(postId);
+  const notiInforForOwner =
+    new statusPostEventStruture.NewStatusPostAppearEvent(postData, true);
+  // console.log(notiInforForOwner);
+  // send notification through socket to owner of post
+  const socketRoomNameOfOwner =
+    socketHelper.getPrivateRoomNameOfUser(PostOnwer_Id);
+  normUserNamespace
+    .to(socketRoomNameOfOwner)
+    .emit(
+      statusPostEventStruture.NewStatusPostAppearEvent.getEventName(),
+      notiInforForOwner
+    );
+
+  // send notification to other followers
+  const notiInforForOthers =
+    new statusPostEventStruture.NewStatusPostAppearEvent(postData, false);
+
+  if (
+    (postData.visibility == "PUBLIC" ||
+      postData.visibility == "JUST_FRIENDS") &&
+    listFriendIds.length > 0
+  ) {
+    const socketRoomNameOfOthers = listFriendIds.map((id) =>
+      socketHelper.getPrivateRoomNameOfUser(id)
+    );
+
+    const socketOfOthers = socketRoomNameOfOthers.reduce(
+      (acc, room_name_of_user) => acc.to(room_name_of_user),
+      normUserNamespace
+    );
+    socketOfOthers.emit(
+      statusPostEventStruture.NewStatusPostAppearEvent.getEventName(),
+      notiInforForOthers
+    );
+  } else if (
+    postData.visibility == "PRIVATE" &&
+    postData.taggedUsers.length > 0
+  ) {
+    const tagged_userId_list = postData.taggedUsers.map((user) =>
+      parseInt(user.ma_nguoi_dung)
+    );
+
+    const socketRoomNameOfOthers = tagged_userId_list.map((id) =>
+      socketHelper.getPrivateRoomNameOfUser(id)
+    );
+    const socketOfOthers = socketRoomNameOfOthers.reduce(
+      (acc, room_name_of_user) => acc.to(room_name_of_user),
+      normUserNamespace
+    );
+    socketOfOthers.emit(
+      statusPostEventStruture.NewStatusPostAppearEvent.getEventName(),
+      notiInforForOthers
+    );
+  }
+};
+
 module.exports = {
   notifyLikePost,
   notifyCommentPost,
   notifyLikeComment,
   notifyReplyComment,
   notifyTaggedUserInStatusPost,
+  notifyHaveNewStatusPost,
 };

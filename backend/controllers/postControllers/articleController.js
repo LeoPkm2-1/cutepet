@@ -46,6 +46,8 @@ async function addArticleControler(req, res) {
         "thêm bài chia sẻ kiến thức thành công"
       )
     );
+
+  // thông báo qua socket cho người dung đang theo dõi họ
 }
 
 async function toggleUpVoteArticleControler(req, res) {

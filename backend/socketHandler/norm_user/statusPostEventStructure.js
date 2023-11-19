@@ -1,4 +1,5 @@
 const notificationStructure = require("./../../models/thongbao/notificationStruture");
+
 class LikePostEvent {
   static getEventName() {
     return notificationStructure.LikeStatusPostNotification.getNotificationType();
@@ -120,10 +121,21 @@ class TagUserInPost {
   }
 }
 
+class NewStatusPostAppearEvent {
+  static getEventName() {
+    return "NEW_STATUS_POST_APPEAR";
+  }
+  constructor(postInfor, areYouOwner = false) {
+    this.postInfor = postInfor;
+    this.areYouOwner = areYouOwner;
+  }
+}
+
 module.exports = {
   LikePostEvent,
   CommentPostEvent,
   LikeCommentEvent,
   ReplyCommentEvent,
   TagUserInPost,
+  NewStatusPostAppearEvent,
 };

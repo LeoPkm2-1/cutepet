@@ -44,6 +44,21 @@ db.ThongBao.createIndex({ createAt: -1, receiver_id: -1 });
 // ================= Nguoi dung Online ======================
 db.NguoiDungDangOnline.createIndex({ userId: 1 }, { unique: true });
 
+// ================== theo dõi ==============================
+db.BangTheoDoi.createIndex({
+  type: -1,
+  user_followed_Id: -1,
+  follower_Id: -1,
+  createAt: -1,
+});
+
+db.BangTheoDoi.createIndex({
+  type: -1,
+  follower_Id: -1,
+  user_followed_Id: -1,
+  createAt: -1,
+});
+
 // ======================= NOTE ============================
 //   1: indicating ascending order (tăng dần)
 //  -1: indicating descending order (giảm dần)

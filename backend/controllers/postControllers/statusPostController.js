@@ -12,6 +12,7 @@ const {
   notifyLikeComment,
   notifyReplyComment,
   notifyTaggedUserInStatusPost,
+  notifyHaveNewStatusPost,
 } = require("../../notificationHandler/statusPost");
 const laBanBeModel = require("../../models/laBanBeModel");
 
@@ -51,11 +52,14 @@ const addPostController = async (req, res) => {
     );
     // thông báo nếu có tag
     notifyTaggedUserInStatusPost(idOfPost, owner_id, taggedUsersId);
+    // thông báo để front-end cập nhật bài viết mới nhất lên giao diện
   }
 
   res
     .status(200)
     .json(new Response(200, insertedPost.payload, "thêm thành công"));
+
+  notifyHaveNewStatusPost(idOfPost, owner_id);
   return;
 };
 
