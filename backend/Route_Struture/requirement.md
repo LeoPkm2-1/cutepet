@@ -59,7 +59,7 @@ tham khảo tại: **[article.md](./article.md)**
 
 ## 14. người dùng đã đăng nhập thành công thì chặn vào trang `đăng nhập` và `đăng ký`
 
-- trong trang đăng ký  tên phải chỉ chứa tối đa 32 ký tự, có thể là tiếng việt hoặc tiếng anh. [chi tiết tại đây](./userInfor.md#5-đăng-ký-tài-khoản)
+- trong trang đăng ký tên phải chỉ chứa tối đa 32 ký tự, có thể là tiếng việt hoặc tiếng anh. [chi tiết tại đây](./userInfor.md#5-đăng-ký-tài-khoản)
 
 ## 15. thêm icon xóa ảnh khi đăng bài viết chia sẻ trạng thái
 
@@ -142,9 +142,13 @@ tham khảo tại: **[article.md](./article.md)**
 
    - cập nhật thông tin người dùng [chi tiết tại đây](./userInfor.md#4-cập-nhật-thông-tin-người-dùng).
 
-##
+## 34. Đăng Bài với visibility là bạn bè bị sai
 
-##
+lý do value của visibility là `JUST_FRIENDS` mà lại gửi lên là `friend` nên bị sai không chạy dc
+
+## 35. cập nhật lại giao diện của newfeed khi có 1 bài viết mới được đăng lên
+
+xem chi tiết tại: **[Route_Struture/socket.md](./socket.md#10-thông-báo-khi-có-bài-viết-status-mới-được-đăng-lên)**
 
 ##
 

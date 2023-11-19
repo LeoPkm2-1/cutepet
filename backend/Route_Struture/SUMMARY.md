@@ -218,9 +218,11 @@
 
    _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#4-cập-nhật-thông-tin-người-dùng)** và **postman số 65**
 
+## (19-11-2023)
 
+1. thông báo qua socket khi có 1 bài viết mới dc đăng lên
 
-##
+   _chi tiết:_ **[Route_Struture/socket.md](./socket.md#10-thông-báo-khi-có-bài-viết-status-mới-được-đăng-lên)**
 
 ##
 
