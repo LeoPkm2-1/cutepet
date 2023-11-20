@@ -2683,7 +2683,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjoyMiwidGVuIjoiVHLDrSIsIm5nYXlfc2luaCI6IjE5OTEtMTAtMTFUMTc6MDA6MDAuMDAwWiIsInRhaV9raG9hbiI6InZhbnRyaXRoYW5oIiwiZW1haWwiOiJ2YW50cmkyMkBnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY5MSIsImdpb2lfdGluaCI6MSwiaWF0IjoxNzAwNDYwOTc0LCJleHAiOjE3MDM0NjA5NzR9.UajNmZYSBeF8QmgjE2wpnZHoGtvOI2rtHMDvIUGSUcwTRg0-8qqaXiUhHHVK63byGEc-vXj9KL2Hu7lE2AjVYg",
 							"type": "string"
 						}
 					]
