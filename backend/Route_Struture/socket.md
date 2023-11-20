@@ -394,9 +394,7 @@
 }
 ```
 
-
-
-## 9. thông báo khi được chấp nhận lời mời kết bạn 
+## 9. thông báo khi được chấp nhận lời mời kết bạn
 
 - Listen on: **ACCEPT_ADD_FRIEND** event
 - data structure:
@@ -439,3 +437,106 @@
     "message": ""
 }
 ```
+
+## 10. thông báo khi có bài viết status mới được đăng lên
+
+- Listen on: **NEW_STATUS_POST_APPEAR** event
+- data trả về:
+
+```javascript
+{
+    "postInfor": {
+        "_id": "655a088a50fed106e885dbb4",
+        "text": "2 susan và thúy nha",
+        "postType": "STATUS",
+        "visibility": "PRIVATE",
+        "media": {
+            "type": "images",
+            "data": [
+                ""
+            ]
+        },
+        "taggedUsers": [
+            {
+                "ma_nguoi_dung": 15,
+                "ten": "Thuy",
+                "ngay_sinh": "1991-10-11T17:00:00.000Z",
+                "tai_khoan": "thuy",
+                "email": "thuy@gmail.com",
+                "so_dien_thoai": "0912345691",
+                "gioi_tinh": 1,
+                "anh": {
+                    "ma_anh": null,
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                    "ngay_cap_nhat": null,
+                    "ma_nguoi_dung": "15",
+                    "is_active": null
+                }
+            },
+            {
+                "ma_nguoi_dung": 8,
+                "ten": "Susan",
+                "ngay_sinh": "1991-10-05T17:00:00.000Z",
+                "tai_khoan": "susan",
+                "email": "susan@gmail.com",
+                "so_dien_thoai": "0912345685",
+                "gioi_tinh": 0,
+                "anh": {
+                    "ma_anh": null,
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                    "ngay_cap_nhat": null,
+                    "ma_nguoi_dung": "8",
+                    "is_active": null
+                }
+            }
+        ],
+        "createAt": "2023-11-19T13:07:22.353Z",
+        "numOfLike": 0,
+        "numOfComment": 0,
+        "modifiedAt": null,
+        "owner_id": 2,
+        "owner_infor": {
+            "ma_nguoi_dung": 2,
+            "ten": "Dung",
+            "ngay_sinh": "1991-09-29T17:00:00.000Z",
+            "tai_khoan": "dung",
+            "email": "dung@gmail.com",
+            "so_dien_thoai": "0912345679",
+            "gioi_tinh": 1,
+            "anh": {
+                "ma_anh": 39,
+                "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
+                "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                "ma_nguoi_dung": 2,
+                "is_active": 1
+            }
+        },
+        "hasLiked": false
+    },
+    "areYouOwner": true
+}
+```
+
+- trong đó:
+  - **postInfor:** chứa thông tin của status post mới dc đăng lên cầm cập nhật:
+  - **areYouOwner:** cho biết bạn có phải là người chủ của bài đăng này không. Nếu là **true** tức là bạn là chủ của bài đăng này => cập nhật bài đăng lên đầu cây dom tree. Nếu là **false** tức là bạn không phải là chủ của bài đăng này => cập nhật bài đăng lên cuối cây dom tree.
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##

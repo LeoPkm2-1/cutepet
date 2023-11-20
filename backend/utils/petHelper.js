@@ -188,8 +188,27 @@ const publicInforOfListPet = async (petid_list) => {
 };
 
 // (async function () {
-//   const data = await publicInforOfListPet([1, 2,]);
+//   const data = await publicInforOfListPet([1,2])
+//   console.log(data);
 // })()
+
+const getPetsIdOwnedByUserInListOfPetIds = async (userid, petid_list) => {
+  petid_list = petid_list.map((petid) => parseInt(petid));
+  userid = parseInt(userid);
+  const OwnPetIdList = await petModel
+    .getAllOwnsPetOf(userid)
+    .then((data) => data.payload)
+    .then((petList) => {
+      return petList.length > 0 ? petList.map((pet) => pet.ma_thu_cung) : [];
+    });
+  // console.log({OwnPetIdList});
+  return petid_list.filter((petid) => OwnPetIdList.includes(petid));
+};
+
+// (async function () {
+//   const data = await getPetsIdOwnedByUserInListOfPetIds(2, [1, 2, 3, 4, 5]);
+//   console.log(data);
+// })();
 
 module.exports = {
   giongLoaiMatch,
@@ -202,4 +221,5 @@ module.exports = {
   deleteAllImageOfPet,
   publicInforOfPet,
   publicInforOfListPet,
+  getPetsIdOwnedByUserInListOfPetIds,
 };

@@ -46,6 +46,8 @@ async function addArticleControler(req, res) {
         "thêm bài chia sẻ kiến thức thành công"
       )
     );
+
+  // thông báo qua socket cho người dung đang theo dõi họ
 }
 
 async function toggleUpVoteArticleControler(req, res) {
@@ -485,6 +487,65 @@ async function getAllArticleInDBController(req, res) {
   res.status(200).json(new Response(200, allArticleInDB, ""));
 }
 
+async function getAllCategoriesController(req, res) {
+  const allCategories = await articleModel.getAllCategories();
+  res
+    .status(200)
+    .json(
+      new Response(200, allCategories, "lấy danh sách các thể loại thành công")
+    );
+}
+
+async function getMyArticlesController(req, res) {
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const myArticles = await articleModel.getArticleOfUser(user_id);
+  res
+    .status(200)
+    .json(
+      new Response(200, myArticles.payload, "lấy danh sách bài viết thành công")
+    );
+}
+
+async function editArticleController(req, res) {
+  const articleBeforeEdit = req.body.ARTICLE_INFOR;
+  const { article_id, title, main_image, intro, content, categories } =
+    req.body;
+  // delete _id field in old object post
+  delete articleBeforeEdit._id;
+  const newArticle = {
+    ...articleBeforeEdit,
+    title,
+    main_image,
+    intro,
+    content,
+    categories,
+    modifiedAt: new Date(),
+  };
+
+  const editProcess = await articleModel.updateArticle(article_id, newArticle);
+
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        newArticle,
+        "cập nhật bài chia sẻ trạng thái thành công"
+      )
+    );
+}
+
+const reportArticleController = async (req, res) => {
+  const { article_id } = req.body;
+  const user_report_id = req.auth_decoded.ma_nguoi_dung;
+  const reportProcess = await articleHelper.reportArticle(
+    article_id,
+    user_report_id,
+    true
+  );
+  res.status(200).json(reportProcess);
+};
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -503,4 +564,8 @@ module.exports = {
   getAllCmtOfArticleController,
   getCmtStartFromController,
   getAllArticleInDBController,
+  getAllCategoriesController,
+  getMyArticlesController,
+  editArticleController,
+  reportArticleController,
 };

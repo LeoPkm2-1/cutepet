@@ -123,7 +123,11 @@ router.post(
 
 router.post(
   "/updatePost",
-  [statusPostMiddle.checkPostExistMid],
+  [
+    statusPostMiddle.checkPostExistMid,
+    statusPostMiddle.preProcessUpdatePost_1,
+    statusPostMiddle.preProcessUpdatePost_2,
+  ],
   statusPostController.updatePostController
 );
 
@@ -144,6 +148,18 @@ router.post(
   "/followPost",
   [statusPostMiddle.checkPostExistMid],
   statusPostController.followPostController
+);
+
+router.post(
+  "/reportPost",
+  [statusPostMiddle.checkPostExistMid],
+  statusPostController.reportPostController
+);
+
+router.post(
+  "/getPostForNewsfeed",
+  [statusPostMiddle.preProccessToGetNewFeed],
+  statusPostController.getPostForNewsfeedController
 );
 
 module.exports = router;

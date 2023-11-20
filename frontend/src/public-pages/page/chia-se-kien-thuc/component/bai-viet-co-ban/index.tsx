@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import { ArticleType } from '../../../../../models/article';
 import { useNavigate } from 'react-router-dom';
 
-export function BaiVietCoBan(props: { article: ArticleType }) {
+export function BaiVietCoBan(props: { article: ArticleType, isShowNewFead?: boolean}) {
   const navigate = useNavigate();
   return (
     <>
@@ -19,14 +19,14 @@ export function BaiVietCoBan(props: { article: ArticleType }) {
           transition: '10s',
           position: 'relative',
           ':hover': {
-            bottom: '2px',
+            bottom: props?.isShowNewFead ? "0px" : '2px',
           },
           cursor: 'pointer',
         }}
       >
         <img
           width={'100%'}
-          height={'150px'}
+          height={props?.isShowNewFead ? "250px" : '150px'}
           style={{
             objectFit: 'cover',
           }}

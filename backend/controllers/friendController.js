@@ -73,27 +73,17 @@ const requestAddFriend = async (req, res) => {
 
 // phản hồi lời mới kết bạn
 const responeAddFriend = async (req, res) => {
-  const NOT_SEND_SENDER_ID = `phải nhập id của người gửi yêu cầu kết bạn`;
   const RESPONE_INFOR_NOT_TRUE = `thông tin phản hồi lời mời kết bạn không đúng`;
-  let NOT_HAVE_REQUEST_ADD_FRIEND = "";
+
   try {
     const idNguoiGui = parseInt(req.body.senderID);
     const idNguoiPhanHoi = parseInt(req.auth_decoded.ma_nguoi_dung);
-    NOT_HAVE_REQUEST_ADD_FRIEND = `không tồn tại lời mời kết bạn từ ${idNguoiGui} đến ${idNguoiPhanHoi}`;
+
     const REJECT_MESSAGE = `người dùng ${idNguoiPhanHoi} đã từ chối lời mời kết bạn từ ${idNguoiGui}}`;
     const respone_infor = req.body.acceptOrReject
       ? req.body.acceptOrReject.toUpperCase()
       : "";
-    // Ngươi dùng phải nhập id friend muốn kết bạn
-    if (Number.isNaN(idNguoiGui)) {
-      throw new Error(NOT_SEND_SENDER_ID);
-    }
-    const isHaveRequest = await loiMoiKetBanModel
-      .havePendingRequestAddFriend(idNguoiGui, idNguoiPhanHoi)
-      .then((data) => data.payload);
-    if (!isHaveRequest) {
-      throw new Error(NOT_HAVE_REQUEST_ADD_FRIEND);
-    }
+
     if (respone_infor == "REJECT") {
       await loiMoiKetBanModel.updatePendingRequestToReject(
         idNguoiGui,
@@ -125,18 +115,6 @@ const responeAddFriend = async (req, res) => {
     }
   } catch (error) {
     switch (error.message) {
-      case NOT_SEND_SENDER_ID:
-        res
-          .status(400)
-          .json(new Response(400, [], NOT_SEND_SENDER_ID, 300, 300));
-        return;
-
-      case NOT_HAVE_REQUEST_ADD_FRIEND:
-        res
-          .status(400)
-          .json(new Response(400, [], NOT_HAVE_REQUEST_ADD_FRIEND, 300, 300));
-        return;
-
       case RESPONE_INFOR_NOT_TRUE:
         res
           .status(400)
@@ -146,7 +124,6 @@ const responeAddFriend = async (req, res) => {
         console.log(error);
     }
   }
-  // res.status(200).send('ok');
 };
 
 // xóa bạn bè
@@ -221,10 +198,30 @@ const getFriendList = async (req, res) => {
   );
   res.json(new Response(200, friends_infor, "lấy danh sách bạn bè thành công"));
 };
+
+// bỏ theo dõi bạn bè
+const unfollowFriend = async (req, res) => {
+  const friend_id = parseInt(req.body.friend_id);
+  const ma_nguoi_dung = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const data = await theodoiHelper
+    .unFollowUser(ma_nguoi_dung, friend_id)
+    .then((data) => data.payload);
+  console.log(data);
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        [],
+        `người dùng ${ma_nguoi_dung} đã bỏ theo dõi người dùng ${friend_id}`
+      )
+    );
+};
 module.exports = {
   requestAddFriend,
   responeAddFriend,
   unFriendById,
   getRequestAddFriendList,
   getFriendList,
+  unfollowFriend,
 };

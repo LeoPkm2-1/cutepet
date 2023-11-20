@@ -6,6 +6,7 @@ import { groupsReducer } from './groups';
 import { dataReducer } from './data';
 import persistReducer from 'redux-persist/es/persistReducer';
 import { friendReducer } from './friend';
+import { notiReducer } from './noti';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -14,6 +15,7 @@ export const rootReducer = combineReducers({
   group: groupsReducer,
   data: dataReducer,
   friend: friendReducer,
+  noti:notiReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

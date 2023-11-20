@@ -13,6 +13,7 @@
     text: String,
     visibility: "PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
     taggedUsersId: Array[id_users],
+    myPetIds:Array[id_pets],
     media:
         undefined || {
             type:"video" || "images"
@@ -35,6 +36,7 @@
             data:[url]
         },
     taggedUsers:Array[users infor],
+    withPets:Array[pet infor],
     createAt: time,
     numOfLike:0,
     numOfComment:0,
@@ -804,3 +806,266 @@ nếu bình luận không tồn tại:
     "errcode": 300
 }
 ```
+
+## 15. chỉnh sửa bài viết trạng thái
+
+(**postman số 57**)
+
+1. phương thức:
+
+   POST http://localhost:3000/post/statusPost/updatePost
+
+2. cấu trúc:
+
+```javascript
+{
+    post_id: mã của bài viết muốn chỉnh sửa thông tin
+    text: string,
+    visibility: "PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
+    taggedUsersId: Array[id_users],
+    media:
+        undefined || {
+            type:"video" || "images"
+            data:[url]
+        }
+}
+```
+
+3. trả về:
+
+- khi bài viết không tòn tại:
+
+```javascript
+{
+    "status": 400,
+    "payload": "Bài viết không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi bạn không có quyền cập nhật bài viết:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bạn không có quyền xóa bài viết này",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+## 16. report bài viết chia sẻ trạng thái
+
+1. phương thức:
+
+   POST: http://localhost:3000/post/statusPost/reportPost
+
+2. cấu trúc:
+
+```javascript
+{
+    post_id: string (bắt buộc)
+}
+```
+
+3. trả về:
+
+- khi bài viết không tồn tại:
+
+```javascript
+{
+    "status": 400,
+    "payload": "Bài viết không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi báo cáo thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "insertedId": "6555c41df3ea8cfc9d63b289"
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 17. lấy bài viết cho newfeed của 1 người dùng
+
+1. Phương thức:
+
+   POST http://localhost:3000/post/statusPost/getPostForNewsfeed
+
+2. cấu trúc:
+
+```javascript
+{
+    index: number(bắt buộc)
+}
+```
+
+- _trong đó:_
+
+  - **index**: lấy ra bài viết **lần** thứ mấy (thứ tự bắt đầu từ: 0,1,......)
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "_id": "123456789012123456789013",
+            "text": "du lịch cùng sa sa 3",
+            "postType": "STATUS",
+            "visibility": "PUBLIC",
+            "media": {
+                "type": "images",
+                "data": [
+                    "https://xoaimedia.com/wp-content/uploads/2021/03/chup-anh-thu-cung-6.jpg"
+                ]
+            },
+            "taggedUsers": [],
+            "createAt": "2023-11-16T08:46:16.598Z",
+            "numOfLike": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 3,
+            "test": 1,
+            "score": 54809386,
+            "owner_infor": {
+                "ma_nguoi_dung": 3,
+                "ten": "Teo",
+                "ngay_sinh": "1991-09-30T17:00:00.000Z",
+                "tai_khoan": "teo",
+                "email": "teo@gmail.com",
+                "so_dien_thoai": "0912345680",
+                "gioi_tinh": 1,
+                "anh": {
+                    "ma_anh": null,
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                    "ngay_cap_nhat": null,
+                    "ma_nguoi_dung": "3",
+                    "is_active": null
+                }
+            },
+            "hasLiked": false
+        },
+        {
+            "_id": "6550ecdbe158c8fc09206db2",
+            "text": "ahihi",
+            "postType": "STATUS",
+            "visibility": "PUBLIC",
+            "media": {
+                "type": "images",
+                "data": [
+                    "https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa"
+                ]
+            },
+            "taggedUsers": [
+                {
+                    "ma_nguoi_dung": 3,
+                    "ten": "Teo",
+                    "ngay_sinh": "1991-09-30T17:00:00.000Z",
+                    "tai_khoan": "teo",
+                    "email": "teo@gmail.com",
+                    "so_dien_thoai": "0912345680",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "3",
+                        "is_active": null
+                    }
+                },
+                {
+                    "ma_nguoi_dung": 4,
+                    "ten": "Ty",
+                    "ngay_sinh": "1991-10-01T17:00:00.000Z",
+                    "tai_khoan": "ty",
+                    "email": "ty@gmail.com",
+                    "so_dien_thoai": "0912345681",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "4",
+                        "is_active": null
+                    }
+                },
+                {
+                    "ma_nguoi_dung": 5,
+                    "ten": "Leo",
+                    "ngay_sinh": "1991-10-02T17:00:00.000Z",
+                    "tai_khoan": "leo",
+                    "email": "leo@gmail.com",
+                    "so_dien_thoai": "0912345682",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "5",
+                        "is_active": null
+                    }
+                }
+            ],
+            "createAt": "2023-11-15T03:23:22.530Z",
+            "numOfLike": 2,
+            "numOfComment": 2,
+            "modifiedAt": "2023-11-15T04:01:10.615Z",
+            "owner_id": 2,
+            "score": 149483452,
+            "owner_infor": {
+                "ma_nguoi_dung": 2,
+                "ten": "Dung",
+                "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                "tai_khoan": "dung",
+                "email": "dung@gmail.com",
+                "so_dien_thoai": "0912345679",
+                "gioi_tinh": 1,
+                "anh": {
+                    "ma_anh": 39,
+                    "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
+                    "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                    "ma_nguoi_dung": 2,
+                    "is_active": 1
+                }
+            },
+            "hasLiked": true
+        },
+
+    ],
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- các thông tin trả về đều giống với lấy bài viết trước đó [chi tiết](./post.md#11-phân-trang-cho-bài-viết)
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##

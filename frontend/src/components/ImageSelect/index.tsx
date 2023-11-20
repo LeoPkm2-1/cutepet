@@ -262,6 +262,7 @@ const ImageRoot = styled.div`
 
 const PreviewImage = styled(AspectRatioImg)`
   width: 100%;
+  height: 150px;
 `;
 const PreviewAvatar = styled(AspectRatioImg)`
   width: 100%;

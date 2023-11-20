@@ -112,7 +112,7 @@
 ## 3. lấy tat cả các thú cưng của chính mình
 
 1. phương thức:
-   GET: http://localhost:3000/pet/getAllMyPets
+   POST: http://localhost:3000/pet/getAllMyPets
 
 2. cấu trúc:
    không cần truyền tham số
@@ -267,3 +267,77 @@
     "errcode": null
 }
 ```
+
+## 6. lấy thông tin cơ bản của 1 con thú cưng
+
+(postman số 67)
+
+1. phương thức:
+
+   POST http://localhost:3000/pet/infor
+
+2. cấu trúc
+
+```javascript
+{
+  pet_id: number;
+}
+```
+
+- trong đó:
+  - **pet_id**: mô tả mã của thú cưng
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "ma_thu_cung": 2,
+        "ten_thu_cung": "Charlie",
+        "ngay_sinh": "2019-10-10T17:00:00.000Z",
+        "gioi_tinh": 1,
+        "ghi_chu": "mèo ú",
+        "ma_nguoi_chu": 2,
+        "giong_loai": {
+            "ma_giong": 205,
+            "ten_giong": "British Shorthair",
+            "ma_loai": 2,
+            "ten_loai": "mèo"
+        },
+        "anh": {
+            "ma_anh": null,
+            "url": "https://img.freepik.com/free-photo/view-adorable-3d-cat_23-2150473746.jpg",
+            "ngay_cap_nhat": null,
+            "ma_thu_cung": 2,
+            "is_active": null
+        },
+        "thong_tin_suc_khoe": {
+            "ma_suc_khoe": null,
+            "ma_thu_cung": 2,
+            "thoi_gian": null,
+            "can_nang": null,
+            "chieu_cao": null
+        }
+    },
+    "message": "thông tin thú cưng",
+    "errno": null,
+    "errcode": null
+}
+```
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+s

@@ -388,6 +388,90 @@ const getAllArticles = async () => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getArticleOfUser = async (user_id) => {
+  async function executor(collection) {
+    return await collection
+      .find({
+        postType: articleComposStructure.Article.type,
+        owner_id: user_id,
+      })
+      .sort({ createAt: -1 })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const updateArticle = async (article_id, edited_Article_Obj) => {
+  async function executor(collection) {
+    return await collection.updateOne(
+      {
+        _id: new ObjectId(article_id),
+      },
+      {
+        $set: edited_Article_Obj,
+      }
+    );
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const reportArticle = async (article_id, user_report_id) => {
+  user_report_id = parseInt(user_report_id);
+  const reportObject = new articleComposStructure.ReportArticle(
+    article_id,
+    user_report_id
+  );
+  async function executor(collection) {
+    return await collection.insertOne(reportObject);
+  }
+  return await nonSQLQuery(executor, "Report")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getUserReportInforOfArticle = async (user_report_id, article_id) => {
+  user_report_id = parseInt(user_report_id);
+  async function executor(collection) {
+    return await collection.findOne({
+      articleId: article_id,
+      reportBy: user_report_id,
+    });
+  }
+  return await nonSQLQuery(executor, "Report")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// const getReplyInforOfUserInPost = async (user_id, post_id) => {
+//   user_id = parseInt(user_id)
+//   async function executor(collection) {
+//     return await collection.find().toArray();
+//   }
+// };
+
+const getAllCategories = () => {
+  return [
+    "CHÓ",
+    "CHÓ CON",
+    "CHÓ TRƯỞNG THÀNH",
+    "CHÓ LỚN TUỔI",
+    "GIỐNG LOÀI",
+    "MÈO",
+    "MÈO CON",
+    "MÈO TRƯỞNG THÀNH",
+    "MÈO LỚN TUỔI",
+    "DỊ ỨNG",
+    "CÁCH CHĂM SÓC",
+    "BỆNH",
+    "CHẾ ĐỘ ĂN UỐNG",
+    "HÀNH VI & KỸ NĂNG",
+  ];
+};
+
 // (async function () {
 //   const data = await getAllCommentsOfArticle("6548f00bb7221c7de43e80f6");
 //   console.log(data);
@@ -421,4 +505,9 @@ module.exports = {
   getArticleById,
   getAllCommentsOfArticle,
   getAllArticles,
+  getAllCategories,
+  getArticleOfUser,
+  updateArticle,
+  reportArticle,
+  getUserReportInforOfArticle,
 };

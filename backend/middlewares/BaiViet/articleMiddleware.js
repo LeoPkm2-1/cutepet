@@ -7,6 +7,7 @@ const NOT_HAVE_TITLE_ERR = "Tiêu đề không được để trống";
 const NOT_HAVE_MAIN_IMG_ERR = "Bài chiase kiến thức phải có ảnh chính";
 const NOT_HAVE_CONTENT_ERR = "Nội dung bài viết không được để trống";
 const NOT_HAVE_CATEGORIES_ERR = "bài chia sẻ không có thể loại";
+const NOT_HAVE_SUITABLE_CATEGORIES_ERR = "các thể loại không phù hợp ";
 const WRONG_INTRO_ERR = "intro phải là string";
 
 function hasStringContent(param) {
@@ -15,18 +16,37 @@ function hasStringContent(param) {
 function hasArrayContent(param) {
   return Array.isArray(param) && param.length > 0;
 }
+function filterCategoryList(categories) {
+  categories = categories.map((category) => {
+    category = category.trim();
+    category = category.toUpperCase();
+    return category;
+  });
+  // console.log(categories);
+  categories = Array.from(new Set(categories));
+  categories = categories.filter((element) =>
+    articleModel.getAllCategories().includes(element)
+  );
+
+  return categories;
+}
 
 async function preProcessAddArtticle(req, res, next) {
   //   console.log(req.body);
-  const { title, main_image, intro, content, categories } = req.body;
+  const { title, main_image, intro, content } = req.body;
+  let { categories } = req.body;
   try {
     // check content of variables
     if (!hasStringContent(title)) throw new Error(NOT_HAVE_TITLE_ERR);
     if (!hasStringContent(main_image)) throw new Error(NOT_HAVE_MAIN_IMG_ERR);
     if (!hasStringContent(content)) throw new Error(NOT_HAVE_CONTENT_ERR);
     if (!hasArrayContent(categories)) throw new Error(NOT_HAVE_CATEGORIES_ERR);
+    categories = filterCategoryList(categories);
+    if (!hasArrayContent(categories))
+      throw new Error(NOT_HAVE_SUITABLE_CATEGORIES_ERR);
     if (intro && typeof intro != "string") throw new Error(WRONG_INTRO_ERR);
     req.body.intro = intro || "";
+    req.body.categories = categories;
     next();
     return;
   } catch (error) {
@@ -53,6 +73,13 @@ async function preProcessAddArtticle(req, res, next) {
         return;
       case WRONG_INTRO_ERR:
         res.status(400).json(new Response(400, [], WRONG_INTRO_ERR, 300, 300));
+        return;
+      case NOT_HAVE_SUITABLE_CATEGORIES_ERR:
+        res
+          .status(400)
+          .json(
+            new Response(400, [], NOT_HAVE_SUITABLE_CATEGORIES_ERR, 300, 300)
+          );
         return;
       default:
         console.log(error);
@@ -336,6 +363,20 @@ async function preProcessGetCmtByIndex(req, res, next) {
   next();
 }
 
+async function preProcessEditArticle(req, res, next) {
+  const articleBeforeEdit = req.body.ARTICLE_INFOR;
+  const userId = req.auth_decoded.ma_nguoi_dung;
+  if (userId != articleBeforeEdit.owner_id) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Bạn không có quyền xóa bài viết này", 300, 300)
+      );
+    return;
+  }
+  next();
+}
+
 module.exports = {
   preProcessAddArtticle,
   checkArticleExistMid,
@@ -351,4 +392,5 @@ module.exports = {
   preProcessDeleteComment,
   preProcessDeleteArticle,
   preProcessGetCmtByIndex,
+  preProcessEditArticle,
 };

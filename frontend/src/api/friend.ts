@@ -7,6 +7,14 @@ const getListFriend = () => {
   });
 };
 
+const getRequestAddFriendList = () => {
+  return authRequest<any>({
+    url: `/friend/getRequestAddFriendList`,
+    method: 'POST',
+  });
+};
+
+
 const searchPeople = (searchKey: string, index: number, num: number) => {
   return authRequest<any>({
     url: `/user/searchPeople`,
@@ -21,7 +29,8 @@ const searchPeople = (searchKey: string, index: number, num: number) => {
 
 const friendApi = {
   getListFriend,
-  searchPeople
+  searchPeople,
+  getRequestAddFriendList
 };
 
 export default friendApi;

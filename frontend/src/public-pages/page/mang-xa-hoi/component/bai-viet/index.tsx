@@ -24,7 +24,7 @@ import moment from 'moment';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { timeAgo } from '../../../../../helper/post';
 import { AirlineSeatReclineExtraOutlined } from '@mui/icons-material';
-import { socket } from '../../../../../socket';
+//import { socket } from '../../../../../socket';
 import LockIcon from '@mui/icons-material/Lock';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import PublicIcon from '@mui/icons-material/Public';

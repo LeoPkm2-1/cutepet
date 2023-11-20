@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "thanh@gmail.com",
+							"value": "kien@gmail.com",
 							"type": "text"
 						},
 						{
@@ -68,12 +68,12 @@
 					"urlencoded": [
 						{
 							"key": "ten",
-							"value": "kien",
+							"value": "tony",
 							"type": "text"
 						},
 						{
 							"key": "tai_khoan",
-							"value": "kien",
+							"value": "tony",
 							"type": "text"
 						},
 						{
@@ -83,7 +83,7 @@
 						},
 						{
 							"key": "email",
-							"value": "maithinhphat21@gmail.com",
+							"value": "tony@gmail.com",
 							"type": "text"
 						}
 					]
@@ -122,7 +122,7 @@
 					"urlencoded": [
 						{
 							"key": "requestID",
-							"value": "15",
+							"value": "8",
 							"type": "text"
 						}
 					]
@@ -137,13 +137,6 @@
 					"path": [
 						"friend",
 						"requestAddFriendById"
-					],
-					"query": [
-						{
-							"key": "",
-							"value": null,
-							"disabled": true
-						}
 					]
 				}
 			},
@@ -209,7 +202,7 @@
 					"urlencoded": [
 						{
 							"key": "senderID",
-							"value": "10",
+							"value": "2",
 							"type": "text"
 						},
 						{
@@ -242,7 +235,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -254,7 +247,7 @@
 					"urlencoded": [
 						{
 							"key": "friend_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -312,7 +305,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -328,7 +321,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"text\": \"Tý PUBLIC test no tag_1\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"google.com\",\"youtube.com\",\"amazon.com\"]\n    }\n}",
+					"raw": "{\n    \"text\": \"quẩy lên ae ơi dung đây\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[],\n   \"myPetIds\":[1,2,3,4,5],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"google.com\",\"youtube.com\",\"amazon.com\"]\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -359,7 +352,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -371,7 +364,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "6546fdc3b3b48facbd063193",
+							"value": "6550ecdbe158c8fc09206db2",
 							"type": "text"
 						}
 					]
@@ -400,7 +393,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -412,12 +405,12 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "654af039c82ff4c74b78f9eb",
+							"value": "6550ecdbe158c8fc09206db2",
 							"type": "text"
 						},
 						{
 							"key": "comment",
-							"value": "tôi là Thanh nha",
+							"value": "tôi là tý",
 							"type": "text"
 						}
 					]
@@ -533,7 +526,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -545,12 +538,12 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "6545b0a49d829001b64f5dd4",
+							"value": "655441ccedfafc2f29403170",
 							"type": "text"
 						},
 						{
 							"key": "reply",
-							"value": "Thành",
+							"value": "susan Repl",
 							"type": "text"
 						}
 					]
@@ -1032,7 +1025,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "6546fdc3b3b48facbd063193",
+							"value": "6550ecdbe158c8fc09206db2",
 							"type": "text"
 						}
 					]
@@ -1243,7 +1236,7 @@
 						}
 					]
 				},
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"url": {
 					"raw": "http://localhost:3000/pet/getAllMyPets",
@@ -1361,7 +1354,7 @@
 					"urlencoded": [
 						{
 							"key": "user_id",
-							"value": "2",
+							"value": "1",
 							"type": "text"
 						}
 					]
@@ -1501,7 +1494,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Dùng sữa vào bủôi sáng hay buổi tối thì tốt hơn cho thú cưng\",\n    \"main_image\": \"www.dogcat.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"các thú cưng con.....\",\n    \"categories\": [\"dog\",\"cat\"]\n}",
+					"raw": "{\n    \"title\": \"liệu cho mèo con 3 tháng tuối uống sửa có tốt không\",\n    \"main_image\": \"www.dogcat.com\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"các thú cưng con.....\",\n    \"categories\": [\"dog\",\"cat\",\"Mèo con\",\"chế độ ăn uống\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2410,7 +2403,456 @@
 			"response": []
 		},
 		{
-			"name": "updatePost",
+			"name": "56_user_confirmRegister",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "active_code",
+							"value": "{{account_active_code}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/confirmRegister",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"confirmRegister"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "57_update_status_Post",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"post_id\":\"6550ecdbe158c8fc09206db2\",\n    \"text\": \"ahihi\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[3,4,5],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa\"]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/updatePost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"updatePost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "58_user_changePassword",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "old_pass",
+							"value": "123999",
+							"type": "text"
+						},
+						{
+							"key": "new_pass",
+							"value": "123",
+							"type": "text"
+						},
+						{
+							"key": "confirm_pass",
+							"value": "123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/changePassword",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"changePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "59_article_AllAvailableCategories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/post/article/AllAvailableCategories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"AllAvailableCategories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "60_article_editArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"article_id\":\"65555eee151a2e67690ca296\",\n    \"title\": \"cách cho mèo  uống sữa đúng cách\",\n    \"main_image\": \"https://imgt.taimienphi.vn/cf/Images/tt/2023/1/10/hinh-nen-meo-cute-ngo-nghinh-dang-yeu-nhin-la-cung-4.jpg\",\n    \"intro\": \"xin chào .....\",\n    \"content\": \"các thú cưng con.....\",\n    \"categories\": [\"Mèo\",\"Mèo con\",\"chế độ ăn uống\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/editArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"editArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "61_article_reportArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "article_id",
+							"value": "65555eee151a2e67690ca296",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/reportArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"reportArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "62_statusPost_reportPost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "654fae52a09d67af78165cb9",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/reportPost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"reportPost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "63_statusPost_getPostForNewsfeed",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjoyMiwidGVuIjoiVHLDrSIsIm5nYXlfc2luaCI6IjE5OTEtMTAtMTFUMTc6MDA6MDAuMDAwWiIsInRhaV9raG9hbiI6InZhbnRyaXRoYW5oIiwiZW1haWwiOiJ2YW50cmkyMkBnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY5MSIsImdpb2lfdGluaCI6MSwiaWF0IjoxNzAwNDYwOTc0LCJleHAiOjE3MDM0NjA5NzR9.UajNmZYSBeF8QmgjE2wpnZHoGtvOI2rtHMDvIUGSUcwTRg0-8qqaXiUhHHVK63byGEc-vXj9KL2Hu7lE2AjVYg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "index",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getPostForNewsfeed",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getPostForNewsfeed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "64_user_updateAvatar",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "url_anh",
+							"value": "                       ",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/updateAvatar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"updateAvatar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "65_user_updateInfor",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ten",
+							"value": "kien 3",
+							"type": "text"
+						},
+						{
+							"key": "ngay_sinh",
+							"value": "2000-10-18",
+							"type": "text"
+						},
+						{
+							"key": "so_dien_thoai",
+							"value": "01222",
+							"type": "text"
+						},
+						{
+							"key": "gioi_tinh",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/updateInfor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"updateInfor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "66_friend_unFollowFriend",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "friend_id",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/friend/unFollowFriend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"unFollowFriend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "67_pet-infor",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -2428,23 +2870,22 @@
 					"mode": "urlencoded",
 					"urlencoded": [
 						{
-							"key": "post_id",
-							"value": "313233343536373839303132",
+							"key": "pet_id",
+							"value": "2",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost:3000/post/statusPost/updatePost",
+					"raw": "http://localhost:3000/pet/infor",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"post",
-						"statusPost",
-						"updatePost"
+						"pet",
+						"infor"
 					]
 				}
 			},
@@ -2512,32 +2953,6 @@
 			"response": []
 		},
 		{
-			"name": "user_confirmRegister",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/user/confirmRegister?active_code={{account_active_code}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"confirmRegister"
-					],
-					"query": [
-						{
-							"key": "active_code",
-							"value": "{{account_active_code}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "user-infor",
 			"request": {
 				"auth": {
@@ -2553,7 +2968,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/user/infor/ty",
+					"raw": "http://localhost:3000/user/infor/susan",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2562,7 +2977,7 @@
 					"path": [
 						"user",
 						"infor",
-						"ty"
+						"susan"
 					]
 				}
 			},
@@ -2598,37 +3013,6 @@
 			"response": []
 		},
 		{
-			"name": "pet-infor",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/pet/infor/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"pet",
-						"infor",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "getPostBypost_id",
 			"request": {
 				"auth": {
@@ -2648,7 +3032,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "1",
+							"value": "6550dec7bd7587177b41a789",
 							"type": "text"
 						}
 					]

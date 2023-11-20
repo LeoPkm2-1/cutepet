@@ -49,6 +49,36 @@ async function unFollowStatusPost(
     return await followModel.userUnFollowStatusPost(statusPost_Id, user_id);
 }
 
+async function listOfUserUnFollowStatusPost(
+  statusPost_Id,
+  list_user_ids,
+  stillFollowWhenUserIsOwner = true
+) {
+  list_user_ids = list_user_ids.map((id) => parseInt(id));
+  return await Promise.all(
+    list_user_ids.map(async (user_id) => {
+      return await unFollowStatusPost(
+        statusPost_Id,
+        user_id,
+        stillFollowWhenUserIsOwner
+      );
+    })
+  );
+}
+
+async function listOfUserFollowStatusPost(
+  statusPost_Id,
+  list_user_ids,
+  isUnique = true
+) {
+  list_user_ids = list_user_ids.map((id) => parseInt(id));
+  return await Promise.all(
+    list_user_ids.map(async (user_id) => {
+      return await followStatusPost(statusPost_Id, user_id, isUnique);
+    })
+  );
+}
+
 // user follow
 
 async function hasUserFollowedAnother(follower_Id, user_followed_id) {
@@ -117,12 +147,6 @@ async function unFollowArticle(
   }
 }
 
-// (async function () {
-//   "6548f00bb7221c7de43e80f6";
-//   const data = await unFollowArticle("6548f00bb7221c7de43e80f6", 8,false);
-//   console.log(data);
-// })();
-
 module.exports = {
   followStatusPost,
   hasUserFollowedStatusPost,
@@ -133,4 +157,6 @@ module.exports = {
   followArticle,
   unFollowArticle,
   hasUserFollowArticle,
+  listOfUserUnFollowStatusPost,
+  listOfUserFollowStatusPost,
 };

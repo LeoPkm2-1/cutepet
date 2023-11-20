@@ -11,11 +11,12 @@ const { requireLogined, nonRequireLogined } = require("../middlewares/auth");
 const { handlLogin } = require("./../controllers/loginController");
 const { handleLogout } = require("./../controllers/logoutController");
 const { handleRegister } = require("./../controllers/registerController");
+const { registerMid } = require("../middlewares/registerMid");
 
 // đăng nhập - dăng ký
 router.use(["/login", "/register"], nonRequireLogined);
 router.post("/login", handlLogin);
-router.post("/register", handleRegister);
+router.post("/register", registerMid, handleRegister);
 // đăng xuất
 router.get("/logout", requireLogined, handleLogout);
 

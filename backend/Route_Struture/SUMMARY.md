@@ -163,3 +163,83 @@
 7. lấy tất cả các bài viết chia sẻ kiến thức trong database:
 
    _chi tiết:_ **[Route_Struture/article.md số 17](./article.md#17-lấy-tất-cả-các-bài-viết-chia-sẻ-kiến-thức-trong-database)** và **postman số 55**
+
+## (12-11-2023):
+
+1. trang đăng ký tài khoản
+
+   _chi tiết:_ **[Route_Struture/register.md số 1](./register.md#1-trang-đăng-ký)** và **postman số 1**
+
+2. xác nhận đăng nhập tài khoản
+
+   _chi tiết:_ **[Route_Struture/register.md số 2](./register.md#2-xác-thực-đăng-ký)** và **postman số 56**
+
+3. chỉnh sửa bài viết chia sẻ trạng thái
+
+   _chi tiết:_ **[Route_Struture/post.md số 15](./post.md#15-chỉnh-sửa-bài-viết-trạng-thái)** và **postman số 57**
+
+## (14-11-2023):
+
+1. đổi mật khẩu người dùng
+
+   _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#2-đổi-mật-khẩu-người-dùng)** và **postman số 58**
+
+## (16-11-2023)
+
+1. lấy danh sách chứ tên của tất cả các thể loại hợp lệ của bài viết chia sẻ kiến thức
+
+   _chi tiết_ **[Route_Struture/article.md](./article.md#18-danh-sách-tên-của-tất-cả-các-thể-loại-trong-bài-viết-chia-sẻ-kiến-thức)** và **postman số 59**
+
+2. chỉnh sửa bài viết chia sẻ kiến thức
+
+   _chi tiết:_ **[Route_Struture/article.md](./article.md#19-chỉnh-sửa-bài-viết-chia-sẻ-kiến-thức)** và **postman số 60**
+
+3. report bài viết chia sẻ kiến thức:
+
+   _chi tiết:_ **[Route_Struture/article.md](./article.md#20-report-bài-viết-chia-sẻ-kiến-thức)** và **postman số 61**
+
+4. report bài viết chia sẻ trạng thái:
+
+   _chi tiết:_ **[Route_Struture/post.md](./post.md#16-report-bài-viết-chia-sẻ-trạng-thái)** và **postman số 62**
+
+5. lấy post cho new feeds của người dùng
+
+   chi tiết: **[Route_Struture/post.md](./post.md#17-lấy-bài-viết-cho-newfeed-của-1-người-dùng)** và **postman số 63**
+
+## (17-11-2023)
+
+1. cập nhật ảnh đại diện cho người dùng:
+
+   _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#3-cập-nhật-ảnh-đại-diện-cho-người-dùng)** và **postman số 64**
+
+## (18-11-2023)
+
+1. cập nhật thông tin cá nhân cho người dùng:
+
+   _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#4-cập-nhật-thông-tin-người-dùng)** và **postman số 65**
+
+## (19-11-2023)
+
+1. thông báo qua socket khi có 1 bài viết mới dc đăng lên
+
+   _chi tiết:_ **[Route_Struture/socket.md](./socket.md#10-thông-báo-khi-có-bài-viết-status-mới-được-đăng-lên)**
+
+## (20-11-2023)
+
+1. lấy chi tiết 1 con thú cưng:
+
+   _chi tiết:_ **[Route_Struture/pet.md](./pet.md#6-lấy-thông-tin-cơ-bản-của-1-con-thú-cưng)** và **postman số 67**
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
