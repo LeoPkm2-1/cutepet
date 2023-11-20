@@ -15,17 +15,20 @@ const {
   notifyHaveNewStatusPost,
 } = require("../../notificationHandler/statusPost");
 const laBanBeModel = require("../../models/laBanBeModel");
+const petHelper = require("../../utils/petHelper");
 
 const addPostController = async (req, res) => {
-  const { text, media, visibility, taggedUsersId } = req.body;
+  const { text, media, visibility, taggedUsersId, myPetIds } = req.body;
   const taggedUsers = await userHelper.getUserPublicInforByListIds(
     taggedUsersId
   );
+  const withPets = await petHelper.publicInforOfListPet(myPetIds);
   const postStatus = new StatusPostComposStructure.StatusPost(
     text,
     visibility,
     media,
     taggedUsers,
+    withPets,
     req.auth_decoded.ma_nguoi_dung
   );
 

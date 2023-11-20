@@ -150,7 +150,9 @@ lý do value của visibility là `JUST_FRIENDS` mà lại gửi lên là `frien
 
 xem chi tiết tại: **[Route_Struture/socket.md](./socket.md#10-thông-báo-khi-có-bài-viết-status-mới-được-đăng-lên)**
 
-##
+## 36. cho phép tag thú cưng của mình vào bài viết chia sẻ trạng thái
+
+xem chi tiết tại: **[Route_Struture/post.md](./post.md#1-thêm-bài-viết-chia-sẻ-trạng-thái)**
 
 ##
 

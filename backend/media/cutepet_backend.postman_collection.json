@@ -68,12 +68,12 @@
 					"urlencoded": [
 						{
 							"key": "ten",
-							"value": "biết bố mày là ai không222",
+							"value": "tony",
 							"type": "text"
 						},
 						{
 							"key": "tai_khoan",
-							"value": "khong_nha",
+							"value": "tony",
 							"type": "text"
 						},
 						{
@@ -83,7 +83,7 @@
 						},
 						{
 							"key": "email",
-							"value": "maithinhphat21@gmail.com",
+							"value": "tony@gmail.com",
 							"type": "text"
 						}
 					]
@@ -122,7 +122,7 @@
 					"urlencoded": [
 						{
 							"key": "requestID",
-							"value": "15",
+							"value": "8",
 							"type": "text"
 						}
 					]
@@ -137,13 +137,6 @@
 					"path": [
 						"friend",
 						"requestAddFriendById"
-					],
-					"query": [
-						{
-							"key": "",
-							"value": null,
-							"disabled": true
-						}
 					]
 				}
 			},
@@ -209,7 +202,7 @@
 					"urlencoded": [
 						{
 							"key": "senderID",
-							"value": "10",
+							"value": "2",
 							"type": "text"
 						},
 						{
@@ -242,7 +235,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -254,7 +247,7 @@
 					"urlencoded": [
 						{
 							"key": "friend_id",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -312,7 +305,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -328,7 +321,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"text\": \"Tý PUBLIC test no tag_1\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"google.com\",\"youtube.com\",\"amazon.com\"]\n    }\n}",
+					"raw": "{\n    \"text\": \"quẩy lên ae ơi dung đây\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[],\n   \"myPetIds\":[1,2,3,4,5],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"google.com\",\"youtube.com\",\"amazon.com\"]\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1243,7 +1236,7 @@
 						}
 					]
 				},
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"url": {
 					"raw": "http://localhost:3000/pet/getAllMyPets",
@@ -2819,6 +2812,86 @@
 			"response": []
 		},
 		{
+			"name": "66_friend_unFollowFriend",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "friend_id",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/friend/unFollowFriend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"unFollowFriend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "67_pet-infor",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "pet_id",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/pet/infor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"pet",
+						"infor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "capnhatthongtinthucung",
 			"request": {
 				"auth": {
@@ -2934,37 +3007,6 @@
 					"port": "3000",
 					"path": [
 						"logout"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "pet-infor",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/pet/infor/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"pet",
-						"infor",
-						"2"
 					]
 				}
 			},

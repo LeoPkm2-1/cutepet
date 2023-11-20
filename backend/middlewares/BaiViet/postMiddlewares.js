@@ -4,6 +4,7 @@ const postHelper = require("../../utils/postHelper");
 const banBeHelper = require("./../../utils/banbeHelper");
 const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 const followhelper = require("./../../utils/theodoiHelper");
+const petHelper = require("../../utils/petHelper");
 
 // middle ware kiểm tra tiền sử lý để thêm bài viết
 async function preProcessAddPost(req, res, next) {
@@ -13,12 +14,22 @@ async function preProcessAddPost(req, res, next) {
   req.body.visibility = visibility;
   let userTaggedIds = req.body.taggedUsersId || [];
   userTaggedIds = userTaggedIds.map((id) => parseInt(id, 10));
-  // remove dulplicate
+  // remove dulplicate tagged user ids
   userTaggedIds = [...new Set(userTaggedIds)];
   req.body.taggedUsersId = await banBeHelper.getFriendsIdInListOfUserId(
     req.auth_decoded.ma_nguoi_dung,
     userTaggedIds
   );
+
+  let myPetIds = req.body.myPetIds || [];
+  myPetIds = myPetIds.map((petId) => parseInt(petId, 10));
+  // remove dulplicate my pets id
+  myPetIds = [...new Set(myPetIds)];
+  req.body.myPetIds = await petHelper.getPetsIdOwnedByUserInListOfPetIds(
+    req.auth_decoded.ma_nguoi_dung,
+    myPetIds
+  );
+
   const media = req.body.media;
   if (
     visibility != "PUBLIC" &&

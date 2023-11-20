@@ -13,6 +13,7 @@
     text: String,
     visibility: "PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
     taggedUsersId: Array[id_users],
+    myPetIds:Array[id_pets],
     media:
         undefined || {
             type:"video" || "images"
@@ -35,6 +36,7 @@
             data:[url]
         },
     taggedUsers:Array[users infor],
+    withPets:Array[pet infor],
     createAt: time,
     numOfLike:0,
     numOfComment:0,

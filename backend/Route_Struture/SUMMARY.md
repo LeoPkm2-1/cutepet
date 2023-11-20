@@ -224,7 +224,11 @@
 
    _chi tiết:_ **[Route_Struture/socket.md](./socket.md#10-thông-báo-khi-có-bài-viết-status-mới-được-đăng-lên)**
 
-##
+## (20-11-2023)
+
+1. lấy chi tiết 1 con thú cưng:
+
+   _chi tiết:_ **[Route_Struture/pet.md](./pet.md#6-lấy-thông-tin-cơ-bản-của-1-con-thú-cưng)** và **postman số 67**
 
 ##
 

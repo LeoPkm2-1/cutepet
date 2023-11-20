@@ -1,11 +1,12 @@
 class StatusPost {
   static type = "STATUS";
-  constructor(text, visibility, media, taggedUsers, owner_id) {
+  constructor(text, visibility, media, taggedUsers, withPets, owner_id) {
     this.text = text;
     this.postType = this.constructor.type;
     this.visibility = visibility;
     this.media = media;
     this.taggedUsers = taggedUsers;
+    this.withPets = withPets;
     this.createAt = new Date();
     this.numOfLike = 0;
     this.numOfComment = 0;

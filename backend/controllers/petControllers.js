@@ -6,7 +6,9 @@ const anhThuCungModel = require("../models/anhThuCungModel");
 const { Response } = require("./../utils/index");
 
 const getInforById = async (req, res) => {
-  const petid = req.params.pet_id;
+  // console.log(req.method);
+  const petid = req.method == "GET" ? req.params.pet_id : req.body.pet_id;
+  // console.log(petid);
   const petPublicInfor = await petHelper.publicInforOfPet(petid);
   res.status(200).json(new Response(200, petPublicInfor, "thông tin thú cưng"));
 };
