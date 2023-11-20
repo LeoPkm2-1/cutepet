@@ -16,6 +16,7 @@ const {
 } = require("../../notificationHandler/statusPost");
 const laBanBeModel = require("../../models/laBanBeModel");
 const petHelper = require("../../utils/petHelper");
+const banbeHelper = require("../../utils/banbeHelper");
 
 const addPostController = async (req, res) => {
   const { text, media, visibility, taggedUsersId, myPetIds } = req.body;
@@ -668,18 +669,31 @@ const reportPostController = async (req, res) => {
   res.status(200).json(reportProcess);
 };
 
+const calNumOfPostOfEachUser = async (user_id, NEEDED_NUM_OF_POST = 10) => {
+  console.log({ NEEDED_NUM_OF_POST });
+  const numOfFriend = await banbeHelper.getNumOfFriendOfUser(user_id);
+  return Math.ceil(NEEDED_NUM_OF_POST / (numOfFriend + 1));
+};
+
 const getPostForNewsfeedController = async (req, res) => {
   const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
-  const index = req.body.index + 1;
-  console.log({ index });
-  const numOfPostForEachUser = index * 10;
+  // console.log({ user_id });
+  const index = parseInt(req.body.index);
+  const NUMOF_POST_RETURN = 10;
+  const NEEDED_NUM_OF_POST = (index + 1) * NUMOF_POST_RETURN;
+  const startPointSlicing = index * NUMOF_POST_RETURN;
+  // console.log({ index });
+  const numOfPostForEachUser = await calNumOfPostOfEachUser(
+    user_id,
+    NEEDED_NUM_OF_POST
+  );
+  console.log({ numOfPostForEachUser });
   const ds_ban_be = await laBanBeModel
     .getAllFriendIdsOfUser(user_id)
     .then((data) =>
       data.payload.map((friendShip) => parseInt(friendShip.friend_id))
     );
-  // console.log(ds_ban_be);
-  // a = [3, 2];
+  // post of friend
   const listPostsOfEachFriend = await Promise.all(
     ds_ban_be.map(
       async (id) =>
@@ -692,21 +706,19 @@ const getPostForNewsfeedController = async (req, res) => {
         )
     )
   );
-
+  // my post
   const myPostList = await StatusPostModel.getAllPostOfUserBeforeTime(
     user_id,
     new Date(),
     numOfPostForEachUser
   ).then((data) => data.payload);
 
-  console.log(myPostList);
-
+  // concat post of friend and my post
   let listOfPost = listPostsOfEachFriend.reduce((acc, cur) => {
     return acc.concat(cur.payload);
   }, []);
-
   listOfPost = listOfPost.concat(myPostList);
-
+  // calculate score for each post
   const scoredListPosts = await Promise.all(
     listOfPost.map(async (obj, index) => {
       obj.score = 0; // initialize score
@@ -741,16 +753,27 @@ const getPostForNewsfeedController = async (req, res) => {
       return obj;
     })
   );
+  // sort list post by score (lower score is better)
   scoredListPosts.sort((a, b) => a.score - b.score);
-  // insert owner infor for each post
-  await statusPostHelper.InsertOwnerInforOfListPosts(scoredListPosts);
-  // insert infor to indicate that  has user liked each post?
-  await statusPostHelper.insertUserLikePostInforOfListPosts(
-    user_id,
-    scoredListPosts
-  );
 
-  res.status(200).json(new Response(200, scoredListPosts, ""));
+  console.log({ len_1: scoredListPosts.length });
+
+  const posts =
+    scoredListPosts.length >= NEEDED_NUM_OF_POST
+      ? scoredListPosts.slice(
+          startPointSlicing,
+          startPointSlicing + NUMOF_POST_RETURN + 1
+        )
+      : scoredListPosts.slice(-Math.ceil(scoredListPosts.length / (index + 1)));
+
+  // insert owner infor for each post
+  await statusPostHelper.InsertOwnerInforOfListPosts(posts);
+  // insert infor to indicate that  has user liked each post?
+  await statusPostHelper.insertUserLikePostInforOfListPosts(user_id, posts);
+
+  console.log({ len_2: posts.length });
+
+  res.status(200).json(new Response(200, posts, ""));
 };
 
 module.exports = {

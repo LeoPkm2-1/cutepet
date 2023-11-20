@@ -440,7 +440,7 @@
 
 ## 10. thông báo khi có bài viết status mới được đăng lên
 
-- Listen on: **REQUEST_ADD_FRIEND** event
+- Listen on: **NEW_STATUS_POST_APPEAR** event
 - data trả về:
 
 ```javascript
