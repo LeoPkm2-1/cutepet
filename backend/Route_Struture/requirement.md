@@ -154,7 +154,7 @@ xem chi tiết tại: **[Route_Struture/socket.md](./socket.md#10-thông-báo-kh
 
 xem chi tiết tại: **[Route_Struture/post.md](./post.md#1-thêm-bài-viết-chia-sẻ-trạng-thái)**
 
-##
+## 37. Load bài viết status khi vào trang mạng xã hội
 
 ##
 

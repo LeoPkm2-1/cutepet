@@ -459,6 +459,10 @@ async function preProcessGetPostStartFrom(req, res, next) {
 
 async function preProccessToGetNewFeed(req, res, next) {
   const index = parseInt(req.body.index);
+  const PostIdsHaveRendered = req.body.PostIdsHaveRendered || [];
+  req.body.PostIdsHaveRendered = PostIdsHaveRendered.map((postId) =>
+    String(postId)
+  );
   // console.log(typeof req.body.index);
   if (Number.isNaN(index)) {
     res

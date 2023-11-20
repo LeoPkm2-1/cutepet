@@ -677,10 +677,11 @@ const calNumOfPostOfEachUser = async (user_id, NEEDED_NUM_OF_POST = 10) => {
 
 const getPostForNewsfeedController = async (req, res) => {
   const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
-  // console.log({ user_id });
-  const index = parseInt(req.body.index);
+  const { index } = req.body;
+
   const NUMOF_POST_RETURN = 10;
   const NEEDED_NUM_OF_POST = (index + 1) * NUMOF_POST_RETURN;
+
   const startPointSlicing = index * NUMOF_POST_RETURN;
   // console.log({ index });
   const numOfPostForEachUser = await calNumOfPostOfEachUser(
@@ -757,14 +758,11 @@ const getPostForNewsfeedController = async (req, res) => {
   scoredListPosts.sort((a, b) => a.score - b.score);
 
   console.log({ len_1: scoredListPosts.length });
-
-  const posts =
-    scoredListPosts.length >= NEEDED_NUM_OF_POST
-      ? scoredListPosts.slice(
-          startPointSlicing,
-          startPointSlicing + NUMOF_POST_RETURN + 1
-        )
-      : scoredListPosts.slice(-Math.ceil(scoredListPosts.length / (index + 1)));
+  // remove posts have already render
+  const postsHaveNotRender = scoredListPosts.filter(
+    (post) => !req.body.PostIdsHaveRendered.includes(post._id.toString())
+  );
+  const posts = postsHaveNotRender.slice(0, NUMOF_POST_RETURN);
 
   // insert owner infor for each post
   await statusPostHelper.InsertOwnerInforOfListPosts(posts);

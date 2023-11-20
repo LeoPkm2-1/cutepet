@@ -910,13 +910,15 @@ nếu bình luận không tồn tại:
 
 ```javascript
 {
-    index: number(bắt buộc)
+    index: number(bắt buộc),
+    PostIdsHaveRendered: Array (string postId)
 }
 ```
 
 - _trong đó:_
 
   - **index**: lấy ra bài viết **lần** thứ mấy (thứ tự bắt đầu từ: 0,1,......)
+  - **PostIdsHaveRendered**: mô tả các bài viết đã dc render ở giao diện rồi để backend có thể lọc bỏ đi
 
 3. trả về:
 
