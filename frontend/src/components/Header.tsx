@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { mdiMenu } from '@mdi/js';
 import { Button, Divider, Popover, SvgIcon } from '@mui/material';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Image from './Image';
 import { RootState } from '../redux';
@@ -29,6 +29,8 @@ import notiApi from '../api/noti';
 import { list } from 'firebase/storage';
 import friendApi from '../api/friend';
 import { PersonComponent } from '../public-pages/page/ban-be';
+import ArticleIcon from '@mui/icons-material/Article';
+import { NotiActions } from '../redux/noti';
 type Props = ReturnType<typeof mapStateToProps> & {
   onHambuger?: React.MouseEventHandler<HTMLButtonElement>;
 };
@@ -51,8 +53,8 @@ const Header = (props: Props) => {
   >([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
-
   const [valueSearch, setValueSearch] = useState('');
+  const numNoti = useSelector((state:RootState) => state.noti.numNoti);
   const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -88,7 +90,56 @@ const Header = (props: Props) => {
   const open1 = Boolean(anchorEl1);
   const id1 = open1 ? 'simple-popover1' : undefined;
 
-  function handleSearch() {}
+  const dispatch = useDispatch();
+  useEffect(() => {
+    notiApi.getNotificationStartFrom(0, 10).then((data:any) => {
+      console.log(data, ' data notification: ');
+
+      if (data?.status == 200) {
+        let num = 0;
+        const list = data?.payload?.map((noti: any) => {
+          console.log(noti, " notu nef");
+          if(!noti?.hasRead){
+            num ++;
+          }
+          if (noti?.type == 'COMMENT_STATUS_POST') {
+            return {
+              name: noti?.payload?.userComment?.ten,
+              url: noti?.payload?.userComment?.anh?.url,
+              idPost: noti?.payload?.postInfor?._id,
+              hasRead: noti?.hasRead || false,
+              type: 'bình luận',
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+            };
+          }
+          if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
+            return {
+              name: noti?.payload?.userReply?.ten,
+              url: noti?.payload?.userReply?.anh?.url,
+              idPost: noti?.payload?.commentInfor?.postId,
+              hasRead: noti?.payload?.hasRead,
+              type: 'trả lời bình luận',
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+            };
+          }
+
+        });
+        console.log(list, 'List');
+        dispatch(NotiActions.setNumNoti(num));
+        // setNoti(list);
+      }
+    });
+  }, []);
 
   return (
     <Root>
@@ -171,6 +222,7 @@ const Header = (props: Props) => {
             mx: '20px',
             padding: '12px 30px',
             borderRadius: '5px',
+            position:"relative"
           }}
           aria-label="home"
         >
@@ -179,6 +231,22 @@ const Header = (props: Props) => {
               fontSize: '28px',
             }}
           />
+          {true && (numNoti > 0) && (
+            <>
+             <Box sx={{
+              backgroundColor: "#e41e3f",
+              color: "#fff",
+              borderRadius:"7px",
+              fontSize:"10px",
+              padding: "3px 5px",
+              position:"absolute",
+              right:"2px",
+              top:"10px"
+             }}>
+                {numNoti}+
+             </Box>
+            </>
+          )}
         </IconButton>
         <Popover
           id={id}
@@ -204,7 +272,7 @@ const Header = (props: Props) => {
           }}
           aria-label="home"
         >
-          <SmsIcon
+          <ArticleIcon
             sx={{
               fontSize: '28px',
             }}
@@ -383,19 +451,24 @@ function NotifycationComponent() {
     { name?: string; url?: string; idPost?: string; type?: string, hasRead: boolean }[]
   >([]);
 
+   const dispatch = useDispatch();
   useEffect(() => {
     notiApi.getNotificationStartFrom(0, 10).then((data:any) => {
       console.log(data, ' data notification: ');
-      if (data?.status == 200) {
-        const list = data?.payload?.map((noti: any) => {
-          console.log(noti);
 
+      if (data?.status == 200) {
+        let num = 0;
+        const list = data?.payload?.map((noti: any) => {
+          console.log(noti, " notu nef");
+          if(!noti?.hasRead){
+            num ++;
+          }
           if (noti?.type == 'COMMENT_STATUS_POST') {
             return {
               name: noti?.payload?.userComment?.ten,
               url: noti?.payload?.userComment?.anh?.url,
               idPost: noti?.payload?.postInfor?._id,
-              hasRead: noti?.payload?.hasRead,
+              hasRead: noti?.hasRead || false,
               type: 'bình luận',
             } as {
               name?: string;
@@ -405,6 +478,24 @@ function NotifycationComponent() {
               hasRead: boolean;
             };
           }
+
+          if (noti?.type == 'LIKE_STATUS_POST') {
+            return {
+              name: noti?.payload?.userLike?.ten,
+              url: noti?.payload?.userLike?.anh?.url,
+              idPost: noti?.payload?.postInfor?._id,
+              hasRead: noti?.hasRead || false,
+              type: 'thích',
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+            };
+          }
+
+
           if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
             return {
               name: noti?.payload?.userReply?.ten,
@@ -420,8 +511,10 @@ function NotifycationComponent() {
               hasRead: boolean;
             };
           }
+
         });
         console.log(list, 'List');
+        dispatch(NotiActions.setNumNoti(num));
         setNoti(list);
       }
     });

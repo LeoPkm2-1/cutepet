@@ -4,11 +4,11 @@ import { io } from 'socket.io-client';
 
 // export const socket = io(`${process.env.REACT_APP_SERVER_API_HOST}`);
 
-const token = localStorage.getItem("accessToken");
-console.log(token, "token: ");
+const token = localStorage.getItem('accessToken');
+console.log(token, 'token ne lay socket: ');
 // export const socket = io(`${process.env.REACT_APP_SERVER_API_HOST}`,{
-  export const socket = io(`http://localhost:3000/norm_user`,{
-    extraHeaders:{
-      authen_token: JSON.parse(token),
-    }
-  });
+export const socket = io(`http://localhost:3000/norm_user`, {
+  extraHeaders: {
+    authen_token: JSON.parse(token),
+  },
+});

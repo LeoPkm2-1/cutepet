@@ -68,6 +68,15 @@ const getPostStartFrom = (index: number, num: number) => {
   });
 };
 
+const getPostForNewsfeed = (index: number) => {
+  return authRequest<any>({
+    url: `/post/statusPost/getPostForNewsfeed`,
+    method: 'POST',
+    body: {
+      index,
+    },
+  });
+};
 
 const getAllComment = (id: string,) => {
   return authRequest<any>({
@@ -130,7 +139,8 @@ const postApi = {
   replyCommentStatus,
   getAllReply,
   removeComment,
-  removeReply
+  removeReply,
+  getPostForNewsfeed
 };
 
 export default postApi;

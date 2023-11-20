@@ -5,6 +5,7 @@ import { StyledFormControl, StyledTextField } from "../FormItem";
 import { Box, Chip, SvgIcon } from "@mui/material";
 import styled from "@emotion/styled";
 import { mdiCheck } from "@mdi/js";
+import articleApi from "../../api/article";
 
 
 type Props = {
@@ -23,9 +24,16 @@ type Props = {
 export default function TagNameSelect(props: Props) {
   const [open, setOpen] = React.useState(false);
   // const [value, setValue] = React.useState<string[]>(null);
-  const [options, setOptions] = React.useState<readonly string[]>(["Đi dạo", "Ăn uống", "Tắm"]);
+  const [options, setOptions] = React.useState<readonly string[]>([]);
   const [loading, setLoading] = React.useState(false);
 
+  React.useEffect(() => {
+    articleApi.getCategori().then((data) => {
+      if( data?.status == 200){
+        setOptions(data?.payload)
+      }
+    })
+  }, [])
   // React.useEffect(() => {
   //   setValue(props.value ?? null);
   // }, [props.value, options]);

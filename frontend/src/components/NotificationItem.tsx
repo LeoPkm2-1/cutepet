@@ -64,7 +64,11 @@ export function NotifycationItemClick(props: Props) {
       <Link
         onClick={() => {
           if (props?.idPost) {
+              console.log("vaof nef");
+
             notiApi.postNotificationHasReaded(props?.idPost).then((data) => {
+              console.log("vaof nef 1");
+              
               setIsReaded(true);
             });
           }

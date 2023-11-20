@@ -29,13 +29,21 @@ const createArticle = (title:string, main_image: string,intro:string, content:st
       
     });
   };
+  const getCategori = () => {
+    return authRequest<any>({
+      url: '/post/article/AllAvailableCategories',
+      method: 'POST',
+      
+    });
+  };
 
 
 
   const articleApi = {
     createArticle,
     getArticleById,
-    getAllArticle
+    getAllArticle,
+    getCategori
   };
   
   export default articleApi;

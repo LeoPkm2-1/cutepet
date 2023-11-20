@@ -33,6 +33,7 @@ import authApi from '../api/auth';
 import { AuthActions } from '../redux/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux';
+// import { socket } from '../socket';
 
 interface IMenuItemData {
   key: string;
@@ -96,6 +97,7 @@ export default function SideBar(props: {
         console.log('Thành công');
         localStorage.removeItem('accessToken');
         dispatch(AuthActions.setAuth(false));
+        // socket.disconnect();
       })
       .catch((err) => {
         naviagte('/login');

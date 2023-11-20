@@ -21,6 +21,7 @@ import Loading from '../../../../../components/loading';
 import Select from '../../../../../components/Select';
 import React from 'react';
 import { FriendTagComponent, PersonComponent } from '../../../ban-be';
+import ImageSelect from '../../../../../components/ImageSelect';
 
 type Props = {
   open: boolean;
@@ -31,6 +32,7 @@ export default function PopUpCreatePost(props: Props) {
   const [isFilePicked, setIsFilePicked] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [text, setText] = useState('');
+  const [isPhoto, setIsPhoto] = useState(false);
   const [visibility, setVisibility] = useState('PUBLIC');
   const { enqueueSnackbar } = useSnackbar();
   const infoUser = useSelector((state: RootState) => state.user.profile);
@@ -160,22 +162,16 @@ export default function PopUpCreatePost(props: Props) {
                         }}
                       >
                         cùng với
-                      </span>
-
-                      {" "}
+                      </span>{' '}
                       {friend?.map((item, index) => {
-                        if(index> 0){
+                        if (index > 0) {
                           return (
                             <span>
-                             {", "} {item?.name}
+                              {', '} {item?.name}
                             </span>
-                          )
+                          );
                         }
-                        return (
-                          <span>
-                           {item?.name}
-                          </span>
-                        )
+                        return <span>{item?.name}</span>;
                       })}
                     </>
                   )}
@@ -192,7 +188,7 @@ export default function PopUpCreatePost(props: Props) {
                 </Typography> */}
                 <Select
                   sx={{
-                    width:"120px",
+                    width: '120px',
                     marginTop: '4px',
                     '.MuiInputBase-root': {
                       height: '28px',
@@ -224,7 +220,7 @@ export default function PopUpCreatePost(props: Props) {
               autoFocus
               fullWidth
               multiline
-              minRows={3}
+              minRows={1}
               maxRows={10}
               sx={{ flex: 1, padding: '0 20px', fontFamily: 'quicksand' }}
               placeholder="Chia sẽ trang thái của bạn..."
@@ -232,7 +228,7 @@ export default function PopUpCreatePost(props: Props) {
               value={text}
               onChange={(e) => setText(e.target.value as string)}
             />
-            {selectedFile && (
+            {/* {selectedFile && (
               <img
                 style={{
                   marginBottom: '10px',
@@ -242,6 +238,24 @@ export default function PopUpCreatePost(props: Props) {
                 // src="https://i.pinimg.com/550x/bb/0b/88/bb0b88d61edeaf96ae83421cf759650e.jpg"
                 src={URL.createObjectURL(selectedFile)}
               />
+            )} */}
+            {isPhoto && (
+              <Box
+                sx={{
+                  margin: '20px',
+                }}
+              >
+                <ImageSelect
+                  aspectRatio={1.5}
+                  onFileChange={(file) => {
+                    if (file) {
+                      setSelectedFile(file);
+                    } else {
+                      setSelectedFile(null);
+                    }
+                  }}
+                />
+              </Box>
             )}
           </Box>
           <Box
@@ -272,9 +286,10 @@ export default function PopUpCreatePost(props: Props) {
               <Box>
                 <IconButton
                   onClick={() => {
-                    if (fileInputRef.current) {
-                      fileInputRef.current.click();
-                    }
+                    // if (fileInputRef.current) {
+                    //   fileInputRef.current.click();
+                    // }
+                    setIsPhoto(true);
                   }}
                 >
                   <InsertPhotoIcon

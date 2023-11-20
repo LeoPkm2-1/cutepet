@@ -2,7 +2,6 @@ import { Box } from '@mui/material';
 import { StyledTypography } from './style';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
-
 export function DanhSachThuCung() {
   return (
     <>

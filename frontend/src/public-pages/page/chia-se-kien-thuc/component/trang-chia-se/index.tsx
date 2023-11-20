@@ -9,6 +9,7 @@ import { ArticleType } from '../../../../../models/article';
 export function TrangChiaSe() {
   const naviagte = useNavigate();
   const [articles, setArticles] = useState<ArticleType[]>([]);
+  
   useEffect(() => {
     articleApi.getAllArticle().then((data) => {
         console.log(data, " data art");
