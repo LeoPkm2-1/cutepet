@@ -21,6 +21,28 @@ const userPublicInforByUserName = async (req, res) => {
   res.status(200).json(new Response(200, userPubInfor, ""));
 };
 
+const insertRequestAddFriendStatusOfEachPersonToYou = async (listOfPeople) => {
+  listOfPeople.forEach((element, index) => {
+    if (element.isFriend == true) {
+      element["requestAddFriendStatus"] = null;
+    } else {
+      element["requestAddFriendStatus"] = true;
+    }
+  });
+  console.log(listOfPeople);
+};
+
+// Sample array of objects
+let arrayOfObjects = [
+  { id: 1, name: "John" },
+  { id: 2, name: "Jane" },
+  { id: 3, name: "Doe" },
+];
+
+(async function () {
+  await insertRequestAddFriendStatusOfEachPersonToYou(arrayOfObjects);
+})();
+
 // searchPeopleByNameController
 const searchPeopleController = async (req, res) => {
   let searchKey = req.body.searchKey;

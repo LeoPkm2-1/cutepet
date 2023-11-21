@@ -143,6 +143,51 @@
 
 ## 4. thu hồi lời mời kết bạn (xóa lời mời kết bạn khi nó chưa được trả lời)
 
+1. phương thức:
+
+   POST http://localhost:3000/friend/removeRequestAddFriendById
+
+2. cấu trúc:
+
+```javascript
+{
+  requestID: number;
+}
+```
+
+- trong đó:
+  - **requestID**: id của người dùng trước đó đã gửi lời mời nhưng chưa được phản hồi
+
+3. trả về:
+
+- khi bạn chưa gửi lời mời kết bạn tới người dùng đó
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bạn chưa gửi lời mời đến người dùng này",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- thu hồi lời mời kết bạn thành công:
+  
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "affectedRows": 1,
+        "insertId": 0,
+        "warningStatus": 0
+    },
+    "message": "OK",
+    "errno": null,
+    "errcode": null
+}
+```
+
 ##
 
 ##
