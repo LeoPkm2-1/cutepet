@@ -15,7 +15,7 @@ const requestAddFriend = async (req, res) => {
     "Người Gửi không thể gửi lời mời kết bạn đến chính mình";
   const NOT_SEND_REQUIRE_ID =
     "Bắt buộc phải nhập ID người muốn gửi lời mời kết bạn";
-  const BAN_TO_SEND_REQUEST = "không đủ điều kiện để gửi lời mời kết bạn";
+  const BAN_TO_SEND_REQUEST = "Không đủ điều kiện để gửi lời mời kết bạn";
   try {
     const idNguoiNhan = parseInt(req.body.requestID);
     const idNguoiGui = parseInt(req.auth_decoded.ma_nguoi_dung);
@@ -217,6 +217,21 @@ const unfollowFriend = async (req, res) => {
       )
     );
 };
+
+const removeRequestAddFriend = async (req, res) => {
+  // res.send("ahihi");
+  const recipient_id = req.body.requestID;
+  const sender_id = req.auth_decoded.ma_nguoi_dung;
+  const deleteProcess = await loiMoiKetBanModel.deletePendingRequest(
+    sender_id,
+    recipient_id
+  ).then(data=>data.payload).then(data=>{
+    data.insertId = parseInt(data.insertId);
+    return data
+  })
+  // console.log(deleteProcess);
+  res.status(200).json(new Response(200, deleteProcess, "OK"));
+};
 module.exports = {
   requestAddFriend,
   responeAddFriend,
@@ -224,4 +239,5 @@ module.exports = {
   getRequestAddFriendList,
   getFriendList,
   unfollowFriend,
+  removeRequestAddFriend,
 };

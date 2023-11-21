@@ -138,3 +138,13 @@
     "errcode": null
 }
 ```
+
+## 3. phải hồi lời mời kết bạn (đồng ý hay không đồng ý)
+
+## 4. thu hồi lời mời kết bạn (xóa lời mời kết bạn khi nó chưa được trả lời)
+
+##
+
+##
+
+##

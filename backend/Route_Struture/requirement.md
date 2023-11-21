@@ -156,6 +156,14 @@ xem chi tiết tại: **[Route_Struture/post.md](./post.md#1-thêm-bài-viết-c
 
 ## 37. Load bài viết status khi vào trang mạng xã hội
 
-##
+## 38. khi đăng xuất thông báo xanh xanh vẫn còn chưa kịp tắt đi
 
-##
+## 39. thêm tính năng thêm bạn bè trong lúc tìm kiếm bạn bè
+
+## 40. chờ phản hồi khi tìm kiếm bạn bè
+
+## 41. hủy lời mời kết bạn
+
+Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chưa có phản hồi xem chi tiết tại: **[thu hồi lời mời kết bạn](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)**
+
+## 42. hủy bạn bè

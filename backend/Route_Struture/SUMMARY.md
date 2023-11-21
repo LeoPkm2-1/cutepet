@@ -230,7 +230,11 @@
 
    _chi tiết:_ **[Route_Struture/pet.md](./pet.md#6-lấy-thông-tin-cơ-bản-của-1-con-thú-cưng)** và **postman số 67**
 
-##
+## (21-11-2023)
+
+1. thu hồi lời mời kết bạn:
+
+*chi tiết:* **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)** và **postman số 68**
 
 ##
 
