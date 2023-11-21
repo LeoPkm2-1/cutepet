@@ -14,6 +14,17 @@ const getRequestAddFriendList = () => {
   });
 };
 
+const responeAddFriend = (senderID: number|string, acceptOrReject:string) => {
+  return authRequest<any>({
+    url: `/friend/responeAddFriendRequestById`,
+    method: 'POST',
+    body: {
+      senderID,
+      acceptOrReject
+    }
+  });
+};
+
 
 const searchPeople = (searchKey: string, index: number, num: number) => {
   return authRequest<any>({
@@ -30,7 +41,8 @@ const searchPeople = (searchKey: string, index: number, num: number) => {
 const friendApi = {
   getListFriend,
   searchPeople,
-  getRequestAddFriendList
+  getRequestAddFriendList,
+  responeAddFriend
 };
 
 export default friendApi;
