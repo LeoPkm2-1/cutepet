@@ -1,8 +1,14 @@
 import { Box } from '@mui/material';
 import { StyledTypography } from './style';
-import FemaleIcon from '@mui/icons-material/Female';
+
 import MaleIcon from '@mui/icons-material/Male';
-export function DanhSachThuCung() {
+import React, { useEffect } from 'react';
+import petApi from '../../../../../api/pet';
+import { PetType } from '../../../../../models/pet';
+import moment from 'moment';
+import FemaleIcon from '@mui/icons-material/Female';
+
+export function DanhSachThuCung(props: { pet: PetType }) {
   return (
     <>
       <Box
@@ -11,7 +17,7 @@ export function DanhSachThuCung() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginBottom: "40px"
+          marginBottom: '40px',
         }}
       >
         <img
@@ -21,7 +27,7 @@ export function DanhSachThuCung() {
             objectFit: 'cover',
             borderRadius: '10px',
           }}
-          src="https://anhhd.com/wp-content/uploads/2021/10/avatar-cute-meo-39.jpg"
+          src={props?.pet?.url_anh}
         />
 
         <Box
@@ -33,7 +39,7 @@ export function DanhSachThuCung() {
             top: '210px',
             borderRadius: '8px',
             display: 'flex',
-            justifyContent: "space-around",
+            justifyContent: 'space-around',
           }}
         >
           <Box
@@ -41,19 +47,23 @@ export function DanhSachThuCung() {
               display: 'flex',
               justifyContent: 'center',
               flexDirection: 'column',
-              alignItems: "center"
+              alignItems: 'center',
             }}
           >
-            <StyledTypography sx={{
-                fontWeight:"500"
-            }}>Clound</StyledTypography>
+            <StyledTypography
+              sx={{
+                fontWeight: '500',
+              }}
+            >
+              {props?.pet?.ten_thu_cung}
+            </StyledTypography>
             <StyledTypography
               sx={{
                 fontSize: '13px',
                 color: 'rgba(1, 0, 0, 0.7)',
               }}
             >
-              Pigbull
+              {props?.pet?.ten_giong}
             </StyledTypography>
           </Box>
           <Box
@@ -61,18 +71,17 @@ export function DanhSachThuCung() {
               display: 'flex',
               justifyContent: 'center',
               flexDirection: 'column',
-              alignItems: "center"
-
+              alignItems: 'center',
             }}
           >
-            <MaleIcon />
+            {!props?.pet?.gioi_tinh ? <FemaleIcon /> : <MaleIcon />}
             <StyledTypography
               sx={{
                 fontSize: '13px',
                 color: 'rgba(1, 0, 0, 0.7)',
               }}
             >
-              1 year ago
+              {moment(props?.pet?.ngay_sinh).format('MM-DD-YYYY')}
             </StyledTypography>
           </Box>
         </Box>

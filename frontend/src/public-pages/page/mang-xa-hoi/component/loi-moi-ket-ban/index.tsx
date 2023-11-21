@@ -3,6 +3,7 @@ import Button from '../../../../../components/Button';
 import { useEffect, useState } from 'react';
 import friendApi from '../../../../../api/friend';
 import { timeAgo } from '../../../../../helper/post';
+import { useSnackbar } from 'notistack';
 
 export default function LoiMoiKetBan() {
   const [userList, setUserList] = useState<
@@ -10,10 +11,12 @@ export default function LoiMoiKetBan() {
       name: string;
       url: string;
       time: string;
+      senderID: number | string;
     }[]
   >([]);
 
   const [isShowAll, setIsShowAll] = useState(true);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     friendApi.getRequestAddFriendList().then((data) => {
@@ -23,6 +26,7 @@ export default function LoiMoiKetBan() {
             name: item?.thong_tin_nguoi_gui?.ten,
             url: item?.thong_tin_nguoi_gui?.anh?.url,
             time: item?.ngay_gui,
+            senderID: item?.ma_nguoi_gui,
           };
         });
         if ((list?.length || 0) > 0) {
@@ -33,7 +37,7 @@ export default function LoiMoiKetBan() {
         }
       }
     });
-  }, []);
+  }, [reload]);
   return (
     <>
       <Typography
@@ -54,66 +58,91 @@ export default function LoiMoiKetBan() {
       <LoiMoi name ="Dung Nguyen"/>
       <LoiMoi name ="Tung"/>
       <LoiMoi name ="Ngoc Anh"/> */}
-      {!isShowAll ? (
+      {userList?.length > 0 ? (
         <>
-          {userList.map((item, index) => {
-            if (index < 4) {
-              return (
-                <LoiMoi name={item?.name} url={item?.url} time={item?.time} />
-              );
-            }
-          })}
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <Button
-             onClick={() => {
-              setIsShowAll(true);
-             }}
-              sx={{
-                fontFamily: 'quicksand',
-                fontWeight: '600',
-                fontSize: '14px',
-                color: 'blue',
-                marginTop: '20px',
-              }}
-            >
-              Xem tất cả
-            </Button>
-          </Box>
+          {!isShowAll ? (
+            <>
+              {userList.map((item, index) => {
+                if (index < 4) {
+                  return (
+                    <LoiMoi
+                      onSuccess={() => setReload(!reload)}
+                      senderID={item?.senderID}
+                      name={item?.name}
+                      url={item?.url}
+                      time={item?.time}
+                    />
+                  );
+                }
+              })}
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <Button
+                  onClick={() => {
+                    setIsShowAll(true);
+                  }}
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    color: 'blue',
+                    marginTop: '20px',
+                  }}
+                >
+                  Xem tất cả
+                </Button>
+              </Box>
+            </>
+          ) : (
+            <>
+              {userList.map((item, index) => {
+                return (
+                  <LoiMoi
+                    onSuccess={() => setReload(!reload)}
+                    senderID={item?.senderID}
+                    name={item?.name}
+                    url={item?.url}
+                    time={item?.time}
+                  />
+                );
+              })}
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <Button
+                  onClick={() => {
+                    setIsShowAll(false);
+                  }}
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    color: 'blue',
+                    marginTop: '20px',
+                  }}
+                >
+                  Ẩn bớt
+                </Button>
+              </Box>
+            </>
+          )}
         </>
       ) : (
-        <>
-          {userList.map((item, index) => {
-            return (
-              <LoiMoi name={item?.name} url={item?.url} time={item?.time} />
-            );
-          })}
-           <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <Button
-             onClick={() => {
-              setIsShowAll(false);
-             }}
-              sx={{
-                fontFamily: 'quicksand',
-                fontWeight: '600',
-                fontSize: '14px',
-                color: 'blue',
-                marginTop: '20px',
-              }}
-            >
-              Ẩn bớt
-            </Button>
-          </Box>
-        </>
+        <Typography sx={{
+          fontFamily: 'quicksand',
+          fontWeight: '500',
+          fontSize: '16px',
+          marginTop: '12px',
+        }} >
+          Chưa có lời mời kết bạn
+        </Typography>
       )}
     </>
   );
@@ -123,8 +152,29 @@ type PropsLoiMoi = {
   name: string;
   time?: string;
   url?: string;
+  senderID: number | string;
+  onSuccess: () => void;
 };
 function LoiMoi(props: PropsLoiMoi) {
+  const { enqueueSnackbar } = useSnackbar();
+  function handleSubmit(type: string) {
+    friendApi.responeAddFriend(props.senderID, type).then((data) => {
+      console.log(data, ' dtata nef');
+      if (data?.status == 200) {
+        if (data?.payload?.accepted) {
+          enqueueSnackbar(`Kết bạn với ${props?.name} thành công`, {
+            variant: 'success',
+          });
+        } else {
+          enqueueSnackbar(`Xóa lời mời kết bạn với ${props?.name} thành công`, {
+            variant: 'success',
+          });
+        }
+        props?.onSuccess();
+      }
+    });
+  }
+
   return (
     <>
       <Box
@@ -184,6 +234,7 @@ function LoiMoi(props: PropsLoiMoi) {
             }}
           >
             <Button
+              onClick={() => handleSubmit('accept')}
               sx={{
                 minWidth: '100px',
               }}
@@ -192,6 +243,7 @@ function LoiMoi(props: PropsLoiMoi) {
               Xác Nhận
             </Button>
             <Button
+              onClick={() => handleSubmit('reject')}
               variant="contained"
               color="inherit"
               sx={{
