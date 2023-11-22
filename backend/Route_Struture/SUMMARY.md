@@ -234,9 +234,16 @@
 
 1. thu hồi lời mời kết bạn:
 
-*chi tiết:* **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)** và **postman số 68**
+_chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)** và **postman số 68**
 
-##
+## (22-11-2023)
+
+1. lấy các thông báo chưa đọc theo index và number
+   _chi tiết:_ **[Route_Struture/notification.md](./notification.md#5-get-unread-notifications-before-specific-time)** và **postman số 69**
+
+2. lấy các thông báo chưa đọc trước 1 thời điểm
+
+   _chi tiết:_ **[Route_Struture/notification.md](./notification.md#6-get-unread-notifications-by-index-and-range)** và **postman số 70**
 
 ##
 

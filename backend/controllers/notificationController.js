@@ -1,49 +1,76 @@
-const { Response } = require('./../utils/index');
-const notificationModel = require('./../models/thongbao/notificationModel');
+const { Response } = require("./../utils/index");
+const notificationModel = require("./../models/thongbao/notificationModel");
 
 const getAllNotification = async (req, res) => {};
 
 const getNotiByIndexAndRange = async (req, res) => {
-	const user_id = req.auth_decoded.ma_nguoi_dung;
-	const { index, num } = req.body;
-	const notifications = await notificationModel
-		.getNotificationByIndexAndRange(user_id, index, num)
-		.then((data) => data.payload);
-	const neededNotifications = notifications.slice(index, index + num);
-	res.status(200).json(new Response(200, neededNotifications, ''));
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const { index, num } = req.body;
+  const notifications = await notificationModel
+    .getNotificationByIndexAndRange(user_id, index, num)
+    .then((data) => data.payload);
+
+  const neededNotifications =
+    typeof num == "undefined"
+      ? notifications
+      : notifications.slice(index, index + num);
+  //   console.log(neededNotifications.length);
+  res.status(200).json(new Response(200, neededNotifications, ""));
+};
+
+const getUnReadNotiByIndexAndRange = async (req, res) => {
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const { index, num } = req.body;
+  const unReadNotifications = await notificationModel
+    .getUnReadNotifiByIndexAndRange(user_id, index, num)
+    .then((data) => data.payload);
+  const needNotifications = unReadNotifications.slice(index);
+  res.status(200).json(new Response(200, needNotifications, ""));
 };
 
 const getNotiBefore = async (req, res) => {
-	const user_id = req.auth_decoded.ma_nguoi_dung;
-	const { before, num } = req.body;
-	const notifications = await notificationModel
-		.getNotificationBeforeTime(user_id, before, num)
-		.then((data) => data.payload);
-		console.log(notifications);
-	res.status(200).json(new Response(200, notifications, ''));
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const { before, num } = req.body;
+  const notifications = await notificationModel
+    .getNotificationBeforeTime(user_id, before, num)
+    .then((data) => data.payload);
+  // console.log(notifications.length);
+  res.status(200).json(new Response(200, notifications, ""));
+};
+
+const getUnReadNotiBefore = async (req, res) => {
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const { before, num } = req.body;
+  const notifications = await notificationModel
+    .getUnReadNotifiBeforeTime(user_id, before, num)
+    .then((data) => data.payload);
+  console.log(notifications);
+  res.status(200).json(new Response(200, notifications, ""));
 };
 
 const markAsRead = async (req, res) => {
-	const notif_id = req.body.notif_id;
-	await notificationModel.updateNotificationhasReadField(notif_id, true);
-	const notif_after_update = await notificationModel
-		.getNotificationById(notif_id)
-		.then((data) => data.payload);
-	// console.log(notif_after_update);
-	res
-		.status(200)
-		.json(new Response(200, notif_after_update, 'đánh dấu đã đọc thành công'));
+  const notif_id = req.body.notif_id;
+  await notificationModel.updateNotificationhasReadField(notif_id, true);
+  const notif_after_update = await notificationModel
+    .getNotificationById(notif_id)
+    .then((data) => data.payload);
+  // console.log(notif_after_update);
+  res
+    .status(200)
+    .json(new Response(200, notif_after_update, "đánh dấu đã đọc thành công"));
 };
 
 const markAllAsRead = async (req, res) => {
-	const user_id = req.auth_decoded.ma_nguoi_dung;
-	const data = await notificationModel.markAllUnReadNotifToRead(user_id);
-	res.status(200).json(new Response(200, data, 'cập nhật thành công'));
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const data = await notificationModel.markAllUnReadNotifToRead(user_id);
+  res.status(200).json(new Response(200, data, "cập nhật thành công"));
 };
 module.exports = {
-	getAllNotification,
-	getNotiByIndexAndRange,
-	getNotiBefore,
-	markAsRead,
-	markAllAsRead,
+  getAllNotification,
+  getNotiByIndexAndRange,
+  getNotiBefore,
+  markAsRead,
+  markAllAsRead,
+  getUnReadNotiBefore,
+  getUnReadNotiByIndexAndRange,
 };

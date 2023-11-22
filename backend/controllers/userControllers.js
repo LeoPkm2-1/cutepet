@@ -4,6 +4,7 @@ const loginHelper = require("./../utils/loginHelper");
 const { getHash } = require("./../utils/hash");
 const { Response } = require("./../utils/index");
 const anhNguoiDungModel = require("../models/anhNguoiDungModel");
+const loiMoiKetBanModel = require("../models/loiMoiKetBanModel");
 
 // gọi để model để lấy thông tin người dùng trong bảng người dùng
 const getUserByUserName = async (req, res) => {
@@ -21,27 +22,38 @@ const userPublicInforByUserName = async (req, res) => {
   res.status(200).json(new Response(200, userPubInfor, ""));
 };
 
-const insertRequestAddFriendStatusOfEachPersonToYou = async (listOfPeople) => {
-  listOfPeople.forEach((element, index) => {
-    if (element.isFriend == true) {
-      element["requestAddFriendStatus"] = null;
-    } else {
-      element["requestAddFriendStatus"] = true;
-    }
-  });
-  console.log(listOfPeople);
+const insertRequestAddFriendStatusOfEachPersonToYou = async (
+  listOfPeople,
+  your_id
+) => {
+  return await Promise.all(
+    listOfPeople.map(async (person) => {
+      person["requestAddFriendStatus"] = null;
+      if (person.isFriend != true) {
+        person["requestAddFriendStatus"] = null;
+
+        const waittingYourRespone = await loiMoiKetBanModel
+          .havePendingRequestAddFriend(person.ma_nguoi_dung, your_id)
+          .then((data) => data.payload);
+        const hasSendRequestAddFriend = await loiMoiKetBanModel
+          .havePendingRequestAddFriend(your_id, person.ma_nguoi_dung)
+          .then((data) => data.payload);
+        // console.log(waittingYourRespone,person.ma_nguoi_dung);
+        if (waittingYourRespone) {
+          person["requestAddFriendStatus"] = "WAITTING_YOUR_RESPONE";
+          return person;
+        }
+
+        if (hasSendRequestAddFriend) {
+          person["requestAddFriendStatus"] = "HAS_SEND_REQUEST_ADD_FRIEND";
+          return person;
+        }
+        return person;
+      }
+      return person;
+    })
+  );
 };
-
-// Sample array of objects
-let arrayOfObjects = [
-  { id: 1, name: "John" },
-  { id: 2, name: "Jane" },
-  { id: 3, name: "Doe" },
-];
-
-(async function () {
-  await insertRequestAddFriendStatusOfEachPersonToYou(arrayOfObjects);
-})();
 
 // searchPeopleByNameController
 const searchPeopleController = async (req, res) => {
@@ -82,8 +94,10 @@ const searchPeopleController = async (req, res) => {
         return newUser;
       })
     );
-  // console.log('\n\n\nlistUserPubInfor');
-  // console.log(listUserPubInfor);
+  const result = await insertRequestAddFriendStatusOfEachPersonToYou(
+    listUserPubInfor,
+    parseInt(req.auth_decoded.ma_nguoi_dung)
+  );
   res.status(200).json(new Response(200, listUserPubInfor, ""));
 };
 

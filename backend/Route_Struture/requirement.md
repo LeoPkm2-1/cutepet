@@ -4,6 +4,7 @@
 
     - [ ] 1.1. khi có 1 thông báo mới đến thì icon thông báo sẽ được load lại
     - [ ] 1.2. khi mới đăng nhập vào hệ thống phải load lại trang thông báo
+    - [ ] 1.3 nếu thông báo đọc rồi thì xóa nó đi có api rồi ko hiện thị, nếu thông báo dến thì load lại icon thông báo và api để cập nhật
 
 sửa dụng: - **[getNotificationBefore](./notification.md/#1-get-notifications-before-specific-time)** hoặc **[getNotificationStartFrom](./notification.md/#2-get-notifications-by-index-and-range)**
 
@@ -19,7 +20,7 @@ sửa dụng:
 - **[3](./profile.md/#3-lấy-thông-tin-trang-cá-nhân-của-người-dùng-khác)**
 - **[4](./profile.md/#4-lấy-các-bài-viết-trên-time-line-của-người-dùng-khác)**
 
-## 3. đổi lại icon cho bài viết chia sẻ:
+## 3. ==DONE== đổi lại icon cho bài viết chia sẻ:
 
 ## 4. handle kết bạn
 
@@ -39,14 +40,14 @@ sửa dụng:
 
 ## 8. sửa lại icon của bài viết `private`, `public`, `just_friend`
 
-## 9. socket có vấn đề:
+## 9. == DONE == socket có vấn đề :
 
     - [ ] 9.1. đăng xuất chưa tắt socket
     - [ ] 9.2. khi đăng nhập vào thì socket chưa được kết nối
 
 ## 10. navigate tới mạng xã hội khi path là `/` hoặc là `/home`
 
-## 11. hoàn thiện ảnh trong trang chia sẻ kiến thức:
+## 11. ==DONE== hoàn thiện ảnh trong trang chia sẻ kiến thức:
 
     - [ ] 11.1 resize lại
     - [ ] 11.2 cho hủy ảnh
@@ -61,7 +62,7 @@ tham khảo tại: **[article.md](./article.md)**
 
 - trong trang đăng ký tên phải chỉ chứa tối đa 32 ký tự, có thể là tiếng việt hoặc tiếng anh. [chi tiết tại đây](./userInfor.md#5-đăng-ký-tài-khoản)
 
-## 15. thêm icon xóa ảnh khi đăng bài viết chia sẻ trạng thái
+## 15. ==DONE== thêm icon xóa ảnh khi đăng bài viết chia sẻ trạng thái
 
 ## 16. khi người dùng tag thì phải bỏ đi những người dùng tag rồi tag lại
 
@@ -69,7 +70,7 @@ tham khảo tại: **[article.md](./article.md)**
 
     (xem trong file summary)
 
-## 18. Sửa lại thông báo trong trang đăng nhập:
+## 18. == DONE == Sửa lại thông báo trong trang đăng nhập :
 
     - thông báo rõ ràng hơn lỗi đó là lỗi gì không nên để chung chung là lỗi đăng nhập được:
 
@@ -79,7 +80,7 @@ tham khảo tại: **[article.md](./article.md)**
 
     (xem trong file summary)
 
-## 20. sửa lại danh sách các thể loại của bài viết chia sẻ kiến thức
+## 20. ==DONE== sửa lại danh sách các thể loại của bài viết chia sẻ kiến thức
 
     (xem trong file summary)
 
@@ -91,17 +92,19 @@ tham khảo tại: **[article.md](./article.md)**
 
     (xem trong file summary)
 
-## 23. thêm nút xóa ảnh khi đăng bài trạng thái
+## 23. ==DONE== thêm nút xóa ảnh khi đăng bài trạng thái
 
-## 24. resize lại ảnh khi đăng bài viết chia sẻ kiến thức
+## 24. ==DONE== resize lại ảnh khi đăng bài viết chia sẻ kiến thức
 
 ## 25. hiện category lúc đọc bài viết chia sẻ kiến thức
 
-## 26. đổi lại icon article trên navbar
+## 26. ==DONE== đổi lại icon article trên navbar
 
 ## 27. bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức
 
 ## 28. handle ảnh bìa cho bài viết chia sẻ kiến thức
+    
+        (chỉnh lại cho đẹp hơn)
 
 ## 29. chỉnh sửa bài viết chia sẻ kiến thức.
 
@@ -167,3 +170,4 @@ xem chi tiết tại: **[Route_Struture/post.md](./post.md#1-thêm-bài-viết-c
 Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chưa có phản hồi xem chi tiết tại: **[thu hồi lời mời kết bạn](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)**
 
 ## 42. hủy bạn bè
+
