@@ -141,7 +141,7 @@ export default function BaiChiaSe() {
             <Divider sx={{
               marginBottom: "22px"
             }}/>
-            <Comment
+            {/* <Comment
               comment={{
                 photoURL: 'string',
                 name: 'Thuyen',
@@ -160,7 +160,7 @@ export default function BaiChiaSe() {
                 id: 'kk',
               }}
               onRemove={() => {}}
-            />
+            /> */}
             <CreateComment
               onSuccess={() => {
                 // setReloadComment(!reloadComment);

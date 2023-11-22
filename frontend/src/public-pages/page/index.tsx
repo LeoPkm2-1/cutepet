@@ -22,6 +22,7 @@ import { useSnackbar } from 'notistack';
 import { NotifycationItem } from '../../components/NotificationItem';
 import { NotiActions } from '../../redux/noti';
 import { io } from 'socket.io-client';
+import TrangCaNhanMoiNguoi from './trang-ca-nhan/trang-ca-nhan-moi-nguoi';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -103,6 +104,7 @@ export default function PageRouting() {
             <Routes>
               <Route path="mang-xa-hoi" element={<MangXaHoi />} />
               <Route path="trang-ca-nhan" element={<TrangCaNhan />} />
+              <Route path="trang-ca-nhan-nguoi-dung/:id" element={<TrangCaNhanMoiNguoi />} />
               <Route path="quan-ly-thu-cung" element={<QuanLyThuCung />} />
               <Route path="them-thu-cung" element={<ThemThuCung />} />
               <Route path="ban-be" element={<FriendList />} />
