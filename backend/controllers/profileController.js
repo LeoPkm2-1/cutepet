@@ -67,6 +67,12 @@ async function myProfileController(req, res) {
 async function userProfileController(req, res) {
   const myId = parseInt(req.auth_decoded.ma_nguoi_dung);
   const findingUserId = parseInt(req.body.user_id);
+
+  if (myId == findingUserId) {
+    await myProfileController(req, res);
+    return;
+  }
+
   const userPublicInfor = await userHelper.getUserPublicInforByUserId(
     findingUserId
   );
