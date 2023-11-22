@@ -6,6 +6,35 @@ const petHelper = require("../utils/petHelper");
 const { Response } = require("../utils/index");
 const StatusPostModel = require("../models/BaiViet/StatusPostModel");
 const { haveFriendShipBetween } = require("../utils/banbeHelper");
+const loiMoiKetBanModel = require("../models/loiMoiKetBanModel");
+
+async function getRequestAddFriendStatusOfOnePersonToYou(person_id, your_id) {
+  const isFriend = await haveFriendShipBetween(person_id, your_id);
+  let result = null;
+  if (isFriend) return null;
+  const waittingYourRespone = await loiMoiKetBanModel
+    .havePendingRequestAddFriend(person_id, your_id)
+    .then((data) => data.payload);
+  const hasSendRequestAddFriend = await loiMoiKetBanModel
+    .havePendingRequestAddFriend(your_id, person_id)
+    .then((data) => data.payload);
+
+  if (waittingYourRespone) {
+    result = "WAITTING_YOUR_RESPONE";
+    return result;
+  }
+
+  if (hasSendRequestAddFriend) {
+    result = "HAS_SEND_REQUEST_ADD_FRIEND";
+    return result;
+  }
+  return result;
+}
+
+// (async function () {
+//   const data = await getRequestAddFriendStatusOfOnePersonToYou(10, 2);
+//   console.log(data);
+// })();
 
 async function myProfileController(req, res) {
   const userid = req.auth_decoded.ma_nguoi_dung;
@@ -65,10 +94,12 @@ async function userProfileController(req, res) {
     .getAllOwnsPetOf(findingUserId)
     .then((data) => data.payload.map((pet) => pet.ma_thu_cung));
   const danh_sach_thu_cung = await petHelper.publicInforOfListPet(listOfPetId);
-
+  const thong_tin_ve_gui_loi_moi_ket_ban =
+    await getRequestAddFriendStatusOfOnePersonToYou(findingUserId, myId);
   res.status(200).json({
     thong_tin_profile_user: userPublicInfor,
     la_ban_be: laBanBe,
+    thong_tin_ve_gui_loi_moi_ket_ban: thong_tin_ve_gui_loi_moi_ket_ban,
     danh_sach_anh_dai_dien,
     danh_sach_ban_be: laBanBe ? publicFriendInforList : [],
     danh_sach_thu_cung,

@@ -816,7 +816,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -828,12 +828,12 @@
 					"urlencoded": [
 						{
 							"key": "before",
-							"value": "2023-10-19-07:30",
+							"value": "2023-10-19",
 							"type": "text"
 						},
 						{
 							"key": "num",
-							"value": "100",
+							"value": "1",
 							"type": "text"
 						}
 					]
@@ -2889,6 +2889,91 @@
 			"response": []
 		},
 		{
+			"name": "68_friend_removeRequestAddFriendById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "requestID",
+							"value": "8",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/friend/removeRequestAddFriendById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"removeRequestAddFriendById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "69_getUnReadNotiBefore",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "before",
+							"value": "2023-11-22",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/notification/getUnReadNotiBefore",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"notification",
+						"getUnReadNotiBefore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "capnhatthongtinthucung",
 			"request": {
 				"auth": {
@@ -3142,6 +3227,51 @@
 							"value": "2",
 							"disabled": true
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "70_getUnReadNotiStartFrom",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "index",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/notification/getUnReadNotiStartFrom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"notification",
+						"getUnReadNotiStartFrom"
 					]
 				}
 			},

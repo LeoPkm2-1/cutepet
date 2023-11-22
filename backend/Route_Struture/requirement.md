@@ -103,7 +103,7 @@ tham khảo tại: **[article.md](./article.md)**
 ## 27. bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức
 
 ## 28. handle ảnh bìa cho bài viết chia sẻ kiến thức
-    
+
         (chỉnh lại cho đẹp hơn)
 
 ## 29. chỉnh sửa bài viết chia sẻ kiến thức.
@@ -171,3 +171,10 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 42. hủy bạn bè
 
+## 43. chưa show text trong bài viết chia sẻ trạng thái khi bam61 vào thông báo
+
+## 44. thích bài viết chia sẻ trạng thái
+
+## 45. lắng nghe khi có ai đó thích bài viết chia sẻ trạng thái
+
+## 46. lắng nghe khi phản hồi bình luận của bài viết chia sẻ trạng thái
