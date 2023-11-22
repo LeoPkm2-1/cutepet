@@ -3,6 +3,7 @@ import Button from '../../../components/Button';
 import React, { useState, useEffect } from 'react';
 import friendApi from '../../../api/friend';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import { useNavigate } from 'react-router-dom';
 
 
 export function FriendList() {
@@ -12,6 +13,7 @@ export function FriendList() {
       user: string;
       url: string;
       isOnline?: boolean;
+      userId?: number;
     }[]
   >([]);
 
@@ -25,6 +27,7 @@ export function FriendList() {
             user: item?.tai_khoan,
             url: item?.anh?.url,
             isOnline: item?.isOnline || false,
+            userId: item?.ma_nguoi_dung
           };
         });
         setFriends(list);
@@ -48,6 +51,7 @@ export function FriendList() {
               {friends?.map((item) => {
                 return (
                   <PersonComponent
+                    userId={item?.userId}
                     name={item.name}
                     user={item.user}
                     url={item.url}
@@ -68,11 +72,14 @@ type PropsPerson = {
   url: string;
   user: string;
   isOnline?: boolean;
+  userId?: number | string;
 };
 export function PersonComponent(props: PropsPerson) {
+   const navigate = useNavigate();
   return (
     <>
       <Box
+        onClick ={() => navigate(`/home/trang-ca-nhan-nguoi-dung/${props?.userId}`)}
         sx={{
           display: 'flex',
           justifyContent: 'space-between',

@@ -128,3 +128,11 @@ export interface FriendType {
   url: string;
   isOnline: boolean;
 }
+
+export interface PeopleType {
+  name: string;
+  id: string;
+  user: string;
+  url: string;
+  numberPet: number;
+}

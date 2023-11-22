@@ -24,6 +24,7 @@ export interface StatusType {
 export interface CommentType {
   photoURL: string;
   name: string;
+  userId: number;
   text: string;
   createdAt: string;
   id: string;
