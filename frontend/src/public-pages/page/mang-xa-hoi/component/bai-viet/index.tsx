@@ -28,6 +28,7 @@ import { AirlineSeatReclineExtraOutlined } from '@mui/icons-material';
 import LockIcon from '@mui/icons-material/Lock';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import PublicIcon from '@mui/icons-material/Public';
+import { useNavigate } from 'react-router-dom';
 type Props = {
   idStatus?: string;
   status?: StatusType;
@@ -41,12 +42,14 @@ export default function PostComponent(props: Props) {
   const [isComment, setIsComment] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+  const profile = useSelector((state: RootState) => state.user.profile);
   const [friendTag, setFriendTag] = useState<
-  {
-    id: string;
-    name: string;
-  }[]
->([]);
+    {
+      id: string;
+      name: string;
+    }[]
+  >([]);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -78,11 +81,11 @@ export default function PostComponent(props: Props) {
             hasLiked: data?.payload?.hasLiked,
             text: data?.text || '',
             visibility: data?.payload?.visibility,
-            taggedUsers: data?.payload?.taggedUsers?.map((item:any) => {
+            taggedUsers: data?.payload?.taggedUsers?.map((item: any) => {
               return {
                 id: item?.ma_nguoi_dung,
                 ten: item?.ten,
-              }
+              };
             }),
           };
           setStatus(sta);
@@ -109,6 +112,7 @@ export default function PostComponent(props: Props) {
               text: item?.comment,
               createdAt: item?.commentAt,
               id: item?._id,
+              userId: item?.userCmtInfor?.ma_nguoi_dung
             } as CommentType;
           });
           console.log(comments, 'Comment');
@@ -212,11 +216,19 @@ export default function PostComponent(props: Props) {
               }}
             >
               <img
+                onClick={() => {
+                  profile?.id == status?.userInfor.id
+                    ? navigate('/home/trang-ca-nhan')
+                    : navigate(
+                        `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor.id}`
+                      );
+                }}
                 style={{
                   height: '50px',
                   width: '50px',
                   objectFit: 'cover',
                   borderRadius: '30px',
+                  cursor:"pointer"
                 }}
                 src={status?.userInfor?.avatarURL || ''}
               />
@@ -232,8 +244,22 @@ export default function PostComponent(props: Props) {
                     fontWeight: '700',
                   }}
                 >
-                  {status?.userInfor?.name} {" "}
-                  {(status?.taggedUsers?.length || 0 ) > 0 && (
+                  <span
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                      profile?.id == status?.userInfor.id
+                        ? navigate('/home/trang-ca-nhan')
+                        : navigate(
+                            `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor.id}`
+                          );
+                    }}
+                  >
+                    {' '}
+                    {status?.userInfor?.name}{' '}
+                  </span>
+                  {(status?.taggedUsers?.length || 0) > 0 && (
                     <>
                       <span
                         style={{
@@ -241,22 +267,38 @@ export default function PostComponent(props: Props) {
                         }}
                       >
                         cùng với
-                      </span>
-
-                      {" "}
+                      </span>{' '}
                       {status?.taggedUsers?.map((item, index) => {
-                        if(index> 0){
+                        if (index > 0) {
                           return (
-                            <span>
-                             {", "} {item?.name}
+                            <span
+                              onClick={() => {
+                                navigate(
+                                  `/home/trang-ca-nhan-nguoi-dung/${item.id}`
+                                );
+                              }}
+                              style={{
+                                cursor: 'pointer',
+                              }}
+                            >
+                              {', '} {item?.name}
                             </span>
-                          )
+                          );
                         }
                         return (
-                          <span>
-                           {item?.name}
+                          <span
+                            onClick={() => {
+                              navigate(
+                                `/home/trang-ca-nhan-nguoi-dung/${item.id}`
+                              );
+                            }}
+                            style={{
+                              cursor: 'pointer',
+                            }}
+                          >
+                            {item?.name}
                           </span>
-                        )
+                        );
                       })}
                     </>
                   )}
@@ -594,8 +636,10 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
     setIsFinish(true);
   }, [props.comment.id, isReload]);
 
+  const profile  = useSelector((state:RootState) => state.user.profile)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     console.log('Vaao click nè');
@@ -634,6 +678,14 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
                 borderRadius: '30px',
                 minWidth: '40px',
                 minHeight: '40px',
+                cursor:"pointer"
+              }}
+              onClick={() => {
+                profile?.id == props.comment.userId
+                  ? navigate('/home/trang-ca-nhan')
+                  : navigate(
+                      `/home/trang-ca-nhan-nguoi-dung/${props.comment.userId}`
+                    );
               }}
               src={props.comment.photoURL}
             />
