@@ -180,10 +180,39 @@ async function hasUserReplyCmtInPost(user_id, post_id) {
   return true;
 }
 
+async function hasUserLikeTheCmtStatusPost(user_id, cmt_id) {
+  return await StatusPostModel.getLikeCmtPostInfor(user_id, cmt_id).then(
+    (data) => {
+      return data.payload.length > 0 ? true : false;
+    }
+  );
+}
+
+async function insertHaveLikeOfUserInListOfComment(
+  user_id,
+  listComment,
+  field_name_contain_have_like_infor = "hasLiked"
+) {
+  // console.log(listComment);
+  const data = await Promise.all(
+    listComment.map(async (comment_infor) => {
+      const hasLikedComment = await hasUserLikeTheCmtStatusPost(
+        user_id,
+        comment_infor._id.toString()
+      );
+      comment_infor[field_name_contain_have_like_infor] = hasLikedComment;
+      return comment_infor;
+    })
+  );
+  // console.log(listComment);
+
+  return data;
+}
+
 // (async function () {
-//   const data = await hasUserReplyCmtInPost(8, "6550ecdbe158c8fc09206db2");
-//   console.log({data});
-// })()
+//   const data = await hasUserLikeTheCmtStatusPost(8, "655441ccedfafc2f29403170");
+//   console.log(data);
+// })();
 
 module.exports = {
   InsertOwnerInforOfListPosts,
@@ -197,4 +226,6 @@ module.exports = {
   reportPost,
   hasUserCommentedPost,
   hasUserReplyCmtInPost,
+  hasUserLikeTheCmtStatusPost,
+  insertHaveLikeOfUserInListOfComment,
 };

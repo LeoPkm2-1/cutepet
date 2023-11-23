@@ -181,6 +181,12 @@ const publicInforOfPet = async (petid) => {
   };
 };
 
+// (async function () {
+//   const data = await publicInforOfPet(1);
+//   const ma_thu_cung = data.ma_thu_cung;
+//   console.log(typeof ma_thu_cung, ma_thu_cung);
+// })();
+
 const publicInforOfListPet = async (petid_list) => {
   return await Promise.all(
     petid_list.map(async (petid) => await publicInforOfPet(petid))

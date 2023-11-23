@@ -258,11 +258,19 @@ const replyCmtController = async (req, res) => {
 };
 
 const getAllCmtController = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
   const post_id = req.body.post_id;
   const comments = await StatusPostModel.getAllCmtByPostId(post_id)
     .then((data) => data.payload)
     .catch((err) => []);
   await statusPostHelper.InsertUserCmtInforOfListCmts(comments);
+  // console.log(comments);
+  await statusPostHelper.insertHaveLikeOfUserInListOfComment(
+    user_id,
+    comments,
+    "hasLike"
+  );
+
   const data = {
     comments,
     numOfComments: comments.length,
@@ -273,6 +281,7 @@ const getAllCmtController = async (req, res) => {
 
 const getCmtStartFromController = async (req, res) => {
   const { post_id, index, num } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
   const AllComments = await StatusPostModel.getAllCmtByPostId(post_id)
     .then((data) => data.payload)
     .catch((err) => []);
@@ -293,6 +302,10 @@ const getCmtStartFromController = async (req, res) => {
   if (typeof num == "undefined") {
     const comments = AllComments.slice(index);
     await statusPostHelper.InsertUserCmtInforOfListCmts(comments);
+    await statusPostHelper.insertHaveLikeOfUserInListOfComment(
+      user_id,
+      comments
+    );
     const data = {
       comments,
       numOfComments: comments.length,
@@ -304,6 +317,10 @@ const getCmtStartFromController = async (req, res) => {
   } else {
     const comments = AllComments.slice(index, index + num);
     await statusPostHelper.InsertUserCmtInforOfListCmts(comments);
+    await statusPostHelper.insertHaveLikeOfUserInListOfComment(
+      user_id,
+      comments
+    );
 
     const data = {
       comments,
@@ -607,7 +624,7 @@ const deletePostController = async (req, res) => {
       // xóa phản hồi
       await StatusPostModel.deleteAllReplyCmtOfPost(post_id),
       // xóa theo dõi
-      await followModel.deleteAllFollowOfStatusPost(post_id)
+      await followModel.deleteAllFollowOfStatusPost(post_id),
     ]);
     res.json(deleteProcess);
   } catch (error) {
