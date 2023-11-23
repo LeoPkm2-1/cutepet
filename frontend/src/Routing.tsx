@@ -3,6 +3,7 @@ import Private from './components/Private';
 import ForgotPasswordPage from './public-pages/forgot-password';
 import LoginPage from './public-pages/login';
 import RegisterPage from './public-pages/register';
+import XacThucPage from './public-pages/xac-thuc';
 import PrivatePagesRouting from './private-pages';
 import { useDispatch } from 'react-redux';
 import React, { useEffect } from 'react';
@@ -67,6 +68,7 @@ export default function Routing(props: Props) {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/mang-xa-hoi" element={<MangXaHoi />} />
+        <Route path={`/user/confirmRegister/:id`} element={<XacThucPage/>} />
 
         <Route
           path="/*"
