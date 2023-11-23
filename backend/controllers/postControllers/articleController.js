@@ -9,6 +9,11 @@ const {
   userUnFollowArticle,
   deleteAllFollowOfArticle,
 } = require("../../models/theodoi/followModel");
+const {
+  notifyUpVoteArticle,
+  notifyDownVoteArticle,
+  notifyCommentArticle,
+} = require("../../notificationHandler/article");
 
 async function addArticleControler(req, res) {
   const { title, main_image, intro, content, categories } = req.body;
@@ -65,6 +70,8 @@ async function toggleUpVoteArticleControler(req, res) {
         .then((data) => data.payload);
       // tăng số lượng upvote của bài viết
       await articleModel.updateNumOfUpVoteArticle(article_id, numOfUpVote + 1);
+      // gửi thông báo đến người chủ của article
+      notifyUpVoteArticle(article_id, user_id);
 
       res.status(200).json(new Response(200, upVoteInfor, "upvote thành công"));
       return;
@@ -104,6 +111,10 @@ async function toggleUpVoteArticleControler(req, res) {
         .then((data) => data.payload);
       // === 2.3. tăng số lượng upvote của bài viết
       await articleModel.updateNumOfUpVoteArticle(article_id, numOfUpVote + 1);
+
+      // gửi thông báo đến người chủ của article
+      notifyUpVoteArticle(article_id, user_id);
+
       res.status(200).json(new Response(200, upVoteInfor, "upvote thành công"));
     }
   } catch (error) {
@@ -131,6 +142,8 @@ async function toggleDownVoteArticleControler(req, res) {
         article_id,
         numOfDownVote + 1
       );
+      // gửi thông báo đến người chủ của article
+      notifyDownVoteArticle(article_id, user_id);
 
       res
         .status(200)
@@ -175,6 +188,10 @@ async function toggleDownVoteArticleControler(req, res) {
         article_id,
         numOfDownVote + 1
       );
+
+      // gửi thông báo đến người chủ của article
+      notifyDownVoteArticle(article_id, user_id);
+
       res
         .status(200)
         .json(new Response(200, downVoteInfor, "downvote thành công"));
@@ -200,6 +217,8 @@ async function addCommentController(req, res) {
   await articleModel.updateNumOfCommentArticle(article_id, numOfComment + 1);
   const idOfComment = commentProcess.payload.insertedId.toString();
   const insertedComment = await articleModel.getCommentByCmtId(idOfComment);
+  // gửi thông báo đến người chủ của article
+  notifyCommentArticle(article_id, commentBy);
 
   res.status(200).json(new Response(200, insertedComment.payload, ""));
 }

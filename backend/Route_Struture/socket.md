@@ -521,11 +521,179 @@
   - **postInfor:** chứa thông tin của status post mới dc đăng lên cầm cập nhật:
   - **areYouOwner:** cho biết bạn có phải là người chủ của bài đăng này không. Nếu là **true** tức là bạn là chủ của bài đăng này => cập nhật bài đăng lên đầu cây dom tree. Nếu là **false** tức là bạn không phải là chủ của bài đăng này => cập nhật bài đăng lên cuối cây dom tree.
 
-##
+## 11. thông báo khi có người upvote article
 
-##
+- listen on: **UPVOTE_ARTICLE** event
+- data trả về:
 
-##
+```javascript
+{
+    "userUpvote": {
+        "ma_nguoi_dung": 15,
+        "ten": "Thuy",
+        "tai_khoan": "thuy",
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "15",
+            "is_active": null
+        }
+    },
+    "articleOwner": {
+        "ma_nguoi_dung": 8,
+        "ten": "Susan",
+        "tai_khoan": "susan",
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "8",
+            "is_active": null
+        }
+    },
+    "articleInfor": {
+        "_id": "654f9e8f479ad1da822047b4",
+        "title": "Cách xử lý lông cho trắng bị ố vàng",
+        "postType": "ARTICLE",
+        "visibility": "PUBLIC",
+        "main_image": "https://png.pngtree.com/background/20230607/original/pngtree-the-baby-kittens-look-at-the-camera-picture-image_2903605.jpg",
+        "intro": "....................................... ",
+        "content": ".......................",
+        "categories": [
+            "Tắm",
+            "Đi dạo",
+            "Ăn uống"
+        ],
+        "createAt": "2023-11-11T15:32:31.242Z",
+        "numOfUpVote": 2,
+        "numOfDownVote": 2,
+        "numOfComment": 2,
+        "modifiedAt": null,
+        "owner_id": 8
+    },
+    "upVoteAt": "2023-11-23T08:23:53.376Z",
+    "youAreOwner": true,
+    "dependOn": null,
+    "message": ""
+}
+```
+
+## 12. thông báo khi có ai đó downvote article
+
+- listen on: **DOWNVOTE_ARTICLE** event
+- data trả về:
+
+```javascript
+{
+    "userDownvote": {
+        "ma_nguoi_dung": 10,
+        "ten": "Thanh",
+        "tai_khoan": "thanh",
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "10",
+            "is_active": null
+        }
+    },
+    "articleOwner": {
+        "ma_nguoi_dung": 8,
+        "ten": "Susan",
+        "tai_khoan": "susan",
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "8",
+            "is_active": null
+        }
+    },
+    "articleInfor": {
+        "_id": "654f9e8f479ad1da822047b4",
+        "title": "Cách xử lý lông cho trắng bị ố vàng",
+        "postType": "ARTICLE",
+        "visibility": "PUBLIC",
+        "main_image": "https://png.pngtree.com/background/20230607/original/pngtree-the-baby-kittens-look-at-the-camera-picture-image_2903605.jpg",
+        "intro": ".................................. ",
+        "content": "...........................",
+        "categories": [
+            "Tắm",
+            "Đi dạo",
+            "Ăn uống"
+        ],
+        "createAt": "2023-11-11T15:32:31.242Z",
+        "numOfUpVote": 1,
+        "numOfDownVote": 3,
+        "numOfComment": 2,
+        "modifiedAt": null,
+        "owner_id": 8
+    },
+    "downVoteAt": "2023-11-23T08:26:32.125Z",
+    "youAreOwner": true,
+    "dependOn": null,
+    "message": ""
+}
+```
+
+## 13. thông báo khi có ai đó comment bài viết article
+
+- listen on: **COMMENT_ARTICLE** event
+- data trả về:
+
+```javascript
+{
+    "userComment": {
+        "ma_nguoi_dung": 10,
+        "ten": "Thanh",
+        "tai_khoan": "thanh",
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "10",
+            "is_active": null
+        }
+    },
+    "articleOwner": {
+        "ma_nguoi_dung": 8,
+        "ten": "Susan",
+        "tai_khoan": "susan",
+        "anh": {
+            "ma_anh": null,
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "ngay_cap_nhat": null,
+            "ma_nguoi_dung": "8",
+            "is_active": null
+        }
+    },
+    "articleInfor": {
+        "_id": "654f9e8f479ad1da822047b4",
+        "title": "Cách xử lý lông cho trắng bị ố vàng",
+        "postType": "ARTICLE",
+        "visibility": "PUBLIC",
+        "main_image": "https://png.pngtree.com/background/20230607/original/pngtree-the-baby-kittens-look-at-the-camera-picture-image_2903605.jpg",
+        "intro": ".............................",
+        "content": ".......................",
+        "categories": [
+            "Tắm",
+            "Đi dạo",
+            "Ăn uống"
+        ],
+        "createAt": "2023-11-11T15:32:31.242Z",
+        "numOfUpVote": 1,
+        "numOfDownVote": 3,
+        "numOfComment": 3,
+        "modifiedAt": null,
+        "owner_id": 8
+    },
+    "commentAt": "2023-11-23T08:28:18.120Z",
+    "youAreOwner": true,
+    "dependOn": null,
+    "message": ""
+}
+```
 
 ##
 
