@@ -170,7 +170,7 @@ const LoginPage = (props: P) => {
         // navigate("/home");
         // Test no server
         setIsLoading(false);
-        enqueueSnackbar('Lỗi đăng nhập. Vui lòng thử lại !', {
+        enqueueSnackbar(`${err?.message || 'Lỗi đăng nhập. Vui lòng thử lại !' }`, {
           variant: 'error',
         });
       });
@@ -313,7 +313,7 @@ const LoginPage = (props: P) => {
             <Footer>
               <div style={{ textAlign: 'center' }}>
                 Bạn chưa có tài khoản ?{' '}
-                <StyledHref href="/register">Đang ký ngay !</StyledHref>
+                <StyledHref onClick={() => navigate("/register")}>Đang ký ngay !</StyledHref>
               </div>
             </Footer>
           </ScrollView>
