@@ -46,7 +46,7 @@ const loginTest = (userName: string, password: string) => {
     },
   });
 };
-const register = (ten:string, tai_khoan: string, mat_khau: string) => {
+const register = (ten:string, tai_khoan: string, mat_khau: string, email:string) => {
   return request<any>({
     url: '/register',
     method: 'POST',
@@ -54,6 +54,7 @@ const register = (ten:string, tai_khoan: string, mat_khau: string) => {
       ten,
       tai_khoan,
       mat_khau,
+      email
     },
   });
 };
@@ -65,12 +66,22 @@ const logoutUser = () => {
   });
 };
 
+const xacThucUser = (active_code:string) => {
+  return request<any>({
+    url: '/user/confirmRegister',
+    method: 'POST',
+    body:{
+      active_code
+    }
+  });
+};
 
 const authApi = {
   loginTest,
   register,
   // login,
   logoutUser,
+  xacThucUser
 };
 
 export default authApi;
