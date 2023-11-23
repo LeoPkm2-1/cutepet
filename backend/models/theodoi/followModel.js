@@ -69,6 +69,23 @@ const getFollowInforOfStatusPost = async (statusPost_Id) => {
   ).then((data) => data.payload);
 };
 
+const deleteAllFollowOfStatusPost = async (statusPost_Id) => {
+  async function executor(collection) {
+    return await collection.deleteMany({
+      type: followStructure.FollowStatusPost.get_type(),
+      followed_Obj_Id: statusPost_Id,
+    });
+  }
+  return await nonSQLQuery(executor, "BangTheoDoi")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// (async function () {
+//   const data = await deleteAllFollowOfStatusPost('123456789012123456789138')
+//   console.log(data);
+// })()
+
 // user follow
 const userFollowAnother = async (followed_user_id, follower_id) => {
   const followRelationShip = new followStructure.FollowUser(
@@ -149,7 +166,6 @@ const deleteAllFollowOfArticle = async (article_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-
 module.exports = {
   userFollowStatusPost,
   userUnFollowStatusPost,
@@ -161,4 +177,5 @@ module.exports = {
   userFollowArticle,
   userUnFollowArticle,
   deleteAllFollowOfArticle,
+  deleteAllFollowOfStatusPost,
 };

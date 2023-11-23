@@ -30,7 +30,7 @@ sửa dụng:
 
     `nhớ kiểm tra event listen nha`
 
-## 6. sửa lại hiển thị bài viết trên newsfeed
+## 6. ==DONE== sửa lại hiển thị bài viết trên newsfeed
 
     `bài viết trạng thái hiển thị khác với bài viết chia sẻ kiến thức`
 
@@ -52,7 +52,7 @@ sửa dụng:
     - [ ] 11.1 resize lại
     - [ ] 11.2 cho hủy ảnh
 
-## 12. điều hướng người dung qua trang bài viết khi đăng xong bài viết
+## 12. điều hướng người dung qua trang bài viết khi đăng xong bài viết chia sẻ kiến thức
 
 ## 13. `upvote`, `downvote` và `comment` khi vào bài viết chia sẻ kiến thức
 
@@ -100,7 +100,7 @@ tham khảo tại: **[article.md](./article.md)**
 
 ## 26. ==DONE== đổi lại icon article trên navbar
 
-## 27. bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức
+## 27. bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức, icon bạn bè khi vào danh sách bạn bè, icon thông báo khi bấm vào thông báo
 
 ## 28. handle ảnh bìa cho bài viết chia sẻ kiến thức
 
@@ -173,8 +173,41 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 43. chưa show text trong bài viết chia sẻ trạng thái khi bam61 vào thông báo
 
+![](../media/img/err/img9.png)
+
 ## 44. thích bài viết chia sẻ trạng thái
 
 ## 45. lắng nghe khi có ai đó thích bài viết chia sẻ trạng thái
 
 ## 46. lắng nghe khi phản hồi bình luận của bài viết chia sẻ trạng thái
+
+## 47. xóa bài viết không tồn tại đi
+
+## 48. xóa lời mời kết bạn cuối cùng đi
+
+## 49. lắng nghe khi có ai đó gửi lời mời kết bạn tới
+
+## 50. up vote, downvote bài viết chia sẻ kiến thức, bình luận bài viết chia sẻ kiến thức
+
+## 51. sai khi đánh dấu đọc thông báo là do truyền sai tham số
+
+## 52. Đánh dấu đã đọc tất cả các thông báo
+
+## 53. ảnh trong trang cá nhân gặp vấn đề.
+
+![](../media/img/err/img8.png)
+
+## 54. search người dùng xong bấm vào không được
+
+![](../media/img/err/img10.png)
+
+## 56. chưa loading bài viết trong trang cá nhân
+
+## 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
+
+(viết ra thông báo đó là thông báo nào đừng để  noname)
+
+## 58. khi có thông báo mới đến thì load lại API lấy thông báo
+
+## 59. khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
+

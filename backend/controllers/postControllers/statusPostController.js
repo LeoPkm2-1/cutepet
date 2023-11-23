@@ -606,6 +606,8 @@ const deletePostController = async (req, res) => {
       await StatusPostModel.deleteAllLikeCmtsOfPost(post_id),
       // xóa phản hồi
       await StatusPostModel.deleteAllReplyCmtOfPost(post_id),
+      // xóa theo dõi
+      await followModel.deleteAllFollowOfStatusPost(post_id)
     ]);
     res.json(deleteProcess);
   } catch (error) {

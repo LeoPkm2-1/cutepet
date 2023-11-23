@@ -59,6 +59,18 @@ db.BangTheoDoi.createIndex({
   createAt: -1,
 });
 
+db.BangTheoDoi.createIndex({
+  type: -1,
+  followed_Obj_Id: -1,
+  follower_Id: -1,
+});
+
+db.BangTheoDoi.createIndex({
+  type: -1,
+  follower_Id: -1,
+  followed_Obj_Id: -1,
+});
+
 // ======================= NOTE ============================
 //   1: indicating ascending order (tăng dần)
 //  -1: indicating descending order (giảm dần)
