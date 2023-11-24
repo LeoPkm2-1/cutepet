@@ -211,8 +211,13 @@ const getPetsIdOwnedByUserInListOfPetIds = async (userid, petid_list) => {
   return petid_list.filter((petid) => OwnPetIdList.includes(petid));
 };
 
+const getOwnerIdOfPet = async (petid) => {
+  const data = await petModel.getPetByID(petid).then((data) => data.payload[0]);
+  return typeof data == "undefined" ? null : data.ma_nguoi_chu;
+};
+
 // (async function () {
-//   const data = await getPetsIdOwnedByUserInListOfPetIds(2, [1, 2, 3, 4, 5]);
+//   const data = await getOwnerIdOfPet(420);
 //   console.log(data);
 // })();
 
@@ -228,4 +233,5 @@ module.exports = {
   publicInforOfPet,
   publicInforOfListPet,
   getPetsIdOwnedByUserInListOfPetIds,
+  getOwnerIdOfPet,
 };

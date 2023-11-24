@@ -793,6 +793,45 @@ const getPostForNewsfeedController = async (req, res) => {
   res.status(200).json(new Response(200, posts, ""));
 };
 
+const getPostHavePetController = async (req, res) => {
+  const { pet_id, before, num } = req.body;
+  const reader_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const owner_id_of_pet = await petHelper.getOwnerIdOfPet(pet_id);
+  // console.log(owner_id_of_pet);
+  if (reader_id == owner_id_of_pet) {
+    const posts = await StatusPostModel.getAllPostOfUserHavePetBeforeTime(
+      owner_id_of_pet,
+      pet_id,
+      before,
+      num
+    );
+    res
+      .status(200)
+      .json(new Response(200, posts.payload, "Lấy dữ liệu thành công"));
+    return;
+  } else {
+    const laBanBe = await banbeHelper.haveFriendShipBetween(
+      reader_id,
+      owner_id_of_pet
+    );
+    // console.log({ laBanBe });
+    // res.send('1');
+    // return ;
+    const posts = await StatusPostModel.getPostOfUserHavePetForReaderBeforeTime(
+      owner_id_of_pet,
+      pet_id,
+      reader_id,
+      laBanBe,
+      before,
+      num
+    );
+    res
+      .status(200)
+      .json(new Response(200, posts.payload, "Lấy dữ liệu thành công"));
+    return;
+  }
+};
+
 module.exports = {
   addPostController,
   toggleLikePostController,
@@ -816,4 +855,5 @@ module.exports = {
   followPostController,
   reportPostController,
   getPostForNewsfeedController,
+  getPostHavePetController,
 };

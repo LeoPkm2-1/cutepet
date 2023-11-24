@@ -163,9 +163,10 @@ router.post(
   statusPostController.getPostForNewsfeedController
 );
 
-router.post("/getPostHavePet", [
-  petMid.checkPetExistMid,
-  statusPostMiddle.preProcessGetPostHavePet,
-]);
+router.post(
+  "/getPostHavePet",
+  [petMid.checkPetExistMid, statusPostMiddle.preProcessGetPostHavePet],
+  statusPostController.getPostHavePetController
+);
 
 module.exports = router;

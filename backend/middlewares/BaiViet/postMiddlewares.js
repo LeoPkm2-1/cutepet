@@ -489,6 +489,7 @@ async function preProcessGetPostHavePet(req, res, next) {
     if (typeof num != "undefined" && Number.isNaN(parseInt(num))) {
       throw new Error(VALID_PARAM);
     }
+    num = typeof num == "undefined" ? undefined : parseInt(num);
     if (typeof num != "undefined" && num <= 0) throw new Error(VALID_PARAM);
     req.body.before =
       typeof before == "undefined" ? new Date() : new Date(before);
