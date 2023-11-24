@@ -17,6 +17,23 @@ const extracValuesOfFieldFromListObjs = (arr, field) => {
   return arr.map((obj) => obj[field]);
 };
 
+// Generate three random, distinct numbers between 1 and 10
+function generateNumRandomNumbersInRangeOf10(numOfRandomNumbers) {
+  const randomNumbers = [];
+
+  while (randomNumbers.length < numOfRandomNumbers) {
+    const randomNumber = Math.floor(Math.random() * 10) + 1;
+    if (!randomNumbers.includes(randomNumber)) {
+      randomNumbers.push(randomNumber);
+    }
+  }
+
+  return randomNumbers;
+}
+
+// const data = generateNumRandomNumbersInRangeOf10(5);
+// console.log({ data });
+
 // (async function () {
 // 	const data = extracValuesOfFieldFromListObjs([
 // 	  { key: 1 },
@@ -58,6 +75,7 @@ module.exports = {
   extracValuesOfFieldFromListObjs,
   isPhoneNumberValid,
   isValidVietnameseName,
+  generateNumRandomNumbersInRangeOf10,
 };
 
 // let obj = {
