@@ -207,7 +207,7 @@ const RegisterPage = (props: P) => {
     return (
       <Navigate
         to={{
-          pathname: from?.pathname ?? '/',
+          pathname: from?.pathname ?? '/home/mang-xa-hoi',
           search: from?.search,
         }}
       />

@@ -331,7 +331,7 @@ export default function PostComponent(props: Props) {
                         }}
                       />
                     )}
-                    {status?.visibility == 'FRIEND' && (
+                    {status?.visibility == 'JUST_FRIENDS' && (
                       <PeopleAltIcon
                         sx={{
                           marginTop: '4px',
@@ -341,7 +341,7 @@ export default function PostComponent(props: Props) {
                       />
                     )}
                     {status?.visibility !== 'PRIVATE' &&
-                      status?.visibility !== 'FRIEND' && (
+                      status?.visibility !== 'JUST_FRIENDS' && (
                         <PublicIcon
                           sx={{
                             marginTop: '4px',

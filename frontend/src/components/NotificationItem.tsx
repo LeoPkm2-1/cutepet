@@ -9,6 +9,7 @@ type Props = {
   idPost?: string;
   type?: string;
   onClick?: () => void;
+  idNoti?: string;
   isReaded?: boolean;
 };
 export function NotifycationItem(props: Props) {
@@ -47,7 +48,7 @@ export function NotifycationItem(props: Props) {
           }}
         >
           <span style={{ fontWeight: '700' }}>{props?.name || 'No name'}</span>{' '}
-          đã {props?.type || 'bình luận'} một bài viết
+          đã {props?.type || 'bình luận'}
         </Typography>
       </Box>
     </>
@@ -58,15 +59,15 @@ export function NotifycationItemClick(props: Props) {
   const [isReaded, setIsReaded] = useState(props?.isReaded);
   useEffect(() => {
     setIsReaded(props?.isReaded);
-  }, [props?.idPost]);
+  }, [props?.idPost, props?.isReaded]);
   return (
     <>
       <Link
         onClick={() => {
-          if (props?.idPost) {
+          if (props?.idNoti) {
               console.log("vaof nef");
 
-            notiApi.postNotificationHasReaded(props?.idPost).then((data) => {
+            notiApi.postNotificationHasReaded(props?.idNoti).then((data) => {
               console.log("vaof nef 1");
               
               setIsReaded(true);
@@ -121,7 +122,7 @@ export function NotifycationItemClick(props: Props) {
               <span style={{ fontWeight: '700' }}>
                 {props?.name || 'No name'}
               </span>{' '}
-              đã {props?.type || 'bình luận'} một bài viết
+              đã {props?.type || 'bình luận'} 
             </Typography>
           </Box>
           {!isReaded && (

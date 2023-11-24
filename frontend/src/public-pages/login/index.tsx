@@ -198,11 +198,12 @@ const LoginPage = (props: P) => {
     //   });
   };
 
-  if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
+  // if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
+    if (props.auth.mindfullyAuth) {
     return (
       <Navigate
         to={{
-          pathname: from?.pathname ?? '/',
+          pathname: from?.pathname ?? '/home/mang-xa-hoi',
           search: from?.search,
         }}
       />

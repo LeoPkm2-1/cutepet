@@ -28,36 +28,32 @@ export default function MangXaHoi() {
     postApi.getPostForNewsfeed(indexPost).then((data: any) => {
       if (data?.status == 200) {
         console.log(data, 'data lan 1');
-        const list: StatusType[] = data?.payload?.map(
-          (item: any) => {
-         
+        const list: StatusType[] = data?.payload?.map((item: any) => {
+          return {
+            id: item?._id,
+            media: item?.media as {
+              type: string;
+              data: string[];
+            },
+            createAt: item?.createAt,
+            numOfLike: item?.numOfLike,
+            numOfComment: item?.numOfComment,
+            userInfor: {
+              id: item?.owner_infor?.ma_nguoi_dung,
+              name: item?.owner_infor?.ten,
+              avatarURL: item?.owner_infor?.anh?.url,
+            },
+            hasLiked: item?.hasLiked,
+            visibility: item?.visibility,
+            text: item?.text,
+            taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
               return {
-                id: item?._id,
-                media: item?.media as {
-                  type: string;
-                  data: string[];
-                },
-                createAt: item?.createAt,
-                numOfLike: item?.numOfLike,
-                numOfComment: item?.numOfComment,
-                userInfor: {
-                  id: item?.owner_infor?.ma_nguoi_dung,
-                  name: item?.owner_infor?.ten,
-                  avatarURL: item?.owner_infor?.anh?.url,
-                },
-                hasLiked: item?.hasLiked,
-                text: item?.text,
-                taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
-                  return {
-                    id: tagUser?.ma_nguoi_dung,
-                    name: tagUser?.ten,
-                  };
-                }),
-              } as StatusType;
-            
-            
-          }
-        );
+                id: tagUser?.ma_nguoi_dung,
+                name: tagUser?.ten,
+              };
+            }),
+          } as StatusType;
+        });
         setListPost(list);
       }
     });
@@ -85,6 +81,7 @@ export default function MangXaHoi() {
               },
               hasLiked: item?.hasLiked,
               text: item?.text,
+              visibility: item?.visibility,
               taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
                 return {
                   id: tagUser?.ma_nguoi_dung,
@@ -94,13 +91,12 @@ export default function MangXaHoi() {
             } as StatusType;
           });
           // setListPost(list);
-          const setA= new Set(listPost);
-          const setB= new Set(list);
+          const setA = new Set(listPost);
+          const setB = new Set(list);
           const result = difference(setB, setA);
-          const newListPost = Array.from(result)
-          console.log(Array.from(result), " result");
-          setListPost([...listPost, ...newListPost])
-          
+          const newListPost = Array.from(result);
+          console.log(Array.from(result), ' result');
+          setListPost([...listPost, ...newListPost]);
         }
       });
     }
@@ -203,9 +199,8 @@ export default function MangXaHoi() {
   );
 }
 
-
-function difference(set1:any, set2:any) {
-  return new Set([...set1].filter(element => !set2.has(element)));
+function difference(set1: any, set2: any) {
+  return new Set([...set1].filter((element) => !set2.has(element)));
 }
 
 // Example usage:
