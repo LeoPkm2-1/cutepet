@@ -195,6 +195,81 @@ class AcceptAddFriendNotification extends GeneralNotification {
   }
 }
 
+class UpvoteArticleNotification extends GeneralNotification {
+  static NOTIFICATION_TYPE = "UPVOTE_ARTICLE";
+  static getNotificationType() {
+    return UpvoteArticleNotification.NOTIFICATION_TYPE;
+  }
+  constructor(
+    receiver_id,
+    payload,
+    createAt = new Date(),
+    title = "",
+    message = "",
+    hasRead = false
+  ) {
+    super(
+      UpvoteArticleNotification.NOTIFICATION_TYPE,
+      receiver_id,
+      payload,
+      createAt,
+      title,
+      message,
+      hasRead
+    );
+  }
+}
+
+class DownvoteArticleNotification extends GeneralNotification {
+  static NOTIFICATION_TYPE = "DOWNVOTE_ARTICLE";
+  static getNotificationType() {
+    return DownvoteArticleNotification.NOTIFICATION_TYPE;
+  }
+  constructor(
+    receiver_id,
+    payload,
+    createAt = new Date(),
+    title = "",
+    message = "",
+    hasRead = false
+  ) {
+    super(
+      DownvoteArticleNotification.NOTIFICATION_TYPE,
+      receiver_id,
+      payload,
+      createAt,
+      title,
+      message,
+      hasRead
+    );
+  }
+}
+
+class CommentArticleNotification extends GeneralNotification {
+  static NOTIFICATION_TYPE = "COMMENT_ARTICLE";
+  static getNotificationType() {
+    return CommentArticleNotification.NOTIFICATION_TYPE;
+  }
+  constructor(
+    receiver_id,
+    payload,
+    createAt = new Date(),
+    title = "",
+    message = "",
+    hasRead = false
+  ) {
+    super(
+      CommentArticleNotification.NOTIFICATION_TYPE,
+      receiver_id,
+      payload,
+      createAt,
+      title,
+      message,
+      hasRead
+    );
+  }
+}
+
 module.exports = {
   LikeStatusPostNotification,
   CommentStatusPostNotification,
@@ -203,4 +278,7 @@ module.exports = {
   TagUserInStatusPostNotification,
   RequestAddFriendNotification,
   AcceptAddFriendNotification,
+  UpvoteArticleNotification,
+  DownvoteArticleNotification,
+  CommentArticleNotification,
 };

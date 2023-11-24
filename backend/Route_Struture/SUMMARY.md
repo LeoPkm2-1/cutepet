@@ -230,11 +230,34 @@
 
    _chi tiết:_ **[Route_Struture/pet.md](./pet.md#6-lấy-thông-tin-cơ-bản-của-1-con-thú-cưng)** và **postman số 67**
 
-##
+## (21-11-2023)
 
-##
+1. thu hồi lời mời kết bạn:
 
-##
+_chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)** và **postman số 68**
+
+## (22-11-2023)
+
+1. lấy các thông báo chưa đọc theo index và number
+   _chi tiết:_ **[Route_Struture/notification.md](./notification.md#5-get-unread-notifications-before-specific-time)** và **postman số 69**
+
+2. lấy các thông báo chưa đọc trước 1 thời điểm
+
+   _chi tiết:_ **[Route_Struture/notification.md](./notification.md#6-get-unread-notifications-by-index-and-range)** và **postman số 70**
+
+## (23-11-2023)
+
+1. thông báo qua socket khi có người dùng upvote article
+
+   _chi tiết:_ **[Route_Struture/socket.md](./socket.md#11-thông-báo-khi-có-người-upvote-article)**
+
+2. thông báo qua socket khi có người dùng downvote article
+
+   _chi tiết:_ **[Route_Struture/socket.md](./socket.md#12-thông-báo-khi-có-ai-đó-downvote-article)**
+
+3. thông báo qua socket khi có người dùng comment article
+
+   _chi tiết:_ **[Route_Struture/socket.md](./socket.md#13-thông-báo-khi-có-ai-đó-comment-bài-viết-article)**
 
 ##
 

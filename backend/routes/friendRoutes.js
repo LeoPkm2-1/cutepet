@@ -3,6 +3,7 @@ const router = express.Router();
 const friendController = require("./../controllers/friendController");
 const addFriendMid = require("../middlewares/addFriendMid");
 
+// request add friend
 router.post(
   "/requestAddFriendById",
   addFriendMid.AddByUserIdMid,
@@ -13,10 +14,16 @@ router.post(
   addFriendMid.AddByUserNameMid,
   friendController.requestAddFriend
 );
+// remove request add friend
+router.post(
+  "/removeRequestAddFriendById",
+  [addFriendMid.hasSendRequestAddFriendToMid],
+  friendController.removeRequestAddFriend
+);
 // respone add friend request.
 router.post(
   "/responeAddFriendRequestById",
-  [addFriendMid.reponseRequestAddFriendByIdMid],
+  [addFriendMid.hasReceiveRequestAddFriendFromMid],
   friendController.responeAddFriend
 );
 // unfriend

@@ -11,6 +11,13 @@ router.post(
 	notiMid.preProcessGetNotiStartFrom,
 	notificationController.getNotiByIndexAndRange
 );
+
+router.post(
+	'/getUnReadNotiStartFrom',
+	notiMid.preProcessGetNotiStartFrom,
+	notificationController.getUnReadNotiByIndexAndRange
+)
+
 // có chữ Z ở cuối cùng của string date là múi giờ +0, nếu không có là múi giờ local
 // nếu muốn biểu thị múi giờ bất kỳ thì thay vì thêm vào Z để tạo múi giờ ko ta +<><>:<><> để biểu thị múi giờ bất kỳ
 // vd :2023-10-16T13:34:12.735+08:00 là 13:34:12 ngày 16-10-2023 ở múi giờ +8
@@ -19,6 +26,13 @@ router.post(
 	notiMid.preProcessGetNotiUntil,
 	notificationController.getNotiBefore
 );
+
+router.post(
+	'/getUnReadNotiBefore',
+	notiMid.preProcessGetNotiUntil,
+	notificationController.getUnReadNotiBefore
+
+)
 
 router.post(
 	'/markAsRead',

@@ -266,7 +266,11 @@ const getAllPostOfUserBeforeTime = async (userId, before, num = undefined) => {
     executor = async (collection) => {
       return await collection
         .find({
-          $and: [{ owner_id: userId }, { createAt: { $lt: before } }],
+          $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
+            { owner_id: userId },
+            { createAt: { $lt: before } },
+          ],
         })
         .sort({ createAt: -1 })
         .toArray();
@@ -292,6 +296,69 @@ const getAllPostOfUserBeforeTime = async (userId, before, num = undefined) => {
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
+
+const getAllPostOfUserHavePetBeforeTime = async (
+  user_id,
+  pet_id,
+  before,
+  num = undefined
+) => {
+  user_id = parseInt(user_id);
+  pet_id = parseInt(pet_id);
+  let executor = null;
+  if (typeof num == "undefined") {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
+            { owner_id: user_id },
+            { createAt: { $lt: before } },
+            {
+              withPets: {
+                $elemMatch: {
+                  ma_thu_cung: pet_id,
+                },
+              },
+            },
+          ],
+        })
+        .sort({ createAt: -1 })
+        .toArray();
+    };
+  } else {
+    num = parseInt(num);
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
+            { owner_id: user_id },
+            { createAt: { $lt: before } },
+            {
+              withPets: {
+                $elemMatch: {
+                  ma_thu_cung: pet_id,
+                },
+              },
+            },
+          ],
+        })
+        .sort({ createAt: -1 })
+        .limit(num)
+        .toArray();
+    };
+  }
+
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// (async function () {
+//   const data = await getAllPostOfUserHavePetBeforeTime(1,1, new Date());
+//   console.log(data);
+// })()
 
 const getPostOfUserForReaderBeforeTime = async (
   postOnwer_id,
@@ -432,8 +499,178 @@ const getPostOfUserForReaderBeforeTime = async (
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getPostOfUserHavePetForReaderBeforeTime = async (
+  postOnwer_id,
+  pet_id,
+  reader_id,
+  isFriend,
+  before,
+  num = undefined
+) => {
+  postOnwer_id = parseInt(postOnwer_id);
+  pet_id = parseInt(pet_id);
+  reader_id = parseInt(reader_id);
+  let executor = null;
+  if (typeof num == "undefined" && !isFriend) {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
+            { owner_id: postOnwer_id },
+            { createAt: { $lt: before } },
+            {
+              $or: [
+                { visibility: "PUBLIC" },
+                {
+                  $and: [
+                    { visibility: "PRIVATE" },
+                    {
+                      taggedUsers: {
+                        $elemMatch: {
+                          ma_nguoi_dung: reader_id,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              withPets: {
+                $elemMatch: {
+                  ma_thu_cung: pet_id,
+                },
+              },
+            },
+          ],
+        })
+        .sort({ createAt: -1 })
+        .toArray();
+    };
+  } else if (typeof num == "undefined" && isFriend) {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
+            { owner_id: postOnwer_id },
+            { createAt: { $lt: before } },
+            {
+              $or: [
+                { visibility: "PUBLIC" },
+                { visibility: "JUST_FRIENDS" },
+                {
+                  $and: [
+                    { visibility: "PRIVATE" },
+                    {
+                      taggedUsers: {
+                        $elemMatch: {
+                          ma_nguoi_dung: reader_id,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              withPets: {
+                $elemMatch: {
+                  ma_thu_cung: pet_id,
+                },
+              },
+            },
+          ],
+        })
+        .sort({ createAt: -1 })
+        .toArray();
+    };
+  } else if (typeof num != "undefined" && !isFriend) {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
+            { owner_id: postOnwer_id },
+            { createAt: { $lt: before } },
+            {
+              $or: [
+                { visibility: "PUBLIC" },
+                {
+                  $and: [
+                    { visibility: "PRIVATE" },
+                    {
+                      taggedUsers: {
+                        $elemMatch: {
+                          ma_nguoi_dung: reader_id,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              withPets: {
+                $elemMatch: {
+                  ma_thu_cung: pet_id,
+                },
+              },
+            },
+          ],
+        })
+        .sort({ createAt: -1 })
+        .limit(num)
+        .toArray();
+    };
+  } else if (typeof num != "undefined" && isFriend) {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $and: [
+            { postType: StatusPostComposStructure.StatusPost.type },
+            { owner_id: postOnwer_id },
+            { createAt: { $lt: before } },
+            {
+              $or: [
+                { visibility: "PUBLIC" },
+                { visibility: "JUST_FRIENDS" },
+                {
+                  $and: [
+                    { visibility: "PRIVATE" },
+                    {
+                      taggedUsers: {
+                        $elemMatch: {
+                          ma_nguoi_dung: reader_id,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              withPets: {
+                $elemMatch: {
+                  ma_thu_cung: pet_id,
+                },
+              },
+            },
+          ],
+        })
+        .sort({ createAt: -1 })
+        .limit(num)
+        .toArray();
+    };
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // (async function () {
-//   const data = await getAllPostOfUserBeforeTime(2, new Date(), 1);
+//   const data = await getPostOfUserHavePetForReaderBeforeTime(2, new Date(), 1);
 //   console.log(data);
 // })();
 
@@ -703,4 +940,6 @@ module.exports = {
   getUserReportInforOfPost,
   getCommentInforOfUserInPost,
   getReplyInforOfUserInPost,
+  getAllPostOfUserHavePetBeforeTime,
+  getPostOfUserHavePetForReaderBeforeTime,
 };

@@ -112,6 +112,11 @@ async function hasUserFollowArticle(article_id, user_id) {
   return await hasFollowExisted(article_id, user_id, "FOLLOW_ARTICLE");
 }
 
+// (async function () {
+//   const data = await hasUserFollowArticle('654f9e8f479ad1da822047b4',2)
+//   console.log(data);
+// })()
+
 async function followArticle(article_id, user_id, isUnique = true) {
   if (!isUnique) {
     return await followModel.userFollowArticle(article_id, user_id);

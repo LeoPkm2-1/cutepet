@@ -5,6 +5,7 @@ const banBeHelper = require("./../../utils/banbeHelper");
 const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
 const followhelper = require("./../../utils/theodoiHelper");
 const petHelper = require("../../utils/petHelper");
+const utilHelper = require("../../utils/UtilsHelper");
 
 // middle ware kiểm tra tiền sử lý để thêm bài viết
 async function preProcessAddPost(req, res, next) {
@@ -459,6 +460,10 @@ async function preProcessGetPostStartFrom(req, res, next) {
 
 async function preProccessToGetNewFeed(req, res, next) {
   const index = parseInt(req.body.index);
+  const PostIdsHaveRendered = req.body.PostIdsHaveRendered || [];
+  req.body.PostIdsHaveRendered = PostIdsHaveRendered.map((postId) =>
+    String(postId)
+  );
   // console.log(typeof req.body.index);
   if (Number.isNaN(index)) {
     res
@@ -467,6 +472,32 @@ async function preProccessToGetNewFeed(req, res, next) {
     return;
   }
   req.body.index = index;
+  next();
+}
+
+async function preProcessGetPostHavePet(req, res, next) {
+  const VALID_PARAM = "Tham số không hợp lệ";
+  const { pet_id } = req.body;
+  let { before, num } = req.body;
+  try {
+    if (
+      typeof before != "undefined" &&
+      !utilHelper.isDateValid(new Date(before))
+    ) {
+      throw new Error(VALID_PARAM);
+    }
+    if (typeof num != "undefined" && Number.isNaN(parseInt(num))) {
+      throw new Error(VALID_PARAM);
+    }
+    num = typeof num == "undefined" ? undefined : parseInt(num);
+    if (typeof num != "undefined" && num <= 0) throw new Error(VALID_PARAM);
+    req.body.before =
+      typeof before == "undefined" ? new Date() : new Date(before);
+    req.body.num = num;
+  } catch (error) {
+    res.status(400).json(new Response(400, [], VALID_PARAM, 300, 300));
+    return;
+  }
   next();
 }
 
@@ -490,4 +521,5 @@ module.exports = {
   preProcessUpdatePost_1,
   preProcessUpdatePost_2,
   preProccessToGetNewFeed,
+  preProcessGetPostHavePet,
 };

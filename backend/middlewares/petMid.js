@@ -33,6 +33,19 @@ const addPetMiddleWare = (req, res, next) => {
   next();
 };
 
+const checkPetExistMid = async (req, res, next) => {
+  const { pet_id } = req.body;
+  const isExist = await petHeper.isPetExist(pet_id);
+  if (!isExist) {
+    res
+      .status(400)
+      .json(new Response(400, [], "thú cưng không tồn tại", 300, 300));
+    return;
+  }
+  req.body.pet_id = parseInt(pet_id);
+  next();
+};
+
 const preChangePet = async (req, res, next) => {
   const { pet_id } = req.body;
   const isExist = await petHeper.isPetExist(pet_id);
@@ -57,4 +70,5 @@ const preChangePet = async (req, res, next) => {
 module.exports = {
   addPetMiddleWare,
   preChangePet,
+  checkPetExistMid,
 };

@@ -258,11 +258,19 @@ const replyCmtController = async (req, res) => {
 };
 
 const getAllCmtController = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
   const post_id = req.body.post_id;
   const comments = await StatusPostModel.getAllCmtByPostId(post_id)
     .then((data) => data.payload)
     .catch((err) => []);
   await statusPostHelper.InsertUserCmtInforOfListCmts(comments);
+  // console.log(comments);
+  await statusPostHelper.insertHaveLikeOfUserInListOfComment(
+    user_id,
+    comments,
+    "hasLike"
+  );
+
   const data = {
     comments,
     numOfComments: comments.length,
@@ -273,6 +281,7 @@ const getAllCmtController = async (req, res) => {
 
 const getCmtStartFromController = async (req, res) => {
   const { post_id, index, num } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
   const AllComments = await StatusPostModel.getAllCmtByPostId(post_id)
     .then((data) => data.payload)
     .catch((err) => []);
@@ -293,6 +302,10 @@ const getCmtStartFromController = async (req, res) => {
   if (typeof num == "undefined") {
     const comments = AllComments.slice(index);
     await statusPostHelper.InsertUserCmtInforOfListCmts(comments);
+    await statusPostHelper.insertHaveLikeOfUserInListOfComment(
+      user_id,
+      comments
+    );
     const data = {
       comments,
       numOfComments: comments.length,
@@ -304,6 +317,10 @@ const getCmtStartFromController = async (req, res) => {
   } else {
     const comments = AllComments.slice(index, index + num);
     await statusPostHelper.InsertUserCmtInforOfListCmts(comments);
+    await statusPostHelper.insertHaveLikeOfUserInListOfComment(
+      user_id,
+      comments
+    );
 
     const data = {
       comments,
@@ -606,6 +623,8 @@ const deletePostController = async (req, res) => {
       await StatusPostModel.deleteAllLikeCmtsOfPost(post_id),
       // xóa phản hồi
       await StatusPostModel.deleteAllReplyCmtOfPost(post_id),
+      // xóa theo dõi
+      await followModel.deleteAllFollowOfStatusPost(post_id),
     ]);
     res.json(deleteProcess);
   } catch (error) {
@@ -677,10 +696,11 @@ const calNumOfPostOfEachUser = async (user_id, NEEDED_NUM_OF_POST = 10) => {
 
 const getPostForNewsfeedController = async (req, res) => {
   const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
-  // console.log({ user_id });
-  const index = parseInt(req.body.index);
+  const { index } = req.body;
+
   const NUMOF_POST_RETURN = 10;
   const NEEDED_NUM_OF_POST = (index + 1) * NUMOF_POST_RETURN;
+
   const startPointSlicing = index * NUMOF_POST_RETURN;
   // console.log({ index });
   const numOfPostForEachUser = await calNumOfPostOfEachUser(
@@ -757,14 +777,11 @@ const getPostForNewsfeedController = async (req, res) => {
   scoredListPosts.sort((a, b) => a.score - b.score);
 
   console.log({ len_1: scoredListPosts.length });
-
-  const posts =
-    scoredListPosts.length >= NEEDED_NUM_OF_POST
-      ? scoredListPosts.slice(
-          startPointSlicing,
-          startPointSlicing + NUMOF_POST_RETURN + 1
-        )
-      : scoredListPosts.slice(-Math.ceil(scoredListPosts.length / (index + 1)));
+  // remove posts have already render
+  const postsHaveNotRender = scoredListPosts.filter(
+    (post) => !req.body.PostIdsHaveRendered.includes(post._id.toString())
+  );
+  const posts = postsHaveNotRender.slice(0, NUMOF_POST_RETURN);
 
   // insert owner infor for each post
   await statusPostHelper.InsertOwnerInforOfListPosts(posts);
@@ -774,6 +791,45 @@ const getPostForNewsfeedController = async (req, res) => {
   console.log({ len_2: posts.length });
 
   res.status(200).json(new Response(200, posts, ""));
+};
+
+const getPostHavePetController = async (req, res) => {
+  const { pet_id, before, num } = req.body;
+  const reader_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const owner_id_of_pet = await petHelper.getOwnerIdOfPet(pet_id);
+  // console.log(owner_id_of_pet);
+  if (reader_id == owner_id_of_pet) {
+    const posts = await StatusPostModel.getAllPostOfUserHavePetBeforeTime(
+      owner_id_of_pet,
+      pet_id,
+      before,
+      num
+    );
+    res
+      .status(200)
+      .json(new Response(200, posts.payload, "Lấy dữ liệu thành công"));
+    return;
+  } else {
+    const laBanBe = await banbeHelper.haveFriendShipBetween(
+      reader_id,
+      owner_id_of_pet
+    );
+    // console.log({ laBanBe });
+    // res.send('1');
+    // return ;
+    const posts = await StatusPostModel.getPostOfUserHavePetForReaderBeforeTime(
+      owner_id_of_pet,
+      pet_id,
+      reader_id,
+      laBanBe,
+      before,
+      num
+    );
+    res
+      .status(200)
+      .json(new Response(200, posts.payload, "Lấy dữ liệu thành công"));
+    return;
+  }
 };
 
 module.exports = {
@@ -799,4 +855,5 @@ module.exports = {
   followPostController,
   reportPostController,
   getPostForNewsfeedController,
+  getPostHavePetController,
 };

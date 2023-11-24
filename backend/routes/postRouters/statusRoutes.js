@@ -1,5 +1,6 @@
 const express = require("express");
 const statusPostMiddle = require("../../middlewares/BaiViet/postMiddlewares");
+const petMid = require("../../middlewares/petMid");
 const statusPostController = require("../../controllers/postControllers/statusPostController");
 const { requireLogined } = require("../../middlewares/auth");
 const router = express.Router();
@@ -160,6 +161,12 @@ router.post(
   "/getPostForNewsfeed",
   [statusPostMiddle.preProccessToGetNewFeed],
   statusPostController.getPostForNewsfeedController
+);
+
+router.post(
+  "/getPostHavePet",
+  [petMid.checkPetExistMid, statusPostMiddle.preProcessGetPostHavePet],
+  statusPostController.getPostHavePetController
 );
 
 module.exports = router;

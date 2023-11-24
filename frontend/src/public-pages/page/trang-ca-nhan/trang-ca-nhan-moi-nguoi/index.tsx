@@ -13,6 +13,9 @@ import { RootState } from '../../../../redux';
 import { PersonComponent } from '../../ban-be';
 import { PetType } from '../../../../models/pet';
 import { DanhSachThuCung } from '../../quan-ly-thu-cung/component/danh-sach-thu-cung';
+import Button from '../../../../components/Button';
+import friendApi from '../../../../api/friend';
+import { useSnackbar } from 'notistack';
 
 export default function TrangCaNhanMoiNguoi() {
   // const profile = useSelector((state: RootState) => state.user.profile);
@@ -26,11 +29,18 @@ export default function TrangCaNhanMoiNguoi() {
     user: '',
     url: '',
     numberPet: 0,
+    isFriend: false,
   });
+
+  const [isFriend, setIsFriend] = useState(0);
 
   const [friend, setFriend] = useState<FriendType[]>([]);
   const [listPost, setListPost] = useState<StatusType[]>([]);
   const [listPet, setListPet] = useState<PetType[]>([]);
+
+  const acceptUser = useSelector((state:RootState) => state?.socket.acceptFriend.idUser);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (id) {
@@ -43,7 +53,14 @@ export default function TrangCaNhanMoiNguoi() {
           user: data?.thong_tin_profile_user?.tai_khoan,
           url: data?.thong_tin_profile_user?.anh?.url,
           numberPet: data?.danh_sach_thu_cung?.length,
+          isFriend: data?.la_ban_be,
         });
+
+        if (data?.la_ban_be) {
+          setIsFriend(1);
+        } else {
+          setIsFriend(0);
+        }
         const fri: FriendType[] = data?.danh_sach_ban_be?.map((item: any) => {
           return {
             name: item?.ten,
@@ -106,6 +123,69 @@ export default function TrangCaNhanMoiNguoi() {
     }
   }, [profile.id]);
 
+  useEffect(() => {
+    if(profile?.id == acceptUser){
+      setIsFriend(1);
+    }
+  }, [acceptUser])
+
+  function handleUnfriend() {
+    if (profile?.id) {
+      friendApi
+        .unFriendById(profile?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            enqueueSnackbar(`Đã hủy kết bạn với ${profile?.name}`, {
+              variant: 'success',
+            });
+            setIsFriend(0);
+          } else {
+            enqueueSnackbar(
+              `${data?.message || 'Thất bại vui lòng thử lại !'}`,
+              {
+                variant: 'error',
+              }
+            );
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message || 'Thất bại vui lòng thử lại !'}`, {
+            variant: 'error',
+          });
+        });
+    }
+
+  }
+
+  
+
+  function handleAddfriend() {
+    if (profile?.id) {
+      friendApi
+        .addFriendById(profile?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            enqueueSnackbar(`Đã gửi lời mời kết bạn với ${profile?.name}`, {
+              variant: 'success',
+            });
+            setIsFriend(-1);
+          } else {
+            enqueueSnackbar(
+              `${data?.message || 'Thất bại vui lòng thử lại !'}`,
+              {
+                variant: 'error',
+              }
+            );
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message || 'Thất bại vui lòng thử lại !'}`, {
+            variant: 'error',
+          });
+        });
+    }
+  }
+
   return (
     <>
       <Box
@@ -126,15 +206,52 @@ export default function TrangCaNhanMoiNguoi() {
               ml: '80px',
             }}
           >
-            <Typography
+            <Box
               sx={{
-                fontFamily: 'quicksand',
-                fontSize: '22px',
-                fontWeight: '600',
+                display: 'flex',
+
+                alignItems: 'center',
               }}
             >
-              {profile?.name}
-            </Typography>
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontSize: '22px',
+                  fontWeight: '600',
+                  marginRight: '20px',
+                }}
+              >
+                {profile?.name}
+              </Typography>
+              {isFriend == 1 && (
+                <Button
+                  onClick={handleUnfriend}
+                  variant="contained"
+                  color="info"
+                >
+                  Hủy kết bạn
+                </Button>
+              )}
+              {isFriend == 0 && (
+                <Button
+                  onClick={handleAddfriend}
+                  variant="contained"
+                  color="info"
+                >
+                  Kết bạn
+                </Button>
+              )}
+              
+              {isFriend == -1 && (
+                <Button
+                  disabled
+                  variant="contained"
+                  color="info"
+                >
+                  Đang chờ phản hồi
+                </Button>
+              )}
+            </Box>
             <Typography
               sx={{
                 fontFamily: 'quicksand',

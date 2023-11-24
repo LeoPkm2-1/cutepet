@@ -362,6 +362,22 @@ const getArticleById = async (article_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+// (async function () {
+//   const data =await getArticleById('654f9e8f479ad1da822047b4');
+//   console.log(data);
+// })()
+
+const getOwnerIdOfArticle = async (article_id) => {
+  const article = await getArticleById(article_id).then((data) => data.payload);
+  // console.log(article);
+  return article == null ? null : parseInt(article.owner_id);
+};
+
+// (async function () {
+//   const data = await getOwnerIdOfArticle("654f9e8f479ad1da822047b4");
+//   console.log(data);
+// })();
+
 const getAllCommentsOfArticle = async (article_id) => {
   async function executor(collection) {
     return await collection
@@ -510,4 +526,5 @@ module.exports = {
   updateArticle,
   reportArticle,
   getUserReportInforOfArticle,
+  getOwnerIdOfArticle,
 };

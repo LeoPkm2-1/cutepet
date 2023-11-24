@@ -910,13 +910,15 @@ nếu bình luận không tồn tại:
 
 ```javascript
 {
-    index: number(bắt buộc)
+    index: number(bắt buộc),
+    PostIdsHaveRendered: Array (string postId)
 }
 ```
 
 - _trong đó:_
 
   - **index**: lấy ra bài viết **lần** thứ mấy (thứ tự bắt đầu từ: 0,1,......)
+  - **PostIdsHaveRendered**: mô tả các bài viết đã dc render ở giao diện rồi để backend có thể lọc bỏ đi
 
 3. trả về:
 
@@ -1056,7 +1058,163 @@ nếu bình luận không tồn tại:
 
 - các thông tin trả về đều giống với lấy bài viết trước đó [chi tiết](./post.md#11-phân-trang-cho-bài-viết)
 
-##
+## 18. lấy bài viết có tag con thú cụ thể
+
+1. Phương thức:
+
+   POST http://localhost:3000/post/statusPost/getPostHavePet
+
+2. cấu trúc:
+
+```javascript
+{
+    pet_id: number (bắt buộc),
+    before: string_time || undefined,
+    num: number || undefined
+}
+```
+
+- trong đó:
+  - **pet_id**: mã của con thú cần lấy bài viết có tag nó
+  - **before**: thời điểm để làm mốc lấy các bài viết trước thời gian này
+  - **num**: số lượng bài viết cần lấy ra
+
+1. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "_id": "655f83f78c54dd810bb61689",
+            "text": "ae ơi 4",
+            "postType": "STATUS",
+            "visibility": "PUBLIC",
+            "media": {
+                "type": "images",
+                "data": [
+                    "https://pbs.twimg.com/media/D7dBfozUEAEkItp.jpg"
+                ]
+            },
+            "taggedUsers": [],
+            "withPets": [
+                {
+                    "ma_thu_cung": 1,
+                    "ten_thu_cung": "tom",
+                    "ngay_sinh": "2019-10-09T17:00:00.000Z",
+                    "gioi_tinh": 1,
+                    "ghi_chu": "chú mèo béo lười",
+                    "ma_nguoi_chu": 1,
+                    "giong_loai": {
+                        "ma_giong": 205,
+                        "ten_giong": "British Shorthair",
+                        "ma_loai": 2,
+                        "ten_loai": "mèo"
+                    },
+                    "anh": {
+                        "ma_anh": 49,
+                        "url": "...............................",
+                        "ngay_cap_nhat": "2023-09-02T04:43:12.000Z",
+                        "ma_thu_cung": 1,
+                        "is_active": 1
+                    },
+                    "thong_tin_suc_khoe": {
+                        "ma_suc_khoe": 14,
+                        "ma_thu_cung": 1,
+                        "thoi_gian": "2023-09-04T04:29:06.000Z",
+                        "can_nang": null,
+                        "chieu_cao": 100
+                    }
+                }
+            ],
+            "createAt": "2023-11-23T16:55:19.419Z",
+            "numOfLike": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 1
+        },
+        {
+            "_id": "655f83ef8c54dd810bb61687",
+            "text": "ae ơi 3",
+            "postType": "STATUS",
+            "visibility": "PUBLIC",
+            "media": {
+                "type": "images",
+                "data": [
+                    "https://pbs.twimg.com/media/D7dBfozUEAEkItp.jpg"
+                ]
+            },
+            "taggedUsers": [],
+            "withPets": [
+                {
+                    "ma_thu_cung": 1,
+                    "ten_thu_cung": "tom",
+                    "ngay_sinh": "2019-10-09T17:00:00.000Z",
+                    "gioi_tinh": 1,
+                    "ghi_chu": "chú mèo béo lười",
+                    "ma_nguoi_chu": 1,
+                    "giong_loai": {
+                        "ma_giong": 205,
+                        "ten_giong": "British Shorthair",
+                        "ma_loai": 2,
+                        "ten_loai": "mèo"
+                    },
+                    "anh": {
+                        "ma_anh": 49,
+                        "url": ".....................",
+                        "ngay_cap_nhat": "2023-09-02T04:43:12.000Z",
+                        "ma_thu_cung": 1,
+                        "is_active": 1
+                    },
+                    "thong_tin_suc_khoe": {
+                        "ma_suc_khoe": 14,
+                        "ma_thu_cung": 1,
+                        "thoi_gian": "2023-09-04T04:29:06.000Z",
+                        "can_nang": null,
+                        "chieu_cao": 100
+                    }
+                },
+                {
+                    "ma_thu_cung": 5,
+                    "ten_thu_cung": "Bella",
+                    "ngay_sinh": "2019-10-13T17:00:00.000Z",
+                    "gioi_tinh": 0,
+                    "ghi_chu": "chú mèo béo lười",
+                    "ma_nguoi_chu": 1,
+                    "giong_loai": {
+                        "ma_giong": 205,
+                        "ten_giong": "British Shorthair",
+                        "ma_loai": 2,
+                        "ten_loai": "mèo"
+                    },
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "............................",
+                        "ngay_cap_nhat": null,
+                        "ma_thu_cung": 5,
+                        "is_active": null
+                    },
+                    "thong_tin_suc_khoe": {
+                        "ma_suc_khoe": null,
+                        "ma_thu_cung": 5,
+                        "thoi_gian": null,
+                        "can_nang": null,
+                        "chieu_cao": null
+                    }
+                }
+            ],
+            "createAt": "2023-11-23T16:55:11.306Z",
+            "numOfLike": 0,
+            "numOfComment": 0,
+            "modifiedAt": null,
+            "owner_id": 1
+        }
+    ],
+    "message": "Lấy dữ liệu thành công",
+    "errno": null,
+    "errcode": null
+}
+```
 
 ##
 

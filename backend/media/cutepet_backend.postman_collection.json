@@ -816,7 +816,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -828,12 +828,12 @@
 					"urlencoded": [
 						{
 							"key": "before",
-							"value": "2023-10-19-07:30",
+							"value": "2023-10-19",
 							"type": "text"
 						},
 						{
 							"key": "num",
-							"value": "100",
+							"value": "1",
 							"type": "text"
 						}
 					]
@@ -861,7 +861,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -873,7 +873,7 @@
 					"urlencoded": [
 						{
 							"key": "notif_id",
-							"value": "653e1337a2eed379e418b5ff",
+							"value": "654f9667479ad1da822047a3",
 							"type": "text"
 						}
 					]
@@ -1308,14 +1308,12 @@
 						{
 							"key": "before",
 							"value": "2023-11-02T17:03:22.440Z",
-							"type": "text",
-							"disabled": true
+							"type": "text"
 						},
 						{
 							"key": "num",
 							"value": "1",
-							"type": "text",
-							"disabled": true
+							"type": "text"
 						}
 					]
 				},
@@ -2683,7 +2681,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjoyMiwidGVuIjoiVHLDrSIsIm5nYXlfc2luaCI6IjE5OTEtMTAtMTFUMTc6MDA6MDAuMDAwWiIsInRhaV9raG9hbiI6InZhbnRyaXRoYW5oIiwiZW1haWwiOiJ2YW50cmkyMkBnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY5MSIsImdpb2lfdGluaCI6MSwiaWF0IjoxNzAwNDYwOTc0LCJleHAiOjE3MDM0NjA5NzR9.UajNmZYSBeF8QmgjE2wpnZHoGtvOI2rtHMDvIUGSUcwTRg0-8qqaXiUhHHVK63byGEc-vXj9KL2Hu7lE2AjVYg",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -2691,14 +2689,13 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "index",
-							"value": "1",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n    \"index\":1,\n    \"PostIdsHaveRendered\":[\"123456789012123456789138\",\"123456789012123456789118\",\"123456789012123456789132\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
 					"raw": "http://localhost:3000/post/statusPost/getPostForNewsfeed",
@@ -2886,6 +2883,91 @@
 					"path": [
 						"pet",
 						"infor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "68_friend_removeRequestAddFriendById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "requestID",
+							"value": "8",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/friend/removeRequestAddFriendById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"removeRequestAddFriendById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "69_getUnReadNotiBefore",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "before",
+							"value": "2023-11-22",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/notification/getUnReadNotiBefore",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"notification",
+						"getUnReadNotiBefore"
 					]
 				}
 			},
@@ -3145,6 +3227,51 @@
 							"value": "2",
 							"disabled": true
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "70_getUnReadNotiStartFrom",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "index",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/notification/getUnReadNotiStartFrom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"notification",
+						"getUnReadNotiStartFrom"
 					]
 				}
 			},

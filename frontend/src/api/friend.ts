@@ -25,6 +25,25 @@ const responeAddFriend = (senderID: number|string, acceptOrReject:string) => {
   });
 };
 
+const unFriendById = (friend_id: number|string) => {
+  return authRequest<any>({
+    url: `/friend/unfriendById`,
+    method: 'POST',
+    body: {
+      friend_id
+    }
+  });
+};
+
+const addFriendById = (requestID: number|string) => {
+  return authRequest<any>({
+    url: `/friend/requestAddFriendById`,
+    method: 'POST',
+    body: {
+      requestID
+    }
+  });
+};
 
 const searchPeople = (searchKey: string, index: number, num: number) => {
   return authRequest<any>({
@@ -39,6 +58,8 @@ const searchPeople = (searchKey: string, index: number, num: number) => {
 };
 
 const friendApi = {
+  unFriendById,
+  addFriendById,
   getListFriend,
   searchPeople,
   getRequestAddFriendList,

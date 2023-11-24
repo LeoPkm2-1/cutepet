@@ -71,7 +71,7 @@ export default function Routing(props: Props) {
         <Route path={`/user/confirmRegister/:id`} element={<XacThucPage/>} />
 
         <Route
-          path="/*"
+          path="*"
           element={
             <Private>
               <PrivatePagesRouting />
