@@ -64,7 +64,7 @@ tham khảo tại: **[article.md](./article.md)**
 
 ## 15. ==OK== thêm icon xóa ảnh khi đăng bài viết chia sẻ trạng thái
 
-## 16. khi người dùng tag thì phải bỏ đi những người dùng tag rồi tag lại
+## 16. ==OK== khi người dùng tag thì phải bỏ đi những người dùng tag rồi tag lại
 
 ## 17. đổi mật khẩu người dùng
 
@@ -100,7 +100,7 @@ tham khảo tại: **[article.md](./article.md)**
 
 ## 26. ==OK== đổi lại icon article trên navbar
 
-## 27. bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức, icon bạn bè khi vào danh sách bạn bè, icon thông báo khi bấm vào thông báo
+## 27.==OK== bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức, icon bạn bè khi vào danh sách bạn bè, icon thông báo khi bấm vào thông báo
 
 ## 28. handle ảnh bìa cho bài viết chia sẻ kiến thức
 
@@ -153,7 +153,7 @@ lý do value của visibility là `JUST_FRIENDS` mà lại gửi lên là `frien
 
 xem chi tiết tại: **[Route_Struture/socket.md](./socket.md#10-thông-báo-khi-có-bài-viết-status-mới-được-đăng-lên)**
 
-## 36. cho phép tag thú cưng của mình vào bài viết chia sẻ trạng thái
+## 36. --OK-- cho phép tag thú cưng của mình vào bài viết chia sẻ trạng thái
 
 xem chi tiết tại: **[Route_Struture/post.md](./post.md#1-thêm-bài-viết-chia-sẻ-trạng-thái)**
 
@@ -211,7 +211,7 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 59. khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
 
-## 60 follow bài viết trạng thái 
+## 60. --OK-- follow bài viết trạng thái 
 
 ## 61. thích bình luận bài viết chia sẻ trạng thái
 
