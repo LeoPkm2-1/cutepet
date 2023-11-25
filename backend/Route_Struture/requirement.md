@@ -20,7 +20,7 @@ sửa dụng:
 - **[3](./profile.md/#3-lấy-thông-tin-trang-cá-nhân-của-người-dùng-khác)**
 - **[4](./profile.md/#4-lấy-các-bài-viết-trên-time-line-của-người-dùng-khác)**
 
-## 3. ==DONE== đổi lại icon cho bài viết chia sẻ:
+## 3. ==OK== đổi lại icon cho bài viết chia sẻ:
 
 ## 4. handle kết bạn
 
@@ -30,7 +30,7 @@ sửa dụng:
 
     `nhớ kiểm tra event listen nha`
 
-## 6. ==DONE== sửa lại hiển thị bài viết trên newsfeed
+## 6. ==OK== sửa lại hiển thị bài viết trên newsfeed
 
     `bài viết trạng thái hiển thị khác với bài viết chia sẻ kiến thức`
 
@@ -40,29 +40,29 @@ sửa dụng:
 
 ## 8. sửa lại icon của bài viết `private`, `public`, `just_friend`
 
-## 9. == DONE == socket có vấn đề :
+## 9. == OK == socket có vấn đề :
 
     - [ ] 9.1. đăng xuất chưa tắt socket
     - [ ] 9.2. khi đăng nhập vào thì socket chưa được kết nối
 
 ## 10. navigate tới mạng xã hội khi path là `/` hoặc là `/home`
 
-## 11. ==DONE== hoàn thiện ảnh trong trang chia sẻ kiến thức:
+## 11. ==OK== hoàn thiện ảnh trong trang chia sẻ kiến thức:
 
     - [ ] 11.1 resize lại
     - [ ] 11.2 cho hủy ảnh
 
-## 12. điều hướng người dung qua trang bài viết khi đăng xong bài viết chia sẻ kiến thức
+## 12. ==OK== điều hướng người dung qua trang bài viết khi đăng xong bài viết chia sẻ kiến thức
 
 ## 13. `upvote`, `downvote` và `comment` khi vào bài viết chia sẻ kiến thức
 
 tham khảo tại: **[article.md](./article.md)**
 
-## 14. người dùng đã đăng nhập thành công thì chặn vào trang `đăng nhập` và `đăng ký`
+## 14. ==OK== người dùng đã đăng nhập thành công thì chặn vào trang `đăng nhập` và `đăng ký`
 
 - trong trang đăng ký tên phải chỉ chứa tối đa 32 ký tự, có thể là tiếng việt hoặc tiếng anh. [chi tiết tại đây](./userInfor.md#5-đăng-ký-tài-khoản)
 
-## 15. ==DONE== thêm icon xóa ảnh khi đăng bài viết chia sẻ trạng thái
+## 15. ==OK== thêm icon xóa ảnh khi đăng bài viết chia sẻ trạng thái
 
 ## 16. khi người dùng tag thì phải bỏ đi những người dùng tag rồi tag lại
 
@@ -70,7 +70,7 @@ tham khảo tại: **[article.md](./article.md)**
 
     (xem trong file summary)
 
-## 18. == DONE == Sửa lại thông báo trong trang đăng nhập :
+## 18. == OK == Sửa lại thông báo trong trang đăng nhập :
 
     - thông báo rõ ràng hơn lỗi đó là lỗi gì không nên để chung chung là lỗi đăng nhập được:
 
@@ -80,7 +80,7 @@ tham khảo tại: **[article.md](./article.md)**
 
     (xem trong file summary)
 
-## 20. ==DONE== sửa lại danh sách các thể loại của bài viết chia sẻ kiến thức
+## 20. ==OK== sửa lại danh sách các thể loại của bài viết chia sẻ kiến thức
 
     (xem trong file summary)
 
@@ -92,13 +92,13 @@ tham khảo tại: **[article.md](./article.md)**
 
     (xem trong file summary)
 
-## 23. ==DONE== thêm nút xóa ảnh khi đăng bài trạng thái
+## 23. ==OK== thêm nút xóa ảnh khi đăng bài trạng thái
 
-## 24. ==DONE== resize lại ảnh khi đăng bài viết chia sẻ kiến thức
+## 24. ==OK== resize lại ảnh khi đăng bài viết chia sẻ kiến thức
 
 ## 25. hiện category lúc đọc bài viết chia sẻ kiến thức
 
-## 26. ==DONE== đổi lại icon article trên navbar
+## 26. ==OK== đổi lại icon article trên navbar
 
 ## 27. bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức, icon bạn bè khi vào danh sách bạn bè, icon thông báo khi bấm vào thông báo
 
@@ -145,7 +145,7 @@ tham khảo tại: **[article.md](./article.md)**
 
    - cập nhật thông tin người dùng [chi tiết tại đây](./userInfor.md#4-cập-nhật-thông-tin-người-dùng).
 
-## 34. Đăng Bài với visibility là bạn bè bị sai
+## 34. ---OK---  Đăng Bài với visibility là bạn bè bị sai
 
 lý do value của visibility là `JUST_FRIENDS` mà lại gửi lên là `friend` nên bị sai không chạy dc
 
@@ -189,7 +189,7 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 50. up vote, downvote bài viết chia sẻ kiến thức, bình luận bài viết chia sẻ kiến thức
 
-## 51. sai khi đánh dấu đọc thông báo là do truyền sai tham số
+## 51. --OK-- sai khi đánh dấu đọc thông báo là do truyền sai tham số
 
 ## 52. Đánh dấu đã đọc tất cả các thông báo
 
@@ -197,7 +197,7 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ![](../media/img/err/img8.png)
 
-## 54. search người dùng xong bấm vào không được
+## 54. ==OK== search người dùng xong bấm vào không được
 
 ![](../media/img/err/img10.png)
 
@@ -207,7 +207,14 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 (viết ra thông báo đó là thông báo nào đừng để  noname)
 
-## 58. khi có thông báo mới đến thì load lại API lấy thông báo
+## 58. --OK-- khi có thông báo mới đến thì load lại API lấy thông báo
 
 ## 59. khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
 
+## 60 follow bài viết trạng thái 
+
+## 61. thích bình luận bài viết chia sẻ trạng thái
+
+## 62. bỏ thích trong phản hồi bài viết trạng thái
+
+## 63. hiện thực upvote và downvote , bình luận, và báo cáo bài viết chia sẻ kiến thức
