@@ -218,3 +218,5 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 ## 62. bỏ thích trong phản hồi bài viết trạng thái
 
 ## 63. hiện thực upvote và downvote , bình luận, và báo cáo bài viết chia sẻ kiến thức
+
+## 64. xóa thú cưng

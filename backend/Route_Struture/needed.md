@@ -116,3 +116,5 @@ hiển thị 404 page not found khi bài viết không tồn tại
 ## 62. bỏ thích trong phản hồi bài viết trạng thái
 
 ## 63. hiện thực upvote và downvote , bình luận, và báo cáo bài viết chia sẻ kiến thức
+
+## 64. xóa thú cưng
