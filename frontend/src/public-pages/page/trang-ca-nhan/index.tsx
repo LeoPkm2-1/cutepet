@@ -10,12 +10,13 @@ import PostComponent from '../mang-xa-hoi/component/bai-viet';
 import { QuanLyThuCung } from '../quan-ly-thu-cung';
 import { FriendList } from '../ban-be';
 import { useNavigate } from 'react-router-dom';
+import { RestaurantMenuRounded } from '@mui/icons-material';
 
 export default function TrangCaNhan() {
   // const profile = useSelector((state: RootState) => state.user.profile);
   const navigate = useNavigate();
   const [isPostState, setIsPostState] = useState(true);
-
+  const [timePost, setTimePost] = useState('none');
   const [profile, setProfile] = useState<PeopleType>({
     name: '',
     id: '',
@@ -41,38 +42,112 @@ export default function TrangCaNhan() {
   }, []);
 
   useEffect(() => {
-    profileApi.getMyPost().then((data) => {
-      if (data?.status == 200) {
-        console.log(data, 'data lan 1');
-        const list: StatusType[] = data?.payload?.map((item: any) => {
-          return {
-            id: item?._id,
-            media: item?.media as {
-              type: string;
-              data: string[];
-            },
-            createAt: item?.createAt,
-            numOfLike: item?.numOfLike,
-            numOfComment: item?.numOfComment,
-            userInfor: {
-              id: item?.owner_infor?.ma_nguoi_dung,
-              name: item?.owner_infor?.ten,
-              avatarURL: item?.owner_infor?.anh?.url,
-            },
-            hasLiked: item?.hasLiked,
-            text: item?.text,
-            taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
+    if (profile?.id && profile) {
+      profileApi
+        .getMyPost(new Date())
+        .then((data) => {
+          if (data?.status == 200) {
+            if (data?.payload?.length == 0) {
+              setTimePost('');
+              return;
+            }
+            const list: StatusType[] = data?.payload?.map((item: any) => {
               return {
-                id: tagUser?.ma_nguoi_dung,
-                name: tagUser?.ten,
-              };
-            }),
-          } as StatusType;
+                id: item?._id,
+                media: item?.media as {
+                  type: string;
+                  data: string[];
+                },
+                createAt: item?.createAt,
+                numOfLike: item?.numOfLike,
+                numOfComment: item?.numOfComment,
+                userInfor: {
+                  id: profile?.id,
+                  name: profile?.name,
+                  avatarURL: profile?.url,
+                },
+                hasLiked: item?.hasLiked,
+                text: item?.text,
+                visibility: item?.visibility,
+                taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
+                  return {
+                    id: tagUser?.ma_nguoi_dung,
+                    name: tagUser?.ten,
+                  };
+                }),
+                taggedPets: item?.withPets?.map((tagPet: any) => {
+                  return {
+                    id: tagPet?.ma_thu_cung,
+                    name: tagPet?.ten_thu_cung,
+                  };
+                }),
+                owner_id: item?.owner_id,
+              } as StatusType;
+            });
+            setListPost(list);
+          } else {
+            setTimePost('');
+          }
+        })
+        .catch(() => {
+          setTimePost('');
         });
-        setListPost(list);
-      }
-    });
-  },[]);
+    }
+  }, [profile?.id]);
+
+  useEffect(() => {
+    if (profile?.id && timePost && timePost !== 'none') {
+      profileApi
+        .getMyPost(timePost)
+        .then((data) => {
+          if (data?.status == 200) {
+            if (data?.payload?.length == 0) {
+              setTimePost('');
+              return;
+            }
+            const list: StatusType[] = data?.payload?.map((item: any) => {
+              return {
+                id: item?._id,
+                media: item?.media as {
+                  type: string;
+                  data: string[];
+                },
+                createAt: item?.createAt,
+                numOfLike: item?.numOfLike,
+                numOfComment: item?.numOfComment,
+                userInfor: {
+                  id: profile?.id,
+                  name: profile?.name,
+                  avatarURL: profile?.url,
+                },
+                hasLiked: item?.hasLiked,
+                text: item?.text,
+                visibility: item?.visibility,
+                taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
+                  return {
+                    id: tagUser?.ma_nguoi_dung,
+                    name: tagUser?.ten,
+                  };
+                }),
+                taggedPets: item?.withPets?.map((tagPet: any) => {
+                  return {
+                    id: tagPet?.ma_thu_cung,
+                    name: tagPet?.ten_thu_cung,
+                  };
+                }),
+                owner_id: item?.owner_id,
+              } as StatusType;
+            });
+            setListPost([...listPost, ...list]);
+          } else {
+            setTimePost('');
+          }
+        })
+        .catch(() => {
+          setTimePost('');
+        });
+    }
+  }, [profile.id, timePost]);
 
   return (
     <>
@@ -130,7 +205,7 @@ export default function TrangCaNhan() {
               }}
             >
               <Typography
-                onClick = {() => setIsPostState(true)}
+                onClick={() => setIsPostState(true)}
                 sx={{
                   fontFamily: 'quicksand',
                   fontSize: '14px',
@@ -147,12 +222,12 @@ export default function TrangCaNhan() {
                     fontSize: '15px',
                   }}
                 >
-                  6
+                  {listPost?.length}
                 </span>{' '}
                 bài viết{' '}
               </Typography>
               <Typography
-                onClick = {() => navigate("/home/quan-ly-thu-cung")}
+                onClick={() => navigate('/home/quan-ly-thu-cung')}
                 sx={{
                   fontFamily: 'quicksand',
                   fontSize: '14px',
@@ -174,7 +249,7 @@ export default function TrangCaNhan() {
                 thú cưng{' '}
               </Typography>
               <Typography
-                onClick = {() => setIsPostState(false)}
+                onClick={() => setIsPostState(false)}
                 sx={{
                   fontFamily: 'quicksand',
                   fontSize: '14px',
@@ -224,12 +299,32 @@ export default function TrangCaNhan() {
           <Box
             sx={{
               display: !isPostState ? 'block' : 'none',
-              width:"50vw"
+              width: '50vw',
             }}
           >
-           <FriendList />
+            <FriendList />
           </Box>
         </Box>
+        {timePost && isPostState && (
+          <Typography
+            align="center"
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              fontSize: '15px',
+              margin: '16px 16px 10px 0px',
+              color: '#0c4195',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              setTimePost(listPost[listPost?.length - 1]?.createAt || "");
+            }}
+          >
+            {' '}
+            Xem thêm bài viết{' '}
+          </Typography>
+        )}
       </Box>
     </>
   );

@@ -3,6 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import React, { useState, useEffect } from 'react';
 import notiApi from '../api/noti';
+import { useDispatch, useSelector } from 'react-redux';
+import { NotiActions } from '../redux/noti';
+import { RootState } from '../redux';
 type Props = {
   name?: string;
   url?: string;
@@ -11,6 +14,8 @@ type Props = {
   onClick?: () => void;
   idNoti?: string;
   isReaded?: boolean;
+  isRequestFriend?:boolean;
+  isFriend?:boolean;
 };
 export function NotifycationItem(props: Props) {
   return (
@@ -60,21 +65,29 @@ export function NotifycationItemClick(props: Props) {
   useEffect(() => {
     setIsReaded(props?.isReaded);
   }, [props?.idPost, props?.isReaded]);
+  const numNoti = useSelector((state:RootState) => state?.noti?.numNoti)
+  const dispatch = useDispatch();
+  function naviga(){
+    if(props?.isRequestFriend){
+      return `/home/ban-be`
+    }
+    if(props?.isFriend){
+      return `/home/trang-ca-nhan-nguoi-dung/${props?.idNoti}`
+    }
+    return `post/${props?.idPost}`;
+  }
   return (
     <>
       <Link
         onClick={() => {
           if (props?.idNoti) {
-              console.log("vaof nef");
-
             notiApi.postNotificationHasReaded(props?.idNoti).then((data) => {
-              console.log("vaof nef 1");
-              
+              dispatch(NotiActions.setNumNoti(numNoti - 1));
               setIsReaded(true);
             });
           }
         }}
-        to={`post/${props?.idPost}`}
+        to={naviga()}
       >
         <Box
           sx={{
@@ -122,7 +135,7 @@ export function NotifycationItemClick(props: Props) {
               <span style={{ fontWeight: '700' }}>
                 {props?.name || 'No name'}
               </span>{' '}
-              đã {props?.type || 'bình luận'} 
+              đã {props?.type} 
             </Typography>
           </Box>
           {!isReaded && (

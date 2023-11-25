@@ -7,13 +7,13 @@ const getMyProfile = () => {
   });
 };
 
-const getMyPost = () => {
+const getMyPost = (before: any) => {
   return authRequest<any>({
     url: `/profile/myTimelineBackward`,
     method: 'POST',
     body: {
-      before: new Date(),
-      num: 100,
+      before,
+      num: 10,
     },
   });
 };
@@ -28,14 +28,14 @@ const getUserProfileById = (user_id: number | string) => {
   });
 };
 
-const getPostUserById = (user_id: number | string) => {
+const getPostUserById = (user_id: number | string, before:any,) => {
   return authRequest<any>({
     url: `/profile/userTimelineBackward`,
     method: 'POST',
     body: {
       user_id,
-      before: new Date(),
-      num: 100,
+      before,
+      num: 10,
     },
   });
 };

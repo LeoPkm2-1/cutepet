@@ -22,6 +22,7 @@ import { CommentType } from '../../../../../models/post';
 import { timeAgo } from '../../../../../helper/post';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Tag from '../../../../../components/tag';
+import { Page404 } from '../../../mang-xa-hoi/component/post-detail';
 
 export default function BaiChiaSe() {
   const [article, setArticle] = useState<ArticleType>({
@@ -37,124 +38,134 @@ export default function BaiChiaSe() {
   });
 
   const { id } = useParams();
-
+  const [isData, setIsData] = useState(true);
   useEffect(() => {
     if (id) {
-      articleApi.getArticleById(id).then((data) => {
-        if (data?.status == 200) {
-          const art = {
-            id: data?.payload?._id,
-            title: data?.payload?.title,
-            main_image: data?.payload?.main_image,
-            intro: data?.payload?.intro,
-            content: data?.payload?.content,
-            categories: data?.payload?.categories,
-            user_avatar: data?.payload?.owner_infor?.anh?.url,
-            user_name: data?.payload?.owner_infor?.ten,
-          };
-          setArticle(art);
-        }
-      });
+      articleApi
+        .getArticleById(id)
+        .then((data) => {
+          if (data?.status == 200) {
+            const art = {
+              id: data?.payload?._id,
+              title: data?.payload?.title,
+              main_image: data?.payload?.main_image,
+              intro: data?.payload?.intro,
+              content: data?.payload?.content,
+              categories: data?.payload?.categories,
+              user_avatar: data?.payload?.owner_infor?.anh?.url,
+              user_name: data?.payload?.owner_infor?.ten,
+            };
+            setArticle(art);
+          } else {
+            setIsData(false);
+          }
+        })
+        .catch(() => {
+          setIsData(false);
+        });
     }
   }, []);
 
   return (
     <>
-      <Grid container>
-        <Grid xs={9} item>
-          <Box
-            sx={{
-              paddingBottom: '120px',
-            }}
-          >
+      {isData ? (
+        <Grid container>
+          <Grid xs={9} item>
             <Box
               sx={{
-                // display: 'flex',
-                mb: '20px',
+                paddingBottom: '120px',
               }}
             >
-              <Typography
-                textAlign="center"
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '600',
-                  flex: 1,
-                  fontSize: '24px',
-                  mb: '16px',
-                }}
-              >
-                {article.title}
-              </Typography>
               <Box
                 sx={{
-                  flex: 1,
+                  // display: 'flex',
+                  mb: '20px',
                 }}
               >
                 <Typography
+                  textAlign="center"
                   sx={{
                     fontFamily: 'quicksand',
-                    fontWeight: '400',
-                    fontSize: '15px',
+                    fontWeight: '600',
+                    flex: 1,
+                    fontSize: '24px',
+                    mb: '16px',
                   }}
                 >
-                  {article?.intro}
+                  {article.title}
                 </Typography>
                 <Box
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    mt: '10px',
-                    justifyContent: 'center',
+                    flex: 1,
                   }}
                 >
-                  <img
-                    style={{
-                      objectFit: 'cover',
-                      borderRadius: '50px',
-                    }}
-                    height={36}
-                    width={36}
-                    src={article?.user_avatar}
-                  />
                   <Typography
                     sx={{
                       fontFamily: 'quicksand',
-                      fontWeight: '500',
-                      fontSize: '14px',
-                      ml: '16px',
+                      fontWeight: '400',
+                      fontSize: '15px',
                     }}
                   >
-                    By {article.user_name}
+                    {article?.intro}
                   </Typography>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      mt: '10px',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img
+                      style={{
+                        objectFit: 'cover',
+                        borderRadius: '50px',
+                      }}
+                      height={36}
+                      width={36}
+                      src={article?.user_avatar}
+                    />
+                    <Typography
+                      sx={{
+                        fontFamily: 'quicksand',
+                        fontWeight: '500',
+                        fontSize: '14px',
+                        ml: '16px',
+                      }}
+                    >
+                      By {article.user_name}
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
 
-            <img
-              width={'100%'}
-              style={{
-                maxHeight: '250px',
-                objectFit: 'cover',
-              }}
-              src={article?.main_image}
-            />
-            <span>{parse(article.content)} </span>
-            <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              flexWrap:"wrap"
-            }}
-          >
-            {article?.categories?.map((item) => {
-              return <Tag text={item} />;
-            })}
-          </Box>
-            <Divider sx={{
-              marginBottom: "22px",
-              marginTop:"20px"
-            }}/>
-            {/* <Comment
+              <img
+                width={'100%'}
+                style={{
+                  maxHeight: '250px',
+                  objectFit: 'cover',
+                }}
+                src={article?.main_image}
+              />
+              <span>{parse(article.content)} </span>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                }}
+              >
+                {article?.categories?.map((item) => {
+                  return <Tag text={item} />;
+                })}
+              </Box>
+              <Divider
+                sx={{
+                  marginBottom: '22px',
+                  marginTop: '20px',
+                }}
+              />
+              {/* <Comment
               comment={{
                 photoURL: 'string',
                 name: 'Thuyen',
@@ -174,24 +185,27 @@ export default function BaiChiaSe() {
               }}
               onRemove={() => {}}
             /> */}
-            <CreateComment
-              onSuccess={() => {
-                // setReloadComment(!reloadComment);
-                // console.log('reload laij nef');
-                // if (status) {
-                //   setStatus({
-                //     ...status,
-                //     numOfComment: status?.numOfComment + 1,
-                //   });
-                // }
-              }}
-              // idStatus={status?.id}
-              idStatus={''}
-            />
-          </Box>
+              <CreateComment
+                onSuccess={() => {
+                  // setReloadComment(!reloadComment);
+                  // console.log('reload laij nef');
+                  // if (status) {
+                  //   setStatus({
+                  //     ...status,
+                  //     numOfComment: status?.numOfComment + 1,
+                  //   });
+                  // }
+                }}
+                // idStatus={status?.id}
+                idStatus={''}
+              />
+            </Box>
+          </Grid>
+          <Grid xs={3} item></Grid>
         </Grid>
-        <Grid xs={3} item></Grid>
-      </Grid>
+      ) : (
+        <Page404 />
+      )}
     </>
   );
 }
@@ -342,7 +356,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
               display: 'flex',
               // background: '#fff',
               // padding: '0px 20px 10px 20px',
-              paddingBottom:"20px",
+              paddingBottom: '20px',
               borderRadius: '12px',
             }}
           >

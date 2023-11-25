@@ -85,7 +85,7 @@ export default function PostComponent(props: Props) {
               avatarURL: data?.payload?.owner_infor?.anh?.url,
             },
             hasLiked: data?.payload?.hasLiked,
-            text: data?.text || '',
+            text: data?.payload?.text || '',
             visibility: data?.payload?.visibility,
             taggedUsers: data?.payload?.taggedUsers?.map((item: any) => {
               return {
@@ -157,8 +157,8 @@ export default function PostComponent(props: Props) {
               ...status,
               hasLiked: !status?.hasLiked,
               numOfLike: status?.hasLiked
-                ? status?.numOfLike - 1
-                : status?.numOfLike + 1,
+                ? (status?.numOfLike || 0) - 1
+                : (status?.numOfLike || 0) + 1,
             });
           }
         })
@@ -230,7 +230,7 @@ export default function PostComponent(props: Props) {
 
   async function handleClickComment() {
     // if (props.status && props.status?.numOfComment > 0 && props.status?.id) {
-    if (status && status?.numOfComment > 0 && status?.id) {
+    if (status && (status?.numOfComment ||0) > 0 && status?.id) {
       // await postApi.getAllComment(props.status?.id).then((data) => {
       await postApi.getAllComment(status?.id).then((data) => {
         if (data?.status == 200) {
@@ -293,10 +293,10 @@ export default function PostComponent(props: Props) {
             >
               <img
                 onClick={() => {
-                  profile?.id == status?.userInfor.id
+                  profile?.id == status?.userInfor?.id
                     ? navigate('/home/trang-ca-nhan')
                     : navigate(
-                        `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor.id}`
+                        `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor?.id}`
                       );
                 }}
                 style={{
@@ -325,10 +325,10 @@ export default function PostComponent(props: Props) {
                       cursor: 'pointer',
                     }}
                     onClick={() => {
-                      profile?.id == status?.userInfor.id
+                      profile?.id == status?.userInfor?.id
                         ? navigate('/home/trang-ca-nhan')
                         : navigate(
-                            `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor.id}`
+                            `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor?.id}`
                           );
                     }}
                   >
@@ -707,7 +707,7 @@ export default function PostComponent(props: Props) {
                 }}
               />
             </Box>
-            <Box
+            {/* <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -729,7 +729,7 @@ export default function PostComponent(props: Props) {
                   color: 'gray',
                 }}
               />
-            </Box>
+            </Box> */}
           </Box>
           {isComment && (
             <>
@@ -743,7 +743,7 @@ export default function PostComponent(props: Props) {
                     if (status) {
                       setStatus({
                         ...status,
-                        numOfComment: status?.numOfComment + 1,
+                        numOfComment: (status?.numOfComment || 0) + 1,
                       });
                     }
                   }}
@@ -759,7 +759,7 @@ export default function PostComponent(props: Props) {
                         if (status) {
                           setStatus({
                             ...status,
-                            numOfComment: status?.numOfComment - 1,
+                            numOfComment: (status?.numOfComment || 0) - 1,
                           });
                         }
                       }}
