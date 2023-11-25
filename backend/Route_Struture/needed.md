@@ -29,8 +29,6 @@
 
 - **mới làm online chưa là Ofline**
 
-<!-- ## 6. sửa lại hiển thị bài viết trên newsfeed -->
-
 ## ---DONE--- 6. sửa lại hiển thị bài viết trên newsfeed
 - chưa bỏ được bài viết trùng
 
