@@ -135,4 +135,5 @@ export interface PeopleType {
   user: string;
   url: string;
   numberPet: number;
+  isFriend?: boolean;
 }

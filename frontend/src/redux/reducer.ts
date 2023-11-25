@@ -7,6 +7,7 @@ import { dataReducer } from './data';
 import persistReducer from 'redux-persist/es/persistReducer';
 import { friendReducer } from './friend';
 import { notiReducer } from './noti';
+import { socketReducer } from './socket';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -16,6 +17,7 @@ export const rootReducer = combineReducers({
   data: dataReducer,
   friend: friendReducer,
   noti:notiReducer,
+  socket:socketReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

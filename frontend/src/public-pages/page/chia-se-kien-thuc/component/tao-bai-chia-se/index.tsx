@@ -10,6 +10,7 @@ import articleApi from '../../../../../api/article';
 import { useSnackbar } from 'notistack';
 import Loading from '../../../../../components/loading';
 import { uploadTaskPromise } from '../../../../../api/upload';
+import { useNavigate } from 'react-router-dom';
 export function TaoBaiChiaSe() {
   const [title, setTitle] = useState('');
   const [decrition, setDecrition] = useState('');
@@ -18,7 +19,7 @@ export function TaoBaiChiaSe() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-
+  const navigate = useNavigate();
   async function handleSubmit() {
     setIsLoading(true);
     let urlPhoto: string = '';
@@ -27,10 +28,20 @@ export function TaoBaiChiaSe() {
     }
     articleApi
       .createArticle(title, urlPhoto, decrition, content, tag)
-      .then(() => {
-        console.log('Thanh cong');
-        enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
-        setIsLoading(false);
+      .then((data) => {
+        if (data?.status == 200) {
+          console.log('Thanh cong');
+          enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
+          setIsLoading(false);
+          console.log(data);
+          
+          if(data?.payload[0]?._id){
+            navigate(`/home/trang-chia-se/${data?.payload[0]?._id}`);
+          }
+        }
+      }).catch((err) => {
+        enqueueSnackbar(`${err?.message}`, { variant: "error" });
+          setIsLoading(false);
       });
   }
 
@@ -212,10 +223,12 @@ export function TaoBaiChiaSe() {
             }}
           />
         </Box>
-        <Box sx={{
-          display:"flex",
-          justifyContent:"center"
-        }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
           <Button
             disabled={!file || !title || !decrition || tag?.length == 0}
             onClick={handleSubmit}

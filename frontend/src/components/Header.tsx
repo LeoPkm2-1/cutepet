@@ -49,12 +49,13 @@ const Header = (props: Props) => {
       name: string;
       user: string;
       url: string;
+      id: number | string;
     }[]
   >([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
   const [valueSearch, setValueSearch] = useState('');
-  const numNoti = useSelector((state:RootState) => state.noti.numNoti);
+  const numNoti = useSelector((state: RootState) => state.noti.numNoti);
   const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -71,6 +72,7 @@ const Header = (props: Props) => {
             name: item?.ten,
             user: item?.tai_khoan,
             url: item?.anh?.url,
+            id: item?.ma_nguoi_dung,
           };
         });
         setFriends(list);
@@ -92,15 +94,15 @@ const Header = (props: Props) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    notiApi.getNotificationStartFrom(0, 10).then((data:any) => {
+    notiApi.getNotificationStartFrom(0, 10).then((data: any) => {
       console.log(data, ' data notification: ');
 
       if (data?.status == 200) {
         let num = 0;
         const list = data?.payload?.map((noti: any) => {
-          console.log(noti, " notu nef");
-          if(!noti?.hasRead){
-            num ++;
+          console.log(noti, ' notu nef');
+          if (!noti?.hasRead) {
+            num++;
           }
           if (noti?.type == 'COMMENT_STATUS_POST') {
             return {
@@ -132,7 +134,6 @@ const Header = (props: Props) => {
               hasRead: boolean;
             };
           }
-
         });
         console.log(list, 'List');
         dispatch(NotiActions.setNumNoti(num));
@@ -222,7 +223,7 @@ const Header = (props: Props) => {
             mx: '20px',
             padding: '12px 30px',
             borderRadius: '5px',
-            position:"relative"
+            position: 'relative',
           }}
           aria-label="home"
         >
@@ -231,20 +232,22 @@ const Header = (props: Props) => {
               fontSize: '28px',
             }}
           />
-          {true && (numNoti > 0) && (
+          {true && numNoti > 0 && (
             <>
-             <Box sx={{
-              backgroundColor: "#e41e3f",
-              color: "#fff",
-              borderRadius:"7px",
-              fontSize:"10px",
-              padding: "3px 5px",
-              position:"absolute",
-              right:"2px",
-              top:"10px"
-             }}>
+              <Box
+                sx={{
+                  backgroundColor: '#e41e3f',
+                  color: '#fff',
+                  borderRadius: '7px',
+                  fontSize: '10px',
+                  padding: '3px 5px',
+                  position: 'absolute',
+                  right: '2px',
+                  top: '10px',
+                }}
+              >
                 {numNoti}+
-             </Box>
+              </Box>
             </>
           )}
         </IconButton>
@@ -261,9 +264,9 @@ const Header = (props: Props) => {
           <NotifycationComponent />
         </Popover>
         <IconButton
-         onClick={() => {
-          navigate('/home/trang-chia-se')
-         }}
+          onClick={() => {
+            navigate('/home/trang-chia-se');
+          }}
           sx={{
             color: 'inherit',
             mx: '20px',
@@ -376,19 +379,24 @@ const Header = (props: Props) => {
             horizontal: 'left',
           }}
         >
-          <Box sx={{
-            width:"250px",
-            padding: "20px"
-          }}>
-            {friends?.length > 0 ? friends?.map((item) => {
-              return (
-                <PersonComponent
-                  name={item.name}
-                  user={item.user}
-                  url={item.url}
-                />
-              );
-            }) : "Không tìm thấy"}
+          <Box
+            sx={{
+              width: '250px',
+              padding: '20px',
+            }}
+          >
+            {friends?.length > 0
+              ? friends?.map((item) => {
+                  return (
+                    <PersonComponent
+                      name={item.name}
+                      user={item.user}
+                      url={item.url}
+                      userId= {item?.id}
+                    />
+                  );
+                })
+              : 'Không tìm thấy'}
           </Box>
 
           {/* <NotifycationComponent /> */}
@@ -448,20 +456,34 @@ const OrgName = styled.span`
 
 function NotifycationComponent() {
   const [noti, setNoti] = useState<
-    { name?: string; url?: string; idPost?: string; type?: string, hasRead: boolean }[]
+    {
+      name?: string;
+      url?: string;
+      idPost?: string;
+      type?: string;
+      hasRead: boolean;
+      idNoti?: string;
+    }[]
   >([]);
 
-   const dispatch = useDispatch();
+  const [isNoti, setIsNoti] = useState(true);
+  const [index, setIndex] = useState(0);
+  const dispatch = useDispatch();
+  const notiStoreNum = useSelector((state: RootState) => state.noti.numNoti);
   useEffect(() => {
-    notiApi.getNotificationStartFrom(0, 10).then((data:any) => {
+    notiApi.getNotificationStartFrom(index, 5).then((data: any) => {
       console.log(data, ' data notification: ');
 
       if (data?.status == 200) {
         let num = 0;
+        if (data?.payload?.length == 0) {
+          setIsNoti(false);
+          return;
+        }
         const list = data?.payload?.map((noti: any) => {
-          console.log(noti, " notu nef");
-          if(!noti?.hasRead){
-            num ++;
+          console.log(noti, ' notu nef');
+          if (!noti?.hasRead) {
+            num++;
           }
           if (noti?.type == 'COMMENT_STATUS_POST') {
             return {
@@ -470,12 +492,14 @@ function NotifycationComponent() {
               idPost: noti?.payload?.postInfor?._id,
               hasRead: noti?.hasRead || false,
               type: 'bình luận',
+              idNoti: noti?._id,
             } as {
               name?: string;
               url?: string;
               idPost?: string;
               type?: string;
               hasRead: boolean;
+              idNoti?: string;
             };
           }
 
@@ -486,15 +510,16 @@ function NotifycationComponent() {
               idPost: noti?.payload?.postInfor?._id,
               hasRead: noti?.hasRead || false,
               type: 'thích',
+              idNoti: noti?._id,
             } as {
               name?: string;
               url?: string;
               idPost?: string;
               type?: string;
               hasRead: boolean;
+              idNoti?: string;
             };
           }
-
 
           if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
             return {
@@ -503,63 +528,139 @@ function NotifycationComponent() {
               idPost: noti?.payload?.commentInfor?.postId,
               hasRead: noti?.payload?.hasRead,
               type: 'trả lời bình luận',
+              idNoti: noti?._id,
             } as {
               name?: string;
               url?: string;
               idPost?: string;
               type?: string;
               hasRead: boolean;
+              idNoti?: string;
             };
           }
-
         });
         console.log(list, 'List');
-        dispatch(NotiActions.setNumNoti(num));
-        setNoti(list);
+        setNoti([...noti, ...list]);
+        if (data?.payload?.length < 5) {
+          setIsNoti(false);
+          return;
+        }
+      } else {
+        setIsNoti(false);
       }
     });
-  }, []);
+  }, [index]);
+
+  useEffect(() => {
+    if (noti?.length) {
+      dispatch(NotiActions.setNumNoti(noti?.length));
+    }
+  }, [noti]);
 
   return (
     <>
       <Box
         sx={{
-          paddingBottom: '20px',
+          paddingBottom: '36px',
+          minWidth: '400px',
         }}
       >
-        <Typography
+        <Box
           sx={{
-            fontFamily: 'quicksand',
-            fontWeight: '700',
-            fontSize: '22px',
-            margin: '16px 0px 10px 16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
-          Thông báo
-        </Typography>
-        <Typography
-          sx={{
-            fontFamily: 'quicksand',
-            fontWeight: '600',
-            fontSize: '16px',
-            margin: '0px 0px 6px 16px',
-          }}
-        >
-          Tuần này
-        </Typography>
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '700',
+              fontSize: '22px',
+              margin: '16px 0px 10px 16px',
+            }}
+          >
+            Thông báo
+          </Typography>
+          {noti?.length > 0 && (
+            <Typography
+              onClick={() => {
+                notiApi?.markAsRead().then((data) => {
+                  if (data?.status == 200) {
+                    const listNoti = noti?.map((item) => {
+                      return {
+                        ...item,
+                        hasRead: false,
+                      };
+                    });
+                    setNoti([]);
+                  }
+                });
+              }}
+              sx={{
+                fontFamily: 'quicksand',
+                fontWeight: '500',
+                fontSize: '15px',
+                margin: '16px 16px 10px 0px',
+                color: '#0c4195',
+
+                textDecoration: 'underline',
+                cursor: 'pointer',
+              }}
+            >
+              Đánh dấu tất cả đã đọc
+            </Typography>
+          )}
+        </Box>
+
         {noti?.map((item) => {
           return (
             <>
               <NotifycationItemClick
                 idPost={item?.idPost}
+                idNoti={item?.idNoti}
                 name={item?.name}
                 type={item?.type}
                 url={item?.url}
-                isReaded= {item?.hasRead}
+                isReaded={item?.hasRead}
               />
             </>
           );
         })}
+        {isNoti && (
+          <Typography
+            onClick={() => setIndex(index + 5)}
+            align="center"
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              fontSize: '15px',
+              margin: '12px 0px 10px 0px',
+              color: '#0c4195',
+              paddingBottom: '5px',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+          >
+            Xem thêm thông báo
+          </Typography>
+        )}
+        {noti?.length == 0 && (
+          <Typography
+            onClick={() => setIndex(index + 5)}
+            align="center"
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              fontSize: '15px',
+              margin: '12px 0px 10px 0px',
+
+              paddingBottom: '5px',
+            }}
+          >
+            Chưa có thông báo mới
+          </Typography>
+        )}
 
         {/* <Divider
           sx={{

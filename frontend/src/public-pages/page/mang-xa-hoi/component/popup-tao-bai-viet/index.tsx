@@ -208,7 +208,7 @@ export default function PopUpCreatePost(props: Props) {
                       label: 'Chỉ mình tôi',
                     },
                     {
-                      value: 'FRIEND',
+                      value: 'JUST_FRIENDS',
                       label: 'Bạn bè',
                     },
                   ]}

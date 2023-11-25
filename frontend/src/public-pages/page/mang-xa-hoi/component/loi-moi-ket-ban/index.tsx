@@ -21,6 +21,11 @@ export default function LoiMoiKetBan() {
   useEffect(() => {
     friendApi.getRequestAddFriendList().then((data) => {
       if (data?.status == 200) {
+        console.log(data, ' dtaa loi moi');
+        if(data?.payload?.length == 0){
+          setUserList([]);
+          return;
+        }
         const list = data?.payload?.map((item: any) => {
           return {
             name: item?.thong_tin_nguoi_gui?.ten,
@@ -75,27 +80,29 @@ export default function LoiMoiKetBan() {
                   );
                 }
               })}
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
-                <Button
-                  onClick={() => {
-                    setIsShowAll(true);
-                  }}
+              {userList?.length >= 4 && (
+                <Box
                   sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    color: 'blue',
-                    marginTop: '20px',
+                    display: 'flex',
+                    justifyContent: 'center',
                   }}
                 >
-                  Xem tất cả
-                </Button>
-              </Box>
+                  <Button
+                    onClick={() => {
+                      setIsShowAll(true);
+                    }}
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '600',
+                      fontSize: '14px',
+                      color: 'blue',
+                      marginTop: '20px',
+                    }}
+                  >
+                    Xem tất cả
+                  </Button>
+                </Box>
+              )}
             </>
           ) : (
             <>
@@ -110,37 +117,41 @@ export default function LoiMoiKetBan() {
                   />
                 );
               })}
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
-                <Button
-                  onClick={() => {
-                    setIsShowAll(false);
-                  }}
+              {userList?.length >= 4 && (
+                <Box
                   sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    color: 'blue',
-                    marginTop: '20px',
+                    display: 'flex',
+                    justifyContent: 'center',
                   }}
                 >
-                  Ẩn bớt
-                </Button>
-              </Box>
+                  <Button
+                    onClick={() => {
+                      setIsShowAll(false);
+                    }}
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '600',
+                      fontSize: '14px',
+                      color: 'blue',
+                      marginTop: '20px',
+                    }}
+                  >
+                    Ẩn bớt
+                  </Button>
+                </Box>
+              )}
             </>
           )}
         </>
       ) : (
-        <Typography sx={{
-          fontFamily: 'quicksand',
-          fontWeight: '500',
-          fontSize: '16px',
-          marginTop: '12px',
-        }} >
+        <Typography
+          sx={{
+            fontFamily: 'quicksand',
+            fontWeight: '500',
+            fontSize: '16px',
+            marginTop: '12px',
+          }}
+        >
           Chưa có lời mời kết bạn
         </Typography>
       )}
