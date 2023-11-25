@@ -16,9 +16,14 @@ export interface StatusType {
   text: string;
   visibility?: string;
   taggedUsers?: {
-    id: string;
+    id: string | number;
     name: string;
   }[];
+  taggedPets?: {
+    id: string | number;
+    name: string;
+  }[];
+  owner_id?: number;
 }
 
 export interface CommentType {

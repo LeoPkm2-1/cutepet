@@ -1,8 +1,12 @@
 import { Box, Typography } from '@mui/material';
 import { ArticleType } from '../../../../../models/article';
 import { useNavigate } from 'react-router-dom';
+import Tag from '../../../../../components/tag';
 
-export function BaiVietCoBan(props: { article: ArticleType, isShowNewFead?: boolean}) {
+export function BaiVietCoBan(props: {
+  article: ArticleType;
+  isShowNewFead?: boolean;
+}) {
   const navigate = useNavigate();
   return (
     <>
@@ -19,14 +23,14 @@ export function BaiVietCoBan(props: { article: ArticleType, isShowNewFead?: bool
           transition: '10s',
           position: 'relative',
           ':hover': {
-            bottom: props?.isShowNewFead ? "0px" : '2px',
+            bottom: props?.isShowNewFead ? '0px' : '2px',
           },
           cursor: 'pointer',
         }}
       >
         <img
           width={'100%'}
-          height={props?.isShowNewFead ? "250px" : '150px'}
+          height={props?.isShowNewFead ? '250px' : '150px'}
           style={{
             objectFit: 'cover',
           }}
@@ -62,6 +66,17 @@ export function BaiVietCoBan(props: { article: ArticleType, isShowNewFead?: bool
               ? props.article.intro.substring(0, 60)
               : props.article.intro}
           </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap:"wrap"
+            }}
+          >
+            {props?.article?.categories?.map((item) => {
+              return <Tag text={item} />;
+            })}
+          </Box>
           <Box
             sx={{
               display: 'flex',

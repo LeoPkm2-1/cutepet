@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { mdiMenu } from '@mdi/js';
 import { Button, Divider, Popover, SvgIcon } from '@mui/material';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Image from './Image';
 import { RootState } from '../redux';
 import logo from '../assets/img/logo.png';
@@ -91,6 +91,8 @@ const Header = (props: Props) => {
   const id = open ? 'simple-popover' : undefined;
   const open1 = Boolean(anchorEl1);
   const id1 = open1 ? 'simple-popover1' : undefined;
+  const location = useLocation();
+  console.log(location, 'location');
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -159,7 +161,6 @@ const Header = (props: Props) => {
       <StyledTypography
         sx={{
           color: '#fff',
-          backgroundColor: '#0C4195',
           padding: '4px 8px',
           borderRadius: '6px',
           margin: '0 10px',
@@ -187,7 +188,8 @@ const Header = (props: Props) => {
         <IconButton
           onClick={() => navigate('/home/mang-xa-hoi')}
           sx={{
-            color: '#0C4195',
+            color:
+              location.pathname == '/home/mang-xa-hoi' ? '#0C4195' : 'inherit',
             mx: '20px',
             padding: '12px 30px',
             borderRadius: '5px',
@@ -203,7 +205,7 @@ const Header = (props: Props) => {
         <IconButton
           onClick={() => navigate('/home/ban-be')}
           sx={{
-            color: 'inherit',
+            color: location.pathname == '/home/ban-be' ? '#0C4195' : 'inherit',
             mx: '20px',
             padding: '12px 30px',
             borderRadius: '5px',
@@ -268,7 +270,10 @@ const Header = (props: Props) => {
             navigate('/home/trang-chia-se');
           }}
           sx={{
-            color: 'inherit',
+            color:
+              location.pathname == '/home/trang-chia-se'
+                ? '#0C4195'
+                : 'inherit',
             mx: '20px',
             padding: '12px 30px',
             borderRadius: '5px',
@@ -282,8 +287,14 @@ const Header = (props: Props) => {
           />
         </IconButton>
         <IconButton
+          onClick={() => {
+            navigate('/home/trang-ca-nhan');
+          }}
           sx={{
-            color: 'inherit',
+            color:
+              location.pathname == '/home/trang-ca-nhan'
+                ? '#0C4195'
+                : 'inherit',
             mx: '20px',
             padding: '12px 30px',
             borderRadius: '5px',
@@ -392,7 +403,7 @@ const Header = (props: Props) => {
                       name={item.name}
                       user={item.user}
                       url={item.url}
-                      userId= {item?.id}
+                      userId={item?.id}
                     />
                   );
                 })
