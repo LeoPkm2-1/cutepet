@@ -19,10 +19,14 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../redux';
 import Loading from '../../../../../components/loading';
 import Select from '../../../../../components/Select';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FriendTagComponent, PersonComponent } from '../../../ban-be';
 import ImageSelect from '../../../../../components/ImageSelect';
-
+import { FriendType } from '../../../../../models/user';
+import PetsIcon from '@mui/icons-material/Pets';
+import { PetType } from '../../../../../models/pet';
+import petApi from '../../../../../api/pet';
+import Tag from '../../../../../components/tag';
 type Props = {
   open: boolean;
   onClose: () => void;
@@ -38,12 +42,48 @@ export default function PopUpCreatePost(props: Props) {
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const [isloading, setIsloading] = useState(false);
   const friends = useSelector((state: RootState) => state.friend.friend);
+  const [listOptionTag, setListOptionTag] = useState<FriendType[]>([]);
+  useEffect(() => {
+    if (friends) {
+      setListOptionTag(friends);
+    }
+  }, [friends]);
+
   const [friend, setFriend] = useState<
     {
-      id: string;
+      id: number;
       name: string;
     }[]
   >([]);
+
+  const [petsTag, setPetsTag] = useState<
+    {
+      id: number;
+      name: string;
+    }[]
+  >([]);
+
+  const [listPet, setListPet] = useState<PetType[]>([]);
+  useEffect(() => {
+    petApi.getAllPet().then((data) => {
+      console.log(data, ' data nè: ');
+      if (data?.status == 200) {
+        const list: PetType[] = data?.payload?.map((item: any) => {
+          return {
+            ten_thu_cung: item?.ten_thu_cung,
+            ten_giong: item?.giong_loai?.ten_giong,
+            ten_loai: item?.giong_loai?.ten_loai,
+            ngay_sinh: item?.ngay_sinh,
+            gioi_tinh: item?.gioi_tinh,
+            url_anh: item?.anh?.url,
+            ma_thu_cung: item?.ma_thu_cung,
+          } as PetType;
+        });
+        setListPet(list);
+      }
+    });
+  }, []);
+
   const changeHandler = (event: any) => {
     setSelectedFile(event.target.files[0]);
   };
@@ -61,6 +101,7 @@ export default function PopUpCreatePost(props: Props) {
         visibility,
         text,
         friend.map((item) => item.id),
+        petsTag.map((item) => item.id),
         'images',
         [storageUrl]
       )
@@ -82,6 +123,10 @@ export default function PopUpCreatePost(props: Props) {
     null
   );
 
+  const [anchorEl2, setAnchorEl2] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -92,6 +137,16 @@ export default function PopUpCreatePost(props: Props) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+
+  const handleClick2 = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl2(event.currentTarget);
+  };
+  const handleClose2 = () => {
+    setAnchorEl2(null);
+  };
+
+  const open2 = Boolean(anchorEl2);
+  const id2 = open2 ? 'simple-popover2' : undefined;
 
   return (
     <>
@@ -166,7 +221,11 @@ export default function PopUpCreatePost(props: Props) {
                       {friend?.map((item, index) => {
                         if (index > 0) {
                           return (
-                            <span>
+                            <span
+                              style={{
+                                position: 'relative',
+                              }}
+                            >
                               {', '} {item?.name}
                             </span>
                           );
@@ -215,7 +274,22 @@ export default function PopUpCreatePost(props: Props) {
                 />
               </Box>
             </Box>
-
+            <Box sx={{ padding: '0 20px' }}>
+              {petsTag?.map((pet) => {
+                return (
+                  <span
+                    style={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '600',
+                      color: '#ff5b2e',
+                      marginRight:"12px"
+                    }}
+                  >
+                    @{pet?.name?.trim()}
+                  </span>
+                );
+              })}
+            </Box>
             <InputBase
               autoFocus
               fullWidth
@@ -239,6 +313,7 @@ export default function PopUpCreatePost(props: Props) {
                 src={URL.createObjectURL(selectedFile)}
               />
             )} */}
+
             {isPhoto && (
               <Box
                 sx={{
@@ -285,6 +360,9 @@ export default function PopUpCreatePost(props: Props) {
               </Typography>
               <Box>
                 <IconButton
+                  sx={{
+                    paddingRight: '20px',
+                  }}
                   onClick={() => {
                     // if (fileInputRef.current) {
                     //   fileInputRef.current.click();
@@ -332,21 +410,32 @@ export default function PopUpCreatePost(props: Props) {
                   <Box
                     sx={{
                       width: '300px',
+                      maxHeight: '50vh',
                     }}
                   >
-                    {friends?.map((item) => {
+                    {listOptionTag?.map((item) => {
+                      const isSele = !!friend?.find((i) => i?.id == item?.id);
                       return (
                         <FriendTagComponent
                           onClick={() => {
-                            handleClose();
-                            setFriend([
-                              ...friend,
-                              {
-                                id: item?.id,
-                                name: item?.name,
-                              },
-                            ]);
+                            // const listOption = listOptionTag?.filter((friend) => friend?.id !== item?.id)
+                            // setListOptionTag(listOption);
+                            if (isSele) {
+                              const list = friend.filter(
+                                (i) => i?.id !== item?.id
+                              );
+                              setFriend(list);
+                            } else {
+                              setFriend([
+                                ...friend,
+                                {
+                                  id: item?.id,
+                                  name: item?.name,
+                                },
+                              ]);
+                            }
                           }}
+                          isSelect={isSele}
                           id={item?.id}
                           name={item.name}
                           user={item.user}
@@ -355,6 +444,96 @@ export default function PopUpCreatePost(props: Props) {
                         />
                       );
                     })}
+                    {listOptionTag?.length == 0 && (
+                      <Typography
+                        align="center"
+                        sx={{
+                          fontFamily: 'quicksand',
+                          fontWeight: '500',
+                          m: '20px 0px',
+                        }}
+                      >
+                        Danh sách trống
+                      </Typography>
+                    )}
+                  </Box>
+                </Popover>
+
+                {/* Pet ne */}
+                <IconButton onClick={handleClick2}>
+                  <PetsIcon
+                    sx={{
+                      fontSize: '34px',
+                      color: '#ff5b2e',
+                      m: ' 0 10px',
+                    }}
+                  />
+                </IconButton>
+                <Popover
+                  id={id2}
+                  open={open2}
+                  anchorEl={anchorEl2}
+                  onClose={handleClose2}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: '300px',
+                      maxHeight: '50vh',
+                    }}
+                  >
+                    {listPet?.map((item) => {
+                      const isSele = !!petsTag?.find(
+                        (i) => i?.id == item?.ma_thu_cung
+                      );
+                      return (
+                        <FriendTagComponent
+                          onClick={() => {
+                            // const listOption = listOptionTag?.filter((friend) => friend?.id !== item?.id)
+                            // setListOptionTag(listOption);
+                            if (isSele) {
+                              const list = petsTag.filter(
+                                (i) => i?.id !== item?.ma_thu_cung
+                              );
+                              setPetsTag(list);
+                            } else {
+                              setPetsTag([
+                                ...petsTag,
+                                {
+                                  id: item?.ma_thu_cung || 0,
+                                  name: item?.ten_thu_cung,
+                                },
+                              ]);
+                            }
+                          }}
+                          isSelect={isSele}
+                          id={item?.ma_thu_cung || ''}
+                          name={item?.ten_thu_cung}
+                          user={item?.ten_giong || ''}
+                          url={item?.url_anh || ''}
+                          isOnline={false}
+                        />
+                      );
+                    })}
+                    {listPet?.length == 0 && (
+                      <Typography
+                        align="center"
+                        sx={{
+                          fontFamily: 'quicksand',
+                          fontWeight: '500',
+                          m: '20px 0px',
+                        }}
+                      >
+                        Danh sách trống
+                      </Typography>
+                    )}
                   </Box>
                 </Popover>
                 {/* <IconButton>

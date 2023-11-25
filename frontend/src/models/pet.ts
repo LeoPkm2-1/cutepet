@@ -10,4 +10,5 @@ export interface PetType {
   can_nang?:  number;
   ten_giong?:string;
   ten_loai?: string;
+  ma_thu_cung?:number;
 }

@@ -29,8 +29,9 @@
 
 - **mới làm online chưa là Ofline**
 
-## 6. sửa lại hiển thị bài viết trên newsfeed
+<!-- ## 6. sửa lại hiển thị bài viết trên newsfeed -->
 
+## ---DONE--- 6. sửa lại hiển thị bài viết trên newsfeed
 - chưa bỏ được bài viết trùng
 
 ## ---DONE---|| ==ERR== 8. sửa lại icon của bài viết `private`, `public`, `just_friend`
@@ -43,13 +44,13 @@
 
 - trong trang đăng ký tên phải chỉ chứa tối đa 32 ký tự, có thể là tiếng việt hoặc tiếng anh. [chi tiết tại đây](./userInfor.md#5-đăng-ký-tài-khoản)
 
-## 16. khi người dùng tag thì phải bỏ đi những người dùng tag rồi tag lại
+## ---DONE--- 16. khi người dùng tag thì phải bỏ đi những người dùng tag rồi tag lại
 
-## 25. hiện category lúc đọc bài viết chia sẻ kiến thức
+## ---DONE--- 25. hiện category lúc đọc bài viết chia sẻ kiến thức
 
-## 27. bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức, icon bạn bè khi vào danh sách bạn bè, icon thông báo khi bấm vào thông báo
+## ---DONE--- 27. bật sáng đúng icon article trên navbar lúc đọc bài viết chia sẻ kiến thức, icon bạn bè khi vào danh sách bạn bè, icon thông báo khi bấm vào thông báo
 
-## 30. report bài viết chia sẻ kiến thức.
+## ---DONE--- 30. report bài viết chia sẻ kiến thức.
 
     (xem chi tiến trong summary)
 
@@ -63,7 +64,7 @@ lý do value của visibility là `JUST_FRIENDS` mà lại gửi lên là `frien
 
 ## 35. cập nhật lại giao diện của newfeed khi có 1 bài viết mới được đăng lên
 
-## 36. cho phép tag thú cưng của mình vào bài viết chia sẻ trạng thái
+## ---DONE--- 36. cho phép tag thú cưng của mình vào bài viết chia sẻ trạng thái
 
 ## 37. quên text trong riêng bài viết
 
@@ -105,7 +106,7 @@ hiển thị 404 page not found khi bài viết không tồn tại
 
 ## 59. khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
 
-## 60 follow bài viết trạng thái
+## ---DONE--- 60 follow bài viết trạng thái 
 
 ## 61. thích bình luận bài viết chia sẻ trạng thái
 

@@ -21,6 +21,7 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { CommentType } from '../../../../../models/post';
 import { timeAgo } from '../../../../../helper/post';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Tag from '../../../../../components/tag';
 
 export default function BaiChiaSe() {
   const [article, setArticle] = useState<ArticleType>({
@@ -138,8 +139,20 @@ export default function BaiChiaSe() {
               src={article?.main_image}
             />
             <span>{parse(article.content)} </span>
+            <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap:"wrap"
+            }}
+          >
+            {article?.categories?.map((item) => {
+              return <Tag text={item} />;
+            })}
+          </Box>
             <Divider sx={{
-              marginBottom: "22px"
+              marginBottom: "22px",
+              marginTop:"20px"
             }}/>
             {/* <Comment
               comment={{

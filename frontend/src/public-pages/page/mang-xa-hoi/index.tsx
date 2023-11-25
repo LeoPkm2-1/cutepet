@@ -24,10 +24,15 @@ export default function MangXaHoi() {
   const [isLoad, setisLoad] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
   const [indexPost, setIndexPost] = useState(0);
+  const [isPost, setIsPost] = useState(true);
   useEffect(() => {
-    postApi.getPostForNewsfeed(indexPost).then((data: any) => {
+    postApi.getPostForNewsfeed(indexPost, []).then((data: any) => {
       if (data?.status == 200) {
         console.log(data, 'data lan 1');
+        if (data?.payload?.length == 0) {
+          setIsPost(false);
+          return;
+        }
         const list: StatusType[] = data?.payload?.map((item: any) => {
           return {
             id: item?._id,
@@ -46,27 +51,41 @@ export default function MangXaHoi() {
             hasLiked: item?.hasLiked,
             visibility: item?.visibility,
             text: item?.text,
+            owner_id: item?.owner_id,
             taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
               return {
                 id: tagUser?.ma_nguoi_dung,
                 name: tagUser?.ten,
               };
             }),
+            taggedPets: item?.withPets?.map((tagPet: any) => {
+              return {
+                id: tagPet?.ma_thu_cung,
+                name: tagPet?.ten_thu_cung,
+              };
+            }),
           } as StatusType;
         });
         setListPost(list);
+      } else {
+        setIsPost(false);
       }
     });
   }, [isLoad]);
 
   useEffect(() => {
+    const listId = listPost?.map((item) => item?.id);
     if (indexPost > 0) {
-      postApi.getPostForNewsfeed(indexPost).then((data: any) => {
+      postApi.getPostForNewsfeed(indexPost, listId).then((data: any) => {
         if (data?.status == 200) {
           console.log(data, 'data lần 2');
+          if (data?.payload?.length == 0) {
+            setIsPost(false);
+            return;
+          }
           const list: StatusType[] = data?.payload?.map((item: any) => {
             return {
-              id: `${item?._id}/hihi`,
+              id: `${item?._id}`,
               media: item?.media as {
                 type: string;
                 data: string[];
@@ -82,10 +101,17 @@ export default function MangXaHoi() {
               hasLiked: item?.hasLiked,
               text: item?.text,
               visibility: item?.visibility,
+              owner_id: item?.owner_id,
               taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
                 return {
                   id: tagUser?.ma_nguoi_dung,
                   name: tagUser?.ten,
+                };
+              }),
+              taggedPets: item?.withPets?.map((tagPet: any) => {
+                return {
+                  id: tagPet?.ma_thu_cung,
+                  name: tagPet?.ten_thu_cung,
                 };
               }),
             } as StatusType;
@@ -97,6 +123,8 @@ export default function MangXaHoi() {
           const newListPost = Array.from(result);
           console.log(Array.from(result), ' result');
           setListPost([...listPost, ...newListPost]);
+        } else {
+          setIsPost(false);
         }
       });
     }
@@ -176,14 +204,26 @@ export default function MangXaHoi() {
             listPost?.map((status) => {
               return <PostComponent status={status} />;
             })}
-          <Button
-            onClick={() => {
-              setIndexPost(indexPost + 1);
-            }}
-          >
-            {' '}
-            Lấy Thêm Bài Viết{' '}
-          </Button>
+          {isPost && (
+            <Typography
+              align="center"
+              sx={{
+                fontFamily: 'quicksand',
+                fontWeight: '500',
+                fontSize: '15px',
+                margin: '16px 16px 10px 0px',
+                color: '#0c4195',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                setIndexPost(indexPost + 1);
+              }}
+            >
+              {' '}
+              Xem thêm bài viết{' '}
+            </Typography>
+          )}
         </Grid>
         <Grid
           sx={{
