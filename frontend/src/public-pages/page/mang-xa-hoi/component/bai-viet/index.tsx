@@ -29,6 +29,11 @@ import LockIcon from '@mui/icons-material/Lock';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import PublicIcon from '@mui/icons-material/Public';
 import { useNavigate } from 'react-router-dom';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import BuildIcon from '@mui/icons-material/Build';
+import FlagIcon from '@mui/icons-material/Flag';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 type Props = {
   idStatus?: string;
   status?: StatusType;
@@ -39,6 +44,7 @@ export default function PostComponent(props: Props) {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [reloadComment, setReloadComment] = useState(false);
   const [isRender, setIsRender] = useState(true);
+  const [isFollow, setIsFollow] = useState(false);
   const [isComment, setIsComment] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -84,7 +90,13 @@ export default function PostComponent(props: Props) {
             taggedUsers: data?.payload?.taggedUsers?.map((item: any) => {
               return {
                 id: item?.ma_nguoi_dung,
-                ten: item?.ten,
+                name: item?.ten,
+              };
+            }),
+            taggedPets: data?.payload?.withPets?.map((tagPet: any) => {
+              return {
+                id: tagPet?.ma_thu_cung,
+                name: tagPet?.ten_thu_cung,
               };
             }),
           };
@@ -112,7 +124,7 @@ export default function PostComponent(props: Props) {
               text: item?.comment,
               createdAt: item?.commentAt,
               id: item?._id,
-              userId: item?.userCmtInfor?.ma_nguoi_dung
+              userId: item?.userCmtInfor?.ma_nguoi_dung,
             } as CommentType;
           });
           console.log(comments, 'Comment');
@@ -122,6 +134,18 @@ export default function PostComponent(props: Props) {
       });
     }
   }, [reloadComment]);
+
+  useEffect(() => {
+    if (props?.status?.id) {
+      postApi?.getIsUserFollowedPost(props?.status?.id).then((data) => {
+        if (data?.status == 200) {
+          if (data?.payload?.isFollowed) {
+            setIsFollow(true);
+          }
+        }
+      });
+    }
+  }, [props?.status?.id]);
 
   function handleLike() {
     if (status?.id) {
@@ -139,16 +163,68 @@ export default function PostComponent(props: Props) {
           }
         })
         .catch((err) => {
-          enqueueSnackbar(`${err}`, { variant: 'error' });
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
         });
     }
   }
 
   function handleDelete() {
     if (status?.id) {
-      postApi.removePost(status?.id).then(() => {
-        setIsRender(false);
+      postApi.removePost(status?.id).then((data) => {
+        if (data?.status == 200) {
+          setIsRender(false);
+          enqueueSnackbar(`Xóa bài viết thành công`, {
+            variant: 'success',
+          });
+        }
       });
+    }
+  }
+
+  function handleUnFollow() {
+    if (status?.id) {
+      postApi
+        .unFollowPost(status?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            setIsFollow(false);
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
+    }
+  }
+
+  function handleFollow() {
+    if (status?.id) {
+      postApi
+        .followPost(status?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            setIsFollow(true);
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
+    }
+  }
+
+  function handleReport() {
+    if (status?.id) {
+      postApi
+        .reportPost(status?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            enqueueSnackbar(`Báo cáo bài viết thành công`, {
+              variant: 'success',
+            });
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
     }
   }
 
@@ -228,7 +304,7 @@ export default function PostComponent(props: Props) {
                   width: '50px',
                   objectFit: 'cover',
                   borderRadius: '30px',
-                  cursor:"pointer"
+                  cursor: 'pointer',
                 }}
                 src={status?.userInfor?.avatarURL || ''}
               />
@@ -377,25 +453,115 @@ export default function PostComponent(props: Props) {
                 horizontal: 'right',
               }}
             >
-              <MenuItem
-                sx={{
-                  fontFamily: 'quicksand',
-                }}
-                onClick={handleDelete}
-              >
-                Xóa
-              </MenuItem>
-              <MenuItem
-                sx={{
-                  fontFamily: 'quicksand',
-                }}
-                onClick={handleDelete}
-              >
-                Chỉnh sửa
-              </MenuItem>
+              {status?.owner_id == profile?.id ? (
+                <>
+                  <MenuItem
+                    sx={{
+                      fontFamily: 'quicksand',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      minWidth: '150px',
+                    }}
+                    onClick={handleDelete}
+                  >
+                    <span>Xóa</span>{' '}
+                    <DeleteOutlineIcon
+                      sx={{
+                        color: 'gray',
+                      }}
+                    />
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      fontFamily: 'quicksand',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      minWidth: '150px',
+                    }}
+                    onClick={handleDelete}
+                  >
+                    <span> Chỉnh sửa </span>{' '}
+                    <BuildIcon
+                      sx={{
+                        color: 'gray',
+                      }}
+                    />
+                  </MenuItem>
+                </>
+              ) : (
+                <>
+                  {isFollow ? (
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'quicksand',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        minWidth: '150px',
+                      }}
+                      onClick={handleUnFollow}
+                    >
+                      <span> Bỏ theo dõi </span>{' '}
+                      <NotificationsOffIcon
+                        sx={{
+                          color: 'gray',
+                        }}
+                      />
+                    </MenuItem>
+                  ) : (
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'quicksand',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        minWidth: '150px',
+                      }}
+                      onClick={handleFollow}
+                    >
+                      <span> Theo dõi </span>{' '}
+                      <NotificationsIcon
+                        sx={{
+                          color: 'gray',
+                        }}
+                      />
+                    </MenuItem>
+                  )}
+                  <MenuItem
+                    sx={{
+                      fontFamily: 'quicksand',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      minWidth: '150px',
+                    }}
+                    onClick={handleReport}
+                  >
+                    <span> Báo cáo </span>{' '}
+                    <FlagIcon
+                      sx={{
+                        color: 'gray',
+                      }}
+                    />
+                  </MenuItem>
+                </>
+              )}
             </Menu>
           </Box>
-
+          <Box sx={{ padding: '10px 20px' }}>
+            {status?.taggedPets?.map((pet) => {
+              return (
+                <span
+                  style={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '600',
+                    color: '#ff5b2e',
+                    marginRight: '12px',
+                    cursor:"pointer"
+                  }}
+                >
+                  @{pet?.name?.trim()}
+                </span>
+              );
+            })}
+          </Box>
           <Typography
             sx={{
               fontFamily: 'quicksand',
@@ -636,7 +802,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
     setIsFinish(true);
   }, [props.comment.id, isReload]);
 
-  const profile  = useSelector((state:RootState) => state.user.profile)
+  const profile = useSelector((state: RootState) => state.user.profile);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -678,7 +844,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
                 borderRadius: '30px',
                 minWidth: '40px',
                 minHeight: '40px',
-                cursor:"pointer"
+                cursor: 'pointer',
               }}
               onClick={() => {
                 profile?.id == props.comment.userId

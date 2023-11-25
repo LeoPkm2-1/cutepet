@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { SocketActions } from '../../../redux/socket';
-
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 export function FriendList() {
   const [friends, setFriends] = useState<
     {
@@ -59,7 +59,6 @@ export function FriendList() {
       }
     }
   }, [userOffline]);
-
 
   return (
     <>
@@ -213,8 +212,9 @@ type PropsFriendTag = {
   url: string;
   user: string;
   isOnline?: boolean;
-  id: string;
+  id: string | number;
   onClick: () => void;
+  isSelect?: boolean;
 };
 
 export function FriendTagComponent(props: PropsFriendTag) {
@@ -230,6 +230,7 @@ export function FriendTagComponent(props: PropsFriendTag) {
           padding: '0 10px',
           cursor: 'pointer',
           borderRadius: '4px',
+          backgroundColor: props?.isSelect ? '#7494932e' : 'transparent',
           '&:hover': {
             backgroundColor: 'rgb(99 93 93 / 5%)',
           },
@@ -309,6 +310,13 @@ export function FriendTagComponent(props: PropsFriendTag) {
             ></Box>
           </Box>
         </Box>
+        {props?.isSelect && (
+          <CheckCircleOutlineIcon
+            sx={{
+              color: '#14ada6',
+            }}
+          />
+        )}
         {/* <Button
           sx={{
             height: '40px',

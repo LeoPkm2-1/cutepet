@@ -688,10 +688,71 @@ const reportPostController = async (req, res) => {
   res.status(200).json(reportProcess);
 };
 
-const calNumOfPostOfEachUser = async (user_id, NEEDED_NUM_OF_POST = 10) => {
+const calNumOfPostOfEachUser = async (
+  user_id,
+  NEEDED_NUM_OF_POST = 10,
+  numOfPeopleGetPost = undefined
+) => {
   console.log({ NEEDED_NUM_OF_POST });
-  const numOfFriend = await banbeHelper.getNumOfFriendOfUser(user_id);
-  return Math.ceil(NEEDED_NUM_OF_POST / (numOfFriend + 1));
+  if (typeof numOfPeopleGetPost == "undefined") {
+    const numOfFriend = await banbeHelper.getNumOfFriendOfUser(user_id);
+    return Math.ceil(NEEDED_NUM_OF_POST / (numOfFriend + 1));
+  } else {
+    return Math.ceil(NEEDED_NUM_OF_POST / numOfPeopleGetPost);
+  }
+};
+
+const scoreListPostForUser = async (
+  listOfPost,
+  user_id,
+  sortList = true,
+  DECS = true
+) => {
+  // calculate score for each post
+  const scoredListPosts = await Promise.all(
+    listOfPost.map(async (obj, index) => {
+      obj.score = 0; // initialize score
+      // check user is tagged in this post
+      const hasTagged =
+        typeof obj.taggedUsers.find((elem) => elem.ma_nguoi_dung == user_id) ==
+        "undefined"
+          ? false
+          : true;
+      const TagScore = hasTagged ? 2 * 1000 * 3600 : 0;
+      // check user is commented in this post
+      const hasCommented = await statusPostHelper.hasUserCommentedPost(
+        user_id,
+        obj._id.toString()
+      );
+      const commentScore = hasCommented ? (1000 * 3600) / 2 : 0;
+      // check user is liked in this post
+      const hasLiked = await statusPostHelper.hasUserLikedPost_1(
+        user_id,
+        obj._id.toString()
+      );
+      const likeScore = hasLiked ? (1000 * 3600) / 3 : 0;
+      // check user reply in this post
+      const hasReplied = await statusPostHelper.hasUserReplyCmtInPost(
+        user_id,
+        obj._id.toString()
+      );
+      const replyScore = hasReplied ? (1000 * 3600) / 4 : 0;
+      let score = new Date().getTime() - obj.createAt.getTime();
+      score = score - TagScore - commentScore - likeScore - replyScore;
+      obj.score = score;
+      return obj;
+    })
+  );
+  if (sortList) {
+    if (DECS) {
+      scoredListPosts.sort((a, b) => a.score - b.score);
+      // return scoredListPosts;
+    } else {
+      scoredListPosts.sort((a, b) => b.score - a.score);
+      // return scoredListPosts;
+    }
+  }
+  return scoredListPosts;
 };
 
 const getPostForNewsfeedController = async (req, res) => {
@@ -791,6 +852,114 @@ const getPostForNewsfeedController = async (req, res) => {
   console.log({ len_2: posts.length });
 
   res.status(200).json(new Response(200, posts, ""));
+  console.log("heheheh");
+};
+
+const getPostOfListUserIdForUser = async (
+  listUserId,
+  numOfPostForEachUser,
+  user_id
+) => {
+  const dataPosts = await Promise.all(
+    listUserId.map(
+      async (id) =>
+        await StatusPostModel.getPostOfUserForReaderBeforeTime(
+          id,
+          user_id,
+          true,
+          new Date(),
+          numOfPostForEachUser
+        )
+    )
+  );
+  let listOfPost = dataPosts.reduce((acc, cur) => {
+    return acc.concat(cur.payload);
+  }, []);
+  return listOfPost;
+};
+
+const getPostForNewsfeedController_2 = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const { index } = req.body;
+
+  const NUMOF_POST_RETURN = 10;
+  const NEEDED_NUM_OF_POST = (index + 1) * NUMOF_POST_RETURN;
+
+  const startPointSlicing = index * NUMOF_POST_RETURN;
+  // console.log({ index });
+  let numOfPostForEachUser = await calNumOfPostOfEachUser(
+    user_id,
+    NEEDED_NUM_OF_POST
+  );
+  console.log({ numOfPostForEachUser });
+  const ds_ban_be = await laBanBeModel
+    .getAllFriendIdsOfUser(user_id)
+    .then((data) =>
+      data.payload.map((friendShip) => parseInt(friendShip.friend_id))
+    );
+  // post of friend
+  const listPostsOfEachFriend = await getPostOfListUserIdForUser(
+    ds_ban_be,
+    numOfPostForEachUser,
+    user_id
+  );
+
+  // my post
+  const myPostList = await StatusPostModel.getAllPostOfUserBeforeTime(
+    user_id,
+    new Date(),
+    numOfPostForEachUser
+  ).then((data) => data.payload);
+
+  // concat post of friend and my post
+  let listOfPost = listPostsOfEachFriend.concat(myPostList);
+
+  // remove posts have already render
+  let postsHaveNotRender = listOfPost.filter(
+    (post) => !req.body.PostIdsHaveRendered.includes(post._id.toString())
+  );
+
+  if (postsHaveNotRender.length <= 0) {
+    console.log("okkkkkkkkkkk");
+    const ramdomUserId = userHelper.getSomeUserIdInRangeOf10(4);
+
+    numOfPostForEachUser = await calNumOfPostOfEachUser(
+      user_id,
+      NEEDED_NUM_OF_POST,
+      ramdomUserId.length
+    );
+    // post of random user
+    const listPostsOfrandomUser = await getPostOfListUserIdForUser(
+      ramdomUserId,
+      numOfPostForEachUser,
+      user_id
+    );
+    // remove posts have already render
+    postsHaveNotRender = listPostsOfrandomUser.filter(
+      (post) => !req.body.PostIdsHaveRendered.includes(post._id.toString())
+    );
+  }
+
+  // calculate score for each post
+  const scoredListPosts = await scoreListPostForUser(
+    postsHaveNotRender,
+    user_id,
+    true,
+    true
+  );
+
+  console.log({ len_1: scoredListPosts.length });
+
+  const posts = scoredListPosts.slice(0, NUMOF_POST_RETURN);
+
+  // insert owner infor for each post
+  await statusPostHelper.InsertOwnerInforOfListPosts(posts);
+  // insert infor to indicate that  has user liked each post?
+  await statusPostHelper.insertUserLikePostInforOfListPosts(user_id, posts);
+
+  console.log({ len_2: posts.length });
+
+  res.status(200).json(new Response(200, posts, ""));
 };
 
 const getPostHavePetController = async (req, res) => {
@@ -856,4 +1025,5 @@ module.exports = {
   reportPostController,
   getPostForNewsfeedController,
   getPostHavePetController,
+  getPostForNewsfeedController_2,
 };

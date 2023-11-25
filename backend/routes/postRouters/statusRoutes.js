@@ -160,7 +160,7 @@ router.post(
 router.post(
   "/getPostForNewsfeed",
   [statusPostMiddle.preProccessToGetNewFeed],
-  statusPostController.getPostForNewsfeedController
+  statusPostController.getPostForNewsfeedController_2
 );
 
 router.post(
