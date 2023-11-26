@@ -377,6 +377,74 @@ async function preProcessEditArticle(req, res, next) {
   next();
 }
 
+const prePageingForArticle = async (req, res, next) => {
+  const INVALID_PARAMS = "Tham số không hợp lệ";
+  let { index, num } = req.body;
+  if (typeof index != "undefined" && Number.isNaN(parseInt(index))) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  if (typeof num != "undefined" && Number.isNaN(parseInt(num))) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  index = typeof index == "undefined" ? 0 : parseInt(index);
+  num = typeof num == "undefined" ? undefined : parseInt(num);
+  if (typeof num == "number" && num < 0) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  if (typeof index == "number" && index < 0) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  req.body.num = num;
+  req.body.index = index;
+  next();
+};
+
+// const preProcessFilterArticle_1 = async (req, res, next) => {
+//   const INVALID_PARAMS = "Tham số không hợp lệ";
+//   let { searchKey, tags, index, num } = req.body;
+//   try {
+//     if (typeof searchKey != "string" && typeof searchKey != "undefined") {
+//       throw new Error(INVALID_PARAMS);
+//     }
+//     if (!Array.isArray(tags) && typeof tags != "undefined") {
+//       throw new Error(INVALID_PARAMS);
+//     }
+//     if (typeof index != "number" && typeof index != "undefined") {
+//       throw new Error(INVALID_PARAMS);
+//     }
+//     if (typeof num != "number" && typeof num != "undefined") {
+//       throw new Error(INVALID_PARAMS);
+//     }
+//     next();
+//   } catch (error) {
+//     if (error.message == INVALID_PARAMS) {
+//       res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+//       return;
+//     } else {
+//       console.log(error);
+//       res.status(400).json(new Response(400, [], error.message, 300, 300));
+//       return;
+//     }
+//   }
+// };
+
+// const preProcessFilterArticle_2 = async (req, res, next) => {
+//   let { searchKey, tags, index, num } = req.body;
+//   req.body.searchKey =
+//     typeof searchKey == "string" ? searchKey.trim() : undefined;
+//   req.body.index = typeof index == "number" ? Number(index) : undefined;
+//   req.body.num = typeof num == "number" ? Number(num) : undefined;
+//   req.body.tags = tags.map((tag) => tag.toUpperCase());
+//   const AllCategories = await articleModel.getAllCategories();
+//   req.body.tags = tags.filter((element) => AllCategories.includes(element));
+//   // console.log(AllCategories);
+//   res.send("hihi");
+// };
+
 module.exports = {
   preProcessAddArtticle,
   checkArticleExistMid,
@@ -393,4 +461,7 @@ module.exports = {
   preProcessDeleteArticle,
   preProcessGetCmtByIndex,
   preProcessEditArticle,
+  prePageingForArticle,
+  // preProcessFilterArticle_1,
+  // preProcessFilterArticle_2,
 };

@@ -504,6 +504,7 @@ async function getAllArticleInDBController(req, res) {
     allArticleInDB
   );
   res.status(200).json(new Response(200, allArticleInDB, ""));
+  return allArticleInDB;
 }
 
 async function getAllCategoriesController(req, res) {
@@ -565,6 +566,24 @@ const reportArticleController = async (req, res) => {
   res.status(200).json(reportProcess);
 };
 
+const getArticlesByIndexAndNumController = async (req, res) => {
+  const { index, num } = req.body;
+  console.log({ index });
+
+  const articles = await articleModel
+    .getArticlesByIndexAndNum(index, num)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(articles);
+
+  res.status(200).json(new Response(200, articles, ""));
+  return articles;
+};
+
+// const filterArticleController = async (req, res) => {
+//   res.send("ahi jjaja");
+// };
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -587,4 +606,6 @@ module.exports = {
   getMyArticlesController,
   editArticleController,
   reportArticleController,
+  getArticlesByIndexAndNumController,
+  // filterArticleController,
 };

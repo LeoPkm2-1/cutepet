@@ -488,6 +488,42 @@ const getAllCategories = () => {
   ];
 };
 
+const getArticlesByIndexAndNum = async (index = 0, num) => {
+  index = parseInt(index);
+  let executor = undefined;
+  if (typeof num == "undefined") {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          postType: articleComposStructure.Article.type,
+        })
+        .sort({
+          _id: -1,
+          createAt: -1,
+        })
+        .skip(index)
+        .toArray();
+    };
+  } else {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          postType: articleComposStructure.Article.type,
+        })
+        .sort({
+          _id: -1,
+          createAt: -1,
+        })
+        .skip(index)
+        .limit(num)
+        .toArray();
+    };
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // (async function () {
 //   const data = await getAllCommentsOfArticle("6548f00bb7221c7de43e80f6");
 //   console.log(data);
@@ -527,4 +563,5 @@ module.exports = {
   reportArticle,
   getUserReportInforOfArticle,
   getOwnerIdOfArticle,
+  getArticlesByIndexAndNum,
 };

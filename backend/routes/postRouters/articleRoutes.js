@@ -147,4 +147,20 @@ router.post(
   articleController.reportArticleController
 );
 
+router.post(
+  '/getArticlesByIndexAndNum',
+  articleMiddle.prePageingForArticle,
+  articleController.getArticlesByIndexAndNumController
+
+
+)
+
+// // search article
+// router.post(
+//   "/filterArticles",
+//   [articleMiddle.preProcessFilterArticle_1,
+//   articleMiddle.preProcessFilterArticle_2],
+//   articleController.filterArticleController
+// );
+
 module.exports = router;
