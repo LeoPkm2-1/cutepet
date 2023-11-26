@@ -65,13 +65,13 @@ chưa hoàn thành
 
 lý do value của visibility là `JUST_FRIENDS` mà lại gửi lên là `friend` nên bị sai không chạy dc
 
-## 35. cập nhật lại giao diện của newfeed khi có 1 bài viết mới được đăng lên
+## ---DONE--- 35. cập nhật lại giao diện của newfeed khi có 1 bài viết mới được đăng lên
 
 ## ---DONE---||==OK== 36. cho phép tag thú cưng của mình vào bài viết chia sẻ trạng thái
 
-## 37. quên text trong riêng bài viết
+## ---DONE--- 37. quên text trong riêng bài viết
 
-## 47. xóa bài viết không tồn tại đi
+## --- DONE--- 47. xóa bài viết không tồn tại đi
 
 hiển thị 404 page not found khi bài viết không tồn tại
 
@@ -91,7 +91,7 @@ hiển thị 404 page not found khi bài viết không tồn tại
 52. chưa reset số lượng thông báo về 0 khi đánh dấu đã đọc tất cả các thông báo
     ![](../media/img/err/img14.png)
 
-## 53. ảnh trong trang cá nhân gặp vấn đề.
+## ---DONE ---53. ảnh trong trang cá nhân gặp vấn đề.
 
 ![](../media/img/err/img8.png)
 
@@ -99,15 +99,15 @@ hiển thị 404 page not found khi bài viết không tồn tại
 
 ![](../media/img/err/img10.png)
 
-## 56. chưa loading bài viết trong trang cá nhân
+## ---DONE --- 56. chưa loading bài viết trong trang cá nhân
 
-## 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
+## ---DONE--- 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
 
 (viết ra thông báo đó là thông báo nào đừng để noname)
 
 ## --- DONE ---||==OK== 58. khi có thông báo mới đến thì load lại API lấy thông báo
 
-## 59. khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
+## ---DONE--- 59. khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
 
 ## ---DONE--- ||==OK== 60 follow bài viết trạng thái 
 

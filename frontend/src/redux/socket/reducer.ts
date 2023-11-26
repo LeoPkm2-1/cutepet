@@ -1,4 +1,5 @@
-import { FriendType } from '../../models/user';
+import { StatusType } from '../../models/post';
+import { FriendType, LoiMoiType } from '../../models/user';
 import { UserProfile } from '../../models/user-profile';
 import { SocketActionEnum, SocketActionTypes } from './action';
 
@@ -12,12 +13,18 @@ type SocketState = {
   acceptFriend: {
     idUser: number| string;
   };
+  newPost: { post: StatusType },
+  newRequestAddFriend: { request: LoiMoiType },
+
 };
 
 const initState = Object.freeze<SocketState>({
   onLine: {idUser : 0},
   offLine: {idUser : 0},
   acceptFriend: {idUser : 0},
+  newPost: { post: {} },
+  newRequestAddFriend: { request: {} },
+
 });
 
 export default function (
@@ -50,6 +57,24 @@ export default function (
         }
       };
     }
+
+    case SocketActionEnum.SET_NEW_POST: {
+      return {
+        ...state,
+        newPost: {
+          post: action.payload
+        }
+      };
+    }
+    case SocketActionEnum.SET_NEW_REQUEST_ADDFRIEND: {
+      return {
+        ...state,
+        newRequestAddFriend: {
+          request: action.payload
+        }
+      };
+    }
+  
   
     case SocketActionEnum.RESET: {
       return initState;

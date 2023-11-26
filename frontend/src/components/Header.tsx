@@ -96,7 +96,7 @@ const Header = (props: Props) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    notiApi.getNotificationStartFrom(0, 10).then((data: any) => {
+    notiApi.getNotificationStartFrom(0, 5).then((data: any) => {
       console.log(data, ' data notification: ');
 
       if (data?.status == 200) {
@@ -112,7 +112,7 @@ const Header = (props: Props) => {
               url: noti?.payload?.userComment?.anh?.url,
               idPost: noti?.payload?.postInfor?._id,
               hasRead: noti?.hasRead || false,
-              type: 'bình luận',
+              type: 'bình luận một bài viết.',
             } as {
               name?: string;
               url?: string;
@@ -127,7 +127,22 @@ const Header = (props: Props) => {
               url: noti?.payload?.userReply?.anh?.url,
               idPost: noti?.payload?.commentInfor?.postId,
               hasRead: noti?.payload?.hasRead,
-              type: 'trả lời bình luận',
+              type: 'trả lời bình luận trong một bài viết',
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+            };
+          }
+          if (noti?.type == 'LIKE_STATUS_POST') {
+            return {
+              name: noti?.payload?.userReply?.ten,
+              url: noti?.payload?.userReply?.anh?.url,
+              idPost: noti?.payload?.commentInfor?.postId,
+              hasRead: noti?.payload?.hasRead,
+              type: 'đã thích một bài viết',
             } as {
               name?: string;
               url?: string;
@@ -474,6 +489,7 @@ function NotifycationComponent() {
       type?: string;
       hasRead: boolean;
       idNoti?: string;
+      isRequestFriend?:boolean;
     }[]
   >([]);
 
@@ -483,8 +499,6 @@ function NotifycationComponent() {
   const notiStoreNum = useSelector((state: RootState) => state.noti.numNoti);
   useEffect(() => {
     notiApi.getNotificationStartFrom(index, 5).then((data: any) => {
-      console.log(data, ' data notification: ');
-
       if (data?.status == 200) {
         let num = 0;
         if (data?.payload?.length == 0) {
@@ -502,7 +516,7 @@ function NotifycationComponent() {
               url: noti?.payload?.userComment?.anh?.url,
               idPost: noti?.payload?.postInfor?._id,
               hasRead: noti?.hasRead || false,
-              type: 'bình luận',
+              type: 'bình luận một bài viết',
               idNoti: noti?._id,
             } as {
               name?: string;
@@ -520,7 +534,7 @@ function NotifycationComponent() {
               url: noti?.payload?.userLike?.anh?.url,
               idPost: noti?.payload?.postInfor?._id,
               hasRead: noti?.hasRead || false,
-              type: 'thích',
+              type: 'thích một bài viết',
               idNoti: noti?._id,
             } as {
               name?: string;
@@ -538,7 +552,7 @@ function NotifycationComponent() {
               url: noti?.payload?.userReply?.anh?.url,
               idPost: noti?.payload?.commentInfor?.postId,
               hasRead: noti?.payload?.hasRead,
-              type: 'trả lời bình luận',
+              type: 'trả lời bình luận trong một bài viết',
               idNoti: noti?._id,
             } as {
               name?: string;
@@ -549,6 +563,103 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
+
+          if (noti?.type == 'LIKE_COMMENT_IN_STATUS_POST') {
+            return {
+              name: noti?.payload?.userLike?.ten,
+              url: noti?.payload?.userLike?.anh?.url,
+              idPost: noti?.payload?.commentInfor?.postId,
+              hasRead: noti?.payload?.hasRead,
+              type: 'thích bình luận trong một bài viết',
+              idNoti: noti?._id,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+            };
+          }
+
+          if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
+            return {
+              name: noti?.payload?.userReply?.ten,
+              url: noti?.payload?.userReply?.anh?.url,
+              idPost: noti?.payload?.commentInfor?.postId,
+              hasRead: noti?.payload?.hasRead,
+              type: 'trả lời bình luận trong một bài viết',
+              idNoti: noti?._id,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+            };
+          }
+
+          if (noti?.type == 'TAG_USER_IN_STATUS_POST') {
+            return {
+              name: noti?.payload?.userTag?.ten,
+              url: noti?.payload?.userTag?.anh?.url,
+              idPost: noti?.payload?.commentInfor?.postId,
+              hasRead: noti?.payload?.hasRead,
+              type: 'gắn thẻ bạn trong một bài viết',
+              idNoti: noti?._id,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+            };
+          }
+
+          // Không link đến
+
+          if (noti?.type == 'REQUEST_ADD_FRIEND') {
+            return {
+              name: noti?.payload?.requestUser?.ten,
+              url: noti?.payload?.requestUser?.anh?.url,
+              idPost: noti?.payload?.commentInfor?.postId,
+              hasRead: noti?.payload?.hasRead,
+              type: 'gửi một lời mời kết bạn',
+              idNoti: noti?._id,
+              isRequestFriend: true,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+              isRequestFriend: boolean,
+            };
+          }
+
+          if (noti?.type == 'ACCEPT_ADD_FRIEND') {
+            return {
+              name: noti?.payload?.acceptUser?.ten,
+              url: noti?.payload?.acceptUser?.anh?.url,
+              idPost: noti?.payload?.acceptUser?.ma_nguoi_dung,
+              hasRead: noti?.payload?.hasRead,
+              type: 'đồng ý kết bạn',
+              idNoti: noti?._id,
+              isFriend:true,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+              isFriend?: boolean;
+            };
+          }
+
         });
         console.log(list, 'List');
         setNoti([...noti, ...list]);
@@ -563,9 +674,7 @@ function NotifycationComponent() {
   }, [index]);
 
   useEffect(() => {
-    if (noti?.length) {
-      dispatch(NotiActions.setNumNoti(noti?.length));
-    }
+    dispatch(NotiActions.setNumNoti(noti?.length));
   }, [noti]);
 
   return (
@@ -605,6 +714,7 @@ function NotifycationComponent() {
                       };
                     });
                     setNoti([]);
+                    setIsNoti(false);
                   }
                 });
               }}
@@ -634,6 +744,7 @@ function NotifycationComponent() {
                 type={item?.type}
                 url={item?.url}
                 isReaded={item?.hasRead}
+                isRequestFriend= {item?.isRequestFriend || false}
               />
             </>
           );

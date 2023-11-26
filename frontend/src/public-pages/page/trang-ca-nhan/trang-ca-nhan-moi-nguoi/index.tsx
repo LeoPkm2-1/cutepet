@@ -33,20 +33,30 @@ export default function TrangCaNhanMoiNguoi() {
   });
 
   const [isFriend, setIsFriend] = useState(0);
+  // 0 chưa ket ban
+  // 1 ket ban
+  // - đang đợi phản hồi
+  // -2 nhận được lời mời
 
   const [friend, setFriend] = useState<FriendType[]>([]);
   const [listPost, setListPost] = useState<StatusType[]>([]);
   const [listPet, setListPet] = useState<PetType[]>([]);
+  const newRequestAddFriend = useSelector((state:RootState) => state?.socket.newRequestAddFriend?.request)
+  
+  const newFriendId = useSelector((state:RootState) => state?.socket.acceptFriend?.idUser)
 
-  const acceptUser = useSelector((state:RootState) => state?.socket.acceptFriend.idUser);
+  const acceptUser = useSelector(
+    (state: RootState) => state?.socket.acceptFriend.idUser
+  );
 
   const { enqueueSnackbar } = useSnackbar();
+  const [timePost, setTimePost] = useState('none');
 
   useEffect(() => {
     if (id) {
       setTab('post');
       profileApi.getUserProfileById(id).then((data) => {
-        console.log(data);
+        console.log(data, " data profile");
         setProfile({
           name: data?.thong_tin_profile_user?.ten,
           id: data?.thong_tin_profile_user?.ma_nguoi_dung,
@@ -59,6 +69,14 @@ export default function TrangCaNhanMoiNguoi() {
         if (data?.la_ban_be) {
           setIsFriend(1);
         } else {
+          if(data?.thong_tin_ve_gui_loi_moi_ket_ban == "HAS_SEND_REQUEST_ADD_FRIEND"){
+            setIsFriend(-1);
+            return;
+          }
+          if(data?.thong_tin_ve_gui_loi_moi_ket_ban == "WAITTING_YOUR_RESPONE"){
+            setIsFriend(-2);
+            return;
+          }
           setIsFriend(0);
         }
         const fri: FriendType[] = data?.danh_sach_ban_be?.map((item: any) => {
@@ -89,45 +107,141 @@ export default function TrangCaNhanMoiNguoi() {
 
   useEffect(() => {
     if (id && profile?.id) {
-      profileApi.getPostUserById(id).then((data) => {
-        if (data?.status == 200) {
-          console.log(data, 'data lan 1');
-          const list: StatusType[] = data?.payload?.map((item: any) => {
-            return {
-              id: item?._id,
-              media: item?.media as {
-                type: string;
-                data: string[];
-              },
-              createAt: item?.createAt,
-              numOfLike: item?.numOfLike,
-              numOfComment: item?.numOfComment,
-              userInfor: {
-                id: profile.id,
-                name: profile.name,
-                avatarURL: profile.url,
-              },
-              hasLiked: item?.hasLiked,
-              text: item?.text,
-              taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
-                return {
-                  id: tagUser?.ma_nguoi_dung,
-                  name: tagUser?.ten,
-                };
-              }),
-            } as StatusType;
-          });
-          setListPost(list);
-        }
-      });
+      profileApi
+        .getPostUserById(id, new Date())
+        .then((data) => {
+          if (data?.status == 200) {
+            console.log(data, 'data lan 1');
+            if (data?.payload?.length == 0) {
+              setTimePost('');
+              return;
+            }
+            const list: StatusType[] = data?.payload?.map((item: any) => {
+              return {
+                id: item?._id,
+                media: item?.media as {
+                  type: string;
+                  data: string[];
+                },
+                createAt: item?.createAt,
+                numOfLike: item?.numOfLike,
+                numOfComment: item?.numOfComment,
+                visibility: item?.visibility,
+                userInfor: {
+                  id: profile.id,
+                  name: profile.name,
+                  avatarURL: profile.url,
+                },
+                hasLiked: item?.hasLiked,
+                text: item?.text,
+                taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
+                  return {
+                    id: tagUser?.ma_nguoi_dung,
+                    name: tagUser?.ten,
+                  };
+                }),
+                taggedPets: item?.withPets?.map((tagPet: any) => {
+                  return {
+                    id: tagPet?.ma_thu_cung,
+                    name: tagPet?.ten_thu_cung,
+                  };
+                }),
+                owner_id: item?.owner_id,
+              } as StatusType;
+            });
+            setListPost(list);
+          } else {
+            setTimePost('');
+          }
+        })
+        .catch(() => {
+          setTimePost('');
+        });
     }
   }, [profile.id]);
 
   useEffect(() => {
-    if(profile?.id == acceptUser){
+    if (id && profile?.id && timePost && timePost !== 'none') {
+      profileApi
+        .getPostUserById(id, timePost)
+        .then((data) => {
+          if (data?.status == 200) {
+            console.log(data, 'data lan 1');
+            if (data?.payload?.length == 0) {
+              setTimePost('');
+              return;
+            }
+            const list: StatusType[] = data?.payload?.map((item: any) => {
+              return {
+                id: item?._id,
+                media: item?.media as {
+                  type: string;
+                  data: string[];
+                },
+                createAt: item?.createAt,
+                numOfLike: item?.numOfLike,
+                numOfComment: item?.numOfComment,
+                userInfor: {
+                  id: profile.id,
+                  name: profile.name,
+                  avatarURL: profile.url,
+                },
+                hasLiked: item?.hasLiked,
+                text: item?.text,
+                visibility: item?.visibility,
+                taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
+                  return {
+                    id: tagUser?.ma_nguoi_dung,
+                    name: tagUser?.ten,
+                  };
+                }),
+                taggedPets: item?.withPets?.map((tagPet: any) => {
+                  return {
+                    id: tagPet?.ma_thu_cung,
+                    name: tagPet?.ten_thu_cung,
+                  };
+                }),
+                owner_id: item?.owner_id,
+              } as StatusType;
+            });
+            setListPost(list);
+            if (data?.payload?.length < 10) {
+              setTimePost('');
+              return;
+            }
+          } else {
+            setTimePost('');
+          }
+        })
+        .catch(() => {
+          setTimePost('');
+        });
+    }
+  }, [profile.id, timePost]);
+
+  useEffect(() => {
+    if (profile?.id == acceptUser) {
       setIsFriend(1);
     }
-  }, [acceptUser])
+  }, [acceptUser]);
+
+  useEffect(() => {
+    if(newRequestAddFriend?.senderID && profile?.id){
+      if(newRequestAddFriend?.senderID == profile?.id){
+        setIsFriend(-2);
+      }
+    }
+
+  }, [newRequestAddFriend?.senderID])
+
+  useEffect(() => {
+    if(newFriendId && profile?.id){
+      if(newFriendId == profile?.id){
+        setIsFriend(1);
+      }
+    }
+
+  }, [newFriendId])
 
   function handleUnfriend() {
     if (profile?.id) {
@@ -154,10 +268,7 @@ export default function TrangCaNhanMoiNguoi() {
           });
         });
     }
-
   }
-
-  
 
   function handleAddfriend() {
     if (profile?.id) {
@@ -183,6 +294,28 @@ export default function TrangCaNhanMoiNguoi() {
             variant: 'error',
           });
         });
+    }
+  }
+
+  function handleSubmit(type: string) {
+    if(profile?.id){
+      friendApi.responeAddFriend(profile?.id, type).then((data) => {
+        console.log(data, ' dtata nef');
+        if (data?.status == 200) {
+          if (data?.payload?.accepted) {
+            enqueueSnackbar(`Kết bạn với ${profile?.name} thành công`, {
+              variant: 'success',
+            });
+            setIsFriend(1);
+          } else {
+            enqueueSnackbar(`Xóa lời mời kết bạn với ${profile?.name} thành công`, {
+              variant: 'success',
+            });
+            setIsFriend(0);
+          };
+          
+        }
+      });
     }
   }
 
@@ -241,15 +374,40 @@ export default function TrangCaNhanMoiNguoi() {
                   Kết bạn
                 </Button>
               )}
-              
+
               {isFriend == -1 && (
-                <Button
-                  disabled
-                  variant="contained"
-                  color="info"
-                >
+                <Button disabled variant="contained" color="info">
                   Đang chờ phản hồi
                 </Button>
+              )}
+                {isFriend == -2 && (
+                <Box
+                sx={{
+                  display: 'flex',
+                }}
+              >
+                <Button
+                  onClick={() => handleSubmit('accept')}
+                  sx={{
+                    minWidth: '100px',
+                  }}
+                  variant="contained"
+                >
+                  Xác Nhận
+                </Button>
+                <Button
+                  onClick={() => handleSubmit('reject')}
+                  variant="contained"
+                  color="inherit"
+                  sx={{
+                    minWidth: '100px',
+                    color: 'gray',
+                    ml: '20px',
+                  }}
+                >
+                  Xóa
+                </Button>
+              </Box>
               )}
             </Box>
             <Typography
@@ -433,6 +591,26 @@ export default function TrangCaNhanMoiNguoi() {
             )}
           </Box>
         </Box>
+        {timePost && tab == "post" && (
+          <Typography
+            align="center"
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              fontSize: '15px',
+              margin: '16px 16px 10px 0px',
+              color: '#0c4195',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              setTimePost(listPost[listPost?.length - 1]?.createAt ||"");
+            }}
+          >
+            {' '}
+            Xem thêm bài viết{' '}
+          </Typography>
+        )}
       </Box>
     </>
   );

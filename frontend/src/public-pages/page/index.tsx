@@ -24,6 +24,8 @@ import { NotiActions } from '../../redux/noti';
 import { io } from 'socket.io-client';
 import TrangCaNhanMoiNguoi from './trang-ca-nhan/trang-ca-nhan-moi-nguoi';
 import { SocketActions } from '../../redux/socket';
+import { StatusType } from '../../models/post';
+import { LoiMoiType } from '../../models/user';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -123,7 +125,7 @@ export default function PageRouting() {
       // 6
       socket.on('USER_IS_OFFLINE', (data) => {
         console.log(data, ' Data chat from server:');
-        dispatch(SocketActions.setOnline(data?.user_id));
+        dispatch(SocketActions.setOffline(data?.user_id));
       });
 
       // 7
@@ -144,8 +146,16 @@ export default function PageRouting() {
 
       // 8
       socket.on('REQUEST_ADD_FRIEND', (data) => {
+        
         console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
+        const loiMoi :LoiMoiType = {
+          name: data?.requestUser?.ten,
+          url: data?.requestUser?.anh?.url,
+          time: data?.requestAt,
+          senderID:data?.requestUser?.ma_nguoi_dung,
+        }
+        dispatch(SocketActions.setNewRequest(loiMoi));
         enqueueSnackbar(
           <NotifycationItem
             name={data?.requestUser?.ten}
@@ -178,6 +188,41 @@ export default function PageRouting() {
       // 10
       socket.on('NEW_STATUS_POST_APPEAR', (data) => {
         console.log(data, ' Data chat from server:');
+        if(data?.areYouOwner){
+          const item = data?.postInfor;
+          const post : StatusType = {
+            id: `${item?._id}`,
+            media: item?.media as {
+              type: string;
+              data: string[];
+            },
+            createAt: item?.createAt,
+            numOfLike: item?.numOfLike,
+            numOfComment: item?.numOfComment,
+            userInfor: {
+              id: item?.owner_infor?.ma_nguoi_dung,
+              name: item?.owner_infor?.ten,
+              avatarURL: item?.owner_infor?.anh?.url,
+            },
+            hasLiked: item?.hasLiked,
+            text: item?.text,
+            visibility: item?.visibility,
+            owner_id: item?.owner_id,
+            taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
+              return {
+                id: tagUser?.ma_nguoi_dung,
+                name: tagUser?.ten,
+              };
+            }),
+            taggedPets: item?.withPets?.map((tagPet: any) => {
+              return {
+                id: tagPet?.ma_thu_cung,
+                name: tagPet?.ten_thu_cung,
+              };
+            }),
+          }
+          dispatch(SocketActions.setNewPost(post))
+        }
       });
       // 11
       socket.on('UPVOTE_ARTICLE', (data) => {
