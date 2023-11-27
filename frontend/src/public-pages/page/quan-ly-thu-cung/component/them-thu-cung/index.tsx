@@ -1,13 +1,21 @@
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import AdapterDateMoment from '@mui/lab/AdapterMoment';
-
-import { StyledTextField } from '../../../../../components/FormItem';
+import { Label, StyledTextField } from '../../../../../components/FormItem';
 import { StyledButton, StyledTypography } from './style';
 import { Box, Grid } from '@mui/material';
 import Select from '../../../../../components/Select';
 import { PetType } from '../../../../../models/pet';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import ImageSelect from '../../../../../components/ImageSelect';
+import moment from 'moment';
+import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import petApi from '../../../../../api/pet';
+import { uploadTaskPromise } from '../../../../../api/upload';
+import { useSnackbar } from 'notistack';
+import Loading from '../../../../../components/loading';
+import { useNavigate } from 'react-router-dom';
 
 export default function ThemThuCung() {
   const [pet, setPet] = useState<PetType>({
@@ -22,19 +30,99 @@ export default function ThemThuCung() {
     can_nang: 0,
   });
 
+  const [file, setFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const [loai, setLoai] = useState<
+    {
+      ma_loai: string;
+      ten_loai: string;
+    }[]
+  >([]);
+  const [giong, setGiong] = useState<
+    {
+      ma_giong: string;
+      ten_giong: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    petApi.getLoai().then((data) => {
+      if (data?.status == 200) {
+        const listLoai = data?.payload?.map((item: any) => {
+          return {
+            ma_loai: item?.ma_loai,
+            ten_loai: item?.ten_loai,
+          };
+        });
+        setLoai(listLoai);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (pet?.ma_loai) {
+      petApi.getGiong(pet?.ma_loai).then((data) => {
+        if (data?.status == 200) {
+          const listGiong = data?.payload?.map((item: any) => {
+            return {
+              ma_giong: item?.ma_giong,
+              ten_giong: item?.ten_giong,
+            };
+          });
+          setGiong(listGiong);
+        }
+      });
+    }
+  }, [pet?.ma_loai]);
+
+  async function addPet() {
+    console.log(pet, 'Pet nè: ');
+    let url: string = '';
+    setIsLoading(true);
+    if (file) {
+      url = (await uploadTaskPromise(file)) as string;
+    }
+    petApi
+      .addPet(
+        pet?.ten_thu_cung,
+        pet?.ngay_sinh || '',
+        pet?.gioi_tinh || 0,
+        pet?.ghi_chu || '',
+        pet?.ma_loai || 0,
+        pet?.ma_giong || 0,
+        url || '',
+        pet?.chieu_cao || 0,
+        pet?.can_nang || 0
+      )
+      .then((data) => {
+        if (data?.status == 200) {
+          enqueueSnackbar('Thêm thú cưng thành công', { variant: 'success' });
+          setIsLoading(false);
+          navigate("/home/quan-ly-thu-cung")
+        }
+      }).catch(() => {
+        enqueueSnackbar('Thêm thú cưng thất bại', { variant: "error" });
+        setIsLoading(false);
+      });
+  }
+
   return (
     <>
+      <Loading open={isLoading}/>
       <Box
         sx={{
           color: 'black',
           width: '100%',
+          paddingBottom: '150px',
         }}
       >
         <StyledTypography
           sx={{
             fontSize: '20px',
             fontWeight: '600',
-            mb: '50px',
+            mb: '20px',
           }}
         >
           Thêm Thú Cưng
@@ -47,6 +135,26 @@ export default function ThemThuCung() {
         >
           Thông tin thú cưng
         </StyledTypography> */}
+
+        <Label>Ảnh đại diện</Label>
+        <ImageSelect
+          style={{
+            // borderRadius: '100%',
+            width: '300px',
+            height: '300px',
+            marginTop: '5px',
+            marginBottom: '10px',
+          }}
+          aspectRatio={1}
+          onFileChange={(file) => {
+            if (file) {
+              setFile(file);
+            } else {
+              setFile(null);
+            }
+          }}
+        />
+
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <StyledTextField
@@ -73,14 +181,14 @@ export default function ThemThuCung() {
               margin="normal"
               name="Chieu-cao"
               placeholder="Nhập chiều cao"
-              label="Chiều cao"
+              label="Chiều cao (cm)"
               type="number"
               required
-              value={pet.chieu_cao}
+              value={pet.chieu_cao || null}
               onChange={(e) =>
                 setPet({
                   ...pet,
-                  chieu_cao: parseInt(e.currentTarget.value),
+                  chieu_cao: +e.currentTarget.value as number,
                 })
               }
             />
@@ -92,69 +200,55 @@ export default function ThemThuCung() {
               margin="normal"
               name="user-name"
               placeholder="Nhập cân nặng"
-              label="Cân nặng"
+              label="Cân nặng (kg)"
               type="number"
               required
-              value={pet.can_nang}
+              value={pet.can_nang || null}
               onChange={(e) =>
                 setPet({
                   ...pet,
-                  can_nang: parseInt(e.currentTarget.value) as number,
+                  can_nang: parseFloat(e.currentTarget.value) as number,
                 })
               }
             />
           </Grid>
 
           <Grid item xs={6}>
-            <LocalizationProvider dateAdapter={AdapterDateMoment}>
-              <DateTimePicker
-                views={['year', 'month', 'day']}
-                renderInput={(props) => (
-                  <StyledTextField
-                    {...props}
-                    fullWidth
-                    size="small"
-                    color="info"
-                    margin="normal"
-                    sx={{
-                      width: '100%',
-                      mt: '15px',
-                    }}
-                    // error={!!errors['scheduledAt']}
-                    // helperText={errors['scheduledAt']}
-                  />
-                )}
-                value={pet.ngay_sinh}
-                clearable
-                cancelText="clear"
-                // minDateTime={moment(new Date())}
-                onChange={(newValue) => {
-                  if (newValue) {
-                    console.log(newValue);
-                    
-                    setPet({ ...pet, ngay_sinh: newValue });
-                  }
-                  // props.onChange(newValue?.toISOString() || "");
-                  // if (errors['scheduledAt']) {
-                  //   clearError('scheduledAt');
-                  // }
-                }}
-              />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DatePicker', 'DatePicker']}>
+                <DatePicker
+                  sx={{
+                    width: '100%',
+                    fontFamily: 'quicksand !important',
+                    '&.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root': {
+                      fontSize: '30px !important',
+                    },
+                  }}
+                  label="Ngày sinh"
+                  value={dayjs('2023-11-17')}
+                  onChange={(newValue) => {
+                    if (newValue) {
+                      console.log(newValue.format('YYYY-MM-DD'));
+                      setPet({
+                        ...pet,
+                        ngay_sinh: newValue.format('YYYY-MM-DD'),
+                      });
+                    }
+                  }}
+                />
+              </DemoContainer>
             </LocalizationProvider>
           </Grid>
           <Grid item xs={6}>
             <Select
               value={pet.ma_loai}
-              options={[
-                {
-                  value: 1,
-                  label: 'Chó',
-                },
-                {
-                  value: 2,
-                  label: 'Mèo',
-                },
-              ]}
+              label="Loài"
+              options={loai?.map((item) => {
+                return {
+                  value: item?.ma_loai,
+                  label: item?.ten_loai,
+                };
+              })}
               onChange={(v) => {
                 setPet({
                   ...pet,
@@ -165,34 +259,44 @@ export default function ThemThuCung() {
           </Grid>
           <Grid item xs={6}>
             <Select
-              value={'Pibbull'}
-              options={[
-                {
-                  value: 'Pibbull',
-                  label: 'Pibbull',
-                },
-                {
-                  value: 'Mèo',
-                  label: 'Mèo',
-                },
-              ]}
-              onChange={(v) => {}}
+              value={pet?.ma_giong}
+              label="Giống"
+              options={giong?.map((item) => {
+                return {
+                  value: item?.ma_giong,
+                  label: item?.ten_giong,
+                };
+              })}
+              onChange={(v) => {
+                if (v?.value) {
+                  setPet({
+                    ...pet,
+                    ma_giong: v?.value as number,
+                  });
+                }
+              }}
             />
           </Grid>
           <Grid item xs={6}>
             <Select
-              value={'Đực'}
+              value={pet?.gioi_tinh || 0}
+              label="Giới tính"
               options={[
                 {
-                  value: 'Đực',
+                  value: 0,
                   label: 'Đực',
                 },
                 {
-                  value: 'Cái ',
+                  value: 1,
                   label: 'Cái',
                 },
               ]}
-              onChange={(v) => {}}
+              onChange={(v) => {
+                setPet({
+                  ...pet,
+                  gioi_tinh: v?.value as number,
+                });
+              }}
             />
           </Grid>
           <Grid item xs={6}>
@@ -205,17 +309,15 @@ export default function ThemThuCung() {
               label="Ghi chú"
               multiline
               minRows={5}
-                // value={'Name'}
-                // onChange={(e) =>
-                //   // setFormData({
-                //   //   ...formData,
-                //   //   name: e.currentTarget.value,
-                //   // })
-                // }
+              value={pet?.ghi_chu}
+              onChange={(e) => {
+                setPet({ ...pet, ghi_chu: e.currentTarget.value });
+              }}
             />
           </Grid>
         </Grid>
         <Box
+          onClick={addPet}
           sx={{
             display: 'flex',
             justifyItems: 'center',

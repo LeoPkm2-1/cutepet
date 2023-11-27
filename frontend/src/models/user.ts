@@ -123,8 +123,24 @@ export interface RTDUser {
 
 export interface FriendType {
   name: string;
-  id: string;
+  id: number;
   user: string;
   url: string;
   isOnline: boolean;
+}
+
+export interface PeopleType {
+  name: string;
+  id: string;
+  user: string;
+  url: string;
+  numberPet: number;
+  isFriend?: boolean;
+}
+
+export interface LoiMoiType {
+  name?: string;
+  url?: string;
+  time?: string;
+  senderID?: number | string;
 }

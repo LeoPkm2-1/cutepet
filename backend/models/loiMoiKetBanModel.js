@@ -45,6 +45,11 @@ const havePendingRequestAddFriend = async (sender_id, recipient_id) => {
 		});
 };
 
+// (async function () {
+// 	const data = await havePendingRequestAddFriend(19, 2);
+// 	console.log({data});
+// })()
+
 const deleteRequestAddFriend = async (sender_id, recipient_id) => {
 	const sqlStmt = `delete from LoiMoiKetBan where (ma_nguoi_gui,ma_nguoi_nhan) = (?,?) `;
 	return await sqlQuery(sqlStmt, [sender_id, recipient_id])

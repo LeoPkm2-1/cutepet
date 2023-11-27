@@ -111,13 +111,59 @@ router.post(
 // lấy bình luận của bài viết chia sẻ kiến thức thứ tự trước sau
 router.post(
   "/getCommentStartFrom",
-  [articleMiddle.checkArticleExistMid,articleMiddle.preProcessGetCmtByIndex],
+  [articleMiddle.checkArticleExistMid, articleMiddle.preProcessGetCmtByIndex],
   articleController.getCmtStartFromController
 );
-
+// lấy tất các các bài viết chia sẻ kiến thức trong DB
 router.post(
   "/getAllArticleInDB",
   articleController.getAllArticleInDBController
-)
+);
+
+// lấy tất cả các thể loại của bài viết chiase kiến thức
+router.post(
+  "/AllAvailableCategories",
+  articleController.getAllCategoriesController
+);
+
+// danh sách bài viết chia sẻ kiến thức của chính mình
+router.post("/getMyArticles", articleController.getMyArticlesController);
+
+// chỉnh sửa danh sách chia sẻ bài viết
+router.post(
+  "/editArticle",
+  [
+    articleMiddle.checkArticleExistMid,
+    articleMiddle.preProcessEditArticle,
+    articleMiddle.preProcessAddArtticle,
+  ],
+  articleController.editArticleController
+);
+
+// tố cáo bài viết chia sẻ trạng thái
+router.post(
+  "/reportArticle",
+  [articleMiddle.checkArticleExistMid],
+  articleController.reportArticleController
+);
+
+router.post(
+  "/getArticlesByIndexAndNum",
+  articleMiddle.prePageingForArticle,
+  articleController.getArticlesByIndexAndNumController
+);
+
+router.post("/filterArticles", [
+  articleMiddle.preFilterArticleMid,
+  articleMiddle.navigateToSuitableFilterArricleMid,
+]);
+
+// // search article
+// router.post(
+//   "/filterArticles",
+//   [articleMiddle.preProcessFilterArticle_1,
+//   articleMiddle.preProcessFilterArticle_2],
+//   articleController.filterArticleController
+// );
 
 module.exports = router;

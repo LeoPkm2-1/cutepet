@@ -16,7 +16,7 @@ const preProccessGetTimeline = async (req, res, next) => {
       throw new Error(VALID_PARAM);
     }
     num = typeof num == "undefined" ? undefined : parseInt(num);
-    if (num <= 0) throw new Error(VALID_PARAM);
+    if (typeof num != "undefined" && num <= 0) throw new Error(VALID_PARAM);
     req.body.before =
       typeof before == "undefined" ? new Date() : new Date(before);
     req.body.num = num;

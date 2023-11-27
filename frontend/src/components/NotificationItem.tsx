@@ -3,13 +3,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import React, { useState, useEffect } from 'react';
 import notiApi from '../api/noti';
+import { useDispatch, useSelector } from 'react-redux';
+import { NotiActions } from '../redux/noti';
+import { RootState } from '../redux';
 type Props = {
   name?: string;
   url?: string;
   idPost?: string;
   type?: string;
   onClick?: () => void;
+  idNoti?: string;
   isReaded?: boolean;
+  isRequestFriend?:boolean;
+  isFriend?:boolean;
 };
 export function NotifycationItem(props: Props) {
   return (
@@ -47,7 +53,7 @@ export function NotifycationItem(props: Props) {
           }}
         >
           <span style={{ fontWeight: '700' }}>{props?.name || 'No name'}</span>{' '}
-          đã {props?.type || 'bình luận'} một bài viết
+          đã {props?.type || 'bình luận'}
         </Typography>
       </Box>
     </>
@@ -58,18 +64,30 @@ export function NotifycationItemClick(props: Props) {
   const [isReaded, setIsReaded] = useState(props?.isReaded);
   useEffect(() => {
     setIsReaded(props?.isReaded);
-  }, [props?.idPost]);
+  }, [props?.idPost, props?.isReaded]);
+  const numNoti = useSelector((state:RootState) => state?.noti?.numNoti)
+  const dispatch = useDispatch();
+  function naviga(){
+    if(props?.isRequestFriend){
+      return `/home/ban-be`
+    }
+    if(props?.isFriend){
+      return `/home/trang-ca-nhan-nguoi-dung/${props?.idNoti}`
+    }
+    return `post/${props?.idPost}`;
+  }
   return (
     <>
       <Link
         onClick={() => {
-          if (props?.idPost) {
-            notiApi.postNotificationHasReaded(props?.idPost).then((data) => {
+          if (props?.idNoti) {
+            notiApi.postNotificationHasReaded(props?.idNoti).then((data) => {
+              dispatch(NotiActions.setNumNoti(numNoti - 1));
               setIsReaded(true);
             });
           }
         }}
-        to={`post/${props?.idPost}`}
+        to={naviga()}
       >
         <Box
           sx={{
@@ -117,7 +135,7 @@ export function NotifycationItemClick(props: Props) {
               <span style={{ fontWeight: '700' }}>
                 {props?.name || 'No name'}
               </span>{' '}
-              đã {props?.type || 'bình luận'} một bài viết
+              đã {props?.type} 
             </Typography>
           </Box>
           {!isReaded && (

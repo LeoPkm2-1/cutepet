@@ -121,16 +121,21 @@ function extractListIdFromListUser(listUser, idFieldName = "ma_nguoi_dung") {
   return UtilsHelper.extracValuesOfFieldFromListObjs(listUser, idFieldName);
 }
 
-// (async function () {
-//   const data = await getUserPublicInforByListIds([1000,200])
-//   console.log(data);
-// })()
+function getSomeUserIdInRangeOf10(numOfRandomNumbers = 1) {
+  const randomNumbers = [];
 
-// (async function () {
-//   const data = extractListIdFromListUser([{ key: 1 }, { key: 2 }], "key");
-//   console.log(data);
-// })();
+  while (randomNumbers.length < numOfRandomNumbers) {
+    const randomNumber = Math.floor(Math.random() * 10) + 1;
+    if (!randomNumbers.includes(randomNumber)) {
+      randomNumbers.push(randomNumber);
+    }
+  }
 
+  return randomNumbers;
+}
+
+// const data = getSomeUserIdInRangeOf10(3);
+// console.log(data);
 
 module.exports = {
   isFriend,
@@ -142,4 +147,5 @@ module.exports = {
   getUserPublicInforByUserId,
   getUserPublicInforByListIds,
   extractListIdFromListUser,
+  getSomeUserIdInRangeOf10,
 };

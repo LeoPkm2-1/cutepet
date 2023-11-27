@@ -24,10 +24,16 @@ import moment from 'moment';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { timeAgo } from '../../../../../helper/post';
 import { AirlineSeatReclineExtraOutlined } from '@mui/icons-material';
-import { socket } from '../../../../../socket';
+//import { socket } from '../../../../../socket';
 import LockIcon from '@mui/icons-material/Lock';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import PublicIcon from '@mui/icons-material/Public';
+import { useNavigate } from 'react-router-dom';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import BuildIcon from '@mui/icons-material/Build';
+import FlagIcon from '@mui/icons-material/Flag';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 type Props = {
   idStatus?: string;
   status?: StatusType;
@@ -38,15 +44,18 @@ export default function PostComponent(props: Props) {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [reloadComment, setReloadComment] = useState(false);
   const [isRender, setIsRender] = useState(true);
+  const [isFollow, setIsFollow] = useState(false);
   const [isComment, setIsComment] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+  const profile = useSelector((state: RootState) => state.user.profile);
   const [friendTag, setFriendTag] = useState<
-  {
-    id: string;
-    name: string;
-  }[]
->([]);
+    {
+      id: string;
+      name: string;
+    }[]
+  >([]);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -76,13 +85,19 @@ export default function PostComponent(props: Props) {
               avatarURL: data?.payload?.owner_infor?.anh?.url,
             },
             hasLiked: data?.payload?.hasLiked,
-            text: data?.text || '',
+            text: data?.payload?.text || '',
             visibility: data?.payload?.visibility,
-            taggedUsers: data?.payload?.taggedUsers?.map((item:any) => {
+            taggedUsers: data?.payload?.taggedUsers?.map((item: any) => {
               return {
                 id: item?.ma_nguoi_dung,
-                ten: item?.ten,
-              }
+                name: item?.ten,
+              };
+            }),
+            taggedPets: data?.payload?.withPets?.map((tagPet: any) => {
+              return {
+                id: tagPet?.ma_thu_cung,
+                name: tagPet?.ten_thu_cung,
+              };
             }),
           };
           setStatus(sta);
@@ -109,6 +124,7 @@ export default function PostComponent(props: Props) {
               text: item?.comment,
               createdAt: item?.commentAt,
               id: item?._id,
+              userId: item?.userCmtInfor?.ma_nguoi_dung,
             } as CommentType;
           });
           console.log(comments, 'Comment');
@@ -118,6 +134,18 @@ export default function PostComponent(props: Props) {
       });
     }
   }, [reloadComment]);
+
+  useEffect(() => {
+    if (props?.status?.id) {
+      postApi?.getIsUserFollowedPost(props?.status?.id).then((data) => {
+        if (data?.status == 200) {
+          if (data?.payload?.isFollowed) {
+            setIsFollow(true);
+          }
+        }
+      });
+    }
+  }, [props?.status?.id]);
 
   function handleLike() {
     if (status?.id) {
@@ -129,28 +157,80 @@ export default function PostComponent(props: Props) {
               ...status,
               hasLiked: !status?.hasLiked,
               numOfLike: status?.hasLiked
-                ? status?.numOfLike - 1
-                : status?.numOfLike + 1,
+                ? (status?.numOfLike || 0) - 1
+                : (status?.numOfLike || 0) + 1,
             });
           }
         })
         .catch((err) => {
-          enqueueSnackbar(`${err}`, { variant: 'error' });
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
         });
     }
   }
 
   function handleDelete() {
     if (status?.id) {
-      postApi.removePost(status?.id).then(() => {
-        setIsRender(false);
+      postApi.removePost(status?.id).then((data) => {
+        if (data?.status == 200) {
+          setIsRender(false);
+          enqueueSnackbar(`Xóa bài viết thành công`, {
+            variant: 'success',
+          });
+        }
       });
+    }
+  }
+
+  function handleUnFollow() {
+    if (status?.id) {
+      postApi
+        .unFollowPost(status?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            setIsFollow(false);
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
+    }
+  }
+
+  function handleFollow() {
+    if (status?.id) {
+      postApi
+        .followPost(status?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            setIsFollow(true);
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
+    }
+  }
+
+  function handleReport() {
+    if (status?.id) {
+      postApi
+        .reportPost(status?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            enqueueSnackbar(`Báo cáo bài viết thành công`, {
+              variant: 'success',
+            });
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
     }
   }
 
   async function handleClickComment() {
     // if (props.status && props.status?.numOfComment > 0 && props.status?.id) {
-    if (status && status?.numOfComment > 0 && status?.id) {
+    if (status && (status?.numOfComment ||0) > 0 && status?.id) {
       // await postApi.getAllComment(props.status?.id).then((data) => {
       await postApi.getAllComment(status?.id).then((data) => {
         if (data?.status == 200) {
@@ -212,11 +292,19 @@ export default function PostComponent(props: Props) {
               }}
             >
               <img
+                onClick={() => {
+                  profile?.id == status?.userInfor?.id
+                    ? navigate('/home/trang-ca-nhan')
+                    : navigate(
+                        `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor?.id}`
+                      );
+                }}
                 style={{
                   height: '50px',
                   width: '50px',
                   objectFit: 'cover',
                   borderRadius: '30px',
+                  cursor: 'pointer',
                 }}
                 src={status?.userInfor?.avatarURL || ''}
               />
@@ -232,8 +320,22 @@ export default function PostComponent(props: Props) {
                     fontWeight: '700',
                   }}
                 >
-                  {status?.userInfor?.name} {" "}
-                  {(status?.taggedUsers?.length || 0 ) > 0 && (
+                  <span
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                      profile?.id == status?.userInfor?.id
+                        ? navigate('/home/trang-ca-nhan')
+                        : navigate(
+                            `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor?.id}`
+                          );
+                    }}
+                  >
+                    {' '}
+                    {status?.userInfor?.name}{' '}
+                  </span>
+                  {(status?.taggedUsers?.length || 0) > 0 && (
                     <>
                       <span
                         style={{
@@ -241,22 +343,38 @@ export default function PostComponent(props: Props) {
                         }}
                       >
                         cùng với
-                      </span>
-
-                      {" "}
+                      </span>{' '}
                       {status?.taggedUsers?.map((item, index) => {
-                        if(index> 0){
+                        if (index > 0) {
                           return (
-                            <span>
-                             {", "} {item?.name}
+                            <span
+                              onClick={() => {
+                                navigate(
+                                  `/home/trang-ca-nhan-nguoi-dung/${item.id}`
+                                );
+                              }}
+                              style={{
+                                cursor: 'pointer',
+                              }}
+                            >
+                              {', '} {item?.name}
                             </span>
-                          )
+                          );
                         }
                         return (
-                          <span>
-                           {item?.name}
+                          <span
+                            onClick={() => {
+                              navigate(
+                                `/home/trang-ca-nhan-nguoi-dung/${item.id}`
+                              );
+                            }}
+                            style={{
+                              cursor: 'pointer',
+                            }}
+                          >
+                            {item?.name}
                           </span>
-                        )
+                        );
                       })}
                     </>
                   )}
@@ -289,7 +407,7 @@ export default function PostComponent(props: Props) {
                         }}
                       />
                     )}
-                    {status?.visibility == 'FRIEND' && (
+                    {status?.visibility == 'JUST_FRIENDS' && (
                       <PeopleAltIcon
                         sx={{
                           marginTop: '4px',
@@ -299,7 +417,7 @@ export default function PostComponent(props: Props) {
                       />
                     )}
                     {status?.visibility !== 'PRIVATE' &&
-                      status?.visibility !== 'FRIEND' && (
+                      status?.visibility !== 'JUST_FRIENDS' && (
                         <PublicIcon
                           sx={{
                             marginTop: '4px',
@@ -335,25 +453,115 @@ export default function PostComponent(props: Props) {
                 horizontal: 'right',
               }}
             >
-              <MenuItem
-                sx={{
-                  fontFamily: 'quicksand',
-                }}
-                onClick={handleDelete}
-              >
-                Xóa
-              </MenuItem>
-              <MenuItem
-                sx={{
-                  fontFamily: 'quicksand',
-                }}
-                onClick={handleDelete}
-              >
-                Chỉnh sửa
-              </MenuItem>
+              {status?.owner_id == profile?.id ? (
+                <>
+                  <MenuItem
+                    sx={{
+                      fontFamily: 'quicksand',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      minWidth: '150px',
+                    }}
+                    onClick={handleDelete}
+                  >
+                    <span>Xóa</span>{' '}
+                    <DeleteOutlineIcon
+                      sx={{
+                        color: 'gray',
+                      }}
+                    />
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      fontFamily: 'quicksand',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      minWidth: '150px',
+                    }}
+                    onClick={handleDelete}
+                  >
+                    <span> Chỉnh sửa </span>{' '}
+                    <BuildIcon
+                      sx={{
+                        color: 'gray',
+                      }}
+                    />
+                  </MenuItem>
+                </>
+              ) : (
+                <>
+                  {isFollow ? (
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'quicksand',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        minWidth: '150px',
+                      }}
+                      onClick={handleUnFollow}
+                    >
+                      <span> Bỏ theo dõi </span>{' '}
+                      <NotificationsOffIcon
+                        sx={{
+                          color: 'gray',
+                        }}
+                      />
+                    </MenuItem>
+                  ) : (
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'quicksand',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        minWidth: '150px',
+                      }}
+                      onClick={handleFollow}
+                    >
+                      <span> Theo dõi </span>{' '}
+                      <NotificationsIcon
+                        sx={{
+                          color: 'gray',
+                        }}
+                      />
+                    </MenuItem>
+                  )}
+                  <MenuItem
+                    sx={{
+                      fontFamily: 'quicksand',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      minWidth: '150px',
+                    }}
+                    onClick={handleReport}
+                  >
+                    <span> Báo cáo </span>{' '}
+                    <FlagIcon
+                      sx={{
+                        color: 'gray',
+                      }}
+                    />
+                  </MenuItem>
+                </>
+              )}
             </Menu>
           </Box>
-
+          <Box sx={{ padding: '10px 20px' }}>
+            {status?.taggedPets?.map((pet) => {
+              return (
+                <span
+                  style={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '600',
+                    color: '#ff5b2e',
+                    marginRight: '12px',
+                    cursor:"pointer"
+                  }}
+                >
+                  @{pet?.name?.trim()}
+                </span>
+              );
+            })}
+          </Box>
           <Typography
             sx={{
               fontFamily: 'quicksand',
@@ -499,7 +707,7 @@ export default function PostComponent(props: Props) {
                 }}
               />
             </Box>
-            <Box
+            {/* <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -521,7 +729,7 @@ export default function PostComponent(props: Props) {
                   color: 'gray',
                 }}
               />
-            </Box>
+            </Box> */}
           </Box>
           {isComment && (
             <>
@@ -535,7 +743,7 @@ export default function PostComponent(props: Props) {
                     if (status) {
                       setStatus({
                         ...status,
-                        numOfComment: status?.numOfComment + 1,
+                        numOfComment: (status?.numOfComment || 0) + 1,
                       });
                     }
                   }}
@@ -551,7 +759,7 @@ export default function PostComponent(props: Props) {
                         if (status) {
                           setStatus({
                             ...status,
-                            numOfComment: status?.numOfComment - 1,
+                            numOfComment: (status?.numOfComment || 0) - 1,
                           });
                         }
                       }}
@@ -594,8 +802,10 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
     setIsFinish(true);
   }, [props.comment.id, isReload]);
 
+  const profile = useSelector((state: RootState) => state.user.profile);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     console.log('Vaao click nè');
@@ -634,6 +844,14 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
                 borderRadius: '30px',
                 minWidth: '40px',
                 minHeight: '40px',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                profile?.id == props.comment.userId
+                  ? navigate('/home/trang-ca-nhan')
+                  : navigate(
+                      `/home/trang-ca-nhan-nguoi-dung/${props.comment.userId}`
+                    );
               }}
               src={props.comment.photoURL}
             />

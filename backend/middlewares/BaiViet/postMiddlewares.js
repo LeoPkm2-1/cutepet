@@ -3,17 +3,34 @@ const statusPostModel = require("../../models/BaiViet/StatusPostModel");
 const postHelper = require("../../utils/postHelper");
 const banBeHelper = require("./../../utils/banbeHelper");
 const statusAndArticleModel = require("../../models/BaiViet/StatusAndArticleModel");
+const followhelper = require("./../../utils/theodoiHelper");
+const petHelper = require("../../utils/petHelper");
+const utilHelper = require("../../utils/UtilsHelper");
 
+// middle ware kiểm tra tiền sử lý để thêm bài viết
 async function preProcessAddPost(req, res, next) {
   const NOT_CONTENT_POST = `bài viết không được chấp nhận do không có nội dung`;
   const text = req.body.text;
   const visibility = String(req.body.visibility).toUpperCase();
   req.body.visibility = visibility;
-  const userTaggedIds = req.body.taggedUsersId || [];
+  let userTaggedIds = req.body.taggedUsersId || [];
+  userTaggedIds = userTaggedIds.map((id) => parseInt(id, 10));
+  // remove dulplicate tagged user ids
+  userTaggedIds = [...new Set(userTaggedIds)];
   req.body.taggedUsersId = await banBeHelper.getFriendsIdInListOfUserId(
     req.auth_decoded.ma_nguoi_dung,
     userTaggedIds
   );
+
+  let myPetIds = req.body.myPetIds || [];
+  myPetIds = myPetIds.map((petId) => parseInt(petId, 10));
+  // remove dulplicate my pets id
+  myPetIds = [...new Set(myPetIds)];
+  req.body.myPetIds = await petHelper.getPetsIdOwnedByUserInListOfPetIds(
+    req.auth_decoded.ma_nguoi_dung,
+    myPetIds
+  );
+
   const media = req.body.media;
   if (
     visibility != "PUBLIC" &&
@@ -42,7 +59,14 @@ async function preProcessAddPost(req, res, next) {
 
   if (flag == 2) {
     res.status(400).json(new Response(400, [], NOT_CONTENT_POST, 300, 300));
+    return;
   }
+
+  if (text.trim() == "" && media.data[0].trim() == "") {
+    res.status(400).json(new Response(400, [], NOT_CONTENT_POST, 300, 300));
+    return;
+  }
+  req.body.text = text.trim();
 
   next();
 }
@@ -282,6 +306,93 @@ async function preProcessDeletePost(req, res, next) {
   next();
 }
 
+// middware kiểm tra quyền của người dung xem họ có quyền cập nhật bài viết không + lọc ra danh sách bạn bè dc tag thêm vào, bỏ tag đi
+async function preProcessUpdatePost_1(req, res, next) {
+  // kiểm tra quyền cập nhật bài viết
+  const postBeforeUpdate = req.body.STATUS_POST_INFOR;
+  if (req.auth_decoded.ma_nguoi_dung != postBeforeUpdate.owner_id) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Bạn không có quyền xóa bài viết này", 300, 300)
+      );
+    return;
+  }
+  // lọc friend trong danh sách tag
+  let userTaggedIds = req.body.taggedUsersId || [];
+  userTaggedIds = userTaggedIds.map((id) => parseInt(id, 10)); // change index to int type
+  // remove dulplicate
+  userTaggedIds = [...new Set(userTaggedIds)];
+  // danh sách bạn bè mới dc tag
+  const newTaggedUserId = (req.body.taggedUsersId =
+    await banBeHelper.getFriendsIdInListOfUserId(
+      req.auth_decoded.ma_nguoi_dung,
+      userTaggedIds
+    ));
+  // danh sách bạn bè cũ dc tag
+  const oldTaggedUserId = postBeforeUpdate.taggedUsers.map((user) =>
+    parseInt(user.ma_nguoi_dung)
+  );
+
+  // danh sách bạn bè bị untag = set( danh sách bạn bè cũ - danh sách bạn bè mới )
+  req.body.UNFOLLOW_USER_ID = [
+    ...oldTaggedUserId.filter(
+      (oldId) => !new Set([...newTaggedUserId]).has(oldId)
+    ),
+  ];
+  // danh sách bạn bè mới dc tag = set( danh sách bạn bè mới - danh sách bạn bè cũ )
+  req.body.NEW_FOLLOW_USER_ID = [
+    ...newTaggedUserId.filter(
+      (newId) => !new Set([...oldTaggedUserId]).has(newId)
+    ),
+  ];
+
+  next();
+}
+
+// dựa vào danh sách bạn bè được tag ở trên tiến hành thay đổi danh sách người dùng theo dõi bài viết
+async function preProcessUpdatePost_2(req, res, next) {
+  const { post_id } = req.body;
+  const postBeforeUpdate = req.body.STATUS_POST_INFOR;
+  // const text = req.body.text.trim() ? req.body.text.trim() : false;
+  const visibility = String(req.body.visibility).toUpperCase();
+  req.body.visibility = visibility;
+  // let userTaggedIds = req.body.taggedUsersId || [];
+  // userTaggedIds = userTaggedIds.map((id) => parseInt(id, 10));
+  // // remove dulplicate
+  // userTaggedIds = [...new Set(userTaggedIds)];
+  // req.body.taggedUsersId = await banBeHelper.getFriendsIdInListOfUserId(
+  //   req.auth_decoded.ma_nguoi_dung,
+  //   userTaggedIds
+  // );
+  if (
+    visibility != "PUBLIC" &&
+    visibility != "JUST_FRIENDS" &&
+    visibility != "PRIVATE"
+  ) {
+    res
+      .status(400)
+      .json(new Response(400, [], "visibility không hợp lệ", 300, 300));
+    return;
+  }
+
+  if (visibility == "PRIVATE") {
+    await followhelper.listOfUserUnFollowStatusPost(
+      post_id,
+      req.body.UNFOLLOW_USER_ID,
+      false
+    );
+  }
+
+  await followhelper.listOfUserFollowStatusPost(
+    post_id,
+    req.body.NEW_FOLLOW_USER_ID,
+    true
+  );
+
+  next();
+}
+
 async function preProcessDeleteComment(req, res, next) {
   const postInfor = await statusAndArticleModel
     .getPostById(req.body.CMT_POST_INFOR.postId)
@@ -347,6 +458,49 @@ async function preProcessGetPostStartFrom(req, res, next) {
   next();
 }
 
+async function preProccessToGetNewFeed(req, res, next) {
+  const index = parseInt(req.body.index);
+  const PostIdsHaveRendered = req.body.PostIdsHaveRendered || [];
+  req.body.PostIdsHaveRendered = PostIdsHaveRendered.map((postId) =>
+    String(postId)
+  );
+  // console.log(typeof req.body.index);
+  if (Number.isNaN(index)) {
+    res
+      .status(400)
+      .json(new Response(400, [], "tham số không hợp lệ", 300, 300));
+    return;
+  }
+  req.body.index = index;
+  next();
+}
+
+async function preProcessGetPostHavePet(req, res, next) {
+  const VALID_PARAM = "Tham số không hợp lệ";
+  const { pet_id } = req.body;
+  let { before, num } = req.body;
+  try {
+    if (
+      typeof before != "undefined" &&
+      !utilHelper.isDateValid(new Date(before))
+    ) {
+      throw new Error(VALID_PARAM);
+    }
+    if (typeof num != "undefined" && Number.isNaN(parseInt(num))) {
+      throw new Error(VALID_PARAM);
+    }
+    num = typeof num == "undefined" ? undefined : parseInt(num);
+    if (typeof num != "undefined" && num <= 0) throw new Error(VALID_PARAM);
+    req.body.before =
+      typeof before == "undefined" ? new Date() : new Date(before);
+    req.body.num = num;
+  } catch (error) {
+    res.status(400).json(new Response(400, [], VALID_PARAM, 300, 300));
+    return;
+  }
+  next();
+}
+
 module.exports = {
   preProcessAddPost,
   preProcessLikePost,
@@ -364,4 +518,8 @@ module.exports = {
   preProcessGetPostStartFrom,
   preProcessDeleteComment,
   preProcessDeletePost,
+  preProcessUpdatePost_1,
+  preProcessUpdatePost_2,
+  preProccessToGetNewFeed,
+  preProcessGetPostHavePet,
 };

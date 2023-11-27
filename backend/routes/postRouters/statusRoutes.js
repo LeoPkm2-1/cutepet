@@ -1,5 +1,6 @@
 const express = require("express");
 const statusPostMiddle = require("../../middlewares/BaiViet/postMiddlewares");
+const petMid = require("../../middlewares/petMid");
 const statusPostController = require("../../controllers/postControllers/statusPostController");
 const { requireLogined } = require("../../middlewares/auth");
 const router = express.Router();
@@ -123,7 +124,11 @@ router.post(
 
 router.post(
   "/updatePost",
-  [statusPostMiddle.checkPostExistMid],
+  [
+    statusPostMiddle.checkPostExistMid,
+    statusPostMiddle.preProcessUpdatePost_1,
+    statusPostMiddle.preProcessUpdatePost_2,
+  ],
   statusPostController.updatePostController
 );
 
@@ -144,6 +149,24 @@ router.post(
   "/followPost",
   [statusPostMiddle.checkPostExistMid],
   statusPostController.followPostController
+);
+
+router.post(
+  "/reportPost",
+  [statusPostMiddle.checkPostExistMid],
+  statusPostController.reportPostController
+);
+
+router.post(
+  "/getPostForNewsfeed",
+  [statusPostMiddle.preProccessToGetNewFeed],
+  statusPostController.getPostForNewsfeedController_2
+);
+
+router.post(
+  "/getPostHavePet",
+  [petMid.checkPetExistMid, statusPostMiddle.preProcessGetPostHavePet],
+  statusPostController.getPostHavePetController
 );
 
 module.exports = router;

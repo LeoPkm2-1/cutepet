@@ -9,6 +9,11 @@ const {
   userUnFollowArticle,
   deleteAllFollowOfArticle,
 } = require("../../models/theodoi/followModel");
+const {
+  notifyUpVoteArticle,
+  notifyDownVoteArticle,
+  notifyCommentArticle,
+} = require("../../notificationHandler/article");
 
 async function addArticleControler(req, res) {
   const { title, main_image, intro, content, categories } = req.body;
@@ -46,6 +51,8 @@ async function addArticleControler(req, res) {
         "thêm bài chia sẻ kiến thức thành công"
       )
     );
+
+  // thông báo qua socket cho người dung đang theo dõi họ
 }
 
 async function toggleUpVoteArticleControler(req, res) {
@@ -63,6 +70,8 @@ async function toggleUpVoteArticleControler(req, res) {
         .then((data) => data.payload);
       // tăng số lượng upvote của bài viết
       await articleModel.updateNumOfUpVoteArticle(article_id, numOfUpVote + 1);
+      // gửi thông báo đến người chủ của article
+      notifyUpVoteArticle(article_id, user_id);
 
       res.status(200).json(new Response(200, upVoteInfor, "upvote thành công"));
       return;
@@ -102,6 +111,10 @@ async function toggleUpVoteArticleControler(req, res) {
         .then((data) => data.payload);
       // === 2.3. tăng số lượng upvote của bài viết
       await articleModel.updateNumOfUpVoteArticle(article_id, numOfUpVote + 1);
+
+      // gửi thông báo đến người chủ của article
+      notifyUpVoteArticle(article_id, user_id);
+
       res.status(200).json(new Response(200, upVoteInfor, "upvote thành công"));
     }
   } catch (error) {
@@ -129,6 +142,8 @@ async function toggleDownVoteArticleControler(req, res) {
         article_id,
         numOfDownVote + 1
       );
+      // gửi thông báo đến người chủ của article
+      notifyDownVoteArticle(article_id, user_id);
 
       res
         .status(200)
@@ -173,6 +188,10 @@ async function toggleDownVoteArticleControler(req, res) {
         article_id,
         numOfDownVote + 1
       );
+
+      // gửi thông báo đến người chủ của article
+      notifyDownVoteArticle(article_id, user_id);
+
       res
         .status(200)
         .json(new Response(200, downVoteInfor, "downvote thành công"));
@@ -198,6 +217,8 @@ async function addCommentController(req, res) {
   await articleModel.updateNumOfCommentArticle(article_id, numOfComment + 1);
   const idOfComment = commentProcess.payload.insertedId.toString();
   const insertedComment = await articleModel.getCommentByCmtId(idOfComment);
+  // gửi thông báo đến người chủ của article
+  notifyCommentArticle(article_id, commentBy);
 
   res.status(200).json(new Response(200, insertedComment.payload, ""));
 }
@@ -483,7 +504,96 @@ async function getAllArticleInDBController(req, res) {
     allArticleInDB
   );
   res.status(200).json(new Response(200, allArticleInDB, ""));
+  return allArticleInDB;
 }
+
+async function getAllCategoriesController(req, res) {
+  const allCategories = await articleModel.getAllCategories();
+  res
+    .status(200)
+    .json(
+      new Response(200, allCategories, "lấy danh sách các thể loại thành công")
+    );
+}
+
+async function getMyArticlesController(req, res) {
+  const user_id = req.auth_decoded.ma_nguoi_dung;
+  const myArticles = await articleModel.getArticleOfUser(user_id);
+  res
+    .status(200)
+    .json(
+      new Response(200, myArticles.payload, "lấy danh sách bài viết thành công")
+    );
+}
+
+async function editArticleController(req, res) {
+  const articleBeforeEdit = req.body.ARTICLE_INFOR;
+  const { article_id, title, main_image, intro, content, categories } =
+    req.body;
+  // delete _id field in old object post
+  delete articleBeforeEdit._id;
+  const newArticle = {
+    ...articleBeforeEdit,
+    title,
+    main_image,
+    intro,
+    content,
+    categories,
+    modifiedAt: new Date(),
+  };
+
+  const editProcess = await articleModel.updateArticle(article_id, newArticle);
+
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        newArticle,
+        "cập nhật bài chia sẻ trạng thái thành công"
+      )
+    );
+}
+
+const reportArticleController = async (req, res) => {
+  const { article_id } = req.body;
+  const user_report_id = req.auth_decoded.ma_nguoi_dung;
+  const reportProcess = await articleHelper.reportArticle(
+    article_id,
+    user_report_id,
+    true
+  );
+  res.status(200).json(reportProcess);
+};
+
+const getArticlesByIndexAndNumController = async (req, res) => {
+  const { index, num } = req.body;
+  // console.log({ index });
+
+  const articles = await articleModel
+    .getArticlesByIndexAndNum(index, num)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(articles);
+  const totalNumOfArticles = await articleModel
+    .getTotalNumOfArticle()
+    .then((data) => data.payload);
+  const data = {
+    articles: articles,
+    totalNumOfArticles: totalNumOfArticles,
+    remainNumOfArticles:
+      index + articles.length - 1 >= totalNumOfArticles - 1
+        ? 0
+        : totalNumOfArticles - 1 - (index + articles.length - 1),
+  };
+
+  res.status(200).json(new Response(200, data, ""));
+  return articles;
+};
+
+// const filterArticleController = async (req, res) => {
+//   res.send("ahi jjaja");
+// };
 
 module.exports = {
   addArticleControler,
@@ -503,4 +613,10 @@ module.exports = {
   getAllCmtOfArticleController,
   getCmtStartFromController,
   getAllArticleInDBController,
+  getAllCategoriesController,
+  getMyArticlesController,
+  editArticleController,
+  reportArticleController,
+  getArticlesByIndexAndNumController,
+  // filterArticleController,
 };

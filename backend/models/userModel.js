@@ -166,6 +166,19 @@ const getUsersByListId = async (listId) => {
     });
 };
 
+const updateUserPasswordByUserName = async (username, newPassword) => {
+  const sqlStmt = `UPDATE NguoiDung
+                  SET mat_khau = ?
+                  WHERE tai_khoan = ?;`;
+  return await sqlQuery(sqlStmt, [newPassword, username])
+    .then((data) => {
+      return new Response(200, data, "");
+    })
+    .catch((err) => {
+      return new Response(400, [], err.sqlMessage, err.errno, err.code);
+    });
+};
+
 const getUserPublicInforByListId = async (listId) => {
   const sqlStmt = `select ma_nguoi_dung,ten,ngay_sinh,tai_khoan,email,so_dien_thoai,gioi_tinh from NguoiDung where ma_nguoi_dung in (?)`;
   return await sqlQuery(sqlStmt, [listId])
@@ -204,6 +217,31 @@ const searchUserBySearchKey = async (searchKey, index = 0, range = 20) => {
       return new Response(400, [], err.sqlMessage, err.errno, err.code);
     });
 };
+
+const updateUserBasicInfor = async (
+  ma_nguoi_dung,
+  { ten, ngay_sinh, so_dien_thoai, gioi_tinh }
+) => {
+  const sqlStmt = `UPDATE NguoiDung SET 
+                          ten = ?, 
+                          ngay_sinh = ?, 
+                          so_dien_thoai = ?, 
+                          gioi_tinh = ? 
+                        WHERE 
+                          ma_nguoi_dung = ?;`;
+  // console.log({ ten, ngay_sinh, so_dien_thoai, gioi_tinh });
+  // return;
+  return await sqlQuery(sqlStmt, [
+    ten,
+    ngay_sinh,
+    so_dien_thoai,
+    gioi_tinh,
+    ma_nguoi_dung,
+  ])
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
+};
+
 module.exports = {
   getUserByUsername,
   getUserByEmail,
@@ -222,5 +260,6 @@ module.exports = {
   getUsersByListId,
   getUserPublicInforByListId,
   searchUserBySearchKey,
-  // searchUsersByName,
+  updateUserPasswordByUserName,
+  updateUserBasicInfor,
 };

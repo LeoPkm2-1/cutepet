@@ -9,20 +9,36 @@ import { useEffect, useState } from 'react';
 import { StatusType } from '../../../models/post';
 import userApis from '../../../api/user';
 import LoiMoiKetBan from './component/loi-moi-ket-ban';
-import { socket } from '../../../socket';
+//import { socket } from '../../../socket';
 import { useSnackbar } from 'notistack';
-import {NotifycationItem} from '../../../components/NotificationItem';
+import { NotifycationItem } from '../../../components/NotificationItem';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import articleApi from '../../../api/article';
+import { ArticleType } from '../../../models/article';
+import { BaiVietCoBan } from '../chia-se-kien-thuc/component/bai-viet-co-ban';
+import { listAll } from 'firebase/storage';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux';
 
 // Our app
 export default function MangXaHoi() {
   const [listPost, setListPost] = useState<StatusType[]>([]);
   const [isLoad, setisLoad] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
+  const [indexPost, setIndexPost] = useState(0);
+  const [isPost, setIsPost] = useState(true);
+  const newPostFromStore = useSelector(
+    (state: RootState) => state?.socket?.newPost.post
+  );
   useEffect(() => {
-    postApi.getPostStartFrom(0, 10).then((data:any) => {
+    postApi.getPostForNewsfeed(indexPost, []).then((data: any) => {
       if (data?.status == 200) {
-        console.log(data, 'data');
-        const list: StatusType[] = data?.payload?.posts?.map((item: any) => {
+        console.log(data, 'data lan 1');
+        if (data?.payload?.length == 0) {
+          setIsPost(false);
+          return;
+        }
+        const list: StatusType[] = data?.payload?.map((item: any) => {
           return {
             id: item?._id,
             media: item?.media as {
@@ -38,58 +54,162 @@ export default function MangXaHoi() {
               avatarURL: item?.owner_infor?.anh?.url,
             },
             hasLiked: item?.hasLiked,
+            visibility: item?.visibility,
             text: item?.text,
-            taggedUsers: item?.taggedUsers?.map((tagUser:any) => {
+            owner_id: item?.owner_id,
+            taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
               return {
                 id: tagUser?.ma_nguoi_dung,
                 name: tagUser?.ten,
-              }
+              };
+            }),
+            taggedPets: item?.withPets?.map((tagPet: any) => {
+              return {
+                id: tagPet?.ma_thu_cung,
+                name: tagPet?.ten_thu_cung,
+              };
             }),
           } as StatusType;
         });
         setListPost(list);
+      } else {
+        setIsPost(false);
       }
     });
   }, [isLoad]);
 
- 
+  useEffect(() => {
+    const listId = listPost?.map((item) => item?.id);
+    if (indexPost > 0) {
+      postApi
+        .getPostForNewsfeed(indexPost, listId as string[])
+        .then((data: any) => {
+          if (data?.status == 200) {
+            console.log(data, 'data lần 2');
+            if (data?.payload?.length == 0) {
+              setIsPost(false);
+              return;
+            }
+            const list: StatusType[] = data?.payload?.map((item: any) => {
+              return {
+                id: `${item?._id}`,
+                media: item?.media as {
+                  type: string;
+                  data: string[];
+                },
+                createAt: item?.createAt,
+                numOfLike: item?.numOfLike,
+                numOfComment: item?.numOfComment,
+                userInfor: {
+                  id: item?.owner_infor?.ma_nguoi_dung,
+                  name: item?.owner_infor?.ten,
+                  avatarURL: item?.owner_infor?.anh?.url,
+                },
+                hasLiked: item?.hasLiked,
+                text: item?.text,
+                visibility: item?.visibility,
+                owner_id: item?.owner_id,
+                taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
+                  return {
+                    id: tagUser?.ma_nguoi_dung,
+                    name: tagUser?.ten,
+                  };
+                }),
+                taggedPets: item?.withPets?.map((tagPet: any) => {
+                  return {
+                    id: tagPet?.ma_thu_cung,
+                    name: tagPet?.ten_thu_cung,
+                  };
+                }),
+              } as StatusType;
+            });
+            // setListPost(list);
+            const setA = new Set(listPost);
+            const setB = new Set(list);
+            const result = difference(setB, setA);
+            const newListPost = Array.from(result);
+            console.log(Array.from(result), ' result');
+            setListPost([...listPost, ...newListPost]);
+          } else {
+            setIsPost(false);
+          }
+        });
+    }
+  }, [indexPost]);
 
   useEffect(() => {
-    console.log("Mở comment");
-    
-    socket.on('LIKE_STATUS_POST', (data) => {
-      console.log(data, ' Data chat from server:');
-      enqueueSnackbar(<NotifycationItem 
-        name={data?.userLike?.ten}
-         type="thích"
-         url = {data?.userLike?.anh?.url}
-      />, {
-        variant: "info",
-      });
+    console.log(newPostFromStore, ' newPostFromStore nè');
+
+    if (newPostFromStore?.id) {
+      let arr: StatusType[] = [];
+      arr.push(newPostFromStore);
+      console.log(arr, "arr nè");
+      const arr2 = [...arr, ...listPost]
+      console.log(arr2, " arr2 nè");
+      
+      // setListPost([ ...arr,...listPost]);
+
+      setListPost(arr2);
+    }
+  }, [newPostFromStore?.id]);
+  // useEffect(() => {
+  //   console.log("Mở comment");
+
+  //   socket.on('LIKE_STATUS_POST', (data) => {
+  //     console.log(data, ' Data chat from server:');
+  //     enqueueSnackbar(<NotifycationItem
+  //       name={data?.userLike?.ten}
+  //        type="thích"
+  //        url = {data?.userLike?.anh?.url}
+  //     />, {
+  //       variant: "info",
+  //     });
+  //   });
+  //   return () => {
+  //     socket.off('response-message');
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   socket.on('COMMENT_STATUS_POST', (data) => {
+  //     console.log(data, ' Data comment from server:');
+  //     enqueueSnackbar(<NotifycationItem
+  //       name={data?.userComment?.ten}
+  //        type="bình luận"
+  //        url = {data?.userComment?.anh?.url}
+
+  //     />, {
+  //       variant: "info",
+  //     });
+  //   });
+  //   return () => {
+  //     socket.off('response-message');
+  //   };
+  // }, []);
+
+  const naviagte = useNavigate();
+  const [articles, setArticles] = useState<ArticleType[]>([]);
+  useEffect(() => {
+    articleApi.getAllArticle().then((data) => {
+      console.log(data, ' data art');
+
+      if (data?.status == 200) {
+        const list: ArticleType[] = data?.payload?.map((art: any) => {
+          return {
+            id: art?._id,
+            title: art?.title,
+            main_image: art?.main_image,
+            intro: art?.intro,
+            content: art?.content,
+            categories: art?.categories,
+            user_name: art?.owner_infor?.ten,
+            user_avatar: art?.owner_infor?.anh?.url,
+          } as ArticleType;
+        });
+        setArticles(list);
+      }
     });
-    return () => {
-      socket.off('response-message');
-    };
   }, []);
-
-  useEffect(() => { 
-    socket.on('COMMENT_STATUS_POST', (data) => {
-      console.log(data, ' Data comment from server:');
-      enqueueSnackbar(<NotifycationItem 
-        name={data?.userComment?.ten}
-         type="bình luận"
-         url = {data?.userComment?.anh?.url}
-
-      />, {
-        variant: "info",
-      });
-    });
-    return () => {
-      socket.off('response-message');
-    };
-  }, []);
-
-
 
   return (
     <>
@@ -106,6 +226,26 @@ export default function MangXaHoi() {
             listPost?.map((status) => {
               return <PostComponent status={status} />;
             })}
+          {isPost && (
+            <Typography
+              align="center"
+              sx={{
+                fontFamily: 'quicksand',
+                fontWeight: '500',
+                fontSize: '15px',
+                margin: '16px 16px 10px 0px',
+                color: '#0c4195',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                setIndexPost(indexPost + 1);
+              }}
+            >
+              {' '}
+              Xem thêm bài viết{' '}
+            </Typography>
+          )}
         </Grid>
         <Grid
           sx={{
@@ -121,4 +261,15 @@ export default function MangXaHoi() {
   );
 }
 
+function difference(set1: any, set2: any) {
+  return new Set([...set1].filter((element) => !set2.has(element)));
+}
 
+// Example usage:
+const setA = new Set([1, 2, 3, 4]);
+const setB = new Set([3, 4, 5, 6]);
+
+const result = difference(setA, setB);
+
+console.log(Array.from(result));
+// Output: [1, 2]

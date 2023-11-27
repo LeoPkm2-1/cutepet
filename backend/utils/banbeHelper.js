@@ -19,9 +19,22 @@ async function getFriendsIdInListOfUserId(yourId, list_Userids) {
     .map((user) => user.id);
 }
 
+async function getNumOfFriendOfUser(user_id) {
+  user_id = parseInt(user_id);
+  const data = await laBanBeModel
+    .getAllFriendIdsOfUser(user_id)
+    .then((data) => data.payload);
+  // console.log(data);
+  return data.length;
+}
 
+// (async function () {
+//   const data = await getNumOfFriendOfUser(100);
+//   console.log(data);
+// })();
 
 module.exports = {
   haveFriendShipBetween,
   getFriendsIdInListOfUserId,
+  getNumOfFriendOfUser,
 };

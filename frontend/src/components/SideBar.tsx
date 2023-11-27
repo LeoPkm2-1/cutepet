@@ -33,6 +33,7 @@ import authApi from '../api/auth';
 import { AuthActions } from '../redux/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux';
+// import { socket } from '../socket';
 
 interface IMenuItemData {
   key: string;
@@ -55,18 +56,18 @@ const menu: IMenuItemData[] = [
     icon: mdiViewDashboard,
     link: '/home/quan-ly-thu-cung',
   },
-  {
-    key: '/admin/dat-lich',
-    title: 'Đặt lịch',
-    icon: mdiAccountMultiple,
-    link: '/home/dat-lich',
-  },
-  {
-    key: '/admin/su-kien',
-    title: 'Sự kiện',
-    icon: mdiAccountMultiple,
-    link: '/home/su-kien',
-  },
+  // {
+  //   key: '/admin/dat-lich',
+  //   title: 'Đặt lịch',
+  //   icon: mdiAccountMultiple,
+  //   link: '/home/dat-lich',
+  // },
+  // {
+  //   key: '/admin/su-kien',
+  //   title: 'Sự kiện',
+  //   icon: mdiAccountMultiple,
+  //   link: '/home/su-kien',
+  // },
 ];
 
 export default function SideBar(props: {
@@ -96,6 +97,7 @@ export default function SideBar(props: {
         console.log('Thành công');
         localStorage.removeItem('accessToken');
         dispatch(AuthActions.setAuth(false));
+        // socket.disconnect();
       })
       .catch((err) => {
         naviagte('/login');

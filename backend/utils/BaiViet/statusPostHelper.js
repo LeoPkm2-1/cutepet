@@ -1,5 +1,6 @@
 const StatusPostModel = require("../../models/BaiViet/StatusPostModel");
 const userHelper = require("../../utils/userHelper");
+const { hasUserLikeTheStatusPost } = require("../postHelper");
 
 async function userInfor2ListOfObjectMapByUserId(
   listObjs,
@@ -62,6 +63,7 @@ async function InsertUserReplyInforOfListReplies(listReplies) {
 }
 
 async function hasUserLikedPost_1(userId, postid) {
+  userId = parseInt(userId);
   return await StatusPostModel.getLikeThePostInfor(userId, postid)
     .then((data) => {
       if (data.payload.length > 0) {
@@ -72,6 +74,11 @@ async function hasUserLikedPost_1(userId, postid) {
     })
     .catch((err) => console.log(err));
 }
+
+// (async function () {
+//   const data = await hasUserLikeTheStatusPost(4,'6550ecdbe158c8fc09206db2');
+//   console.log({data});
+// })();
 
 async function hasUserLikedListPosts_1(userId, listPostId) {
   const matching_table = {};
@@ -111,6 +118,102 @@ function extractListIdFromListPost(listPosts) {
   return listId;
 }
 
+async function hasUserReportPost(user_report_id, post_id) {
+  const data = await StatusPostModel.getUserReportInforOfPost(
+    user_report_id,
+    post_id
+  );
+  if (data.payload == null) return false;
+  return true;
+}
+
+async function reportPost(post_id, user_report_id, isUnique = true) {
+  if (!isUnique) {
+    const reportProcess = await StatusPostModel.reportPost(
+      post_id,
+      user_report_id
+    );
+    return reportProcess;
+  }
+
+  const hasReport = await hasUserReportPost(user_report_id, post_id);
+  if (hasReport) {
+    const reportInfor = await StatusPostModel.getUserReportInforOfPost(
+      user_report_id,
+      post_id
+    ).then((data) => data.payload);
+    return {
+      status: 200,
+      payload: {
+        acknowledged: true,
+        insertedId: reportInfor._id.toString(),
+      },
+      message: "",
+      errno: null,
+      errcode: null,
+    };
+  }
+  return await StatusPostModel.reportPost(post_id, user_report_id);
+}
+
+async function hasUserCommentedPost(user_id, post_id) {
+  const data = await StatusPostModel.getCommentInforOfUserInPost(
+    user_id,
+    post_id
+  );
+  if (data.payload.length <= 0) return false;
+  return true;
+}
+
+// (async function () {
+//   const data = await hasUserCommentedPost(3, "6550ecdbe158c8fc09206db2");
+//   console.log(data);
+// })();
+
+async function hasUserReplyCmtInPost(user_id, post_id) {
+  const data = await StatusPostModel.getReplyInforOfUserInPost(
+    user_id,
+    post_id
+  );
+  // console.log(data);
+  if (data.payload.length <= 0) return false;
+  return true;
+}
+
+async function hasUserLikeTheCmtStatusPost(user_id, cmt_id) {
+  return await StatusPostModel.getLikeCmtPostInfor(user_id, cmt_id).then(
+    (data) => {
+      return data.payload.length > 0 ? true : false;
+    }
+  );
+}
+
+async function insertHaveLikeOfUserInListOfComment(
+  user_id,
+  listComment,
+  field_name_contain_have_like_infor = "hasLiked"
+) {
+  // console.log(listComment);
+  const data = await Promise.all(
+    listComment.map(async (comment_infor) => {
+      const hasLikedComment = await hasUserLikeTheCmtStatusPost(
+        user_id,
+        comment_infor._id.toString()
+      );
+      comment_infor[field_name_contain_have_like_infor] = hasLikedComment;
+      return comment_infor;
+    })
+  );
+  // console.log(listComment);
+
+  return data;
+}
+
+// (async function () {
+//   const data = await hasUserLikeTheCmtStatusPost(8, "655441ccedfafc2f29403170");
+//   console.log(data);
+// })();
+
 module.exports = {
   InsertOwnerInforOfListPosts,
   InsertUserCmtInforOfListCmts,
@@ -119,4 +222,10 @@ module.exports = {
   hasUserLikedListPosts_1,
   extractListIdFromListPost,
   insertUserLikePostInforOfListPosts,
+  hasUserReportPost,
+  reportPost,
+  hasUserCommentedPost,
+  hasUserReplyCmtInPost,
+  hasUserLikeTheCmtStatusPost,
+  insertHaveLikeOfUserInListOfComment,
 };

@@ -9,25 +9,39 @@ import ImageSelect from '../../../../../components/ImageSelect';
 import articleApi from '../../../../../api/article';
 import { useSnackbar } from 'notistack';
 import Loading from '../../../../../components/loading';
+import { uploadTaskPromise } from '../../../../../api/upload';
+import { useNavigate } from 'react-router-dom';
 export function TaoBaiChiaSe() {
   const [title, setTitle] = useState('');
   const [decrition, setDecrition] = useState('');
   const [tag, setTag] = useState<string[]>([]);
   const [content, setContent] = useState('');
-  const [urlImage, setUrlImage] = useState(
-    'https://png.pngtree.com/background/20230607/original/pngtree-the-baby-kittens-look-at-the-camera-picture-image_2903605.jpg'
-  );
+  const [file, setFile] = useState<File | null>(null);
   const [loading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-
-  function handleSubmit() {
+  const navigate = useNavigate();
+  async function handleSubmit() {
     setIsLoading(true);
+    let urlPhoto: string = '';
+    if (file) {
+      urlPhoto = (await uploadTaskPromise(file)) as string;
+    }
     articleApi
-      .createArticle(title, urlImage, decrition, content, tag)
-      .then(() => {
-        console.log('Thanh cong');
-        enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
-        setIsLoading(false);
+      .createArticle(title, urlPhoto, decrition, content, tag)
+      .then((data) => {
+        if (data?.status == 200) {
+          console.log('Thanh cong');
+          enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
+          setIsLoading(false);
+          console.log(data);
+          
+          if(data?.payload[0]?._id){
+            navigate(`/home/trang-chia-se/${data?.payload[0]?._id}`);
+          }
+        }
+      }).catch((err) => {
+        enqueueSnackbar(`${err?.message}`, { variant: "error" });
+          setIsLoading(false);
       });
   }
 
@@ -54,7 +68,14 @@ export function TaoBaiChiaSe() {
               mb: '12px',
             }}
           >
-            Tiêu đề
+            Tiêu đề{' '}
+            <span
+              style={{
+                color: 'red',
+              }}
+            >
+              *
+            </span>
           </Typography>
           <StyledTextField
             value={title}
@@ -79,9 +100,25 @@ export function TaoBaiChiaSe() {
               mb: '12px',
             }}
           >
-            Ảnh bìa
+            Ảnh bìa{' '}
+            <span
+              style={{
+                color: 'red',
+              }}
+            >
+              *
+            </span>
           </Typography>
-          <ImageSelect />
+          <ImageSelect
+            aspectRatio={3}
+            onFileChange={(file) => {
+              if (file) {
+                setFile(file);
+              } else {
+                setFile(null);
+              }
+            }}
+          />
         </Box>
         <Box
           sx={{
@@ -126,7 +163,14 @@ export function TaoBaiChiaSe() {
               mb: '12px',
             }}
           >
-            Nội dung
+            Nội dung{' '}
+            <span
+              style={{
+                color: 'red',
+              }}
+            >
+              *
+            </span>
           </Typography>
           <CKEditor
             editor={ClassicEditor}
@@ -163,7 +207,14 @@ export function TaoBaiChiaSe() {
               mb: '12px',
             }}
           >
-            Chọn chuyên mục
+            Chọn chuyên mục{' '}
+            <span
+              style={{
+                color: 'red',
+              }}
+            >
+              *
+            </span>
           </Typography>
           <TagNameSelect
             value={tag}
@@ -172,8 +223,17 @@ export function TaoBaiChiaSe() {
             }}
           />
         </Box>
-        <Box sx={{}}>
-          <Button onClick={handleSubmit} variant="contained">
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <Button
+            disabled={!file || !title || !decrition || tag?.length == 0}
+            onClick={handleSubmit}
+            variant="contained"
+          >
             Tạo Bài Viết
           </Button>
         </Box>

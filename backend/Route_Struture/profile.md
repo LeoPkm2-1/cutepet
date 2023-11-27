@@ -251,6 +251,7 @@
         }
     },
     "la_ban_be": false,
+    "thong_tin_ve_gui_loi_moi_ket_ban": null,
     "danh_sach_anh_dai_dien": [],
     "danh_sach_ban_be": [],
     "danh_sach_thu_cung": []
@@ -263,6 +264,10 @@
   - nếu `ma_anh` mang giá trị **null** thì tức là đối tượng (người dùng hoặc thú cưng) chưa có hình ảnh, trường **url**: sẽ là giá trị mặc định mà hệ thống cấp cho đối tượng đó
 
 - **la_ban_be**: nếu trả về **true** thì có chính là bạn bè với mình. Nếu **false** thì không phải là bạn bè với mình
+- **thong_tin_ve_gui_loi_moi_ket_ban**:
+  - nếu là **null** :tức là hiện tại chưa có lời bạn chưa gửi lời mời kết bạn cho người dùng đó và người dùng đó cũng chưa gửi lời mời kết bạn đến cho bạn
+  - nếu là **"WAITTING_YOUR_RESPONE"** : người dùng đó đã gửi lời mời kết bạn đến cho bạn và đang chờ bạn phản hồi
+  - nếu là **"HAS_SEND_REQUEST_ADD_FRIEND"** : tức là bạn đã gửi lời mời kết bạn đến cho người dùng đó và đang chờ họ trả lời
 - **danh_sach_anh_dai_dien**:mô tả danh sách ảnh đại diện của người dùng đó
 - **danh_sach_ban_be**:mô tả danh sách bạn bè của người dùng đó.
 - **danh_sach_thu_cung**: mô tả danh sách thú cưng của người dùng đó.
@@ -393,5 +398,3 @@
     "errcode": null
 }
 ```
-
-

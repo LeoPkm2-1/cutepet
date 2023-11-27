@@ -17,6 +17,23 @@ const extracValuesOfFieldFromListObjs = (arr, field) => {
   return arr.map((obj) => obj[field]);
 };
 
+// Generate three random, distinct numbers between 1 and 10
+function generateNumRandomNumbersInRangeOf10(numOfRandomNumbers) {
+  const randomNumbers = [];
+
+  while (randomNumbers.length < numOfRandomNumbers) {
+    const randomNumber = Math.floor(Math.random() * 10) + 1;
+    if (!randomNumbers.includes(randomNumber)) {
+      randomNumbers.push(randomNumber);
+    }
+  }
+
+  return randomNumbers;
+}
+
+// const data = generateNumRandomNumbersInRangeOf10(5);
+// console.log({ data });
+
 // (async function () {
 // 	const data = extracValuesOfFieldFromListObjs([
 // 	  { key: 1 },
@@ -40,11 +57,25 @@ const isDateValid = (date) => {
   return date.toString() !== "Invalid Date";
 };
 
+const isPhoneNumberValid = (phone_number) => {
+  const numericStringPattern = /^\d{4,12}$/;
+  return numericStringPattern.test(phone_number);
+};
+
+const isValidVietnameseName = (name) => {
+  // check both Vietnamese and English characters
+  const vietnameseNamePattern = /^[\p{L} ]{1,32}$/u;
+  return vietnameseNamePattern.test(name);
+};
+
 module.exports = {
   filter_keys_in_Obj,
   filter_keys_in_list_Objs,
   isDateValid,
   extracValuesOfFieldFromListObjs,
+  isPhoneNumberValid,
+  isValidVietnameseName,
+  generateNumRandomNumbersInRangeOf10,
 };
 
 // let obj = {

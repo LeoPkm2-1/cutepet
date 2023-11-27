@@ -114,14 +114,65 @@ async function insertUserCmtInforToListOfCmts(listCmts) {
   );
 }
 
-// (async function () {
-//   const a = await insertUserCmtInforToListOfCmts(data);
-//   console.log(a);
-// })()
+async function hasUserReportArticle(user_report_id, article_id) {
+  const data = await articleModel.getUserReportInforOfArticle(
+    user_report_id,
+    article_id
+  );
+  if (data.payload == null) return false;
+  return true;
+}
+
+async function reportArticle(article_id, user_report_id, isUnique = true) {
+  if (!isUnique) {
+    const reportProcess = await articleModel.reportArticle(
+      article_id,
+      user_report_id
+    );
+    return reportProcess;
+  }
+
+  const hasReport = await hasUserReportArticle(user_report_id, article_id);
+  if (hasReport) {
+    const reportInfor = await articleModel
+      .getUserReportInforOfArticle(user_report_id, article_id)
+      .then((data) => data.payload);
+    // console.log(reportInfor);
+    return {
+      status: 200,
+      payload: {
+        acknowledged: true,
+        insertedId: reportInfor._id.toString(),
+      },
+      message: "",
+      errno: null,
+      errcode: null,
+    };
+  }
+  return await articleModel.reportArticle(article_id, user_report_id);
+}
+
+const filterValidCategoryTags = async (categoryTags) => {
+  const allCategories = await articleModel.getAllCategories();
+
+  // remove duplicate tags
+  categoryTags = [...new Set(categoryTags)];
+  categoryTags = categoryTags.filter((tag) => allCategories.includes(tag));
+  return categoryTags;
+};
 
 // (async function () {
-//   const a = await userInfor2ListOfObjectMapByUserId(data, "commentBy", "ahihi");
-//   console.log(a);
+//   const tags = [
+//     // "CHÓ",
+//     // "HÀNH VI & KỸ NĂNG",
+//     "c",
+//     // "CHÓ",
+//     "d",
+//     // "HÀNH VI & KỸ NĂNG",
+//     // "CHẾ ĐỘ ĂN UỐNG",
+//   ];
+//   const data = await filterValidCategoryTags(tags);
+//   console.log({ data });
 // })();
 
 module.exports = {
@@ -129,4 +180,7 @@ module.exports = {
   hasUserDownVotedArticle,
   insertUserWriteArticleInforToListOfArticle,
   insertUserCmtInforToListOfCmts,
+  reportArticle,
+  hasUserReportArticle,
+  filterValidCategoryTags,
 };

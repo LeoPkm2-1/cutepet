@@ -163,3 +163,112 @@
 7. lấy tất cả các bài viết chia sẻ kiến thức trong database:
 
    _chi tiết:_ **[Route_Struture/article.md số 17](./article.md#17-lấy-tất-cả-các-bài-viết-chia-sẻ-kiến-thức-trong-database)** và **postman số 55**
+
+## (12-11-2023):
+
+1. trang đăng ký tài khoản
+
+   _chi tiết:_ **[Route_Struture/register.md số 1](./register.md#1-trang-đăng-ký)** và **postman số 1**
+
+2. xác nhận đăng nhập tài khoản
+
+   _chi tiết:_ **[Route_Struture/register.md số 2](./register.md#2-xác-thực-đăng-ký)** và **postman số 56**
+
+3. chỉnh sửa bài viết chia sẻ trạng thái
+
+   _chi tiết:_ **[Route_Struture/post.md số 15](./post.md#15-chỉnh-sửa-bài-viết-trạng-thái)** và **postman số 57**
+
+## (14-11-2023):
+
+1. đổi mật khẩu người dùng
+
+   _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#2-đổi-mật-khẩu-người-dùng)** và **postman số 58**
+
+## (16-11-2023)
+
+1. lấy danh sách chứ tên của tất cả các thể loại hợp lệ của bài viết chia sẻ kiến thức
+
+   _chi tiết_ **[Route_Struture/article.md](./article.md#18-danh-sách-tên-của-tất-cả-các-thể-loại-trong-bài-viết-chia-sẻ-kiến-thức)** và **postman số 59**
+
+2. chỉnh sửa bài viết chia sẻ kiến thức
+
+   _chi tiết:_ **[Route_Struture/article.md](./article.md#19-chỉnh-sửa-bài-viết-chia-sẻ-kiến-thức)** và **postman số 60**
+
+3. report bài viết chia sẻ kiến thức:
+
+   _chi tiết:_ **[Route_Struture/article.md](./article.md#20-report-bài-viết-chia-sẻ-kiến-thức)** và **postman số 61**
+
+4. report bài viết chia sẻ trạng thái:
+
+   _chi tiết:_ **[Route_Struture/post.md](./post.md#16-report-bài-viết-chia-sẻ-trạng-thái)** và **postman số 62**
+
+5. lấy post cho new feeds của người dùng
+
+   chi tiết: **[Route_Struture/post.md](./post.md#17-lấy-bài-viết-cho-newfeed-của-1-người-dùng)** và **postman số 63**
+
+## (17-11-2023)
+
+1. cập nhật ảnh đại diện cho người dùng:
+
+   _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#3-cập-nhật-ảnh-đại-diện-cho-người-dùng)** và **postman số 64**
+
+## (18-11-2023)
+
+1. cập nhật thông tin cá nhân cho người dùng:
+
+   _chi tiết:_ **[Route_Struture/userInfor.md](./userInfor.md#4-cập-nhật-thông-tin-người-dùng)** và **postman số 65**
+
+## (19-11-2023)
+
+1. thông báo qua socket khi có 1 bài viết mới dc đăng lên
+
+   _chi tiết:_ **[Route_Struture/socket.md](./socket.md#10-thông-báo-khi-có-bài-viết-status-mới-được-đăng-lên)**
+
+## (20-11-2023)
+
+1. lấy chi tiết 1 con thú cưng:
+
+   _chi tiết:_ **[Route_Struture/pet.md](./pet.md#6-lấy-thông-tin-cơ-bản-của-1-con-thú-cưng)** và **postman số 67**
+
+## (21-11-2023)
+
+1. thu hồi lời mời kết bạn:
+
+_chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)** và **postman số 68**
+
+## (22-11-2023)
+
+1. lấy các thông báo chưa đọc theo index và number
+   _chi tiết:_ **[Route_Struture/notification.md](./notification.md#5-get-unread-notifications-before-specific-time)** và **postman số 69**
+
+2. lấy các thông báo chưa đọc trước 1 thời điểm
+
+   _chi tiết:_ **[Route_Struture/notification.md](./notification.md#6-get-unread-notifications-by-index-and-range)** và **postman số 70**
+
+## (23-11-2023)
+
+1. thông báo qua socket khi có người dùng upvote article
+
+   _chi tiết:_ **[Route_Struture/socket.md](./socket.md#11-thông-báo-khi-có-người-upvote-article)**
+
+2. thông báo qua socket khi có người dùng downvote article
+
+   _chi tiết:_ **[Route_Struture/socket.md](./socket.md#12-thông-báo-khi-có-ai-đó-downvote-article)**
+
+3. thông báo qua socket khi có người dùng comment article
+
+   _chi tiết:_ **[Route_Struture/socket.md](./socket.md#13-thông-báo-khi-có-ai-đó-comment-bài-viết-article)**
+
+## (26-11-2023):
+
+## (27-11-2023):
+
+1. phân trang cho bài viết chia sẻ kiến thức
+
+   _chi tiết:_ **[Route_Struture/article.md](./article.md#21-phân-trang-cho-bài-viết-chia-sẻ-kiến-thức)** và **postman số 72**
+
+##
+
+##
+
+##

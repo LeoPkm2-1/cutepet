@@ -1074,3 +1074,277 @@ trong đó:
     "errcode": null
 }
 ```
+
+## 18 danh sách tên của tất cả các thể loại trong bài viết chia sẻ kiến thức
+
+1. Phương thức:
+
+   POST http://localhost:3000/post/article/AllAvailableCategories
+
+2. cấu trúc:
+
+   không yêu cầu tham số
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        "CHÓ",
+        "CHÓ CON",
+        "CHÓ TRƯỞNG THÀNH",
+        "CHÓ LỚN TUỔI",
+        "GIỐNG LOÀI",
+        "MÈO",
+        "MÈO CON",
+        "MÈO TRƯỞNG THÀNH",
+        "MÈO LỚN TUỔI",
+        "DỊ ỨNG",
+        "CÁCH CHĂM SÓC",
+        "BỆNH",
+        "CHẾ ĐỘ ĂN UỐNG",
+        "HÀNH VI & KỸ NĂNG"
+    ],
+    "message": "lấy danh sách các thể loại thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 19. chỉnh sửa bài viết chia sẻ kiến thức
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/editArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id:string (bắt buộc),
+    title: string (bắt buộc),
+    main_image: string (bắt buộc),
+    intro: string (không bắt buộc),
+    content: string (bắt buộc),
+    categories: array(string) (bắt buộc)
+}
+```
+
+3. trả về:
+
+- khi mã bài viết không hợp lệ
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bài chia sẻ kiến thức không tồn tại",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi tiêu đề không tồn tại
+
+```javascript
+  {
+  "status": 400,
+  "payload": [],
+  "message": "Tiêu đề không được để trống",
+  "errno": 300,
+  "errcode": 300
+  }
+
+```
+
+- khi nội dung không tồn tại
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Nội dung bài viết không được để trống",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi hình ảnh chính của bài viết không có:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bài chiase kiến thức phải có ảnh chính",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi chỉnh sửa thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "title": "cách cho mèo  uống sữa đúng cách",
+        "postType": "ARTICLE",
+        "visibility": "PUBLIC",
+        "main_image": "https://imgt.taimienphi.vn/cf/Images/tt/2023/1/10/hinh-nen-meo-cute-ngo-nghinh-dang-yeu-nhin-la-cung-4.jpg",
+        "intro": "xin chào .....",
+        "content": "các thú cưng con.....",
+        "categories": [
+            "MÈO",
+            "MÈO CON",
+            "CHẾ ĐỘ ĂN UỐNG"
+        ],
+        "createAt": "2023-11-16T00:14:38.939Z",
+        "numOfUpVote": 0,
+        "numOfDownVote": 0,
+        "numOfComment": 0,
+        "modifiedAt": "2023-11-16T02:23:10.113Z",
+        "owner_id": 2
+    },
+    "message": "cập nhật bài chia sẻ trạng thái thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 20. report bài viết chia sẻ kiến thức
+
+1. Phương thức:
+
+   POST http://localhost:3000/post/article/reportArticle
+
+2. cấu trúc:
+
+```javascript
+{
+    article_id: string (bắt buộc)
+}
+```
+
+3. trả về:
+
+- khi bài viết không tồn tại
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bài chia sẻ kiến thức không tồn tại",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi báo cáo thành cộng:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "insertedId": "6555c604f3ea8cfc9d63b28a"
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 21. phân trang cho bài viết chia sẻ kiến thức:
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/getArticlesByIndexAndNum
+
+2. cấu trúc:
+
+```javascript
+{
+    "index":null||number,
+    "num":null||number,
+}
+```
+
+- trong đó:
+  - **index:** :mô tả bắt đầu lấy từ bài viết số mấy(chỉ số bắt đầu từ 0 , 1, ,2,....)
+    - nếu **index** là `null` hoặc `0` thì tức là lấy từ bài viết đầu tiên
+  - **num**: số lượng bài viết cần lấy ra.
+    - nếu **num** là `null` thì tức là lấy đến bài viết cuối cùng trong csdl.
+
+1. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "articles": [
+            {
+                "_id": "654f9e8f479ad1da822047b4",
+                "title": "Cách xử lý lông cho trắng bị ố vàng",
+                "postType": "ARTICLE",
+                "visibility": "PUBLIC",
+                "main_image": "https://png.pngtree.com/background/20230607/original/pngtree-the-baby-kittens-look-at-the-camera-picture-image_2903605.jpg",
+                "intro": "....................",
+                "content": "..............",
+                "categories": [
+                    "Tắm",
+                    "Đi dạo",
+                    "Ăn uống"
+                ],
+                "createAt": "2023-11-11T15:32:31.242Z",
+                "numOfUpVote": 1,
+                "numOfDownVote": 3,
+                "numOfComment": 3,
+                "modifiedAt": null,
+                "owner_id": 8,
+                "owner_infor": {
+                    "ma_nguoi_dung": 8,
+                    "ten": "Susan",
+                    "ngay_sinh": "1991-10-05T17:00:00.000Z",
+                    "tai_khoan": "susan",
+                    "email": "susan@gmail.com",
+                    "so_dien_thoai": "0912345685",
+                    "gioi_tinh": 0,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "8",
+                        "is_active": null
+                    }
+                }
+            }
+        ],
+        "totalNumOfArticles": 8,
+        "remainNumOfArticles": 2
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- trong đó:
+  - **totalNumOfArticles**: tổng số lượng bài viết trong csdl
+  - **remainNumOfArticles**: sau khi lấy đến bài viết hiện tại thì còn lại bao nhiêu bài viết chưa dc lấy ra
+
+##
+
+##
+
+##
+
+##
+
+##
+
+##
+
+```
+
+```
