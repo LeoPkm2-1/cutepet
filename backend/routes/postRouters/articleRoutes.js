@@ -153,10 +153,14 @@ router.post(
   articleController.getArticlesByIndexAndNumController
 );
 
-router.post("/filterArticles", [
-  articleMiddle.preFilterArticleMid,
-  articleMiddle.navigateToSuitableFilterArricleMid,
-]);
+router.post(
+  "/filterArticles",
+  [
+    articleMiddle.preFilterArticleMid,
+    articleMiddle.navigateToSuitableFilterArricleMid,
+  ],
+  articleController.filterArticlesController
+);
 
 // // search article
 // router.post(

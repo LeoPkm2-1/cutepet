@@ -18,6 +18,8 @@ db.BaiViet.createIndex({
   createAt: -1,
 });
 
+db.BaiViet.createIndex({ title: "text" });
+
 // index for Reply bình luận bài viết chia sẻ trạng thái
 db.RelyBinhLuanBaiVietTrangThai.createIndex({ postId: 1 });
 db.RelyBinhLuanBaiVietTrangThai.createIndex({ postId: 1, replyBy: 1 });

@@ -1257,6 +1257,8 @@ trong đó:
 
 ## 21. phân trang cho bài viết chia sẻ kiến thức:
 
+**(postman số 72)**
+
 1. phương thức:
 
    POST http://localhost:3000/post/article/getArticlesByIndexAndNum
@@ -1276,7 +1278,7 @@ trong đó:
   - **num**: số lượng bài viết cần lấy ra.
     - nếu **num** là `null` thì tức là lấy đến bài viết cuối cùng trong csdl.
 
-1. trả về:
+3. trả về:
 
 ```javascript
 {
@@ -1333,7 +1335,86 @@ trong đó:
   - **totalNumOfArticles**: tổng số lượng bài viết trong csdl
   - **remainNumOfArticles**: sau khi lấy đến bài viết hiện tại thì còn lại bao nhiêu bài viết chưa dc lấy ra
 
-##
+## 22. lọc bài viết chia sẻ kiến thức theo thể loại và tiêu đề
+
+**(postman số 73)**
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/filterArticles
+
+2. cấu trúc:
+
+```javascript
+{
+    "searchKey":string || null,
+    "tags":array(string) || null,
+    "index":number || null,
+    "num": number || null
+}
+```
+
+- trong đó:
+  - **searchKey**: mô tả từ khóa liên quan đến tiêu đề của bài viết muốn tìm kiếm.
+  - **tags**: danh sách các thể loại bài viết chia sẻ trạng thái muốn tìm kiếm nếu không có để là `null`
+  - **index**: mô tả lấy từ bài viết thứ mấy chở đi (index bắt đầu từ: 0,1,2....)
+  - **num**: số lượng bài viết muốn lấy ra. Nếu muốn lấy đến cuối danh sách thì truyền vào là `null`
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "articles": [
+            {
+                "_id": "65645303ff180e672e6f87c7",
+                "title": "Cách xử lý LôNG chó bị vón cục hiệu quả nhất",
+                "postType": "ARTICLE",
+                "visibility": "PUBLIC",
+                "main_image": ".....................",
+                "intro": "..........................",
+                "content": "...............................",
+                "categories": [
+                    "CHÓ",
+                    "CÁCH CHĂM SÓC"
+                ],
+                "createAt": "2023-11-27T08:27:47.554Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfComment": 0,
+                "modifiedAt": null,
+                "owner_id": 2,
+                "owner_infor": {
+                    "ma_nguoi_dung": 2,
+                    "ten": "Dung",
+                    "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                    "tai_khoan": "dung",
+                    "email": "dung@gmail.com",
+                    "so_dien_thoai": "0912345679",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": 39,
+                        "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
+                        "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                        "ma_nguoi_dung": 2,
+                        "is_active": 1
+                    }
+                }
+            }
+        ],
+        "totalNumOfArticles": 3,
+        "remainNumOfArticles": 2
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- trong đó:
+  - **totalNumOfArticles**: tổng số lượng bài viết trong csdl match với bộ lọc
+  - **remainNumOfArticles**: sau khi lấy đến bài viết hiện tại thì còn lại bao nhiêu bài viết chưa dc lấy ra
 
 ##
 
