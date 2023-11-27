@@ -1255,7 +1255,83 @@ trong đó:
 }
 ```
 
-##
+## 21. phân trang cho bài viết chia sẻ kiến thức:
+
+1. phương thức:
+
+   POST http://localhost:3000/post/article/getArticlesByIndexAndNum
+
+2. cấu trúc:
+
+```javascript
+{
+    "index":null||number,
+    "num":null||number,
+}
+```
+
+- trong đó:
+  - **index:** :mô tả bắt đầu lấy từ bài viết số mấy(chỉ số bắt đầu từ 0 , 1, ,2,....)
+    - nếu **index** là `null` hoặc `0` thì tức là lấy từ bài viết đầu tiên
+  - **num**: số lượng bài viết cần lấy ra.
+    - nếu **num** là `null` thì tức là lấy đến bài viết cuối cùng trong csdl.
+
+1. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "articles": [
+            {
+                "_id": "654f9e8f479ad1da822047b4",
+                "title": "Cách xử lý lông cho trắng bị ố vàng",
+                "postType": "ARTICLE",
+                "visibility": "PUBLIC",
+                "main_image": "https://png.pngtree.com/background/20230607/original/pngtree-the-baby-kittens-look-at-the-camera-picture-image_2903605.jpg",
+                "intro": "....................",
+                "content": "..............",
+                "categories": [
+                    "Tắm",
+                    "Đi dạo",
+                    "Ăn uống"
+                ],
+                "createAt": "2023-11-11T15:32:31.242Z",
+                "numOfUpVote": 1,
+                "numOfDownVote": 3,
+                "numOfComment": 3,
+                "modifiedAt": null,
+                "owner_id": 8,
+                "owner_infor": {
+                    "ma_nguoi_dung": 8,
+                    "ten": "Susan",
+                    "ngay_sinh": "1991-10-05T17:00:00.000Z",
+                    "tai_khoan": "susan",
+                    "email": "susan@gmail.com",
+                    "so_dien_thoai": "0912345685",
+                    "gioi_tinh": 0,
+                    "anh": {
+                        "ma_anh": null,
+                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                        "ngay_cap_nhat": null,
+                        "ma_nguoi_dung": "8",
+                        "is_active": null
+                    }
+                }
+            }
+        ],
+        "totalNumOfArticles": 8,
+        "remainNumOfArticles": 2
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- trong đó:
+  - **totalNumOfArticles**: tổng số lượng bài viết trong csdl
+  - **remainNumOfArticles**: sau khi lấy đến bài viết hiện tại thì còn lại bao nhiêu bài viết chưa dc lấy ra
 
 ##
 

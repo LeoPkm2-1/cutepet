@@ -259,7 +259,13 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
    _chi tiết:_ **[Route_Struture/socket.md](./socket.md#13-thông-báo-khi-có-ai-đó-comment-bài-viết-article)**
 
-##
+## (26-11-2023):
+
+## (27-11-2023):
+
+1. phân trang cho bài viết chia sẻ kiến thức
+
+   _chi tiết:_ **[Route_Struture/article.md](./article.md#21-phân-trang-cho-bài-viết-chia-sẻ-kiến-thức)** và **postman số 72**
 
 ##
 

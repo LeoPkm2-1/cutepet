@@ -524,6 +524,22 @@ const getArticlesByIndexAndNum = async (index = 0, num) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getTotalNumOfArticle = async () => {
+  async function executor(collection) {
+    return await collection.countDocuments({
+      postType: articleComposStructure.Article.type,
+    });
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// (async function () {
+//   const data = await getTotalNumOfArticle();
+//   console.log(data);
+// })()
+
 // (async function () {
 //   const data = await getAllCommentsOfArticle("6548f00bb7221c7de43e80f6");
 //   console.log(data);
@@ -564,4 +580,5 @@ module.exports = {
   getUserReportInforOfArticle,
   getOwnerIdOfArticle,
   getArticlesByIndexAndNum,
+  getTotalNumOfArticle,
 };

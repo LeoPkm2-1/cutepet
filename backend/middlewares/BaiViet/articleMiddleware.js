@@ -380,16 +380,21 @@ async function preProcessEditArticle(req, res, next) {
 const prePageingForArticle = async (req, res, next) => {
   const INVALID_PARAMS = "Tham số không hợp lệ";
   let { index, num } = req.body;
-  if (typeof index != "undefined" && Number.isNaN(parseInt(index))) {
+
+  if (
+    typeof index != "undefined" &&
+    index != null &&
+    Number.isNaN(parseInt(index))
+  ) {
     res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
     return;
   }
-  if (typeof num != "undefined" && Number.isNaN(parseInt(num))) {
+  if (typeof num != "undefined" && num != null && Number.isNaN(parseInt(num))) {
     res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
     return;
   }
-  index = typeof index == "undefined" ? 0 : parseInt(index);
-  num = typeof num == "undefined" ? undefined : parseInt(num);
+  index = typeof index == "number" ? parseInt(index) : 0;
+  num = typeof num == "number" ? parseInt(num) : undefined;
   if (typeof num == "number" && num < 0) {
     res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
     return;
@@ -403,47 +408,76 @@ const prePageingForArticle = async (req, res, next) => {
   next();
 };
 
-// const preProcessFilterArticle_1 = async (req, res, next) => {
-//   const INVALID_PARAMS = "Tham số không hợp lệ";
-//   let { searchKey, tags, index, num } = req.body;
-//   try {
-//     if (typeof searchKey != "string" && typeof searchKey != "undefined") {
-//       throw new Error(INVALID_PARAMS);
-//     }
-//     if (!Array.isArray(tags) && typeof tags != "undefined") {
-//       throw new Error(INVALID_PARAMS);
-//     }
-//     if (typeof index != "number" && typeof index != "undefined") {
-//       throw new Error(INVALID_PARAMS);
-//     }
-//     if (typeof num != "number" && typeof num != "undefined") {
-//       throw new Error(INVALID_PARAMS);
-//     }
-//     next();
-//   } catch (error) {
-//     if (error.message == INVALID_PARAMS) {
-//       res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
-//       return;
-//     } else {
-//       console.log(error);
-//       res.status(400).json(new Response(400, [], error.message, 300, 300));
-//       return;
-//     }
-//   }
-// };
+const preFilterArticleMid = async (req, res, next) => {
+  const INVALID_PARAMS = "Tham số không hợp lệ";
+  let { searchKey, index, num, tags } = req.body;
+  // console.log("\n\nbefore");
+  // console.log({ searchKey, index, num, tags });
+  // kiểm tra kiểu của searchkey
+  if (
+    typeof searchKey != undefined &&
+    searchKey != null &&
+    typeof searchKey != "string"
+  ) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của index
+  if (
+    typeof index != "undefined" &&
+    index != null &&
+    Number.isNaN(parseInt(index))
+  ) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của num
+  if (typeof num != "undefined" && num != null && Number.isNaN(parseInt(num))) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của tags
+  if (typeof tags != "undefined" && tags != null && !Array.isArray(tags)) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
 
-// const preProcessFilterArticle_2 = async (req, res, next) => {
-//   let { searchKey, tags, index, num } = req.body;
-//   req.body.searchKey =
-//     typeof searchKey == "string" ? searchKey.trim() : undefined;
-//   req.body.index = typeof index == "number" ? Number(index) : undefined;
-//   req.body.num = typeof num == "number" ? Number(num) : undefined;
-//   req.body.tags = tags.map((tag) => tag.toUpperCase());
-//   const AllCategories = await articleModel.getAllCategories();
-//   req.body.tags = tags.filter((element) => AllCategories.includes(element));
-//   // console.log(AllCategories);
-//   res.send("hihi");
-// };
+  index = typeof index == "number" ? parseInt(index) : 0;
+  num = typeof num == "number" ? parseInt(num) : undefined;
+  if (typeof num == "number" && num < 0) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  if (typeof index == "number" && index < 0) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  tags =
+    typeof tags == "undefined" || tags == null
+      ? undefined
+      : tags.map((tag) => tag.toUpperCase().trim());
+
+  if (typeof tags == "undefined") req.body.tags = tags;
+  else req.body.tags = await articleHelper.filterValidCategoryTags(tags);
+  req.body.searchKey =
+    typeof searchKey == "undefined" || searchKey == null
+      ? undefined
+      : searchKey.trim();
+  req.body.num = num;
+  req.body.index = index;
+  // console.log("\n\nafter");
+  // console.log({
+  //   searchKey: req.body.searchKey,
+  //   index: req.body.index,
+  //   num: req.body.num,
+  //   tags: req.body.tags,
+  // });
+  next();
+};
+
+const navigateToSuitableFilterArricleMid = async (req, res, next) => {
+  res.send("ahihi");
+};
 
 module.exports = {
   preProcessAddArtticle,
@@ -462,6 +496,8 @@ module.exports = {
   preProcessGetCmtByIndex,
   preProcessEditArticle,
   prePageingForArticle,
+  preFilterArticleMid,
+  navigateToSuitableFilterArricleMid,
   // preProcessFilterArticle_1,
   // preProcessFilterArticle_2,
 };

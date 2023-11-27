@@ -568,15 +568,26 @@ const reportArticleController = async (req, res) => {
 
 const getArticlesByIndexAndNumController = async (req, res) => {
   const { index, num } = req.body;
-  console.log({ index });
+  // console.log({ index });
 
   const articles = await articleModel
     .getArticlesByIndexAndNum(index, num)
     .then((data) => data.payload)
     .catch((err) => []);
   await articleHelper.insertUserWriteArticleInforToListOfArticle(articles);
+  const totalNumOfArticles = await articleModel
+    .getTotalNumOfArticle()
+    .then((data) => data.payload);
+  const data = {
+    articles: articles,
+    totalNumOfArticles: totalNumOfArticles,
+    remainNumOfArticles:
+      index + articles.length - 1 >= totalNumOfArticles - 1
+        ? 0
+        : totalNumOfArticles - 1 - (index + articles.length - 1),
+  };
 
-  res.status(200).json(new Response(200, articles, ""));
+  res.status(200).json(new Response(200, data, ""));
   return articles;
 };
 

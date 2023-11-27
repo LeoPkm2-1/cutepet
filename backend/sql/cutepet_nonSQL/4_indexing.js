@@ -2,6 +2,12 @@
 // index for Bài Viết
 db.BaiViet.createIndex({
   postType: 1,
+  _id: -1,
+  createAt: -1,
+  owner_id: -1,
+});
+db.BaiViet.createIndex({
+  postType: 1,
   createAt: -1,
   owner_id: -1,
 });

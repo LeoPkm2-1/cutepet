@@ -152,6 +152,29 @@ async function reportArticle(article_id, user_report_id, isUnique = true) {
   return await articleModel.reportArticle(article_id, user_report_id);
 }
 
+const filterValidCategoryTags = async (categoryTags) => {
+  const allCategories = await articleModel.getAllCategories();
+
+  // remove duplicate tags
+  categoryTags = [...new Set(categoryTags)];
+  categoryTags = categoryTags.filter((tag) => allCategories.includes(tag));
+  return categoryTags;
+};
+
+// (async function () {
+//   const tags = [
+//     // "CHÓ",
+//     // "HÀNH VI & KỸ NĂNG",
+//     "c",
+//     // "CHÓ",
+//     "d",
+//     // "HÀNH VI & KỸ NĂNG",
+//     // "CHẾ ĐỘ ĂN UỐNG",
+//   ];
+//   const data = await filterValidCategoryTags(tags);
+//   console.log({ data });
+// })();
+
 module.exports = {
   hasUserUpVotedArticle,
   hasUserDownVotedArticle,
@@ -159,4 +182,5 @@ module.exports = {
   insertUserCmtInforToListOfCmts,
   reportArticle,
   hasUserReportArticle,
+  filterValidCategoryTags,
 };
