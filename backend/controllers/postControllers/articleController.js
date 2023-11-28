@@ -504,6 +504,7 @@ async function getAllArticleInDBController(req, res) {
     allArticleInDB
   );
   res.status(200).json(new Response(200, allArticleInDB, ""));
+  return allArticleInDB;
 }
 
 async function getAllCategoriesController(req, res) {
@@ -565,6 +566,119 @@ const reportArticleController = async (req, res) => {
   res.status(200).json(reportProcess);
 };
 
+const getArticlesByIndexAndNumController = async (req, res) => {
+  const { index, num } = req.body;
+  // console.log("tao là leo 123");
+
+  const articles = await articleModel
+    .getArticlesByIndexAndNum(index, num)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(articles);
+  const totalNumOfArticles = await articleModel
+    .getTotalNumOfArticle()
+    .then((data) => data.payload);
+  const data = {
+    articles: articles,
+    totalNumOfArticles: totalNumOfArticles,
+    remainNumOfArticles:
+      index + articles.length - 1 >= totalNumOfArticles - 1
+        ? 0
+        : totalNumOfArticles - 1 - (index + articles.length - 1),
+  };
+
+  res.status(200).json(new Response(200, data, ""));
+  return data;
+};
+
+const findArticlesByKeyWordInTitleController = async (req, res) => {
+  const { searchKey, index, num } = req.body;
+  const articles = await articleModel
+    .findArticlesByKeyWordInTitle(searchKey, index, num)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(articles);
+  const totalNumOfArticles = await articleModel
+    .getTotalNumOfArticleHaveKeyWordInTitle(searchKey)
+    .then((data) => data.payload);
+  const data = {
+    articles: articles,
+    totalNumOfArticles: totalNumOfArticles,
+    remainNumOfArticles:
+      index + articles.length - 1 >= totalNumOfArticles - 1
+        ? 0
+        : totalNumOfArticles - 1 - (index + articles.length - 1),
+  };
+  res.status(200).json(new Response(200, data, ""));
+  return data;
+};
+
+const filterArticlesByTagsController = async (req, res) => {
+  const { searchKey, tags, index, num } = req.body;
+  const articles = await articleModel
+    .findArticlesByCategories(tags, index, num)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(articles);
+  const totalNumOfArticles = await articleModel
+    .getTotalNumOfArticleHaveListOfCategories(tags)
+    .then((data) => data.payload);
+  // console.log({ totalNumOfArticles });
+  const data = {
+    articles: articles,
+    totalNumOfArticles: totalNumOfArticles,
+    remainNumOfArticles:
+      index + articles.length - 1 >= totalNumOfArticles - 1
+        ? 0
+        : totalNumOfArticles - 1 - (index + articles.length - 1),
+  };
+  res.status(200).json(new Response(200, data, ""));
+};
+
+const filterArticlesByTagsAndSearchController = async (req, res) => {
+  const { searchKey, tags, index, num } = req.body;
+  const articles = await articleModel
+    .findArticlesByKeyWordInTitleAndCategories(searchKey, tags, index, num)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(articles);
+  const totalNumOfArticles = await articleModel
+    .getTotalNumOfArticleHaveKeywWordInTitleAndCategories(searchKey, tags)
+    .then((data) => data.payload);
+
+  const data = {
+    articles: articles,
+    totalNumOfArticles: totalNumOfArticles,
+    remainNumOfArticles:
+      index + articles.length - 1 >= totalNumOfArticles - 1
+        ? 0
+        : totalNumOfArticles - 1 - (index + articles.length - 1),
+  };
+  res.status(200).json(new Response(200, data, ""));
+};
+
+const filterArticlesController = async (req, res) => {
+  const { FILTER_ACTION } = req.body;
+  if (FILTER_ACTION == "JUST_PAGING_BY_INDEX_AND_NUM") {
+    await getArticlesByIndexAndNumController(req, res);
+    return;
+  } else if (FILTER_ACTION == "JUST_SEARCH_BY_TITLE_AND_NO_TAGS") {
+    await findArticlesByKeyWordInTitleController(req, res);
+    return;
+  } else if (FILTER_ACTION == "JUST_FILTER_BY_TAGS_AND_NO_SEARCH") {
+    await filterArticlesByTagsController(req, res);
+    return;
+  } else {
+    // FILTER_ACTION == "FILTER_BY_TAGS_AND_SEARCH";
+    await filterArticlesByTagsAndSearchController(req, res);
+    return;
+  }
+};
+
+// const filterArticleController = async (req, res) => {
+//   res.send("ahi jjaja");
+// };
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -587,4 +701,7 @@ module.exports = {
   getMyArticlesController,
   editArticleController,
   reportArticleController,
+  getArticlesByIndexAndNumController,
+  filterArticlesController,
+  // filterArticleController,
 };

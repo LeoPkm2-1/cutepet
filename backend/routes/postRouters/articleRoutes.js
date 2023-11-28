@@ -147,4 +147,27 @@ router.post(
   articleController.reportArticleController
 );
 
+router.post(
+  "/getArticlesByIndexAndNum",
+  articleMiddle.prePageingForArticle,
+  articleController.getArticlesByIndexAndNumController
+);
+
+router.post(
+  "/filterArticles",
+  [
+    articleMiddle.preFilterArticleMid,
+    articleMiddle.navigateToSuitableFilterArricleMid,
+  ],
+  articleController.filterArticlesController
+);
+
+// // search article
+// router.post(
+//   "/filterArticles",
+//   [articleMiddle.preProcessFilterArticle_1,
+//   articleMiddle.preProcessFilterArticle_2],
+//   articleController.filterArticleController
+// );
+
 module.exports = router;

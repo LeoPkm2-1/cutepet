@@ -2,6 +2,12 @@
 // index for Bài Viết
 db.BaiViet.createIndex({
   postType: 1,
+  _id: -1,
+  createAt: -1,
+  owner_id: -1,
+});
+db.BaiViet.createIndex({
+  postType: 1,
   createAt: -1,
   owner_id: -1,
 });
@@ -11,6 +17,8 @@ db.BaiViet.createIndex({
   owner_id: -1,
   createAt: -1,
 });
+
+db.BaiViet.createIndex({ title: "text" });
 
 // index for Reply bình luận bài viết chia sẻ trạng thái
 db.RelyBinhLuanBaiVietTrangThai.createIndex({ postId: 1 });

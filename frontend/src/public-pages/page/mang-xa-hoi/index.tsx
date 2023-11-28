@@ -12,11 +12,13 @@ import LoiMoiKetBan from './component/loi-moi-ket-ban';
 //import { socket } from '../../../socket';
 import { useSnackbar } from 'notistack';
 import { NotifycationItem } from '../../../components/NotificationItem';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import articleApi from '../../../api/article';
 import { ArticleType } from '../../../models/article';
 import { BaiVietCoBan } from '../chia-se-kien-thuc/component/bai-viet-co-ban';
 import { listAll } from 'firebase/storage';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux';
 
 // Our app
 export default function MangXaHoi() {
@@ -25,6 +27,9 @@ export default function MangXaHoi() {
   const { enqueueSnackbar } = useSnackbar();
   const [indexPost, setIndexPost] = useState(0);
   const [isPost, setIsPost] = useState(true);
+  const newPostFromStore = useSelector(
+    (state: RootState) => state?.socket?.newPost.post
+  );
   useEffect(() => {
     postApi.getPostForNewsfeed(indexPost, []).then((data: any) => {
       if (data?.status == 200) {
@@ -76,60 +81,77 @@ export default function MangXaHoi() {
   useEffect(() => {
     const listId = listPost?.map((item) => item?.id);
     if (indexPost > 0) {
-      postApi.getPostForNewsfeed(indexPost, listId).then((data: any) => {
-        if (data?.status == 200) {
-          console.log(data, 'data lần 2');
-          if (data?.payload?.length == 0) {
+      postApi
+        .getPostForNewsfeed(indexPost, listId as string[])
+        .then((data: any) => {
+          if (data?.status == 200) {
+            console.log(data, 'data lần 2');
+            if (data?.payload?.length == 0) {
+              setIsPost(false);
+              return;
+            }
+            const list: StatusType[] = data?.payload?.map((item: any) => {
+              return {
+                id: `${item?._id}`,
+                media: item?.media as {
+                  type: string;
+                  data: string[];
+                },
+                createAt: item?.createAt,
+                numOfLike: item?.numOfLike,
+                numOfComment: item?.numOfComment,
+                userInfor: {
+                  id: item?.owner_infor?.ma_nguoi_dung,
+                  name: item?.owner_infor?.ten,
+                  avatarURL: item?.owner_infor?.anh?.url,
+                },
+                hasLiked: item?.hasLiked,
+                text: item?.text,
+                visibility: item?.visibility,
+                owner_id: item?.owner_id,
+                taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
+                  return {
+                    id: tagUser?.ma_nguoi_dung,
+                    name: tagUser?.ten,
+                  };
+                }),
+                taggedPets: item?.withPets?.map((tagPet: any) => {
+                  return {
+                    id: tagPet?.ma_thu_cung,
+                    name: tagPet?.ten_thu_cung,
+                  };
+                }),
+              } as StatusType;
+            });
+            // setListPost(list);
+            const setA = new Set(listPost);
+            const setB = new Set(list);
+            const result = difference(setB, setA);
+            const newListPost = Array.from(result);
+            console.log(Array.from(result), ' result');
+            setListPost([...listPost, ...newListPost]);
+          } else {
             setIsPost(false);
-            return;
           }
-          const list: StatusType[] = data?.payload?.map((item: any) => {
-            return {
-              id: `${item?._id}`,
-              media: item?.media as {
-                type: string;
-                data: string[];
-              },
-              createAt: item?.createAt,
-              numOfLike: item?.numOfLike,
-              numOfComment: item?.numOfComment,
-              userInfor: {
-                id: item?.owner_infor?.ma_nguoi_dung,
-                name: item?.owner_infor?.ten,
-                avatarURL: item?.owner_infor?.anh?.url,
-              },
-              hasLiked: item?.hasLiked,
-              text: item?.text,
-              visibility: item?.visibility,
-              owner_id: item?.owner_id,
-              taggedUsers: item?.taggedUsers?.map((tagUser: any) => {
-                return {
-                  id: tagUser?.ma_nguoi_dung,
-                  name: tagUser?.ten,
-                };
-              }),
-              taggedPets: item?.withPets?.map((tagPet: any) => {
-                return {
-                  id: tagPet?.ma_thu_cung,
-                  name: tagPet?.ten_thu_cung,
-                };
-              }),
-            } as StatusType;
-          });
-          // setListPost(list);
-          const setA = new Set(listPost);
-          const setB = new Set(list);
-          const result = difference(setB, setA);
-          const newListPost = Array.from(result);
-          console.log(Array.from(result), ' result');
-          setListPost([...listPost, ...newListPost]);
-        } else {
-          setIsPost(false);
-        }
-      });
+        });
     }
   }, [indexPost]);
 
+  useEffect(() => {
+    console.log(newPostFromStore, ' newPostFromStore nè');
+
+    if (newPostFromStore?.id) {
+      let arr: StatusType[] = [];
+      arr.push(newPostFromStore);
+      console.log(arr, "arr nè");
+      const arr2 = [...arr, ...listPost]
+      console.log(arr2, " arr2 nè");
+      
+      // setListPost([ ...arr,...listPost]);
+
+      setListPost(arr2);
+    }
+  }, [newPostFromStore?.id]);
   // useEffect(() => {
   //   console.log("Mở comment");
 

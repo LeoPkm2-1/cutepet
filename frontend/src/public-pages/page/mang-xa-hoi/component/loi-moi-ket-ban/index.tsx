@@ -4,19 +4,20 @@ import { useEffect, useState } from 'react';
 import friendApi from '../../../../../api/friend';
 import { timeAgo } from '../../../../../helper/post';
 import { useSnackbar } from 'notistack';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../../redux';
+import { LoiMoiType } from '../../../../../models/user';
+import { SocketActions } from '../../../../../redux/socket';
 
 export default function LoiMoiKetBan() {
   const [userList, setUserList] = useState<
-    {
-      name: string;
-      url: string;
-      time: string;
-      senderID: number | string;
-    }[]
+  LoiMoiType[]
   >([]);
 
   const [isShowAll, setIsShowAll] = useState(true);
   const [reload, setReload] = useState(false);
+
+  const newRequestAddFriend= useSelector((state:RootState) => state.socket.newRequestAddFriend.request)
 
   useEffect(() => {
     friendApi.getRequestAddFriendList().then((data) => {
@@ -43,6 +44,18 @@ export default function LoiMoiKetBan() {
       }
     });
   }, [reload]);
+
+
+  useEffect(() => {
+    if(newRequestAddFriend.senderID){
+      console.log("vào nè hihi sénderID");
+      
+      const arr:LoiMoiType[] = [];
+      arr.push(newRequestAddFriend);
+      setUserList([...arr, ...userList]);
+    }
+  }, [newRequestAddFriend.senderID])
+
   return (
     <>
       <Typography
@@ -72,8 +85,8 @@ export default function LoiMoiKetBan() {
                   return (
                     <LoiMoi
                       onSuccess={() => setReload(!reload)}
-                      senderID={item?.senderID}
-                      name={item?.name}
+                      senderID={item?.senderID || 0}
+                      name={item?.name || ""}
                       url={item?.url}
                       time={item?.time}
                     />
@@ -110,8 +123,8 @@ export default function LoiMoiKetBan() {
                 return (
                   <LoiMoi
                     onSuccess={() => setReload(!reload)}
-                    senderID={item?.senderID}
-                    name={item?.name}
+                    senderID={item?.senderID || 0}
+                    name={item?.name ||""}
                     url={item?.url}
                     time={item?.time}
                   />
@@ -168,6 +181,7 @@ type PropsLoiMoi = {
 };
 function LoiMoi(props: PropsLoiMoi) {
   const { enqueueSnackbar } = useSnackbar();
+  const dispatth = useDispatch();
   function handleSubmit(type: string) {
     friendApi.responeAddFriend(props.senderID, type).then((data) => {
       console.log(data, ' dtata nef');
@@ -182,6 +196,7 @@ function LoiMoi(props: PropsLoiMoi) {
           });
         }
         props?.onSuccess();
+        dispatth(SocketActions.setNewRequest({}))
       }
     });
   }

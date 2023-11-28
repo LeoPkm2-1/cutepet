@@ -7,6 +7,7 @@ const { Response } = require("../utils/index");
 const StatusPostModel = require("../models/BaiViet/StatusPostModel");
 const { haveFriendShipBetween } = require("../utils/banbeHelper");
 const loiMoiKetBanModel = require("../models/loiMoiKetBanModel");
+const statusPostHelper = require("../utils/BaiViet/statusPostHelper");
 
 async function getRequestAddFriendStatusOfOnePersonToYou(person_id, your_id) {
   const isFriend = await haveFriendShipBetween(person_id, your_id);
@@ -120,6 +121,11 @@ async function myTimelineBackwardController(req, res) {
     before,
     num
   ).then((data) => data.payload);
+  // insert owner infor for each post
+  await statusPostHelper.InsertOwnerInforOfListPosts(posts);
+
+  // insert infor to indicate that  has user liked each post?
+  await statusPostHelper.insertUserLikePostInforOfListPosts(userid, posts);
   res.status(200).json(new Response(200, posts, ""));
 }
 
@@ -176,6 +182,13 @@ async function userTimelineBackwardController(req, res) {
       num
     ).then((data) => data.payload);
     // console.log("length:", listOfPost.length);
+    // insert owner infor for each post
+    await statusPostHelper.InsertOwnerInforOfListPosts(listOfPost);
+    // insert infor to indicate that  has user liked each post?
+    await statusPostHelper.insertUserLikePostInforOfListPosts(
+      reader_id,
+      listOfPost
+    );
     res.status(200).json(new Response(200, listOfPost, ""));
     return;
   }

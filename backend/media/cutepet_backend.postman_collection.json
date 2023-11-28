@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "kien@gmail.com",
+							"value": "thuy",
 							"type": "text"
 						},
 						{
@@ -110,7 +110,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_0}}",
 							"type": "string"
 						}
 					]
@@ -122,7 +122,7 @@
 					"urlencoded": [
 						{
 							"key": "requestID",
-							"value": "8",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -190,7 +190,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_5}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -235,7 +235,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_5}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -275,7 +275,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_5}}",
+							"value": "{{token_user_1}}",
 							"type": "string"
 						}
 					]
@@ -305,7 +305,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -321,7 +321,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"text\": \"quẩy lên ae ơi dung đây\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[],\n   \"myPetIds\":[1,2,3,4,5],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"google.com\",\"youtube.com\",\"amazon.com\"]\n    }\n}",
+					"raw": "{\n    \"text\": \" hôm nay vui quá nha 6\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[],\n   \"myPetIds\":[46,45],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"https://pbs.twimg.com/media/D7dBfozUEAEkItp.jpg\"]\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -485,7 +485,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -497,7 +497,7 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "6545b0839d829001b64f5dcc",
+							"value": "655441ccedfafc2f29403170",
 							"type": "text"
 						}
 					]
@@ -789,7 +789,8 @@
 						{
 							"key": "num",
 							"value": "2",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -828,12 +829,12 @@
 					"urlencoded": [
 						{
 							"key": "before",
-							"value": "2023-10-19",
+							"value": "2023-11-22",
 							"type": "text"
 						},
 						{
 							"key": "num",
-							"value": "1",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -1077,7 +1078,8 @@
 						{
 							"key": "num",
 							"value": "4",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -1116,7 +1118,7 @@
 					"urlencoded": [
 						{
 							"key": "ten_thu_cung",
-							"value": "tui là ",
+							"value": "Luna",
 							"type": "text"
 						},
 						{
@@ -1261,7 +1263,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_5}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -1295,7 +1297,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_3}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -1312,8 +1314,9 @@
 						},
 						{
 							"key": "num",
-							"value": "1",
-							"type": "text"
+							"value": "",
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -1340,7 +1343,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_5}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -1352,7 +1355,7 @@
 					"urlencoded": [
 						{
 							"key": "user_id",
-							"value": "1",
+							"value": "8",
 							"type": "text"
 						}
 					]
@@ -1392,7 +1395,7 @@
 					"urlencoded": [
 						{
 							"key": "user_id",
-							"value": "8",
+							"value": "5",
 							"type": "text"
 						},
 						{
@@ -1404,8 +1407,7 @@
 						{
 							"key": "num",
 							"value": "5",
-							"type": "text",
-							"disabled": true
+							"type": "text"
 						}
 					]
 				},
@@ -1523,7 +1525,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -1535,7 +1537,7 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "6549106cd55fe46e0f9dd857",
+							"value": "654f9e8f479ad1da822047b4",
 							"type": "text"
 						}
 					]
@@ -1564,7 +1566,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_4}}",
 							"type": "string"
 						}
 					]
@@ -1576,7 +1578,7 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "6549106cd55fe46e0f9dd857",
+							"value": "654f9e8f479ad1da822047b4",
 							"type": "text"
 						}
 					]
@@ -1617,12 +1619,12 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "654b4aa2cacfb2b68ed97a7d",
+							"value": "654f9e8f479ad1da822047b4",
 							"type": "text"
 						},
 						{
 							"key": "comment",
-							"value": "chó con đáng yêu 10",
+							"value": "vui quá 123",
 							"type": "text"
 						}
 					]
@@ -2076,7 +2078,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -2088,7 +2090,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "654af039c82ff4c74b78f9eb",
+							"value": "6550ecdbe158c8fc09206db2",
 							"type": "text"
 						}
 					]
@@ -2117,7 +2119,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_4}}",
 							"type": "string"
 						}
 					]
@@ -2129,7 +2131,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "313233343536373839303132",
+							"value": "6550ecdbe158c8fc09206db2",
 							"type": "text"
 						},
 						{
@@ -2681,7 +2683,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_3}}",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjo1MDEsInRlbiI6IlBow6F0IE1haSIsIm5nYXlfc2luaCI6bnVsbCwidGFpX2tob2FuIjoicGhhdG1haSIsImVtYWlsIjoicGhhdC5tYWlsZW8yMDAxazE5QGhjbXV0LmVkdS52biIsInNvX2RpZW5fdGhvYWkiOm51bGwsImdpb2lfdGluaCI6bnVsbCwiaWF0IjoxNzAwODM0NDYyLCJleHAiOjE3MDM4MzQ0NjJ9.rK1Z8yN91NCmLxoa2yaWTrYjznQOt7E9CldYkGyTnoTqM3vFIIYz9VYyFAcIBG15gZ1R1EXF2onnmUXXBVortA",
 							"type": "string"
 						}
 					]
@@ -2690,7 +2692,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"index\":1,\n    \"PostIdsHaveRendered\":[\"123456789012123456789138\",\"123456789012123456789118\",\"123456789012123456789132\"]\n}",
+					"raw": "{\n    \"index\":1,\n    \"PostIdsHaveRendered\":[\"123456789012123456789138\",\"123456789012123456789118\",\"123456789012123456789132\",\"655f83f78c54dd810bb61689\",\n\"655f83ef8c54dd810bb61687\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3035,6 +3037,182 @@
 			"response": []
 		},
 		{
+			"name": "70_getUnReadNotiStartFrom",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "index",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/notification/getUnReadNotiStartFrom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"notification",
+						"getUnReadNotiStartFrom"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "71_statusPost_getPostHavePet",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "pet_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "before",
+							"value": "2023-11-23T16:55:11z",
+							"type": "text"
+						},
+						{
+							"key": "num",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getPostHavePet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getPostHavePet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "72_article_getArticlesByIndexAndNum",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"index\":5,\n    \"num\":2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/getArticlesByIndexAndNum",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"getArticlesByIndexAndNum"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "73_article_filterArticles",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"searchKey\":\"\",\n    \"tags\":[],\n    \"index\":2,\n    \"num\":1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/filterArticles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"filterArticles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user-infor",
 			"request": {
 				"auth": {
@@ -3227,51 +3405,6 @@
 							"value": "2",
 							"disabled": true
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "70_getUnReadNotiStartFrom",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token_user_2}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "index",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "num",
-							"value": "2",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/notification/getUnReadNotiStartFrom",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"notification",
-						"getUnReadNotiStartFrom"
 					]
 				}
 			},

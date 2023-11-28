@@ -137,3 +137,10 @@ export interface PeopleType {
   numberPet: number;
   isFriend?: boolean;
 }
+
+export interface LoiMoiType {
+  name?: string;
+  url?: string;
+  time?: string;
+  senderID?: number | string;
+}
