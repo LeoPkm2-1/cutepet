@@ -78,10 +78,25 @@ export default function BaiChiaSe() {
             >
               <Box
                 sx={{
-                  // display: 'flex',
-                  mb: '20px',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  alignItems:"center",
+                  justifyContent:"center"
                 }}
               >
+                {article?.categories?.map((item) => {
+                  return <Tag text={item} />;
+                })}
+              </Box>
+              <Box
+                sx={{
+                  // display: 'flex',
+                  mb: '20px',
+                  mt:"12px"
+                }}
+              >
+
                 <Typography
                   textAlign="center"
                   sx={{
@@ -148,17 +163,7 @@ export default function BaiChiaSe() {
                 src={article?.main_image}
               />
               <span>{parse(article.content)} </span>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                }}
-              >
-                {article?.categories?.map((item) => {
-                  return <Tag text={item} />;
-                })}
-              </Box>
+              
               <Divider
                 sx={{
                   marginBottom: '22px',
