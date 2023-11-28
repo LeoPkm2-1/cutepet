@@ -38,7 +38,7 @@ sửa dụng:
 
 `(tính năng này cho cả chia sẻ kiến thức và trạng thái)`
 
-## 8. sửa lại icon của bài viết `private`, `public`, `just_friend`
+## 8. ==OK== sửa lại icon của bài viết `private`, `public`, `just_friend`
 
 ## 9. == OK == socket có vấn đề :
 
@@ -145,7 +145,7 @@ tham khảo tại: **[article.md](./article.md)**
 
    - cập nhật thông tin người dùng [chi tiết tại đây](./userInfor.md#4-cập-nhật-thông-tin-người-dùng).
 
-## 34. ---OK---  Đăng Bài với visibility là bạn bè bị sai
+## 34. ---OK--- Đăng Bài với visibility là bạn bè bị sai
 
 lý do value của visibility là `JUST_FRIENDS` mà lại gửi lên là `friend` nên bị sai không chạy dc
 
@@ -171,7 +171,7 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 42. hủy bạn bè
 
-## 43. chưa show text trong bài viết chia sẻ trạng thái khi bam61 vào thông báo
+## 43. --OK-- chưa show text trong bài viết chia sẻ trạng thái khi bam61 vào thông báo
 
 ![](../media/img/err/img9.png)
 
@@ -181,7 +181,7 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 46. lắng nghe khi phản hồi bình luận của bài viết chia sẻ trạng thái
 
-## 47. xóa bài viết không tồn tại đi
+## 47. ==OK== xóa bài viết không tồn tại đi
 
 ## 48. xóa lời mời kết bạn cuối cùng đi
 
@@ -193,7 +193,7 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 52. Đánh dấu đã đọc tất cả các thông báo
 
-## 53. ảnh trong trang cá nhân gặp vấn đề.
+## 53. --OK-- ảnh trong trang cá nhân gặp vấn đề.
 
 ![](../media/img/err/img8.png)
 
@@ -201,17 +201,17 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ![](../media/img/err/img10.png)
 
-## 56. chưa loading bài viết trong trang cá nhân
+## 56. ==OK== chưa loading bài viết trong trang cá nhân
 
 ## 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
 
-(viết ra thông báo đó là thông báo nào đừng để  noname)
+(viết ra thông báo đó là thông báo nào đừng để noname)
 
 ## 58. --OK-- khi có thông báo mới đến thì load lại API lấy thông báo
 
 ## 59. khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
 
-## 60. --OK-- follow bài viết trạng thái 
+## 60. --OK-- follow bài viết trạng thái
 
 ## 61. thích bình luận bài viết chia sẻ trạng thái
 
@@ -220,3 +220,33 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 ## 63. hiện thực upvote và downvote , bình luận, và báo cáo bài viết chia sẻ kiến thức
 
 ## 64. xóa thú cưng
+
+## 65. khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
+
+## 66. hiện thực like bài viết khi comment trong bài viết chia sẻ kiến thức
+
+## 67. khi xóa bài viết cần phải cho bài viết đó biến mất
+
+## 68. con lăn trong mạng xãi hội có vấn đề
+
+## 69. ảnh giao diện của thông báo nhảy ra góc dưới bên phải có vấn đề, trong cả trang mạng xã hội lẫn trang cá nhân
+
+## 70. cần kiểm tra lại tất cả các hình ảnh và tên của thông báo góc bên phải khi socket đến
+
+## 71. load bài viết chia sẻ trạng thái theo thú cưng được tags
+
+## 72. resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
+
+## 73. trang cập nhật thông tin nguời dùng
+
+## 74. đổi mật khẩu người dùng
+
+## 75. chỉnh sửa bài viết chia sẻ trạng thái
+
+## 76. chỉnh sửa bài viết chia sẻ kiến thức
+
+## 77. xóa bài viết chia sẻ kiến thức
+
+## 78. giao diện gợi ý kết bạn
+
+##

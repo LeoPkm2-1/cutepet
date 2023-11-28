@@ -1060,6 +1060,8 @@ nếu bình luận không tồn tại:
 
 ## 18. lấy bài viết có tag con thú cụ thể
 
+(postman số 71)
+
 1. Phương thức:
 
    POST http://localhost:3000/post/statusPost/getPostHavePet

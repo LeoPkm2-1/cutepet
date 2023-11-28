@@ -29,10 +29,11 @@
 
 - **mới làm online chưa là Ofline**
 
-## ---DONE--- 6. sửa lại hiển thị bài viết trên newsfeed
+## ---DONE--- || ==OK== 6. sửa lại hiển thị bài viết trên newsfeed
+
 - chưa bỏ được bài viết trùng
 
-## ---DONE---|| ==ERR== 8. sửa lại icon của bài viết `private`, `public`, `just_friend`
+## ---DONE---|| ==OK== 8. sửa lại icon của bài viết `private`, `public`, `just_friend`
 
 - **chưa sửa trong trang cá nhân của từng người**
 
@@ -65,13 +66,15 @@ chưa hoàn thành
 
 lý do value của visibility là `JUST_FRIENDS` mà lại gửi lên là `friend` nên bị sai không chạy dc
 
-## ---DONE--- 35. cập nhật lại giao diện của newfeed khi có 1 bài viết mới được đăng lên
+## ---DONE--- || ==ERR== 35. cập nhật lại giao diện của newfeed khi có 1 bài viết mới được đăng lên
+
+chưa hiện thực được
 
 ## ---DONE---||==OK== 36. cho phép tag thú cưng của mình vào bài viết chia sẻ trạng thái
 
-## ---DONE--- 37. quên text trong riêng bài viết
+## ---DONE---||==OK== 37. quên text trong riêng bài viết
 
-## --- DONE--- 47. xóa bài viết không tồn tại đi
+## --- DONE--- || ==OK== 47. xóa bài viết không tồn tại đi
 
 hiển thị 404 page not found khi bài viết không tồn tại
 
@@ -91,7 +94,7 @@ hiển thị 404 page not found khi bài viết không tồn tại
 52. chưa reset số lượng thông báo về 0 khi đánh dấu đã đọc tất cả các thông báo
     ![](../media/img/err/img14.png)
 
-## ---DONE ---53. ảnh trong trang cá nhân gặp vấn đề.
+## ---DONE --- || ==OK== 53. ảnh trong trang cá nhân gặp vấn đề.
 
 ![](../media/img/err/img8.png)
 
@@ -99,17 +102,47 @@ hiển thị 404 page not found khi bài viết không tồn tại
 
 ![](../media/img/err/img10.png)
 
-## ---DONE --- 56. chưa loading bài viết trong trang cá nhân
+## ---DONE --- ||==OK== 56. chưa loading bài viết trong trang cá nhân
 
-## ---DONE--- 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
+## ---DONE--- || ==ERR== 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
 
 (viết ra thông báo đó là thông báo nào đừng để noname)
 
+1.  **LIKE_STATUS_POST** => OK
+2.  **COMMENT_STATUS_POST** => OK
+3.  **LIKE_COMMENT_IN_STATUS_POST** => thiếu chưa hiện thực
+4.  **REPLY_COMMENT_IN_STATUS_POST** => OK
+5.  **USER_IS_ONLINE** => chỉ được lần đầu
+6.  **USER_IS_OFFLINE** => chỉ được lần đầu
+7.  **TAG_USER_IN_STATUS_POST** => khi bấm vào thông báo tag người dùng thì phải show ra bài viết người dùng được tag
+
+![](../media/img/err/img16.png)
+
+8.  **REQUEST_ADD_FRIEND** => thông báo chưa bấm vào được
+
+khi bấm vào thông báo có lời mời kết bạn thì phải navigate đến trang để người dùng phản hồi. hiện tại mới navigate đến trang bạn bè ko phải là nơi để phải hồi lời mời kết bạn.
+
+![](../media/img/err/img17.png)
+
+9. **ACCEPT_ADD_FRIEND** => khi bấm vào thông báo người dùng đã được chấp nhận thành bạn bè thì điều hướng đến trang cá nhân của người dùng đó hiện tại đang sai
+
+![](../media/img/err/img18.png)
+
+10. **NEW_STATUS_POST_APPEAR** => chưa hiện thực được
+11. **UPVOTE_ARTICLE** => chưa hiện thực được
+12. **DOWNVOTE_ARTICLE** => chưa hiện thực được
+13. **COMMENT_ARTICLE** => chưa hiện thực được
+
 ## --- DONE ---||==OK== 58. khi có thông báo mới đến thì load lại API lấy thông báo
 
-## ---DONE--- 59. khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
+## ---DONE--- || ==ERR== 59. khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
 
-## ---DONE--- ||==OK== 60 follow bài viết trạng thái 
+khi bấm vào thông báo đã có lời mời kết bạn thì navigate tới trang cá nhân của nguoi2 dùng đó thay vì là bạn bè
+
+- ở ngoài trang home thì có thể xóa hoặc hiển thị ra luôn
+  - nếu thiếu xóa ngoài home thì phải tạo trang riêng cho lời mời kết bạn
+
+## ---DONE--- ||==OK== 60 follow bài viết trạng thái
 
 ## 61. thích bình luận bài viết chia sẻ trạng thái
 
@@ -118,3 +151,31 @@ hiển thị 404 page not found khi bài viết không tồn tại
 ## 63. hiện thực upvote và downvote , bình luận, và báo cáo bài viết chia sẻ kiến thức
 
 ## 64. xóa thú cưng
+
+## 65. khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
+
+## 66. hiện thực like bài viết khi comment trong bài viết chia sẻ kiến thức
+
+## 67. khi xóa bài viết cần phải cho bài viết đó biến mất
+
+## 68. con lăn trong mạng xãi hội có vấn đề
+
+## 69. ảnh giao diện của thông báo nhảy ra góc dưới bên phải có vấn đề, trong cả trang mạng xã hội lẫn trang cá nhân
+
+## 70. cần kiểm tra lại tất cả các hình ảnh và tên của thông báo góc bên phải khi socket đến
+
+## 71. load bài viết chia sẻ trạng thái theo thú cưng được tags
+
+## 72. resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
+
+## 73. trang cập nhật thông tin nguời dùng
+
+## 74. đổi mật khẩu người dùng
+
+## 75. chỉnh sửa bài viết chia sẻ trạng thái
+
+## 76. chỉnh sửa bài viết chia sẻ kiến thức
+
+## 77. xóa bài viết chia sẻ kiến thức
+
+## 78. giao diện gợi ý kết bạn
