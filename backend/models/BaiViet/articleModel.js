@@ -535,8 +535,176 @@ const getTotalNumOfArticle = async () => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const findArticlesByKeyWordInTitle = async (
+  keyWord,
+  index = 0,
+  num = undefined
+) => {
+  index = parseInt(index);
+  let executor = undefined;
+  if (typeof num == "undefined") {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $text: { $search: keyWord },
+          postType: articleComposStructure.Article.type,
+        })
+        .sort({
+          _id: -1,
+          createAt: -1,
+        })
+        .skip(index)
+        .toArray();
+    };
+  } else {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          $text: { $search: keyWord },
+          postType: articleComposStructure.Article.type,
+        })
+        .sort({
+          _id: -1,
+          createAt: -1,
+        })
+        .skip(index)
+        .limit(num)
+        .toArray();
+    };
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getTotalNumOfArticleHaveKeyWordInTitle = async (keyWord) => {
+  async function executor(collection) {
+    return await collection.countDocuments({
+      $text: { $search: keyWord },
+      postType: articleComposStructure.Article.type,
+    });
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const findArticlesByCategories = async (
+  list_of_categories,
+  index = 0,
+  num = undefined
+) => {
+  index = parseInt(index);
+  let executor = undefined;
+  if (typeof num == "undefined") {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          postType: articleComposStructure.Article.type,
+          categories: { $all: list_of_categories },
+        })
+        .sort({
+          _id: -1,
+          createAt: -1,
+        })
+        .skip(index)
+        .toArray();
+    };
+  } else {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          postType: articleComposStructure.Article.type,
+          categories: { $all: list_of_categories },
+        })
+        .sort({
+          _id: -1,
+          createAt: -1,
+        })
+        .skip(index)
+        .limit(num)
+        .toArray();
+    };
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getTotalNumOfArticleHaveListOfCategories = async (list_of_categories) => {
+  async function executor(collection) {
+    return await collection.countDocuments({
+      postType: articleComposStructure.Article.type,
+      categories: { $all: list_of_categories },
+    });
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const findArticlesByKeyWordInTitleAndCategories = async (
+  keyWord,
+  list_of_categories,
+  index = 0,
+  num = undefined
+) => {
+  index = parseInt(index);
+  let executor = undefined;
+  if (typeof num == "undefined") {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          postType: articleComposStructure.Article.type,
+          $text: { $search: keyWord },
+          categories: { $all: list_of_categories },
+        })
+        .sort({
+          _id: -1,
+          createAt: -1,
+        })
+        .skip(index)
+        .toArray();
+    };
+  } else {
+    executor = async (collection) => {
+      return await collection
+        .find({
+          postType: articleComposStructure.Article.type,
+          $text: { $search: keyWord },
+          categories: { $all: list_of_categories },
+        })
+        .sort({
+          _id: -1,
+          createAt: -1,
+        })
+        .skip(index)
+        .limit(num)
+        .toArray();
+    };
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getTotalNumOfArticleHaveKeywWordInTitleAndCategories = async (
+  keyWord,
+  list_of_categories
+) => {
+  async function executor(collection) {
+    return await collection.countDocuments({
+      postType: articleComposStructure.Article.type,
+      $text: { $search: keyWord },
+      categories: { $all: list_of_categories },
+    });
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
 // (async function () {
-//   const data = await getTotalNumOfArticle();
+//   const data = await getTotalNumOfArticleHaveListOfCategories(['CÁCH CHĂM SÓC','MÈO']);
 //   console.log(data);
 // })()
 
@@ -581,4 +749,10 @@ module.exports = {
   getOwnerIdOfArticle,
   getArticlesByIndexAndNum,
   getTotalNumOfArticle,
+  findArticlesByKeyWordInTitle,
+  getTotalNumOfArticleHaveKeyWordInTitle,
+  findArticlesByCategories,
+  getTotalNumOfArticleHaveListOfCategories,
+  findArticlesByKeyWordInTitleAndCategories,
+  getTotalNumOfArticleHaveKeywWordInTitleAndCategories,
 };

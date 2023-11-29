@@ -25,12 +25,12 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "phatmai",
+							"value": "thuy",
 							"type": "text"
 						},
 						{
 							"key": "mat_khau",
-							"value": "123456",
+							"value": "123",
 							"type": "text"
 						},
 						{
@@ -3111,7 +3111,7 @@
 						},
 						{
 							"key": "num",
-							"value": "2",
+							"value": "",
 							"type": "text"
 						}
 					]
@@ -3133,7 +3133,7 @@
 			"response": []
 		},
 		{
-			"name": "72_article_filterArticles",
+			"name": "72_article_getArticlesByIndexAndNum",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -3149,7 +3149,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"index\":7,\n    \"num\":null\n}",
+					"raw": "{\n    \"index\":5,\n    \"num\":2\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3189,7 +3189,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"searchKey\":\"\",\n    \"tags\":[\"a\",\"b\",\"chó\"],\n    \"index\":1,\n    \"num\":null\n}",
+					"raw": "{\n    \"searchKey\":\"\",\n    \"tags\":[],\n    \"index\":2,\n    \"num\":1\n}",
 					"options": {
 						"raw": {
 							"language": "json"

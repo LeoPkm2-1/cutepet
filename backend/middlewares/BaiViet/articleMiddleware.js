@@ -476,7 +476,36 @@ const preFilterArticleMid = async (req, res, next) => {
 };
 
 const navigateToSuitableFilterArricleMid = async (req, res, next) => {
-  res.send("ahihi");
+  const { searchKey, tags, index, num } = req.body;
+  req.body.FILTER_ACTION = "";
+  if (
+    (typeof searchKey == "undefined" || searchKey == "") &&
+    (typeof tags == "undefined" || tags.length == 0)
+  ) {
+    req.body.FILTER_ACTION = "JUST_PAGING_BY_INDEX_AND_NUM";
+    next();
+    return;
+  } else if (
+    typeof searchKey != "undefined" &&
+    searchKey != "" &&
+    (typeof tags == "undefined" || tags.length == 0)
+  ) {
+    req.body.FILTER_ACTION = "JUST_SEARCH_BY_TITLE_AND_NO_TAGS";
+    next();
+    return;
+  } else if (
+    (typeof searchKey == "undefined" || searchKey == "") &&
+    typeof tags != "undefined" &&
+    tags.length > 0
+  ) {
+    req.body.FILTER_ACTION = "JUST_FILTER_BY_TAGS_AND_NO_SEARCH";
+    next();
+    return;
+  } else {
+    req.body.FILTER_ACTION = "FILTER_BY_TAGS_AND_SEARCH";
+    next();
+    return;
+  }
 };
 
 module.exports = {

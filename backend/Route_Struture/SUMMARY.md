@@ -261,11 +261,19 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 ## (26-11-2023):
 
+1. lấy bài viết theo thú cưng được tag
+   
+*chi tiết* **[Route_Struture/post.md](./post.md#18-lấy-bài-viết-có-tag-con-thú-cụ-thể)** và **postman số 71**
+
 ## (27-11-2023):
 
 1. phân trang cho bài viết chia sẻ kiến thức
 
    _chi tiết:_ **[Route_Struture/article.md](./article.md#21-phân-trang-cho-bài-viết-chia-sẻ-kiến-thức)** và **postman số 72**
+
+2. lọc bài viết chia sẻ trạng thái theo thể loại và tiêu đề
+
+   _chi tiết:_ **[Route_Struture/post.md](./article.md#22-lọc-bài-viết-chia-sẻ-kiến-thức-theo-thể-loại-và-tiêu-đề)** và **postman số 73**
 
 ##
 

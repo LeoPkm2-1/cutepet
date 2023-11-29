@@ -35,12 +35,14 @@ function setNewRequest(request: LoiMoiType) {
 }
 
 
+
 export type SocketActionTypes =
   | ReturnType<typeof setOnline>
   | ReturnType<typeof setOffline>
   | ReturnType<typeof setAcceptFriend>
   | ReturnType<typeof setNewPost>
   | ReturnType<typeof setNewRequest>
-  | { type: typeof SocketActionEnum.RESET };
+  | { type: typeof SocketActionEnum.RESET }
+
 
 export default { setOnline,setOffline,setAcceptFriend,setNewPost,setNewRequest };

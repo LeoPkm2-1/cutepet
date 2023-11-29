@@ -604,7 +604,7 @@ function NotifycationComponent() {
             return {
               name: noti?.payload?.userTag?.ten,
               url: noti?.payload?.userTag?.anh?.url,
-              idPost: noti?.payload?.commentInfor?.postId,
+              idPost: noti?.payload?.postInfor?._id,
               hasRead: noti?.payload?.hasRead,
               type: 'gắn thẻ bạn trong một bài viết',
               idNoti: noti?._id,
@@ -624,7 +624,7 @@ function NotifycationComponent() {
             return {
               name: noti?.payload?.requestUser?.ten,
               url: noti?.payload?.requestUser?.anh?.url,
-              idPost: noti?.payload?.commentInfor?.postId,
+              idPost: noti?.payload?.requestUser?.ma_nguoi_dung,
               hasRead: noti?.payload?.hasRead,
               type: 'gửi một lời mời kết bạn',
               idNoti: noti?._id,
@@ -648,7 +648,7 @@ function NotifycationComponent() {
               hasRead: noti?.payload?.hasRead,
               type: 'đồng ý kết bạn',
               idNoti: noti?._id,
-              isFriend:true,
+              isRequestFriend: true,
             } as {
               name?: string;
               url?: string;
@@ -656,7 +656,7 @@ function NotifycationComponent() {
               type?: string;
               hasRead: boolean;
               idNoti?: string;
-              isFriend?: boolean;
+              isRequestFriend: boolean,
             };
           }
 

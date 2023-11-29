@@ -69,10 +69,10 @@ export function NotifycationItemClick(props: Props) {
   const dispatch = useDispatch();
   function naviga(){
     if(props?.isRequestFriend){
-      return `/home/ban-be`
+      return `/home/trang-ca-nhan-nguoi-dung/${props?.idPost}`
     }
     if(props?.isFriend){
-      return `/home/trang-ca-nhan-nguoi-dung/${props?.idNoti}`
+      return `/home/trang-ca-nhan-nguoi-dung/${props?.idPost}`
     }
     return `post/${props?.idPost}`;
   }

@@ -5,26 +5,24 @@ import { SocketActionEnum, SocketActionTypes } from './action';
 
 type SocketState = {
   onLine: {
-    idUser: number| string;
+    idUser: number | string;
   };
   offLine: {
-    idUser: number| string;
+    idUser: number | string;
   };
   acceptFriend: {
-    idUser: number| string;
+    idUser: number | string;
   };
-  newPost: { post: StatusType },
-  newRequestAddFriend: { request: LoiMoiType },
-
+  newPost: { post: StatusType };
+  newRequestAddFriend: { request: LoiMoiType };
 };
 
 const initState = Object.freeze<SocketState>({
-  onLine: {idUser : 0},
-  offLine: {idUser : 0},
-  acceptFriend: {idUser : 0},
+  onLine: { idUser: 0 },
+  offLine: { idUser: 0 },
+  acceptFriend: { idUser: 0 },
   newPost: { post: {} },
   newRequestAddFriend: { request: {} },
-
 });
 
 export default function (
@@ -36,16 +34,16 @@ export default function (
       return {
         ...state,
         onLine: {
-          idUser: action.payload
-        }
+          idUser: action.payload,
+        },
       };
     }
     case SocketActionEnum.SET_OFFLINE: {
       return {
         ...state,
         offLine: {
-          idUser: action.payload
-        }
+          idUser: action.payload,
+        },
       };
     }
 
@@ -53,8 +51,8 @@ export default function (
       return {
         ...state,
         acceptFriend: {
-          idUser: action.payload
-        }
+          idUser: action.payload,
+        },
       };
     }
 
@@ -62,20 +60,19 @@ export default function (
       return {
         ...state,
         newPost: {
-          post: action.payload
-        }
+          post: action.payload,
+        },
       };
     }
     case SocketActionEnum.SET_NEW_REQUEST_ADDFRIEND: {
       return {
         ...state,
         newRequestAddFriend: {
-          request: action.payload
-        }
+          request: action.payload,
+        },
       };
     }
-  
-  
+
     case SocketActionEnum.RESET: {
       return initState;
     }
