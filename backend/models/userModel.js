@@ -242,6 +242,40 @@ const updateUserBasicInfor = async (
     .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
 };
 
+const getUserIdThatNoteContainUsers = async (
+  not_contain_user_id_list,
+  limitNum = undefined
+) => {
+  let sqlStmt = "";
+  if (typeof limitNum == "number") {
+    sqlStmt = `select DISTINCT ma_nguoi_dung
+              from NguoiDung
+              where ma_nguoi_dung not in (?)
+              limit ?`;
+    data = [not_contain_user_id_list, limitNum];
+  } else {
+    sqlStmt = `select DISTINCT ma_nguoi_dung
+                from NguoiDung
+                where ma_nguoi_dung not in (?)`;
+    data = [not_contain_user_id_list];
+  }
+  return await sqlQuery(sqlStmt, data)
+    .then(
+      (data) =>
+        new Response(
+          200,
+          data.map((maNguoiDungObj) => maNguoiDungObj.ma_nguoi_dung),
+          ""
+        )
+    )
+    .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
+};
+
+// (async function () {
+//   const data = await getUserIdThatNoteContainUsers([10,1,2],10);
+//   console.log(data);
+// })();
+
 module.exports = {
   getUserByUsername,
   getUserByEmail,
@@ -262,4 +296,5 @@ module.exports = {
   searchUserBySearchKey,
   updateUserPasswordByUserName,
   updateUserBasicInfor,
+  getUserIdThatNoteContainUsers,
 };

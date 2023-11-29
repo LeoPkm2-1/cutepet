@@ -4,13 +4,13 @@ const getIdsOfReceiverInPendingAddFriendRequestOf = async (sender_id) => {
   const requestAddFriendList =
     await loiMoiKetBanModel.getAllPendingRequestHaveSendOfUser(sender_id);
 
-  return requestAddFriendList.map((request) => request.ma_nguoi_nhan);
+  return requestAddFriendList.map((request) => parseInt(request.ma_nguoi_nhan));
 };
 
 const getIdsOfSenderInPendingAddFriendRequestTo = async (receiver_id) => {
   const requestAddFriendList =
     await loiMoiKetBanModel.getAllPendingRequestToUser(receiver_id);
-  return requestAddFriendList.map((request) => request.ma_nguoi_gui);
+  return requestAddFriendList.map((request) => parseInt(request.ma_nguoi_gui));
 };
 
 // (async function () {

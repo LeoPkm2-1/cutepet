@@ -48,6 +48,7 @@ router.post(
 // get list suggested friend
 router.post(
   "/getListSuggestedFriends",
+  addFriendMid.preProccessSuggestFriendMid,
   friendController.getListSuggestedFriendController
 );
 module.exports = router;

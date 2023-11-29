@@ -9,6 +9,9 @@ const {
   notifyAcceptAddFriend,
 } = require("../notificationHandler/friend");
 const friendHelper = require("../utils/banbeHelper");
+const loiMoiKetBanHelper = require("../utils/loiMoiKetBanHelper");
+const petModel = require("../models/petModel");
+const userModel = require("../models/userModel");
 
 // gửi lời mời kết bạn
 const requestAddFriend = async (req, res) => {
@@ -235,11 +238,35 @@ const removeRequestAddFriend = async (req, res) => {
 };
 
 const getListSuggestedFriendController = async (req, res) => {
+  const NUM_OF_USER_SUGGEST = 10;
   const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
-  const listFriendIds = await friendHelper.getListFriendIdsOfUser(user_id);
+  const { DANH_SACH_MA_GIONG, UN_SUGGESTED_FRIEND_IDS } = req.body;
+  // DANH_SACH_MA_GIONG = [403];
+  const userid_list_match_pet = await petModel
+    .getListUserIdsHaveGiongOfPetMatchListOfGiong_2(
+      DANH_SACH_MA_GIONG,
+      UN_SUGGESTED_FRIEND_IDS,
+      NUM_OF_USER_SUGGEST
+    )
+    .then((data) => data.payload);
+  let user_suggest_id = [];
+  if (userid_list_match_pet.length < NUM_OF_USER_SUGGEST) {
+    const random_user_id = await userModel
+      .getUserIdThatNoteContainUsers(
+        [...userid_list_match_pet, ...UN_SUGGESTED_FRIEND_IDS],
+        NUM_OF_USER_SUGGEST - userid_list_match_pet.length
+      )
+      .then((data) => data.payload);
+    user_suggest_id = [...userid_list_match_pet, ...random_user_id];
+  } else {
+    user_suggest_id = userid_list_match_pet;
+  }
+  const userSuggestInfor = await userHelper.getUserPublicInforByListIds(
+    user_suggest_id
+  );
 
-  console.log({listFriendIds});
-  res.send("" + user_id);
+  res.status(200).json(new Response(200, userSuggestInfor, ""));
+  return;
 };
 module.exports = {
   requestAddFriend,
