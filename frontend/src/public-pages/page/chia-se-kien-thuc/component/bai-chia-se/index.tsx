@@ -23,15 +23,19 @@ import { timeAgo } from '../../../../../helper/post';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Tag from '../../../../../components/tag';
 import { Page404 } from '../../../mang-xa-hoi/component/post-detail';
-
+import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
+import AssistantPhotoRoundedIcon from '@mui/icons-material/AssistantPhotoRounded';
+import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
+import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
+import NotificationsOffRoundedIcon from '@mui/icons-material/NotificationsOffRounded';
 export default function BaiChiaSe() {
   const [article, setArticle] = useState<ArticleType>({
     id: '',
     title: '',
     main_image: '',
     intro: '',
-    content:
-      '<ol><li>Lý do tại sao cần có 1 rich editor</li><li>Hãy handle nha</li><li>Có bubble nè</li><li>Honghhhhdhdh</li></ol>',
+    content: '',
     categories: [],
     user_avatar: '',
     user_name: 'Thuyen',
@@ -39,12 +43,19 @@ export default function BaiChiaSe() {
 
   const { id } = useParams();
   const [isData, setIsData] = useState(true);
+  const [comments, setComments] = useState<CommentType[]>([]);
+  const [numAve, setNumAve] = useState(0);
+  const { enqueueSnackbar } = useSnackbar();
+  const [isFollow, setIsFollow] = useState(false);
+
   useEffect(() => {
     if (id) {
       articleApi
         .getArticleById(id)
         .then((data) => {
           if (data?.status == 200) {
+            console.log(data, 'data arcticle ');
+
             const art = {
               id: data?.payload?._id,
               title: data?.payload?.title,
@@ -54,7 +65,14 @@ export default function BaiChiaSe() {
               categories: data?.payload?.categories,
               user_avatar: data?.payload?.owner_infor?.anh?.url,
               user_name: data?.payload?.owner_infor?.ten,
+              isUpVote: data?.payload?.hasUpVoted,
+              isDownVote: data?.payload?.hasDownVoted,
+              numUpVote: data?.payload?.numOfUpVote,
+              numDownVote: data?.payload?.numOfDownVote,
             };
+            setNumAve(
+              data?.payload?.numOfUpVote - data?.payload?.numOfDownVote
+            );
             setArticle(art);
           } else {
             setIsData(false);
@@ -66,6 +84,131 @@ export default function BaiChiaSe() {
     }
   }, []);
 
+  useEffect(() => {
+    if (id) {
+      articleApi.getAllComment(id).then((data) => {
+        if (data?.status == 200) {
+          console.log(data, 'COmment');
+
+          const listComment: CommentType[] = data?.payload?.comments?.map(
+            (item: any) => {
+              return {
+                photoURL: item?.userCmtInfor?.anh?.url,
+                name: item?.userCmtInfor?.ten,
+                userId: item?.userCmtInfor?.ma_nguoi_dung,
+                text: item?.comment,
+                createdAt: item?.commentAt,
+                id: item?._id,
+              } as CommentType;
+            }
+          );
+          setComments(listComment.reverse());
+        }
+      });
+    }
+  }, [id]);
+  useEffect(() => {
+    if (id) {
+      articleApi.isUserFollowedPost(id).then((data) => {
+        if (data?.status == 200) {
+          if (data?.payload?.isFollowed) {
+            setIsFollow(true);
+          }
+        }
+      });
+    }
+  }, []);
+
+  function upVote() {
+    if (id) {
+      articleApi
+        .upVoteArticle(id)
+        .then((data) => {
+          if (data?.status == 200) {
+            setArticle({
+              ...article,
+              isUpVote: true,
+              isDownVote: false,
+            });
+            setNumAve(numAve + 1);
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
+    }
+  }
+
+  function downVote() {
+    if (id) {
+      articleApi
+        .downVoteArticle(id)
+        .then((data) => {
+          if (data?.status == 200) {
+            setArticle({
+              ...article,
+              isUpVote: false,
+              isDownVote: true,
+            });
+            setNumAve(numAve - 1);
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
+    }
+  }
+
+  function followArticle() {
+    if (id) {
+      articleApi
+        .followArticle(id)
+        .then((data) => {
+          if (data?.status == 200) {
+            setIsFollow(true);
+            enqueueSnackbar(`Bạn đã theo dõi bài viết`, { variant: 'info' });
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
+    }
+  }
+  function unFollowArticle() {
+    if (id) {
+      articleApi
+        .unFollowArticle(id)
+        .then((data) => {
+          if (data?.status == 200) {
+            setIsFollow(false);
+            enqueueSnackbar(`Bạn đã hủy theo dõi bài viết`, {
+              variant: 'info',
+            });
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
+    }
+  }
+  function reportArticle() {
+    if (id) {
+      articleApi
+        .reportArticle(id)
+        .then((data) => {
+          if (data?.status == 200) {
+            setIsFollow(false);
+            enqueueSnackbar(`Bạn đã báo cáo bài viết thành công`, {
+              variant: 'info',
+            });
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
+    }
+  }
+
   return (
     <>
       {isData ? (
@@ -73,104 +216,209 @@ export default function BaiChiaSe() {
           <Grid xs={9} item>
             <Box
               sx={{
-                paddingBottom: '120px',
+                display: 'flex',
+                position: 'relative',
               }}
             >
               <Box
                 sx={{
                   display: 'flex',
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  alignItems:"center",
-                  justifyContent:"center"
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  paddingLeft: '20px',
+                  position: 'fixed',
+                  left: '280px',
                 }}
               >
-                {article?.categories?.map((item) => {
-                  return <Tag text={item} />;
-                })}
+                <IconButton
+                  disabled={article?.isUpVote}
+                  sx={{
+                    border: '1px solid gray',
+                    padding: '5px',
+                  }}
+                  onClick={upVote}
+                >
+                  <ArrowDropUpRoundedIcon
+                    sx={{
+                      fontSize: '32px',
+                    }}
+                  />
+                </IconButton>
+
+                <span
+                  style={{
+                    margin: '10px 0',
+                    fontSize: '18px',
+                    fontWeight: '600',
+                    fontFamily: 'quicksand',
+                    color: 'gray',
+                  }}
+                >
+                  {' '}
+                  {numAve}+{' '}
+                </span>
+                <IconButton
+                  disabled={article?.isDownVote}
+                  sx={{
+                    border: '1px solid gray',
+                    padding: '5px',
+                  }}
+                  onClick={downVote}
+                >
+                  <ArrowDropDownRoundedIcon
+                    sx={{
+                      fontSize: '32px',
+                    }}
+                  />
+                </IconButton>
+                {isFollow ? (
+                  <IconButton
+                    sx={{
+                      border: '1px solid gray',
+                      padding: '10px',
+                      margin: '16px 0px',
+                    }}
+                    onClick={unFollowArticle}
+                  >
+                    <NotificationsActiveRoundedIcon
+                      sx={{
+                        fontSize: '22px',
+                      }}
+                    />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    sx={{
+                      border: '1px solid gray',
+                      padding: '10px',
+                      margin: '16px 0px',
+                    }}
+                    onClick={followArticle}
+                  >
+                    <NotificationsOffRoundedIcon
+                      sx={{
+                        fontSize: '22px',
+                      }}
+                    />
+                  </IconButton>
+                )}
+                <IconButton
+                  sx={{
+                    border: '1px solid gray',
+                    padding: '10px',
+                  }}
+                  onClick={reportArticle}
+                >
+                  <AssistantPhotoRoundedIcon
+                    sx={{
+                      fontSize: '22px',
+                    }}
+                  />
+                </IconButton>
               </Box>
               <Box
                 sx={{
-                  // display: 'flex',
-                  mb: '20px',
-                  mt:"12px"
+                  paddingBottom: '120px',
+                  marginLeft: '80px',
                 }}
               >
-
-                <Typography
-                  textAlign="center"
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '600',
-                    flex: 1,
-                    fontSize: '24px',
-                    mb: '16px',
-                  }}
-                >
-                  {article.title}
-                </Typography>
                 <Box
                   sx={{
-                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {article?.categories?.map((item) => {
+                    return <Tag text={item} />;
+                  })}
+                </Box>
+                <Box
+                  sx={{
+                    // display: 'flex',
+                    mb: '20px',
+                    mt: '12px',
                   }}
                 >
                   <Typography
+                    textAlign="center"
                     sx={{
                       fontFamily: 'quicksand',
-                      fontWeight: '400',
-                      fontSize: '15px',
+                      fontWeight: '600',
+                      flex: 1,
+                      fontSize: '24px',
+                      mb: '16px',
                     }}
                   >
-                    {article?.intro}
+                    {article.title?.length > 100 ? article.title?.substring(0,100) : article.title}
                   </Typography>
                   <Box
                     sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      mt: '10px',
-                      justifyContent: 'center',
+                      flex: 1,
                     }}
                   >
-                    <img
-                      style={{
-                        objectFit: 'cover',
-                        borderRadius: '50px',
-                      }}
-                      height={36}
-                      width={36}
-                      src={article?.user_avatar}
-                    />
                     <Typography
                       sx={{
                         fontFamily: 'quicksand',
-                        fontWeight: '500',
-                        fontSize: '14px',
-                        ml: '16px',
+                        fontWeight: '400',
+                        fontSize: '15px',
                       }}
                     >
-                      By {article.user_name}
+                      {article?.intro}
                     </Typography>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mt: '10px',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img
+                        style={{
+                          objectFit: 'cover',
+                          borderRadius: '50px',
+                        }}
+                        height={36}
+                        width={36}
+                        src={article?.user_avatar}
+                      />
+                      <Typography
+                        sx={{
+                          fontFamily: 'quicksand',
+                          fontWeight: '500',
+                          fontSize: '14px',
+                          ml: '16px',
+                        }}
+                      >
+                        By {article.user_name}
+                      </Typography>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
 
-              <img
-                width={'100%'}
-                style={{
-                  maxHeight: '250px',
-                  objectFit: 'cover',
-                }}
-                src={article?.main_image}
-              />
-              <span>{parse(article.content)} </span>
-              
-              <Divider
-                sx={{
-                  marginBottom: '22px',
-                  marginTop: '20px',
-                }}
-              />
-              {/* <Comment
+                <img
+                  width={'100%'}
+                  style={{
+                    maxHeight: '250px',
+                    objectFit: 'cover',
+                  }}
+                  src={article?.main_image}
+                />
+                <span>{parse(article.content)} </span>
+
+                <Divider
+                  sx={{
+                    marginBottom: '22px',
+                    marginTop: '20px',
+                  }}
+                />
+                {comments?.map((comment) => {
+                  return <Comment comment={comment} onRemove={() => {}} />;
+                })}
+                {/* <Comment
               comment={{
                 photoURL: 'string',
                 name: 'Thuyen',
@@ -190,20 +438,23 @@ export default function BaiChiaSe() {
               }}
               onRemove={() => {}}
             /> */}
-              <CreateComment
-                onSuccess={() => {
-                  // setReloadComment(!reloadComment);
-                  // console.log('reload laij nef');
-                  // if (status) {
-                  //   setStatus({
-                  //     ...status,
-                  //     numOfComment: status?.numOfComment + 1,
-                  //   });
-                  // }
-                }}
-                // idStatus={status?.id}
-                idStatus={''}
-              />
+                <CreateComment
+                  onSuccess={(cmt) => {
+                    // setReloadComment(!reloadComment);
+                    // console.log('reload laij nef');
+                    // if (status) {
+                    //   setStatus({
+                    //     ...status,
+                    //     numOfComment: status?.numOfComment + 1,
+                    //   });
+                    // }
+                    const arr = [cmt];
+                    setComments([...comments, ...arr]);
+                  }}
+                  // idStatus={status?.id}
+                  idStatus={article?.id}
+                />
+              </Box>
             </Box>
           </Grid>
           <Grid xs={3} item></Grid>
@@ -215,20 +466,33 @@ export default function BaiChiaSe() {
   );
 }
 
-function CreateComment(props: { idStatus: string; onSuccess: () => void }) {
+function CreateComment(props: {
+  idStatus: string;
+  onSuccess: (comment: CommentType) => void;
+}) {
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const { enqueueSnackbar } = useSnackbar();
   const [value, setValue] = useState('');
   const [close, setClose] = useState(true);
   function handleComment() {
-    postApi
-      .commentStatus(props.idStatus, value)
-      .then(() => {
+    console.log(value, ' value n');
+
+    articleApi
+      .addComment(props.idStatus, value)
+      .then((data: any) => {
         setValue('');
-        props?.onSuccess?.();
+        const cmt: CommentType = {
+          photoURL: data?.userCmtInfor?.anh?.url,
+          name: infoUser?.name || '',
+          userId: infoUser?.id || 0,
+          text: data?.payload?.comment,
+          createdAt: data?.payload?.commentAt,
+          id: data?.payload?._id,
+        };
+        props?.onSuccess?.(cmt);
       })
       .catch((err) => {
-        enqueueSnackbar(`${err}`, { variant: 'error' });
+        enqueueSnackbar(`${err.message}`, { variant: 'error' });
       });
   }
 
@@ -305,33 +569,11 @@ function CreateComment(props: { idStatus: string; onSuccess: () => void }) {
 }
 
 function Comment(props: { comment: CommentType; onRemove: () => void }) {
-  const [isReply, setIsReply] = useState(false);
-  const [isReload, setIsReload] = useState(false);
-  const [replys, setReplys] = useState<CommentType[]>([]);
-  const [isFinish, setIsFinish] = useState(false);
-  useEffect(() => {
-    if (props.comment.id) {
-      postApi.getAllReply(props.comment.id).then((data) => {
-        if (data?.status == 200) {
-          const reps = data?.payload?.replies?.map((item: any) => {
-            return {
-              photoURL: item?.userReplyInfor?.anh?.url,
-              name: item?.userReplyInfor?.ten,
-              text: item?.reply,
-              createdAt: item?.replyAt,
-              id: item?._id,
-            } as CommentType;
-          });
-          console.log('lấy phản hổi thanh cong', reps);
-          setReplys(reps);
-          setIsFinish(true);
-          return;
-        }
-      });
-    }
-    setIsFinish(true);
-  }, [props.comment.id, isReload]);
+  const [isFinish, setIsFinish] = useState(true);
+  const [comment, setComment] = useState(props?.comment);
 
+  const profile = useSelector((state: RootState) => state.user.profile);
+  const [isFix, setIsFix] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -341,9 +583,12 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  useEffect(() => {
+    setComment(props?.comment);
+  }, [props?.comment]);
   function handleDeleteCmt() {
     if (props.comment.id) {
-      postApi.removeComment(props.comment.id).then((data) => {
+      articleApi.deleteComment(props.comment.id).then((data) => {
         if (data?.status == 200) {
           setIsFinish(false);
           props.onRemove();
@@ -352,184 +597,252 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
       });
     }
   }
+
+  function handleFix() {
+    handleClose();
+    setIsFix(true);
+  }
   return (
     <>
       {isFinish && (
         <>
-          <Box
-            sx={{
-              display: 'flex',
-              // background: '#fff',
-              // padding: '0px 20px 10px 20px',
-              paddingBottom: '20px',
-              borderRadius: '12px',
-            }}
-          >
-            <img
-              style={{
-                height: '40px',
-                width: '40px',
-                objectFit: 'cover',
-                borderRadius: '30px',
-                minWidth: '40px',
-                minHeight: '40px',
+          {' '}
+          {isFix ? (
+            <FixComment
+              idCmt={props?.comment.id}
+              text={comment?.text}
+              onSuccess={(cmt) => {
+                setComment({
+                  ...comment,
+                  text: cmt,
+                });
+                setIsFix(false);
               }}
-              src={props.comment.photoURL}
             />
-            <Box>
+          ) : (
+            <Box
+              sx={{
+                display: 'flex',
+                // background: '#fff',
+                // padding: '0px 20px 10px 20px',
+                paddingBottom: '20px',
+                borderRadius: '12px',
+                width: '100%',
+              }}
+            >
+              <img
+                style={{
+                  height: '40px',
+                  width: '40px',
+                  objectFit: 'cover',
+                  borderRadius: '30px',
+                  minWidth: '40px',
+                  minHeight: '40px',
+                }}
+                src={props.comment.photoURL}
+              />
               <Box
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
+                  width: '100%',
                 }}
               >
                 <Box
                   sx={{
-                    ml: '16px',
-                    background: '#f0f2f5',
-                    borderRadius: '10px',
-                    padding: '10px',
-                    flex: '1',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
                   }}
                 >
-                  <Typography
+                  <Box
                     sx={{
-                      fontFamily: 'quicksand',
-                      fontWeight: '700',
-                      fontSize: '15px',
+                      ml: '16px',
+                      background: '#f0f2f5',
+                      borderRadius: '10px',
+                      padding: '10px',
+                      flex: '1',
                     }}
                   >
-                    {props.comment.name}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontFamily: 'quicksand',
-                      fontWeight: '400',
-                      fontSize: '13px',
-                      color: '',
-                    }}
-                  >
-                    {props.comment.text}
-                  </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: 'quicksand',
+                        fontWeight: '700',
+                        fontSize: '15px',
+                      }}
+                    >
+                      {props.comment.name}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: 'quicksand',
+                        fontWeight: '400',
+                        fontSize: '13px',
+                        color: '',
+                      }}
+                    >
+                      {comment.text}
+                    </Typography>
+                  </Box>
+                  {profile?.id == props?.comment?.userId && (
+                    <>
+                      <IconButton onClick={handleClick}>
+                        <MoreVertIcon
+                          sx={{
+                            fontSize: '20px',
+                          }}
+                        />
+                      </IconButton>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        sx={{
+                          fontFamily: 'quicksand',
+                        }}
+                        MenuListProps={{
+                          'aria-labelledby': 'basic-button',
+                        }}
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                      >
+                        <MenuItem
+                          sx={{
+                            fontFamily: 'quicksand',
+                          }}
+                          onClick={handleDeleteCmt}
+                        >
+                          Xóa
+                        </MenuItem>
+                        <MenuItem
+                          sx={{
+                            fontFamily: 'quicksand',
+                          }}
+                          onClick={handleFix}
+                        >
+                          Chỉnh sửa
+                        </MenuItem>
+                      </Menu>
+                    </>
+                  )}
                 </Box>
-                <IconButton onClick={handleClick}>
-                  <MoreVertIcon
-                    sx={{
-                      fontSize: '20px',
-                    }}
-                  />
-                </IconButton>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  sx={{
+                <span
+                  style={{
+                    paddingLeft: '20px',
+                    fontSize: '13px',
+                    color: 'gray',
                     fontFamily: 'quicksand',
-                  }}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
+                    paddingTop: '10px',
                   }}
                 >
-                  <MenuItem
-                    sx={{
-                      fontFamily: 'quicksand',
-                    }}
-                    onClick={handleDeleteCmt}
-                  >
-                    Xóa
-                  </MenuItem>
-                  <MenuItem
-                    sx={{
-                      fontFamily: 'quicksand',
-                    }}
-                    onClick={handleDeleteCmt}
-                  >
-                    Chỉnh sửa
-                  </MenuItem>
-                </Menu>
+                  {timeAgo(props?.comment?.createdAt)}
+                </span>
               </Box>
-              {/* <Box
-                sx={{
-                  display: 'flex',
-                  padding: '5px 10px 10px 20px',
-                  alignItems: 'center',
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '600',
-                    fontSize: '16px',
-                    color: 'gray',
-                    mr: '15px',
-                  }}
-                >
-                  Thích
-                </Typography>
-                <Typography
-                  onClick={() => setIsReply(true)}
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '600',
-                    fontSize: '16px',
-                    color: 'gray',
-                    mr: '15px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  Phản hồi
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '500',
-                    fontSize: '14px',
-                    color: 'gray',
-                    mr: '15px',
-                    mt: '3px',
-                  }}
-                >
-                  {timeAgo(props.comment.createdAt)}
-                </Typography>
-              </Box> */}
             </Box>
-          </Box>
-          {/* <Box
-            sx={{
-              marginLeft: '30px',
-            }}
-          >
-            {replys.length > 0 &&
-              replys.map((item) => {
-                return (
-                  <Reply
-                    onHandleReply={() => setIsReply(true)}
-                    comment={item}
-                  />
-                );
-              })}
-            {isReply && (
-              <CreateReply
-                onSuccess={() => {
-                  setIsReload(!isReload);
-                  setIsReply(false);
-                }}
-                idStatus={props.comment.id}
-              />
-            )}
-          </Box> */}
+          )}
         </>
       )}
+    </>
+  );
+}
+
+function FixComment(props: {
+  idCmt: string;
+  text: string;
+  onSuccess: (comment: string) => void;
+}) {
+  const infoUser = useSelector((state: RootState) => state.user.profile);
+  const { enqueueSnackbar } = useSnackbar();
+  const [value, setValue] = useState(props?.text);
+
+  function handleUpdateComment() {
+    articleApi
+      .updateComment(props.idCmt, value)
+      .then((data: any) => {
+        props?.onSuccess?.(value);
+        enqueueSnackbar(`Chỉnh sửa bình luận thành công`, { variant: "info" });
+      })
+      .catch((err) => {
+        enqueueSnackbar(`${err.message}`, { variant: 'error' });
+      });
+  }
+
+  return (
+    <>
+      {/* {!close && ( */}
+      <Box
+        sx={{
+          display: 'flex',
+          // background: '#fff',
+          // padding: '0px 20px 12px 20px',
+          borderRadius: '12px',
+          marginBottom: '20px',
+        }}
+      >
+        <img
+          style={{
+            height: '40px',
+            width: '40px',
+            objectFit: 'cover',
+            borderRadius: '30px',
+            minWidth: '40px',
+            minHeight: '40px',
+          }}
+          src={infoUser?.photoURL || ''}
+        />
+        <Box
+          sx={{
+            ml: '16px',
+            // background: '#f0f2f5',
+            background: '#fff',
+            borderRadius: '10px',
+            padding: '10px',
+            width: '100%',
+            position: 'relative',
+          }}
+        >
+          <InputBase
+            autoFocus
+            fullWidth
+            multiline
+            sx={{
+              ml: 1,
+              flex: 1,
+              fontFamily: 'quicksand',
+              fontWeight: '400',
+              fontSize: '14px',
+              paddingRight: '60px',
+            }}
+            placeholder="Bình luận của bạn ..."
+            inputProps={{ 'aria-label': 'search google maps' }}
+            value={value}
+            onChange={(e) => setValue(e.target.value as string)}
+          />
+          <IconButton
+            onClick={handleUpdateComment}
+            disabled={!value}
+            sx={{
+              position: 'absolute',
+              right: '10px',
+              bottom: '2px',
+            }}
+          >
+            <SendRoundedIcon
+              sx={{
+                color: value ? '#0062d2' : 'gray',
+                fontSize: '22px',
+              }}
+            />
+          </IconButton>
+        </Box>
+      </Box>
+      {/* )} */}
     </>
   );
 }
