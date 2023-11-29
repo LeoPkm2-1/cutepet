@@ -164,30 +164,38 @@ khi bấm vào thông báo đã có lời mời kết bạn thì navigate tới 
 
 ## 64. xóa thú cưng
 
-## 65. khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
+## 65. thu hồi lời mời kết bạn
+
+tham khảo tại
+
+_chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)** và **postman số 68**
+
+## 66. khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
 
 ## 66. hiện thực like bài viết khi comment trong bài viết chia sẻ kiến thức
 
-## 67. khi xóa bài viết cần phải cho bài viết đó biến mất
+## 68. khi xóa bài viết cần phải cho bài viết đó biến mất
 
-## 68. con lăn trong mạng xãi hội có vấn đề
+## 69. con lăn trong mạng xãi hội có vấn đề
 
-## 69. ảnh giao diện của thông báo nhảy ra góc dưới bên phải có vấn đề, trong cả trang mạng xã hội lẫn trang cá nhân
+## 70. ảnh giao diện của thông báo nhảy ra góc dưới bên phải có vấn đề, trong cả trang mạng xã hội lẫn trang cá nhân
 
 ## 70. cần kiểm tra lại tất cả các hình ảnh và tên của thông báo góc bên phải khi socket đến
 
-## 71. load bài viết chia sẻ trạng thái theo thú cưng được tags
+## 72. load bài viết chia sẻ trạng thái theo thú cưng được tags
 
-## 72. resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
+## 73. resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
 
-## 73. trang cập nhật thông tin nguời dùng
+## 74. trang cập nhật thông tin nguời dùng
 
-## 74. đổi mật khẩu người dùng
+## 75. đổi mật khẩu người dùng
 
-## 75. chỉnh sửa bài viết chia sẻ trạng thái
+## 76. chỉnh sửa bài viết chia sẻ trạng thái
 
-## 76. chỉnh sửa bài viết chia sẻ kiến thức
+## 77. chỉnh sửa bài viết chia sẻ kiến thức
 
-## 77. xóa bài viết chia sẻ kiến thức
+## 78. xóa bài viết chia sẻ kiến thức
 
-## 78. giao diện gợi ý kết bạn
+## 79. giao diện gợi ý kết bạn
+
+##

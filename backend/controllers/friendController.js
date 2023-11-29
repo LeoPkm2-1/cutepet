@@ -8,6 +8,7 @@ const {
   notifyRequestAddFriend,
   notifyAcceptAddFriend,
 } = require("../notificationHandler/friend");
+const friendHelper = require("../utils/banbeHelper");
 
 // gửi lời mời kết bạn
 const requestAddFriend = async (req, res) => {
@@ -153,7 +154,7 @@ const unFriendById = async (req, res) => {
 };
 const getRequestAddFriendList = async (req, res) => {
   const user_id = req.auth_decoded.ma_nguoi_dung;
-  const addFriendRequests = await loiMoiKetBanModel.getAllPendingRequest(
+  const addFriendRequests = await loiMoiKetBanModel.getAllPendingRequestToUser(
     user_id
   );
   if (addFriendRequests.length <= 0) {
@@ -222,15 +223,23 @@ const removeRequestAddFriend = async (req, res) => {
   // res.send("ahihi");
   const recipient_id = req.body.requestID;
   const sender_id = req.auth_decoded.ma_nguoi_dung;
-  const deleteProcess = await loiMoiKetBanModel.deletePendingRequest(
-    sender_id,
-    recipient_id
-  ).then(data=>data.payload).then(data=>{
-    data.insertId = parseInt(data.insertId);
-    return data
-  })
+  const deleteProcess = await loiMoiKetBanModel
+    .deletePendingRequest(sender_id, recipient_id)
+    .then((data) => data.payload)
+    .then((data) => {
+      data.insertId = parseInt(data.insertId);
+      return data;
+    });
   // console.log(deleteProcess);
   res.status(200).json(new Response(200, deleteProcess, "OK"));
+};
+
+const getListSuggestedFriendController = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const listFriendIds = await friendHelper.getListFriendIdsOfUser(user_id);
+
+  console.log({listFriendIds});
+  res.send("" + user_id);
 };
 module.exports = {
   requestAddFriend,
@@ -240,4 +249,5 @@ module.exports = {
   getFriendList,
   unfollowFriend,
   removeRequestAddFriend,
+  getListSuggestedFriendController,
 };

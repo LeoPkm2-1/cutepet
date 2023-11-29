@@ -44,4 +44,10 @@ router.post(
   addFriendMid.checkFriendShipExistsMid,
   friendController.unfollowFriend
 );
+
+// get list suggested friend
+router.post(
+  "/getListSuggestedFriends",
+  friendController.getListSuggestedFriendController
+);
 module.exports = router;
