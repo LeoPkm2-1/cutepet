@@ -49,7 +49,8 @@ export function BaiVietCoBan(props: {
               fontSize: '16px',
             }}
           >
-            {props.article.title || 'Bài viết không có tiêu đề'}
+            {props?.article.title?.length > 100 ? `${props?.article.title?.substring(0, 50)}...` : props?.article.title}
+
           </Typography>
           <Typography
             sx={{
@@ -70,7 +71,8 @@ export function BaiVietCoBan(props: {
             sx={{
               display: 'flex',
               flexDirection: 'row',
-              flexWrap:"wrap"
+              flexWrap:"wrap",
+              marginTop:"8px"
             }}
           >
             {props?.article?.categories?.map((item) => {

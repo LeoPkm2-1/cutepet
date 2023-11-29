@@ -7,4 +7,8 @@ export interface ArticleType {
   categories: string[];
   user_name: string;
   user_avatar: string;
+  isUpVote?: boolean;
+  isDownVote?: boolean;
+  numUpVote?: number;
+  numDownVote?: number;
 }
