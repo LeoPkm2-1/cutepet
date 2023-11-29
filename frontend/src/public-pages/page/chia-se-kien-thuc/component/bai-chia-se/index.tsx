@@ -39,6 +39,7 @@ export default function BaiChiaSe() {
 
   const { id } = useParams();
   const [isData, setIsData] = useState(true);
+  const [comments, setComments] = useState<CommentType[]>([]);
   useEffect(() => {
     if (id) {
       articleApi
@@ -66,111 +67,149 @@ export default function BaiChiaSe() {
     }
   }, []);
 
+  useEffect(() => {
+    if (id) {
+      articleApi.getAllComment(id).then((data) => {
+        if (data?.status == 200) {
+          const listComment: CommentType[] = data?.payload?.comments?.map(
+            (item: any) => {
+              return {
+                photoURL: item?.userCmtInfor?.anh?.url,
+                name: item?.userCmtInfor?.ten,
+                userId: item?.userCmtInfor?.ma_nguoi_dung,
+                text: item?.comment,
+                createdAt: item?.commentAt,
+                id: item?._id,
+              } as CommentType;
+            }
+          );
+          setComments(listComment);
+        }
+      });
+    }
+  }, [id]);
+
+  function upVote() {}
+
+  function downVote() {}
+
   return (
     <>
       {isData ? (
         <Grid container>
           <Grid xs={9} item>
-            <Box
-              sx={{
-                paddingBottom: '120px',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  alignItems:"center",
-                  justifyContent:"center"
-                }}
-              >
-                {article?.categories?.map((item) => {
-                  return <Tag text={item} />;
-                })}
+            <Box>
+              <Box>
+                <IconButton onClick={upVote}>Up</IconButton>
+                <IconButton onClick={downVote}>Down</IconButton>
               </Box>
               <Box
                 sx={{
-                  // display: 'flex',
-                  mb: '20px',
-                  mt:"12px"
+                  paddingBottom: '120px',
                 }}
               >
-
-                <Typography
-                  textAlign="center"
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '600',
-                    flex: 1,
-                    fontSize: '24px',
-                    mb: '16px',
-                  }}
-                >
-                  {article.title}
-                </Typography>
                 <Box
                   sx={{
-                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {article?.categories?.map((item) => {
+                    return <Tag text={item} />;
+                  })}
+                </Box>
+                <Box
+                  sx={{
+                    // display: 'flex',
+                    mb: '20px',
+                    mt: '12px',
                   }}
                 >
                   <Typography
+                    textAlign="center"
                     sx={{
                       fontFamily: 'quicksand',
-                      fontWeight: '400',
-                      fontSize: '15px',
+                      fontWeight: '600',
+                      flex: 1,
+                      fontSize: '24px',
+                      mb: '16px',
                     }}
                   >
-                    {article?.intro}
+                    {article.title}
                   </Typography>
                   <Box
                     sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      mt: '10px',
-                      justifyContent: 'center',
+                      flex: 1,
                     }}
                   >
-                    <img
-                      style={{
-                        objectFit: 'cover',
-                        borderRadius: '50px',
-                      }}
-                      height={36}
-                      width={36}
-                      src={article?.user_avatar}
-                    />
                     <Typography
                       sx={{
                         fontFamily: 'quicksand',
-                        fontWeight: '500',
-                        fontSize: '14px',
-                        ml: '16px',
+                        fontWeight: '400',
+                        fontSize: '15px',
                       }}
                     >
-                      By {article.user_name}
+                      {article?.intro}
                     </Typography>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mt: '10px',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img
+                        style={{
+                          objectFit: 'cover',
+                          borderRadius: '50px',
+                        }}
+                        height={36}
+                        width={36}
+                        src={article?.user_avatar}
+                      />
+                      <Typography
+                        sx={{
+                          fontFamily: 'quicksand',
+                          fontWeight: '500',
+                          fontSize: '14px',
+                          ml: '16px',
+                        }}
+                      >
+                        By {article.user_name}
+                      </Typography>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
 
-              <img
-                width={'100%'}
-                style={{
-                  maxHeight: '250px',
-                  objectFit: 'cover',
-                }}
-                src={article?.main_image}
-              />
-              <span>{parse(article.content)} </span>
-              
-              <Divider
-                sx={{
-                  marginBottom: '22px',
-                  marginTop: '20px',
-                }}
-              />
-              {/* <Comment
+                <img
+                  width={'100%'}
+                  style={{
+                    maxHeight: '250px',
+                    objectFit: 'cover',
+                  }}
+                  src={article?.main_image}
+                />
+                <span>{parse(article.content)} </span>
+
+                <Divider
+                  sx={{
+                    marginBottom: '22px',
+                    marginTop: '20px',
+                  }}
+                />
+                {comments?.map((comment) => {
+                  return (
+                    <Comment
+                      comment={comment}
+                      onRemove={() => {}}
+                    />
+                  );
+                })}
+                {/* <Comment
               comment={{
                 photoURL: 'string',
                 name: 'Thuyen',
@@ -190,20 +229,21 @@ export default function BaiChiaSe() {
               }}
               onRemove={() => {}}
             /> */}
-              <CreateComment
-                onSuccess={() => {
-                  // setReloadComment(!reloadComment);
-                  // console.log('reload laij nef');
-                  // if (status) {
-                  //   setStatus({
-                  //     ...status,
-                  //     numOfComment: status?.numOfComment + 1,
-                  //   });
-                  // }
-                }}
-                // idStatus={status?.id}
-                idStatus={''}
-              />
+                <CreateComment
+                  onSuccess={() => {
+                    // setReloadComment(!reloadComment);
+                    // console.log('reload laij nef');
+                    // if (status) {
+                    //   setStatus({
+                    //     ...status,
+                    //     numOfComment: status?.numOfComment + 1,
+                    //   });
+                    // }
+                  }}
+                  // idStatus={status?.id}
+                  idStatus={article?.id}
+                />
+              </Box>
             </Box>
           </Grid>
           <Grid xs={3} item></Grid>
@@ -215,20 +255,30 @@ export default function BaiChiaSe() {
   );
 }
 
-function CreateComment(props: { idStatus: string; onSuccess: () => void }) {
+function CreateComment(props: { idStatus: string; onSuccess: (comment: CommentType) => void }) {
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const { enqueueSnackbar } = useSnackbar();
   const [value, setValue] = useState('');
   const [close, setClose] = useState(true);
   function handleComment() {
-    postApi
-      .commentStatus(props.idStatus, value)
-      .then(() => {
+    console.log(value, ' value n');
+
+    articleApi
+      .addComment(props.idStatus, value)
+      .then((data:any) => {
         setValue('');
+        const cmt : CommentType = {
+           photoURL: item?.userCmtInfor?.anh?.url,
+                name: infoUser?.ten,
+                userId: infoUser?.
+                text: data?.payload?.comment,
+                createdAt: data?.payload?.commentAt,
+                id: data?.payload?._id,
+        }
         props?.onSuccess?.();
       })
       .catch((err) => {
-        enqueueSnackbar(`${err}`, { variant: 'error' });
+        enqueueSnackbar(`${err.message}`, { variant: 'error' });
       });
   }
 
