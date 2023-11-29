@@ -36,7 +36,7 @@ export function TaoBaiChiaSe() {
           console.log(data);
           
           if(data?.payload[0]?._id){
-            navigate(`/home/trang-chia-se/${data?.payload[0]?._id}`);
+            // navigate(`/home/trang-chia-se/${data?.payload[0]?._id}`);
           }
         }
       }).catch((err) => {

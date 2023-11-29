@@ -62,6 +62,88 @@ const getAllComment = (article_id: string) => {
   });
 };
 
+const upVoteArticle = (article_id: string) => {
+  return authRequest<any>({
+    url: '/post/article/upVoteArticle',
+    method: 'POST',
+    body: {
+      article_id,
+    },
+  });
+};
+
+const downVoteArticle = (article_id: string) => {
+  return authRequest<any>({
+    url: '/post/article/downVoteArticle',
+    method: 'POST',
+    body: {
+      article_id,
+    },
+  });
+};
+
+const isUserFollowedPost = (article_id: string) => {
+  return authRequest<any>({
+    url: '/post/article/isUserFollowedPost',
+    method: 'POST',
+    body: {
+      article_id,
+    },
+  });
+};
+
+const followArticle = (article_id: string) => {
+  return authRequest<any>({
+    url: '/post/article/followArticle',
+    method: 'POST',
+    body: {
+      article_id,
+    },
+  });
+};
+
+const unFollowArticle = (article_id: string) => {
+  return authRequest<any>({
+    url: '/post/article/unFollowArticle',
+    method: 'POST',
+    body: {
+      article_id,
+    },
+  });
+};
+
+const reportArticle = (article_id: string) => {
+  return authRequest<any>({
+    url: '/post/article/reportArticle',
+    method: 'POST',
+    body: {
+      article_id,
+    },
+  });
+};
+
+const deleteComment = (cmt_id: string) => {
+  return authRequest<any>({
+    url: '/post/article/deleteComment',
+    method: 'POST',
+    body: {
+      cmt_id,
+    },
+  });
+};
+
+const updateComment = (cmt_id: string, content: string) => {
+  return authRequest<any>({
+    url: '/post/article/updateComment',
+    method: 'POST',
+    body: {
+      cmt_id,
+      content
+    },
+  });
+};
+
+
 
 const articleApi = {
   createArticle,
@@ -69,7 +151,15 @@ const articleApi = {
   getAllArticle,
   getCategori,
   addComment,
-  getAllComment
+  getAllComment,
+  upVoteArticle,
+  downVoteArticle,
+  isUserFollowedPost,
+  followArticle,
+  unFollowArticle,
+  reportArticle,
+  deleteComment,
+  updateComment
 };
 
 export default articleApi;
