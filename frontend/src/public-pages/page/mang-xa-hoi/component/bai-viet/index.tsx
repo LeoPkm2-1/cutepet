@@ -174,7 +174,7 @@ export default function PostComponent(props: Props) {
         if (data?.status == 200) {
           setIsRender(false);
           enqueueSnackbar(`Xóa bài viết thành công`, {
-            variant: 'success',
+            variant: "info",
           });
         }
       });
@@ -218,7 +218,7 @@ export default function PostComponent(props: Props) {
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Báo cáo bài viết thành công`, {
-              variant: 'success',
+              variant: "info",
             });
           }
         })

@@ -31,12 +31,12 @@ export function TaoBaiChiaSe() {
       .then((data) => {
         if (data?.status == 200) {
           console.log('Thanh cong');
-          enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
+          enqueueSnackbar('Tạo bài viết thành công', { variant: "info" });
           setIsLoading(false);
           console.log(data);
           
           if(data?.payload[0]?._id){
-            // navigate(`/home/trang-chia-se/${data?.payload[0]?._id}`);
+            navigate(`/home/trang-chia-se/${data?.payload[0]?._id}`);
           }
         }
       }).catch((err) => {

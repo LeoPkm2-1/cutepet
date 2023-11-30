@@ -147,7 +147,7 @@ const LoginPage = (props: P) => {
             storage.setTokens(res.payload[0]?.token);
             console.log('Thành còng token :', res.payload[0]?.token);
             dispatch(AuthActions.setAuth(true));
-            enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
+            enqueueSnackbar('Đăng nhập thành công', { variant: 'info' });
           } 
           const profile: UserProfile = {
             id: res?.payload[0]?.ma_nguoi_dung,

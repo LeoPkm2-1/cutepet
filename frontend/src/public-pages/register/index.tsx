@@ -161,7 +161,7 @@ const RegisterPage = (props: P) => {
         console.log(res, " res nè");
         if (res?.status == 200) {
           
-          enqueueSnackbar('Đăng ký thành công. Vui lòng kiểm tra email để xác thực !', { variant: 'success' });
+          enqueueSnackbar('Đăng ký thành công. Vui lòng kiểm tra email để xác thực !', { variant: "info" });
           setIsLoading(false);
         } else {
           enqueueSnackbar(

@@ -16,6 +16,7 @@ type Props = {
   isReaded?: boolean;
   isRequestFriend?:boolean;
   isFriend?:boolean;
+  isArticle?:boolean;
 };
 export function NotifycationItem(props: Props) {
   return (
@@ -73,6 +74,10 @@ export function NotifycationItemClick(props: Props) {
     }
     if(props?.isFriend){
       return `/home/trang-ca-nhan-nguoi-dung/${props?.idPost}`
+    }
+    if(props?.isArticle){
+      return `/home/trang-chia-se/${props?.idPost}`;
+
     }
     return `post/${props?.idPost}`;
   }
@@ -141,7 +146,7 @@ export function NotifycationItemClick(props: Props) {
           {!isReaded && (
             <FiberManualRecordRoundedIcon
               sx={{
-                color: '#1876f2',
+                color: "rgb(14, 100, 126)",
               }}
             />
           )}

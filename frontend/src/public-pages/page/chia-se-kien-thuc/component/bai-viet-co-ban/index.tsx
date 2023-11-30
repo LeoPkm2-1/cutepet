@@ -5,7 +5,7 @@ import Tag from '../../../../../components/tag';
 
 export function BaiVietCoBan(props: {
   article: ArticleType;
-  isShowNewFead?: boolean;
+  isSmall?: boolean;
 }) {
   const navigate = useNavigate();
   return (
@@ -23,14 +23,14 @@ export function BaiVietCoBan(props: {
           transition: '10s',
           position: 'relative',
           ':hover': {
-            bottom: props?.isShowNewFead ? '0px' : '2px',
+            bottom: props?.isSmall ? '0px' : '2px',
           },
           cursor: 'pointer',
         }}
       >
         <img
           width={'100%'}
-          height={props?.isShowNewFead ? '250px' : '150px'}
+          height={props?.isSmall ? '120px' : '150px'}
           style={{
             objectFit: 'cover',
           }}

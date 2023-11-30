@@ -106,6 +106,7 @@ const Header = (props: Props) => {
           if (!noti?.hasRead) {
             num++;
           }
+          //1
           if (noti?.type == 'COMMENT_STATUS_POST') {
             return {
               name: noti?.payload?.userComment?.ten,
@@ -121,6 +122,7 @@ const Header = (props: Props) => {
               hasRead: boolean;
             };
           }
+          //2
           if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
             return {
               name: noti?.payload?.userReply?.ten,
@@ -136,6 +138,8 @@ const Header = (props: Props) => {
               hasRead: boolean;
             };
           }
+
+          //3
           if (noti?.type == 'LIKE_STATUS_POST') {
             return {
               name: noti?.payload?.userReply?.ten,
@@ -179,6 +183,7 @@ const Header = (props: Props) => {
           padding: '4px 8px',
           borderRadius: '6px',
           margin: '0 10px',
+          background: 'rgb(14, 100, 126)',
         }}
         textAlign="center"
       >
@@ -204,7 +209,9 @@ const Header = (props: Props) => {
           onClick={() => navigate('/home/mang-xa-hoi')}
           sx={{
             color:
-              location.pathname == '/home/mang-xa-hoi' ? '#0C4195' : 'inherit',
+              location.pathname == '/home/mang-xa-hoi'
+                ? 'rgb(14, 100, 126)'
+                : 'inherit',
             mx: '20px',
             padding: '12px 30px',
             borderRadius: '5px',
@@ -220,7 +227,10 @@ const Header = (props: Props) => {
         <IconButton
           onClick={() => navigate('/home/ban-be')}
           sx={{
-            color: location.pathname == '/home/ban-be' ? '#0C4195' : 'inherit',
+            color:
+              location.pathname == '/home/ban-be'
+                ? 'rgb(14, 100, 126)'
+                : 'inherit',
             mx: '20px',
             padding: '12px 30px',
             borderRadius: '5px',
@@ -287,7 +297,7 @@ const Header = (props: Props) => {
           sx={{
             color:
               location.pathname == '/home/trang-chia-se'
-                ? '#0C4195'
+                ? 'rgb(14, 100, 126)'
                 : 'inherit',
             mx: '20px',
             padding: '12px 30px',
@@ -308,7 +318,7 @@ const Header = (props: Props) => {
           sx={{
             color:
               location.pathname == '/home/trang-ca-nhan'
-                ? '#0C4195'
+                ? 'rgb(14, 100, 126)'
                 : 'inherit',
             mx: '20px',
             padding: '12px 30px',
@@ -364,7 +374,7 @@ const Header = (props: Props) => {
                 flex: 1,
                 pl: '10px',
                 fontFamily: 'quicksand',
-                color: '#0c4195',
+                color: 'rgb(14, 100, 126)',
                 fontWeight: '600',
               }}
               value={valueSearch}
@@ -382,7 +392,7 @@ const Header = (props: Props) => {
             >
               <SearchIcon
                 sx={{
-                  color: '#0c4195',
+                  color: 'rgb(14, 100, 126)',
                 }}
               />
             </IconButton>
@@ -450,12 +460,13 @@ const Root = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  color: #0c4195;
+  color: 'rgb(14, 100, 126)';
 `;
 
 const Title = styled.div`
   font-size: 24px;
   font-weight: 700;
+  color: rgb(14, 100, 126);
   @media (max-width: 600px) {
     display: none;
   }
@@ -489,7 +500,8 @@ function NotifycationComponent() {
       type?: string;
       hasRead: boolean;
       idNoti?: string;
-      isRequestFriend?:boolean;
+      isRequestFriend?: boolean;
+      isArticle?:boolean;
     }[]
   >([]);
 
@@ -510,6 +522,8 @@ function NotifycationComponent() {
           if (!noti?.hasRead) {
             num++;
           }
+
+          //1
           if (noti?.type == 'COMMENT_STATUS_POST') {
             return {
               name: noti?.payload?.userComment?.ten,
@@ -527,7 +541,7 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
-
+          //2
           if (noti?.type == 'LIKE_STATUS_POST') {
             return {
               name: noti?.payload?.userLike?.ten,
@@ -545,7 +559,7 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
-
+          //3
           if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
             return {
               name: noti?.payload?.userReply?.ten,
@@ -563,7 +577,7 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
-
+          //4
           if (noti?.type == 'LIKE_COMMENT_IN_STATUS_POST') {
             return {
               name: noti?.payload?.userLike?.ten,
@@ -581,7 +595,7 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
-
+          //5
           if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
             return {
               name: noti?.payload?.userReply?.ten,
@@ -599,7 +613,7 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
-
+          //  6
           if (noti?.type == 'TAG_USER_IN_STATUS_POST') {
             return {
               name: noti?.payload?.userTag?.ten,
@@ -618,7 +632,7 @@ function NotifycationComponent() {
             };
           }
 
-          // Không link đến
+          //7 Không link đến
 
           if (noti?.type == 'REQUEST_ADD_FRIEND') {
             return {
@@ -636,10 +650,10 @@ function NotifycationComponent() {
               type?: string;
               hasRead: boolean;
               idNoti?: string;
-              isRequestFriend: boolean,
+              isRequestFriend: boolean;
             };
           }
-
+          //8
           if (noti?.type == 'ACCEPT_ADD_FRIEND') {
             return {
               name: noti?.payload?.acceptUser?.ten,
@@ -656,11 +670,73 @@ function NotifycationComponent() {
               type?: string;
               hasRead: boolean;
               idNoti?: string;
-              isRequestFriend: boolean,
+              isRequestFriend: boolean;
             };
           }
 
+          //9
+          if (noti?.type == 'UPVOTE_ARTICLE') {
+            return {
+              name: noti?.payload?.userUpvote?.ten,
+              url: noti?.payload?.userUpvote?.anh?.url,
+              idPost: noti?.payload?.articleInfor?._id,
+              hasRead: noti?.payload?.hasRead,
+              type: 'thích bài chia sẽ kiến thức của bạn',
+              idNoti: noti?._id,
+              isArticle: true,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+              isArticle: boolean;
+            };
+          }
+          //10
+          if (noti?.type == 'DOWNVOTE_ARTICLE') {
+            return {
+              name: noti?.payload?.userDownvote?.ten,
+              url: noti?.payload?.userDownvote?.anh?.url,
+              idPost: noti?.payload?.articleInfor?._id,
+              hasRead: noti?.payload?.hasRead,
+              type: 'không thích bài chia sẽ kiến thức của bạn',
+              idNoti: noti?._id,
+              isArticle: true,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+              isArticle: boolean;
+            };
+          }
+
+           //10
+           if (noti?.type == 'COMMENT_ARTICLE') {
+            return {
+              name: noti?.payload?.userComment?.ten,
+              url: noti?.payload?.userComment?.anh?.url,
+              idPost: noti?.payload?.articleInfor?._id,
+              hasRead: noti?.payload?.hasRead,
+              type: 'bình luận bài chia sẽ kiến thức của bạn',
+              idNoti: noti?._id,
+              isArticle: true,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+              isArticle: boolean;
+            };
+          }
         });
+
         console.log(list, 'List');
         setNoti([...noti, ...list]);
         if (data?.payload?.length < 5) {
@@ -723,7 +799,7 @@ function NotifycationComponent() {
                 fontWeight: '500',
                 fontSize: '15px',
                 margin: '16px 16px 10px 0px',
-                color: '#0c4195',
+                color: 'rgb(14, 100, 126)',
 
                 textDecoration: 'underline',
                 cursor: 'pointer',
@@ -744,7 +820,8 @@ function NotifycationComponent() {
                 type={item?.type}
                 url={item?.url}
                 isReaded={item?.hasRead}
-                isRequestFriend= {item?.isRequestFriend || false}
+                isRequestFriend={item?.isRequestFriend || false}
+                isArticle ={item?.isArticle || false}
               />
             </>
           );
@@ -758,7 +835,7 @@ function NotifycationComponent() {
               fontWeight: '500',
               fontSize: '15px',
               margin: '12px 0px 10px 0px',
-              color: '#0c4195',
+              color: 'rgb(14, 100, 126)',
               paddingBottom: '5px',
               textDecoration: 'underline',
               cursor: 'pointer',
