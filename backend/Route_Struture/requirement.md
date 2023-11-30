@@ -255,4 +255,16 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 ## 79. giao diện gợi ý kết bạn
 
+_chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-người-dùng-gợi-ý-kết-bạn)** và **postman số 74**
+
+##
+
+##
+
+##
+
+##
+
+##
+
 ##

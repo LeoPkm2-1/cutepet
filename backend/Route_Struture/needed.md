@@ -9,7 +9,6 @@
 
 ## ---DONE--- || ==OK== 4. handle kết bạn
 
-
 ## ---DONE--- || ==OK== 5. handle người dùng online hay offline động => Kiểm tra lại socket backend
 
     `nhớ kiểm tra event listen nha`
@@ -128,15 +127,14 @@ hiển thị 404 page not found khi bài viết không tồn tại
 4.  **REPLY_COMMENT_IN_STATUS_POST** => OK
 5.  **USER_IS_ONLINE** => chỉ được lần đầu => OK
 6.  **USER_IS_OFFLINE** => chỉ được lần đầu => OK
-7.  **TAG_USER_IN_STATUS_POST** => ERR=> ảnh của thông báo góc bên dưới phải chưa đúng 
-![](../media/img/err/img22.png)
+7.  **TAG_USER_IN_STATUS_POST** => ERR=> ảnh của thông báo góc bên dưới phải chưa đúng
+    ![](../media/img/err/img22.png)
 
-1.  **REQUEST_ADD_FRIEND** => ERR=> ảnh của thông báo góc bên dưới phải chưa đúng
+8.  **REQUEST_ADD_FRIEND** => ERR=> ảnh của thông báo góc bên dưới phải chưa đúng
 
 ![](../media/img/err/img20.png)
 
 9. **ACCEPT_ADD_FRIEND** => ERR=>ảnh của thông báo góc bên dưới phải chưa đúng
-
 
 ![](../media/img/err/img21.png)
 
@@ -197,5 +195,7 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 ## 78. xóa bài viết chia sẻ kiến thức
 
 ## 79. giao diện gợi ý kết bạn
+
+_chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-người-dùng-gợi-ý-kết-bạn)** và **postman số 74**
 
 ##

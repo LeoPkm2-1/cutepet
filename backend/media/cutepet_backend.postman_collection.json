@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "thuy",
+							"value": "amandawilcox",
 							"type": "text"
 						},
 						{
@@ -3220,7 +3220,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_temp}}",
 							"type": "string"
 						}
 					]
