@@ -49,7 +49,7 @@ chưa hiện thực được
 
 ## --DONE-- 50. up vote, downvote bài viết chia sẻ kiến thức, bình luận bài viết chia sẻ kiến thức
 
-## ---DONE--- || ==ERR== 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
+## ---DONE--- || ==DONE== Em kiểm tra lại --- 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
 
 (viết ra thông báo đó là thông báo nào đừng để noname)
 
