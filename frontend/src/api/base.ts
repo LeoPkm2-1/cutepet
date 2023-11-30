@@ -3,6 +3,7 @@ import axios from 'axios';
 import { store } from '../redux';
 import { AuthActions } from '../redux/auth';
 import jwt_decode from 'jwt-decode';
+import authApi from './auth';
 
 class RequestGlobal {
   static controllers: { [key: string]: AbortController | undefined } = {};
@@ -158,6 +159,13 @@ export function authRequestWithoutExpCheck<T>(
     cancelOptions
   ).catch((error) => {
     console.log("Lỗi nè", error);
+    if(error?.status ==301){
+      if (store.getState().auth.mindfullyAuth) {
+        // @ts-ignore
+        store.dispatch(AuthActions.logout());
+      }
+
+    }
     
     if (error?.error?.statusCode === 401) {
   
@@ -180,3 +188,4 @@ export function authRequest<T>(
     return authRequestWithoutExpCheck<T>(options, cancelOptions);
   });
 }
+

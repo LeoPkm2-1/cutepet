@@ -27,6 +27,11 @@ import { SocketActions } from '../../redux/socket';
 import { StatusType } from '../../models/post';
 import { LoiMoiType } from '../../models/user';
 import { SuaBaiChiaSe } from './chia-se-kien-thuc/component/sua-bai-chia-se';
+import ChinhSuaTrangCaNhan from './trang-ca-nhan/chinh-sua-trang-ca-nhan/profile-header';
+import UpdateProfilePage from './trang-ca-nhan/chinh-sua-trang-ca-nhan/profile-page';
+import ProfileHeader from './trang-ca-nhan/chinh-sua-trang-ca-nhan/profile-header';
+import MeRouting from './trang-ca-nhan/chinh-sua-trang-ca-nhan';
+import ChangePasswordPage from './trang-ca-nhan/chinh-sua-trang-ca-nhan/change-pass';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -294,7 +299,10 @@ export default function PageRouting() {
           <div className="expanded col">
             <Routes>
               <Route path="mang-xa-hoi" element={<MangXaHoi />} />
-              <Route path="trang-ca-nhan" element={<TrangCaNhan />} />
+              <Route path="trang-ca-nhan" element={<TrangCaNhan />} /> 
+              <Route path="chinh-sua-trang-ca-nhan" element={<MeRouting />} /> 
+              <Route path="chinh-sua-trang-ca-nhan/profile" element={<UpdateProfilePage />} /> 
+              <Route path="chinh-sua-trang-ca-nhan/change-pass" element={<ChangePasswordPage />} /> 
               <Route
                 path="trang-ca-nhan-nguoi-dung/:id"
                 element={<TrangCaNhanMoiNguoi />}

@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Typography } from '@mui/material';
+import { Box,  Divider, Grid, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux';
 import { useEffect, useState } from 'react';
@@ -11,7 +11,13 @@ import { QuanLyThuCung } from '../quan-ly-thu-cung';
 import { FriendList } from '../ban-be';
 import { useNavigate } from 'react-router-dom';
 import { RestaurantMenuRounded } from '@mui/icons-material';
-
+import EmailIcon from '@mui/icons-material/Email';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import moment from 'moment';
+import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
+import Button from '../../../components/Button';
 export default function TrangCaNhan() {
   // const profile = useSelector((state: RootState) => state.user.profile);
   const navigate = useNavigate();
@@ -37,6 +43,10 @@ export default function TrangCaNhan() {
         user: data?.thong_tin_profile_user?.tai_khoan,
         url: data?.thong_tin_profile_user?.anh?.url,
         numberPet: data?.danh_sach_thu_cung?.length,
+        ngay_sinh: data?.thong_tin_profile_user?.ngay_sinh,
+        email: data?.thong_tin_profile_user?.email,
+        so_dien_thoai: data?.thong_tin_profile_user?.so_dien_thoai,
+        gioi_tinh: data?.thong_tin_profile_user?.gioi_tinh,
       });
     });
   }, []);
@@ -161,9 +171,12 @@ export default function TrangCaNhan() {
             display: 'flex',
             alignItems: 'center',
             padding: '0 200px',
+            justifyContent:"center"
           }}
         >
-          <img src={profile?.url} height={100} width={100} />
+          <img style={{
+            borderRadius:"100%"
+          }} src={profile?.url} height={200} width={200} />
           <Box
             sx={{
               ml: '80px',
@@ -178,6 +191,7 @@ export default function TrangCaNhan() {
             >
               {profile?.name}
             </Typography>
+            
             <Typography
               sx={{
                 fontFamily: 'quicksand',
@@ -194,10 +208,92 @@ export default function TrangCaNhan() {
                 fontSize: '14px',
                 fontWeight: '500',
                 mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
-              Tiểu sử
+              <EmailIcon
+                sx={{
+                  color: 'gray',
+                  fontSize: '20px',
+                  marginRight: '6px',
+                }}
+              />
+
+              {profile?.email}
             </Typography>
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontSize: '14px',
+                fontWeight: '500',
+                mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <LocalPhoneIcon
+                sx={{
+                  color: 'gray',
+                  fontSize: '20px',
+                  marginRight: '6px',
+                }}
+              />
+
+              {profile?.so_dien_thoai}
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontSize: '14px',
+                fontWeight: '500',
+                mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <CalendarMonthIcon
+                sx={{
+                  color: 'gray',
+                  fontSize: '20px',
+                  marginRight: '6px',
+                }}
+              />
+
+              {moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
+            </Typography>
+
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontSize: '14px',
+                fontWeight: '500',
+                mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              
+              {profile?.gioi_tinh ? (
+                <FemaleIcon
+                  sx={{
+                    color: 'gray',
+                    fontSize: '24px',
+                    marginRight: '6px',
+                  }}
+                />
+              ) : (
+                <MaleIcon
+                  sx={{
+                    color: 'gray',
+                    fontSize: '24px',
+                    marginRight: '6px',
+                  }}
+                />
+              )}
+              {profile?.gioi_tinh ? 'Nam' : 'Nữ'}
+            </Typography>
+
             <Box
               sx={{
                 display: 'flex',
@@ -271,6 +367,22 @@ export default function TrangCaNhan() {
               </Typography>
             </Box>
           </Box>
+          <Button
+              color="inherit"
+              sx={{
+                backgroundColor: 'rgb(14, 100, 126)',
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                },
+              }}
+              onClick={() => {
+                navigate('/home/chinh-sua-trang-ca-nhan');
+              }}
+              variant="contained"
+            >
+              Chỉnh sửa trang cá nhân
+            </Button>
         </Box>
         <Divider
           sx={{
@@ -287,7 +399,7 @@ export default function TrangCaNhan() {
           <Box
             sx={{
               maxWidth: '50vw',
-              width:"100%",
+              width: '100%',
               display: isPostState ? 'block' : 'none',
             }}
           >
@@ -319,7 +431,7 @@ export default function TrangCaNhan() {
               cursor: 'pointer',
             }}
             onClick={() => {
-              setTimePost(listPost[listPost?.length - 1]?.createAt || "");
+              setTimePost(listPost[listPost?.length - 1]?.createAt || '');
             }}
           >
             {' '}
