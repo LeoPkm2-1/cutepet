@@ -275,8 +275,25 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
    _chi tiết:_ **[Route_Struture/post.md](./article.md#22-lọc-bài-viết-chia-sẻ-kiến-thức-theo-thể-loại-và-tiêu-đề)** và **postman số 73**
 
-##
+## (29-11-2023):
+
+1. đề xuất kết bạn
+
+   _chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-người-dùng-gợi-ý-kết-bạn)** và **postman số 74**
 
 ##
 
 ##
+
+##
+
+
+
+
+
+
+
+
+
+
+

@@ -173,7 +173,7 @@
 ```
 
 - thu hồi lời mời kết bạn thành công:
-  
+
 ```javascript
 {
     "status": 200,
@@ -188,7 +188,96 @@
 }
 ```
 
-##
+## 5. lấy danh sách người dùng gợi ý kết bạn
+
+**postman số 74**
+
+1. phương thức:
+
+   POST http://localhost:3000/friend/getListSuggestedFriends
+
+2. cấu trúc:
+
+**không yêu cầu tham số**
+
+3. trả về:
+
+`trả về thông tin người dùng có thể kết bạn`
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "ma_nguoi_dung": 13,
+            "ten": "Tuan",
+            "ngay_sinh": "1991-10-10T17:00:00.000Z",
+            "tai_khoan": "tuan",
+            "email": "tuan@gmail.com",
+            "so_dien_thoai": "0912345690",
+            "gioi_tinh": 1,
+            "anh": {
+                "ma_anh": null,
+                "url": ".........",
+                "ngay_cap_nhat": null,
+                "ma_nguoi_dung": "13",
+                "is_active": null
+            }
+        },
+        {
+            "ma_nguoi_dung": 17,
+            "ten": "Thuyen",
+            "ngay_sinh": "1991-10-11T17:00:00.000Z",
+            "tai_khoan": "thuyen",
+            "email": "thuyen@gmail.com",
+            "so_dien_thoai": "0912345691",
+            "gioi_tinh": 1,
+            "anh": {
+                "ma_anh": null,
+                "url": ".........",
+                "ngay_cap_nhat": null,
+                "ma_nguoi_dung": "17",
+                "is_active": null
+            }
+        },
+        {
+            "ma_nguoi_dung": 23,
+            "ten": "kien",
+            "ngay_sinh": "2000-10-17T17:00:00.000Z",
+            "tai_khoan": "kien",
+            "email": "kien@gmail.com",
+            "so_dien_thoai": null,
+            "gioi_tinh": null,
+            "anh": {
+                "ma_anh": null,
+                "url": ".........",
+                "ngay_cap_nhat": null,
+                "ma_nguoi_dung": "23",
+                "is_active": null
+            }
+        },
+        {
+            "ma_nguoi_dung": 28,
+            "ten": "Troy Juarez",
+            "ngay_sinh": "1993-10-21T17:00:00.000Z",
+            "tai_khoan": "troyjuarez",
+            "email": "troyjuarez@gnet.com",
+            "so_dien_thoai": "11111",
+            "gioi_tinh": 1,
+            "anh": {
+                "ma_anh": null,
+                "url": ".........",
+                "ngay_cap_nhat": null,
+                "ma_nguoi_dung": "28",
+                "is_active": null
+            }
+        }
+    ],
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
 
 ##
 

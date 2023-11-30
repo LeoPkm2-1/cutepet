@@ -251,12 +251,18 @@ const getListSuggestedFriendController = async (req, res) => {
     .then((data) => data.payload);
   let user_suggest_id = [];
   if (userid_list_match_pet.length < NUM_OF_USER_SUGGEST) {
-    const random_user_id = await userModel
+    let random_user_id = await userModel
       .getUserIdThatNoteContainUsers(
         [...userid_list_match_pet, ...UN_SUGGESTED_FRIEND_IDS],
-        NUM_OF_USER_SUGGEST - userid_list_match_pet.length
+        // NUM_OF_USER_SUGGEST - userid_list_match_pet.length
+        100
       )
       .then((data) => data.payload);
+    random_user_id = userHelper.randomGetUserIdInlistId(
+      random_user_id,
+      NUM_OF_USER_SUGGEST - userid_list_match_pet.length
+    );
+    // console.log({random_user_id});
     user_suggest_id = [...userid_list_match_pet, ...random_user_id];
   } else {
     user_suggest_id = userid_list_match_pet;

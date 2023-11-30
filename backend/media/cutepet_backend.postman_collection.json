@@ -1926,7 +1926,7 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "6549106cd55fe46e0f9dd857",
+							"value": "654f9e8f479ad1da822047b4",
 							"type": "text"
 						}
 					]
@@ -3207,6 +3207,36 @@
 						"post",
 						"article",
 						"filterArticles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "74_friend_getListSuggestedFriends",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/friend/getListSuggestedFriends",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"getListSuggestedFriends"
 					]
 				}
 			},
