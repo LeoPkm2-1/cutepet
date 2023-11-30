@@ -109,9 +109,22 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 ## 73. resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
 
-## 74. trang cập nhật thông tin nguời dùng
+## 74. ==ERR== trang cập nhật thông tin nguời dùng
 
-## 75. đổi mật khẩu người dùng
+lỗi giao diện chỗ số điện thoại
+
+![](../media/img/err/img26.png)
+
+khi cập nhật thành công phải cập nhật lại state cho hệ thống (**cả hình ảnh lẫn thông tin**).
+
+![](../media/img/err/img27.png)
+
+## --DONE-- ||==ERR== 75. đổi mật khẩu người dùng
+mật khủâ phải bao gồm từ 8 dến 20 ký tự trong đó có:
+- tối thiểu 1 chữ hoa
+- tối thiểu 1 chữ thường
+- tối thiểu 1 chữ ký tự đặc biệt
+- tối thiểu phải có số.
 
 ## 76. chỉnh sửa bài viết chia sẻ trạng thái
 
@@ -142,6 +155,6 @@ _chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-ngư�
 
 ## 86. hiển thị trả lời bình luận bị ngược
 
-![](../media/img/err/img25.png)
+(tham khảo ý kiến của cô)
 
-## 
+![](../media/img/err/img25.png)
