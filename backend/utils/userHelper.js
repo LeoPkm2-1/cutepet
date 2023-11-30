@@ -134,6 +134,26 @@ function getSomeUserIdInRangeOf10(numOfRandomNumbers = 1) {
   return randomNumbers;
 }
 
+function randomGetUserIdInlistId(listId, numOfRandomNumbers = 0) {
+  if (numOfRandomNumbers <= 0 || listId.length == 0) {
+    return [];
+  }
+  numOfRandomNumbers =
+    numOfRandomNumbers > listId.length ? listId.length : numOfRandomNumbers;
+  const chosenValues = [];
+
+  while (chosenValues.length < numOfRandomNumbers) {
+    const randomIndex = Math.floor(Math.random() * listId.length);
+    const randomValue = listId[randomIndex];
+
+    if (!chosenValues.includes(randomValue)) {
+      chosenValues.push(randomValue);
+    }
+  }
+
+  return chosenValues;
+}
+
 // const data = getSomeUserIdInRangeOf10(3);
 // console.log(data);
 
@@ -148,4 +168,5 @@ module.exports = {
   getUserPublicInforByListIds,
   extractListIdFromListUser,
   getSomeUserIdInRangeOf10,
+  randomGetUserIdInlistId,
 };

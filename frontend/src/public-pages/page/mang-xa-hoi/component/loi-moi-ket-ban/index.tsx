@@ -188,11 +188,11 @@ function LoiMoi(props: PropsLoiMoi) {
       if (data?.status == 200) {
         if (data?.payload?.accepted) {
           enqueueSnackbar(`Kết bạn với ${props?.name} thành công`, {
-            variant: 'success',
+            variant:"info"
           });
         } else {
           enqueueSnackbar(`Xóa lời mời kết bạn với ${props?.name} thành công`, {
-            variant: 'success',
+            variant: "info"
           });
         }
         props?.onSuccess();

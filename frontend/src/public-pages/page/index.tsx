@@ -26,6 +26,7 @@ import TrangCaNhanMoiNguoi from './trang-ca-nhan/trang-ca-nhan-moi-nguoi';
 import { SocketActions } from '../../redux/socket';
 import { StatusType } from '../../models/post';
 import { LoiMoiType } from '../../models/user';
+import { SuaBaiChiaSe } from './chia-se-kien-thuc/component/sua-bai-chia-se';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -108,7 +109,7 @@ export default function PageRouting() {
           <NotifycationItem
             name={data?.userReply?.ten}
             type="trả lời một bình luận của bạn"
-            url={data?.userLike?.anh?.url}
+            url={data?.userReply?.anh?.url}
           />,
           {
             variant: 'info',
@@ -136,7 +137,7 @@ export default function PageRouting() {
           <NotifycationItem
             name={data?.userTag?.ten}
             type="tag tên bạn trong một bài viết"
-            url={data?.userLike?.anh?.url}
+            url={data?.userTag?.anh?.url}
           />,
           {
             variant: 'info',
@@ -160,7 +161,7 @@ export default function PageRouting() {
           <NotifycationItem
             name={data?.requestUser?.ten}
             type="gửi lời mời kết bạn"
-            url={data?.userLike?.anh?.url}
+            url={data?.requestUser?.anh?.url}
           />,
           {
             variant: 'info',
@@ -178,7 +179,7 @@ export default function PageRouting() {
           <NotifycationItem
             name={data?.acceptUser?.ten}
             type="chấp nhận lời mời kết bạn của bạn."
-            url={data?.userLike?.anh?.url}
+            url={data?.acceptUser?.anh?.url}
           />,
           {
             variant: 'info',
@@ -232,7 +233,7 @@ export default function PageRouting() {
           <NotifycationItem
             name={data?.userUpvote?.ten}
             type="thích bài viết chia sẽ của bạn"
-            url={data?.userLike?.anh?.url}
+            url={data?.userUpvote?.anh?.url}
           />,
           {
             variant: 'info',
@@ -247,13 +248,28 @@ export default function PageRouting() {
           <NotifycationItem
             name={data?.userDownvote?.ten}
             type="không thích bài viết chia sẽ của bạn"
-            url={data?.userLike?.anh?.url}
+            url={data?.userDownvote?.anh?.url}
           />,
           {
             variant: 'info',
           }
         );
       });
+        // 13
+        socket.on('COMMENT_ARTICLE', (data) => {
+          console.log(data, ' Data chat from server:');
+          dispatch(NotiActions.setIncreNumNoti());
+          enqueueSnackbar(
+            <NotifycationItem
+              name={data?.userComment?.ten}
+              type="bình luận bài viết chia sẽ của bạn"
+              url={data?.userComment?.anh?.url}
+            />,
+            {
+              variant: 'info',
+            }
+          );
+        });
 
       return () => {
         console.log('Dis conect fe');
@@ -289,6 +305,7 @@ export default function PageRouting() {
               <Route path="trang-chia-se" element={<TrangChiaSe />} />
               <Route path="trang-chia-se/:id" element={<BaiChiaSe />} />
               <Route path="tao-bai-chia-se" element={<TaoBaiChiaSe />} />
+              <Route path="sua-bai-chia-se/:id" element={<SuaBaiChiaSe />} />
               <Route path="post/:id" element={<PostDetail />} />
               <Route path="*" element={<HomePage />} />
             </Routes>

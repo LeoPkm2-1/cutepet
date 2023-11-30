@@ -28,13 +28,21 @@ async function getNumOfFriendOfUser(user_id) {
   return data.length;
 }
 
-// (async function () {
-//   const data = await getNumOfFriendOfUser(100);
-//   console.log(data);
-// })();
+const getListFriendIdsOfUser = async (user_id) => {
+  const friendList = await laBanBeModel
+    .getAllFriendShipOfUser(user_id)
+    .then((data) => data.payload);
+  // console.log(friendList);
+  if (friendList.length <= 0) return [];
+  const friend_ids = friendList.map((friend) =>
+    parseInt(friend.ma_nguoi_dung_2)
+  );
+  return friend_ids;
+};
 
 module.exports = {
   haveFriendShipBetween,
   getFriendsIdInListOfUserId,
   getNumOfFriendOfUser,
+  getListFriendIdsOfUser,
 };

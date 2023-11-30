@@ -12,7 +12,12 @@ import React, { useEffect, useState } from 'react';
 import { ArticleType } from '../../../../../models/article';
 import parse from 'html-react-parser';
 import articleApi from '../../../../../api/article';
-import { useParams } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../redux';
 import { useSnackbar } from 'notistack';
@@ -29,6 +34,10 @@ import AssistantPhotoRoundedIcon from '@mui/icons-material/AssistantPhotoRounded
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
 import NotificationsOffRoundedIcon from '@mui/icons-material/NotificationsOffRounded';
+import { BaiVietCoBan } from '../bai-viet-co-ban';
+import BuildIcon from '@mui/icons-material/Build';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { useShowDialog } from '../../../../../hooks/dialog';
 export default function BaiChiaSe() {
   const [article, setArticle] = useState<ArticleType>({
     id: '',
@@ -38,16 +47,23 @@ export default function BaiChiaSe() {
     content: '',
     categories: [],
     user_avatar: '',
-    user_name: 'Thuyen',
+    user_name: '',
+    user_id: 0,
   });
 
+  const [articlesLienQuan, setArticlesLienQuan] = useState<ArticleType[]>([]);
+  const showDialog = useShowDialog();
   const { id } = useParams();
   const [isData, setIsData] = useState(true);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [numAve, setNumAve] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const [isFollow, setIsFollow] = useState(false);
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pargamSearch = useLocation().search;
+  const sp = new URLSearchParams(pargamSearch);
+  const navigate = useNavigate();
+  const profileId = useSelector((state: RootState) => state.user.profile?.id);
   useEffect(() => {
     if (id) {
       articleApi
@@ -69,6 +85,7 @@ export default function BaiChiaSe() {
               isDownVote: data?.payload?.hasDownVoted,
               numUpVote: data?.payload?.numOfUpVote,
               numDownVote: data?.payload?.numOfDownVote,
+              user_id: data?.payload?.owner_infor?.ma_nguoi_dung,
             };
             setNumAve(
               data?.payload?.numOfUpVote - data?.payload?.numOfDownVote
@@ -82,8 +99,39 @@ export default function BaiChiaSe() {
           setIsData(false);
         });
     }
-  }, []);
+  }, [id]);
 
+  // Lấy bài viết liên quan
+  useEffect(() => {
+    articleApi
+      .filterArticles(
+        null,
+        article?.categories?.length > 0 ? article?.categories : null,
+        0,
+        3
+      )
+      .then((data) => {
+        console.log(data, ' data art');
+
+        if (data?.status == 200) {
+          const list: ArticleType[] = data?.payload?.articles?.map(
+            (art: any) => {
+              return {
+                id: art?._id,
+                title: art?.title,
+                main_image: art?.main_image,
+                intro: art?.intro,
+                content: art?.content,
+                categories: art?.categories,
+                user_name: art?.owner_infor?.ten,
+                user_avatar: art?.owner_infor?.anh?.url,
+              } as ArticleType;
+            }
+          );
+          setArticlesLienQuan(list);
+        }
+      });
+  }, [article?.categories]);
   useEffect(() => {
     if (id) {
       articleApi.getAllComment(id).then((data) => {
@@ -117,7 +165,7 @@ export default function BaiChiaSe() {
         }
       });
     }
-  }, []);
+  }, [id]);
 
   function upVote() {
     if (id) {
@@ -130,7 +178,11 @@ export default function BaiChiaSe() {
               isUpVote: true,
               isDownVote: false,
             });
-            setNumAve(numAve + 1);
+            if (article?.isDownVote) {
+              setNumAve(numAve + 2);
+            } else {
+              setNumAve(numAve + 1);
+            }
           }
         })
         .catch((err) => {
@@ -150,7 +202,11 @@ export default function BaiChiaSe() {
               isUpVote: false,
               isDownVote: true,
             });
-            setNumAve(numAve - 1);
+            if (article?.isUpVote) {
+              setNumAve(numAve - 2);
+            } else {
+              setNumAve(numAve - 1);
+            }
           }
         })
         .catch((err) => {
@@ -174,6 +230,7 @@ export default function BaiChiaSe() {
         });
     }
   }
+
   function unFollowArticle() {
     if (id) {
       articleApi
@@ -209,10 +266,45 @@ export default function BaiChiaSe() {
     }
   }
 
+  function updateArticle() {
+    if (article?.id) {
+      navigate(`/home/sua-bai-chia-se/${article?.id}`);
+    }
+  }
+
+  function removeArticle() {
+    showDialog({
+      content: `Bạn chắc chắn xóa bài chia sẽ kiến thức ?`,
+      onOk: () => {
+        if (id) {
+          articleApi
+            .removeArticles(id)
+            .then((data) => {
+              if (data?.status == 200) {
+                setIsFollow(false);
+                enqueueSnackbar(`Bạn đã xóa bài viết`, {
+                  variant: 'info',
+                });
+                navigate(`/home/trang-chia-se/`);
+              }
+            })
+            .catch((err) => {
+              enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+            });
+        }
+      },
+    });
+  }
+
   return (
     <>
       {isData ? (
-        <Grid container>
+        <Grid
+          sx={{
+            marginBottom: '40px',
+          }}
+          container
+        >
           <Grid xs={9} item>
             <Box
               sx={{
@@ -255,7 +347,7 @@ export default function BaiChiaSe() {
                   }}
                 >
                   {' '}
-                  {numAve}+{' '}
+                  {numAve}{' '}
                 </span>
                 <IconButton
                   disabled={article?.isDownVote}
@@ -280,7 +372,7 @@ export default function BaiChiaSe() {
                     }}
                     onClick={unFollowArticle}
                   >
-                    <NotificationsActiveRoundedIcon
+                    <NotificationsOffRoundedIcon
                       sx={{
                         fontSize: '22px',
                       }}
@@ -295,7 +387,7 @@ export default function BaiChiaSe() {
                     }}
                     onClick={followArticle}
                   >
-                    <NotificationsOffRoundedIcon
+                    <NotificationsActiveRoundedIcon
                       sx={{
                         fontSize: '22px',
                       }}
@@ -315,11 +407,44 @@ export default function BaiChiaSe() {
                     }}
                   />
                 </IconButton>
+                {profileId === article?.user_id && (
+                  <>
+                    <IconButton
+                      sx={{
+                        border: '1px solid gray',
+                        padding: '10px',
+                        marginTop: '20px',
+                      }}
+                      onClick={updateArticle}
+                    >
+                      <BuildIcon
+                        sx={{
+                          fontSize: '22px',
+                        }}
+                      />
+                    </IconButton>
+                    <IconButton
+                      sx={{
+                        border: '1px solid gray',
+                        padding: '10px',
+                        marginTop: '20px',
+                      }}
+                      onClick={removeArticle}
+                    >
+                      <DeleteOutlineIcon
+                        sx={{
+                          fontSize: '22px',
+                        }}
+                      />
+                    </IconButton>
+                  </>
+                )}
               </Box>
               <Box
                 sx={{
                   paddingBottom: '120px',
                   marginLeft: '80px',
+                  width: '100%',
                 }}
               >
                 <Box
@@ -332,7 +457,17 @@ export default function BaiChiaSe() {
                   }}
                 >
                   {article?.categories?.map((item) => {
-                    return <Tag text={item} />;
+                    return (
+                      <span
+                        onClick={() => {
+                          sp.set('categori', item);
+                          setSearchParams(sp);
+                          navigate(`/home/trang-chia-se?${sp}`);
+                        }}
+                      >
+                        <Tag text={item} />
+                      </span>
+                    );
                   })}
                 </Box>
                 <Box
@@ -352,7 +487,9 @@ export default function BaiChiaSe() {
                       mb: '16px',
                     }}
                   >
-                    {article.title?.length > 100 ? article.title?.substring(0,100) : article.title}
+                    {article.title?.length > 100
+                      ? article.title?.substring(0, 100)
+                      : article.title}
                   </Typography>
                   <Box
                     sx={{
@@ -457,7 +594,50 @@ export default function BaiChiaSe() {
               </Box>
             </Box>
           </Grid>
-          <Grid xs={3} item></Grid>
+          <Grid
+            sx={{
+              paddingBottom: '50px',
+            }}
+            xs={3}
+            item
+          >
+            <Typography
+              align="center"
+              sx={{
+                fontFamily: 'quicksand',
+                fontWeight: '600',
+                fontSize: '18px',
+                marginBottom: '18px',
+              }}
+            >
+              Bài viết liên quan
+            </Typography>
+            <Box
+              sx={{
+                marginLeft: '22px',
+              }}
+            >
+              {articlesLienQuan?.length > 0 ? (
+                <>
+                  {articlesLienQuan?.map((art) => {
+                    return <BaiVietCoBan isSmall article={art} />;
+                  })}
+                </>
+              ) : (
+                <Typography
+                  align="center"
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '400',
+                    fontSize: '15px',
+                    marginBottom: '18px',
+                  }}
+                >
+                  Chưa có bài viết liên quan
+                </Typography>
+              )}
+            </Box>
+          </Grid>
         </Grid>
       ) : (
         <Page404 />
@@ -766,7 +946,7 @@ function FixComment(props: {
       .updateComment(props.idCmt, value)
       .then((data: any) => {
         props?.onSuccess?.(value);
-        enqueueSnackbar(`Chỉnh sửa bình luận thành công`, { variant: "info" });
+        enqueueSnackbar(`Chỉnh sửa bình luận thành công`, { variant: 'info' });
       })
       .catch((err) => {
         enqueueSnackbar(`${err.message}`, { variant: 'error' });

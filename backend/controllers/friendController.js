@@ -8,6 +8,10 @@ const {
   notifyRequestAddFriend,
   notifyAcceptAddFriend,
 } = require("../notificationHandler/friend");
+const friendHelper = require("../utils/banbeHelper");
+const loiMoiKetBanHelper = require("../utils/loiMoiKetBanHelper");
+const petModel = require("../models/petModel");
+const userModel = require("../models/userModel");
 
 // gửi lời mời kết bạn
 const requestAddFriend = async (req, res) => {
@@ -153,7 +157,7 @@ const unFriendById = async (req, res) => {
 };
 const getRequestAddFriendList = async (req, res) => {
   const user_id = req.auth_decoded.ma_nguoi_dung;
-  const addFriendRequests = await loiMoiKetBanModel.getAllPendingRequest(
+  const addFriendRequests = await loiMoiKetBanModel.getAllPendingRequestToUser(
     user_id
   );
   if (addFriendRequests.length <= 0) {
@@ -222,15 +226,53 @@ const removeRequestAddFriend = async (req, res) => {
   // res.send("ahihi");
   const recipient_id = req.body.requestID;
   const sender_id = req.auth_decoded.ma_nguoi_dung;
-  const deleteProcess = await loiMoiKetBanModel.deletePendingRequest(
-    sender_id,
-    recipient_id
-  ).then(data=>data.payload).then(data=>{
-    data.insertId = parseInt(data.insertId);
-    return data
-  })
+  const deleteProcess = await loiMoiKetBanModel
+    .deletePendingRequest(sender_id, recipient_id)
+    .then((data) => data.payload)
+    .then((data) => {
+      data.insertId = parseInt(data.insertId);
+      return data;
+    });
   // console.log(deleteProcess);
   res.status(200).json(new Response(200, deleteProcess, "OK"));
+};
+
+const getListSuggestedFriendController = async (req, res) => {
+  const NUM_OF_USER_SUGGEST = 10;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const { DANH_SACH_MA_GIONG, UN_SUGGESTED_FRIEND_IDS } = req.body;
+  // DANH_SACH_MA_GIONG = [403];
+  const userid_list_match_pet = await petModel
+    .getListUserIdsHaveGiongOfPetMatchListOfGiong_2(
+      DANH_SACH_MA_GIONG,
+      UN_SUGGESTED_FRIEND_IDS,
+      NUM_OF_USER_SUGGEST
+    )
+    .then((data) => data.payload);
+  let user_suggest_id = [];
+  if (userid_list_match_pet.length < NUM_OF_USER_SUGGEST) {
+    let random_user_id = await userModel
+      .getUserIdThatNoteContainUsers(
+        [...userid_list_match_pet, ...UN_SUGGESTED_FRIEND_IDS],
+        // NUM_OF_USER_SUGGEST - userid_list_match_pet.length
+        100
+      )
+      .then((data) => data.payload);
+    random_user_id = userHelper.randomGetUserIdInlistId(
+      random_user_id,
+      NUM_OF_USER_SUGGEST - userid_list_match_pet.length
+    );
+    // console.log({random_user_id});
+    user_suggest_id = [...userid_list_match_pet, ...random_user_id];
+  } else {
+    user_suggest_id = userid_list_match_pet;
+  }
+  const userSuggestInfor = await userHelper.getUserPublicInforByListIds(
+    user_suggest_id
+  );
+
+  res.status(200).json(new Response(200, userSuggestInfor, ""));
+  return;
 };
 module.exports = {
   requestAddFriend,
@@ -240,4 +282,5 @@ module.exports = {
   getFriendList,
   unfollowFriend,
   removeRequestAddFriend,
+  getListSuggestedFriendController,
 };

@@ -250,7 +250,7 @@ export default function TrangCaNhanMoiNguoi() {
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Đã hủy kết bạn với ${profile?.name}`, {
-              variant: 'success',
+              variant: "info",
             });
             setIsFriend(0);
           } else {
@@ -277,7 +277,7 @@ export default function TrangCaNhanMoiNguoi() {
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Đã gửi lời mời kết bạn với ${profile?.name}`, {
-              variant: 'success',
+              variant: "info",
             });
             setIsFriend(-1);
           } else {
@@ -304,12 +304,12 @@ export default function TrangCaNhanMoiNguoi() {
         if (data?.status == 200) {
           if (data?.payload?.accepted) {
             enqueueSnackbar(`Kết bạn với ${profile?.name} thành công`, {
-              variant: 'success',
+              variant: "info",
             });
             setIsFriend(1);
           } else {
             enqueueSnackbar(`Xóa lời mời kết bạn với ${profile?.name} thành công`, {
-              variant: 'success',
+              variant: "info",
             });
             setIsFriend(0);
           };
@@ -520,6 +520,7 @@ export default function TrangCaNhanMoiNguoi() {
           <Box
             sx={{
               maxWidth: '50vw',
+              width:"100%",
               display: tab == 'post' ? 'block' : 'none',
             }}
           >

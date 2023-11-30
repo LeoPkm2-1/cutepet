@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-export default function Tag(props: { text: string }) {
+export default function Tag(props: { text: string}) {
   return (
     <span
       style={{
@@ -12,7 +12,8 @@ export default function Tag(props: { text: string }) {
         borderRadius: '20px',
         padding:"4px 8px",
         marginRight:"5px",
-        marginBottom:"5px"
+        marginBottom:"5px",
+        cursor:"pointer",
       }}
     >
       #{props?.text}

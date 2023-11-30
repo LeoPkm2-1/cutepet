@@ -106,7 +106,7 @@ export default function PopUpCreatePost(props: Props) {
         [storageUrl]
       )
       .then(() => {
-        enqueueSnackbar('Tạo bài viết thành công', { variant: 'success' });
+        enqueueSnackbar('Tạo bài viết thành công', { variant: "info" });
         setIsloading(false);
         setText('');
         setSelectedFile(null);

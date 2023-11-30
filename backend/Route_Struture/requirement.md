@@ -1,6 +1,6 @@
 # các yêu cầu cần hoàn thành:
 
-## 1. Load lại icon thông báo khi có 1 thông baó mới đến:
+## 1. ==OK== Load lại icon thông báo khi có 1 thông baó mới đến:
 
     - [ ] 1.1. khi có 1 thông báo mới đến thì icon thông báo sẽ được load lại
     - [ ] 1.2. khi mới đăng nhập vào hệ thống phải load lại trang thông báo
@@ -22,11 +22,11 @@ sửa dụng:
 
 ## 3. ==OK== đổi lại icon cho bài viết chia sẻ:
 
-## 4. handle kết bạn
+## 4. ==OK== handle kết bạn
 
     `nhớ kiểm tra event listen nha`
 
-## 5. handle người dùng online hay offline động
+## 5. ==OK== handle người dùng online hay offline động
 
     `nhớ kiểm tra event listen nha`
 
@@ -34,7 +34,7 @@ sửa dụng:
 
     `bài viết trạng thái hiển thị khác với bài viết chia sẻ kiến thức`
 
-## 7. thêm trường theo dõi bài viết và bỏ theo dõi bài viết vào mục tùy chọn trong bài viết
+## 7. ==OK== thêm trường theo dõi bài viết và bỏ theo dõi bài viết vào mục tùy chọn trong bài viết
 
 `(tính năng này cho cả chia sẻ kiến thức và trạng thái)`
 
@@ -96,7 +96,7 @@ tham khảo tại: **[article.md](./article.md)**
 
 ## 24. ==OK== resize lại ảnh khi đăng bài viết chia sẻ kiến thức
 
-## 25. hiện category lúc đọc bài viết chia sẻ kiến thức
+## 25. ==OK== hiện category lúc đọc bài viết chia sẻ kiến thức
 
 ## 26. ==OK== đổi lại icon article trên navbar
 
@@ -114,7 +114,7 @@ tham khảo tại: **[article.md](./article.md)**
 
     (xem chi tiến trong summary)
 
-## 31. report bài viết chia sẻ trạng thái.
+## 31. ==OK== report bài viết chia sẻ trạng thái.
 
     (xem chi tiến trong summary)
 
@@ -191,7 +191,7 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 51. --OK-- sai khi đánh dấu đọc thông báo là do truyền sai tham số
 
-## 52. Đánh dấu đã đọc tất cả các thông báo
+## 52. ==OK== Đánh dấu đã đọc tất cả các thông báo
 
 ## 53. --OK-- ảnh trong trang cá nhân gặp vấn đề.
 
@@ -209,7 +209,7 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 58. --OK-- khi có thông báo mới đến thì load lại API lấy thông báo
 
-## 59. khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
+## 59. --OK-- khi có lời mời kết bạn đến thì hiện thị luôn lời mời kết bạn ra luôn
 
 ## 60. --OK-- follow bài viết trạng thái
 
@@ -221,32 +221,50 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 64. xóa thú cưng
 
-## 65. khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
+## 65. thu hồi lời mời kết bạn
+
+tham khảo tại
+
+_chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)** và **postman số 68**
+
+## 66. khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
 
 ## 66. hiện thực like bài viết khi comment trong bài viết chia sẻ kiến thức
 
-## 67. khi xóa bài viết cần phải cho bài viết đó biến mất
+## 68. khi xóa bài viết cần phải cho bài viết đó biến mất
 
-## 68. con lăn trong mạng xãi hội có vấn đề
+## 69. con lăn trong mạng xãi hội có vấn đề
 
-## 69. ảnh giao diện của thông báo nhảy ra góc dưới bên phải có vấn đề, trong cả trang mạng xã hội lẫn trang cá nhân
+## 70. ảnh giao diện của thông báo nhảy ra góc dưới bên phải có vấn đề, trong cả trang mạng xã hội lẫn trang cá nhân
 
 ## 70. cần kiểm tra lại tất cả các hình ảnh và tên của thông báo góc bên phải khi socket đến
 
-## 71. load bài viết chia sẻ trạng thái theo thú cưng được tags
+## 72. load bài viết chia sẻ trạng thái theo thú cưng được tags
 
-## 72. resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
+## 73. resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
 
-## 73. trang cập nhật thông tin nguời dùng
+## 74. trang cập nhật thông tin nguời dùng
 
-## 74. đổi mật khẩu người dùng
+## 75. đổi mật khẩu người dùng
 
-## 75. chỉnh sửa bài viết chia sẻ trạng thái
+## 76. chỉnh sửa bài viết chia sẻ trạng thái
 
-## 76. chỉnh sửa bài viết chia sẻ kiến thức
+## 77. chỉnh sửa bài viết chia sẻ kiến thức
 
-## 77. xóa bài viết chia sẻ kiến thức
+## 78. xóa bài viết chia sẻ kiến thức
 
-## 78. giao diện gợi ý kết bạn
+## 79. giao diện gợi ý kết bạn
+
+_chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-người-dùng-gợi-ý-kết-bạn)** và **postman số 74**
+
+##
+
+##
+
+##
+
+##
+
+##
 
 ##

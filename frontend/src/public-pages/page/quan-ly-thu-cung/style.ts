@@ -12,6 +12,6 @@ export const StyledButton = styled(Button)({
   backgroundColor: '#ff5b2e',
   padding: '5px 30px',
   '&:hover': {
-    backgroundColor: ' #000958',
+    backgroundColor: 'rgb(14, 100, 126)',
   },
 });

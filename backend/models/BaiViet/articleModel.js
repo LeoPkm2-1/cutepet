@@ -542,11 +542,13 @@ const findArticlesByKeyWordInTitle = async (
 ) => {
   index = parseInt(index);
   let executor = undefined;
+  const patern = new RegExp("\\b" + keyWord + "\\b", "i");
   if (typeof num == "undefined") {
     executor = async (collection) => {
       return await collection
         .find({
-          $text: { $search: keyWord },
+          // $text: { $search: keyWord },
+          title: { $regex: patern },
           postType: articleComposStructure.Article.type,
         })
         .sort({
@@ -560,7 +562,8 @@ const findArticlesByKeyWordInTitle = async (
     executor = async (collection) => {
       return await collection
         .find({
-          $text: { $search: keyWord },
+          // $text: { $search: keyWord },
+          title: { $regex: patern },
           postType: articleComposStructure.Article.type,
         })
         .sort({
@@ -578,9 +581,11 @@ const findArticlesByKeyWordInTitle = async (
 };
 
 const getTotalNumOfArticleHaveKeyWordInTitle = async (keyWord) => {
+  const patern = new RegExp("\\b" + keyWord + "\\b", "i");
   async function executor(collection) {
     return await collection.countDocuments({
-      $text: { $search: keyWord },
+      // $text: { $search: keyWord },
+      title: { $regex: patern },
       postType: articleComposStructure.Article.type,
     });
   }
@@ -651,12 +656,15 @@ const findArticlesByKeyWordInTitleAndCategories = async (
 ) => {
   index = parseInt(index);
   let executor = undefined;
+  const patern = new RegExp("\\b" + keyWord + "\\b", "i");
   if (typeof num == "undefined") {
+    // console.log('heheh');
     executor = async (collection) => {
       return await collection
         .find({
           postType: articleComposStructure.Article.type,
-          $text: { $search: keyWord },
+          // $text: { $search: keyWord },
+          title: { $regex: patern },
           categories: { $all: list_of_categories },
         })
         .sort({
@@ -671,7 +679,8 @@ const findArticlesByKeyWordInTitleAndCategories = async (
       return await collection
         .find({
           postType: articleComposStructure.Article.type,
-          $text: { $search: keyWord },
+          // $text: { $search: keyWord },
+          title: { $regex: patern },
           categories: { $all: list_of_categories },
         })
         .sort({
@@ -692,10 +701,12 @@ const getTotalNumOfArticleHaveKeywWordInTitleAndCategories = async (
   keyWord,
   list_of_categories
 ) => {
+  const patern = new RegExp("\\b" + keyWord + "\\b", "i");
   async function executor(collection) {
     return await collection.countDocuments({
       postType: articleComposStructure.Article.type,
-      $text: { $search: keyWord },
+      // $text: { $search: keyWord },
+      title: { $regex: patern },
       categories: { $all: list_of_categories },
     });
   }

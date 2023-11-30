@@ -181,12 +181,6 @@ const publicInforOfPet = async (petid) => {
   };
 };
 
-// (async function () {
-//   const data = await publicInforOfPet(1);
-//   const ma_thu_cung = data.ma_thu_cung;
-//   console.log(typeof ma_thu_cung, ma_thu_cung);
-// })();
-
 const publicInforOfListPet = async (petid_list) => {
   return await Promise.all(
     petid_list.map(async (petid) => await publicInforOfPet(petid))
@@ -216,8 +210,14 @@ const getOwnerIdOfPet = async (petid) => {
   return typeof data == "undefined" ? null : data.ma_nguoi_chu;
 };
 
+const getAllGiongOfPetsOwnedByUser = async (user_id) => {
+  const petList = await petModel
+    .getAllOwnsPetOf(user_id)
+    .then((data) => data.payload);
+  return petList.map((pet) => pet.ma_giong);
+};
 // (async function () {
-//   const data = await getOwnerIdOfPet(420);
+//   const data = await getAllGiongOfPetsOwnedByUser(200);
 //   console.log(data);
 // })();
 
@@ -234,4 +234,5 @@ module.exports = {
   publicInforOfListPet,
   getPetsIdOwnedByUserInListOfPetIds,
   getOwnerIdOfPet,
+  getAllGiongOfPetsOwnedByUser,
 };

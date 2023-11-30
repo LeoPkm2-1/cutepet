@@ -19,6 +19,31 @@ const createArticle = (
     },
   });
 };
+
+const editArticle = (
+  article_id:string,
+  title: string,
+  main_image: string,
+  intro: string,
+  content: string,
+  categories: string[]
+) => {
+  return authRequest<any>({
+    url: '/post/article/editArticle',
+    method: 'POST',
+    body: {
+      article_id,
+      title,
+      main_image,
+      intro,
+      content,
+      categories,
+    },
+  });
+};
+
+
+
 const getArticleById = (article_id: string) => {
   return authRequest<any>({
     url: '/post/article/getArticle',
@@ -138,7 +163,37 @@ const updateComment = (cmt_id: string, content: string) => {
     method: 'POST',
     body: {
       cmt_id,
-      content
+      content,
+    },
+  });
+};
+
+const filterArticles = (
+  searchKey: string | null,
+  tags: string[] | null,
+  index: number | null,
+  num: number | null
+) => {
+  return authRequest<any>({
+    url: '/post/article/filterArticles',
+    method: 'POST',
+    body: {
+      searchKey,
+      tags,
+      index,
+      num,
+    },
+  });
+};
+
+const removeArticles = (
+  article_id: string
+) => {
+  return authRequest<any>({
+    url: '/post/article/deleteArticle',
+    method: 'POST',
+    body: {
+      article_id,
     },
   });
 };
@@ -159,7 +214,10 @@ const articleApi = {
   unFollowArticle,
   reportArticle,
   deleteComment,
-  updateComment
+  updateComment,
+  filterArticles,
+  editArticle,
+  removeArticles
 };
 
 export default articleApi;

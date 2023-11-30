@@ -98,7 +98,7 @@ export default function ThemThuCung() {
       )
       .then((data) => {
         if (data?.status == 200) {
-          enqueueSnackbar('Thêm thú cưng thành công', { variant: 'success' });
+          enqueueSnackbar('Thêm thú cưng thành công', { variant: "info" });
           setIsLoading(false);
           navigate("/home/quan-ly-thu-cung")
         }

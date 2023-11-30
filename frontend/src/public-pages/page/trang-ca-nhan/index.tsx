@@ -287,6 +287,7 @@ export default function TrangCaNhan() {
           <Box
             sx={{
               maxWidth: '50vw',
+              width:"100%",
               display: isPostState ? 'block' : 'none',
             }}
           >

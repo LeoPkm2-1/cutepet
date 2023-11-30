@@ -2,6 +2,8 @@ const userModel = require("../models/userModel");
 const banbeHelper = require("./../utils/banbeHelper");
 const { Response } = require("./../utils");
 const loiMoiKetBanModel = require("./../models/loiMoiKetBanModel");
+const loiMoiKetBanHelper = require("../utils/loiMoiKetBanHelper");
+const petHelper = require("../utils/petHelper");
 
 const AddByUserIdMid = async (req, res, next) => {
   const ma_nguoi_dung = req.body.requestID;
@@ -111,10 +113,39 @@ const hasSendRequestAddFriendToMid = async (req, res, next) => {
   next();
 };
 
+const preProccessSuggestFriendMid = async (req, res, next) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const listFriendIds = await banbeHelper.getListFriendIdsOfUser(user_id);
+  const userIdsHaveWaittingResponse =
+    await loiMoiKetBanHelper.getIdsOfReceiverInPendingAddFriendRequestOf(
+      user_id
+    );
+
+  const userIdsHaveSendRequest =
+    await loiMoiKetBanHelper.getIdsOfSenderInPendingAddFriendRequestTo(user_id);
+
+  const unSuggestedFriendIds = [
+    ...listFriendIds,
+    ...userIdsHaveWaittingResponse,
+    ...userIdsHaveSendRequest,
+  ];
+
+  unSuggestedFriendIds.push(user_id)
+  // console.log(unSuggestedFriendIds);
+
+  const danhsachGiong = await petHelper.getAllGiongOfPetsOwnedByUser(user_id);
+
+  req.body.UN_SUGGESTED_FRIEND_IDS = unSuggestedFriendIds;
+  req.body.DANH_SACH_MA_GIONG = danhsachGiong;
+  next();
+  // const pets = await petModel.getAllOwnsPetOf(user_id);
+};
+
 module.exports = {
   AddByUserNameMid,
   AddByUserIdMid,
   checkFriendShipExistsMid,
   hasReceiveRequestAddFriendFromMid,
   hasSendRequestAddFriendToMid,
+  preProccessSuggestFriendMid,
 };
