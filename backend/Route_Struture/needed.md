@@ -48,7 +48,7 @@ chưa hiện thực được
 
 số lượng upvote downvote khi nhiều người dùng vote bị sai.
 
-## ---DONE--- || ==ERR== 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
+## ---DONE--- || ==DONE== Em kiểm tra lại --- 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
 
 (viết ra thông báo đó là thông báo nào đừng để noname)
 

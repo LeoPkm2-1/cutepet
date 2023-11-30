@@ -48,11 +48,11 @@ function logout() {
   console.log("Log out rồi ne");
   
   return (dispatch: Dispatch) => {
-    // return authApi.logoutUser().finally(() => {
-    //   storage.setTokens();
-    //   auth.signOut();
-    //   return dispatch(typedAction(AuthActionEnum.RESET));
-    // });
+    return authApi.logoutUser().finally(() => {
+      storage.setTokens();
+      auth.signOut();
+      return dispatch(typedAction(AuthActionEnum.RESET));
+    });
   };
 }
 

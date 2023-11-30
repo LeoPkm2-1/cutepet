@@ -136,6 +136,10 @@ export interface PeopleType {
   url: string;
   numberPet: number;
   isFriend?: boolean;
+  ngay_sinh?: string;
+  email?: string;
+  so_dien_thoai?: string;
+  gioi_tinh?: number;
 }
 
 export interface LoiMoiType {

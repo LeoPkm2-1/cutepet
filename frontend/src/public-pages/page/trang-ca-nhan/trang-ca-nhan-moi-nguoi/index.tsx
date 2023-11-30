@@ -16,7 +16,12 @@ import { DanhSachThuCung } from '../../quan-ly-thu-cung/component/danh-sach-thu-
 import Button from '../../../../components/Button';
 import friendApi from '../../../../api/friend';
 import { useSnackbar } from 'notistack';
-
+import EmailIcon from '@mui/icons-material/Email';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import moment from 'moment';
+import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
 export default function TrangCaNhanMoiNguoi() {
   // const profile = useSelector((state: RootState) => state.user.profile);
   const { id } = useParams();
@@ -30,6 +35,10 @@ export default function TrangCaNhanMoiNguoi() {
     url: '',
     numberPet: 0,
     isFriend: false,
+    ngay_sinh: '',
+    email: '',
+    so_dien_thoai: '',
+    gioi_tinh: 0,
   });
 
   const [isFriend, setIsFriend] = useState(0);
@@ -41,9 +50,13 @@ export default function TrangCaNhanMoiNguoi() {
   const [friend, setFriend] = useState<FriendType[]>([]);
   const [listPost, setListPost] = useState<StatusType[]>([]);
   const [listPet, setListPet] = useState<PetType[]>([]);
-  const newRequestAddFriend = useSelector((state:RootState) => state?.socket.newRequestAddFriend?.request)
-  
-  const newFriendId = useSelector((state:RootState) => state?.socket.acceptFriend?.idUser)
+  const newRequestAddFriend = useSelector(
+    (state: RootState) => state?.socket.newRequestAddFriend?.request
+  );
+
+  const newFriendId = useSelector(
+    (state: RootState) => state?.socket.acceptFriend?.idUser
+  );
 
   const acceptUser = useSelector(
     (state: RootState) => state?.socket.acceptFriend.idUser
@@ -56,7 +69,7 @@ export default function TrangCaNhanMoiNguoi() {
     if (id) {
       setTab('post');
       profileApi.getUserProfileById(id).then((data) => {
-        console.log(data, " data profile");
+        console.log(data, ' data profile');
         setProfile({
           name: data?.thong_tin_profile_user?.ten,
           id: data?.thong_tin_profile_user?.ma_nguoi_dung,
@@ -64,16 +77,25 @@ export default function TrangCaNhanMoiNguoi() {
           url: data?.thong_tin_profile_user?.anh?.url,
           numberPet: data?.danh_sach_thu_cung?.length,
           isFriend: data?.la_ban_be,
+          ngay_sinh: data?.thong_tin_profile_user?.ngay_sinh,
+          email: data?.thong_tin_profile_user?.email,
+          so_dien_thoai: data?.thong_tin_profile_user?.so_dien_thoai,
+          gioi_tinh: data?.thong_tin_profile_user?.gioi_tinh,
         });
 
         if (data?.la_ban_be) {
           setIsFriend(1);
         } else {
-          if(data?.thong_tin_ve_gui_loi_moi_ket_ban == "HAS_SEND_REQUEST_ADD_FRIEND"){
+          if (
+            data?.thong_tin_ve_gui_loi_moi_ket_ban ==
+            'HAS_SEND_REQUEST_ADD_FRIEND'
+          ) {
             setIsFriend(-1);
             return;
           }
-          if(data?.thong_tin_ve_gui_loi_moi_ket_ban == "WAITTING_YOUR_RESPONE"){
+          if (
+            data?.thong_tin_ve_gui_loi_moi_ket_ban == 'WAITTING_YOUR_RESPONE'
+          ) {
             setIsFriend(-2);
             return;
           }
@@ -226,22 +248,20 @@ export default function TrangCaNhanMoiNguoi() {
   }, [acceptUser]);
 
   useEffect(() => {
-    if(newRequestAddFriend?.senderID && profile?.id){
-      if(newRequestAddFriend?.senderID == profile?.id){
+    if (newRequestAddFriend?.senderID && profile?.id) {
+      if (newRequestAddFriend?.senderID == profile?.id) {
         setIsFriend(-2);
       }
     }
-
-  }, [newRequestAddFriend?.senderID])
+  }, [newRequestAddFriend?.senderID]);
 
   useEffect(() => {
-    if(newFriendId && profile?.id){
-      if(newFriendId == profile?.id){
+    if (newFriendId && profile?.id) {
+      if (newFriendId == profile?.id) {
         setIsFriend(1);
       }
     }
-
-  }, [newFriendId])
+  }, [newFriendId]);
 
   function handleUnfriend() {
     if (profile?.id) {
@@ -250,7 +270,7 @@ export default function TrangCaNhanMoiNguoi() {
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Đã hủy kết bạn với ${profile?.name}`, {
-              variant: "info",
+              variant: 'info',
             });
             setIsFriend(0);
           } else {
@@ -277,7 +297,7 @@ export default function TrangCaNhanMoiNguoi() {
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Đã gửi lời mời kết bạn với ${profile?.name}`, {
-              variant: "info",
+              variant: 'info',
             });
             setIsFriend(-1);
           } else {
@@ -298,22 +318,24 @@ export default function TrangCaNhanMoiNguoi() {
   }
 
   function handleSubmit(type: string) {
-    if(profile?.id){
+    if (profile?.id) {
       friendApi.responeAddFriend(profile?.id, type).then((data) => {
         console.log(data, ' dtata nef');
         if (data?.status == 200) {
           if (data?.payload?.accepted) {
             enqueueSnackbar(`Kết bạn với ${profile?.name} thành công`, {
-              variant: "info",
+              variant: 'info',
             });
             setIsFriend(1);
           } else {
-            enqueueSnackbar(`Xóa lời mời kết bạn với ${profile?.name} thành công`, {
-              variant: "info",
-            });
+            enqueueSnackbar(
+              `Xóa lời mời kết bạn với ${profile?.name} thành công`,
+              {
+                variant: 'info',
+              }
+            );
             setIsFriend(0);
-          };
-          
+          }
         }
       });
     }
@@ -331,9 +353,12 @@ export default function TrangCaNhanMoiNguoi() {
             display: 'flex',
             alignItems: 'center',
             padding: '0 200px',
+            justifyContent:'center'
           }}
         >
-          <img src={profile?.url} height={100} width={100} />
+          <img style={{
+            borderRadius:"100%"
+          }} src={profile?.url} height={200} width={200} />
           <Box
             sx={{
               ml: '80px',
@@ -380,34 +405,34 @@ export default function TrangCaNhanMoiNguoi() {
                   Đang chờ phản hồi
                 </Button>
               )}
-                {isFriend == -2 && (
+              {isFriend == -2 && (
                 <Box
-                sx={{
-                  display: 'flex',
-                }}
-              >
-                <Button
-                  onClick={() => handleSubmit('accept')}
                   sx={{
-                    minWidth: '100px',
-                  }}
-                  variant="contained"
-                >
-                  Xác Nhận
-                </Button>
-                <Button
-                  onClick={() => handleSubmit('reject')}
-                  variant="contained"
-                  color="inherit"
-                  sx={{
-                    minWidth: '100px',
-                    color: 'gray',
-                    ml: '20px',
+                    display: 'flex',
                   }}
                 >
-                  Xóa
-                </Button>
-              </Box>
+                  <Button
+                    onClick={() => handleSubmit('accept')}
+                    sx={{
+                      minWidth: '100px',
+                    }}
+                    variant="contained"
+                  >
+                    Xác Nhận
+                  </Button>
+                  <Button
+                    onClick={() => handleSubmit('reject')}
+                    variant="contained"
+                    color="inherit"
+                    sx={{
+                      minWidth: '100px',
+                      color: 'gray',
+                      ml: '20px',
+                    }}
+                  >
+                    Xóa
+                  </Button>
+                </Box>
               )}
             </Box>
             <Typography
@@ -420,15 +445,96 @@ export default function TrangCaNhanMoiNguoi() {
             >
               {`@${profile.user}`}
             </Typography>
+
             <Typography
               sx={{
                 fontFamily: 'quicksand',
                 fontSize: '14px',
                 fontWeight: '500',
                 mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
-              Tiểu sử
+              <EmailIcon
+                sx={{
+                  color: 'gray',
+                  fontSize: '20px',
+                  marginRight: '6px',
+                }}
+              />
+
+              {profile?.email}
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontSize: '14px',
+                fontWeight: '500',
+                mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <LocalPhoneIcon
+                sx={{
+                  color: 'gray',
+                  fontSize: '20px',
+                  marginRight: '6px',
+                }}
+              />
+
+              {profile?.so_dien_thoai}
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontSize: '14px',
+                fontWeight: '500',
+                mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <CalendarMonthIcon
+                sx={{
+                  color: 'gray',
+                  fontSize: '20px',
+                  marginRight: '6px',
+                }}
+              />
+
+              {moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
+            </Typography>
+
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontSize: '14px',
+                fontWeight: '500',
+                mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {profile?.gioi_tinh ? (
+                <FemaleIcon
+                  sx={{
+                    color: 'gray',
+                    fontSize: '24px',
+                    marginRight: '6px',
+                  }}
+                />
+              ) : (
+                <MaleIcon
+                  sx={{
+                    color: 'gray',
+                    fontSize: '24px',
+                    marginRight: '6px',
+                  }}
+                />
+              )}
+              {profile?.gioi_tinh ? 'Nam' : 'Nữ'}
             </Typography>
             <Box
               sx={{
@@ -454,7 +560,7 @@ export default function TrangCaNhanMoiNguoi() {
                     fontSize: '15px',
                   }}
                 >
-                  6
+                  {listPost?.length || 0}
                 </span>{' '}
                 bài viết{' '}
               </Typography>
@@ -520,7 +626,7 @@ export default function TrangCaNhanMoiNguoi() {
           <Box
             sx={{
               maxWidth: '50vw',
-              width:"100%",
+              width: '100%',
               display: tab == 'post' ? 'block' : 'none',
             }}
           >
@@ -592,7 +698,7 @@ export default function TrangCaNhanMoiNguoi() {
             )}
           </Box>
         </Box>
-        {timePost && tab == "post" && (
+        {timePost && tab == 'post' && (
           <Typography
             align="center"
             sx={{
@@ -605,7 +711,7 @@ export default function TrangCaNhanMoiNguoi() {
               cursor: 'pointer',
             }}
             onClick={() => {
-              setTimePost(listPost[listPost?.length - 1]?.createAt ||"");
+              setTimePost(listPost[listPost?.length - 1]?.createAt || '');
             }}
           >
             {' '}
