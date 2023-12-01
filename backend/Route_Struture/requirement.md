@@ -227,7 +227,7 @@ tham khảo tại
 
 _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)** và **postman số 68**
 
-## 66. khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
+## 66. ==OK== khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
 
 ## 66. hiện thực like bài viết khi comment trong bài viết chia sẻ kiến thức
 
@@ -241,7 +241,7 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 ## 72. load bài viết chia sẻ trạng thái theo thú cưng được tags
 
-## 73. resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
+## 73.==OK== resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
 
 ## 74. trang cập nhật thông tin nguời dùng
 
@@ -251,9 +251,9 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 ## 77. chỉnh sửa bài viết chia sẻ kiến thức
 
-## 78. xóa bài viết chia sẻ kiến thức
+## 78. ==OK== xóa bài viết chia sẻ kiến thức
 
-## 79. giao diện gợi ý kết bạn
+## 79. ==OK== giao diện gợi ý kết bạn
 
 _chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-người-dùng-gợi-ý-kết-bạn)** và **postman số 74**
 

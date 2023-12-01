@@ -541,11 +541,14 @@ const updatePostController = async (req, res) => {
           (user) => !req.body.UNFOLLOW_USER_ID.includes(user.ma_nguoi_dung)
         )
       : postBeforeDelete.taggedUsers;
-  // res.json(remainingTaggedUser);
+  // // res.json(remainingTaggedUser);
+  // let taggedUsers = await userHelper.getUserPublicInforByListIds(
+  //   req.body.NEW_FOLLOW_USER_ID
+  // );
+  // taggedUsers = remainingTaggedUser.concat(taggedUsers);
   let taggedUsers = await userHelper.getUserPublicInforByListIds(
-    req.body.NEW_FOLLOW_USER_ID
+    req.body.taggedUsersId
   );
-  taggedUsers = remainingTaggedUser.concat(taggedUsers);
 
   const withPets = await petHelper.publicInforOfListPet(req.body.myPetIds);
 
