@@ -12,7 +12,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
 import ShareIcon from '@mui/icons-material/Share';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { useEffect, useState } from 'react';
 import postApi from '../../../../../api/post';
@@ -34,6 +34,8 @@ import BuildIcon from '@mui/icons-material/Build';
 import FlagIcon from '@mui/icons-material/Flag';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
+import { useShowDialog } from '../../../../../hooks/dialog';
+import UpdatePost from '../chinh-sua-bai-viet';
 type Props = {
   idStatus?: string;
   status?: StatusType;
@@ -49,6 +51,8 @@ export default function PostComponent(props: Props) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const showDialog = useShowDialog();
+  const [openUpdate, setOpenUpdate] = useState(false);
   const profile = useSelector((state: RootState) => state.user.profile);
   const [friendTag, setFriendTag] = useState<
     {
@@ -106,10 +110,12 @@ export default function PostComponent(props: Props) {
       return;
     }
     if (props?.status) {
+      console.log(props?.status, ' status nè');
+
       setStatus(props?.status);
     }
     // get comment
-  }, [props?.idStatus]);
+  }, [props?.idStatus, props?.status?.id]);
 
   useEffect(() => {
     console.log('reload comment');
@@ -125,6 +131,7 @@ export default function PostComponent(props: Props) {
               createdAt: item?.commentAt,
               id: item?._id,
               userId: item?.userCmtInfor?.ma_nguoi_dung,
+              postUserId: item?.userCmtInfor?.ma_nguoi_dung,
             } as CommentType;
           });
           console.log(comments, 'Comment');
@@ -169,16 +176,27 @@ export default function PostComponent(props: Props) {
   }
 
   function handleDelete() {
-    if (status?.id) {
-      postApi.removePost(status?.id).then((data) => {
-        if (data?.status == 200) {
-          setIsRender(false);
-          enqueueSnackbar(`Xóa bài viết thành công`, {
-            variant: "info",
-          });
+    showDialog({
+      content: `Bạn chắc chắn xóa bài chia sẽ trạng thái ?`,
+      onOk: () => {
+        if (status?.id) {
+          postApi
+            .removePost(status?.id)
+            .then((data) => {
+              if (data?.status == 200) {
+                setIsRender(false);
+                enqueueSnackbar(`Xóa bài viết thành công`, {
+                  variant: 'info',
+                });
+                setIsRender(false);
+              }
+            })
+            .catch((err) => {
+              enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+            });
         }
-      });
-    }
+      },
+    });
   }
 
   function handleUnFollow() {
@@ -218,7 +236,7 @@ export default function PostComponent(props: Props) {
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Báo cáo bài viết thành công`, {
-              variant: "info",
+              variant: 'info',
             });
           }
         })
@@ -230,7 +248,7 @@ export default function PostComponent(props: Props) {
 
   async function handleClickComment() {
     // if (props.status && props.status?.numOfComment > 0 && props.status?.id) {
-    if (status && (status?.numOfComment ||0) > 0 && status?.id) {
+    if (status && (status?.numOfComment || 0) > 0 && status?.id) {
       // await postApi.getAllComment(props.status?.id).then((data) => {
       await postApi.getAllComment(status?.id).then((data) => {
         if (data?.status == 200) {
@@ -241,6 +259,10 @@ export default function PostComponent(props: Props) {
               text: item?.comment,
               createdAt: item?.commentAt,
               id: item?._id,
+              numOfLike: item?.numOfLike,
+              numOfReply: item?.numOfReply,
+              postUserId: status?.userInfor?.id,
+              userId: item?.userCmtInfor?.ma_nguoi_dung,
             } as CommentType;
           });
           setComments(commemts);
@@ -252,100 +274,108 @@ export default function PostComponent(props: Props) {
 
   return (
     <>
-      {/* <Button
-        onClick={() => {
-          const a = [
-            {
-              photoURL: 'string',
-              name: 'string',
-              text: 'string',
-              createdAt: 'dđ',
-              id: 'string',
-            },
-          ];
-          setComments([...comments, ...a]);
-        }}
-      >
-        Thêm 1 comment
-      </Button> */}
       {isRender && (
-        <Box
-          sx={{
-            background: '#fff',
-            borderRadius: '8px',
-            mb: '30px',
-          }}
-        >
+        <>
+          {status && (
+            <UpdatePost
+              onSuccess={(status) => setStatus(status)}
+              status={status}
+              open={openUpdate}
+              onClose={() => setOpenUpdate(false)}
+            />
+          )}
           <Box
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              background: '#fff',
+              borderRadius: '8px',
+              mb: '30px',
             }}
           >
             <Box
               sx={{
                 display: 'flex',
-                background: '#fff',
-                padding: '20px',
-                borderRadius: '12px',
+                alignItems: 'center',
+                justifyContent: 'space-between',
               }}
             >
-              <img
-                onClick={() => {
-                  profile?.id == status?.userInfor?.id
-                    ? navigate('/home/trang-ca-nhan')
-                    : navigate(
-                        `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor?.id}`
-                      );
-                }}
-                style={{
-                  height: '50px',
-                  width: '50px',
-                  objectFit: 'cover',
-                  borderRadius: '30px',
-                  cursor: 'pointer',
-                }}
-                src={status?.userInfor?.avatarURL || ''}
-              />
-
               <Box
                 sx={{
-                  ml: '16px',
+                  display: 'flex',
+                  background: '#fff',
+                  padding: '20px',
+                  borderRadius: '12px',
                 }}
               >
-                <Typography
+                <img
+                  onClick={() => {
+                    profile?.id == status?.userInfor?.id
+                      ? navigate('/home/trang-ca-nhan')
+                      : navigate(
+                          `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor?.id}`
+                        );
+                  }}
+                  style={{
+                    height: '50px',
+                    width: '50px',
+                    objectFit: 'cover',
+                    borderRadius: '30px',
+                    cursor: 'pointer',
+                  }}
+                  src={status?.userInfor?.avatarURL || ''}
+                />
+
+                <Box
                   sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '700',
+                    ml: '16px',
                   }}
                 >
-                  <span
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {
-                      profile?.id == status?.userInfor?.id
-                        ? navigate('/home/trang-ca-nhan')
-                        : navigate(
-                            `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor?.id}`
-                          );
+                  <Typography
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '700',
                     }}
                   >
-                    {' '}
-                    {status?.userInfor?.name}{' '}
-                  </span>
-                  {(status?.taggedUsers?.length || 0) > 0 && (
-                    <>
-                      <span
-                        style={{
-                          fontWeight: '400',
-                        }}
-                      >
-                        cùng với
-                      </span>{' '}
-                      {status?.taggedUsers?.map((item, index) => {
-                        if (index > 0) {
+                    <span
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => {
+                        profile?.id == status?.userInfor?.id
+                          ? navigate('/home/trang-ca-nhan')
+                          : navigate(
+                              `/home/trang-ca-nhan-nguoi-dung/${status?.userInfor?.id}`
+                            );
+                      }}
+                    >
+                      {' '}
+                      {status?.userInfor?.name}{' '}
+                    </span>
+                    {(status?.taggedUsers?.length || 0) > 0 && (
+                      <>
+                        <span
+                          style={{
+                            fontWeight: '400',
+                          }}
+                        >
+                          cùng với
+                        </span>{' '}
+                        {status?.taggedUsers?.map((item, index) => {
+                          if (index > 0) {
+                            return (
+                              <span
+                                onClick={() => {
+                                  navigate(
+                                    `/home/trang-ca-nhan-nguoi-dung/${item.id}`
+                                  );
+                                }}
+                                style={{
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                {', '} {item?.name}
+                              </span>
+                            );
+                          }
                           return (
                             <span
                               onClick={() => {
@@ -357,68 +387,34 @@ export default function PostComponent(props: Props) {
                                 cursor: 'pointer',
                               }}
                             >
-                              {', '} {item?.name}
+                              {item?.name}
                             </span>
                           );
-                        }
-                        return (
-                          <span
-                            onClick={() => {
-                              navigate(
-                                `/home/trang-ca-nhan-nguoi-dung/${item.id}`
-                              );
-                            }}
-                            style={{
-                              cursor: 'pointer',
-                            }}
-                          >
-                            {item?.name}
-                          </span>
-                        );
-                      })}
-                    </>
-                  )}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '400',
-                    fontSize: '13px',
-                    color: 'gray',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <span
-                    style={{
+                        })}
+                      </>
+                    )}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '400',
                       fontSize: '13px',
+                      color: 'gray',
+                      display: 'flex',
+                      alignItems: 'center',
                     }}
                   >
-                    {moment(status?.createAt).format('DD-MM-YYYY')}
-                  </span>
-                  <span>
-                    {' '}
-                    {status?.visibility == 'PRIVATE' && (
-                      <LockIcon
-                        sx={{
-                          marginTop: '4px',
-                          fontSize: '15px',
-                          marginLeft: '10px',
-                        }}
-                      />
-                    )}
-                    {status?.visibility == 'JUST_FRIENDS' && (
-                      <PeopleAltIcon
-                        sx={{
-                          marginTop: '4px',
-                          fontSize: '15px',
-                          marginLeft: '10px',
-                        }}
-                      />
-                    )}
-                    {status?.visibility !== 'PRIVATE' &&
-                      status?.visibility !== 'JUST_FRIENDS' && (
-                        <PublicIcon
+                    <span
+                      style={{
+                        fontSize: '13px',
+                      }}
+                    >
+                      {moment(status?.createAt).format('DD-MM-YYYY')}
+                    </span>
+                    <span>
+                      {' '}
+                      {status?.visibility == 'PRIVATE' && (
+                        <LockIcon
                           sx={{
                             marginTop: '4px',
                             fontSize: '15px',
@@ -426,288 +422,313 @@ export default function PostComponent(props: Props) {
                           }}
                         />
                       )}
-                  </span>
-                </Typography>
+                      {status?.visibility == 'JUST_FRIENDS' && (
+                        <PeopleAltIcon
+                          sx={{
+                            marginTop: '4px',
+                            fontSize: '15px',
+                            marginLeft: '10px',
+                          }}
+                        />
+                      )}
+                      {status?.visibility !== 'PRIVATE' &&
+                        status?.visibility !== 'JUST_FRIENDS' && (
+                          <PublicIcon
+                            sx={{
+                              marginTop: '4px',
+                              fontSize: '15px',
+                              marginLeft: '10px',
+                            }}
+                          />
+                        )}
+                    </span>
+                  </Typography>
+                </Box>
               </Box>
+              <IconButton onClick={handleClick}>
+                <MoreVertIcon />
+              </IconButton>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                sx={{
+                  fontFamily: 'quicksand',
+                }}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+              >
+                {status?.owner_id == profile?.id ? (
+                  <>
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'quicksand',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        minWidth: '150px',
+                      }}
+                      onClick={handleDelete}
+                    >
+                      <span>Xóa</span>{' '}
+                      <DeleteOutlineIcon
+                        sx={{
+                          color: 'gray',
+                        }}
+                      />
+                    </MenuItem>
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'quicksand',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        minWidth: '150px',
+                      }}
+                      onClick={() => {
+                        handleClose();
+                        setOpenUpdate(true);
+                      }}
+                    >
+                      <span> Chỉnh sửa </span>{' '}
+                      <BuildIcon
+                        sx={{
+                          color: 'gray',
+                        }}
+                      />
+                    </MenuItem>
+                  </>
+                ) : (
+                  <>
+                    {isFollow ? (
+                      <MenuItem
+                        sx={{
+                          fontFamily: 'quicksand',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          minWidth: '150px',
+                        }}
+                        onClick={handleUnFollow}
+                      >
+                        <span> Bỏ theo dõi </span>{' '}
+                        <NotificationsOffIcon
+                          sx={{
+                            color: 'gray',
+                          }}
+                        />
+                      </MenuItem>
+                    ) : (
+                      <MenuItem
+                        sx={{
+                          fontFamily: 'quicksand',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          minWidth: '150px',
+                        }}
+                        onClick={handleFollow}
+                      >
+                        <span> Theo dõi </span>{' '}
+                        <NotificationsIcon
+                          sx={{
+                            color: 'gray',
+                          }}
+                        />
+                      </MenuItem>
+                    )}
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'quicksand',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        minWidth: '150px',
+                      }}
+                      onClick={handleReport}
+                    >
+                      <span> Báo cáo </span>{' '}
+                      <FlagIcon
+                        sx={{
+                          color: 'gray',
+                        }}
+                      />
+                    </MenuItem>
+                  </>
+                )}
+              </Menu>
             </Box>
-            <IconButton onClick={handleClick}>
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
+            <Box sx={{ padding: '10px 20px' }}>
+              {status?.taggedPets?.map((pet) => {
+                return (
+                  <span
+                    onClick={() => {
+                      navigate(`/home/bai-viet-thu-cung/${pet?.id}`);
+                    }}
+                    style={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '600',
+                      color: '#ff5b2e',
+                      marginRight: '12px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    @{pet?.name?.trim()}
+                  </span>
+                );
+              })}
+            </Box>
+            <Typography
               sx={{
                 fontFamily: 'quicksand',
-              }}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                fontWeight: '400',
+                fontSize: '15px',
+                color: '',
+                px: '20px',
+                mb: '20px',
               }}
             >
-              {status?.owner_id == profile?.id ? (
-                <>
-                  <MenuItem
-                    sx={{
-                      fontFamily: 'quicksand',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      minWidth: '150px',
-                    }}
-                    onClick={handleDelete}
-                  >
-                    <span>Xóa</span>{' '}
-                    <DeleteOutlineIcon
-                      sx={{
-                        color: 'gray',
-                      }}
-                    />
-                  </MenuItem>
-                  <MenuItem
-                    sx={{
-                      fontFamily: 'quicksand',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      minWidth: '150px',
-                    }}
-                    onClick={handleDelete}
-                  >
-                    <span> Chỉnh sửa </span>{' '}
-                    <BuildIcon
-                      sx={{
-                        color: 'gray',
-                      }}
-                    />
-                  </MenuItem>
-                </>
-              ) : (
-                <>
-                  {isFollow ? (
-                    <MenuItem
-                      sx={{
-                        fontFamily: 'quicksand',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        minWidth: '150px',
-                      }}
-                      onClick={handleUnFollow}
-                    >
-                      <span> Bỏ theo dõi </span>{' '}
-                      <NotificationsOffIcon
-                        sx={{
-                          color: 'gray',
-                        }}
-                      />
-                    </MenuItem>
-                  ) : (
-                    <MenuItem
-                      sx={{
-                        fontFamily: 'quicksand',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        minWidth: '150px',
-                      }}
-                      onClick={handleFollow}
-                    >
-                      <span> Theo dõi </span>{' '}
-                      <NotificationsIcon
-                        sx={{
-                          color: 'gray',
-                        }}
-                      />
-                    </MenuItem>
-                  )}
-                  <MenuItem
-                    sx={{
-                      fontFamily: 'quicksand',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      minWidth: '150px',
-                    }}
-                    onClick={handleReport}
-                  >
-                    <span> Báo cáo </span>{' '}
-                    <FlagIcon
-                      sx={{
-                        color: 'gray',
-                      }}
-                    />
-                  </MenuItem>
-                </>
-              )}
-            </Menu>
-          </Box>
-          <Box sx={{ padding: '10px 20px' }}>
-            {status?.taggedPets?.map((pet) => {
-              return (
-                <span
-                  style={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '600',
-                    color: '#ff5b2e',
-                    marginRight: '12px',
-                    cursor:"pointer"
-                  }}
-                >
-                  @{pet?.name?.trim()}
-                </span>
-              );
-            })}
-          </Box>
-          <Typography
-            sx={{
-              fontFamily: 'quicksand',
-              fontWeight: '400',
-              fontSize: '15px',
-              color: '',
-              px: '20px',
-              mb: '20px',
-            }}
-          >
-            {status?.text}
-          </Typography>
-          {status?.media?.data[0] && (
-            <img
-              style={{
-                width: '100%',
-                objectFit: 'cover',
-              }}
-              src={status?.media?.data[0]}
-            />
-          )}
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '10px 20px',
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <FavoriteIcon
-                sx={{
-                  color: '#df3731',
+              {status?.text}
+            </Typography>
+            {status?.media?.data[0] && (
+              <img
+                style={{
+                  width: '100%',
+                  objectFit: 'cover',
                 }}
+                src={status?.media?.data[0]}
               />
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '400',
-                  fontSize: '15px',
-                  color: '',
-                  ml: '5px',
-                }}
-              >
-                {status?.numOfLike}
-              </Typography>
-            </Box>
-
+            )}
             <Box
               sx={{
                 display: 'flex',
+                justifyContent: 'space-between',
                 alignItems: 'center',
+                padding: '10px 20px',
               }}
             >
-              <Typography
+              <Box
                 sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '400',
-                  fontSize: '15px',
-                  color: '',
-                  mr: '5px',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
-                {status?.numOfComment}
-              </Typography>
-              <SmsOutlinedIcon
-                sx={{
-                  color: 'gray',
-                }}
-              />
-              {/* <ShareIcon /> */}
-            </Box>
-          </Box>
-          <Divider />
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-              padding: '16px 20px',
-            }}
-          >
-            <Box
-              onClick={handleLike}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                cursor: 'pointer',
-              }}
-            >
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '600',
-                  fontSize: '16px',
-                  color: 'gray',
-                  mr: '5px',
-                }}
-              >
-                Thích
-              </Typography>
-              {status?.hasLiked ? (
                 <FavoriteIcon
                   sx={{
                     color: '#df3731',
                   }}
                 />
-              ) : (
-                <FavoriteBorderOutlinedIcon
+                <Typography
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '400',
+                    fontSize: '15px',
+                    color: '',
+                    ml: '5px',
+                  }}
+                >
+                  {status?.numOfLike}
+                </Typography>
+              </Box>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '400',
+                    fontSize: '15px',
+                    color: '',
+                    mr: '5px',
+                  }}
+                >
+                  {status?.numOfComment}
+                </Typography>
+                <SmsOutlinedIcon
                   sx={{
                     color: 'gray',
                   }}
                 />
-              )}
+                {/* <ShareIcon /> */}
+              </Box>
             </Box>
+            <Divider />
             <Box
-              onClick={handleClickComment}
               sx={{
                 display: 'flex',
+                justifyContent: 'space-around',
                 alignItems: 'center',
-                cursor: 'pointer',
+                padding: '16px 20px',
               }}
             >
-              <Typography
+              <Box
+                onClick={handleLike}
                 sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '600',
-                  fontSize: '16px',
-                  color: 'gray',
-                  mr: '5px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  cursor: 'pointer',
                 }}
               >
-                Bình luận
-              </Typography>
-              <SmsOutlinedIcon
+                <Typography
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '600',
+                    fontSize: '16px',
+                    color: 'gray',
+                    mr: '5px',
+                  }}
+                >
+                  Thích
+                </Typography>
+                {status?.hasLiked ? (
+                  <FavoriteIcon
+                    sx={{
+                      color: '#df3731',
+                    }}
+                  />
+                ) : (
+                  <FavoriteBorderOutlinedIcon
+                    sx={{
+                      color: 'gray',
+                    }}
+                  />
+                )}
+              </Box>
+              <Box
+                onClick={handleClickComment}
                 sx={{
-                  color: 'gray',
+                  display: 'flex',
+                  alignItems: 'center',
+                  cursor: 'pointer',
                 }}
-              />
-            </Box>
-            {/* <Box
+              >
+                <Typography
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '600',
+                    fontSize: '16px',
+                    color: 'gray',
+                    mr: '5px',
+                  }}
+                >
+                  Bình luận
+                </Typography>
+                <SmsOutlinedIcon
+                  sx={{
+                    color: 'gray',
+                  }}
+                />
+              </Box>
+              {/* <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -730,45 +751,46 @@ export default function PostComponent(props: Props) {
                 }}
               />
             </Box> */}
-          </Box>
-          {isComment && (
-            <>
-              <Divider sx={{ mb: '20px' }} />
-              {status?.id && (
-                <CreateComment
-                  onSuccess={() => {
-                    setReloadComment(!reloadComment);
-                    console.log('reload laij nef');
+            </Box>
+            {isComment && (
+              <>
+                <Divider sx={{ mb: '20px' }} />
+                {status?.id && (
+                  <CreateComment
+                    onSuccess={() => {
+                      setReloadComment(!reloadComment);
+                      console.log('reload laij nef');
 
-                    if (status) {
-                      setStatus({
-                        ...status,
-                        numOfComment: (status?.numOfComment || 0) + 1,
-                      });
-                    }
-                  }}
-                  idStatus={status?.id}
-                />
-              )}
-              {comments?.length > 0 &&
-                comments?.map((comment) => {
-                  return (
-                    <Comment
-                      comment={comment}
-                      onRemove={() => {
-                        if (status) {
-                          setStatus({
-                            ...status,
-                            numOfComment: (status?.numOfComment || 0) - 1,
-                          });
-                        }
-                      }}
-                    />
-                  );
-                })}
-            </>
-          )}
-        </Box>
+                      if (status) {
+                        setStatus({
+                          ...status,
+                          numOfComment: (status?.numOfComment || 0) + 1,
+                        });
+                      }
+                    }}
+                    idStatus={status?.id}
+                  />
+                )}
+                {comments?.length > 0 &&
+                  comments?.map((comment) => {
+                    return (
+                      <Comment
+                        comment={comment}
+                        onRemove={() => {
+                          if (status) {
+                            setStatus({
+                              ...status,
+                              numOfComment: (status?.numOfComment || 0) - 1,
+                            });
+                          }
+                        }}
+                      />
+                    );
+                  })}
+              </>
+            )}
+          </Box>
+        </>
       )}
     </>
   );
@@ -779,6 +801,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [isReload, setIsReload] = useState(false);
   const [replys, setReplys] = useState<CommentType[]>([]);
   const [isFinish, setIsFinish] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   useEffect(() => {
     if (props.comment.id) {
       postApi.getAllReply(props.comment.id).then((data) => {
@@ -790,6 +813,8 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
               text: item?.reply,
               createdAt: item?.replyAt,
               id: item?._id,
+              userId: item?.userReplyInfor?.ma_nguoi_dung,
+              postUserId: props?.comment?.postUserId,
             } as CommentType;
           });
           console.log('lấy phản hổi thanh cong', reps);
@@ -801,11 +826,16 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
     }
     setIsFinish(true);
   }, [props.comment.id, isReload]);
+  console.log(props?.comment);
+
+  const [comment, setComment] = useState<CommentType>(props?.comment);
+  const { enqueueSnackbar } = useSnackbar();
 
   const profile = useSelector((state: RootState) => state.user.profile);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const [isLike, setIsLike] = useState(false);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     console.log('Vaao click nè');
@@ -813,220 +843,335 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   function handleDeleteCmt() {
     if (props.comment.id) {
-      postApi.removeComment(props.comment.id).then((data) => {
-        if (data?.status == 200) {
-          setIsFinish(false);
-          props.onRemove();
-        } else {
-        }
-      });
+      postApi
+        .removeComment(props.comment.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            setIsFinish(false);
+            props.onRemove();
+            handleClose();
+            enqueueSnackbar(`Xóa bình luận thành công`, {
+              variant: 'info',
+            });
+          } else {
+            enqueueSnackbar(`${data?.message}`, { variant: 'error' });
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err}`, { variant: 'error' });
+        });
     }
   }
+
+  function handleLikeCmt() {
+    postApi?.likeComment(props?.comment?.id).then((data) => {
+      if (data?.status == 200) {
+        if (isLike) {
+          setIsLike(false);
+          setComment({
+            ...comment,
+            numOfLike: (comment?.numOfLike || 0) - 1,
+          });
+        } else {
+          setIsLike(true);
+          setComment({
+            ...comment,
+            numOfLike: (comment?.numOfLike || 0) + 1,
+          });
+        }
+      }
+    });
+  }
+
+  useEffect(() => {
+    setComment(props?.comment);
+  }, [props?.comment?.id]);
+
   return (
     <>
       {isFinish && (
         <>
-          <Box
-            sx={{
-              display: 'flex',
-              background: '#fff',
-              padding: '0px 20px 10px 20px',
-              borderRadius: '12px',
-            }}
-          >
-            <img
-              style={{
-                height: '40px',
-                width: '40px',
-                objectFit: 'cover',
-                borderRadius: '30px',
-                minWidth: '40px',
-                minHeight: '40px',
-                cursor: 'pointer',
+          {isUpdate ? (
+            <UpdateComment
+              idStatus={props?.comment.id}
+              text={comment.text}
+              onSuccess={(text) => {
+                setComment({
+                  ...comment,
+                  text: text,
+                });
+                setIsUpdate(false);
               }}
-              onClick={() => {
-                profile?.id == props.comment.userId
-                  ? navigate('/home/trang-ca-nhan')
-                  : navigate(
-                      `/home/trang-ca-nhan-nguoi-dung/${props.comment.userId}`
-                    );
-              }}
-              src={props.comment.photoURL}
             />
-            <Box>
+          ) : (
+            <>
               <Box
                 sx={{
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
+                  background: '#fff',
+                  padding: '0px 20px 10px 20px',
+                  borderRadius: '12px',
                 }}
               >
-                <Box
-                  sx={{
-                    ml: '16px',
-                    background: '#f0f2f5',
-                    borderRadius: '10px',
-                    padding: '10px',
-                    flex: '1',
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontFamily: 'quicksand',
-                      fontWeight: '700',
-                      fontSize: '15px',
-                    }}
-                  >
-                    {props.comment.name}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontFamily: 'quicksand',
-                      fontWeight: '400',
-                      fontSize: '14px',
-                      color: '',
-                    }}
-                  >
-                    {props.comment.text}
-                  </Typography>
-                </Box>
-                <IconButton onClick={handleClick}>
-                  <MoreVertIcon
-                    sx={{
-                      fontSize: '20px',
-                    }}
-                  />
-                </IconButton>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  sx={{
-                    fontFamily: 'quicksand',
-                  }}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                >
-                  <MenuItem
-                    sx={{
-                      fontFamily: 'quicksand',
-                    }}
-                    onClick={handleDeleteCmt}
-                  >
-                    Xóa
-                  </MenuItem>
-                  <MenuItem
-                    sx={{
-                      fontFamily: 'quicksand',
-                    }}
-                    onClick={handleDeleteCmt}
-                  >
-                    Chỉnh sửa
-                  </MenuItem>
-                </Menu>
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  padding: '5px 10px 10px 20px',
-                  alignItems: 'center',
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '600',
-                    fontSize: '16px',
-                    color: 'gray',
-                    mr: '15px',
-                  }}
-                >
-                  Thích
-                </Typography>
-                <Typography
-                  onClick={() => setIsReply(true)}
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '600',
-                    fontSize: '16px',
-                    color: 'gray',
-                    mr: '15px',
+                <img
+                  style={{
+                    height: '40px',
+                    width: '40px',
+                    objectFit: 'cover',
+                    borderRadius: '30px',
+                    minWidth: '40px',
+                    minHeight: '40px',
                     cursor: 'pointer',
                   }}
-                >
-                  Phản hồi
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '500',
-                    fontSize: '14px',
-                    color: 'gray',
-                    mr: '15px',
-                    mt: '3px',
+                  onClick={() => {
+                    profile?.id == comment.userId
+                      ? navigate('/home/trang-ca-nhan')
+                      : navigate(
+                          `/home/trang-ca-nhan-nguoi-dung/${comment.userId}`
+                        );
                   }}
-                >
-                  {timeAgo(props.comment.createdAt)}
-                </Typography>
+                  src={comment.photoURL}
+                />
+                <Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        ml: '16px',
+                        background: '#f0f2f5',
+                        borderRadius: '10px',
+                        padding: '10px',
+                        flex: '1',
+                        mr: '8px',
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontFamily: 'quicksand',
+                          fontWeight: '700',
+                          fontSize: '15px',
+                        }}
+                      >
+                        {props.comment.name}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontFamily: 'quicksand',
+                          fontWeight: '400',
+                          fontSize: '14px',
+                          color: '',
+                        }}
+                      >
+                        {comment.text}
+                      </Typography>
+                    </Box>
+                    <IconButton onClick={handleLikeCmt}>
+                      {isLike ? (
+                        <FavoriteIcon
+                          sx={{
+                            color: '#df3731',
+                          }}
+                        />
+                      ) : (
+                        <FavoriteBorderOutlinedIcon
+                          sx={{
+                            color: 'gray',
+                          }}
+                        />
+                      )}
+                    </IconButton>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      padding: '5px 10px 10px 20px',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: 'quicksand',
+                        fontWeight: '500',
+                        fontSize: '16px',
+                        color: 'gray',
+                        mr: '15px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        minWidth: '40px',
+                      }}
+                    >
+                      <span style={{}}> {comment?.numOfLike} </span>
+                      <FavoriteIcon
+                        sx={{
+                          color: '#df3731',
+                          fontSize: '20px',
+                          ml: '6px',
+                        }}
+                      />
+                    </Typography>
+                    <Typography
+                      onClick={() => setIsReply(true)}
+                      sx={{
+                        fontFamily: 'quicksand',
+                        fontWeight: '500',
+                        fontSize: '16px',
+                        color: 'gray',
+                        mr: '15px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Phản hồi
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: 'quicksand',
+                        fontWeight: '500',
+                        fontSize: '14px',
+                        color: 'gray',
+                        mr: '15px',
+                        mt: '3px',
+                      }}
+                    >
+                      {timeAgo(props.comment.createdAt)}
+                    </Typography>
+                    {(profile?.id == comment?.postUserId ||
+                      profile?.id == comment?.userId) && (
+                      <>
+                        <IconButton onClick={handleClick}>
+                          <MoreHorizIcon
+                            sx={{
+                              fontSize: '20px',
+                            }}
+                          />
+                        </IconButton>
+                        <Menu
+                          id="basic-menu"
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleClose}
+                          sx={{
+                            fontFamily: 'quicksand',
+                          }}
+                          MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                          }}
+                          anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                          }}
+                        >
+                          {(profile?.id == comment?.postUserId ||
+                            profile?.id == comment?.userId) && (
+                            <MenuItem
+                              sx={{
+                                fontFamily: 'quicksand',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                minWidth: '150px',
+                              }}
+                              onClick={handleDeleteCmt}
+                            >
+                              Xóa
+                              <DeleteOutlineIcon
+                                sx={{
+                                  color: 'gray',
+                                }}
+                              />
+                            </MenuItem>
+                          )}
+                          {profile?.id == comment?.userId && (
+                            <MenuItem
+                              sx={{
+                                fontFamily: 'quicksand',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                minWidth: '150px',
+                              }}
+                              onClick={() => {
+                                setIsUpdate(true);
+                                handleClose();
+                              }}
+                            >
+                              Chỉnh sửa
+                              <BuildIcon
+                                sx={{
+                                  color: 'gray',
+                                }}
+                              />
+                            </MenuItem>
+                          )}
+                        </Menu>
+                      </>
+                    )}
+                  </Box>
+                </Box>
               </Box>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              marginLeft: '30px',
-            }}
-          >
-            {replys.length > 0 &&
-              replys.map((item) => {
-                return (
-                  <Reply
-                    onHandleReply={() => setIsReply(true)}
-                    comment={item}
-                  />
-                );
-              })}
-            {isReply && (
-              <CreateReply
-                onSuccess={() => {
-                  setIsReload(!isReload);
-                  setIsReply(false);
+              <Box
+                sx={{
+                  marginLeft: '30px',
                 }}
-                idStatus={props.comment.id}
-              />
-            )}
-          </Box>
+              >
+                {replys.length > 0 &&
+                  replys.map((item) => {
+                    return (
+                      <Reply
+                        onHandleReply={() => setIsReply(true)}
+                        reply={item}
+                      />
+                    );
+                  })}
+                {isReply && (
+                  <CreateReply
+                    onSuccess={() => {
+                      setIsReload(!isReload);
+                      setIsReply(false);
+                    }}
+                    idStatus={props.comment.id}
+                  />
+                )}
+              </Box>
+            </>
+          )}
         </>
       )}
     </>
   );
 }
 
-function Reply(props: { comment: CommentType; onHandleReply: () => void }) {
+function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isRemove, setIsRemove] = useState(false);
+  const [reply, setReply] = useState<CommentType>(props?.reply);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const profile = useSelector((state: RootState) => state.user.profile);
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [isUpdate, setIsUpdate] = useState(false);
 
+  useEffect(() => {
+    setReply(props?.reply);
+    console.log(props?.reply, ' props?.reply');
+  }, [props?.reply?.id]);
   function handleDeleteReply() {
-    if (props.comment.id) {
-      postApi.removeReply(props.comment.id).then((data) => {
+    if (props.reply.id) {
+      postApi.removeReply(props.reply.id).then((data) => {
         if (data?.status == 200) {
           setIsRemove(true);
         }
@@ -1036,153 +1181,232 @@ function Reply(props: { comment: CommentType; onHandleReply: () => void }) {
   return (
     <>
       {!isRemove && (
-        <Box
-          sx={{
-            display: 'flex',
-            background: '#fff',
-            padding: '0px 20px 10px 20px',
-            borderRadius: '12px',
-          }}
-        >
-          <img
-            style={{
-              height: '40px',
-              width: '40px',
-              objectFit: 'cover',
-              borderRadius: '30px',
-              minWidth: '40px',
-              minHeight: '40px',
-            }}
-            src={props.comment.photoURL}
-          />
-          <Box>
+        <>
+          {isUpdate ? (
+            <UpdateReply
+              idStatus={props?.reply?.id}
+              text={reply?.text}
+              onSuccess={(text) => {
+                setReply({ ...reply, text: text });
+                setIsUpdate(false);
+              }}
+            />
+          ) : (
             <Box
               sx={{
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                background: '#fff',
+                padding: '0px 20px 10px 20px',
+                borderRadius: '12px',
               }}
             >
-              <Box
-                sx={{
-                  ml: '16px',
-                  background: '#f0f2f5',
-                  borderRadius: '10px',
-                  padding: '10px',
-                  flex: '1',
+              <img
+                style={{
+                  height: '40px',
+                  width: '40px',
+                  objectFit: 'cover',
+                  borderRadius: '30px',
+                  minWidth: '40px',
+                  minHeight: '40px',
                 }}
-              >
-                <Typography
+                src={props?.reply?.photoURL}
+              />
+              <Box>
+                <Box
                   sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '700',
-                    fontSize: '15px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                   }}
                 >
-                  {props.comment.name}
-                </Typography>
-                <Typography
+                  <Box
+                    sx={{
+                      ml: '16px',
+                      background: '#f0f2f5',
+                      borderRadius: '10px',
+                      padding: '10px',
+                      flex: '1',
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: 'quicksand',
+                        fontWeight: '700',
+                        fontSize: '15px',
+                      }}
+                    >
+                      {props?.reply?.name}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: 'quicksand',
+                        fontWeight: '400',
+                        fontSize: '14px',
+                        color: '',
+                      }}
+                    >
+                      {reply?.text}
+                    </Typography>
+                  </Box>
+                  {/* <IconButton onClick={handleClick}>
+                    <MoreVertIcon
+                      sx={{
+                        fontSize: '20px',
+                      }}
+                    />
+                  </IconButton>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    sx={{
+                      fontFamily: 'quicksand',
+                    }}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                  >
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'quicksand',
+                      }}
+                      onClick={handleDeleteReply}
+                    >
+                      Xóa
+                    </MenuItem>
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'quicksand',
+                      }}
+                      onClick={handleDeleteReply}
+                    >
+                      Chỉnh sửa
+                      <BuildIcon
+                        sx={{
+                          color: 'gray',
+                        }}
+                      />
+                    </MenuItem>
+                  </Menu> */}
+                </Box>
+                <Box
                   sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '400',
-                    fontSize: '14px',
-                    color: '',
+                    display: 'flex',
+                    padding: '5px 10px 10px 20px',
+                    alignItems: 'center',
                   }}
                 >
-                  {props.comment.text}
-                </Typography>
+                  <Typography
+                    onClick={props.onHandleReply}
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '600',
+                      fontSize: '15px',
+                      color: 'gray',
+                      mr: '15px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Phản hồi
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '500',
+                      fontSize: '14px',
+                      color: 'gray',
+                      mr: '15px',
+                    }}
+                  >
+                    {timeAgo(props?.reply?.createdAt)}
+                  </Typography>
+                  {(profile?.id == reply?.postUserId ||
+                    profile?.id == reply?.userId) && (
+                    <>
+                      <IconButton onClick={handleClick}>
+                        <MoreHorizIcon
+                          sx={{
+                            fontSize: '20px',
+                          }}
+                        />
+                      </IconButton>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        sx={{
+                          fontFamily: 'quicksand',
+                        }}
+                        MenuListProps={{
+                          'aria-labelledby': 'basic-button',
+                        }}
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                      >
+                        {(profile?.id == reply?.postUserId ||
+                          profile?.id == reply?.userId) && (
+                          <MenuItem
+                            sx={{
+                              fontFamily: 'quicksand',
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              minWidth: '150px',
+                            }}
+                            onClick={handleDeleteReply}
+                          >
+                            Xóa
+                            <DeleteOutlineIcon
+                              sx={{
+                                color: 'gray',
+                              }}
+                            />
+                          </MenuItem>
+                        )}
+                        {profile?.id == reply?.userId && (
+                          <MenuItem
+                            sx={{
+                              fontFamily: 'quicksand',
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              minWidth: '150px',
+                            }}
+                            onClick={() => {
+                              setIsUpdate(true);
+                              handleClose();
+                            }}
+                          >
+                            Chỉnh sửa
+                            <BuildIcon
+                              sx={{
+                                color: 'gray',
+                              }}
+                            />
+                          </MenuItem>
+                        )}
+                      </Menu>
+                    </>
+                  )}
+                </Box>
               </Box>
-              <IconButton onClick={handleClick}>
-                <MoreVertIcon
-                  sx={{
-                    fontSize: '20px',
-                  }}
-                />
-              </IconButton>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                sx={{
-                  fontFamily: 'quicksand',
-                }}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
-                }}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-              >
-                <MenuItem
-                  sx={{
-                    fontFamily: 'quicksand',
-                  }}
-                  onClick={handleDeleteReply}
-                >
-                  Xóa
-                </MenuItem>
-                <MenuItem
-                  sx={{
-                    fontFamily: 'quicksand',
-                  }}
-                  onClick={handleDeleteReply}
-                >
-                  Chỉnh sửa
-                </MenuItem>
-              </Menu>
             </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                padding: '5px 10px 10px 20px',
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '600',
-                  fontSize: '16px',
-                  color: 'gray',
-                  mr: '15px',
-                }}
-              >
-                Thích
-              </Typography>
-              <Typography
-                onClick={props.onHandleReply}
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '600',
-                  fontSize: '16px',
-                  color: 'gray',
-                  mr: '15px',
-                  cursor: 'pointer',
-                }}
-              >
-                Phản hồi
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '500',
-                  fontSize: '14px',
-                  color: 'gray',
-                  mr: '15px',
-                  mt: '3px',
-                }}
-              >
-                {timeAgo(props.comment.createdAt)}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
+          )}
+        </>
       )}
     </>
   );
@@ -1240,6 +1464,102 @@ function CreateComment(props: { idStatus: string; onSuccess: () => void }) {
             <InputBase
               fullWidth
               multiline
+              autoFocus
+              sx={{
+                ml: 1,
+                flex: 1,
+                fontFamily: 'quicksand',
+                fontWeight: '400',
+                fontSize: '14px',
+                paddingRight: '60px',
+              }}
+              placeholder="Bình luận của bạn ..."
+              inputProps={{ 'aria-label': 'search google maps' }}
+              value={value}
+              onChange={(e) => setValue(e.target.value as string)}
+            />
+            <IconButton
+              onClick={handleComment}
+              disabled={!value}
+              sx={{
+                position: 'absolute',
+                right: '10px',
+                bottom: '2px',
+              }}
+            >
+              <SendRoundedIcon
+                sx={{
+                  color: value ? '#0062d2' : 'gray',
+                  fontSize: '22px',
+                }}
+              />
+            </IconButton>
+          </Box>
+        </Box>
+      )}
+    </>
+  );
+}
+
+function UpdateComment(props: {
+  idStatus: string;
+  onSuccess: (text: string) => void;
+  text: string;
+}) {
+  const infoUser = useSelector((state: RootState) => state.user.profile);
+  const { enqueueSnackbar } = useSnackbar();
+  const [value, setValue] = useState<string>(props?.text);
+  const [close, setClose] = useState(false);
+  function handleComment() {
+    postApi
+      .updateComment(props.idStatus, value)
+      .then((data) => {
+        if (data?.status == 200) {
+          props?.onSuccess?.(value || '');
+          setValue('');
+        }
+      })
+      .catch((err: any) => {
+        enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+      });
+  }
+
+  return (
+    <>
+      {!close && (
+        <Box
+          sx={{
+            display: 'flex',
+            background: '#fff',
+            padding: '0px 20px 12px 20px',
+            borderRadius: '12px',
+          }}
+        >
+          <img
+            style={{
+              height: '40px',
+              width: '40px',
+              objectFit: 'cover',
+              borderRadius: '30px',
+              minWidth: '40px',
+              minHeight: '40px',
+            }}
+            src={infoUser?.photoURL || ''}
+          />
+          <Box
+            sx={{
+              ml: '16px',
+              background: '#f0f2f5',
+              borderRadius: '10px',
+              padding: '10px',
+              width: '100%',
+              position: 'relative',
+            }}
+          >
+            <InputBase
+              fullWidth
+              multiline
+              autoFocus
               sx={{
                 ml: 1,
                 flex: 1,
@@ -1329,6 +1649,100 @@ function CreateReply(props: { idStatus: string; onSuccess: () => void }) {
             <InputBase
               fullWidth
               multiline
+              sx={{
+                ml: 1,
+                flex: 1,
+                fontFamily: 'quicksand',
+                fontWeight: '400',
+                fontSize: '14px',
+                paddingRight: '60px',
+              }}
+              placeholder="Phản hồi của bạn ..."
+              inputProps={{ 'aria-label': 'search google maps' }}
+              value={value}
+              onChange={(e) => setValue(e.target.value as string)}
+            />
+            <IconButton
+              onClick={handleComment}
+              disabled={!value}
+              sx={{
+                position: 'absolute',
+                right: '10px',
+                bottom: '2px',
+              }}
+            >
+              <SendRoundedIcon
+                sx={{
+                  color: value ? '#0062d2' : 'gray',
+                  fontSize: '22px',
+                }}
+              />
+            </IconButton>
+          </Box>
+        </Box>
+      )}
+    </>
+  );
+}
+function UpdateReply(props: {
+  idStatus: string;
+  onSuccess: (text: string) => void;
+  text: string;
+}) {
+  const infoUser = useSelector((state: RootState) => state.user.profile);
+  const { enqueueSnackbar } = useSnackbar();
+  const [value, setValue] = useState<string>(props?.text);
+  const [close, setClose] = useState(false);
+  function handleComment() {
+    postApi
+      .updateReply(props.idStatus, value)
+      .then((data) => {
+        if (data?.status == 200) {
+          props?.onSuccess?.(value || '');
+          setValue('');
+        }
+      })
+      .catch((err: any) => {
+        enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+      });
+  }
+
+  return (
+    <>
+      {!close && (
+        <Box
+          sx={{
+            display: 'flex',
+            background: '#fff',
+            padding: '0px 20px 12px 20px',
+            borderRadius: '12px',
+          }}
+        >
+          <img
+            style={{
+              height: '40px',
+              width: '40px',
+              objectFit: 'cover',
+              borderRadius: '30px',
+              minWidth: '40px',
+              minHeight: '40px',
+            }}
+            src={infoUser?.photoURL || ''}
+          />
+          <Box
+            sx={{
+              ml: '16px',
+              background: '#f0f2f5',
+              borderRadius: '10px',
+              padding: '10px',
+              width: '100%',
+              position: 'relative',
+            }}
+          >
+            <InputBase
+              fullWidth
+              multiline
+              autoFocus
               sx={{
                 ml: 1,
                 flex: 1,

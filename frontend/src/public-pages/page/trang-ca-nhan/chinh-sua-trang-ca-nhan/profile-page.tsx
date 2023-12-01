@@ -45,7 +45,7 @@ function UpdateProfilePage() {
   const [file, setFile] = useState<File | null>(null);
   const [profile, setProfile] = useState<PeopleType>({
     name: '',
-    id: '',
+    id: 0,
     user: '',
     url: '',
     numberPet: 0,

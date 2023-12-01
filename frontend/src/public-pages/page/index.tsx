@@ -32,6 +32,9 @@ import UpdateProfilePage from './trang-ca-nhan/chinh-sua-trang-ca-nhan/profile-p
 import ProfileHeader from './trang-ca-nhan/chinh-sua-trang-ca-nhan/profile-header';
 import MeRouting from './trang-ca-nhan/chinh-sua-trang-ca-nhan';
 import ChangePasswordPage from './trang-ca-nhan/chinh-sua-trang-ca-nhan/change-pass';
+import BaiVietThuCung from './quan-ly-thu-cung/component/bai-viet-thu-cung';
+import UpdatePost from './mang-xa-hoi/component/chinh-sua-bai-viet';
+
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -299,6 +302,8 @@ export default function PageRouting() {
           <div className="expanded col">
             <Routes>
               <Route path="mang-xa-hoi" element={<MangXaHoi />} />
+              {/* <Route path="chinh-sua-bai-viet-trang-thai/:id" element={<UpdatePost />} /> */}
+              <Route path="bai-viet-thu-cung/:id" element={<BaiVietThuCung />} />
               <Route path="trang-ca-nhan" element={<TrangCaNhan />} /> 
               <Route path="chinh-sua-trang-ca-nhan" element={<MeRouting />} /> 
               <Route path="chinh-sua-trang-ca-nhan/profile" element={<UpdateProfilePage />} /> 

@@ -17,7 +17,7 @@ chưa hoàn thành
 
     (do backend đã có hàm mới để thay thế cho hàm cũ)
 
-## 33. trang cập nhật thông tin người dùng
+## 33. --DONE-- trang cập nhật thông tin người dùng
 
 1. **yêu cầu:**
 
@@ -37,7 +37,7 @@ chưa hoàn thành
    - cập nhật thông tin người dùng [chi tiết tại đây](./userInfor.md#4-cập-nhật-thông-tin-người-dùng).
 
 
-## ---DONE--- || ==ERR== 35. cập nhật lại giao diện của newfeed khi có 1 bài viết mới được đăng lên
+## ---DONE--- || ==DONE== 35. cập nhật lại giao diện của newfeed khi có 1 bài viết mới được đăng lên
 
 chưa hiện thực được
 
@@ -85,13 +85,13 @@ khi bấm vào thông báo đã có lời mời kết bạn thì navigate tới 
   - nếu thiếu xóa ngoài home thì phải tạo trang riêng cho lời mời kết bạn
 
 
-## 61. thích bình luận bài viết chia sẻ trạng thái
+## ---DONE--- 61. thích bình luận bài viết chia sẻ trạng thái
 
-## 62. bỏ thích trong phản hồi bài viết trạng thái
+## 62.---DONE--- bỏ thích trong phản hồi bài viết trạng thái
 
-## 64. xóa thú cưng
+## 64. ---DONE--- xóa thú cưng
 
-## 65. thu hồi lời mời kết bạn
+## 65.---DONE--- thu hồi lời mời kết bạn
 
 tham khảo tại
 
@@ -113,9 +113,9 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 ## 73. resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
 
-## 74. trang cập nhật thông tin nguời dùng
+## ---DONE--- 74. trang cập nhật thông tin nguời dùng
 
-## 75. đổi mật khẩu người dùng
+## ---DONE--- 75. đổi mật khẩu người dùng
 
 ## 76. chỉnh sửa bài viết chia sẻ trạng thái
 

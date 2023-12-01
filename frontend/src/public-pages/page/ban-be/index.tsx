@@ -20,7 +20,7 @@ export function FriendList() {
   >([]);
   const [reload, setReload] = useState(false);
   const userOnline = useSelector(
-    (state: RootState) => state?.socket.onLine.idUser
+    (state: RootState) => state?.socket?.onLine?.idUser
   );
   const userOffline = useSelector(
     (state: RootState) => state?.socket.offLine.idUser

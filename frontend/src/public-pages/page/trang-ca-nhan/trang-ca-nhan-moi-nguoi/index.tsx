@@ -30,7 +30,7 @@ export default function TrangCaNhanMoiNguoi() {
 
   const [profile, setProfile] = useState<PeopleType>({
     name: '',
-    id: '',
+    id: 0,
     user: '',
     url: '',
     numberPet: 0,
@@ -67,6 +67,10 @@ export default function TrangCaNhanMoiNguoi() {
 
   useEffect(() => {
     if (id) {
+      if (id === `${profile?.id}`) {
+        navigate('/home/trang-ca-nhan');
+        return;
+      }
       setTab('post');
       profileApi.getUserProfileById(id).then((data) => {
         console.log(data, ' data profile');
@@ -316,6 +320,32 @@ export default function TrangCaNhanMoiNguoi() {
         });
     }
   }
+  function thuHoiLoiMoi() {
+    if (profile?.id) {
+      friendApi
+        .removeRequestAddFriendById(profile?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            enqueueSnackbar(`Đã thu hồi lời mời kết bạn với ${profile?.name}`, {
+              variant: 'info',
+            });
+            setIsFriend(0);
+          } else {
+            enqueueSnackbar(
+              `${data?.message || 'Thất bại vui lòng thử lại !'}`,
+              {
+                variant: 'error',
+              }
+            );
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message || 'Thất bại vui lòng thử lại !'}`, {
+            variant: 'error',
+          });
+        });
+    }
+  }
 
   function handleSubmit(type: string) {
     if (profile?.id) {
@@ -353,12 +383,17 @@ export default function TrangCaNhanMoiNguoi() {
             display: 'flex',
             alignItems: 'center',
             padding: '0 200px',
-            justifyContent:'center'
+            justifyContent: 'center',
           }}
         >
-          <img style={{
-            borderRadius:"100%"
-          }} src={profile?.url} height={200} width={200} />
+          <img
+            style={{
+              borderRadius: '100%',
+            }}
+            src={profile?.url}
+            height={200}
+            width={200}
+          />
           <Box
             sx={{
               ml: '80px',
@@ -401,9 +436,21 @@ export default function TrangCaNhanMoiNguoi() {
               )}
 
               {isFriend == -1 && (
-                <Button disabled variant="contained" color="info">
-                  Đang chờ phản hồi
-                </Button>
+                <>
+                  <Button disabled variant="contained" color="info">
+                    Đang chờ phản hồi
+                  </Button>
+                  <Button
+                    sx={{
+                      ml: '12px',
+                    }}
+                    onClick={thuHoiLoiMoi}
+                    variant="contained"
+                    color="info"
+                  >
+                    Thu hồi
+                  </Button>
+                </>
               )}
               {isFriend == -2 && (
                 <Box

@@ -14,34 +14,37 @@ const getRequestAddFriendList = () => {
   });
 };
 
-const responeAddFriend = (senderID: number|string, acceptOrReject:string) => {
+const responeAddFriend = (
+  senderID: number | string,
+  acceptOrReject: string
+) => {
   return authRequest<any>({
     url: `/friend/responeAddFriendRequestById`,
     method: 'POST',
     body: {
       senderID,
-      acceptOrReject
-    }
+      acceptOrReject,
+    },
   });
 };
 
-const unFriendById = (friend_id: number|string) => {
+const unFriendById = (friend_id: number | string) => {
   return authRequest<any>({
     url: `/friend/unfriendById`,
     method: 'POST',
     body: {
-      friend_id
-    }
+      friend_id,
+    },
   });
 };
 
-const addFriendById = (requestID: number|string) => {
+const addFriendById = (requestID: number | string) => {
   return authRequest<any>({
     url: `/friend/requestAddFriendById`,
     method: 'POST',
     body: {
-      requestID
-    }
+      requestID,
+    },
   });
 };
 
@@ -52,8 +55,18 @@ const searchPeople = (searchKey: string, index: number, num: number) => {
     body: {
       searchKey,
       index,
-      num
-    }
+      num,
+    },
+  });
+};
+
+const removeRequestAddFriendById = (requestID: number | string) => {
+  return authRequest<any>({
+    url: `/friend/removeRequestAddFriendById`,
+    method: 'POST',
+    body: {
+      requestID,
+    },
   });
 };
 
@@ -63,7 +76,8 @@ const friendApi = {
   getListFriend,
   searchPeople,
   getRequestAddFriendList,
-  responeAddFriend
+  responeAddFriend,
+  removeRequestAddFriendById,
 };
 
 export default friendApi;

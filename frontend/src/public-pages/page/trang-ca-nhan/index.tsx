@@ -18,6 +18,8 @@ import moment from 'moment';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import Button from '../../../components/Button';
+import { deepCopy } from '@firebase/util';
+
 export default function TrangCaNhan() {
   // const profile = useSelector((state: RootState) => state.user.profile);
   const navigate = useNavigate();
@@ -25,12 +27,14 @@ export default function TrangCaNhan() {
   const [timePost, setTimePost] = useState('none');
   const [profile, setProfile] = useState<PeopleType>({
     name: '',
-    id: '',
+    id: 0,
     user: '',
     url: '',
     numberPet: 0,
   });
-
+  const newPostFromStore = useSelector(
+    (state: RootState) => state?.socket?.newPost.post
+  );
   const friend = useSelector((state: RootState) => state.friend.friend);
   const [listPost, setListPost] = useState<StatusType[]>([]);
 
@@ -158,6 +162,17 @@ export default function TrangCaNhan() {
         });
     }
   }, [profile.id, timePost]);
+
+
+  useEffect(() => {
+    console.log(newPostFromStore, ' newPostFromStore nè');
+
+    if (newPostFromStore?.id) {
+      let arr: StatusType[] = deepCopy(listPost);
+      arr.unshift(newPostFromStore);
+      setListPost(arr);
+    }
+  }, [newPostFromStore?.id]);
 
   return (
     <>

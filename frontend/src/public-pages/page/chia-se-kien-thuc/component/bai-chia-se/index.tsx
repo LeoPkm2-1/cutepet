@@ -52,7 +52,6 @@ export default function BaiChiaSe() {
   });
 
   const [articlesLienQuan, setArticlesLienQuan] = useState<ArticleType[]>([]);
-  const showDialog = useShowDialog();
   const { id } = useParams();
   const [isData, setIsData] = useState(true);
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -63,6 +62,8 @@ export default function BaiChiaSe() {
   const pargamSearch = useLocation().search;
   const sp = new URLSearchParams(pargamSearch);
   const navigate = useNavigate();
+  const showDialog = useShowDialog();
+
   const profileId = useSelector((state: RootState) => state.user.profile?.id);
   useEffect(() => {
     if (id) {
@@ -368,7 +369,8 @@ export default function BaiChiaSe() {
                     sx={{
                       border: '1px solid gray',
                       padding: '10px',
-                      margin: '16px 0px',
+                      marginTop: '16px',
+
                     }}
                     onClick={unFollowArticle}
                   >
@@ -383,7 +385,7 @@ export default function BaiChiaSe() {
                     sx={{
                       border: '1px solid gray',
                       padding: '10px',
-                      margin: '16px 0px',
+                      marginTop: '16px',
                     }}
                     onClick={followArticle}
                   >
@@ -394,19 +396,22 @@ export default function BaiChiaSe() {
                     />
                   </IconButton>
                 )}
-                <IconButton
-                  sx={{
-                    border: '1px solid gray',
-                    padding: '10px',
-                  }}
-                  onClick={reportArticle}
-                >
-                  <AssistantPhotoRoundedIcon
+                {profileId !== article?.user_id && (
+                  <IconButton
                     sx={{
-                      fontSize: '22px',
+                      border: '1px solid gray',
+                      padding: '10px',
+                      marginTop: '16px',
                     }}
-                  />
-                </IconButton>
+                    onClick={reportArticle}
+                  >
+                    <AssistantPhotoRoundedIcon
+                      sx={{
+                        fontSize: '22px',
+                      }}
+                    />
+                  </IconButton>
+                )}
                 {profileId === article?.user_id && (
                   <>
                     <IconButton
@@ -649,10 +654,11 @@ export default function BaiChiaSe() {
 function CreateComment(props: {
   idStatus: string;
   onSuccess: (comment: CommentType) => void;
+  value?: string;
 }) {
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const { enqueueSnackbar } = useSnackbar();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(props?.value || "");
   const [close, setClose] = useState(true);
   function handleComment() {
     console.log(value, ' value n');
@@ -751,7 +757,6 @@ function CreateComment(props: {
 function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [isFinish, setIsFinish] = useState(true);
   const [comment, setComment] = useState(props?.comment);
-
   const profile = useSelector((state: RootState) => state.user.profile);
   const [isFix, setIsFix] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
