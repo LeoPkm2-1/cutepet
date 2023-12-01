@@ -819,11 +819,11 @@ nếu bình luận không tồn tại:
 
 ```javascript
 {
-    post_id: string,
-    text: string,
+    post_id:"655f82e8cc542f348fe2007b",
+    text: "ahihi",
     visibility:"PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
-    taggedUsersId:[3,4,5],
-    myPetIds:[1,2,3]
+    taggedUsersId: Array[id_users],
+    myPetIds:Array[id_pets],
     media: {
         "type":"images",
         "data":["https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa"]
@@ -1570,4 +1570,11 @@ nếu bình luận không tồn tại:
 }
 ```
 
-##
+
+
+
+
+
+
+
+
