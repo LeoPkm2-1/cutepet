@@ -108,7 +108,7 @@ const RegisterPage = (props: P) => {
     }else if (
       userInfo?.nhap_lai_mat_khau?.length < 8
     ){
-      errors.re_password = 'Mật khẩu xác thực tối thiểu 8 kí tự';
+      errors.re_password = 'Mật khẩu xác nhận tối thiểu 8 kí tự';
     }else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/.test(userInfo?.nhap_lai_mat_khau)){
       errors.re_password = 'Mật khẩu phải bao gôm kí tự hoa, thường, chữ số và kí tự đặc biệt';
     }else if(!(userInfo?.nhap_lai_mat_khau== userInfo.mat_khau)){
@@ -323,7 +323,7 @@ const RegisterPage = (props: P) => {
               <TextField
                 name="password"
                 type="password"
-                placeholder="Mật khẩu ( tối thiểu 6 kí tự )"
+                placeholder="Mật khẩu"
                 margin="dense"
                 autoSave="no"
                 autoComplete="no"

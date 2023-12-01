@@ -262,8 +262,8 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 ## (26-11-2023):
 
 1. lấy bài viết theo thú cưng được tag
-   
-*chi tiết* **[Route_Struture/post.md](./post.md#18-lấy-bài-viết-có-tag-con-thú-cụ-thể)** và **postman số 71**
+
+_chi tiết_ **[Route_Struture/post.md](./post.md#18-lấy-bài-viết-có-tag-con-thú-cụ-thể)** và **postman số 71**
 
 ## (27-11-2023):
 
@@ -281,19 +281,14 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
    _chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-người-dùng-gợi-ý-kết-bạn)** và **postman số 74**
 
-##
+## (1-12-2023):
+
+1. danh sách bạn bè mà ta đã gửi lời mời kết bạn:
+
+   _chi tiết:_ **[Route_Struture/friend.md](./friend.md#6-danh-sách-các-người-dũng-đã-gửi-lời-mời-kết-bạn-đang-chờ-phải-hồi)** và **postman số 75**
 
 ##
 
 ##
 
-
-
-
-
-
-
-
-
-
-
+##

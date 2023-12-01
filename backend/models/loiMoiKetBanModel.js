@@ -102,8 +102,8 @@ const getAllPendingRequestHaveSendOfUser = async (sender_id) => {
 };
 
 // (async function () {
-//   const data = await getAllPendingRequestHaveSendOfUser(200000);
-//   console.log(data);
+  // const data = await getAllPendingRequestHaveSendOfUser(2);
+  // console.log(data);
 // })();
 
 // (async function () {

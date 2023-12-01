@@ -93,7 +93,7 @@ tham khảo tại
 
 _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)** và **postman số 68**
 
-## 66. --DONE--- khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
+## 66. --DONE---||==OK== khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
 
 <!-- ## 66. hiện thực like bài viết khi comment trong bài viết chia sẻ kiến thức -->
 
@@ -105,11 +105,11 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 ## 70.--- DONE--- cần kiểm tra lại tất cả các hình ảnh và tên của thông báo góc bên phải khi socket đến
 
-## ---DONE--- || ==DONE== 72. load bài viết chia sẻ trạng thái theo thú cưng được tags
+## ---DONE--- || ==ERR== 72. load bài viết chia sẻ trạng thái theo thú cưng được tags
 
-    **không chạy dc**
+   thông tin về người chủ và bài viết không chính xác, do BE quên trả về thông tin người dùng nên là sai => đã sửa lại ở BE => cập nhật lại.
 
-## 73. --DONE-- resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
+## 73. --DONE--||==OK== resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
 
 ## 74. ---DONE--- trang cập nhật thông tin nguời dùng
 
@@ -121,7 +121,7 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 ## ---DONE---||==OK== 78. xóa bài viết chia sẻ kiến thức
 
-## --DONE --- 79. giao diện gợi ý kết bạn
+## --DONE --- || ==OK== 79. giao diện gợi ý kết bạn
 
 _chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-người-dùng-gợi-ý-kết-bạn)** và **postman số 74**
 
@@ -129,16 +129,18 @@ _chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-ngư�
 
 <!-- ## 81. quên mật khẩu -->
 
-## ---DONE--- 82. sửa lại trang đăng ký thông báo lỗi khi mật khẩu
+## ---DONE--- || ==OK==82. sửa lại trang đăng ký thông báo lỗi khi mật khẩu
 
-## ---DONE--- 83. khi đứng tại trang cá nhân của 1 người khác mà nhận được thông báo lời mời kết bạn rồi bấm vào thì chỉ có phần trên thay đổi còn phần dưới thì không.
+## ---DONE--- || ==ERR== 83. khi đứng tại trang cá nhân của 1 người khác mà nhận được thông báo lời mời kết bạn rồi bấm vào thì chỉ có phần trên thay đổi còn phần dưới thì không.
 
 ![](./../media/img/err/img23.png)
+
+chưa tet được do tự động điều hướng sang trang cá nhân khi muốn vào trang bạn bè
 
 
 ## 84. khi đã đứng ở trong bài viết chia sẻ trạng thái mà có bấm vào thông báo navigate đến bài viết đó thì không cập nhật lại danh sách mới nhất
 
-## ---DONE--- 85. khi comment bài viết chia sẻ kiến thức thì hình không cập nhật ở chỗ comment
+## ---DONE---||==OK== 85. khi comment bài viết chia sẻ kiến thức thì hình không cập nhật ở chỗ comment
 
 ![](../media/img/err/img24.png)
 
@@ -147,3 +149,9 @@ _chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-ngư�
 (tham khảo ý kiến của cô)
 
 ![](../media/img/err/img25.png)
+
+## 87. khi vào trang của bạn bè thì tự động điều hướng sang trang cá nhân
+
+## 88. khi bấm vào con thú thì thông tin chủ nhân của nó bị sai backend đã sửa lại API cũ
+
+chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con-thú-cụ-thể)** và **postman số 71**
