@@ -274,6 +274,27 @@ const getListSuggestedFriendController = async (req, res) => {
   res.status(200).json(new Response(200, userSuggestInfor, ""));
   return;
 };
+
+const getListOfAllUserrecievedRequestAddFriendFromMe = async (req, res) => {
+  const my_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  let listUserHaveRecievedMyRequest = await loiMoiKetBanModel
+    .getAllPendingRequestHaveSendOfUser(my_id)
+    .then((data) =>
+      data.map((request) => {
+        delete request.ma_nguoi_gui;
+        return request;
+      })
+    );
+  listUserHaveRecievedMyRequest = await Promise.all(
+    listUserHaveRecievedMyRequest.map(async (request) => {
+      request.thong_tin_nguoi_nhan =
+        await userHelper.getUserPublicInforByUserId(request.ma_nguoi_nhan);
+      return request;
+    })
+  );
+  res.status(200).json(new Response(200, listUserHaveRecievedMyRequest, ""));
+  return;
+};
 module.exports = {
   requestAddFriend,
   responeAddFriend,
@@ -283,4 +304,5 @@ module.exports = {
   unfollowFriend,
   removeRequestAddFriend,
   getListSuggestedFriendController,
+  getListOfAllUserrecievedRequestAddFriendFromMe,
 };

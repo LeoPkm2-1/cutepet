@@ -3439,6 +3439,36 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "75_friend_getListOfAllUserrecievedRequestAddFriendFromMe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_4}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/friend/getListOfAllUserrecievedRequestAddFriendFromMe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"getListOfAllUserrecievedRequestAddFriendFromMe"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
