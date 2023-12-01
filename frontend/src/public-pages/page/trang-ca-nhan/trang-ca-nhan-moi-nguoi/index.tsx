@@ -27,6 +27,7 @@ export default function TrangCaNhanMoiNguoi() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [tab, setTab] = useState('post');
+  const userProfile = useSelector((state:RootState) => state.user.profile)
 
   const [profile, setProfile] = useState<PeopleType>({
     name: '',
@@ -69,7 +70,7 @@ export default function TrangCaNhanMoiNguoi() {
     if (id) {
       setTab('post');
       profileApi.getUserProfileById(id).then((data) => {
-        if (id === `${data?.thong_tin_profile_user?.ma_nguoi_dung}`) {
+        if (id === `${userProfile?.id}`) {
           navigate('/home/trang-ca-nhan');
           return;
         }
