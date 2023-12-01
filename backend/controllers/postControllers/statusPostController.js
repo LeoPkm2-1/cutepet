@@ -626,7 +626,9 @@ const deletePostController = async (req, res) => {
       // xóa theo dõi
       await followModel.deleteAllFollowOfStatusPost(post_id),
     ]);
-    res.json(deleteProcess);
+    res
+      .status(200)
+      .json(new Response(200, deleteProcess, "Xóa bài viết thành công"));
   } catch (error) {
     console.log(error);
   }
