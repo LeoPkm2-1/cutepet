@@ -40,7 +40,7 @@ function SearchArticle(props: Props) {
         >
           <SearchIcon
             sx={{
-              color: "#1acbaa",
+              color: "#0e647e",
               marginRight: "10px",
             }}
           />

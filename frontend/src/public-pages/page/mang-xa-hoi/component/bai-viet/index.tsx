@@ -130,8 +130,11 @@ export default function PostComponent(props: Props) {
               text: item?.comment,
               createdAt: item?.commentAt,
               id: item?._id,
+              numOfLike: item?.numOfLike,
+              numOfReply: item?.numOfReply,
+              postUserId: status?.userInfor?.id,
               userId: item?.userCmtInfor?.ma_nguoi_dung,
-              postUserId: item?.userCmtInfor?.ma_nguoi_dung,
+              hasLike: item?.hasLike,
             } as CommentType;
           });
           console.log(comments, 'Comment');
@@ -263,6 +266,7 @@ export default function PostComponent(props: Props) {
               numOfReply: item?.numOfReply,
               postUserId: status?.userInfor?.id,
               userId: item?.userCmtInfor?.ma_nguoi_dung,
+              hasLike: item?.hasLike,
             } as CommentType;
           });
           setComments(commemts);
@@ -600,6 +604,7 @@ export default function PostComponent(props: Props) {
                 style={{
                   width: '100%',
                   objectFit: 'cover',
+                  maxHeight:"550px"
                 }}
                 src={status?.media?.data[0]}
               />
@@ -835,7 +840,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
-  const [isLike, setIsLike] = useState(false);
+  const [isLike, setIsLike] = useState(props?.comment?.hasLike);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     console.log('Vaao click nè');
@@ -888,6 +893,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
 
   useEffect(() => {
     setComment(props?.comment);
+    setIsLike(props?.comment?.hasLike)
   }, [props?.comment?.id]);
 
   return (
@@ -1008,7 +1014,10 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
                         minWidth: '40px',
                       }}
                     >
-                      <span style={{}}> {comment?.numOfLike} </span>
+                      <span style={{ marginBottom: '2px' }}>
+                        {' '}
+                        {comment?.numOfLike}{' '}
+                      </span>
                       <FavoriteIcon
                         sx={{
                           color: '#df3731',

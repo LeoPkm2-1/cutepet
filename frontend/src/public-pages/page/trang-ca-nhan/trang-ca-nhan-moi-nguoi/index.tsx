@@ -67,13 +67,13 @@ export default function TrangCaNhanMoiNguoi() {
 
   useEffect(() => {
     if (id) {
-      if (id === `${profile?.id}`) {
-        navigate('/home/trang-ca-nhan');
-        return;
-      }
       setTab('post');
       profileApi.getUserProfileById(id).then((data) => {
-        console.log(data, ' data profile');
+        if (id === `${data?.thong_tin_profile_user?.ma_nguoi_dung}`) {
+          navigate('/home/trang-ca-nhan');
+          return;
+        }
+
         setProfile({
           name: data?.thong_tin_profile_user?.ten,
           id: data?.thong_tin_profile_user?.ma_nguoi_dung,
@@ -184,7 +184,7 @@ export default function TrangCaNhanMoiNguoi() {
           setTimePost('');
         });
     }
-  }, [profile.id]);
+  }, [profile.id, id]);
 
   useEffect(() => {
     if (id && profile?.id && timePost && timePost !== 'none') {
@@ -243,7 +243,7 @@ export default function TrangCaNhanMoiNguoi() {
           setTimePost('');
         });
     }
-  }, [profile.id, timePost]);
+  }, [profile.id, timePost, id]);
 
   useEffect(() => {
     if (profile?.id == acceptUser) {
@@ -375,7 +375,7 @@ export default function TrangCaNhanMoiNguoi() {
     <>
       <Box
         sx={{
-          paddingBottom: '120px',
+          paddingBottom: '20px',
         }}
       >
         <Box

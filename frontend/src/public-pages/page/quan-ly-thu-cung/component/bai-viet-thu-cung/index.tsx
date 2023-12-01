@@ -137,7 +137,7 @@ export default function BaiVietThuCung() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          paddingBottom: '120px',
+          paddingBottom: '20px',
         }}
       >
         <Box

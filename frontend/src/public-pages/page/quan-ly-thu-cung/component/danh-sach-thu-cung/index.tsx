@@ -59,7 +59,7 @@ export function DanhSachThuCung(props: { pet: PetType; onRemove?: () => void }) 
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginBottom: '40px',
+          marginBottom: '20px',
         }}
       >
         <img

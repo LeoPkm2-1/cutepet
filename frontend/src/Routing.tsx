@@ -67,7 +67,7 @@ export default function Routing(props: Props) {
         {/* <Route path="/home/*" element={<PageRouting />}></Route> */}
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/mang-xa-hoi" element={<MangXaHoi />} />
+        {/* <Route path="/mang-xa-hoi" element={<MangXaHoi />} /> */}
         <Route path={`/user/confirmRegister/:id`} element={<XacThucPage/>} />
 
         <Route

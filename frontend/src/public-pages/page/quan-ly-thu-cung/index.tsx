@@ -41,7 +41,7 @@ export function QuanLyThuCung() {
         <Grid container>
           <Grid
             sx={{
-              paddingBottom: '100px',
+              paddingBottom: '20px',
             }}
             item
             xs={9}

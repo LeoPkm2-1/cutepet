@@ -178,7 +178,7 @@ export default function TrangCaNhan() {
     <>
       <Box
         sx={{
-          paddingBottom: '120px',
+          paddingBottom: '20px',
         }}
       >
         <Box

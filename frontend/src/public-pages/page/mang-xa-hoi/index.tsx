@@ -2,7 +2,7 @@ import { PickerOverlay, PickerInline } from 'filestack-react';
 import { uploadMedia } from './upload';
 import UploadImage from '../../../components/upload-image';
 import PostComponent from './component/bai-viet';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Divider, Grid, Typography } from '@mui/material';
 import CreatePost from './component/tao-bai-viet';
 import postApi from '../../../api/post';
 import { useEffect, useState } from 'react';
@@ -14,6 +14,7 @@ import { useSnackbar } from 'notistack';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux';
 import { deepCopy } from '@firebase/util';
+import GoiYKetBan from './component/goi-y-ket-ban';
 
 // Our app
 export default function MangXaHoi() {
@@ -153,7 +154,7 @@ export default function MangXaHoi() {
       <Grid container>
         <Grid
           sx={{
-            paddingBottom: '100px',
+            paddingBottom: '10px',
           }}
           xs={8}
           item
@@ -192,6 +193,10 @@ export default function MangXaHoi() {
           item
         >
           <LoiMoiKetBan />
+          <Divider sx={{
+            mt:"30px"
+          }}/>
+          <GoiYKetBan/>
         </Grid>
       </Grid>
     </>

@@ -29,6 +29,9 @@ import moment from 'moment';
 import { uploadTaskPromise } from '../../../../api/upload';
 import Loading from '../../../../components/loading';
 import ProfileHeader from './profile-header';
+import { UserActions } from '../../../../redux/user';
+import { profile } from 'console';
+import { UserProfile } from '../../../../models/user-profile';
 
 const defaultState = {
   aliasName: '',
@@ -94,6 +97,14 @@ function UpdateProfilePage() {
             variant: 'info',
           });
           setLoading(false);
+          const newProfile: UserProfile = {
+            id: profile?.id,
+            name: profile?.name,
+            email:profile?.email || '',
+            age: profile?.ngay_sinh || '',
+            photoURL: profile?.url,
+          };
+          dispatch(UserActions.setProfile(newProfile));
         }
       })
       .catch((err) => {
@@ -183,6 +194,7 @@ function UpdateProfilePage() {
                           value={profile?.email ?? ''}
                           onChange={(e) => {}}
                           required
+                          disabled
                           InputProps={{
                             readOnly: true,
                           }}

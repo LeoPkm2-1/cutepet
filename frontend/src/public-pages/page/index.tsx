@@ -35,7 +35,6 @@ import ChangePasswordPage from './trang-ca-nhan/chinh-sua-trang-ca-nhan/change-p
 import BaiVietThuCung from './quan-ly-thu-cung/component/bai-viet-thu-cung';
 import UpdatePost from './mang-xa-hoi/component/chinh-sua-bai-viet';
 
-
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
   const [drawerOpen, setDrawerOpen] = useState(matches);
@@ -155,15 +154,14 @@ export default function PageRouting() {
 
       // 8
       socket.on('REQUEST_ADD_FRIEND', (data) => {
-        
         console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
-        const loiMoi :LoiMoiType = {
+        const loiMoi: LoiMoiType = {
           name: data?.requestUser?.ten,
           url: data?.requestUser?.anh?.url,
           time: data?.requestAt,
-          senderID:data?.requestUser?.ma_nguoi_dung,
-        }
+          senderID: data?.requestUser?.ma_nguoi_dung,
+        };
         dispatch(SocketActions.setNewRequest(loiMoi));
         enqueueSnackbar(
           <NotifycationItem
@@ -180,9 +178,14 @@ export default function PageRouting() {
       socket.on('ACCEPT_ADD_FRIEND', (data) => {
         console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
-        console.log(data?.acceptUser?.ma_nguoi_dung, " data?.acceptUser?.ma_nguoi_dung");
-        
-        dispatch(SocketActions.setAcceptFriend(data?.acceptUser?.ma_nguoi_dung));
+        console.log(
+          data?.acceptUser?.ma_nguoi_dung,
+          ' data?.acceptUser?.ma_nguoi_dung'
+        );
+
+        dispatch(
+          SocketActions.setAcceptFriend(data?.acceptUser?.ma_nguoi_dung)
+        );
         enqueueSnackbar(
           <NotifycationItem
             name={data?.acceptUser?.ten}
@@ -197,9 +200,9 @@ export default function PageRouting() {
       // 10
       socket.on('NEW_STATUS_POST_APPEAR', (data) => {
         console.log(data, ' Data chat from server:');
-        if(data?.areYouOwner){
+        if (data?.areYouOwner) {
           const item = data?.postInfor;
-          const post : StatusType = {
+          const post: StatusType = {
             id: `${item?._id}`,
             media: item?.media as {
               type: string;
@@ -229,8 +232,8 @@ export default function PageRouting() {
                 name: tagPet?.ten_thu_cung,
               };
             }),
-          }
-          dispatch(SocketActions.setNewPost(post))
+          };
+          dispatch(SocketActions.setNewPost(post));
         }
       });
       // 11
@@ -263,21 +266,21 @@ export default function PageRouting() {
           }
         );
       });
-        // 13
-        socket.on('COMMENT_ARTICLE', (data) => {
-          console.log(data, ' Data chat from server:');
-          dispatch(NotiActions.setIncreNumNoti());
-          enqueueSnackbar(
-            <NotifycationItem
-              name={data?.userComment?.ten}
-              type="bình luận bài viết chia sẽ của bạn"
-              url={data?.userComment?.anh?.url}
-            />,
-            {
-              variant: 'info',
-            }
-          );
-        });
+      // 13
+      socket.on('COMMENT_ARTICLE', (data) => {
+        console.log(data, ' Data chat from server:');
+        dispatch(NotiActions.setIncreNumNoti());
+        enqueueSnackbar(
+          <NotifycationItem
+            name={data?.userComment?.ten}
+            type="bình luận bài viết chia sẽ của bạn"
+            url={data?.userComment?.anh?.url}
+          />,
+          {
+            variant: 'info',
+          }
+        );
+      });
 
       return () => {
         console.log('Dis conect fe');
@@ -295,6 +298,7 @@ export default function PageRouting() {
       />
       <div
         style={{ position: 'relative', background: '#f9fafb' }}
+        // style={{ position: 'relative', background: 'green', height:"100px" }}
         className="row expanded"
       >
         <SideBar open={drawerOpen} mobile={!matches} onClose={closeDrawer} />
@@ -303,11 +307,20 @@ export default function PageRouting() {
             <Routes>
               <Route path="mang-xa-hoi" element={<MangXaHoi />} />
               {/* <Route path="chinh-sua-bai-viet-trang-thai/:id" element={<UpdatePost />} /> */}
-              <Route path="bai-viet-thu-cung/:id" element={<BaiVietThuCung />} />
-              <Route path="trang-ca-nhan" element={<TrangCaNhan />} /> 
-              <Route path="chinh-sua-trang-ca-nhan" element={<MeRouting />} /> 
-              <Route path="chinh-sua-trang-ca-nhan/profile" element={<UpdateProfilePage />} /> 
-              <Route path="chinh-sua-trang-ca-nhan/change-pass" element={<ChangePasswordPage />} /> 
+              <Route
+                path="bai-viet-thu-cung/:id"
+                element={<BaiVietThuCung />}
+              />
+              <Route path="trang-ca-nhan" element={<TrangCaNhan />} />
+              <Route path="chinh-sua-trang-ca-nhan" element={<MeRouting />} />
+              <Route
+                path="chinh-sua-trang-ca-nhan/profile"
+                element={<UpdateProfilePage />}
+              />
+              <Route
+                path="chinh-sua-trang-ca-nhan/change-pass"
+                element={<ChangePasswordPage />}
+              />
               <Route
                 path="trang-ca-nhan-nguoi-dung/:id"
                 element={<TrangCaNhanMoiNguoi />}
@@ -320,7 +333,7 @@ export default function PageRouting() {
               <Route path="tao-bai-chia-se" element={<TaoBaiChiaSe />} />
               <Route path="sua-bai-chia-se/:id" element={<SuaBaiChiaSe />} />
               <Route path="post/:id" element={<PostDetail />} />
-              <Route path="*" element={<HomePage />} />
+              <Route path="*" element={<MangXaHoi />} />
             </Routes>
           </div>
         </ScrollView>
@@ -328,3 +341,53 @@ export default function PageRouting() {
     </Root>
   );
 }
+
+//   return (
+//     // <div className="fullsize row" style={{ overflow: 'hidden' }}>
+
+//       <ScrollView
+//         contentContainerProps={{
+//           style: {
+//             backgroundImage:
+//               'radial-gradient(at left top, #f4fffd 50%, rgb(125,215,230) 100%)',
+//           },
+//         }}
+//       >
+//         <div className="expanded col">
+//           {/* <Header
+//             // showHambuger={!matches}
+//             onHambuger={() => setDrawerOpen(!drawerOpen)}
+//           /> */}
+//           <Routes>
+//             <Route path="mang-xa-hoi" element={<MangXaHoi />} />
+//             {/* <Route path="chinh-sua-bai-viet-trang-thai/:id" element={<UpdatePost />} />  */}
+//             <Route path="bai-viet-thu-cung/:id" element={<BaiVietThuCung />} />
+//             <Route path="trang-ca-nhan" element={<TrangCaNhan />} />
+//             <Route path="chinh-sua-trang-ca-nhan" element={<MeRouting />} />
+//             <Route
+//               path="chinh-sua-trang-ca-nhan/profile"
+//               element={<UpdateProfilePage />}
+//             />
+//             <Route
+//               path="chinh-sua-trang-ca-nhan/change-pass"
+//               element={<ChangePasswordPage />}
+//             />
+//             <Route
+//               path="trang-ca-nhan-nguoi-dung/:id"
+//               element={<TrangCaNhanMoiNguoi />}
+//             />
+//             <Route path="quan-ly-thu-cung" element={<QuanLyThuCung />} />
+//             <Route path="them-thu-cung" element={<ThemThuCung />} />
+//             <Route path="ban-be" element={<FriendList />} />
+//             <Route path="trang-chia-se" element={<TrangChiaSe />} />
+//             <Route path="trang-chia-se/:id" element={<BaiChiaSe />} />
+//             <Route path="tao-bai-chia-se" element={<TaoBaiChiaSe />} />
+//             <Route path="sua-bai-chia-se/:id" element={<SuaBaiChiaSe />} />
+//             <Route path="post/:id" element={<PostDetail />} />
+//             <Route path="*" element={<MangXaHoi />} />
+//           </Routes>
+//         </div>
+//       </ScrollView>
+//     // </div>
+//   );
+// }

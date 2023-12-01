@@ -70,6 +70,15 @@ const removeRequestAddFriendById = (requestID: number | string) => {
   });
 };
 
+const getListSuggestedFriends = () => {
+  return authRequest<any>({
+    url: `/friend/getListSuggestedFriends`,
+    method: 'POST',
+  });
+};
+
+
+
 const friendApi = {
   unFriendById,
   addFriendById,
@@ -78,6 +87,7 @@ const friendApi = {
   getRequestAddFriendList,
   responeAddFriend,
   removeRequestAddFriendById,
+  getListSuggestedFriends
 };
 
 export default friendApi;
