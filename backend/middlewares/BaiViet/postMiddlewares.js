@@ -347,6 +347,18 @@ async function preProcessUpdatePost_1(req, res, next) {
     ),
   ];
 
+  // lọc danh sách thú cưng
+  let myPetIds = req.body.myPetIds || [];
+  myPetIds = myPetIds.map((petId) => parseInt(petId, 10)); // change index to int type
+  // remove dulplicate
+  myPetIds = [...new Set(myPetIds)];
+  // danh sách thú cưng mới dc tag
+  const newTaggedPetIds = (req.body.myPetIds =
+    await petHelper.getOwnPetIdsOfUserInListOfPetIds(
+      req.auth_decoded.ma_nguoi_dung,
+      myPetIds
+    ));
+
   next();
 }
 

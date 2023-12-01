@@ -547,6 +547,8 @@ const updatePostController = async (req, res) => {
   );
   taggedUsers = remainingTaggedUser.concat(taggedUsers);
 
+  const withPets = await petHelper.publicInforOfListPet(req.body.myPetIds);
+
   // delete _id field in old object post
   delete postBeforeDelete._id;
   const newPost = {
@@ -555,6 +557,7 @@ const updatePostController = async (req, res) => {
     visibility,
     media,
     taggedUsers,
+    withPets,
     modifiedAt: new Date(),
   };
   const updateProcess = await StatusPostModel.updatePost(post_id, newPost);
@@ -626,9 +629,34 @@ const deletePostController = async (req, res) => {
       // xóa theo dõi
       await followModel.deleteAllFollowOfStatusPost(post_id),
     ]);
-    res
-      .status(200)
-      .json(new Response(200, deleteProcess, "Xóa bài viết thành công"));
+    const everyOk = deleteProcess.every(
+      (elemProcess) => elemProcess.status == 200
+    );
+    // console.log({ everyOk });
+    if (everyOk) {
+      res.status(200).json(
+        new Response(
+          200,
+          {
+            isDeleted: true,
+            post_id,
+          },
+          "Xóa bài viết thành công bài viết " + post_id
+        )
+      );
+      return;
+    } else {
+      res.status(400).json(
+        new Response(
+          400,
+          {
+            isDeleted: false,
+            post_id,
+          },
+          "xóa bài viết thất bại: " + post_id
+        )
+      );
+    }
   } catch (error) {
     console.log(error);
   }

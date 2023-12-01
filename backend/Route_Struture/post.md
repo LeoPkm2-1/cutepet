@@ -819,11 +819,11 @@ nếu bình luận không tồn tại:
 
 ```javascript
 {
-    post_id:"6562aabf0acaafe756be1eb7",
-    text: "ahihi",
-    visibility:"PUBLIC",
+    post_id: string,
+    text: string,
+    visibility:"PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
     taggedUsersId:[3,4,5],
-
+    myPetIds:[1,2,3]
     media: {
         "type":"images",
         "data":["https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa"]
@@ -1432,71 +1432,28 @@ nếu bình luận không tồn tại:
 ```javascript
 {
     "status": 200,
-    "payload": [
-        {
-            "status": 200,
-            "payload": {
-                "acknowledged": true,
-                "deletedCount": 1
-            },
-            "message": "",
-            "errno": null,
-            "errcode": null
-        },
-        {
-            "status": 200,
-            "payload": {
-                "acknowledged": true,
-                "deletedCount": 2
-            },
-            "message": "",
-            "errno": null,
-            "errcode": null
-        },
-        {
-            "status": 200,
-            "payload": {
-                "acknowledged": true,
-                "deletedCount": 2
-            },
-            "message": "",
-            "errno": null,
-            "errcode": null
-        },
-        {
-            "status": 200,
-            "payload": {
-                "acknowledged": true,
-                "deletedCount": 0
-            },
-            "message": "",
-            "errno": null,
-            "errcode": null
-        },
-        {
-            "status": 200,
-            "payload": {
-                "acknowledged": true,
-                "deletedCount": 2
-            },
-            "message": "",
-            "errno": null,
-            "errcode": null
-        },
-        {
-            "status": 200,
-            "payload": {
-                "acknowledged": true,
-                "deletedCount": 3
-            },
-            "message": "",
-            "errno": null,
-            "errcode": null
-        }
-    ],
-    "message": "Xóa bài viết thành công",
+    "payload": {
+        "isDeleted": true,
+        "post_id": "6562aabf0acaafe756be1eb7"
+    },
+    "message": "Xóa bài viết thành công bài viết 6562aabf0acaafe756be1eb7",
     "errno": null,
     "errcode": null
+}
+```
+
+- khi xóa thất bại:
+
+```javascript
+{
+    "status": 400,
+    "payload": {
+        "isDeleted": false,
+        "post_id": "6562aabf0acaafe756be1eb7"
+    },
+    "message": "xóa bài viết thất bại: 6562aabf0acaafe756be1eb7",
+    "errno": 300,
+    "errcode": 300
 }
 ```
 
