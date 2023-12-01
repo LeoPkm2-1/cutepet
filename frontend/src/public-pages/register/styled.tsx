@@ -25,7 +25,7 @@ export const Form = styled.form`
   padding: 16px;
   border-radius: 16px;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   box-sizing: border-box;
 `;
 

@@ -2,7 +2,7 @@ import { PickerOverlay, PickerInline } from 'filestack-react';
 import { uploadMedia } from './upload';
 import UploadImage from '../../../components/upload-image';
 import PostComponent from './component/bai-viet';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Divider, Grid, Typography } from '@mui/material';
 import CreatePost from './component/tao-bai-viet';
 import postApi from '../../../api/post';
 import { useEffect, useState } from 'react';
@@ -11,14 +11,10 @@ import userApis from '../../../api/user';
 import LoiMoiKetBan from './component/loi-moi-ket-ban';
 //import { socket } from '../../../socket';
 import { useSnackbar } from 'notistack';
-import { NotifycationItem } from '../../../components/NotificationItem';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import articleApi from '../../../api/article';
-import { ArticleType } from '../../../models/article';
-import { BaiVietCoBan } from '../chia-se-kien-thuc/component/bai-viet-co-ban';
-import { listAll } from 'firebase/storage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux';
+import { deepCopy } from '@firebase/util';
+import GoiYKetBan from './component/goi-y-ket-ban';
 
 // Our app
 export default function MangXaHoi() {
@@ -31,9 +27,10 @@ export default function MangXaHoi() {
     (state: RootState) => state?.socket?.newPost.post
   );
   useEffect(() => {
+    
     postApi.getPostForNewsfeed(indexPost, []).then((data: any) => {
       if (data?.status == 200) {
-        console.log(data, 'data lan 1');
+        console.log(data, 'data lan 1 nha ggigi');
         if (data?.payload?.length == 0) {
           setIsPost(false);
           return;
@@ -137,86 +134,27 @@ export default function MangXaHoi() {
     }
   }, [indexPost]);
 
+
+
   useEffect(() => {
     console.log(newPostFromStore, ' newPostFromStore nè');
 
     if (newPostFromStore?.id) {
-      let arr: StatusType[] = [];
-      arr.push(newPostFromStore);
-      console.log(arr, "arr nè");
-      const arr2 = [...arr, ...listPost]
-      console.log(arr2, " arr2 nè");
-      
-      // setListPost([ ...arr,...listPost]);
+      let arr: StatusType[] = deepCopy(listPost);
+      console.log(listPost, ' list pót');
 
-      setListPost(arr2);
+      arr.unshift(newPostFromStore);
+      console.log(arr, ' arr');
+      setListPost(arr);
     }
   }, [newPostFromStore?.id]);
-  // useEffect(() => {
-  //   console.log("Mở comment");
-
-  //   socket.on('LIKE_STATUS_POST', (data) => {
-  //     console.log(data, ' Data chat from server:');
-  //     enqueueSnackbar(<NotifycationItem
-  //       name={data?.userLike?.ten}
-  //        type="thích"
-  //        url = {data?.userLike?.anh?.url}
-  //     />, {
-  //       variant: "info",
-  //     });
-  //   });
-  //   return () => {
-  //     socket.off('response-message');
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   socket.on('COMMENT_STATUS_POST', (data) => {
-  //     console.log(data, ' Data comment from server:');
-  //     enqueueSnackbar(<NotifycationItem
-  //       name={data?.userComment?.ten}
-  //        type="bình luận"
-  //        url = {data?.userComment?.anh?.url}
-
-  //     />, {
-  //       variant: "info",
-  //     });
-  //   });
-  //   return () => {
-  //     socket.off('response-message');
-  //   };
-  // }, []);
-
-  const naviagte = useNavigate();
-  const [articles, setArticles] = useState<ArticleType[]>([]);
-  useEffect(() => {
-    articleApi.getAllArticle().then((data) => {
-      console.log(data, ' data art');
-
-      if (data?.status == 200) {
-        const list: ArticleType[] = data?.payload?.map((art: any) => {
-          return {
-            id: art?._id,
-            title: art?.title,
-            main_image: art?.main_image,
-            intro: art?.intro,
-            content: art?.content,
-            categories: art?.categories,
-            user_name: art?.owner_infor?.ten,
-            user_avatar: art?.owner_infor?.anh?.url,
-          } as ArticleType;
-        });
-        setArticles(list);
-      }
-    });
-  }, []);
 
   return (
     <>
       <Grid container>
         <Grid
           sx={{
-            paddingBottom: '100px',
+            paddingBottom: '10px',
           }}
           xs={8}
           item
@@ -255,6 +193,10 @@ export default function MangXaHoi() {
           item
         >
           <LoiMoiKetBan />
+          <Divider sx={{
+            mt:"30px"
+          }}/>
+          <GoiYKetBan/>
         </Grid>
       </Grid>
     </>
@@ -265,11 +207,3 @@ function difference(set1: any, set2: any) {
   return new Set([...set1].filter((element) => !set2.has(element)));
 }
 
-// Example usage:
-const setA = new Set([1, 2, 3, 4]);
-const setB = new Set([3, 4, 5, 6]);
-
-const result = difference(setA, setB);
-
-console.log(Array.from(result));
-// Output: [1, 2]

@@ -75,14 +75,10 @@ const LoginPage = (props: P) => {
   ) => {
     const errors: ErrorObj = {};
     if (!data.email) {
-      errors.email = 'Email is required.';
-    } else if (
-      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.email)
-    ) {
-      errors.email = 'Invalid email address.';
-    }
+      errors.email = 'Tài khoản không được để trống';
+    } 
     if (!data.password) {
-      errors.password = 'Password is required.';
+      errors.password = 'Mật khẩu không được để trống';
     }
     if (Object.keys(errors).length) {
       return errors;
@@ -90,8 +86,8 @@ const LoginPage = (props: P) => {
     return;
   };
 
-  // function loginWithUserCredential(
-  //   userCredential: UserCredential,
+  
+  
   //   provider: SocialProviderEnum
   // ) {
   //   return userCredential.user
@@ -131,11 +127,11 @@ const LoginPage = (props: P) => {
     const password =
       (e.currentTarget['password'] as HTMLInputElement)?.value ?? '';
 
-    // const errors = verifyData({ email, password });
-    // if (errors) {
-    //   setErrors(errors);
-    //   return;
-    // }
+    const errors = verifyData({email, password});
+    if (errors) {
+      setErrors(errors);
+      return;
+    }
     setIsLoading(true);
 
     authApi

@@ -68,6 +68,8 @@ const PrivatePagesRouting = () => {
       <Route path="me/*" element={<MeRouting />} /> */}
       {/* <Route path="mang-xa-hoi/" element={<MangXaHoi />} /> */}
       <Route path="home/*" element={<PageRouting />} />
+      <Route path="*" element={<PageRouting />} />
+
       {/* <Route path="*" element={<NotMatchRouting profile={profile} />} /> */}
     </Routes>
   );

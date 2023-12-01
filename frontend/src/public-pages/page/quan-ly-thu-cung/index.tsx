@@ -1,4 +1,4 @@
-import { Box, Dialog, Grid } from '@mui/material';
+import { Box, Dialog, Grid, Typography } from '@mui/material';
 import { DanhSachThuCung } from './component/danh-sach-thu-cung';
 import Button from '../../../components/Button';
 import { StyledButton, StyledTypography } from './style';
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import petApi from '../../../api/pet';
 import { PetType } from '../../../models/pet';
-
+import { deepCopy } from '@firebase/util';
 export function QuanLyThuCung() {
   const navigate = useNavigate();
   const [listPet, setListPet] = useState<PetType[]>([]);
@@ -23,6 +23,7 @@ export function QuanLyThuCung() {
             ngay_sinh: item?.ngay_sinh,
             gioi_tinh: item?.gioi_tinh,
             url_anh: item?.anh?.url,
+            ma_thu_cung: item?.ma_thu_cung,
           } as PetType;
         });
         setListPet(list);
@@ -40,21 +41,31 @@ export function QuanLyThuCung() {
         <Grid container>
           <Grid
             sx={{
-              paddingBottom: '100px',
+              paddingBottom: '20px',
             }}
             item
             xs={9}
           >
-            <Grid container spacing={2}>
-              {listPet?.map((pet) => {
-                return (
-                  <Grid item xs={4}>
-                    <DanhSachThuCung pet={pet} />
-                  </Grid>
-                );
-              })}
+            {listPet?.length > 0 ? (
+              <Grid container spacing={2}>
+                {listPet?.map((pet, index) => {
+                  return (
+                    <Grid item xs={4}>
+                      <DanhSachThuCung
+                        onRemove={() => {
+                          const list: PetType[] = deepCopy(listPet);
+                          list.splice(index, 1);
+                          console.log(list, ' list nè');
 
-              {/* <Grid item xs={3}>
+                          setListPet(list);
+                        }}
+                        pet={pet}
+                      />
+                    </Grid>
+                  );
+                })}
+
+                {/* <Grid item xs={3}>
             <DanhSachThuCung />
           </Grid>
           <Grid item xs={3}>
@@ -63,7 +74,21 @@ export function QuanLyThuCung() {
           <Grid item xs={3}>
             <DanhSachThuCung />
           </Grid> */}
-            </Grid>
+              </Grid>
+            ) : (
+              <Typography
+                sx={{
+                  fontSize: '20px',
+                  fontWeight: '500',
+                  color: 'gray',
+                  fontFamily: 'quicksand',
+                  mt: '200px',
+                }}
+                align="center"
+              >
+                Chưa có thú cưng vui lòng thêm thú cưng !
+              </Typography>
+            )}
           </Grid>
           <Grid
             sx={{

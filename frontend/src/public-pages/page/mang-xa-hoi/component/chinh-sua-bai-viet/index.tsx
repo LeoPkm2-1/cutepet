@@ -27,28 +27,27 @@ import PetsIcon from '@mui/icons-material/Pets';
 import { PetType } from '../../../../../models/pet';
 import petApi from '../../../../../api/pet';
 import Tag from '../../../../../components/tag';
+import { StatusType } from '../../../../../models/post';
 type Props = {
   open: boolean;
-  onClose: () => void;
+  onClose?: () => void;
+  status: StatusType;
+  onSuccess: (status: StatusType) => void;
 };
-export default function PopUpCreatePost(props: Props) {
+export default function UpdatePost(props: Props) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isFilePicked, setIsFilePicked] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [text, setText] = useState('');
   const [isPhoto, setIsPhoto] = useState(false);
+  const [urlPhotoDefault, setUrlPhotoDefault] = useState('');
   const [visibility, setVisibility] = useState('PUBLIC');
   const { enqueueSnackbar } = useSnackbar();
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const [isloading, setIsloading] = useState(false);
   const friends = useSelector((state: RootState) => state.friend.friend);
   const [listOptionTag, setListOptionTag] = useState<FriendType[]>([]);
-  useEffect(() => {
-    if (friends) {
-      setListOptionTag(friends);
-    }
-  }, [friends]);
-
+  const [status, setStatus] = useState<StatusType>(props.status);
   const [friend, setFriend] = useState<
     {
       id: number;
@@ -62,6 +61,29 @@ export default function PopUpCreatePost(props: Props) {
       name: string;
     }[]
   >([]);
+  useEffect(() => {
+    if (props.status) {
+      setStatus(status);
+      setText(props?.status?.text || '');
+      setVisibility(props?.status?.visibility || 'PUBLIC');
+      if (props?.status?.media?.data[0]) {
+        setIsPhoto(true);
+        setUrlPhotoDefault(props?.status?.media?.data[0]);
+      }
+      if (props?.status?.taggedUsers) {
+        setFriend(props?.status?.taggedUsers);
+      }
+      if (props?.status?.taggedPets) {
+        setPetsTag(props?.status?.taggedPets);
+      }
+    }
+  }, [props.status.id]);
+
+  useEffect(() => {
+    if (friends) {
+      setListOptionTag(friends);
+    }
+  }, [friends]);
 
   const [listPet, setListPet] = useState<PetType[]>([]);
   useEffect(() => {
@@ -90,33 +112,48 @@ export default function PopUpCreatePost(props: Props) {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    setIsloading(true);
-    let storageUrl: string = '';
-    if (selectedFile) {
-      storageUrl = (await uploadTaskPromise(selectedFile)) as string;
-    }
+    if (props?.status?.id) {
+      setIsloading(true);
+      let storageUrl: string = urlPhotoDefault;
+      if (selectedFile) {
+        storageUrl = (await uploadTaskPromise(selectedFile)) as string;
+      }
 
-    postApi
-      .createStatus(
-        visibility,
-        text,
-        friend.map((item) => item.id),
-        petsTag.map((item) => item.id),
-        'images',
-        [storageUrl]
-      )
-      .then(() => {
-        enqueueSnackbar('Tạo bài viết thành công', { variant: "info" });
-        setIsloading(false);
-        setText('');
-        setSelectedFile(null);
-        props.onClose();
-      })
-      .catch((err) => {
-        setIsloading(false);
-        console.log(err, 'err');
-        enqueueSnackbar(`${err}`, { variant: 'error' });
-      });
+      postApi
+        .updatePost(
+          props?.status?.id,
+          visibility,
+          text,
+          friend.map((item) => item.id as number),
+          petsTag.map((item) => item.id as number),
+          [storageUrl]
+        )
+        .then(() => {
+          enqueueSnackbar('Cập nhật bài viết thành công', { variant: 'info' });
+          setIsloading(false);
+          setSelectedFile(null);
+          props?.onClose?.();
+          if (props?.status && props?.status?.media) {
+            const newStatus: StatusType = {
+              ...props?.status,
+              text: text,
+              taggedPets: petsTag,
+              taggedUsers: friend,
+              visibility: visibility,
+              media: {
+                ...props?.status?.media,
+                data: [urlPhotoDefault],
+              },
+            };
+            props.onSuccess(newStatus);
+          }
+        })
+        .catch((err) => {
+          setIsloading(false);
+          console.log(err, 'err');
+          enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+        });
+    }
   }
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -153,7 +190,7 @@ export default function PopUpCreatePost(props: Props) {
       <Loading open={isloading} />
       <Dialog
         onClose={() => {
-          props.onClose();
+          props?.onClose?.();
         }}
         open={props.open}
       >
@@ -176,7 +213,7 @@ export default function PopUpCreatePost(props: Props) {
                 m: '20px 0px',
               }}
             >
-              Tạo bài viết
+              Chỉnh sửa bài viết
             </Typography>
             <Divider />
             <Box
@@ -235,16 +272,6 @@ export default function PopUpCreatePost(props: Props) {
                     </>
                   )}
                 </Typography>
-                {/* <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '400',
-                    fontSize: '13px',
-                    color: 'gray',
-                  }}
-                >
-                  Công khai
-                </Typography> */}
                 <Select
                   sx={{
                     width: '120px',
@@ -282,7 +309,7 @@ export default function PopUpCreatePost(props: Props) {
                       fontFamily: 'quicksand',
                       fontWeight: '600',
                       color: '#ff5b2e',
-                      marginRight:"12px"
+                      marginRight: '12px',
                     }}
                   >
                     @{pet?.name?.trim()}
@@ -322,10 +349,12 @@ export default function PopUpCreatePost(props: Props) {
               >
                 <ImageSelect
                   aspectRatio={1.5}
+                  defaultPreview={urlPhotoDefault}
                   onFileChange={(file) => {
                     if (file) {
                       setSelectedFile(file);
                     } else {
+                      setUrlPhotoDefault('');
                       setIsPhoto(false);
                       setSelectedFile(null);
                     }
@@ -556,7 +585,7 @@ export default function PopUpCreatePost(props: Props) {
                 m: '20px 0',
               }}
             >
-              Đăng
+              Cập nhật
             </Button>
           </Box>
         </Box>

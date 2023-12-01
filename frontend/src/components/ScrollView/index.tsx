@@ -17,8 +17,7 @@ const ContentContainer = styled.div`
   overflow: auto;
   display: flex;
   flex-direction: column;
-
-  min-height: 100vh;
+  min-height: "100%";
   padding: 30px;
   /* border-radius: 12px; */
 `;
@@ -28,7 +27,7 @@ const ContentContainerSidebar = styled.div`
   top: 0;
   left: 10px;
   right: 10px;
-  bottom: 0;
+  bottom: 0px;
   overflow: auto;
   display: flex;
   flex-direction: column;

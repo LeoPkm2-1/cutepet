@@ -64,6 +64,15 @@ const getStatusById = (post_id: string) => {
     },
   });
 };
+const likeComment = (cmt_id: string) => {
+  return authRequest<any>({
+    url: `/post/statusPost/likeComment`,
+    method: 'POST',
+    body: {
+      cmt_id,
+    },
+  });
+};
 
 const getPostStartFrom = (index: number, num: number) => {
   return authRequest<any>({
@@ -177,6 +186,53 @@ const reportPost = (post_id: string) => {
   });
 };
 
+const updateComment = (cmt_id: string, content: string) => {
+  return authRequest<any>({
+    url: `/post/statusPost/updateComment`,
+    method: 'POST',
+    body: {
+      cmt_id,
+      content,
+    },
+  });
+};
+
+const updateReply = (reply_id: string, content: string) => {
+  return authRequest<any>({
+    url: `/post/statusPost/updateReply`,
+    method: 'POST',
+    body: {
+      reply_id,
+      content,
+    },
+  });
+};
+
+const updatePost = (
+  post_id: string,
+  visibility: string,
+  text: string,
+  taggedUsersId: string[] | number[],
+  myPetIds: string[] | number[],
+  data: string[]
+) => {
+  return authRequest<any>({
+    url: `/post/statusPost/updatePost`,
+    method: 'POST',
+    body: {
+      post_id,
+      text,
+      visibility,
+      taggedUsersId,
+      myPetIds,
+      media: {
+        type: 'images',
+        data: data,
+      },
+    },
+  });
+};
+
 const postApi = {
   createStatus,
   likeOrUnlikeStatus,
@@ -194,6 +250,10 @@ const postApi = {
   followPost,
   unFollowPost,
   reportPost,
+  likeComment,
+  updateComment,
+  updateReply,
+  updatePost
 };
 
 export default postApi;
