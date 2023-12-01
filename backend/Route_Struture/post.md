@@ -1387,6 +1387,8 @@ nếu bình luận không tồn tại:
 
 ## 21. xóa bài viết trạng thái
 
+**(postman số 16)**
+
 1. phương thức:
 
    POST http://localhost:3000/post/statusPost/deletePost
@@ -1498,8 +1500,117 @@ nếu bình luận không tồn tại:
 }
 ```
 
-## 
+## 22. xóa bình luận của bài viết trạng thái
 
-##
+**(postman số 15)**
+
+1. phương thức:
+
+    POST http://localhost:3000/post/statusPost/deleteComment
+
+2. cấu trúc:
+
+```javascript
+{
+    cmt_id: string
+}
+```
+
+3. trả về:
+
+
+- khi bình luận không tồn tại.
+```javascript
+{
+    "status": 400,
+    "payload": "Bình luật không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi bạn không có quyền xóa bình luận:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bạn không có quyền xóa bình luận này",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "cmt_id": "655e15986f6e342ed081d45b"
+    },
+    "message": "xóa thành công bình luận:655e15986f6e342ed081d45b",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 23. xóa phản hồi của bình luận trong bài viết chia sẻ kiến thức
+
+**(postman số 14)**
+
+1. phương thức:
+
+    POST http://localhost:3000/post/statusPost/deleteReply
+
+2. cấu trúc:
+
+```javascript
+{
+    reply_id: string
+}
+```
+3. trả về :
+
+- khi phản hồi không tồn tại:
+
+```javascript
+{
+    "status": 400,
+    "payload": "Phản hồi không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi bạn không có quyền:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bạn không có quyền xóa phản hồi này",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "deletedCount": 1,
+        "reply_id": "65697981e92f526f137528ec"
+    },
+    "message": "xóa thành công phản hồi:65697981e92f526f137528ec",
+    "errno": null,
+    "errcode": null
+}
+```
 
 ##

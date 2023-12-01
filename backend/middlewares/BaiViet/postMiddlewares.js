@@ -398,6 +398,14 @@ async function preProcessDeleteComment(req, res, next) {
     .getPostById(req.body.CMT_POST_INFOR.postId)
     .then((data) => data.payload[0]);
   console.log({ postInfor });
+  if (typeof postInfor == "undefined") {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Bài viết chứa bình luận không tồn tại", 300, 300)
+      );
+    return;
+  }
   if (req.auth_decoded.ma_nguoi_dung == postInfor.owner_id) {
     next();
     return;
