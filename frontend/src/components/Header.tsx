@@ -107,54 +107,54 @@ const Header = (props: Props) => {
             num++;
           }
           //1
-          if (noti?.type == 'COMMENT_STATUS_POST') {
-            return {
-              name: noti?.payload?.userComment?.ten,
-              url: noti?.payload?.userComment?.anh?.url,
-              idPost: noti?.payload?.postInfor?._id,
-              hasRead: noti?.hasRead || false,
-              type: 'bình luận một bài viết.',
-            } as {
-              name?: string;
-              url?: string;
-              idPost?: string;
-              type?: string;
-              hasRead: boolean;
-            };
-          }
-          //2
-          if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
-            return {
-              name: noti?.payload?.userReply?.ten,
-              url: noti?.payload?.userReply?.anh?.url,
-              idPost: noti?.payload?.commentInfor?.postId,
-              hasRead: noti?.payload?.hasRead,
-              type: 'trả lời bình luận trong một bài viết',
-            } as {
-              name?: string;
-              url?: string;
-              idPost?: string;
-              type?: string;
-              hasRead: boolean;
-            };
-          }
+          // if (noti?.type == 'COMMENT_STATUS_POST') {
+          //   return {
+          //     name: noti?.payload?.userComment?.ten,
+          //     url: noti?.payload?.userComment?.anh?.url,
+          //     idPost: noti?.payload?.postInfor?._id,
+          //     hasRead: noti?.hasRead || false,
+          //     type: 'bình luận một bài viết.',
+          //   } as {
+          //     name?: string;
+          //     url?: string;
+          //     idPost?: string;
+          //     type?: string;
+          //     hasRead: boolean;
+          //   };
+          // }
+          // //2
+          // if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
+          //   return {
+          //     name: noti?.payload?.userReply?.ten,
+          //     url: noti?.payload?.userReply?.anh?.url,
+          //     idPost: noti?.payload?.commentInfor?.postId,
+          //     hasRead: noti?.payload?.hasRead,
+          //     type: 'trả lời bình luận trong một bài viết',
+          //   } as {
+          //     name?: string;
+          //     url?: string;
+          //     idPost?: string;
+          //     type?: string;
+          //     hasRead: boolean;
+          //   };
+          // }
 
-          //3
-          if (noti?.type == 'LIKE_STATUS_POST') {
-            return {
-              name: noti?.payload?.userReply?.ten,
-              url: noti?.payload?.userReply?.anh?.url,
-              idPost: noti?.payload?.commentInfor?.postId,
-              hasRead: noti?.payload?.hasRead,
-              type: 'đã thích một bài viết',
-            } as {
-              name?: string;
-              url?: string;
-              idPost?: string;
-              type?: string;
-              hasRead: boolean;
-            };
-          }
+          // //3
+          // if (noti?.type == 'LIKE_STATUS_POST') {
+          //   return {
+          //     name: noti?.payload?.userReply?.ten,
+          //     url: noti?.payload?.userReply?.anh?.url,
+          //     idPost: noti?.payload?.commentInfor?.postId,
+          //     hasRead: noti?.payload?.hasRead,
+          //     type: 'đã thích một bài viết',
+          //   } as {
+          //     name?: string;
+          //     url?: string;
+          //     idPost?: string;
+          //     type?: string;
+          //     hasRead: boolean;
+          //   };
+          // }
         });
         console.log(list, 'List');
         dispatch(NotiActions.setNumNoti(num));
@@ -518,7 +518,6 @@ function NotifycationComponent() {
           return;
         }
         const list = data?.payload?.map((noti: any) => {
-          console.log(noti, ' notu nef');
           if (!noti?.hasRead) {
             num++;
           }

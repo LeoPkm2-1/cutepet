@@ -451,7 +451,7 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "6545b0929d829001b64f5dd0",
+							"value": "65561fa45b4503906b609533",
 							"type": "text"
 						},
 						{
@@ -572,7 +572,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -584,12 +584,12 @@
 					"urlencoded": [
 						{
 							"key": "reply_id",
-							"value": "6545a85d8f0d07ad15bd7d8d",
+							"value": "65697981e92f526f137528ec",
 							"type": "text"
 						},
 						{
 							"key": "content",
-							"value": "thành rep updated rồi nha",
+							"value": "Dũng rep updated rồi nha",
 							"type": "text"
 						}
 					]
@@ -618,7 +618,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -630,7 +630,7 @@
 					"urlencoded": [
 						{
 							"key": "reply_id",
-							"value": "6545ad119d829001b64f5d9e",
+							"value": "65697981e92f526f137528ec",
 							"type": "text"
 						}
 					]
@@ -659,7 +659,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -671,7 +671,7 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "65459cc8bbf363cd325af860",
+							"value": "6561660b62fd1ddcea138304",
 							"type": "text"
 						}
 					]
@@ -712,7 +712,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "654599ed01b55d7d2f7928dd",
+							"value": "6562aabf0acaafe756be1eb7",
 							"type": "text"
 						}
 					]
@@ -2440,7 +2440,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -2449,7 +2449,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"post_id\":\"6550ecdbe158c8fc09206db2\",\n    \"text\": \"ahihi\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[3,4,5],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa\"]\n    }\n}",
+					"raw": "{\n    \"post_id\":\"655feb605232b05af79727e3\",\n    \"text\": \"ahihi xin chào\",\n    \"visibility\":\"PRIVATE\",\n   \"taggedUsersId\":[3,4,5],\n   \"myPetIds\":[],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa\"]\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3189,7 +3189,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"searchKey\":\"\",\n    \"tags\":[],\n    \"index\":2,\n    \"num\":1\n}",
+					"raw": "{\n    \"searchKey\":\"Should you be Concerned About Fatty Tumors\",\n    \"tags\":[\"cách chăm sóc\"],\n    \"index\":null,\n    \"num\":null\n}",
 					"options": {
 						"raw": {
 							"language": "json"

@@ -81,7 +81,7 @@ export function TrangChiaSe() {
     <>
       <Grid
         sx={{
-          paddingBottom: '150px',
+          paddingBottom: '10px',
         }}
         spacing={2}
         container

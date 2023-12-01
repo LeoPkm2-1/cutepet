@@ -52,9 +52,9 @@ export default function BaiChiaSe() {
   });
 
   const [articlesLienQuan, setArticlesLienQuan] = useState<ArticleType[]>([]);
-  const showDialog = useShowDialog();
   const { id } = useParams();
   const [isData, setIsData] = useState(true);
+  const [isReload, setIsReload] = useState(true);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [numAve, setNumAve] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
@@ -63,6 +63,8 @@ export default function BaiChiaSe() {
   const pargamSearch = useLocation().search;
   const sp = new URLSearchParams(pargamSearch);
   const navigate = useNavigate();
+  const showDialog = useShowDialog();
+
   const profileId = useSelector((state: RootState) => state.user.profile?.id);
   useEffect(() => {
     if (id) {
@@ -71,7 +73,6 @@ export default function BaiChiaSe() {
         .then((data) => {
           if (data?.status == 200) {
             console.log(data, 'data arcticle ');
-
             const art = {
               id: data?.payload?._id,
               title: data?.payload?.title,
@@ -99,7 +100,7 @@ export default function BaiChiaSe() {
           setIsData(false);
         });
     }
-  }, [id]);
+  }, [id, isReload]);
 
   // Lấy bài viết liên quan
   useEffect(() => {
@@ -178,11 +179,13 @@ export default function BaiChiaSe() {
               isUpVote: true,
               isDownVote: false,
             });
-            if (article?.isDownVote) {
-              setNumAve(numAve + 2);
-            } else {
-              setNumAve(numAve + 1);
-            }
+            setIsReload(!isReload);
+            // if (article?.isDownVote) {
+            //   setNumAve(numAve + 2);
+            // } else {
+            //   setNumAve(numAve + 1);
+
+            // }
           }
         })
         .catch((err) => {
@@ -202,11 +205,12 @@ export default function BaiChiaSe() {
               isUpVote: false,
               isDownVote: true,
             });
-            if (article?.isUpVote) {
-              setNumAve(numAve - 2);
-            } else {
-              setNumAve(numAve - 1);
-            }
+            setIsReload(!isReload);
+            // if (article?.isUpVote) {
+            //   setNumAve(numAve - 2);
+            // } else {
+            //   setNumAve(numAve - 1);
+            // }
           }
         })
         .catch((err) => {
@@ -301,7 +305,7 @@ export default function BaiChiaSe() {
       {isData ? (
         <Grid
           sx={{
-            marginBottom: '40px',
+            marginBottom: '10px',
           }}
           container
         >
@@ -320,6 +324,7 @@ export default function BaiChiaSe() {
                   paddingLeft: '20px',
                   position: 'fixed',
                   left: '280px',
+                
                 }}
               >
                 <IconButton
@@ -363,50 +368,57 @@ export default function BaiChiaSe() {
                     }}
                   />
                 </IconButton>
-                {isFollow ? (
+                {profileId == article?.user_id && (
+                  <>
+                    {isFollow ? (
+                      <IconButton
+                        sx={{
+                          border: '1px solid gray',
+                          padding: '10px',
+                          marginTop: '16px',
+                        }}
+                        onClick={unFollowArticle}
+                      >
+                        <NotificationsOffRoundedIcon
+                          sx={{
+                            fontSize: '22px',
+                          }}
+                        />
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        sx={{
+                          border: '1px solid gray',
+                          padding: '10px',
+                          marginTop: '16px',
+                        }}
+                        onClick={followArticle}
+                      >
+                        <NotificationsActiveRoundedIcon
+                          sx={{
+                            fontSize: '22px',
+                          }}
+                        />
+                      </IconButton>
+                    )}
+                  </>
+                )}
+                {profileId !== article?.user_id && (
                   <IconButton
                     sx={{
                       border: '1px solid gray',
                       padding: '10px',
-                      margin: '16px 0px',
+                      marginTop: '16px',
                     }}
-                    onClick={unFollowArticle}
+                    onClick={reportArticle}
                   >
-                    <NotificationsOffRoundedIcon
-                      sx={{
-                        fontSize: '22px',
-                      }}
-                    />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    sx={{
-                      border: '1px solid gray',
-                      padding: '10px',
-                      margin: '16px 0px',
-                    }}
-                    onClick={followArticle}
-                  >
-                    <NotificationsActiveRoundedIcon
+                    <AssistantPhotoRoundedIcon
                       sx={{
                         fontSize: '22px',
                       }}
                     />
                   </IconButton>
                 )}
-                <IconButton
-                  sx={{
-                    border: '1px solid gray',
-                    padding: '10px',
-                  }}
-                  onClick={reportArticle}
-                >
-                  <AssistantPhotoRoundedIcon
-                    sx={{
-                      fontSize: '22px',
-                    }}
-                  />
-                </IconButton>
                 {profileId === article?.user_id && (
                   <>
                     <IconButton
@@ -442,9 +454,10 @@ export default function BaiChiaSe() {
               </Box>
               <Box
                 sx={{
-                  paddingBottom: '120px',
+                  paddingBottom: '20px',
                   marginLeft: '80px',
                   width: '100%',
+                  paddingRight:"20px"
                 }}
               >
                 <Box
@@ -649,20 +662,19 @@ export default function BaiChiaSe() {
 function CreateComment(props: {
   idStatus: string;
   onSuccess: (comment: CommentType) => void;
+  value?: string;
 }) {
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const { enqueueSnackbar } = useSnackbar();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(props?.value || '');
   const [close, setClose] = useState(true);
   function handleComment() {
-    console.log(value, ' value n');
-
     articleApi
       .addComment(props.idStatus, value)
       .then((data: any) => {
         setValue('');
         const cmt: CommentType = {
-          photoURL: data?.userCmtInfor?.anh?.url,
+          photoURL: infoUser?.photoURL || '',
           name: infoUser?.name || '',
           userId: infoUser?.id || 0,
           text: data?.payload?.comment,
@@ -751,7 +763,6 @@ function CreateComment(props: {
 function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [isFinish, setIsFinish] = useState(true);
   const [comment, setComment] = useState(props?.comment);
-
   const profile = useSelector((state: RootState) => state.user.profile);
   const [isFix, setIsFix] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -819,7 +830,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
                   minWidth: '40px',
                   minHeight: '40px',
                 }}
-                src={props.comment.photoURL}
+                src={props?.comment?.photoURL}
               />
               <Box
                 sx={{

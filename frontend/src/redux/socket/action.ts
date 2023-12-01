@@ -14,15 +14,15 @@ export const SocketActionEnum = {
 
 
 export type SocketActionEnum = Enum<typeof SocketActionEnum>;
-function setOnline(idUser: number | string) {
+function setOnline(idUser: number ) {
   return typedAction(SocketActionEnum.SET_ONLINE, idUser);
 }
 
-function setOffline(idUser: number | string) {
+function setOffline(idUser: number) {
   return typedAction(SocketActionEnum.SET_OFFLINE, idUser);
 }
 
-function setAcceptFriend(idUser: number | string) {
+function setAcceptFriend(idUser: number ) {
   return typedAction(SocketActionEnum.SET_ACCEPT_FRIEND, idUser);
 }
 

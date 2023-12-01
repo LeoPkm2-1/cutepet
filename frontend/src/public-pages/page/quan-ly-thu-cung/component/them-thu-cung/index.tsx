@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 export default function ThemThuCung() {
   const [pet, setPet] = useState<PetType>({
     ten_thu_cung: '',
-    ngay_sinh: '',
+    ngay_sinh: '2023-1-1',
     gioi_tinh: 1,
     ghi_chu: '',
     ma_loai: 0,
@@ -81,6 +81,11 @@ export default function ThemThuCung() {
     console.log(pet, 'Pet nè: ');
     let url: string = '';
     setIsLoading(true);
+    if (!pet?.ten_thu_cung?.trim()) {
+      enqueueSnackbar(`Tên thú cưng bắt buộc`, { variant: 'error' });
+      setIsLoading(false);
+      return;
+    }
     if (file) {
       url = (await uploadTaskPromise(file)) as string;
     }
@@ -98,24 +103,27 @@ export default function ThemThuCung() {
       )
       .then((data) => {
         if (data?.status == 200) {
-          enqueueSnackbar('Thêm thú cưng thành công', { variant: "info" });
+          enqueueSnackbar('Thêm thú cưng thành công', { variant: 'info' });
           setIsLoading(false);
-          navigate("/home/quan-ly-thu-cung")
+          navigate('/home/quan-ly-thu-cung');
         }
-      }).catch(() => {
-        enqueueSnackbar('Thêm thú cưng thất bại', { variant: "error" });
+      })
+      .catch((err) => {
+        enqueueSnackbar(`${err?.message || 'Thêm thú cưng thất bại'}`, {
+          variant: 'error',
+        });
         setIsLoading(false);
       });
   }
 
   return (
     <>
-      <Loading open={isLoading}/>
+      <Loading open={isLoading} />
       <Box
         sx={{
           color: 'black',
           width: '100%',
-          paddingBottom: '150px',
+          paddingBottom: '20px',
         }}
       >
         <StyledTypography
@@ -183,7 +191,6 @@ export default function ThemThuCung() {
               placeholder="Nhập chiều cao"
               label="Chiều cao (cm)"
               type="number"
-              required
               value={pet.chieu_cao || null}
               onChange={(e) =>
                 setPet({
@@ -202,7 +209,6 @@ export default function ThemThuCung() {
               placeholder="Nhập cân nặng"
               label="Cân nặng (kg)"
               type="number"
-              required
               value={pet.can_nang || null}
               onChange={(e) =>
                 setPet({
@@ -225,7 +231,7 @@ export default function ThemThuCung() {
                     },
                   }}
                   label="Ngày sinh"
-                  value={dayjs('2023-11-17')}
+                  value={dayjs(pet?.ngay_sinh)}
                   onChange={(newValue) => {
                     if (newValue) {
                       console.log(newValue.format('YYYY-MM-DD'));
@@ -243,6 +249,7 @@ export default function ThemThuCung() {
             <Select
               value={pet.ma_loai}
               label="Loài"
+              required
               options={loai?.map((item) => {
                 return {
                   value: item?.ma_loai,
@@ -261,6 +268,7 @@ export default function ThemThuCung() {
             <Select
               value={pet?.ma_giong}
               label="Giống"
+              required
               options={giong?.map((item) => {
                 return {
                   value: item?.ma_giong,

@@ -5,13 +5,13 @@ import { SocketActionEnum, SocketActionTypes } from './action';
 
 type SocketState = {
   onLine: {
-    idUser: number | string;
+    idUser: number ;
   };
   offLine: {
-    idUser: number | string;
+    idUser: number;
   };
   acceptFriend: {
-    idUser: number | string;
+    idUser: number;
   };
   newPost: { post: StatusType };
   newRequestAddFriend: { request: LoiMoiType };

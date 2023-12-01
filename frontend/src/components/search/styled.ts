@@ -6,7 +6,7 @@ export const SearchButton = styled(Button)({
   textTransform: "none",
   fontFamily: "inherit",
   minWidth: "90px",
-  backgroundColor: "#1acbaa",
+  backgroundColor: "#0e647e",
   marginRight: "7px",
   borderRadius: "20px",
   "&:hover": {

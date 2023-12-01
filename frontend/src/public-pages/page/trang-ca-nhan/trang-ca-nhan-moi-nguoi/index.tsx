@@ -30,7 +30,7 @@ export default function TrangCaNhanMoiNguoi() {
 
   const [profile, setProfile] = useState<PeopleType>({
     name: '',
-    id: '',
+    id: 0,
     user: '',
     url: '',
     numberPet: 0,
@@ -69,7 +69,11 @@ export default function TrangCaNhanMoiNguoi() {
     if (id) {
       setTab('post');
       profileApi.getUserProfileById(id).then((data) => {
-        console.log(data, ' data profile');
+        if (id === `${data?.thong_tin_profile_user?.ma_nguoi_dung}`) {
+          navigate('/home/trang-ca-nhan');
+          return;
+        }
+
         setProfile({
           name: data?.thong_tin_profile_user?.ten,
           id: data?.thong_tin_profile_user?.ma_nguoi_dung,
@@ -180,7 +184,7 @@ export default function TrangCaNhanMoiNguoi() {
           setTimePost('');
         });
     }
-  }, [profile.id]);
+  }, [profile.id, id]);
 
   useEffect(() => {
     if (id && profile?.id && timePost && timePost !== 'none') {
@@ -239,7 +243,7 @@ export default function TrangCaNhanMoiNguoi() {
           setTimePost('');
         });
     }
-  }, [profile.id, timePost]);
+  }, [profile.id, timePost, id]);
 
   useEffect(() => {
     if (profile?.id == acceptUser) {
@@ -316,6 +320,32 @@ export default function TrangCaNhanMoiNguoi() {
         });
     }
   }
+  function thuHoiLoiMoi() {
+    if (profile?.id) {
+      friendApi
+        .removeRequestAddFriendById(profile?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            enqueueSnackbar(`Đã thu hồi lời mời kết bạn với ${profile?.name}`, {
+              variant: 'info',
+            });
+            setIsFriend(0);
+          } else {
+            enqueueSnackbar(
+              `${data?.message || 'Thất bại vui lòng thử lại !'}`,
+              {
+                variant: 'error',
+              }
+            );
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message || 'Thất bại vui lòng thử lại !'}`, {
+            variant: 'error',
+          });
+        });
+    }
+  }
 
   function handleSubmit(type: string) {
     if (profile?.id) {
@@ -345,7 +375,7 @@ export default function TrangCaNhanMoiNguoi() {
     <>
       <Box
         sx={{
-          paddingBottom: '120px',
+          paddingBottom: '20px',
         }}
       >
         <Box
@@ -353,12 +383,17 @@ export default function TrangCaNhanMoiNguoi() {
             display: 'flex',
             alignItems: 'center',
             padding: '0 200px',
-            justifyContent:'center'
+            justifyContent: 'center',
           }}
         >
-          <img style={{
-            borderRadius:"100%"
-          }} src={profile?.url} height={200} width={200} />
+          <img
+            style={{
+              borderRadius: '100%',
+            }}
+            src={profile?.url}
+            height={200}
+            width={200}
+          />
           <Box
             sx={{
               ml: '80px',
@@ -401,9 +436,21 @@ export default function TrangCaNhanMoiNguoi() {
               )}
 
               {isFriend == -1 && (
-                <Button disabled variant="contained" color="info">
-                  Đang chờ phản hồi
-                </Button>
+                <>
+                  <Button disabled variant="contained" color="info">
+                    Đang chờ phản hồi
+                  </Button>
+                  <Button
+                    sx={{
+                      ml: '12px',
+                    }}
+                    onClick={thuHoiLoiMoi}
+                    variant="contained"
+                    color="info"
+                  >
+                    Thu hồi
+                  </Button>
+                </>
               )}
               {isFriend == -2 && (
                 <Box

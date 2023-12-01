@@ -216,8 +216,21 @@ const getAllGiongOfPetsOwnedByUser = async (user_id) => {
     .then((data) => data.payload);
   return petList.map((pet) => pet.ma_giong);
 };
+
+const getOwnPetIdsOfUserInListOfPetIds = async (userid, petid_list=[]) => {
+  petid_list = petid_list.map((petid) => parseInt(petid));
+  const allPetIdsOfUser = await petModel
+    .getAllOwnsPetOf(userid)
+    .then((data) => data.payload)
+    .then((listpet) => listpet.map((pet) => pet.ma_thu_cung));
+
+  // console.log({ allPetIdsOfUser });
+  return petid_list.filter((petId) => allPetIdsOfUser.includes(petId));
+};
+
+
 // (async function () {
-//   const data = await getAllGiongOfPetsOwnedByUser(200);
+//   const data = await getOwnPetIdsOfUserInListOfPetIds(2,[2,40,2001]);
 //   console.log(data);
 // })();
 
@@ -235,4 +248,5 @@ module.exports = {
   getPetsIdOwnedByUserInListOfPetIds,
   getOwnerIdOfPet,
   getAllGiongOfPetsOwnedByUser,
+  getOwnPetIdsOfUserInListOfPetIds,
 };

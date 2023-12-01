@@ -131,7 +131,7 @@ export interface FriendType {
 
 export interface PeopleType {
   name: string;
-  id: string;
+  id: number;
   user: string;
   url: string;
   numberPet: number;
@@ -146,5 +146,5 @@ export interface LoiMoiType {
   name?: string;
   url?: string;
   time?: string;
-  senderID?: number | string;
+  senderID?: number;
 }
