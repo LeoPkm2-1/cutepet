@@ -431,7 +431,7 @@ const notifyLikeComment = async (
           postOwner_infor.ma_nguoi_dung == commentOwner_infor.ma_nguoi_dung,
       }
     );
-    await statusPostNotificationModel.addCmtPostNotification(
+    await statusPostNotificationModel.addLikeCommentNotification(
       commentOwner_infor.ma_nguoi_dung,
       notiInforForCommenter
     );
