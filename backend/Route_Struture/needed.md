@@ -170,3 +170,6 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 ## 94. phản hồi bình luận phải theo thứ tự thời gian
 
 ## 95. thú cưng của mình thì mới dc xóa còn của bạn bè là chỉ xem thôi.
+
+## 96. làm trang chi tiết thú cưng, có loading .
+
