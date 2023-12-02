@@ -521,6 +521,35 @@ async function preProcessGetPostHavePet(req, res, next) {
   next();
 }
 
+const checkRightToReadPostMid = async (req, res, next) => {
+  const { visibility } = req.body.STATUS_POST_INFOR;
+  const reader_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const owner_id = parseInt(req.body.STATUS_POST_INFOR.owner_id);
+  const userTaggedIdList = req.body.STATUS_POST_INFOR.taggedUsers.map(
+    (user) => user.ma_nguoi_dung
+  );
+  console.log({ userTaggedIdList });
+  const isTagged = userTaggedIdList.includes(reader_id);
+  console.log({ isTagged });
+
+  const isFriend = await banBeHelper.haveFriendShipBetween(reader_id, owner_id);
+  if (reader_id == owner_id || visibility == "PUBLIC") {
+    next();
+    return;
+  } else if (visibility == "JUST_FRIENDS" && isFriend) {
+    next();
+    return;
+  } else if (visibility == "PRIVATE" && isTagged) {
+    next();
+    return;
+  }
+
+  res
+    .status(400)
+    .json(new Response(400, {}, "Bài viết này không thể xem", 300, 300));
+  return;
+};
+
 module.exports = {
   preProcessAddPost,
   preProcessLikePost,
@@ -542,4 +571,5 @@ module.exports = {
   preProcessUpdatePost_2,
   preProccessToGetNewFeed,
   preProcessGetPostHavePet,
+  checkRightToReadPostMid,
 };

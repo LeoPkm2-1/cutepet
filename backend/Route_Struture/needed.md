@@ -173,3 +173,6 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 
 ## 96. làm trang chi tiết thú cưng, có loading .
 
+## 97. khi xem chi tiết của 1 bài viết, nếu là người chủ thì phải cho họ có thể chỉnh sửa hoặc xóa bài viết đó.
+
+![](../media/img/err/img28.png)

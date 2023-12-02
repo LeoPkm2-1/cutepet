@@ -70,7 +70,10 @@ router.post(
 
 router.post(
   "/getPost",
-  [statusPostMiddle.checkPostExistMid],
+  [
+    statusPostMiddle.checkPostExistMid,
+    statusPostMiddle.checkRightToReadPostMid,
+  ],
   statusPostController.getPostController
 );
 
