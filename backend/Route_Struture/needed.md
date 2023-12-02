@@ -101,7 +101,7 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 ## 69. con lăn trong mạng xãi hội có vấn đề
 
-## 70. --- Chưa hiểu ---- ảnh giao diện của thông báo nhảy ra góc dưới bên phải có vấn đề, trong cả trang mạng xã hội lẫn trang cá nhân
+## 70. --- OK---- ảnh giao diện của thông báo nhảy ra góc dưới bên phải có vấn đề, trong cả trang mạng xã hội lẫn trang cá nhân
 
 ## 70.--- DONE--- cần kiểm tra lại tất cả các hình ảnh và tên của thông báo góc bên phải khi socket đến
 
@@ -155,3 +155,18 @@ chưa tet được do tự động điều hướng sang trang cá nhân khi mu�
 ## 88. khi bấm vào con thú thì thông tin chủ nhân của nó bị sai backend đã sửa lại API cũ
 
 chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con-thú-cụ-thể)** và **postman số 71**
+
+## 89. them6 trang chi tiết thú cưng.
+
+## 90. thêm đoạn mô tả ở flag cả ở trang mạng xã hội lẫn chia sẻ kiến thức
+
+## 91. sửa lại state khi cập nhật.
+
+## 92. chấp nhận hay xóa lời mời kết bạn khi đã bị thu hồi.
+
+## 93. người dùng truy cập vào bài viết không phù hợp
+
+
+## 94. phản hồi bình luận phải theo thứ tự thời gian
+
+## 95. thú cưng của mình thì mới dc xóa còn của bạn bè là chỉ xem thôi.
