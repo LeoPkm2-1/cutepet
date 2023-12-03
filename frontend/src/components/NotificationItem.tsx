@@ -6,6 +6,7 @@ import notiApi from '../api/noti';
 import { useDispatch, useSelector } from 'react-redux';
 import { NotiActions } from '../redux/noti';
 import { RootState } from '../redux';
+import { SocketActions } from '../redux/socket';
 type Props = {
   name?: string;
   url?: string;
@@ -68,6 +69,7 @@ export function NotifycationItemClick(props: Props) {
   }, [props?.idPost, props?.isReaded]);
   const numNoti = useSelector((state:RootState) => state?.noti?.numNoti)
   const dispatch = useDispatch();
+
   function naviga(){
     if(props?.isRequestFriend){
       return `/home/trang-ca-nhan-nguoi-dung/${props?.idPost}`
@@ -78,6 +80,9 @@ export function NotifycationItemClick(props: Props) {
     if(props?.isArticle){
       return `/home/trang-chia-se/${props?.idPost}`;
 
+    }
+    if(props?.idPost){
+      dispatch(SocketActions.setHasPostId(props?.idPost));
     }
     return `post/${props?.idPost}`;
   }

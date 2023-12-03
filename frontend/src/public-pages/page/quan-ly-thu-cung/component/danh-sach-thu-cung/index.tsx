@@ -14,7 +14,11 @@ import ArticleIcon from '@mui/icons-material/Article';
 import { useShowDialog } from '../../../../../hooks/dialog';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-export function DanhSachThuCung(props: { pet: PetType; onRemove?: () => void }) {
+export function DanhSachThuCung(props: {
+  pet: PetType;
+  onRemove?: () => void;
+  isManager?: boolean;
+}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -127,88 +131,94 @@ export function DanhSachThuCung(props: { pet: PetType; onRemove?: () => void }) 
             </StyledTypography>
           </Box>
         </Box>
-        <IconButton
-          color="inherit"
-          sx={{
-            position: 'absolute',
-            right: '0px',
-            // backgroundColor:"#fff"
-          }}
-          onClick={handleClick}
-        >
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          sx={{
-            fontFamily: 'quicksand',
-          }}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <MenuItem
-            sx={{
-              fontFamily: 'quicksand',
-              display: 'flex',
-              justifyContent: 'space-between',
-              minWidth: '150px',
-            }}
-            onClick={handleDelete}
-          >
-            <span>Xóa</span>{' '}
-            <DeleteOutlineIcon
+        {props?.isManager && (
+          <>
+            <IconButton
+              color="inherit"
               sx={{
-                color: 'gray',
+                position: 'absolute',
+                right: '0px',
+                // backgroundColor:"#fff"
               }}
-            />
-          </MenuItem>
-          <MenuItem
-            sx={{
-              fontFamily: 'quicksand',
-              display: 'flex',
-              justifyContent: 'space-between',
-              minWidth: '150px',
-            }}
-            onClick={handleDelete}
-          >
-            <span> Chỉnh sửa </span>{' '}
-            <BuildIcon
+              onClick={handleClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
               sx={{
-                color: 'gray',
+                fontFamily: 'quicksand',
               }}
-            />
-          </MenuItem>
-          <MenuItem
-            sx={{
-              fontFamily: 'quicksand',
-              display: 'flex',
-              justifyContent: 'space-between',
-              minWidth: '180px',
-            }}
-            onClick={() => {
-              navigate(`/home/bai-viet-thu-cung/${props?.pet?.ma_thu_cung}`);
-            }}
-          >
-            <span> Xem bài viết </span>{' '}
-            <ArticleIcon
-              sx={{
-                color: 'gray',
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
               }}
-            />
-          </MenuItem>
-        </Menu>
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <MenuItem
+                sx={{
+                  fontFamily: 'quicksand',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  minWidth: '150px',
+                }}
+                onClick={handleDelete}
+              >
+                <span>Xóa</span>{' '}
+                <DeleteOutlineIcon
+                  sx={{
+                    color: 'gray',
+                  }}
+                />
+              </MenuItem>
+              <MenuItem
+                sx={{
+                  fontFamily: 'quicksand',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  minWidth: '150px',
+                }}
+                onClick={handleDelete}
+              >
+                <span> Chỉnh sửa </span>{' '}
+                <BuildIcon
+                  sx={{
+                    color: 'gray',
+                  }}
+                />
+              </MenuItem>
+              <MenuItem
+                sx={{
+                  fontFamily: 'quicksand',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  minWidth: '180px',
+                }}
+                onClick={() => {
+                  navigate(
+                    `/home/bai-viet-thu-cung/${props?.pet?.ma_thu_cung}`
+                  );
+                }}
+              >
+                <span> Xem bài viết </span>{' '}
+                <ArticleIcon
+                  sx={{
+                    color: 'gray',
+                  }}
+                />
+              </MenuItem>
+            </Menu>
+          </>
+        )}
       </Box>
     </>
   );
