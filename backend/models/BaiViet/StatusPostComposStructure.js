@@ -50,10 +50,11 @@ class ReplyComment {
 
 class ReportPost {
   static type = "REPORT_STATUS_POST";
-  constructor(postId, reportBy) {
+  constructor(postId, reportBy, reportReason = "") {
     this.type = this.constructor.type;
     this.postId = postId;
     this.reportBy = reportBy;
+    this.reportReason = reportReason;
     this.handleStatus = "PENDING";
     this.reportAt = new Date();
     this.handleAt = null;

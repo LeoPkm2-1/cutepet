@@ -127,11 +127,17 @@ async function hasUserReportPost(user_report_id, post_id) {
   return true;
 }
 
-async function reportPost(post_id, user_report_id, isUnique = true) {
+async function reportPost(
+  post_id,
+  user_report_id,
+  reportReason = "",
+  isUnique = true
+) {
   if (!isUnique) {
     const reportProcess = await StatusPostModel.reportPost(
       post_id,
-      user_report_id
+      user_report_id,
+      reportReason
     );
     return reportProcess;
   }
@@ -153,7 +159,11 @@ async function reportPost(post_id, user_report_id, isUnique = true) {
       errcode: null,
     };
   }
-  return await StatusPostModel.reportPost(post_id, user_report_id);
+  return await StatusPostModel.reportPost(
+    post_id,
+    user_report_id,
+    reportReason
+  );
 }
 
 async function hasUserCommentedPost(user_id, post_id) {

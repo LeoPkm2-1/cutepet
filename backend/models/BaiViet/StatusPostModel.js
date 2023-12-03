@@ -836,11 +836,12 @@ const getOnwerIdOfComment = async (comment_id) => {
     : parseInt(commentInfor.commentBy);
 };
 
-const reportPost = async (post_id, user_report_id) => {
+const reportPost = async (post_id, user_report_id, reportReason = "") => {
   user_report_id = parseInt(user_report_id);
   const reportObject = new StatusPostComposStructure.ReportPost(
     post_id,
-    user_report_id
+    user_report_id,
+    reportReason
   );
   // console.log(reportObject);
   async function executor(collection) {
