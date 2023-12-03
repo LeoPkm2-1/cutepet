@@ -1,5 +1,6 @@
 backend/node_modules/
-backend/test/
+# backend/test/
+backend/test_code/
 backend/.env
 frontend/node_modules
 .prettierignore

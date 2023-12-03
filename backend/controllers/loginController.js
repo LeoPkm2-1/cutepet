@@ -16,6 +16,7 @@ const handlLogin = async (req, res) => {
   const INFOR_NOT_MATCH_MES = "thông tin đăng nhập không đúng";
   const { tai_khoan: userIndentifier } = req.body;
   const { mat_khau: drawPass } = req.body;
+  console.log("userIndentifier", userIndentifier);
   try {
     const { match, userInfor } = await checkUsernameAndPass(
       userIndentifier,

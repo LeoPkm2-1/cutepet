@@ -1028,7 +1028,7 @@ const getPostHavePetController = async (req, res) => {
       num
     );
     await statusPostHelper.InsertOwnerInforOfListPosts(posts.payload);
-    console.log(posts);
+    // console.log(posts);
     res
       .status(200)
       .json(new Response(200, posts.payload, "Lấy dữ liệu thành công"));
