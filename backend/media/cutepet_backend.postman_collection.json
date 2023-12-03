@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "amandawilcox",
+							"value": "leo",
 							"type": "text"
 						},
 						{
@@ -2615,6 +2615,11 @@
 							"key": "article_id",
 							"value": "65555eee151a2e67690ca296",
 							"type": "text"
+						},
+						{
+							"key": "report_Reason",
+							"value": "tệ",
+							"type": "text"
 						}
 					]
 				},
@@ -2655,6 +2660,11 @@
 						{
 							"key": "post_id",
 							"value": "654fae52a09d67af78165cb9",
+							"type": "text"
+						},
+						{
+							"key": "report_Reason",
+							"value": "tệ lắm",
 							"type": "text"
 						}
 					]
@@ -3107,12 +3117,14 @@
 						{
 							"key": "before",
 							"value": "2023-11-23T16:55:11z",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						},
 						{
 							"key": "num",
 							"value": "",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -3243,6 +3255,77 @@
 			"response": []
 		},
 		{
+			"name": "75_friend_getListOfAllUserrecievedRequestAddFriendFromMe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_4}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/friend/getListOfAllUserrecievedRequestAddFriendFromMe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"getListOfAllUserrecievedRequestAddFriendFromMe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "76_getPostBypost_id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "6550dec7bd7587177b41a789",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getPost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getPost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user-infor",
 			"request": {
 				"auth": {
@@ -3297,47 +3380,6 @@
 					"port": "3000",
 					"path": [
 						"logout"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getPostBypost_id",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "post_id",
-							"value": "6550dec7bd7587177b41a789",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/post/statusPost/getPost",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"post",
-						"statusPost",
-						"getPost"
 					]
 				}
 			},
@@ -3435,36 +3477,6 @@
 							"value": "2",
 							"disabled": true
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "75_friend_getListOfAllUserrecievedRequestAddFriendFromMe",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token_user_4}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/friend/getListOfAllUserrecievedRequestAddFriendFromMe",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"friend",
-						"getListOfAllUserrecievedRequestAddFriendFromMe"
 					]
 				}
 			},

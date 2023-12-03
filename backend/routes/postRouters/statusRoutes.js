@@ -156,7 +156,7 @@ router.post(
 
 router.post(
   "/reportPost",
-  [statusPostMiddle.checkPostExistMid],
+  [statusPostMiddle.checkPostExistMid, statusPostMiddle.preProcessReportPost],
   statusPostController.reportPostController
 );
 

@@ -435,11 +435,12 @@ const updateArticle = async (article_id, edited_Article_Obj) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-const reportArticle = async (article_id, user_report_id) => {
+const reportArticle = async (article_id, user_report_id, reportReason = "") => {
   user_report_id = parseInt(user_report_id);
   const reportObject = new articleComposStructure.ReportArticle(
     article_id,
-    user_report_id
+    user_report_id,
+    reportReason
   );
   async function executor(collection) {
     return await collection.insertOne(reportObject);

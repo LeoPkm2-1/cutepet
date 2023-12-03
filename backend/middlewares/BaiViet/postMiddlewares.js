@@ -550,6 +550,12 @@ const checkRightToReadPostMid = async (req, res, next) => {
   return;
 };
 
+const preProcessReportPost = async (req, res, next) => {
+  let { report_Reason } = req.body;
+  req.body.report_Reason = report_Reason.trim();
+  next();
+};
+
 module.exports = {
   preProcessAddPost,
   preProcessLikePost,
@@ -572,4 +578,5 @@ module.exports = {
   preProccessToGetNewFeed,
   preProcessGetPostHavePet,
   checkRightToReadPostMid,
+  preProcessReportPost,
 };

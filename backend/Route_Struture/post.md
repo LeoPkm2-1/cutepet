@@ -913,7 +913,8 @@ nếu bình luận không tồn tại:
 
 ```javascript
 {
-    post_id: string (bắt buộc)
+    post_id: string (bắt buộc),
+    report_Reason: string (bắt buộc),
 }
 ```
 

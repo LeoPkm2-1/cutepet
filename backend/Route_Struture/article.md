@@ -1222,7 +1222,8 @@ trong đó:
 
 ```javascript
 {
-    article_id: string (bắt buộc)
+    article_id: string (bắt buộc),
+    report_Reason: string (bắt buộc)
 }
 ```
 

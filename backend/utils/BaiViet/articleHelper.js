@@ -123,11 +123,17 @@ async function hasUserReportArticle(user_report_id, article_id) {
   return true;
 }
 
-async function reportArticle(article_id, user_report_id, isUnique = true) {
+async function reportArticle(
+  article_id,
+  user_report_id,
+  reportReason = "",
+  isUnique = true
+) {
   if (!isUnique) {
     const reportProcess = await articleModel.reportArticle(
       article_id,
-      user_report_id
+      user_report_id,
+      reportReason
     );
     return reportProcess;
   }
@@ -149,7 +155,11 @@ async function reportArticle(article_id, user_report_id, isUnique = true) {
       errcode: null,
     };
   }
-  return await articleModel.reportArticle(article_id, user_report_id);
+  return await articleModel.reportArticle(
+    article_id,
+    user_report_id,
+    reportReason
+  );
 }
 
 const filterValidCategoryTags = async (categoryTags) => {
