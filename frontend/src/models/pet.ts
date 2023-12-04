@@ -1,5 +1,5 @@
 export interface PetType {
-  ten_thu_cung: string;
+  ten_thu_cung?: string;
   ngay_sinh?: string;
   gioi_tinh?: number;
   ghi_chu?: string;
@@ -11,4 +11,5 @@ export interface PetType {
   ten_giong?:string;
   ten_loai?: string;
   ma_thu_cung?:number;
+  ma_nguoi_chu?: number;
 }

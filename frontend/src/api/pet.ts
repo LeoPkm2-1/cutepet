@@ -74,6 +74,32 @@ const getPostHavePet = (pet_id: number |string, before: any, num: number) => {
   });
 };
 
+
+const getPetById = (pet_id: number|string) => {
+  return authRequest<any>({
+    url: `/pet/infor`,
+    method: 'POST',
+    body: {
+      pet_id,
+    },
+  });
+};
+
+const updatePetById = (pet_id: number|string, ten_thu_cung:string,ngay_sinh:string, gioi_tinh:number, ghi_chu: string, ma_giong: number) => {
+  return authRequest<any>({
+    url: `/pet/capnhatthongtin/${pet_id}`,
+    method: 'POST',
+    body: {
+      ten_thu_cung,
+      ngay_sinh,
+      gioi_tinh,
+      ghi_chu,
+      ma_giong
+    },
+  });
+};
+
+
 const petApi = {
   getLoai,
   getAllPet,
@@ -81,6 +107,8 @@ const petApi = {
   getGiong,
   deletePet,
   getPostHavePet,
+  getPetById,
+  updatePetById
 };
 
 export default petApi;

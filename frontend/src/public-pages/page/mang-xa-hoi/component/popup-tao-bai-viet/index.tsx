@@ -509,14 +509,14 @@ export default function PopUpCreatePost(props: Props) {
                                 ...petsTag,
                                 {
                                   id: item?.ma_thu_cung || 0,
-                                  name: item?.ten_thu_cung,
+                                  name: item?.ten_thu_cung ||"",
                                 },
                               ]);
                             }
                           }}
                           isSelect={isSele}
                           id={item?.ma_thu_cung || ''}
-                          name={item?.ten_thu_cung}
+                          name={item?.ten_thu_cung ||""}
                           user={item?.ten_giong || ''}
                           url={item?.url_anh || ''}
                           isOnline={false}

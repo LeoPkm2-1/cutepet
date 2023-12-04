@@ -86,6 +86,8 @@ export function NotifycationItemClick(props: Props) {
     }
     return `post/${props?.idPost}`;
   }
+
+
   return (
     <>
       <Link

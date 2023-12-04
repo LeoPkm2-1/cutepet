@@ -99,6 +99,7 @@ export default function PostComponent(props: Props) {
                 name: tagPet?.ten_thu_cung,
               };
             }),
+            owner_id: data?.payload?.owner_id,
           };
           setStatus(sta);
         }
@@ -425,6 +426,7 @@ export default function PostComponent(props: Props) {
                     )}
                   </Typography>
                   <Typography
+                  onClick = {() => navigate(`/home/post/${status?.id}`)}
                     sx={{
                       fontFamily: 'quicksand',
                       fontWeight: '400',
@@ -432,6 +434,7 @@ export default function PostComponent(props: Props) {
                       color: 'gray',
                       display: 'flex',
                       alignItems: 'center',
+                      cursor:'pointer'
                     }}
                   >
                     <span
@@ -598,7 +601,7 @@ export default function PostComponent(props: Props) {
                 return (
                   <span
                     onClick={() => {
-                      navigate(`/home/bai-viet-thu-cung/${pet?.id}`);
+                      navigate(`/home/thong-tin-thu-cung/${pet?.id}`);
                     }}
                     style={{
                       fontFamily: 'quicksand',
@@ -837,7 +840,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
     if (props.comment.id) {
       postApi.getAllReply(props.comment.id).then((data) => {
         if (data?.status == 200) {
-          const reps = data?.payload?.replies?.map((item: any) => {
+          const reps: CommentType[] = data?.payload?.replies?.map((item: any) => {
             return {
               photoURL: item?.userReplyInfor?.anh?.url,
               name: item?.userReplyInfor?.ten,
@@ -849,7 +852,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
             } as CommentType;
           });
           console.log('lấy phản hổi thanh cong', reps);
-          setReplys(reps);
+          setReplys(reps.reverse());
           setIsFinish(true);
           return;
         }
