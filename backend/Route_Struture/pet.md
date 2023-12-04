@@ -326,7 +326,51 @@
 }
 ```
 
-##
+## 7. chỉnh sửa thông tin cơ bản cho thú cưng
+
+(**postman số 77**)
+
+1. phương thức:
+
+   POST http://localhost:3000/pet/capnhatthongtin/:pet_id
+
+2. cấu trúc:
+
+```javascript
+{
+  ten_thu_cung: string;
+  ngay_sinh: string;
+  gioi_tinh: boolean;
+  ghi_chu: string;
+  ma_giong: number;
+}
+```
+
+3. trả về:
+
+- khi không có quyền:
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Người dùng không thể chỉ sửa thú cưng mà không sở hữu",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": [],
+    "message": "cập nhật thú cưng thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
 
 ##
 
