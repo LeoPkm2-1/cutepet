@@ -201,7 +201,17 @@ function LoiMoi(props: PropsLoiMoi) {
         }
         props?.onSuccess();
         dispatth(SocketActions.setNewRequest({}));
+      }else if( data?.status == 400){
+        enqueueSnackbar(`Không tồn tại lời mời kết bạn`, {
+          variant: "error",
+        });
       }
+    }).catch((err) => {
+      enqueueSnackbar(`${err?.message}`, {
+        variant: "error",
+      });
+      props?.onSuccess();
+
     });
   }
 

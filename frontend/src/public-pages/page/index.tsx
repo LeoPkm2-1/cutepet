@@ -34,6 +34,7 @@ import MeRouting from './trang-ca-nhan/chinh-sua-trang-ca-nhan';
 import ChangePasswordPage from './trang-ca-nhan/chinh-sua-trang-ca-nhan/change-pass';
 import BaiVietThuCung from './quan-ly-thu-cung/component/bai-viet-thu-cung';
 import UpdatePost from './mang-xa-hoi/component/chinh-sua-bai-viet';
+import ChinhSuaThuCung from './quan-ly-thu-cung/component/chinh-sua-thu-cung';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -308,7 +309,7 @@ export default function PageRouting() {
               <Route path="mang-xa-hoi" element={<MangXaHoi />} />
               {/* <Route path="chinh-sua-bai-viet-trang-thai/:id" element={<UpdatePost />} /> */}
               <Route
-                path="bai-viet-thu-cung/:id"
+                path="thong-tin-thu-cung/:id"
                 element={<BaiVietThuCung />}
               />
               <Route path="trang-ca-nhan" element={<TrangCaNhan />} />
@@ -326,6 +327,7 @@ export default function PageRouting() {
                 element={<TrangCaNhanMoiNguoi />}
               />
               <Route path="quan-ly-thu-cung" element={<QuanLyThuCung />} />
+              <Route path="chinh-sua-thu-cung/:id" element={<ChinhSuaThuCung />} />
               <Route path="them-thu-cung" element={<ThemThuCung />} />
               <Route path="ban-be" element={<FriendList />} />
               <Route path="trang-chia-se" element={<TrangChiaSe />} />

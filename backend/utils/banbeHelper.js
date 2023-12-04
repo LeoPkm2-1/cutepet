@@ -5,6 +5,11 @@ async function haveFriendShipBetween(idUser_1, idUser_2) {
   return data.payload.length > 0;
 }
 
+// (async function () {
+//   const isFriend = await haveFriendShipBetween(3,1);
+//   console.log({isFriend});
+// })()
+
 async function getFriendsIdInListOfUserId(yourId, list_Userids) {
   const data = await Promise.all(
     list_Userids.map(async (userId) => {

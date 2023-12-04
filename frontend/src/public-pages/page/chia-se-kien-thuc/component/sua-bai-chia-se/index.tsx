@@ -24,6 +24,7 @@ export function SuaBaiChiaSe() {
   const navigate = useNavigate();
   const [isData, setIsData] = useState(true);
   const [urlCover, setUrlCover] = useState('');
+  const [isOwnerId, setIsOwnerId] = useState(0);
   const [article, setArticle] = useState<ArticleType>({
     id: '',
     title: '',
@@ -35,6 +36,7 @@ export function SuaBaiChiaSe() {
     user_name: '',
   });
 
+
   const { id } = useParams();
   useEffect(() => {
     if (id) {
@@ -43,7 +45,6 @@ export function SuaBaiChiaSe() {
         .then((data) => {
           if (data?.status == 200) {
             console.log(data, 'data arcticle ');
-
             const art = {
               id: data?.payload?._id,
               title: data?.payload?.title,
@@ -58,6 +59,7 @@ export function SuaBaiChiaSe() {
               numUpVote: data?.payload?.numOfUpVote,
               numDownVote: data?.payload?.numOfDownVote,
             };
+            
             setTitle(data?.payload?.title);
             setDecrition(data?.payload?.intro);
             setTag(data?.payload?.categories);

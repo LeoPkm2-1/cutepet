@@ -28,4 +28,8 @@ router.use("/post", requireLogined, postRoutes);
 router.use("/friend", requireLogined, friendRoutes);
 router.use("/notification", requireLogined, notificationRoutes);
 router.use("/profile", requireLogined, profileRoutes);
+router.post("/test_api", (req, res) => {
+    const temp = req.body.temp
+    res.status(200).json({ temp:temp+' 111' })
+});
 module.exports = router;

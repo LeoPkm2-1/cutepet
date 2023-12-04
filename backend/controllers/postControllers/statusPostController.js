@@ -711,11 +711,12 @@ const followPostController = async (req, res) => {
 };
 
 const reportPostController = async (req, res) => {
-  const { post_id } = req.body;
+  const { post_id, report_Reason } = req.body;
   const user_report_id = req.auth_decoded.ma_nguoi_dung;
   const reportProcess = await statusPostHelper.reportPost(
     post_id,
     user_report_id,
+    report_Reason,
     true
   );
   res.status(200).json(reportProcess);
@@ -1028,7 +1029,7 @@ const getPostHavePetController = async (req, res) => {
       num
     );
     await statusPostHelper.InsertOwnerInforOfListPosts(posts.payload);
-    console.log(posts);
+    // console.log(posts);
     res
       .status(200)
       .json(new Response(200, posts.payload, "Lấy dữ liệu thành công"));

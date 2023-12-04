@@ -27,7 +27,7 @@ export default function TrangCaNhanMoiNguoi() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [tab, setTab] = useState('post');
-  const userProfile = useSelector((state:RootState) => state.user.profile)
+  const userProfile = useSelector((state: RootState) => state.user.profile);
 
   const [profile, setProfile] = useState<PeopleType>({
     name: '',
@@ -125,6 +125,7 @@ export default function TrangCaNhanMoiNguoi() {
             ngay_sinh: item?.ngay_sinh,
             gioi_tinh: item?.gioi_tinh,
             url_anh: item?.anh?.url,
+            ma_thu_cung: item?.ma_thu_cung,
           } as PetType;
         });
         setListPet(pets);
@@ -141,6 +142,8 @@ export default function TrangCaNhanMoiNguoi() {
             console.log(data, 'data lan 1');
             if (data?.payload?.length == 0) {
               setTimePost('');
+              setListPost([]);
+
               return;
             }
             const list: StatusType[] = data?.payload?.map((item: any) => {
@@ -350,25 +353,33 @@ export default function TrangCaNhanMoiNguoi() {
 
   function handleSubmit(type: string) {
     if (profile?.id) {
-      friendApi.responeAddFriend(profile?.id, type).then((data) => {
-        console.log(data, ' dtata nef');
-        if (data?.status == 200) {
-          if (data?.payload?.accepted) {
-            enqueueSnackbar(`Kết bạn với ${profile?.name} thành công`, {
-              variant: 'info',
-            });
-            setIsFriend(1);
-          } else {
-            enqueueSnackbar(
-              `Xóa lời mời kết bạn với ${profile?.name} thành công`,
-              {
+      friendApi
+        .responeAddFriend(profile?.id, type)
+        .then((data) => {
+          console.log(data, ' dtata nef');
+          if (data?.status == 200) {
+            if (data?.payload?.accepted) {
+              enqueueSnackbar(`Kết bạn với ${profile?.name} thành công`, {
                 variant: 'info',
-              }
-            );
-            setIsFriend(0);
+              });
+              setIsFriend(1);
+            } else {
+              enqueueSnackbar(
+                `Xóa lời mời kết bạn với ${profile?.name} thành công`,
+                {
+                  variant: 'info',
+                }
+              );
+              setIsFriend(0);
+            }
           }
-        }
-      });
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, {
+            variant: 'error',
+          });
+          setIsFriend(0);
+        });
     }
   }
 
@@ -678,10 +689,25 @@ export default function TrangCaNhanMoiNguoi() {
               display: tab == 'post' ? 'block' : 'none',
             }}
           >
-            {listPost &&
+            {listPost?.length ? (
               listPost?.map((status) => {
                 return <PostComponent status={status} />;
-              })}
+              })
+            ) : (
+              <>
+                <Typography
+                  align="center"
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontSize: '16px',
+                    fontWeight: '500',
+                    color: 'gray',
+                  }}
+                >
+                  Chưa có bài viết{' '}
+                </Typography>
+              </>
+            )}
           </Box>
           <Box
             sx={{

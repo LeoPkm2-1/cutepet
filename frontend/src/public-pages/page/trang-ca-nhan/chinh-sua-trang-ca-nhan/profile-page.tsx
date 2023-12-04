@@ -76,8 +76,9 @@ function UpdateProfilePage() {
     e.preventDefault();
     console.log(profile, ' profile');
     setLoading(true);
+    let url = profile?.url;
     if (file) {
-      const url = (await uploadTaskPromise(file)) as string;
+      url = (await uploadTaskPromise(file)) as string;
       profileApi.updateAvatar(url).catch((err) => {
         enqueueSnackbar(`${err?.message || 'Thất bại vui lòng thử lại !'}`, {
           variant: 'error',
@@ -102,7 +103,7 @@ function UpdateProfilePage() {
             name: profile?.name,
             email:profile?.email || '',
             age: profile?.ngay_sinh || '',
-            photoURL: profile?.url,
+            photoURL: url,
           };
           dispatch(UserActions.setProfile(newProfile));
         }
