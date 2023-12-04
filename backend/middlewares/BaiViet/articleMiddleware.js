@@ -508,6 +508,14 @@ const navigateToSuitableFilterArricleMid = async (req, res, next) => {
   }
 };
 
+const preProcessReport = async (req, res, next) => {
+  let { report_Reason } = req.body;
+  req.body.report_Reason = report_Reason.trim();
+  // res.send({ report_Reason: req.body.report_Reason });
+  // return;
+  next();
+};
+
 module.exports = {
   preProcessAddArtticle,
   checkArticleExistMid,
@@ -527,6 +535,7 @@ module.exports = {
   prePageingForArticle,
   preFilterArticleMid,
   navigateToSuitableFilterArricleMid,
+  preProcessReport,
   // preProcessFilterArticle_1,
   // preProcessFilterArticle_2,
 };

@@ -49,10 +49,11 @@ class ReplyCommentArticle {
 
 class ReportArticle {
   static type = "REPORT_ARTICLE";
-  constructor(articleId, reportBy) {
+  constructor(articleId, reportBy, reportReason = "") {
     this.type = this.constructor.type;
     this.articleId = articleId;
     this.reportBy = reportBy;
+    this.reportReason = reportReason;
     this.handleStatus = "PENDING";
     this.reportAt = new Date();
     this.handleAt = null;

@@ -556,11 +556,12 @@ async function editArticleController(req, res) {
 }
 
 const reportArticleController = async (req, res) => {
-  const { article_id } = req.body;
+  const { article_id, report_Reason } = req.body;
   const user_report_id = req.auth_decoded.ma_nguoi_dung;
   const reportProcess = await articleHelper.reportArticle(
     article_id,
     user_report_id,
+    report_Reason,
     true
   );
   res.status(200).json(reportProcess);

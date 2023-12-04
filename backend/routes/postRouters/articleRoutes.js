@@ -143,7 +143,7 @@ router.post(
 // tố cáo bài viết chia sẻ trạng thái
 router.post(
   "/reportArticle",
-  [articleMiddle.checkArticleExistMid],
+  [articleMiddle.checkArticleExistMid,articleMiddle.preProcessReport],
   articleController.reportArticleController
 );
 
