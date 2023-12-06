@@ -89,7 +89,15 @@ thiếu nút ấn chỉnh sửa khi vào bài viết trang chi tiết của bài
 chưa tet được do tự động điều hướng sang trang cá nhân khi muốn vào trang bạn bè
 
 
-## 84. khi đã đứng ở trong bài viết chia sẻ trạng thái mà có bấm vào thông báo navigate đến bài viết đó thì không cập nhật lại danh sách mới nhất
+
+## ---DONE--- || ==DONE== 72. load bài viết chia sẻ trạng thái theo thú cưng được tags
+
+   thông tin về người chủ và bài viết không chính xác, do BE quên trả về thông tin người dùng nên là sai => đã sửa lại ở BE => cập nhật lại.
+
+
+## --DONE-- 84. khi đã đứng ở trong bài viết chia sẻ trạng thái mà có bấm vào thông báo navigate đến bài viết đó thì không cập nhật lại danh sách mới nhất
+
+
 
 
 
@@ -101,28 +109,26 @@ chưa tet được do tự động điều hướng sang trang cá nhân khi mu�
 
 ## 87. khi vào trang của bạn bè thì tự động điều hướng sang trang cá nhân
 
-## 88. khi bấm vào con thú thì thông tin chủ nhân của nó bị sai backend đã sửa lại API cũ
+## ---DONE--- 88. khi bấm vào con thú thì thông tin chủ nhân của nó bị sai backend đã sửa lại API cũ
 
 chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con-thú-cụ-thể)** và **postman số 71**
 
-## 89. them6 trang chi tiết thú cưng.
+## ---DONE--- 89. them6 trang chi tiết thú cưng.
 
 ## 90. thêm đoạn mô tả ở flag cả ở trang mạng xã hội lẫn chia sẻ kiến thức
 
-## 91. sửa lại state khi cập nhật.
+## ---DOEN--- 91. sửa lại state khi cập nhật.
 
-## 92. chấp nhận hay xóa lời mời kết bạn khi đã bị thu hồi.
-
-## 93. người dùng truy cập vào bài viết không phù hợp
+## --DONE--- 92. chấp nhận hay xóa lời mời kết bạn khi đã bị thu hồi.
 
 
-## 94. phản hồi bình luận phải theo thứ tự thời gian
+## --DONE-- 94. phản hồi bình luận phải theo thứ tự thời gian
 
-## 95. thú cưng của mình thì mới dc xóa còn của bạn bè là chỉ xem thôi.
+## ----DONE---- 95. thú cưng của mình thì mới dc xóa còn của bạn bè là chỉ xem thôi.
 
-## 96. làm trang chi tiết thú cưng, có loading .
+## ---DONE--- 96. làm trang chi tiết thú cưng, có loading .
 
-## 97. khi xem chi tiết của 1 bài viết, nếu là người chủ thì phải cho họ có thể chỉnh sửa hoặc xóa bài viết đó.
+## ---DONE---- 97. khi xem chi tiết của 1 bài viết, nếu là người chủ thì phải cho họ có thể chỉnh sửa hoặc xóa bài viết đó.
 
 ![](../media/img/err/img28.png)
 

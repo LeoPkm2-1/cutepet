@@ -52,6 +52,7 @@ export function QuanLyThuCung() {
                   return (
                     <Grid item xs={4}>
                       <DanhSachThuCung
+                        isManager
                         onRemove={() => {
                           const list: PetType[] = deepCopy(listPet);
                           list.splice(index, 1);

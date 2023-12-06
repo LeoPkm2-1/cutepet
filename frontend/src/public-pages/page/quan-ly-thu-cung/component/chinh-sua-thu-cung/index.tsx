@@ -15,9 +15,9 @@ import petApi from '../../../../../api/pet';
 import { uploadTaskPromise } from '../../../../../api/upload';
 import { useSnackbar } from 'notistack';
 import Loading from '../../../../../components/loading';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default function ThemThuCung() {
+export default function ChinhSuaThuCung() {
   const [pet, setPet] = useState<PetType>({
     ten_thu_cung: '',
     ngay_sinh: '2023-1-1',
@@ -29,7 +29,7 @@ export default function ThemThuCung() {
     chieu_cao: 0,
     can_nang: 0,
   });
-
+  const { id } = useParams();
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -46,6 +46,28 @@ export default function ThemThuCung() {
       ten_giong: string;
     }[]
   >([]);
+
+  useEffect(() => {
+    if (id) {
+      petApi?.getPetById(id).then((data) => {
+        if (data?.status == 200) {
+          const pet: PetType = {
+            ten_thu_cung: data?.payload?.ten_thu_cung,
+            ngay_sinh: data?.payload?.ngay_sinh,
+            gioi_tinh: data?.payload?.gioi_tinh,
+            ghi_chu: data?.payload?.ghi_chu,
+            url_anh: data?.payload?.anh?.url,
+            chieu_cao: data?.payload?.chieu_cao,
+            can_nang: data?.payload?.can_nang,
+            ma_thu_cung: data?.payload?.ma_thu_cung || 0,
+            ma_loai: data?.payload?.giong_loai?.ma_loai,
+            ma_giong: data?.payload?.giong_loai?.ma_giong,
+          };
+          setPet(pet);
+        }
+      });
+    }
+  }, []);
 
   useEffect(() => {
     petApi.getLoai().then((data) => {
@@ -77,7 +99,7 @@ export default function ThemThuCung() {
     }
   }, [pet?.ma_loai]);
 
-  async function addPet() {
+  async function updatePet() {
     console.log(pet, 'Pet nè: ');
     let url: string = '';
     setIsLoading(true);
@@ -86,26 +108,23 @@ export default function ThemThuCung() {
       setIsLoading(false);
       return;
     }
-    if (file) {
-      url = (await uploadTaskPromise(file)) as string;
-    }
+    // if (file) {
+    //   url = (await uploadTaskPromise(file)) as string;
+    // }
     petApi
-      .addPet(
+      .updatePetById(
+        pet?.ma_thu_cung || 0,
         pet?.ten_thu_cung,
         pet?.ngay_sinh || '',
         pet?.gioi_tinh || 0,
         pet?.ghi_chu || '',
-        pet?.ma_loai || 0,
-        pet?.ma_giong || 0,
-        url || '',
-        pet?.chieu_cao || 0,
-        pet?.can_nang || 0
+        pet?.ma_giong || 0
       )
       .then((data) => {
         if (data?.status == 200) {
-          enqueueSnackbar('Thêm thú cưng thành công', { variant: 'info' });
+          enqueueSnackbar('Cập nhật thú cưng thành công', { variant: 'info' });
           setIsLoading(false);
-          navigate('/home/quan-ly-thu-cung');
+          navigate(`/home/thong-tin-thu-cung/${pet?.ma_thu_cung}`);
         }
       })
       .catch((err) => {
@@ -134,19 +153,12 @@ export default function ThemThuCung() {
             mb: '20px',
           }}
         >
-          Thêm Thú Cưng
+          Chỉnh Sửa Thú Cưng
         </StyledTypography>
-        {/* <StyledTypography
-          sx={{
-            fontSize: '16px',
-            fontWeight: '600',
-          }}
-        >
-          Thông tin thú cưng
-        </StyledTypography> */}
 
         <Label>Ảnh đại diện</Label>
         <ImageSelect
+          defaultPreview={pet?.url_anh}
           style={{
             // borderRadius: '100%',
             width: '300px',
@@ -183,7 +195,7 @@ export default function ThemThuCung() {
               }
             />
           </Grid>
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <StyledTextField
               fullWidth
               size="small"
@@ -218,7 +230,7 @@ export default function ThemThuCung() {
                 })
               }
             />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={6}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -246,7 +258,7 @@ export default function ThemThuCung() {
               </DemoContainer>
             </LocalizationProvider>
           </Grid>
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <Select
               value={pet.ma_loai}
               label="Loài"
@@ -264,7 +276,7 @@ export default function ThemThuCung() {
                 });
               }}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={6}>
             <Select
               value={pet?.ma_giong}
@@ -329,19 +341,19 @@ export default function ThemThuCung() {
           sx={{
             display: 'flex',
             alignItem: 'center',
-            justifyContent:"center",
-            mt:"30px"
+            justifyContent: 'center',
+            mt: '30px',
           }}
         >
           <Box
-            onClick={addPet}
+            onClick={updatePet}
             sx={{
               display: 'flex',
               justifyItems: 'center',
               alignItems: 'center',
             }}
           >
-            <StyledButton>Thêm thú cưng</StyledButton>
+            <StyledButton>Cập nhật thú cưng</StyledButton>
           </Box>
         </Box>
       </Box>

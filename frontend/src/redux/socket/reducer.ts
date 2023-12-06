@@ -5,7 +5,7 @@ import { SocketActionEnum, SocketActionTypes } from './action';
 
 type SocketState = {
   onLine: {
-    idUser: number ;
+    idUser: number;
   };
   offLine: {
     idUser: number;
@@ -15,6 +15,7 @@ type SocketState = {
   };
   newPost: { post: StatusType };
   newRequestAddFriend: { request: LoiMoiType };
+  hasPostId: string;
 };
 
 const initState = Object.freeze<SocketState>({
@@ -23,6 +24,7 @@ const initState = Object.freeze<SocketState>({
   acceptFriend: { idUser: 0 },
   newPost: { post: {} },
   newRequestAddFriend: { request: {} },
+  hasPostId: '',
 });
 
 export default function (
@@ -70,6 +72,12 @@ export default function (
         newRequestAddFriend: {
           request: action.payload,
         },
+      };
+    }
+    case SocketActionEnum.SET_HAS_POST_ID: {
+      return {
+        ...state,
+        hasPostId: action.payload,
       };
     }
 

@@ -54,6 +54,7 @@ export default function PostComponent(props: Props) {
   const showDialog = useShowDialog();
   const [openUpdate, setOpenUpdate] = useState(false);
   const profile = useSelector((state: RootState) => state.user.profile);
+  const postIdNew = useSelector((state: RootState) => state.socket.hasPostId);
   const [friendTag, setFriendTag] = useState<
     {
       id: string;
@@ -68,13 +69,8 @@ export default function PostComponent(props: Props) {
   };
 
   useEffect(() => {
-    console.log('Vào 1 nè');
-
     if (props?.idStatus) {
-      console.log('Vào 2 nè');
-
       postApi.getStatusById(props.idStatus).then((data: any) => {
-        console.log('data', data);
         if (data?.status == 200) {
           const sta: StatusType = {
             id: data?.payload?._id,
@@ -103,6 +99,7 @@ export default function PostComponent(props: Props) {
                 name: tagPet?.ten_thu_cung,
               };
             }),
+            owner_id: data?.payload?.owner_id,
           };
           setStatus(sta);
         }
@@ -120,8 +117,9 @@ export default function PostComponent(props: Props) {
   useEffect(() => {
     console.log('reload comment');
 
-    if (props.status && props.status?.id) {
-      postApi.getAllComment(props.status?.id).then((data) => {
+    // if (props.status && props.status?.id) {
+    if (status?.id) {
+      postApi.getAllComment(status?.id).then((data) => {
         if (data?.status == 200) {
           const comments = data?.payload?.comments?.map((item: any) => {
             return {
@@ -144,6 +142,35 @@ export default function PostComponent(props: Props) {
       });
     }
   }, [reloadComment]);
+
+  useEffect(() => {
+    console.log('reload comment');
+
+    // if (props.status && props.status?.id) {
+    if (status?.id && postIdNew == status?.id) {
+      postApi.getAllComment(status?.id).then((data) => {
+        if (data?.status == 200) {
+          const comments = data?.payload?.comments?.map((item: any) => {
+            return {
+              photoURL: item?.userCmtInfor?.anh?.url,
+              name: item?.userCmtInfor?.ten,
+              text: item?.comment,
+              createdAt: item?.commentAt,
+              id: item?._id,
+              numOfLike: item?.numOfLike,
+              numOfReply: item?.numOfReply,
+              postUserId: status?.userInfor?.id,
+              userId: item?.userCmtInfor?.ma_nguoi_dung,
+              hasLike: item?.hasLike,
+            } as CommentType;
+          });
+          console.log(comments, 'Comment');
+
+          setComments(comments);
+        }
+      });
+    }
+  }, [postIdNew]);
 
   useEffect(() => {
     if (props?.status?.id) {
@@ -399,6 +426,7 @@ export default function PostComponent(props: Props) {
                     )}
                   </Typography>
                   <Typography
+                  onClick = {() => navigate(`/home/post/${status?.id}`)}
                     sx={{
                       fontFamily: 'quicksand',
                       fontWeight: '400',
@@ -406,6 +434,7 @@ export default function PostComponent(props: Props) {
                       color: 'gray',
                       display: 'flex',
                       alignItems: 'center',
+                      cursor:'pointer'
                     }}
                   >
                     <span
@@ -572,7 +601,7 @@ export default function PostComponent(props: Props) {
                 return (
                   <span
                     onClick={() => {
-                      navigate(`/home/bai-viet-thu-cung/${pet?.id}`);
+                      navigate(`/home/thong-tin-thu-cung/${pet?.id}`);
                     }}
                     style={{
                       fontFamily: 'quicksand',
@@ -811,7 +840,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
     if (props.comment.id) {
       postApi.getAllReply(props.comment.id).then((data) => {
         if (data?.status == 200) {
-          const reps = data?.payload?.replies?.map((item: any) => {
+          const reps: CommentType[] = data?.payload?.replies?.map((item: any) => {
             return {
               photoURL: item?.userReplyInfor?.anh?.url,
               name: item?.userReplyInfor?.ten,
@@ -823,7 +852,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
             } as CommentType;
           });
           console.log('lấy phản hổi thanh cong', reps);
-          setReplys(reps);
+          setReplys(reps.reverse());
           setIsFinish(true);
           return;
         }
