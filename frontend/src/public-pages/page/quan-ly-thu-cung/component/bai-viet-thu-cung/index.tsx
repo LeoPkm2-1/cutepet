@@ -102,8 +102,8 @@ export default function BaiVietThuCung() {
             gioi_tinh: data?.payload?.gioi_tinh,
             ghi_chu: data?.payload?.ghi_chu,
             url_anh: data?.payload?.anh?.url,
-            chieu_cao: data?.payload?.chieu_cao,
-            can_nang: data?.payload?.can_nang,
+            chieu_cao: data?.payload?.thong_tin_suc_khoe?.chieu_cao,
+            can_nang: data?.payload?.thong_tin_suc_khoe?.can_nang,
             ten_giong: data?.payload?.giong_loai?.ten_giong,
             ten_loai: data?.payload?.giong_loai?.ten_loai,
             ma_thu_cung: data?.payload?.ma_thu_cung || 0,
@@ -350,7 +350,7 @@ export default function BaiVietThuCung() {
                   alignItems: 'center',
                 }}
               >
-                {petInfo?.gioi_tinh ? (
+                {!petInfo?.gioi_tinh ? (
                   <FemaleIcon
                     sx={{
                       color: 'gray',
@@ -443,23 +443,25 @@ export default function BaiVietThuCung() {
                 </Typography>
               </Box> */}
             </Box>
-            <Button
-              color="inherit"
-              sx={{
-                backgroundColor: 'rgb(14, 100, 126)',
-                ml: '20px',
-                color: '#fff',
-                '&:hover': {
-                  backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                },
-              }}
-              onClick={() => {
-                navigate(`/home/chinh-sua-thu-cung/${petInfo?.ma_thu_cung}`);
-              }}
-              variant="contained"
-            >
-              Chỉnh sửa
-            </Button>
+            {petInfo?.ma_nguoi_chu == profile?.id && (
+              <Button
+                color="inherit"
+                sx={{
+                  backgroundColor: 'rgb(14, 100, 126)',
+                  ml: '20px',
+                  color: '#fff',
+                  '&:hover': {
+                    backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                  },
+                }}
+                onClick={() => {
+                  navigate(`/home/chinh-sua-thu-cung/${petInfo?.ma_thu_cung}`);
+                }}
+                variant="contained"
+              >
+                Chỉnh sửa
+              </Button>
+            )}
           </Box>
           <Divider
             sx={{

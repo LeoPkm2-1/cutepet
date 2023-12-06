@@ -548,6 +548,7 @@ export default function PopUpCreatePost(props: Props) {
               </Box>
             </Box>
             <Button
+              disabled = {!text?.trim() && !selectedFile}
               onClick={handleSubmit}
               fullWidth
               variant="contained"

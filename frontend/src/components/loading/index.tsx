@@ -16,8 +16,8 @@ function Loading(props: any) {
           >
             <div>
               <img
-                style={{ width: 64, height: 64, borderRadius:"50px", objectFit:"cover"}}
-                src={`https://patch.com/img/cdn/users/22839933/2015/01/raw/20150154be78a81dad7.jpg`}
+                style={{ width: 64, height: 64, borderRadius:"100%", objectFit:"cover"}}
+                src={`${process.env.PUBLIC_URL}/assets/images/cutepet.png`}
               />
             </div>
           </Backdrop>

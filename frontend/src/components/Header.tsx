@@ -5,7 +5,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Image from './Image';
 import { RootState } from '../redux';
-import logo from '../assets/img/logo.png';
+import logo from '../assets/img/cutepet.png';
 import { Box } from '@mui/system';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
