@@ -1687,6 +1687,7 @@ function CreateReply(props: { idStatus: string; onSuccess: () => void }) {
             <InputBase
               fullWidth
               multiline
+              autoFocus
               sx={{
                 ml: 1,
                 flex: 1,

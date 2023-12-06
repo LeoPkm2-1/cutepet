@@ -1,13 +1,25 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, SvgIcon, Typography } from '@mui/material';
 import Button from '../../../components/Button';
 import React, { useState, useEffect } from 'react';
 import friendApi from '../../../api/friend';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RootState } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { SocketActions } from '../../../redux/socket';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { StyledTab, StyledTabs } from './styled';
+import {
+  mdiAccountArrowLeft,
+  mdiAccountArrowRightOutline,
+  mdiAccountBox,
+  mdiAccountMultipleOutline,
+  mdiAccountMultiplePlusOutline,
+  mdiKey,
+} from '@mdi/js';
+import GoiYKetBan from '../mang-xa-hoi/component/goi-y-ket-ban';
+import LoiMoiKetBan from '../mang-xa-hoi/component/loi-moi-ket-ban';
+import LoiMoiDaGui from '../mang-xa-hoi/component/loi-moi-da-gui';
 export function FriendList() {
   const [friends, setFriends] = useState<
     {
@@ -19,6 +31,7 @@ export function FriendList() {
     }[]
   >([]);
   const [reload, setReload] = useState(false);
+  const [tab, setTab] = useState('ban-be');
   const userOnline = useSelector(
     (state: RootState) => state?.socket?.onLine?.idUser
   );
@@ -62,32 +75,64 @@ export function FriendList() {
 
   return (
     <>
-      <Grid
-        sx={{
-          padding: '0 30px 100px 30px',
+      <StyledTabs
+        value={tab}
+        scrollButtons
+        variant={true ? 'standard' : 'fullWidth'}
+        style={{
+          marginBottom: '30px',
         }}
-        container
       >
-        <Grid xs={8} item>
-          {friends?.length == 0 ? (
-            'Không có bạn bè'
-          ) : (
-            <>
-              {friends?.map((item) => {
-                return (
-                  <PersonComponent
-                    userId={item?.userId}
-                    name={item.name}
-                    user={item.user}
-                    url={item.url}
-                    isOnline={item?.isOnline}
-                  />
-                );
-              })}
-            </>
-          )}
-        </Grid>
-      </Grid>
+        <StyledTab
+          onClick={() => setTab('ban-be')}
+          iconPosition="start"
+          icon={
+            <SvgIcon>
+              <path d={mdiAccountMultipleOutline} />
+            </SvgIcon>
+          }
+          value="ban-be"
+          label={<span className="tab-label">Bạn bè</span>}
+        />
+        <StyledTab
+          onClick={() => setTab('goi-y-ket-ban')}
+          value="goi-y-ket-ban"
+          label={<span className="tab-label">Gợi ý kết bạn</span>}
+          iconPosition="start"
+          icon={
+            <SvgIcon>
+              <path d={mdiAccountMultiplePlusOutline} />
+            </SvgIcon>
+          }
+        />
+        <StyledTab
+          onClick={() => setTab('loi-moi-ket-ban')}
+          value="loi-moi-ket-ban"
+          label={<span className="tab-label">Lời mời đã nhận</span>}
+          iconPosition="start"
+          icon={
+            <SvgIcon>
+              <path d={mdiAccountArrowLeft} />
+            </SvgIcon>
+          }
+        />
+
+        <StyledTab
+          onClick={() => setTab('loi-moi-da-gui')}
+          value="loi-moi-da-gui"
+          label={<span className="tab-label">Lời mời đã gửi</span>}
+          iconPosition="start"
+          icon={
+            <SvgIcon>
+              <path d={mdiAccountArrowRightOutline} />
+            </SvgIcon>
+          }
+        />
+      </StyledTabs>
+      {tab == 'ban-be' && <BanBe />}
+      {tab == 'goi-y-ket-ban' && <GoiYKetBan isPageFriend />}
+      {tab == 'loi-moi-ket-ban' && <LoiMoiKetBan isPageFriend />}
+      {tab == 'loi-moi-da-gui' && <LoiMoiDaGui isPageFriend />}
     </>
   );
 }
@@ -326,6 +371,100 @@ export function FriendTagComponent(props: PropsFriendTag) {
           Chat
         </Button> */}
       </Box>
+    </>
+  );
+}
+
+function BanBe() {
+  const [friends, setFriends] = useState<
+    {
+      name: string;
+      user: string;
+      url: string;
+      isOnline?: boolean;
+      userId?: number;
+    }[]
+  >([]);
+  const [reload, setReload] = useState(false);
+  const [tab, setTab] = useState('ban-be');
+  const userOnline = useSelector(
+    (state: RootState) => state?.socket?.onLine?.idUser
+  );
+  const userOffline = useSelector(
+    (state: RootState) => state?.socket.offLine.idUser
+  );
+
+  useEffect(() => {
+    friendApi.getListFriend().then((data) => {
+      if (data?.status == 200) {
+        console.log(data);
+        const list = data?.payload.map((item: any) => {
+          return {
+            name: item?.ten,
+            user: item?.tai_khoan,
+            url: item?.anh?.url,
+            isOnline: item?.isOnline || false,
+            userId: item?.ma_nguoi_dung,
+          };
+        });
+        setFriends(list);
+      }
+    });
+  }, [reload]);
+
+  useEffect(() => {
+    if (userOnline && friends?.length > 0) {
+      if (friends?.find((friend) => friend?.userId == userOnline)) {
+        setReload(!reload);
+      }
+    }
+  }, [userOnline]);
+
+  useEffect(() => {
+    if (userOffline && friends?.length > 0) {
+      if (friends?.find((friend) => friend?.userId == userOffline)) {
+        setReload(!reload);
+      }
+    }
+  }, [userOffline]);
+
+  return (
+    <>
+      {friends?.length == 0 ? (
+        <Typography
+          align="center"
+          sx={{
+            fontFamily: 'quicksand',
+            fontWeight: '500',
+            fontSize: '16px',
+            color: 'gray',
+            mt: '200px',
+          }}
+        >
+          Chưa có bạn bè !
+        </Typography>
+      ) : (
+        <Grid
+          sx={{
+            padding: '0 30px 100px 30px',
+          }}
+          container
+        >
+          <Grid xs={8} item>
+            {friends?.map((item) => {
+              return (
+                <PersonComponent
+                  userId={item?.userId}
+                  name={item.name}
+                  user={item.user}
+                  url={item.url}
+                  isOnline={item?.isOnline}
+                />
+              );
+            })}
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 }

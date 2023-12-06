@@ -11,7 +11,7 @@ import { SocketActions } from '../../../../../redux/socket';
 import { useNavigate } from 'react-router-dom';
 import { deepCopy } from '@firebase/util';
 
-export default function GoiYKetBan(props: { isPageFriend?: boolean }) {
+export default function LoiMoiDaGui(props: { isPageFriend?: boolean }) {
   const [userList, setUserList] = useState<LoiMoiType[]>([]);
 
   const [isShowAll, setIsShowAll] = useState(true);
@@ -22,19 +22,18 @@ export default function GoiYKetBan(props: { isPageFriend?: boolean }) {
   );
 
   useEffect(() => {
-    friendApi.getListSuggestedFriends().then((data) => {
+    friendApi.getListOfAllUserrecievedRequestAddFriendFromMe().then((data) => {
       if (data?.status == 200) {
-        console.log(data, ' dtaa loi moi');
         if (data?.payload?.length == 0) {
           setUserList([]);
           return;
         }
         const list = data?.payload?.map((item: any) => {
           return {
-            name: item?.ten,
-            url: item?.anh?.url,
-            time: item?.gioi_tinh,
-            senderID: item?.ma_nguoi_dung,
+            name: item?.thong_tin_nguoi_nhan?.ten,
+            url: item?.thong_tin_nguoi_nhan?.anh?.url,
+            time: item?.ngay_gui,
+            senderID: item?.ma_nguoi_nhan,
           };
         });
         if ((list?.length || 0) > 0) {
@@ -65,11 +64,7 @@ export default function GoiYKetBan(props: { isPageFriend?: boolean }) {
                 if (index < 4) {
                   return (
                     <LoiMoi
-                      onSuccess={() => {
-                        const list: LoiMoiType[] = deepCopy(userList);
-                        list.splice(index, 1);
-                        setUserList(list);
-                      }}
+                      onSuccess={() => setReload(!reload)}
                       senderID={item?.senderID || 0}
                       name={item?.name || ''}
                       url={item?.url}
@@ -78,7 +73,7 @@ export default function GoiYKetBan(props: { isPageFriend?: boolean }) {
                   );
                 }
               })}
-              {userList?.length >= 4 && (
+              {userList?.length > 4 && (
                 <Box
                   sx={{
                     display: 'flex',
@@ -119,7 +114,7 @@ export default function GoiYKetBan(props: { isPageFriend?: boolean }) {
                   />
                 );
               })}
-              {userList?.length >= 4 && (
+              {userList?.length > 4 && (
                 <Box
                   sx={{
                     display: 'flex',
@@ -158,7 +153,7 @@ export default function GoiYKetBan(props: { isPageFriend?: boolean }) {
             color: 'gray',
           }}
         >
-          Chưa có lời gợi ý kết bạn
+          Chưa có lời mời đã gửi
         </Typography>
       )}
     </>
@@ -172,36 +167,35 @@ type PropsLoiMoi = {
   senderID: number | string;
   onSuccess: () => void;
 };
-export function LoiMoi(props: PropsLoiMoi) {
+function LoiMoi(props: PropsLoiMoi) {
   const { enqueueSnackbar } = useSnackbar();
   const dispatth = useDispatch();
   const navigate = useNavigate();
-
-  function handleAddfriend() {
-    if (props?.senderID) {
-      friendApi
-        .addFriendById(props?.senderID)
-        .then((data) => {
-          if (data?.status == 200) {
-            enqueueSnackbar(`Đã gửi lời mời kết bạn với ${props?.name}`, {
+  function handleSubmit(type: string) {
+    friendApi
+      .removeRequestAddFriendById(props.senderID)
+      .then((data) => {
+        if (data?.status == 200) {
+          enqueueSnackbar(
+            `Đã thu hồi lời mời kết bạn với ${props?.name} thành công`,
+            {
               variant: 'info',
-            });
-            props?.onSuccess?.();
-          } else {
-            enqueueSnackbar(
-              `${data?.message || 'Thất bại vui lòng thử lại !'}`,
-              {
-                variant: 'error',
-              }
-            );
-          }
-        })
-        .catch((err) => {
-          enqueueSnackbar(`${err?.message || 'Thất bại vui lòng thử lại !'}`, {
+            }
+          );
+          props?.onSuccess();
+          dispatth(SocketActions.setNewRequest({}));
+        } else if (data?.status == 400) {
+          enqueueSnackbar(`Không tồn tại lời mời kết bạn`, {
             variant: 'error',
           });
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(`${err?.message}`, {
+          variant: 'error',
         });
-    }
+        props?.onSuccess();
+      });
   }
 
   return (
@@ -214,6 +208,9 @@ export function LoiMoi(props: PropsLoiMoi) {
         }}
       >
         <img
+          onClick={() =>
+            navigate(`/home/trang-ca-nhan-nguoi-dung/${props?.senderID}`)
+          }
           height={50}
           width={50}
           style={{
@@ -222,9 +219,6 @@ export function LoiMoi(props: PropsLoiMoi) {
             cursor: 'pointer',
           }}
           src={props?.url}
-          onClick={() =>
-            navigate(`/home/trang-ca-nhan-nguoi-dung/${props?.senderID}`)
-          }
         />
         <Box
           sx={{
@@ -252,7 +246,7 @@ export function LoiMoi(props: PropsLoiMoi) {
             >
               {props.name}
             </Typography>
-            {/* <Typography
+            <Typography
               sx={{
                 fontFamily: 'quicksand',
                 fontWeight: '500',
@@ -262,7 +256,7 @@ export function LoiMoi(props: PropsLoiMoi) {
               }}
             >
               {props?.time && timeAgo(props?.time)}
-            </Typography> */}
+            </Typography>
           </Box>
 
           <Box
@@ -271,7 +265,19 @@ export function LoiMoi(props: PropsLoiMoi) {
             }}
           >
             <Button
-              onClick={handleAddfriend}
+              disabled
+              variant="contained"
+              color="inherit"
+              sx={{
+                minWidth: '100px',
+                color: 'gray',
+                mr: '20px',
+              }}
+            >
+              Đang chờ phản hồi
+            </Button>
+            <Button
+              onClick={() => handleSubmit('accept')}
               color="inherit"
               sx={{
                 minWidth: '100px',
@@ -283,10 +289,10 @@ export function LoiMoi(props: PropsLoiMoi) {
               }}
               variant="contained"
             >
-              Kết bạn
+              Thu hồi
             </Button>
-            <Button
-              onClick={() => props?.onSuccess?.()}
+            {/* <Button
+              onClick={() => handleSubmit('reject')}
               variant="contained"
               color="inherit"
               sx={{
@@ -296,7 +302,7 @@ export function LoiMoi(props: PropsLoiMoi) {
               }}
             >
               Xóa
-            </Button>
+            </Button> */}
           </Box>
         </Box>
       </Box>

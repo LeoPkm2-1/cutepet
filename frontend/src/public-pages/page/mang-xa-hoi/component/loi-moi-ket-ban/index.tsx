@@ -10,7 +10,7 @@ import { LoiMoiType } from '../../../../../models/user';
 import { SocketActions } from '../../../../../redux/socket';
 import { useNavigate } from 'react-router-dom';
 
-export default function LoiMoiKetBan() {
+export default function LoiMoiKetBan(props: { isPageFriend?: boolean }) {
   const [userList, setUserList] = useState<LoiMoiType[]>([]);
 
   const [isShowAll, setIsShowAll] = useState(true);
@@ -58,15 +58,6 @@ export default function LoiMoiKetBan() {
 
   return (
     <>
-      <Typography
-        sx={{
-          fontFamily: 'quicksand',
-          fontWeight: '600',
-          fontSize: '20px',
-        }}
-      >
-        Lời mời kết bạn
-      </Typography>
       {/* {userList.map((item, index) => {
         if (index < 4) {
           return <LoiMoi name={item?.name} url={item?.url} time={item?.time} />;
@@ -159,13 +150,14 @@ export default function LoiMoiKetBan() {
         </>
       ) : (
         <Typography
+          align="center"
           sx={{
             fontFamily: 'quicksand',
             fontWeight: '500',
             fontSize: '16px',
-            marginTop: '12px',
-            marginBottom: "20px"
-           
+            marginTop: props?.isPageFriend ? '200px' : '12px',
+            marginBottom: '20px',
+            color: 'gray',
           }}
         >
           Chưa có lời mời kết bạn
@@ -187,32 +179,37 @@ function LoiMoi(props: PropsLoiMoi) {
   const dispatth = useDispatch();
   const navigate = useNavigate();
   function handleSubmit(type: string) {
-    friendApi.responeAddFriend(props.senderID, type).then((data) => {
-      console.log(data, ' dtata nef');
-      if (data?.status == 200) {
-        if (data?.payload?.accepted) {
-          enqueueSnackbar(`Kết bạn với ${props?.name} thành công`, {
-            variant: 'info',
-          });
-        } else {
-          enqueueSnackbar(`Xóa lời mời kết bạn với ${props?.name} thành công`, {
-            variant: 'info',
+    friendApi
+      .responeAddFriend(props.senderID, type)
+      .then((data) => {
+        console.log(data, ' dtata nef');
+        if (data?.status == 200) {
+          if (data?.payload?.accepted) {
+            enqueueSnackbar(`Kết bạn với ${props?.name} thành công`, {
+              variant: 'info',
+            });
+          } else {
+            enqueueSnackbar(
+              `Xóa lời mời kết bạn với ${props?.name} thành công`,
+              {
+                variant: 'info',
+              }
+            );
+          }
+          props?.onSuccess();
+          dispatth(SocketActions.setNewRequest({}));
+        } else if (data?.status == 400) {
+          enqueueSnackbar(`Không tồn tại lời mời kết bạn`, {
+            variant: 'error',
           });
         }
-        props?.onSuccess();
-        dispatth(SocketActions.setNewRequest({}));
-      }else if( data?.status == 400){
-        enqueueSnackbar(`Không tồn tại lời mời kết bạn`, {
-          variant: "error",
+      })
+      .catch((err) => {
+        enqueueSnackbar(`${err?.message}`, {
+          variant: 'error',
         });
-      }
-    }).catch((err) => {
-      enqueueSnackbar(`${err?.message}`, {
-        variant: "error",
+        props?.onSuccess();
       });
-      props?.onSuccess();
-
-    });
   }
 
   return (
@@ -233,8 +230,7 @@ function LoiMoi(props: PropsLoiMoi) {
           style={{
             objectFit: 'cover',
             borderRadius: '50px',
-            cursor:"pointer"
-
+            cursor: 'pointer',
           }}
           src={props?.url}
         />
@@ -259,7 +255,7 @@ function LoiMoi(props: PropsLoiMoi) {
                 fontWeight: '700',
                 fontSize: '16px',
                 marginBottom: '12px',
-                cursor:"pointer"
+                cursor: 'pointer',
               }}
             >
               {props.name}
@@ -284,8 +280,14 @@ function LoiMoi(props: PropsLoiMoi) {
           >
             <Button
               onClick={() => handleSubmit('accept')}
+              color="inherit"
               sx={{
                 minWidth: '100px',
+                backgroundColor: 'rgb(14, 100, 126)',
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                },
               }}
               variant="contained"
             >

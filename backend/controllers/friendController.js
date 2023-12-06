@@ -12,6 +12,7 @@ const friendHelper = require("../utils/banbeHelper");
 const loiMoiKetBanHelper = require("../utils/loiMoiKetBanHelper");
 const petModel = require("../models/petModel");
 const userModel = require("../models/userModel");
+const petHelper = require("../utils/petHelper");
 
 // gửi lời mời kết bạn
 const requestAddFriend = async (req, res) => {
@@ -237,8 +238,57 @@ const removeRequestAddFriend = async (req, res) => {
   res.status(200).json(new Response(200, deleteProcess, "OK"));
 };
 
+const commonMaGiongOfTwoDanhSachGiong = (danhSachGiong_1, danhSachGiong_2) => {
+  danhSachGiong_1 = danhSachGiong_1.map((magiong) => parseInt(magiong));
+  danhSachGiong_2 = danhSachGiong_2.map((magiong) => parseInt(magiong));
+  return danhSachGiong_1.filter((element) => danhSachGiong_2.includes(element));
+};
+
+const handleFriendsOfFriendToSuggest = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  // console.log({user_id});
+  let { USER_SUGGEST_ID } = req.body;
+  const { UN_SUGGESTED_FRIEND_IDS, NUM_OF_USER_SUGGEST, DANH_SACH_MA_GIONG } =
+    req.body;
+  const listFriendIdsOfFriends = await laBanBeModel
+    .getFriendOfFriendForUser(user_id, UN_SUGGESTED_FRIEND_IDS)
+    .then((data) => data.payload.map((idObj) => idObj.friend_of_friend_id));
+  req.body.USER_SUGGEST_ID = [...listFriendIdsOfFriends, ...USER_SUGGEST_ID];
+  req.body.TABLE_SCORES_FOR_SUGGEST = await Promise.all(
+    req.body.USER_SUGGEST_ID.map(async (suggest_user_id) => {
+      const numOfCommonFriend =
+        await laBanBeModel.getNumberOfCommonFriendOfTwoDisTinctUsers(
+          user_id,
+          suggest_user_id
+        );
+      const danhSachGiong = await petHelper.getAllGiongOfPetsOwnedByUser(
+        suggest_user_id
+      );
+      danh_sach_giong_chung = commonMaGiongOfTwoDanhSachGiong(
+        danhSachGiong,
+        DANH_SACH_MA_GIONG
+      );
+      return {
+        user_suggested_id: suggest_user_id,
+        num_of_common_friend: numOfCommonFriend,
+        danh_sach_giong: danhSachGiong,
+        giong_chung: danh_sach_giong_chung,
+        score: 0,
+      };
+    })
+  );
+  // calculate score
+  req.body.TABLE_SCORES_FOR_SUGGEST.map((suggest_user) => {
+    suggest_user.score =
+      suggest_user.num_of_common_friend * 15 +
+      suggest_user.giong_chung.length * 20;
+  });
+  req.body.TABLE_SCORES_FOR_SUGGEST.sort((a, b) => b.score - a.score);
+};
+
 const getListSuggestedFriendController = async (req, res) => {
   const NUM_OF_USER_SUGGEST = 10;
+  req.body.NUM_OF_USER_SUGGEST = NUM_OF_USER_SUGGEST;
   const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
   const { DANH_SACH_MA_GIONG, UN_SUGGESTED_FRIEND_IDS } = req.body;
   // DANH_SACH_MA_GIONG = [403];
@@ -255,7 +305,7 @@ const getListSuggestedFriendController = async (req, res) => {
       .getUserIdThatNoteContainUsers(
         [...userid_list_match_pet, ...UN_SUGGESTED_FRIEND_IDS],
         // NUM_OF_USER_SUGGEST - userid_list_match_pet.length
-        100
+        NUM_OF_USER_SUGGEST
       )
       .then((data) => data.payload);
     random_user_id = userHelper.randomGetUserIdInlistId(
@@ -267,11 +317,23 @@ const getListSuggestedFriendController = async (req, res) => {
   } else {
     user_suggest_id = userid_list_match_pet;
   }
-  const userSuggestInfor = await userHelper.getUserPublicInforByListIds(
-    user_suggest_id
-  );
+  req.body.USER_SUGGEST_ID = user_suggest_id;
+  req.body.UN_SUGGESTED_FRIEND_IDS = [
+    ...user_suggest_id,
+    ...UN_SUGGESTED_FRIEND_IDS,
+  ];
 
-  res.status(200).json(new Response(200, userSuggestInfor, ""));
+  await handleFriendsOfFriendToSuggest(req, res);
+  const suggestedUserIdSortByScore = req.body.TABLE_SCORES_FOR_SUGGEST.map(
+    (user) => user.user_suggested_id
+  );
+  // console.log({ suggestedUserIdSortByScore });
+  const userSuggestInfor = await userHelper.getUserPublicInforByListIds(
+    suggestedUserIdSortByScore
+  );
+  res
+    .status(200)
+    .json(new Response(200, userSuggestInfor, ""));
   return;
 };
 

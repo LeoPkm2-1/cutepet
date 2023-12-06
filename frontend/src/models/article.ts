@@ -12,4 +12,6 @@ export interface ArticleType {
   isDownVote?: boolean;
   numUpVote?: number;
   numDownVote?: number;
+  owner_id?: number;
+
 }
