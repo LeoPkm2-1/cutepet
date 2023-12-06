@@ -32,3 +32,9 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 ## ---DONE---- 97. khi xem chi tiết của 1 bài viết, nếu là người chủ thì phải cho họ có thể chỉnh sửa hoặc xóa bài viết đó.
 
 ![](../media/img/err/img28.png)
+
+## 98. khi đăng bài viết chia sẻ trạng thái mà không nhập gì thì báo lỗi và bắt người dùng nhập thông tin bài viết
+
+## 99. chặn người dùng vào trang edit bài viết không phải của mình
+
+![](../media/img/err/img29.png)

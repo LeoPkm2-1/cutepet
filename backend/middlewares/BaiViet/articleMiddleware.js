@@ -370,7 +370,7 @@ async function preProcessEditArticle(req, res, next) {
     res
       .status(400)
       .json(
-        new Response(400, [], "Bạn không có quyền xóa bài viết này", 300, 300)
+        new Response(400, [], "Bạn không có quyền chỉnh sửa bài viết này", 300, 300)
       );
     return;
   }
