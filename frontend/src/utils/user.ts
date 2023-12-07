@@ -21,7 +21,7 @@ const ANONYMOUS_AVATAR_URI =
   'https://ddpelntkhg3me.cloudfront.net/AnonymousAvatars';
 export function getUserAvatarUri(user?: User | UserProfile) {
   if (!user) {
-    return `${process.env.PUBLIC_URL}/assets/images/logo.png`;
+    return `${process.env.PUBLIC_URL}/assets/images/cutepet.png`;
   }
   if (user?.photoURL) {
     return user.photoURL;

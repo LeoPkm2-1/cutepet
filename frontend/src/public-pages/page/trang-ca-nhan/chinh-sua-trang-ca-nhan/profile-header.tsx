@@ -1,8 +1,8 @@
-import { mdiAccountBox, mdiKey } from "@mdi/js";
-import { Avatar, SvgIcon, useMediaQuery } from "@mui/material";
-import { connect, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
-import { RootState } from "../../../../redux";
+import { mdiAccountBox, mdiKey } from '@mdi/js';
+import { Avatar, SvgIcon, useMediaQuery } from '@mui/material';
+import { connect, useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+import { RootState } from '../../../../redux';
 import {
   CoverContainer,
   CoverImg,
@@ -11,14 +11,15 @@ import {
   Root,
   StyledTab,
   StyledTabs,
-} from "./styled";
-
+} from './styled';
 
 function ProfileHeader() {
-  const isMd = useMediaQuery("(min-width: 600px)");
+  const isMd = useMediaQuery('(min-width: 600px)');
   const { pathname } = useLocation();
-  const tab = pathname.substring("/home/chinh-sua-trang-ca-nhan/".length).split("/")[0];
-  const profile = useSelector((state:RootState) => state.user.profile)
+  const tab = pathname
+    .substring('/home/chinh-sua-trang-ca-nhan/'.length)
+    .split('/')[0];
+  const profile = useSelector((state: RootState) => state.user.profile);
   return (
     <Root>
       <CoverContainer>
@@ -31,7 +32,7 @@ function ProfileHeader() {
           sx={{
             width: 126,
             height: 126,
-            border: "2px solid #fff",
+            border: '2px solid #fff',
           }}
         />
         <NameContainer>
@@ -43,7 +44,7 @@ function ProfileHeader() {
         <StyledTabs
           value={tab}
           scrollButtons
-          variant={isMd ? "standard" : "fullWidth"}
+          variant={isMd ? 'standard' : 'fullWidth'}
         >
           <StyledTab
             component={Link}
@@ -74,6 +75,5 @@ function ProfileHeader() {
     </Root>
   );
 }
-
 
 export default ProfileHeader;

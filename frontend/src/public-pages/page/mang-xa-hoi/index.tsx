@@ -27,7 +27,6 @@ export default function MangXaHoi() {
     (state: RootState) => state?.socket?.newPost.post
   );
   useEffect(() => {
-    
     postApi.getPostForNewsfeed(indexPost, []).then((data: any) => {
       if (data?.status == 200) {
         console.log(data, 'data lan 1 nha ggigi');
@@ -134,8 +133,6 @@ export default function MangXaHoi() {
     }
   }, [indexPost]);
 
-
-
   useEffect(() => {
     console.log(newPostFromStore, ' newPostFromStore nè');
 
@@ -192,11 +189,32 @@ export default function MangXaHoi() {
           xs={4}
           item
         >
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '600',
+              fontSize: '18px',
+            }}
+          >
+            Lời mời kết bạn
+          </Typography>
           <LoiMoiKetBan />
-          <Divider sx={{
-            mt:"30px"
-          }}/>
-          <GoiYKetBan/>
+          <Divider
+            sx={{
+              mt: '30px',
+            }}
+          />
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '600',
+              fontSize: '18px',
+              mt: '20px',
+            }}
+          >
+            Gợi ý kết bạn
+          </Typography>
+          <GoiYKetBan />
         </Grid>
       </Grid>
     </>
@@ -206,4 +224,3 @@ export default function MangXaHoi() {
 function difference(set1: any, set2: any) {
   return new Set([...set1].filter((element) => !set2.has(element)));
 }
-

@@ -1,6 +1,6 @@
 import { Label, StyledTextField } from '../../../../../components/FormItem';
 import { StyledButton, StyledTypography } from './style';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import Select from '../../../../../components/Select';
 import { PetType } from '../../../../../models/pet';
 import React, { useEffect, useState } from 'react';
@@ -16,6 +16,8 @@ import { uploadTaskPromise } from '../../../../../api/upload';
 import { useSnackbar } from 'notistack';
 import Loading from '../../../../../components/loading';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../redux';
 
 export default function ChinhSuaThuCung() {
   const [pet, setPet] = useState<PetType>({
@@ -29,6 +31,7 @@ export default function ChinhSuaThuCung() {
     chieu_cao: 0,
     can_nang: 0,
   });
+  const profileId = useSelector((state: RootState) => state.user.profile);
   const { id } = useParams();
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +65,7 @@ export default function ChinhSuaThuCung() {
             ma_thu_cung: data?.payload?.ma_thu_cung || 0,
             ma_loai: data?.payload?.giong_loai?.ma_loai,
             ma_giong: data?.payload?.giong_loai?.ma_giong,
+            ma_nguoi_chu: data?.payload?.ma_nguoi_chu || 0,
           };
           setPet(pet);
         }
@@ -137,65 +141,67 @@ export default function ChinhSuaThuCung() {
 
   return (
     <>
-      <Loading open={isLoading} />
-      <Box
-        sx={{
-          color: 'black',
-          width: '100%',
-          paddingBottom: '20px',
-        }}
-      >
-        <StyledTypography
-          align="center"
-          sx={{
-            fontSize: '20px',
-            fontWeight: '600',
-            mb: '20px',
-          }}
-        >
-          Chỉnh Sửa Thú Cưng
-        </StyledTypography>
+      {pet?.ma_nguoi_chu === profileId ? (
+        <>
+          <Loading open={isLoading} />
+          <Box
+            sx={{
+              color: 'black',
+              width: '100%',
+              paddingBottom: '20px',
+            }}
+          >
+            <StyledTypography
+              align="center"
+              sx={{
+                fontSize: '20px',
+                fontWeight: '600',
+                mb: '20px',
+              }}
+            >
+              Chỉnh Sửa Thú Cưng
+            </StyledTypography>
 
-        <Label>Ảnh đại diện</Label>
-        <ImageSelect
-          defaultPreview={pet?.url_anh}
-          style={{
-            // borderRadius: '100%',
-            width: '300px',
-            height: '300px',
-            marginTop: '5px',
-            marginBottom: '10px',
-          }}
-          aspectRatio={1}
-          onFileChange={(file) => {
-            if (file) {
-              setFile(file);
-            } else {
-              setFile(null);
-            }
-          }}
-        />
-
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <StyledTextField
-              fullWidth
-              size="small"
-              margin="normal"
-              name="user-name"
-              placeholder="Nhập tên"
-              label="Tên thú cưng"
-              required
-              value={pet.ten_thu_cung}
-              onChange={(e) =>
-                setPet({
-                  ...pet,
-                  ten_thu_cung: e.currentTarget.value,
-                })
-              }
+            <Label>Ảnh đại diện</Label>
+            <ImageSelect
+              defaultPreview={pet?.url_anh}
+              style={{
+                // borderRadius: '100%',
+                width: '300px',
+                height: '300px',
+                marginTop: '5px',
+                marginBottom: '10px',
+              }}
+              aspectRatio={1}
+              onFileChange={(file) => {
+                if (file) {
+                  setFile(file);
+                } else {
+                  setFile(null);
+                }
+              }}
             />
-          </Grid>
-          {/* <Grid item xs={6}>
+
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <StyledTextField
+                  fullWidth
+                  size="small"
+                  margin="normal"
+                  name="user-name"
+                  placeholder="Nhập tên"
+                  label="Tên thú cưng"
+                  required
+                  value={pet.ten_thu_cung}
+                  onChange={(e) =>
+                    setPet({
+                      ...pet,
+                      ten_thu_cung: e.currentTarget.value,
+                    })
+                  }
+                />
+              </Grid>
+              {/* <Grid item xs={6}>
             <StyledTextField
               fullWidth
               size="small"
@@ -232,33 +238,34 @@ export default function ChinhSuaThuCung() {
             />
           </Grid> */}
 
-          <Grid item xs={6}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DatePicker', 'DatePicker']}>
-                <DatePicker
-                  sx={{
-                    width: '100%',
-                    fontFamily: 'quicksand !important',
-                    '&.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root': {
-                      fontSize: '30px !important',
-                    },
-                  }}
-                  label="Ngày sinh"
-                  value={dayjs(pet?.ngay_sinh)}
-                  onChange={(newValue) => {
-                    if (newValue) {
-                      console.log(newValue.format('YYYY-MM-DD'));
-                      setPet({
-                        ...pet,
-                        ngay_sinh: newValue.format('YYYY-MM-DD'),
-                      });
-                    }
-                  }}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
-          </Grid>
-          {/* <Grid item xs={6}>
+              <Grid item xs={6}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker', 'DatePicker']}>
+                    <DatePicker
+                      sx={{
+                        width: '100%',
+                        fontFamily: 'quicksand !important',
+                        '&.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root':
+                          {
+                            fontSize: '30px !important',
+                          },
+                      }}
+                      label="Ngày sinh"
+                      value={dayjs(pet?.ngay_sinh)}
+                      onChange={(newValue) => {
+                        if (newValue) {
+                          console.log(newValue.format('YYYY-MM-DD'));
+                          setPet({
+                            ...pet,
+                            ngay_sinh: newValue.format('YYYY-MM-DD'),
+                          });
+                        }
+                      }}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Grid>
+              {/* <Grid item xs={6}>
             <Select
               value={pet.ma_loai}
               label="Loài"
@@ -277,86 +284,101 @@ export default function ChinhSuaThuCung() {
               }}
             />
           </Grid> */}
-          <Grid item xs={6}>
-            <Select
-              value={pet?.ma_giong}
-              label="Giống"
-              required
-              options={giong?.map((item) => {
-                return {
-                  value: item?.ma_giong,
-                  label: item?.ten_giong,
-                };
-              })}
-              onChange={(v) => {
-                if (v?.value) {
-                  setPet({
-                    ...pet,
-                    ma_giong: v?.value as number,
-                  });
-                }
+              <Grid item xs={6}>
+                <Select
+                  value={pet?.ma_giong}
+                  label="Giống"
+                  required
+                  options={giong?.map((item) => {
+                    return {
+                      value: item?.ma_giong,
+                      label: item?.ten_giong,
+                    };
+                  })}
+                  onChange={(v) => {
+                    if (v?.value) {
+                      setPet({
+                        ...pet,
+                        ma_giong: v?.value as number,
+                      });
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Select
+                  value={pet?.gioi_tinh || 0}
+                  label="Giới tính"
+                  options={[
+                    {
+                      value: 0,
+                      label: 'Đực',
+                    },
+                    {
+                      value: 1,
+                      label: 'Cái',
+                    },
+                  ]}
+                  onChange={(v) => {
+                    setPet({
+                      ...pet,
+                      gioi_tinh: v?.value as number,
+                    });
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <StyledTextField
+                  fullWidth
+                  size="small"
+                  margin="normal"
+                  name="user-name"
+                  placeholder="Ghi chú"
+                  label="Ghi chú"
+                  multiline
+                  minRows={5}
+                  value={pet?.ghi_chu}
+                  onChange={(e) => {
+                    setPet({ ...pet, ghi_chu: e.currentTarget.value });
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItem: 'center',
+                justifyContent: 'center',
+                mt: '30px',
               }}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Select
-              value={pet?.gioi_tinh || 0}
-              label="Giới tính"
-              options={[
-                {
-                  value: 0,
-                  label: 'Đực',
-                },
-                {
-                  value: 1,
-                  label: 'Cái',
-                },
-              ]}
-              onChange={(v) => {
-                setPet({
-                  ...pet,
-                  gioi_tinh: v?.value as number,
-                });
-              }}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <StyledTextField
-              fullWidth
-              size="small"
-              margin="normal"
-              name="user-name"
-              placeholder="Ghi chú"
-              label="Ghi chú"
-              multiline
-              minRows={5}
-              value={pet?.ghi_chu}
-              onChange={(e) => {
-                setPet({ ...pet, ghi_chu: e.currentTarget.value });
-              }}
-            />
-          </Grid>
-        </Grid>
-        <Box
+            >
+              <Box
+                onClick={updatePet}
+                sx={{
+                  display: 'flex',
+                  justifyItems: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <StyledButton>Cập nhật thú cưng</StyledButton>
+              </Box>
+            </Box>
+          </Box>
+        </>
+      ) : (
+        <Typography
+          align="center"
           sx={{
-            display: 'flex',
-            alignItem: 'center',
-            justifyContent: 'center',
-            mt: '30px',
+            fontFamily: 'quicksand',
+            fontWeight: '500',
+            mt: '200px',
+            fontSize: '20',
+            color: 'gray',
           }}
         >
-          <Box
-            onClick={updatePet}
-            sx={{
-              display: 'flex',
-              justifyItems: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <StyledButton>Cập nhật thú cưng</StyledButton>
-          </Box>
-        </Box>
-      </Box>
+          Bạn không có quyền chỉnh thú cưng !
+        </Typography>
+      )}
     </>
   );
 }

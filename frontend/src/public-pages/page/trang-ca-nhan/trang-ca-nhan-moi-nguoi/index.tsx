@@ -432,7 +432,14 @@ export default function TrangCaNhanMoiNguoi() {
                 <Button
                   onClick={handleUnfriend}
                   variant="contained"
-                  color="info"
+                  color="inherit"
+                  sx={{
+                    backgroundColor: 'rgb(14, 100, 126)',
+                    color: '#fff',
+                    '&:hover': {
+                      backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                    },
+                  }}
                 >
                   Hủy kết bạn
                 </Button>
@@ -441,7 +448,14 @@ export default function TrangCaNhanMoiNguoi() {
                 <Button
                   onClick={handleAddfriend}
                   variant="contained"
-                  color="info"
+                  color="inherit"
+                  sx={{
+                    backgroundColor: 'rgb(14, 100, 126)',
+                    color: '#fff',
+                    '&:hover': {
+                      backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                    },
+                  }}
                 >
                   Kết bạn
                 </Button>
@@ -453,12 +467,17 @@ export default function TrangCaNhanMoiNguoi() {
                     Đang chờ phản hồi
                   </Button>
                   <Button
-                    sx={{
-                      ml: '12px',
-                    }}
                     onClick={thuHoiLoiMoi}
                     variant="contained"
-                    color="info"
+                    color="inherit"
+                    sx={{
+                      ml: '12px',
+                      backgroundColor: 'rgb(14, 100, 126)',
+                      color: '#fff',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                      },
+                    }}
                   >
                     Thu hồi
                   </Button>
@@ -472,8 +491,14 @@ export default function TrangCaNhanMoiNguoi() {
                 >
                   <Button
                     onClick={() => handleSubmit('accept')}
+                    color="inherit"
                     sx={{
                       minWidth: '100px',
+                      backgroundColor: 'rgb(14, 100, 126)',
+                      color: '#fff',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                      },
                     }}
                     variant="contained"
                   >
@@ -576,7 +601,7 @@ export default function TrangCaNhanMoiNguoi() {
                 alignItems: 'center',
               }}
             >
-              {profile?.gioi_tinh ? (
+              {!profile?.gioi_tinh ? (
                 <FemaleIcon
                   sx={{
                     color: 'gray',

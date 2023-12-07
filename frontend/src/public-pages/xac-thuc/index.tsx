@@ -146,7 +146,7 @@ const XacThucPage = (props: P) => {
             <div>
               <AspectRatioImg
                 style={{ width: 64 }}
-                src={`${process.env.PUBLIC_URL}/assets/images/logo.png`}
+                src={`${process.env.PUBLIC_URL}/assets/images/cutepet.png`}
               />
             </div>
           </Backdrop>

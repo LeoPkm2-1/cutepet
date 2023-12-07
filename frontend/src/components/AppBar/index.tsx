@@ -21,7 +21,10 @@ const AppBar = (props: Props) => {
         <div className="logo">
           <AspectRatioImg
             className="logo-image"
-            src={`${process.env.PUBLIC_URL}/assets/images/logo.png`}
+            style={{
+              borderRadius:"100%"
+            }}
+            src={`${process.env.PUBLIC_URL}/assets/images/cutepet.png`}
           />
         </div>
         <span className="text-medium">Cutepet</span>
