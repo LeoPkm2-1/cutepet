@@ -62,7 +62,7 @@ Biến mất cả ở trong trang chi tiết của bài viết
 
 
 
-## 74. ---DONE--- trang cập nhật thông tin nguời dùng
+## 74. ---DONE--- || ==ERR== trang cập nhật thông tin nguời dùng
 sai ở cái chỗ số điện thoại 
 ![](../media/img/err/img31.png)
 
@@ -143,3 +143,8 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 ![](../media/img/err/img30.png)
 
 ## 101. load thêm hình luận.
+
+## 102. khi nhận được thông báo chưa gửi lời mời kết bạn đến người dùng khác thì tắt giao diện thu hồi lời mời kết bạn đi
+
+![](../media/img/err/img32.png)
+
