@@ -31,7 +31,7 @@ export default function ChinhSuaThuCung() {
     chieu_cao: 0,
     can_nang: 0,
   });
-  const profileId = useSelector((state: RootState) => state.user.profile);
+  const profileId = useSelector((state: RootState) => state.user.profile?.id);
   const { id } = useParams();
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);

@@ -93,6 +93,7 @@ const RegisterPage = (props: P) => {
     } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       errors.email = 'Định dạnh email không đúng.';
     }
+    
     if (!password) {
       errors.password = 'Mật khẩu không được để trống.';
     }else if (
