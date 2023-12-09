@@ -181,6 +181,7 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 
 
 ## 110. load bình luận trong bài viết trạng thái có phân trang
+## 110. load bình luận trong Chia sẻ kiến thức trạng thái có phân trang
 ## 111. search người dùng phân trang
 ## 112. Khi đang dứng ở trang cá nhân của người dùng và tìm kiếm người dùng khác thì bị lỗi chỗ ảnh người dùng ở bài viết.
 
