@@ -196,5 +196,7 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 
 ![](../media/img/err/img33.png)
 
+## 114. ngày sinh nếu không có hoặc sai thì không nên để invalid date mà nên để trống
+
 
 
