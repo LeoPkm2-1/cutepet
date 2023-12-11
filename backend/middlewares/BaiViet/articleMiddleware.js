@@ -510,6 +510,7 @@ const navigateToSuitableFilterArricleMid = async (req, res, next) => {
 
 const preProcessReport = async (req, res, next) => {
   let { report_Reason } = req.body;
+  report_Reason = report_Reason || "";
   req.body.report_Reason = report_Reason.trim();
   // res.send({ report_Reason: req.body.report_Reason });
   // return;

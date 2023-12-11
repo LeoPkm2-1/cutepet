@@ -56,7 +56,7 @@ export default function ChinhSuaThuCung() {
         if (data?.status == 200) {
           const pet: PetType = {
             ten_thu_cung: data?.payload?.ten_thu_cung,
-            ngay_sinh: data?.payload?.ngay_sinh,
+            ngay_sinh: data?.payload?.ngay_sinh ? moment(data?.payload?.ngay_sinh).format("YYYY-MM-DD") : "",
             gioi_tinh: data?.payload?.gioi_tinh,
             ghi_chu: data?.payload?.ghi_chu,
             url_anh: data?.payload?.anh?.url,

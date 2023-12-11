@@ -134,7 +134,7 @@ export function DanhSachThuCung(props: {
               alignItems: 'center',
             }}
           >
-            {!props?.pet?.gioi_tinh ? <FemaleIcon /> : <MaleIcon />}
+            {props?.pet?.gioi_tinh ? <FemaleIcon /> : <MaleIcon />}
             <StyledTypography
               sx={{
                 fontSize: '13px',
