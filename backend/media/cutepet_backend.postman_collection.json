@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "leo",
+							"value": "karendurham",
 							"type": "text"
 						},
 						{
@@ -1078,8 +1078,7 @@
 						{
 							"key": "num",
 							"value": "4",
-							"type": "text",
-							"disabled": true
+							"type": "text"
 						}
 					]
 				},
@@ -1537,7 +1536,7 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "654f9e8f479ad1da822047b4",
+							"value": "657086c7d1bbd4fc3e2f3f5a",
 							"type": "text"
 						}
 					]
@@ -1619,12 +1618,12 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "654f9e8f479ad1da822047b4",
+							"value": "657086c7d1bbd4fc3e2f3f5a",
 							"type": "text"
 						},
 						{
 							"key": "comment",
-							"value": "vui quá 123",
+							"value": "a",
 							"type": "text"
 						}
 					]
@@ -1926,7 +1925,7 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "654f9e8f479ad1da822047b4",
+							"value": "657086c7d1bbd4fc3e2f3f5a",
 							"type": "text"
 						}
 					]
@@ -2701,13 +2700,14 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"index\":1,\n    \"PostIdsHaveRendered\":[\"123456789012123456789138\",\"123456789012123456789118\",\"123456789012123456789132\",\"655f83f78c54dd810bb61689\",\n\"655f83ef8c54dd810bb61687\"]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "index",
+							"value": "8",
+							"type": "text"
 						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3000/post/statusPost/getPostForNewsfeed",
@@ -2986,67 +2986,6 @@
 			"response": []
 		},
 		{
-			"name": "capnhatthongtinthucung",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjoxLCJ0ZW4iOiJOYW0iLCJuZ2F5X3NpbmgiOiIxOTkxLTA5LTI4VDE3OjAwOjAwLjAwMFoiLCJ0YWlfa2hvYW4iOiJuYW0iLCJlbWFpbCI6Im5hbUBnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY3OCIsImdpb2lfdGluaCI6MSwiaWF0IjoxNjkxOTgwODMzLCJleHAiOjE2OTE5ODM4MzN9.0lpa7HU0dz6EMoAJCnEkzvfvybDKFw4xL-0FMa4qYIOv_xOi9MPXzyNB6lQDykVwn9Hx0ZkSKGq0s42mXD1cgw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "ten_thu_cung",
-							"value": "tony-2",
-							"type": "text"
-						},
-						{
-							"key": "ngay_sinh",
-							"value": "2019-10-14",
-							"type": "text"
-						},
-						{
-							"key": "gioi_tinh",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "ghi_chu",
-							"value": "mập béo lười",
-							"type": "text"
-						},
-						{
-							"key": "ma_giong",
-							"value": "202",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/pet/capnhatthongtin/18",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"pet",
-						"capnhatthongtin",
-						"18"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "70_getUnReadNotiStartFrom",
 			"request": {
 				"auth": {
@@ -3066,13 +3005,14 @@
 					"urlencoded": [
 						{
 							"key": "index",
-							"value": "1",
+							"value": "0",
 							"type": "text"
 						},
 						{
 							"key": "num",
 							"value": "2",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -3232,13 +3172,17 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_0}}",
 							"type": "string"
 						}
 					]
 				},
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
 				"url": {
 					"raw": "http://localhost:3000/friend/getListSuggestedFriends",
 					"protocol": "http",
@@ -3320,6 +3264,112 @@
 						"post",
 						"statusPost",
 						"getPost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "77_capnhatthongtinthucung",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ten_thu_cung",
+							"value": "tony-2",
+							"type": "text"
+						},
+						{
+							"key": "ngay_sinh",
+							"value": "2019-10-14",
+							"type": "text"
+						},
+						{
+							"key": "gioi_tinh",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "ghi_chu",
+							"value": "mập béo lười",
+							"type": "text"
+						},
+						{
+							"key": "ma_giong",
+							"value": "202",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/pet/capnhatthongtin/18",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"pet",
+						"capnhatthongtin",
+						"18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "78_pet_capnhatanhdaidien",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "url_anh",
+							"value": "https://i.pinimg.com/236x/e4/21/92/e42192b0682ede9d80d92260fb5e17cd.jpg",
+							"type": "text"
+						},
+						{
+							"key": "pet_id",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/pet/capnhatanhdaidien",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"pet",
+						"capnhatanhdaidien"
 					]
 				}
 			},
