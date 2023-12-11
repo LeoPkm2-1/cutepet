@@ -113,7 +113,7 @@ export default function BaiVietThuCung() {
         }
       });
     }
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (id && profile?.id && timePost && timePost !== 'none') {
@@ -298,7 +298,7 @@ export default function BaiVietThuCung() {
                   }}
                 />
 
-                {moment(petInfo?.ngay_sinh).format('DD-MM-YYYY')}
+                {petInfo?.ngay_sinh && moment(petInfo?.ngay_sinh).format('DD-MM-YYYY')}
               </Typography>
 
               <Typography
@@ -350,7 +350,7 @@ export default function BaiVietThuCung() {
                   alignItems: 'center',
                 }}
               >
-                {!petInfo?.gioi_tinh ? (
+                {petInfo?.gioi_tinh ? (
                   <FemaleIcon
                     sx={{
                       color: 'gray',
@@ -367,7 +367,7 @@ export default function BaiVietThuCung() {
                     }}
                   />
                 )}
-                {petInfo?.gioi_tinh ? 'Đực' : 'Cái'}
+                {petInfo?.gioi_tinh ? 'Cái' : 'Đực'}
               </Typography>
               {/* <Box
                 sx={{

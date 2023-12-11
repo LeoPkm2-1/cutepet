@@ -143,7 +143,6 @@ export default function TrangCaNhanMoiNguoi() {
             if (data?.payload?.length == 0) {
               setTimePost('');
               setListPost([]);
-
               return;
             }
             const list: StatusType[] = data?.payload?.map((item: any) => {
@@ -158,9 +157,9 @@ export default function TrangCaNhanMoiNguoi() {
                 numOfComment: item?.numOfComment,
                 visibility: item?.visibility,
                 userInfor: {
-                  id: profile.id,
-                  name: profile.name,
-                  avatarURL: profile.url,
+                  id: item?.owner_infor?.ma_nguoi_dung,
+                  name: item?.owner_infor?.ten,
+                  avatarURL: item?.owner_infor?.anh?.url,
                 },
                 hasLiked: item?.hasLiked,
                 text: item?.text,
@@ -212,9 +211,9 @@ export default function TrangCaNhanMoiNguoi() {
                 numOfLike: item?.numOfLike,
                 numOfComment: item?.numOfComment,
                 userInfor: {
-                  id: profile.id,
-                  name: profile.name,
-                  avatarURL: profile.url,
+                  id: item?.owner_infor?.ma_nguoi_dung,
+                  name: item?.owner_infor?.ten,
+                  avatarURL: item?.owner_infor?.anh?.url,
                 },
                 hasLiked: item?.hasLiked,
                 text: item?.text,
@@ -347,6 +346,7 @@ export default function TrangCaNhanMoiNguoi() {
           enqueueSnackbar(`${err?.message || 'Thất bại vui lòng thử lại !'}`, {
             variant: 'error',
           });
+          setIsFriend(0);
         });
     }
   }
@@ -588,7 +588,7 @@ export default function TrangCaNhanMoiNguoi() {
                 }}
               />
 
-              {moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
+              { profile?.ngay_sinh && moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
             </Typography>
 
             <Typography
@@ -601,7 +601,7 @@ export default function TrangCaNhanMoiNguoi() {
                 alignItems: 'center',
               }}
             >
-              {!profile?.gioi_tinh ? (
+              {profile?.gioi_tinh ? (
                 <FemaleIcon
                   sx={{
                     color: 'gray',
@@ -618,7 +618,7 @@ export default function TrangCaNhanMoiNguoi() {
                   }}
                 />
               )}
-              {profile?.gioi_tinh ? 'Nam' : 'Nữ'}
+              {profile?.gioi_tinh ? 'Nữ' : 'Nam'}
             </Typography>
             <Box
               sx={{

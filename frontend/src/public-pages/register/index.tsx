@@ -403,7 +403,7 @@ const RegisterPage = (props: P) => {
               <div style={{ textAlign: 'center' }}>
                 Bạn đã có tài khoản ?{' '}
                 <StyledHref onClick={() => navigate('/login')}>
-                  Đang nhập ngay !
+                  Đăng nhập ngay !
                 </StyledHref>
               </div>
             </Footer>

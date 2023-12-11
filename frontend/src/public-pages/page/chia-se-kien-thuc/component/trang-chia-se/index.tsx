@@ -191,7 +191,7 @@ export function TrangChiaSe() {
             }}
             align="center"
           >
-            Bộ lọc theo categori
+            Bộ lọc theo categories
           </Typography>
         </Grid>
         {totalPage && (

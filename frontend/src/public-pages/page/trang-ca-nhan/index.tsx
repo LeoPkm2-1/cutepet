@@ -275,7 +275,7 @@ export default function TrangCaNhan() {
                 }}
               />
 
-              {moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
+              {profile?.ngay_sinh && moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
             </Typography>
 
             <Typography
@@ -306,7 +306,7 @@ export default function TrangCaNhan() {
                   }}
                 />
               )}
-              {profile?.gioi_tinh ? 'Nam' : 'Nữ'}
+              {profile?.gioi_tinh ? 'Nữ' : 'Nam'}
             </Typography>
 
             <Box

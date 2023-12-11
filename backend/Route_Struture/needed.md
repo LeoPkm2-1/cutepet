@@ -68,7 +68,7 @@ sai ở cái chỗ số điện thoại
 
 
 
-## ---DONE---||== ERR== 76. chỉnh sửa bài viết chia sẻ trạng thái
+## ---DONE---||== DONE == 76. chỉnh sửa bài viết chia sẻ trạng thái
 thiếu nút ấn chỉnh sửa khi vào bài viết trang chi tiết của bài viết chia sẻ trạng thái.
 ![](../media/img/err/img30.png)
 
@@ -80,7 +80,7 @@ thiếu nút ấn chỉnh sửa khi vào bài viết trang chi tiết của bài
 
 
 
-## ---DONE--- || ==ERR== 83. khi đứng tại trang cá nhân của 1 người khác mà nhận được thông báo lời mời kết bạn rồi bấm vào thì chỉ có phần trên thay đổi còn phần dưới thì không.
+## ---DONE--- || ==DONE== 83. khi đứng tại trang cá nhân của 1 người khác mà nhận được thông báo lời mời kết bạn rồi bấm vào thì chỉ có phần trên thay đổi còn phần dưới thì không.
 
 ![](./../media/img/err/img23.png)
 
@@ -136,23 +136,23 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 
 ![](../media/img/err/img29.png)
 
-## 100. cho phép chỉnh sửa khi ở trang chi tiết của bài viết nếu ta là chủ
+## ---DONE-- 100. cho phép chỉnh sửa khi ở trang chi tiết của bài viết nếu ta là chủ
 
 ![](../media/img/err/img30.png)
 
 ## 101. load thêm hình luận.
 
-## 102. khi nhận được thông báo chưa gửi lời mời kết bạn đến người dùng khác thì tắt giao diện thu hồi lời mời kết bạn đi
+## ---DONE--- 102. khi nhận được thông báo chưa gửi lời mời kết bạn đến người dùng khác thì tắt giao diện thu hồi lời mời kết bạn đi
 
 ![](../media/img/err/img32.png)
 
-## 103. đứng tại trang của thú cưng này bấm vào con thú cưng kia thì chỉ có phần bài viết thay đổi còn phần thông tin phía trên thì không thay đổi.
+## ---DONE--- 103. đứng tại trang của thú cưng này bấm vào con thú cưng kia thì chỉ có phần bài viết thay đổi còn phần thông tin phía trên thì không thay đổi.
 ![](../media/img/err/img33.png)
 
-## 104. thiếu phần theo dõi ở chỗ bài viết của mình trạng thái
+## ---DONE--- 104. thiếu phần theo dõi ở chỗ bài viết của mình trạng thái
 ![](../media/img/err/img34.png)
 
-## 105. chỉnh sửa thú cưng bị lỗi chỗ ngày sinh khi để ngày sinh là giống với ban đầu
+## ---DONE--- 105. chỉnh sửa thú cưng bị lỗi chỗ ngày sinh khi để ngày sinh là giống với ban đầu
 **sai do truyền vào ngày sinh mặc định cả giờ phút giây**
 ![](../media/img/err/img35.png)
 
@@ -161,14 +161,14 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 
 
 
-## 107. đang đứng ở trang cá nhân của người dùng khác bấm vào trang cá nhân của người dùng khác nữa thì giao diện bị đảo ngược
+## ---DONE--- 107. đang đứng ở trang cá nhân của người dùng khác bấm vào trang cá nhân của người dùng khác nữa thì giao diện bị đảo ngược
 
 ![](../media/img/err/img37.png)
 
-## 108. xử lý giao diện khi thu hồi lời mời không tồn tại.
+## ---DONE --- 108. xử lý giao diện khi thu hồi lời mời không tồn tại.
 ![](../media/img/err/img38.png)
 
-## 109. giao diện sai chính tả
+## --DONE--- 109. giao diện sai chính tả
 
 
 **cả trang đăng ký  đăng nhập nữa nha**
@@ -183,20 +183,20 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 ## 110. load bình luận trong bài viết trạng thái có phân trang
 ## 110. load bình luận trong Chia sẻ kiến thức trạng thái có phân trang
 ## 111. search người dùng phân trang
-## 112. Khi đang dứng ở trang cá nhân của người dùng và tìm kiếm người dùng khác thì bị lỗi chỗ ảnh người dùng ở bài viết.
+## --DONE --- 112. Khi đang dứng ở trang cá nhân của người dùng và tìm kiếm người dùng khác thì bị lỗi chỗ ảnh người dùng ở bài viết.
 
 **cách giải quyết:** khi bấm vào người dùng => load toàn bộ lại thông tinh giống như nhập mã người dùng vào *url*
 
 ![](../media/img/err/img37.png)
 
 
-## 113. khi bài viết có 2 con thú cưng đang đứng ở trang của con thú này mà chọn con thú kia thì chỉ có phần bài viết thay đổi còn phần thông tin phía trên thì không thay đổi.
+## ---DONE--- 113. khi bài viết có 2 con thú cưng đang đứng ở trang của con thú này mà chọn con thú kia thì chỉ có phần bài viết thay đổi còn phần thông tin phía trên thì không thay đổi.
 
 **cách giải quyết:** khi bấm vào thú cưng => load toàn bộ lại thông tinh giống như nhập mã thú cưng vào *url*
 
 ![](../media/img/err/img33.png)
 
-## 114. ngày sinh nếu không có hoặc sai thì không nên để invalid date mà nên để trống
+## ---DONE-- 114. ngày sinh nếu không có hoặc sai thì không nên để invalid date mà nên để trống
 
 
 

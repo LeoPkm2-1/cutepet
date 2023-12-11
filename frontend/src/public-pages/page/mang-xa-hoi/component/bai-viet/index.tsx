@@ -426,7 +426,7 @@ export default function PostComponent(props: Props) {
                     )}
                   </Typography>
                   <Typography
-                  onClick = {() => navigate(`/home/post/${status?.id}`)}
+                    onClick={() => navigate(`/home/post/${status?.id}`)}
                     sx={{
                       fontFamily: 'quicksand',
                       fontWeight: '400',
@@ -434,7 +434,7 @@ export default function PostComponent(props: Props) {
                       color: 'gray',
                       display: 'flex',
                       alignItems: 'center',
-                      cursor:'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     <span
@@ -501,6 +501,41 @@ export default function PostComponent(props: Props) {
                   horizontal: 'right',
                 }}
               >
+                {isFollow ? (
+                  <MenuItem
+                    sx={{
+                      fontFamily: 'quicksand',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      minWidth: '180px',
+                    }}
+                    onClick={handleUnFollow}
+                  >
+                    <span> Tắt thông báo </span>{' '}
+                    <NotificationsOffIcon
+                      sx={{
+                        color: 'gray',
+                      }}
+                    />
+                  </MenuItem>
+                ) : (
+                  <MenuItem
+                    sx={{
+                      fontFamily: 'quicksand',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      minWidth: '180px',
+                    }}
+                    onClick={handleFollow}
+                  >
+                    <span> Bật thông báo </span>{' '}
+                    <NotificationsIcon
+                      sx={{
+                        color: 'gray',
+                      }}
+                    />
+                  </MenuItem>
+                )}
                 {status?.owner_id == profile?.id ? (
                   <>
                     <MenuItem
@@ -541,41 +576,6 @@ export default function PostComponent(props: Props) {
                   </>
                 ) : (
                   <>
-                    {isFollow ? (
-                      <MenuItem
-                        sx={{
-                          fontFamily: 'quicksand',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          minWidth: '150px',
-                        }}
-                        onClick={handleUnFollow}
-                      >
-                        <span> Bỏ theo dõi </span>{' '}
-                        <NotificationsOffIcon
-                          sx={{
-                            color: 'gray',
-                          }}
-                        />
-                      </MenuItem>
-                    ) : (
-                      <MenuItem
-                        sx={{
-                          fontFamily: 'quicksand',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          minWidth: '150px',
-                        }}
-                        onClick={handleFollow}
-                      >
-                        <span> Theo dõi </span>{' '}
-                        <NotificationsIcon
-                          sx={{
-                            color: 'gray',
-                          }}
-                        />
-                      </MenuItem>
-                    )}
                     <MenuItem
                       sx={{
                         fontFamily: 'quicksand',
@@ -633,7 +633,7 @@ export default function PostComponent(props: Props) {
                 style={{
                   width: '100%',
                   objectFit: 'cover',
-                  maxHeight:"550px"
+                  maxHeight: '550px',
                 }}
                 src={status?.media?.data[0]}
               />
@@ -840,17 +840,19 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
     if (props.comment.id) {
       postApi.getAllReply(props.comment.id).then((data) => {
         if (data?.status == 200) {
-          const reps: CommentType[] = data?.payload?.replies?.map((item: any) => {
-            return {
-              photoURL: item?.userReplyInfor?.anh?.url,
-              name: item?.userReplyInfor?.ten,
-              text: item?.reply,
-              createdAt: item?.replyAt,
-              id: item?._id,
-              userId: item?.userReplyInfor?.ma_nguoi_dung,
-              postUserId: props?.comment?.postUserId,
-            } as CommentType;
-          });
+          const reps: CommentType[] = data?.payload?.replies?.map(
+            (item: any) => {
+              return {
+                photoURL: item?.userReplyInfor?.anh?.url,
+                name: item?.userReplyInfor?.ten,
+                text: item?.reply,
+                createdAt: item?.replyAt,
+                id: item?._id,
+                userId: item?.userReplyInfor?.ma_nguoi_dung,
+                postUserId: props?.comment?.postUserId,
+              } as CommentType;
+            }
+          );
           console.log('lấy phản hổi thanh cong', reps);
           setReplys(reps.reverse());
           setIsFinish(true);
@@ -922,7 +924,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
 
   useEffect(() => {
     setComment(props?.comment);
-    setIsLike(props?.comment?.hasLike)
+    setIsLike(props?.comment?.hasLike);
   }, [props?.comment?.id]);
 
   return (

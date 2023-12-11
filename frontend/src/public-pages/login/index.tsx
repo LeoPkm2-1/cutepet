@@ -312,7 +312,7 @@ const LoginPage = (props: P) => {
               <div style={{ textAlign: 'center' }}>
                 Bạn chưa có tài khoản ?{' '}
                 <StyledHref onClick={() => navigate('/register')}>
-                  Đang ký ngay !
+                  Đăng ký ngay !
                 </StyledHref>
               </div>
             </Footer>
