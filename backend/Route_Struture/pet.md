@@ -349,6 +349,7 @@
 3. trả về:
 
 - khi không có quyền:
+
 ```javascript
 {
     "status": 400,
@@ -371,8 +372,63 @@
 }
 ```
 
+## 8. cập nhật ảnh đại diện thú cưng
 
-##
+**(postman số 78)**
+
+1. phương thức:
+
+   POST http://localhost:3000/pet/capnhatanhdaidien
+
+2. cấu trúc:
+
+```javascript
+{
+  url_anh: string;
+  pet_id: number;
+}
+```
+
+- trong đó:
+  - **url_anh**:  url của ảnh đại diện cần cập nhật
+  - **pet_id**: mô tả mã của thú cưng cần cập nhật ảnh đại diện
+
+3. trả về:
+
+- khi không có quyền:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "bạn không phải là chủ thú cưng",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi url bị để trống bằng **null** hoặc **undefined**
+```javascript
+{
+    "status": 200,
+    "payload": [],
+    "message": "url_anh rỗng nên ảnh không thay đổi",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi cập nhật ảnh đại diện thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": [],
+    "message": "cập nhật ảnh đại diện cho thú cưng thành công",
+    "errno": null,
+    "errcode": null
+}
+```
 
 ##
 

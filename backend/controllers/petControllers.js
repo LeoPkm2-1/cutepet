@@ -208,6 +208,25 @@ const deletePet = async (req, res) => {
     console.log(error);
   }
 };
+
+const updatePetAvatarController = async (req, res) => {
+  try {
+    const { url_anh, pet_id } = req.body;
+    const data = await anhThuCungModel.capNhatAnhDaiDienThuCung(
+      url_anh,
+      pet_id
+    );
+    // console.log(data);
+    // res.send("1");
+    res
+      .status(200)
+      .json(
+        new Response(200, [], "cập nhật ảnh đại diện cho thú cưng thành công")
+      );
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   getInforById,
   getAllOwnPet,
@@ -215,4 +234,5 @@ module.exports = {
   updateInfor,
   deletePet,
   getAllMyPets,
+  updatePetAvatarController,
 };
