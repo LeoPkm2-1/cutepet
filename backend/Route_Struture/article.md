@@ -1350,6 +1350,13 @@ trong đó:
 {
     "searchKey":string || null,
     "tags":array(string) || null,
+    "sortBy":   "TIME_NEWEST_TO_OLDEST" ||   
+                "TIME_OLDEST_TO_NEWEST" ||  
+                "NUM_OF_COMMENT_DESC" ||  
+                "NUM_OF_COMMENT_ASC" ||
+                "SCORE_DESC" ||
+                "SCORE_ASC",
+    "authorName":string || null,
     "index":number || null,
     "num": number || null
 }
@@ -1358,10 +1365,19 @@ trong đó:
 - trong đó:
   - **searchKey**: mô tả từ khóa liên quan đến tiêu đề của bài viết muốn tìm kiếm.
   - **tags**: danh sách các thể loại bài viết chia sẻ trạng thái muốn tìm kiếm nếu không có để là `null`
+  - **authorName**: một phần của tên tác giả muốn tìm kiếm
+  - **sortBy**: mô tả cách sắp sếp dữ liệu trả về theo các các sau đây
+    - ***TIME_NEWEST_TO_OLDEST*** : sắp xếp theo thời gian gần nhất
+    - ***TIME_OLDEST_TO_NEWEST*** : sắp xêp theo thời gian từ cũ đến mới
+    - ***NUM_OF_COMMENT_DESC*** : sắp xếp theo số lượng bình luận giảm dần
+    - ***NUM_OF_COMMENT_ASC*** : sắp xếp theo số lượng bình luận tăng dần
+    - ***SCORE_DESC*** : sắp xếp theo điểm giảm dần
+    - ***SCORE_ASC*** : sắp xếp theo điểm tăng dần
+
   - **index**: mô tả lấy từ bài viết thứ mấy chở đi (index bắt đầu từ: 0,1,2....)
   - **num**: số lượng bài viết muốn lấy ra. Nếu muốn lấy đến cuối danh sách thì truyền vào là `null`
 
-3. trả về:
+1. trả về:
 
 ```javascript
 {
