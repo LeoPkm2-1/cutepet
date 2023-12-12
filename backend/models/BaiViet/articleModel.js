@@ -715,15 +715,162 @@ const getTotalNumOfArticleHaveKeywWordInTitleAndCategories = async (
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
-// (async function () {
-//   const data = await getTotalNumOfArticleHaveListOfCategories(['CÁCH CHĂM SÓC','MÈO']);
-//   console.log(data);
-// })()
+
+const filterArticleModel = async (filter_params) => {
+  const { type, filterObj, index, num, sortObj } = filter_params;
+  // index = parseInt(index);
+  let executor = undefined;
+  if (type == "FIND") {
+    executor = async (collection) => {
+      if (typeof num == "undefined") {
+        return await collection
+          .find(filterObj)
+          .sort(sortObj)
+          .skip(index)
+          .toArray();
+      } else {
+        return await collection
+          .find(filterObj)
+          .sort(sortObj)
+          .skip(index)
+          .limit(num)
+          .toArray();
+      }
+    };
+  } else {
+    executor = async (collection) => {
+      if (typeof num == "undefined") {
+        return await collection
+          .aggregate([
+            {
+              $match: filterObj,
+            },
+            {
+              $addFields: {
+                score: {
+                  $subtract: ["$numOfUpVote", "$numOfDownVote"],
+                },
+              },
+            },
+            {
+              $sort: sortObj,
+            },
+            {
+              $skip: index,
+            },
+          ])
+          .toArray();
+      } else {
+        return await collection
+          .aggregate([
+            {
+              $match: filterObj,
+            },
+            {
+              $addFields: {
+                score: {
+                  $subtract: ["$numOfUpVote", "$numOfDownVote"],
+                },
+              },
+            },
+            {
+              $sort: sortObj,
+            },
+            {
+              $skip: index,
+            },
+            {
+              $limit: num,
+            },
+          ])
+          .toArray();
+      }
+    };
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getTotalNumOfArticleFilter = async (filter_params) => {
+  const { type, filterObj, index, num, sortObj } = filter_params;
+  let executor = undefined;
+  if (type == "FIND") {
+    executor = async (collection) => {
+      return await collection.countDocuments(filterObj);
+    };
+  } else {
+    // console.log('heheh');
+    executor = async (collection) => {
+      return await collection
+        .aggregate([
+          {
+            $match: filterObj,
+          },
+          { $count: "totalNumOfArticles" },
+        ])
+        .toArray();
+    };
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// async function test() {
+//   async function executor(collection) {
+//     return await collection
+//       .aggregate([
+//         {
+//           $match: {
+//             postType: "ARTICLE",
+//           },
+//         },
+//         {
+//           $addFields: {
+//             score: {
+//               $subtract: ["$numOfUpVote", "$numOfDownVote"],
+//             },
+//           },
+//         },
+//         {
+//           $project: {
+//             _id: 1,
+//             title: 1,
+//           },
+//         },
+//       ])
+//       .toArray();
+//   }
+//   return await nonSQLQuery(executor, "BaiViet")
+//     .then((data) => new Response(200, data, ""))
+//     .catch((err) => new Response(400, err, "", 300, 300));
+// }
+
+// async function test_1() {
+//   async function executor(collection) {
+//     return await collection
+//       .aggregate([
+//         {
+//           $match: {
+//             postType: "ARTICLE",
+//             // owner_id:109999
+//           },
+//         },
+//         { $count: "heee" },
+//       ])
+//       .toArray();
+//   }
+//   return await nonSQLQuery(executor, "BaiViet")
+//     .then((data) => new Response(200, data, ""))
+//     .catch((err) => new Response(400, err, "", 300, 300));
+// }
 
 // (async function () {
-//   const data = await getAllCommentsOfArticle("6548f00bb7221c7de43e80f6");
-//   console.log(data);
-// })();
+//   const data = await test_1();
+//   console.log(data.payload[0]);
+// })()
+
 
 module.exports = {
   addArticle,
@@ -767,4 +914,6 @@ module.exports = {
   getTotalNumOfArticleHaveListOfCategories,
   findArticlesByKeyWordInTitleAndCategories,
   getTotalNumOfArticleHaveKeywWordInTitleAndCategories,
+  filterArticleModel,
+  getTotalNumOfArticleFilter,
 };
