@@ -193,6 +193,39 @@ export function TrangChiaSe() {
           >
             Bộ lọc theo categories
           </Typography>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: '100%',
+              marginTop: '35px',
+            }}
+          >
+            <TagNameSelect
+              label="Lọc theo danh mục"
+              value={tag}
+              onChange={(value) => {
+                sp.delete('categori');
+                setSearchParams(sp);
+                setPage(1);
+                setTag(value);
+              }}
+            />
+          </Box>
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              flex: 1,
+              fontSize: '14px',
+              mb: '16px',
+              color: 'gray',
+            }}
+            align="center"
+          >
+            Bộ lọc theo tác giả
+          </Typography>
         </Grid>
         {totalPage && (
           <Box

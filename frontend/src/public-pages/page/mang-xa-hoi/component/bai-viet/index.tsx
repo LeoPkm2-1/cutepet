@@ -1,6 +1,6 @@
 import {
   Box,
-  Button,
+  Dialog,
   Divider,
   IconButton,
   InputBase,
@@ -14,7 +14,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import postApi from '../../../../../api/post';
 import { useSnackbar } from 'notistack';
 import { CommentType, StatusType } from '../../../../../models/post';
@@ -36,6 +36,10 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 import { useShowDialog } from '../../../../../hooks/dialog';
 import UpdatePost from '../chinh-sua-bai-viet';
+import { deepCopy } from '@firebase/util';
+import { StyledTextField } from '../../../../../components/FormItem';
+import Button from '../../../../../components/Button';
+
 type Props = {
   idStatus?: string;
   status?: StatusType;
@@ -55,6 +59,12 @@ export default function PostComponent(props: Props) {
   const [openUpdate, setOpenUpdate] = useState(false);
   const profile = useSelector((state: RootState) => state.user.profile);
   const postIdNew = useSelector((state: RootState) => state.socket.hasPostId);
+  const indexCommentPost = useRef(0);
+  const [isLoadComment, setIsLoadComment] = useState(false);
+  const [isHasComment, setIsHasComment] = useState(true);
+  const [numCommentPost, setNumCommentPost] = useState(5);
+  const [textFlag, setTextFlag] = useState('');
+  const [openFlag, setOpenFlag] = useState(false);
   const [friendTag, setFriendTag] = useState<
     {
       id: string;
@@ -118,34 +128,32 @@ export default function PostComponent(props: Props) {
     console.log('reload comment');
 
     // if (props.status && props.status?.id) {
-    if (status?.id) {
-      postApi.getAllComment(status?.id).then((data) => {
-        if (data?.status == 200) {
-          const comments = data?.payload?.comments?.map((item: any) => {
-            return {
-              photoURL: item?.userCmtInfor?.anh?.url,
-              name: item?.userCmtInfor?.ten,
-              text: item?.comment,
-              createdAt: item?.commentAt,
-              id: item?._id,
-              numOfLike: item?.numOfLike,
-              numOfReply: item?.numOfReply,
-              postUserId: status?.userInfor?.id,
-              userId: item?.userCmtInfor?.ma_nguoi_dung,
-              hasLike: item?.hasLike,
-            } as CommentType;
-          });
-          console.log(comments, 'Comment');
+    // if (status?.id) {
+    //   postApi.getAllComment(status?.id).then((data) => {
+    //     if (data?.status == 200) {
+    //       const comments = data?.payload?.comments?.map((item: any) => {
+    //         return {
+    //           photoURL: item?.userCmtInfor?.anh?.url,
+    //           name: item?.userCmtInfor?.ten,
+    //           text: item?.comment,
+    //           createdAt: item?.commentAt,
+    //           id: item?._id,
+    //           numOfLike: item?.numOfLike,
+    //           numOfReply: item?.numOfReply,
+    //           postUserId: status?.userInfor?.id,
+    //           userId: item?.userCmtInfor?.ma_nguoi_dung,
+    //           hasLike: item?.hasLike,
+    //         } as CommentType;
+    //       });
+    //       console.log(comments, 'Comment');
 
-          setComments(comments);
-        }
-      });
-    }
+    //       setComments(comments);
+    //     }
+    //   });
+    // }
   }, [reloadComment]);
 
   useEffect(() => {
-    console.log('reload comment');
-
     // if (props.status && props.status?.id) {
     if (status?.id && postIdNew == status?.id) {
       postApi.getAllComment(status?.id).then((data) => {
@@ -164,8 +172,6 @@ export default function PostComponent(props: Props) {
               hasLike: item?.hasLike,
             } as CommentType;
           });
-          console.log(comments, 'Comment');
-
           setComments(comments);
         }
       });
@@ -183,6 +189,43 @@ export default function PostComponent(props: Props) {
       });
     }
   }, [props?.status?.id]);
+
+  useEffect(() => {
+    if (indexCommentPost.current > 0 && status?.id) {
+      postApi
+        .getCommentStartFrom(
+          status?.id,
+          indexCommentPost.current,
+          numCommentPost
+        )
+        .then((data: any) => {
+          console.log(data, ' data comment');
+
+          if (data?.status == 200) {
+            const newComments = data?.payload?.comments?.map((item: any) => {
+              return {
+                photoURL: item?.userCmtInfor?.anh?.url,
+                name: item?.userCmtInfor?.ten,
+                text: item?.comment,
+                createdAt: item?.commentAt,
+                id: item?._id,
+                numOfLike: item?.numOfLike,
+                numOfReply: item?.numOfReply,
+                postUserId: status?.userInfor?.id,
+                userId: item?.userCmtInfor?.ma_nguoi_dung,
+                hasLike: item?.hasLike,
+              } as CommentType;
+            });
+            setComments([...comments, ...newComments]);
+            if (data?.payload?.comments?.length < numCommentPost) {
+              setIsHasComment(false);
+            }
+          } else {
+            setIsHasComment(false);
+          }
+        });
+    }
+  }, [isLoadComment]);
 
   function handleLike() {
     if (status?.id) {
@@ -262,12 +305,13 @@ export default function PostComponent(props: Props) {
   function handleReport() {
     if (status?.id) {
       postApi
-        .reportPost(status?.id)
+        .reportPost(status?.id, textFlag)
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Báo cáo bài viết thành công`, {
               variant: 'info',
             });
+            setOpenFlag(false);
           }
         })
         .catch((err) => {
@@ -280,25 +324,41 @@ export default function PostComponent(props: Props) {
     // if (props.status && props.status?.numOfComment > 0 && props.status?.id) {
     if (status && (status?.numOfComment || 0) > 0 && status?.id) {
       // await postApi.getAllComment(props.status?.id).then((data) => {
-      await postApi.getAllComment(status?.id).then((data) => {
-        if (data?.status == 200) {
-          const commemts = data?.payload?.comments?.map((item: any) => {
-            return {
-              photoURL: item?.userCmtInfor?.anh?.url,
-              name: item?.userCmtInfor?.ten,
-              text: item?.comment,
-              createdAt: item?.commentAt,
-              id: item?._id,
-              numOfLike: item?.numOfLike,
-              numOfReply: item?.numOfReply,
-              postUserId: status?.userInfor?.id,
-              userId: item?.userCmtInfor?.ma_nguoi_dung,
-              hasLike: item?.hasLike,
-            } as CommentType;
-          });
-          setComments(commemts);
-        }
-      });
+
+      await postApi
+        .getCommentStartFrom(
+          status?.id,
+          indexCommentPost.current,
+          numCommentPost
+        )
+        .then((data) => {
+          if (data?.status == 200) {
+            const commemts = data?.payload?.comments?.map((item: any) => {
+              return {
+                photoURL: item?.userCmtInfor?.anh?.url,
+                name: item?.userCmtInfor?.ten,
+                text: item?.comment,
+                createdAt: item?.commentAt,
+                id: item?._id,
+                numOfLike: item?.numOfLike,
+                numOfReply: item?.numOfReply,
+                postUserId: status?.userInfor?.id,
+                userId: item?.userCmtInfor?.ma_nguoi_dung,
+                hasLike: item?.hasLike,
+              } as CommentType;
+            });
+            if (data?.payload?.comments?.length < numCommentPost) {
+              setIsHasComment(false);
+            }
+            setComments(commemts);
+          } else {
+            setIsHasComment(false);
+          }
+        });
+    }
+
+    if ((status?.numOfComment || 0) == 0) {
+      setIsHasComment(false);
     }
     setIsComment(true);
   }
@@ -322,6 +382,65 @@ export default function PostComponent(props: Props) {
               mb: '30px',
             }}
           >
+            <Dialog onClose={() => setOpenFlag(false)} open={openFlag}>
+              <Box
+                sx={{
+                  minWidth: '300px',
+                  padding: '20px',
+                }}
+              >
+                <Typography
+                  align="center"
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '500',
+                    fontSize: '15px',
+                    mb: '16px',
+                  }}
+                >
+                  Lý do báo cáo bài viết
+                </Typography>
+                <StyledTextField
+                  fullWidth
+                  size="small"
+                  placeholder="Viết lý do"
+                  name="lydo"
+                  multiline
+                  minRows={2}
+                  maxRows={6}
+                  color="info"
+                  value={textFlag || ''}
+                  onChange={(e) => {
+                    setTextFlag(e.target.value as string);
+                  }}
+                />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-around',
+                    mt: '20px',
+                  }}
+                >
+                  <Button
+                    onClick={() => setOpenFlag(false)}
+                    variant="contained"
+                    color="error"
+                    size="small"
+                    sx={{}}
+                  >
+                    Hủy
+                  </Button>
+                  <Button
+                    onClick={handleReport}
+                    variant="contained"
+                    color="info"
+                    size="small"
+                  >
+                    Báo cáo
+                  </Button>
+                </Box>
+              </Box>
+            </Dialog>
             <Box
               sx={{
                 display: 'flex',
@@ -583,7 +702,7 @@ export default function PostComponent(props: Props) {
                         justifyContent: 'space-between',
                         minWidth: '150px',
                       }}
-                      onClick={handleReport}
+                      onClick={() => setOpenFlag(true)}
                     >
                       <span> Báo cáo </span>{' '}
                       <FlagIcon
@@ -791,10 +910,13 @@ export default function PostComponent(props: Props) {
                 <Divider sx={{ mb: '20px' }} />
                 {status?.id && (
                   <CreateComment
-                    onSuccess={() => {
-                      setReloadComment(!reloadComment);
-                      console.log('reload laij nef');
-
+                    postUserId={status?.owner_id as 0}
+                    onSuccess={(cmt) => {
+                      const newComment: CommentType[] = [];
+                      newComment?.push(cmt);
+                      const oldComments = deepCopy(comments);
+                      setComments([...newComment, ...oldComments]);
+                      indexCommentPost.current = indexCommentPost.current + 1;
                       if (status) {
                         setStatus({
                           ...status,
@@ -821,6 +943,30 @@ export default function PostComponent(props: Props) {
                       />
                     );
                   })}
+                {isHasComment && (
+                  <Typography
+                    align="center"
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '500',
+                      fontSize: '15px',
+                      margin: '16px 16px 10px 0px',
+                      color: '#0c4195',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                      paddingBottom: '30px',
+                    }}
+                    onClick={() => {
+                      indexCommentPost.current =
+                        indexCommentPost.current + numCommentPost;
+                      // setIndexCommentPost(indexCommentPost + numCommentPost);
+                      setIsLoadComment(!isLoadComment);
+                    }}
+                  >
+                    {' '}
+                    Xem thêm bình luận{' '}
+                  </Typography>
+                )}
               </>
             )}
           </Box>
@@ -830,6 +976,44 @@ export default function PostComponent(props: Props) {
   );
 }
 
+function ReportFlag() {
+  const [text, setText] = useState('');
+  return (
+    <>
+      <Box
+        sx={{
+          minWidth: '300px',
+        }}
+      >
+        <Typography
+          align="center"
+          sx={{
+            fontFamily: 'quicksand',
+            fontWeight: '500',
+            fontSize: '15px',
+            mb: '16px',
+          }}
+        >
+          Lý do báo cáo bài viết
+        </Typography>
+        <StyledTextField
+          fullWidth
+          size="small"
+          placeholder="Viết lý do"
+          name="lydo"
+          multiline
+          minRows={2}
+          maxRows={6}
+          color="info"
+          value={text || ''}
+          onChange={(e) => {
+            setText(e.target.value as string);
+          }}
+        />
+      </Box>
+    </>
+  );
+}
 function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [isReply, setIsReply] = useState(false);
   const [isReload, setIsReload] = useState(false);
@@ -1452,7 +1636,11 @@ function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
   );
 }
 
-function CreateComment(props: { idStatus: string; onSuccess: () => void }) {
+function CreateComment(props: {
+  idStatus: string;
+  postUserId: number;
+  onSuccess: (cmt: CommentType) => void;
+}) {
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const { enqueueSnackbar } = useSnackbar();
   const [value, setValue] = useState('');
@@ -1460,9 +1648,25 @@ function CreateComment(props: { idStatus: string; onSuccess: () => void }) {
   function handleComment() {
     postApi
       .commentStatus(props.idStatus, value)
-      .then(() => {
-        setValue('');
-        props?.onSuccess?.();
+      .then((data) => {
+        console.log('data new cmt', data);
+
+        if (data?.status == 200) {
+          const cmt: CommentType = {
+            photoURL: infoUser?.photoURL,
+            name: infoUser?.name,
+            text: value,
+            createdAt: data?.payload?.commentAt,
+            id: data?.payload?._id,
+            numOfLike: 0,
+            numOfReply: 0,
+            postUserId: props?.postUserId,
+            userId: infoUser?.id,
+            hasLike: false,
+          } as CommentType;
+          props?.onSuccess?.(cmt);
+          setValue('');
+        }
       })
       .catch((err) => {
         enqueueSnackbar(`${err}`, { variant: 'error' });

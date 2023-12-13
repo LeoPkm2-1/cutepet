@@ -51,12 +51,12 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 <!-- ## 66. hiện thực like bài viết khi comment trong bài viết chia sẻ kiến thức -->
 
-## ---DONE--- ||==ERR== 68. khi xóa bài viết cần phải cho bài viết đó biến mất
+## ---DONE--- ||==DONE== 68. khi xóa bài viết cần phải cho bài viết đó biến mất
 Biến mất cả ở trong trang chi tiết của bài viết
 
 
 
-## ---DONE--- || ==ERR== 72. load bài viết chia sẻ trạng thái theo thú cưng được tags
+## ---DONE--- || ==DONE== 72. load bài viết chia sẻ trạng thái theo thú cưng được tags
 
    thông tin về người chủ và bài viết không chính xác, do BE quên trả về thông tin người dùng nên là sai => đã sửa lại ở BE => cập nhật lại.
 
@@ -99,13 +99,13 @@ chưa tet được do tự động điều hướng sang trang cá nhân khi mu�
 
 
 
-## Xem sét lại có sửa ko --- 86. hiển thị trả lời bình luận bị ngược
+## --DONE--- Xem sét lại có sửa ko --- 86. hiển thị trả lời bình luận bị ngược
 
 (tham khảo ý kiến của cô)
 
 ![](../media/img/err/img25.png)
 
-## 87. khi vào trang của bạn bè thì tự động điều hướng sang trang cá nhân
+## ---DONE--- 87. khi vào trang của bạn bè thì tự động điều hướng sang trang cá nhân
 
 ## ---DONE--- 88. khi bấm vào con thú thì thông tin chủ nhân của nó bị sai backend đã sửa lại API cũ
 
@@ -113,7 +113,7 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 
 ## ---DONE--- 89. them6 trang chi tiết thú cưng.
 
-## 90. thêm đoạn mô tả ở flag cả ở trang mạng xã hội lẫn chia sẻ kiến thức
+## ---DONE--- 90. thêm đoạn mô tả ở flag cả ở trang mạng xã hội lẫn chia sẻ kiến thức
 
 ## ---DOEN--- 91. sửa lại state khi cập nhật.
 
