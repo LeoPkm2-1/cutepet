@@ -176,6 +176,15 @@ router.post(
   articleController.getAllAuthorOfArticleController
 );
 
+router.post(
+  "/filterArticles_v2",
+  [
+    articleMiddle.preFilterArticleMid_3,
+    articleMiddle.navigateToSuitableFilterArricleMid_3,
+  ],
+  articleController.filterArticlesController_3
+);
+
 // router.post
 
 // // search article

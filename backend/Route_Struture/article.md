@@ -1377,7 +1377,7 @@ trong đó:
   - **index**: mô tả lấy từ bài viết thứ mấy chở đi (index bắt đầu từ: 0,1,2....)
   - **num**: số lượng bài viết muốn lấy ra. Nếu muốn lấy đến cuối danh sách thì truyền vào là `null`
 
-1. trả về:
+3. trả về:
 
 ```javascript
 {
@@ -1504,7 +1504,100 @@ trong đó:
 }
 ```
 
-##
+## 24 lọc bài viết chia sẻ kiến thức theo id của tác giả
+**(postman số 80)**
+1. phương thức:
+
+    POST http://localhost:3000/post/article/filterArticles_v2
+
+2. cấu trúc
+
+```javascript
+{
+    "searchKey":string || null,
+    "tags":array(string) || null,
+    "sortBy":   "TIME_NEWEST_TO_OLDEST" ||   
+                "TIME_OLDEST_TO_NEWEST" ||  
+                "NUM_OF_COMMENT_DESC" ||  
+                "NUM_OF_COMMENT_ASC" ||
+                "SCORE_DESC" ||
+                "SCORE_ASC",
+    "authorId":number || null,
+    "index":number || null,
+    "num": number || null
+}
+```
+
+- trong đó:
+  - **searchKey**: mô tả từ khóa liên quan đến tiêu đề của bài viết muốn tìm kiếm.
+  - **tags**: danh sách các thể loại bài viết chia sẻ trạng thái muốn tìm kiếm nếu không có để là `null`
+  - **authorId**: mã của tác giả muốn tìm kiếm
+  - **sortBy**: mô tả cách sắp sếp dữ liệu trả về theo các các sau đây
+    - ***TIME_NEWEST_TO_OLDEST*** : sắp xếp theo thời gian gần nhất
+    - ***TIME_OLDEST_TO_NEWEST*** : sắp xêp theo thời gian từ cũ đến mới
+    - ***NUM_OF_COMMENT_DESC*** : sắp xếp theo số lượng bình luận giảm dần
+    - ***NUM_OF_COMMENT_ASC*** : sắp xếp theo số lượng bình luận tăng dần
+    - ***SCORE_DESC*** : sắp xếp theo điểm giảm dần
+    - ***SCORE_ASC*** : sắp xếp theo điểm tăng dần
+
+  - **index**: mô tả lấy từ bài viết thứ mấy chở đi (index bắt đầu từ: 0,1,2....)
+  - **num**: số lượng bài viết muốn lấy ra. Nếu muốn lấy đến cuối danh sách thì truyền vào là `null`
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "articles": [
+            {
+                "_id": "65645303ff180e672e6f87c7",
+                "title": "Cách xử lý LôNG chó bị vón cục hiệu quả nhất",
+                "postType": "ARTICLE",
+                "visibility": "PUBLIC",
+                "main_image": ".....................",
+                "intro": "..........................",
+                "content": "...............................",
+                "categories": [
+                    "CHÓ",
+                    "CÁCH CHĂM SÓC"
+                ],
+                "createAt": "2023-11-27T08:27:47.554Z",
+                "numOfUpVote": 0,
+                "numOfDownVote": 0,
+                "numOfComment": 0,
+                "modifiedAt": null,
+                "owner_id": 2,
+                "owner_infor": {
+                    "ma_nguoi_dung": 2,
+                    "ten": "Dung",
+                    "ngay_sinh": "1991-09-29T17:00:00.000Z",
+                    "tai_khoan": "dung",
+                    "email": "dung@gmail.com",
+                    "so_dien_thoai": "0912345679",
+                    "gioi_tinh": 1,
+                    "anh": {
+                        "ma_anh": 39,
+                        "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
+                        "ngay_cap_nhat": "2023-09-01T09:52:48.000Z",
+                        "ma_nguoi_dung": 2,
+                        "is_active": 1
+                    }
+                }
+            }
+        ],
+        "totalNumOfArticles": 3,
+        "remainNumOfArticles": 2
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- trong đó:
+  - **totalNumOfArticles**: tổng số lượng bài viết trong csdl match với bộ lọc
+  - **remainNumOfArticles**: sau khi lấy đến bài viết hiện tại thì còn lại bao nhiêu bài viết chưa dc lấy ra
 
 ##
 
