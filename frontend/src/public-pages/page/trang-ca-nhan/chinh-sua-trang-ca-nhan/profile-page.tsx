@@ -250,11 +250,11 @@ function UpdateProfilePage() {
                           label="Giới tính"
                           options={[
                             {
-                              value: 1,
+                              value: 0,
                               label: 'Nam',
                             },
                             {
-                              value: 0,
+                              value: 1,
                               label: 'Nữ',
                             },
                           ]}
