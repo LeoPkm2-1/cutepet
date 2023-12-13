@@ -1433,7 +1433,76 @@ trong đó:
   - **totalNumOfArticles**: tổng số lượng bài viết trong csdl match với bộ lọc
   - **remainNumOfArticles**: sau khi lấy đến bài viết hiện tại thì còn lại bao nhiêu bài viết chưa dc lấy ra
 
-##
+## 23. lấy thông tin của tất cả các tác giả của bài viết chia sẻ trạng thái
+
+1. phương thức:
+
+    POST http://localhost:3000/post/article/getAllAuthorOfArticle
+
+2. cấu trúc:
+
+**không cần tham số**
+
+3. trả về:
+
+```javascript
+{
+    "status": 200,
+    "payload": [
+        {
+            "ma_nguoi_dung": 1,
+            "ten": "Nam nguyễn",
+            "ngay_sinh": "2000-10-17T17:00:00.000Z",
+            "tai_khoan": "nam",
+            "email": "nam@gmail.com",
+            "so_dien_thoai": "01234",
+            "gioi_tinh": 1,
+            "anh": {
+                "ma_anh": 100,
+                "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fboo-the-dog-2.jpg?alt=media&token=dd69a82c-4a53-45e8-9157-38a757385598",
+                "ngay_cap_nhat": "2023-12-02T11:37:15.000Z",
+                "ma_nguoi_dung": 1,
+                "is_active": 1
+            }
+        },
+        {
+            "ma_nguoi_dung": 2,
+            "ten": "Dũng Trần",
+            "ngay_sinh": "2000-10-17T17:00:00.000Z",
+            "tai_khoan": "dung",
+            "email": "dung@gmail.com",
+            "so_dien_thoai": "0123456789",
+            "gioi_tinh": 1,
+            "anh": {
+                "ma_anh": 106,
+                "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FScreenshot%20from%202023-12-08%2019-16-11.png?alt=media&token=9d73fa0a-063e-42f5-a832-b4ea9e642ff6",
+                "ngay_cap_nhat": "2023-12-08T14:03:27.000Z",
+                "ma_nguoi_dung": 2,
+                "is_active": 1
+            }
+        },
+        {
+            "ma_nguoi_dung": 3,
+            "ten": "Teo",
+            "ngay_sinh": "1991-09-30T17:00:00.000Z",
+            "tai_khoan": "teo",
+            "email": "teo@gmail.com",
+            "so_dien_thoai": "0912345680",
+            "gioi_tinh": 1,
+            "anh": {
+                "ma_anh": null,
+                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                "ngay_cap_nhat": null,
+                "ma_nguoi_dung": "3",
+                "is_active": null
+            }
+        },
+    ],
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
 
 ##
 

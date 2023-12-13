@@ -297,6 +297,9 @@ _chi tiết_ **[Route_Struture/post.md](./post.md#18-lấy-bài-viết-có-tag-c
 
    _chi tiết_ **[Route_Struture/pet.md](./pet.md#8-cập-nhật-ảnh-đại-diện-thú-cưng)** và **postman số 78**
 
-##
+## (13-12-2023):
+1. lấy thông tin của tất cả các tác giả
+
+   *chi tiết* **[Route_Struture/article.md](./article.md#23-lấy-thông-tin-của-tất-cả-các-tác-giả-của-bài-viết-chia-sẻ-trạng-thái)** và **postman số 79**
 
 ##

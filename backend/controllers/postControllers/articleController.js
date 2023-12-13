@@ -705,6 +705,15 @@ const filterArticlesController_2 = async (req, res) => {
   res.status(200).json(new Response(200, data, ""));
 };
 
+const getAllAuthorOfArticleController = async (req, res) => {
+  const AllAuthorId = await articleModel
+    .getAllAuthorIdOfArticle()
+    .then((data) => data.payload.map((userid) => parseInt(userid)));
+  const allAuthor = await userHelper.getUserPublicInforByListIds(AllAuthorId);
+
+  res.status(200).json(new Response(200, allAuthor, ""));
+};
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -730,6 +739,7 @@ module.exports = {
   getArticlesByIndexAndNumController,
   filterArticlesController,
   filterArticlesController_2,
+  getAllAuthorOfArticleController,
 
   // filterArticleController,
 };
