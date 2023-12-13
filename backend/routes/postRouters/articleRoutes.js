@@ -143,7 +143,7 @@ router.post(
 // tố cáo bài viết chia sẻ trạng thái
 router.post(
   "/reportArticle",
-  [articleMiddle.checkArticleExistMid,articleMiddle.preProcessReport],
+  [articleMiddle.checkArticleExistMid, articleMiddle.preProcessReport],
   articleController.reportArticleController
 );
 
@@ -171,12 +171,12 @@ router.post(
   articleController.filterArticlesController_2
 );
 
+router.post(
+  "/getAllAuthorOfArticle",
+  articleController.getAllAuthorOfArticleController
+);
+
 // router.post
-
-
-
-
-
 
 // // search article
 // router.post(

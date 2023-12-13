@@ -817,6 +817,22 @@ const getTotalNumOfArticleFilter = async (filter_params) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getAllAuthorIdOfArticle = async () => {
+  async function executor(collection) {
+    return await collection
+      .distinct("owner_id", { postType: "ARTICLE" })
+      
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+  .then((data) => new Response(200, data, ""))
+  .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// (async function () {
+//   const data = await getAllAuthorIdOfArticle();
+//   console.log(data);
+// })()
+
 // async function test() {
 //   async function executor(collection) {
 //     return await collection
@@ -871,7 +887,6 @@ const getTotalNumOfArticleFilter = async (filter_params) => {
 //   console.log(data.payload[0]);
 // })()
 
-
 module.exports = {
   addArticle,
   addUpVote,
@@ -916,4 +931,5 @@ module.exports = {
   getTotalNumOfArticleHaveKeywWordInTitleAndCategories,
   filterArticleModel,
   getTotalNumOfArticleFilter,
+  getAllAuthorIdOfArticle,
 };
