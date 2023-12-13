@@ -3141,7 +3141,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"searchKey\":\"Should you be Concerned About Fatty Tumors\",\n    \"tags\":[\"cách chăm sóc\"],\n    \"index\":null,\n    \"num\":null\n}",
+					"raw": "{\n    \"searchKey\":\"\",\n    \"tags\":[\"cách chăm sóc\"],\n    \"sortBy\":\"SCORE_DESC\",\n    \"authorName\":\"Hung\",\n    \"index\":0,\n    \"num\":10\n}",
 					"options": {
 						"raw": {
 							"language": "json"
