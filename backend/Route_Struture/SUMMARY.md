@@ -302,4 +302,8 @@ _chi tiết_ **[Route_Struture/post.md](./post.md#18-lấy-bài-viết-có-tag-c
 
    *chi tiết* **[Route_Struture/article.md](./article.md#23-lấy-thông-tin-của-tất-cả-các-tác-giả-của-bài-viết-chia-sẻ-trạng-thái)** và **postman số 79**
 
+2. lọc bài viết chia sẻ kiến thức kèm theo id của tác giả
+
+*chi tiết* **[Route_Struture/article.md](./article.md#24-lọc-bài-viết-chia-sẻ-kiến-thức-theo-id-của-tác-giả)** và **postman số 80**
+
 ##

@@ -714,6 +714,35 @@ const getAllAuthorOfArticleController = async (req, res) => {
   res.status(200).json(new Response(200, allAuthor, ""));
 };
 
+const filterArticlesController_3 = async (req, res) => {
+  const { FILTER_PARAMS } = req.body;
+  const articles = await articleModel
+    .filterArticleModel(FILTER_PARAMS)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  // console.log(FILTER_PARAMS.filterObj);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(articles);
+  const totalNumOfArticles = await articleModel
+    .getTotalNumOfArticleFilter(FILTER_PARAMS)
+    .then((data) =>
+      FILTER_PARAMS.type == "FIND"
+        ? data.payload
+        : data.payload.length <= 0
+        ? 0
+        : data.payload[0].totalNumOfArticles
+    );
+  // console.log({ totalNumOfArticles });
+  const data = {
+    articles: articles,
+    totalNumOfArticles: totalNumOfArticles,
+    remainNumOfArticles:
+      FILTER_PARAMS.index + articles.length - 1 >= totalNumOfArticles - 1
+        ? 0
+        : totalNumOfArticles - 1 - (FILTER_PARAMS.index + articles.length - 1),
+  };
+  res.status(200).json(new Response(200, data, ""));
+};
+
 module.exports = {
   addArticleControler,
   toggleUpVoteArticleControler,
@@ -740,6 +769,6 @@ module.exports = {
   filterArticlesController,
   filterArticlesController_2,
   getAllAuthorOfArticleController,
-
+  filterArticlesController_3,
   // filterArticleController,
 };
