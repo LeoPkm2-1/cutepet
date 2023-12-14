@@ -180,9 +180,9 @@ chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con
 ![](../media/img/err/img40.png)
 
 
-## 110. load bình luận trong bài viết trạng thái có phân trang
-## 110. load bình luận trong Chia sẻ kiến thức trạng thái có phân trang
-## 111. search người dùng phân trang
+## --DONE--- 110. load bình luận trong bài viết trạng thái có phân trang
+## ---DONE-- 110. load bình luận trong Chia sẻ kiến thức trạng thái có phân trang
+## --Chưa có API hoặc trong struct a chưa thấy--- 111. search người dùng phân trang
 ## --DONE --- 112. Khi đang dứng ở trang cá nhân của người dùng và tìm kiếm người dùng khác thì bị lỗi chỗ ảnh người dùng ở bài viết.
 
 **cách giải quyết:** khi bấm vào người dùng => load toàn bộ lại thông tinh giống như nhập mã người dùng vào *url*
