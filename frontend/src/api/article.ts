@@ -218,6 +218,34 @@ const getAllAuthorOfArticle = () => {
   });
 };
 
+const filterArticles_v2 = (
+  searchKey: string | null,
+  tags: string[] | null,
+  sortBy:
+    | 'TIME_NEWEST_TO_OLDEST'
+    | 'TIME_OLDEST_TO_NEWEST'
+    | 'NUM_OF_COMMENT_DESC'
+    | 'NUM_OF_COMMENT_ASC'
+    | 'SCORE_DESC'
+    | 'SCORE_ASC',
+  authorId: number | null,
+  index: number | null,
+  num: number | null
+) => {
+  return authRequest<any>({
+    url: '/post/article/filterArticles_v2',
+    method: 'POST',
+    body: {
+      searchKey,
+      tags,
+      sortBy,
+      authorId,
+      index,
+      num,
+    },
+  });
+};
+
 const articleApi = {
   createArticle,
   getArticleById,
@@ -237,7 +265,8 @@ const articleApi = {
   editArticle,
   removeArticles,
   getCommentStartFrom,
-  getAllAuthorOfArticle
+  getAllAuthorOfArticle,
+  filterArticles_v2
 };
 
 export default articleApi;

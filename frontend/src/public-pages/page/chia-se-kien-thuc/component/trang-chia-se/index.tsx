@@ -8,6 +8,44 @@ import { ArticleType } from '../../../../../models/article';
 import SearchArticle from '../../../../../components/search';
 import TagNameSelect from '../../../../../components/select-tag';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import MixedBy from '../../../../../components/LocTacGia';
+import { PeopleType } from '../../../../../models/user';
+import Select from '../../../../../components/Select';
+
+type TypeSort =
+  | 'TIME_NEWEST_TO_OLDEST'
+  | 'TIME_OLDEST_TO_NEWEST'
+  | 'NUM_OF_COMMENT_DESC'
+  | 'NUM_OF_COMMENT_ASC'
+  | 'SCORE_DESC'
+  | 'SCORE_ASC';
+
+const optionTypeSort = [
+  {
+    value: 'TIME_NEWEST_TO_OLDEST',
+    lable: 'Theo thời gian mới nhất',
+  },
+  {
+    value: 'TIME_OLDEST_TO_NEWEST',
+    lable: 'Theo thời gian cũ nhất',
+  },
+  {
+    value: 'NUM_OF_COMMENT_DESC',
+    lable: 'Theo số lượng bình luận giảm dần',
+  },
+  {
+    value: 'NUM_OF_COMMENT_ASC',
+    lable: 'Theo số lượng bình luận tăng dần',
+  },
+  {
+    value: 'SCORE_DESC',
+    lable: 'Theo điểm giảm dần',
+  },
+  {
+    value: 'SCORE_ASC',
+    lable: 'Theo điểm tăng dần',
+  },
+];
 export function TrangChiaSe() {
   const naviagte = useNavigate();
   const [articles, setArticles] = useState<ArticleType[]>([]);
@@ -20,11 +58,17 @@ export function TrangChiaSe() {
   const sp = new URLSearchParams(pargamSearch);
   const [reload, setReload] = useState(false);
   const [search, setSearch] = useState('');
+  const [tacGia, setTacGia] = useState<PeopleType | null>(null);
+  const [user, setUsers] = useState<PeopleType[]>([]);
+  const [typeSort, setTypeSort] = useState<TypeSort>('TIME_NEWEST_TO_OLDEST');
+  const [idAuthorDefault, setIdAuthorDefault] = useState(0);
   useEffect(() => {
     articleApi
-      .filterArticles(
+      .filterArticles_v2(
         search || null,
         tag?.length > 0 ? tag : null,
+        typeSort,
+        idAuthorDefault || tacGia?.id || null,
         (page - 1) * num,
         num
       )
@@ -50,7 +94,7 @@ export function TrangChiaSe() {
           setTotalPage(data?.payload?.totalNumOfArticles || 0);
         }
       });
-  }, [page, reload, tag]);
+  }, [page, reload, tag, tacGia, typeSort, idAuthorDefault]);
 
   useEffect(() => {
     const categori = sp.get('categori');
@@ -58,7 +102,37 @@ export function TrangChiaSe() {
       setTag([categori]);
     }
   }, []);
+  useEffect(() => {
+    const idAuthor = sp.get('author');
+    if (idAuthor) {
+      setIdAuthorDefault(parseInt(idAuthor));
+      console.log(idAuthor, ' có nè');
+      if (user?.length > 0) {
+        const newPeople: PeopleType | undefined = user.find(
+          (item) => `${item?.id}` == idAuthor
+        );
+        if (newPeople) {
+          setTacGia(newPeople);
+        }
+      }
+    }
+  }, [user]);
 
+  useEffect(() => {
+    articleApi.getAllAuthorOfArticle().then((data) => {
+      if (data?.status == 200) {
+        const listAuthor = data?.payload?.map((item: any) => {
+          return {
+            name: item?.ten,
+            id: item?.ma_nguoi_dung,
+            user: item?.tai_khoan,
+            url: item?.anh?.url,
+          } as PeopleType;
+        });
+        setUsers(listAuthor);
+      }
+    });
+  }, []);
   function handleChangeSearch(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
@@ -161,6 +235,44 @@ export function TrangChiaSe() {
               Tạo Bài Chia Sẽ
             </Button>
           </Box>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: '100%',
+              marginTop: '30px',
+            }}
+          >
+            <Select
+              value={typeSort}
+              required
+              options={optionTypeSort?.map((item) => {
+                return {
+                  value: item?.value,
+                  label: item?.lable,
+                };
+              })}
+              onChange={(v) => {
+                if (typeof (v?.value == 'string')) {
+                  setTypeSort(v?.value as TypeSort);
+                }
+              }}
+            />
+          </Box>
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              flex: 1,
+              fontSize: '14px',
+              mb: '16px',
+              color: 'gray',
+            }}
+            align="center"
+          >
+            Sắp xếp theo
+          </Typography>
           <Box
             sx={{
               display: 'flex',
@@ -202,14 +314,14 @@ export function TrangChiaSe() {
               marginTop: '35px',
             }}
           >
-            <TagNameSelect
-              label="Lọc theo danh mục"
-              value={tag}
-              onChange={(value) => {
-                sp.delete('categori');
+            <MixedBy
+              value={tacGia}
+              onChange={(t) => {
+                sp.delete('author');
                 setSearchParams(sp);
+                setIdAuthorDefault(0);
                 setPage(1);
-                setTag(value);
+                setTacGia(t);
               }}
             />
           </Box>
@@ -221,6 +333,7 @@ export function TrangChiaSe() {
               fontSize: '14px',
               mb: '16px',
               color: 'gray',
+              mt: '5px',
             }}
             align="center"
           >
