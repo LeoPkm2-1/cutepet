@@ -20,7 +20,7 @@ _chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kế
 
 
 
-## ---DONE--- ||==ERR== 68. khi xóa bài viết cần phải cho bài viết đó biến mất
+## ---DONE--- ||==DONE== 68. khi xóa bài viết cần phải cho bài viết đó biến mất
 Biến mất cả ở trong trang chi tiết của bài viết
 
 

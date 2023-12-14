@@ -101,7 +101,7 @@ function UpdateProfilePage() {
           const newProfile: UserProfile = {
             id: profile?.id,
             name: profile?.name,
-            email:profile?.email || '',
+            email: profile?.email || '',
             age: profile?.ngay_sinh || '',
             photoURL: url,
           };
@@ -124,7 +124,6 @@ function UpdateProfilePage() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-
         }}
       >
         <Box
@@ -207,7 +206,6 @@ function UpdateProfilePage() {
                           size="small"
                           label="Tên hiển thị"
                           name="display-name"
-                          placeholder="Tên hiển thị"
                           color="info"
                           value={profile.name}
                           onChange={(e) => {
@@ -227,21 +225,20 @@ function UpdateProfilePage() {
                         xs={12}
                         md={6}
                       >
+                        {' '}
                         <StyledTextField
                           fullWidth
                           size="small"
                           label="Số điện thoại"
-                          name="alias-name"
-                          placeholder="Số điện thoại"
+                          name="so-dien-thoai"
                           color="info"
-                          value={profile?.so_dien_thoai}
+                          value={profile.so_dien_thoai || ""}
                           onChange={(e) => {
                             setProfile({
                               ...profile,
                               so_dien_thoai: e.target.value as string,
                             });
                           }}
-                          required
                         />
                       </Grid>
                       <Grid item xs={12} md={6}>
