@@ -976,44 +976,6 @@ export default function PostComponent(props: Props) {
   );
 }
 
-function ReportFlag() {
-  const [text, setText] = useState('');
-  return (
-    <>
-      <Box
-        sx={{
-          minWidth: '300px',
-        }}
-      >
-        <Typography
-          align="center"
-          sx={{
-            fontFamily: 'quicksand',
-            fontWeight: '500',
-            fontSize: '15px',
-            mb: '16px',
-          }}
-        >
-          Lý do báo cáo bài viết
-        </Typography>
-        <StyledTextField
-          fullWidth
-          size="small"
-          placeholder="Viết lý do"
-          name="lydo"
-          multiline
-          minRows={2}
-          maxRows={6}
-          color="info"
-          value={text || ''}
-          onChange={(e) => {
-            setText(e.target.value as string);
-          }}
-        />
-      </Box>
-    </>
-  );
-}
 function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [isReply, setIsReply] = useState(false);
   const [isReload, setIsReload] = useState(false);
@@ -1055,6 +1017,8 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const showDialog = useShowDialog();
+
   const [isLike, setIsLike] = useState(props?.comment?.hasLike);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -1065,25 +1029,31 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   };
 
   function handleDeleteCmt() {
-    if (props.comment.id) {
-      postApi
-        .removeComment(props.comment.id)
-        .then((data) => {
-          if (data?.status == 200) {
-            setIsFinish(false);
-            props.onRemove();
-            handleClose();
-            enqueueSnackbar(`Xóa bình luận thành công`, {
-              variant: 'info',
+    handleClose();
+    showDialog({
+      content: `Bạn chắc chắn xóa bình luận này ?`,
+      onOk: () => {
+        if (props.comment.id) {
+          postApi
+            .removeComment(props.comment.id)
+            .then((data) => {
+              if (data?.status == 200) {
+                setIsFinish(false);
+                props.onRemove();
+                handleClose();
+                enqueueSnackbar(`Xóa bình luận thành công`, {
+                  variant: 'info',
+                });
+              } else {
+                enqueueSnackbar(`${data?.message}`, { variant: 'error' });
+              }
+            })
+            .catch((err) => {
+              enqueueSnackbar(`${err?.message}`, { variant: 'error' });
             });
-          } else {
-            enqueueSnackbar(`${data?.message}`, { variant: 'error' });
-          }
-        })
-        .catch((err) => {
-          enqueueSnackbar(`${err}`, { variant: 'error' });
-        });
-    }
+        }
+      },
+    });
   }
 
   function handleLikeCmt() {

@@ -8,46 +8,61 @@ import { RootState } from '../redux';
 import { Box } from '@mui/system';
 import { PeopleType } from '../models/user';
 import articleApi from '../api/article';
+import { setOptions } from 'filepond';
 
 type Props = {
-  onChange?: (value: PeopleType) => void;
-  value: PeopleType;
+  onChange?: (value: PeopleType | null) => void;
+  value?: PeopleType | null;
 };
 
 export default function MixedBy(props: Props) {
   const [users, setUsers] = useState<PeopleType[]>([]);
   const filter = createFilterOptions<PeopleType>();
   const userData = useSelector((state: RootState) => state.user);
-    useEffect(() => {
-      articleApi.getAllAuthorOfArticle().then((data) => {
-        if(data?.status ==200){
-            
-        }
-      });
-    }, [userData]);
+  useEffect(() => {
+    articleApi.getAllAuthorOfArticle().then((data) => {
+      if (data?.status == 200) {
+        const listAuthor = data?.payload?.map((item: any) => {
+          return {
+            name: item?.ten,
+            id: item?.ma_nguoi_dung,
+            user: item?.tai_khoan,
+            url: item?.anh?.url,
+          } as PeopleType;
+        });
+        setUsers(listAuthor);
+      }
+    });
+  }, [userData]);
 
   return (
     <Autocomplete
       size="small"
       value={props.value}
       onChange={(event, newValue) => {
-        if (typeof newValue === 'string') {
+        console.log(newValue, 'new');
+
+        // if (typeof newValue === 'string') {
         //   props.onChange?.({ name: newValue, id: 0, user: '', numberPet: 0 });
-          // setValue({
-          //   email: newValue,
-          // });
-        } else if (newValue && newValue.id) {
-          // Create a new value from the user input
-          //   const newUser: PeopleType = {
-          //     avatarUrl: "",
-          //     id: "",
-          //     displayName: "",
-          //   };
-          //   props.onChange?.(newUser);
-        } else {
-          if (newValue) {
-            props.onChange?.(newValue);
-          }
+        // setValue({
+        //   email: newValue,
+        // });
+        // } else if (newValue && newValue.id) {
+        //   // Create a new value from the user input
+        //   //   const newUser: PeopleType = {
+        //   //     avatarUrl: "",
+        //   //     id: "",
+        //   //     displayName: "",
+        //   //   };
+        //   //   props.onChange?.(newUser);
+        // } else {
+        if (!newValue) {
+          props.onChange?.(null);
+        }
+        if (typeof newValue === 'string') {
+        } else if (newValue) {
+          props.onChange?.(newValue);
+          console.log(newValue, 'new 2');
         }
       }}
       filterOptions={(options, params) => {
@@ -104,6 +119,7 @@ export default function MixedBy(props: Props) {
       }}
       freeSolo
       renderInput={(params) => <StyledTextField {...params} />}
+      // renderInput={(params) => <span> />}
     />
   );
 }

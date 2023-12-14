@@ -116,7 +116,7 @@ export default function BaiChiaSe() {
       .filterArticles(
         null,
         article?.categories?.length > 0 ? article?.categories : null,
-        0,
+        1,
         3
       )
       .then((data) => {
@@ -640,10 +640,16 @@ export default function BaiChiaSe() {
                         style={{
                           objectFit: 'cover',
                           borderRadius: '50px',
+                          cursor: 'pointer',
                         }}
                         height={36}
                         width={36}
                         src={article?.user_avatar}
+                        onClick={() => {
+                          sp.set('author', `${article?.user_id}`);
+                          setSearchParams(sp);
+                          navigate(`/home/trang-chia-se?${sp}`);
+                        }}
                       />
                       <Typography
                         sx={{
@@ -651,6 +657,12 @@ export default function BaiChiaSe() {
                           fontWeight: '500',
                           fontSize: '14px',
                           ml: '16px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => {
+                          sp.set('author', `${article?.user_id}`);
+                          setSearchParams(sp);
+                          navigate(`/home/trang-chia-se?${sp}`);
                         }}
                       >
                         By {article.user_name}

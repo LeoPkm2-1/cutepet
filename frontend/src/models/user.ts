@@ -134,7 +134,7 @@ export interface PeopleType {
   id: number;
   user: string;
   url: string;
-  numberPet: number;
+  numberPet?: number;
   isFriend?: boolean;
   ngay_sinh?: string;
   email?: string;

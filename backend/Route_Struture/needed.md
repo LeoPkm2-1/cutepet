@@ -57,12 +57,28 @@ XÂY DỰNG MẠNG XÃ HỘI DÀNH CHO NGƯỜI NUÔI THÚ CƯNG
 
 
 
-## 110. load bình luận trong bài viết trạng thái có phân trang
-## 110. load bình luận trong Chia sẻ kiến thức trạng thái có phân trang
-## 111. search người dùng phân trang
 
 
 
+
+
+
+
+## --DONE--- 110. load bình luận trong bài viết trạng thái có phân trang
+## ---DONE-- 110. load bình luận trong Chia sẻ kiến thức trạng thái có phân trang
+## --Chưa có API hoặc trong struct a chưa thấy--- 111. search người dùng phân trang
+## --DONE --- 112. Khi đang dứng ở trang cá nhân của người dùng và tìm kiếm người dùng khác thì bị lỗi chỗ ảnh người dùng ở bài viết.
+
+**cách giải quyết:** khi bấm vào người dùng => load toàn bộ lại thông tinh giống như nhập mã người dùng vào *url*
+
+![](../media/img/err/img37.png)
+
+
+## ---DONE--- 113. khi bài viết có 2 con thú cưng đang đứng ở trang của con thú này mà chọn con thú kia thì chỉ có phần bài viết thay đổi còn phần thông tin phía trên thì không thay đổi.
+
+**cách giải quyết:** khi bấm vào thú cưng => load toàn bộ lại thông tinh giống như nhập mã thú cưng vào *url*
+
+![](../media/img/err/img33.png)
 
 ## 114. ---DONE-- || ==OK==  ngày sinh nếu không có hoặc sai thì không nên để invalid date mà nên để trống
 
