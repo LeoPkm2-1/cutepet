@@ -3,12 +3,15 @@ const articleModel = require("./../../models/BaiViet/articleModel");
 const articleHelper = require("./../../utils/BaiViet/articleHelper");
 const StatusAndArticleModel = require("./../../models/BaiViet/StatusAndArticleModel");
 const { Response } = require("../../utils");
+const { getListUserIdsWhenTenContain } = require("../../models/userModel");
 const NOT_HAVE_TITLE_ERR = "Tiêu đề không được để trống";
 const NOT_HAVE_MAIN_IMG_ERR = "Bài chiase kiến thức phải có ảnh chính";
 const NOT_HAVE_CONTENT_ERR = "Nội dung bài viết không được để trống";
 const NOT_HAVE_CATEGORIES_ERR = "bài chia sẻ không có thể loại";
 const NOT_HAVE_SUITABLE_CATEGORIES_ERR = "các thể loại không phù hợp ";
 const WRONG_INTRO_ERR = "intro phải là string";
+
+const articleComposStructure = require("../../models/BaiViet/articleComposStructure");
 
 function hasStringContent(param) {
   return typeof param == "string" && param.length > 0;
@@ -370,7 +373,13 @@ async function preProcessEditArticle(req, res, next) {
     res
       .status(400)
       .json(
-        new Response(400, [], "Bạn không có quyền chỉnh sửa bài viết này", 300, 300)
+        new Response(
+          400,
+          [],
+          "Bạn không có quyền chỉnh sửa bài viết này",
+          300,
+          300
+        )
       );
     return;
   }
@@ -475,6 +484,113 @@ const preFilterArticleMid = async (req, res, next) => {
   next();
 };
 
+const preFilterArticleMid_2 = async (req, res, next) => {
+  const INVALID_PARAMS = "Tham số không hợp lệ";
+  const SORT_TYPES = [
+    "TIME_NEWEST_TO_OLDEST",
+    "TIME_OLDEST_TO_NEWEST",
+    "NUM_OF_COMMENT_DESC",
+    "NUM_OF_COMMENT_ASC",
+    "SCORE_DESC",
+    "SCORE_ASC",
+  ];
+  let { searchKey, index, num, tags, sortBy, authorName } = req.body;
+  // kiểm tra kiểu của searchkey
+  if (
+    typeof searchKey != undefined &&
+    searchKey != null &&
+    typeof searchKey != "string"
+  ) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của index
+  if (
+    typeof index != "undefined" &&
+    index != null &&
+    Number.isNaN(parseInt(index))
+  ) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của num
+  if (typeof num != "undefined" && num != null && Number.isNaN(parseInt(num))) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của tags
+  if (typeof tags != "undefined" && tags != null && !Array.isArray(tags)) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của sortBy
+  if (
+    typeof sortBy != "undefined" &&
+    sortBy != null &&
+    typeof sortBy != "string"
+  ) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của authorName
+  if (
+    typeof authorName != "undefined" &&
+    authorName != null &&
+    typeof authorName != "string"
+  ) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+
+  // xử lý giá trị===============================================
+  index = typeof index == "number" ? parseInt(index) : 0;
+  num = typeof num == "number" ? parseInt(num) : undefined;
+  if (typeof num == "number" && num < 0) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  if (typeof index == "number" && index < 0) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+
+  if (typeof sortBy == "undefined" || sortBy == null || sortBy == "") {
+    sortBy = "TIME_NEWEST_TO_OLDEST";
+  } else if (!SORT_TYPES.includes(sortBy.toUpperCase())) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  } else sortBy = sortBy.toUpperCase();
+
+  authorName =
+    typeof authorName == "undefined" ||
+    authorName == null ||
+    authorName.trim() == ""
+      ? ""
+      : authorName.trim();
+  const authorIds = await getListUserIdsWhenTenContain(authorName).then(
+    (data) => data.payload
+  );
+
+  tags =
+    typeof tags == "undefined" || tags == null
+      ? undefined
+      : tags.map((tag) => tag.toUpperCase().trim());
+
+  if (typeof tags == "undefined") req.body.tags = tags;
+  else req.body.tags = await articleHelper.filterValidCategoryTags(tags);
+  req.body.searchKey =
+    typeof searchKey == "undefined" || searchKey == null
+      ? undefined
+      : searchKey.trim();
+  req.body.sortBy = sortBy;
+  req.body.num = num;
+  req.body.index = index;
+  req.body.authorName = authorName;
+  req.body.authorIds = authorIds;
+
+  next();
+};
+
 const navigateToSuitableFilterArricleMid = async (req, res, next) => {
   const { searchKey, tags, index, num } = req.body;
   req.body.FILTER_ACTION = "";
@@ -517,6 +633,222 @@ const preProcessReport = async (req, res, next) => {
   next();
 };
 
+const navigateToSuitableFilterArricleMid_2 = async (req, res, next) => {
+  const { searchKey, tags, index, num, sortBy, authorIds, authorName } =
+    req.body;
+  const FILTER_PARAMS = {
+    type:
+      sortBy == "SCORE_DESC" || sortBy == "SCORE_ASC" ? "AGGREGATE" : "FIND",
+    filterObj: { postType: articleComposStructure.Article.type },
+    index: index,
+    num: num,
+    scoreObj: undefined,
+    sortObj: {},
+  };
+
+  if (typeof searchKey != "undefined" && searchKey != "") {
+    const key = "title";
+    const patern = new RegExp("\\b" + searchKey + "\\b", "i");
+    const value = { $regex: patern };
+    FILTER_PARAMS.filterObj[key] = value;
+  }
+
+  if (typeof tags != "undefined" && tags.length > 0) {
+    const key = "categories";
+    const value = { $all: tags };
+    FILTER_PARAMS.filterObj[key] = value;
+  }
+
+  if (typeof authorIds != "undefined" && authorIds.length > 0) {
+    const key = "owner_id";
+    const value = {
+      $in: authorIds,
+    };
+    FILTER_PARAMS.filterObj[key] = value;
+  }
+  if (sortBy.includes("TIME")) {
+    const value = sortBy == "TIME_NEWEST_TO_OLDEST" ? -1 : 1;
+    FILTER_PARAMS.sortObj.createAt = value;
+    FILTER_PARAMS.sortObj._id = value;
+  } else if (sortBy.includes("NUM_OF_COMMENT")) {
+    FILTER_PARAMS.sortObj.numOfComment =
+      sortBy == "NUM_OF_COMMENT_DESC" ? -1 : 1;
+    FILTER_PARAMS.sortObj._id = -1;
+  } else {
+    FILTER_PARAMS.scoreObj = {
+      $addFields: {
+        score: { $subtract: ["$numOfUpVote", "$numOfDownVote"] },
+      },
+    };
+    FILTER_PARAMS.sortObj.score = sortBy == "SCORE_DESC" ? -1 : 1;
+    FILTER_PARAMS.sortObj._id = -1;
+  }
+
+  // res.json(FILTER_PARAMS);
+  req.body.FILTER_PARAMS = FILTER_PARAMS;
+  next();
+  return;
+};
+
+const preFilterArticleMid_3 = async (req, res, next) => {
+  const INVALID_PARAMS = "Tham số không hợp lệ";
+  const SORT_TYPES = [
+    "TIME_NEWEST_TO_OLDEST",
+    "TIME_OLDEST_TO_NEWEST",
+    "NUM_OF_COMMENT_DESC",
+    "NUM_OF_COMMENT_ASC",
+    "SCORE_DESC",
+    "SCORE_ASC",
+  ];
+  let { searchKey, index, num, tags, sortBy, authorId } = req.body;
+  // kiểm tra kiểu của searchkey
+  if (
+    typeof searchKey != undefined &&
+    searchKey != null &&
+    typeof searchKey != "string"
+  ) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của index
+  if (
+    typeof index != "undefined" &&
+    index != null &&
+    Number.isNaN(parseInt(index))
+  ) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của num
+  if (typeof num != "undefined" && num != null && Number.isNaN(parseInt(num))) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của tags
+  if (typeof tags != "undefined" && tags != null && !Array.isArray(tags)) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của sortBy
+  if (
+    typeof sortBy != "undefined" &&
+    sortBy != null &&
+    typeof sortBy != "string"
+  ) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  // kiểm tra kiểu của authorId
+  if (
+    typeof authorId != "undefined" &&
+    authorId != null &&
+    authorId != "" &&
+    Number.isNaN(parseInt(authorId))
+  ) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+
+  // xử lý giá trị===============================================
+  index = typeof index == "number" ? parseInt(index) : 0;
+  num = typeof num == "number" ? parseInt(num) : undefined;
+  if (typeof num == "number" && num < 0) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+  if (typeof index == "number" && index < 0) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  }
+
+  if (typeof sortBy == "undefined" || sortBy == null || sortBy == "") {
+    sortBy = "TIME_NEWEST_TO_OLDEST";
+  } else if (!SORT_TYPES.includes(sortBy.toUpperCase())) {
+    res.status(400).json(new Response(400, [], INVALID_PARAMS, 300, 300));
+    return;
+  } else sortBy = sortBy.toUpperCase();
+
+  authorId = !Number.isNaN(parseInt(authorId)) ? parseInt(authorId) : undefined;
+  // const authorIds = await getListUserIdsWhenTenContain(authorId).then(
+  //   (data) => data.payload
+  // );
+
+  tags =
+    typeof tags == "undefined" || tags == null
+      ? undefined
+      : tags.map((tag) => tag.toUpperCase().trim());
+
+  if (typeof tags == "undefined") req.body.tags = tags;
+  else req.body.tags = await articleHelper.filterValidCategoryTags(tags);
+  req.body.searchKey =
+    typeof searchKey == "undefined" || searchKey == null
+      ? undefined
+      : searchKey.trim();
+  req.body.sortBy = sortBy;
+  req.body.num = num;
+  req.body.index = index;
+  req.body.authorId = authorId;
+  // req.body.authorIds = authorIds;
+
+  next();
+};
+
+const navigateToSuitableFilterArricleMid_3 = async (req, res, next) => {
+  const { searchKey, tags, index, num, sortBy, authorId } = req.body;
+  const FILTER_PARAMS = {
+    type:
+      sortBy == "SCORE_DESC" || sortBy == "SCORE_ASC" ? "AGGREGATE" : "FIND",
+    filterObj: { postType: articleComposStructure.Article.type },
+    index: index,
+    num: num,
+    scoreObj: undefined,
+    sortObj: {},
+  };
+
+  if (typeof searchKey != "undefined" && searchKey != "") {
+    const key = "title";
+    const patern = new RegExp("\\b" + searchKey + "\\b", "i");
+    const value = { $regex: patern };
+    FILTER_PARAMS.filterObj[key] = value;
+  }
+
+  if (typeof tags != "undefined" && tags.length > 0) {
+    const key = "categories";
+    const value = { $all: tags };
+    FILTER_PARAMS.filterObj[key] = value;
+  }
+
+  if (typeof authorId == "number") {
+    const key = "owner_id";
+    const value = authorId;
+
+    FILTER_PARAMS.filterObj[key] = value;
+  }
+  if (sortBy.includes("TIME")) {
+    const value = sortBy == "TIME_NEWEST_TO_OLDEST" ? -1 : 1;
+    FILTER_PARAMS.sortObj.createAt = value;
+    FILTER_PARAMS.sortObj._id = value;
+  } else if (sortBy.includes("NUM_OF_COMMENT")) {
+    FILTER_PARAMS.sortObj.numOfComment =
+      sortBy == "NUM_OF_COMMENT_DESC" ? -1 : 1;
+    FILTER_PARAMS.sortObj._id = -1;
+  } else {
+    FILTER_PARAMS.scoreObj = {
+      $addFields: {
+        score: { $subtract: ["$numOfUpVote", "$numOfDownVote"] },
+      },
+    };
+    FILTER_PARAMS.sortObj.score = sortBy == "SCORE_DESC" ? -1 : 1;
+    FILTER_PARAMS.sortObj._id = -1;
+  }
+
+  // console.log(FILTER_PARAMS);
+  // res.json(FILTER_PARAMS);
+  req.body.FILTER_PARAMS = FILTER_PARAMS;
+  next();
+  return;
+};
+
 module.exports = {
   preProcessAddArtticle,
   checkArticleExistMid,
@@ -536,7 +868,11 @@ module.exports = {
   prePageingForArticle,
   preFilterArticleMid,
   navigateToSuitableFilterArricleMid,
+  navigateToSuitableFilterArricleMid_2,
   preProcessReport,
+  preFilterArticleMid_2,
+  preFilterArticleMid_3,
+  navigateToSuitableFilterArricleMid_3,
   // preProcessFilterArticle_1,
   // preProcessFilterArticle_2,
 };

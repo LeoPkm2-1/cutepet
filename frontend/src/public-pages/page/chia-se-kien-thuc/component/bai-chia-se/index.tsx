@@ -1,5 +1,6 @@
 import {
   Box,
+  Dialog,
   Divider,
   Grid,
   IconButton,
@@ -8,7 +9,7 @@ import {
   MenuItem,
   Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArticleType } from '../../../../../models/article';
 import parse from 'html-react-parser';
 import articleApi from '../../../../../api/article';
@@ -38,6 +39,8 @@ import { BaiVietCoBan } from '../bai-viet-co-ban';
 import BuildIcon from '@mui/icons-material/Build';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useShowDialog } from '../../../../../hooks/dialog';
+import Button from '../../../../../components/Button';
+import { StyledTextField } from '../../../../../components/FormItem';
 export default function BaiChiaSe() {
   const [article, setArticle] = useState<ArticleType>({
     id: '',
@@ -64,7 +67,12 @@ export default function BaiChiaSe() {
   const sp = new URLSearchParams(pargamSearch);
   const navigate = useNavigate();
   const showDialog = useShowDialog();
-
+  const [openFlag, setOpenFlag] = useState(false);
+  const [textFlag, setTextFlag] = useState('');
+  const indexCommentPost = useRef(0);
+  const [isLoadComment, setIsLoadComment] = useState(false);
+  const [isHasComment, setIsHasComment] = useState(true);
+  const [numCommentPost, setNumCommentPost] = useState(5);
   const profileId = useSelector((state: RootState) => state.user.profile?.id);
   useEffect(() => {
     if (id) {
@@ -133,29 +141,72 @@ export default function BaiChiaSe() {
         }
       });
   }, [article?.categories]);
+
   useEffect(() => {
     if (id) {
-      articleApi.getAllComment(id).then((data) => {
-        if (data?.status == 200) {
-          console.log(data, 'COmment');
-
-          const listComment: CommentType[] = data?.payload?.comments?.map(
-            (item: any) => {
-              return {
-                photoURL: item?.userCmtInfor?.anh?.url,
-                name: item?.userCmtInfor?.ten,
-                userId: item?.userCmtInfor?.ma_nguoi_dung,
-                text: item?.comment,
-                createdAt: item?.commentAt,
-                id: item?._id,
-              } as CommentType;
+      articleApi
+        .getCommentStartFrom(id, indexCommentPost.current, numCommentPost)
+        .then((data) => {
+          if (data?.status == 200) {
+            console.log(data, 'COmment');
+            const listComment: CommentType[] = data?.payload?.comments?.map(
+              (item: any) => {
+                return {
+                  photoURL: item?.userCmtInfor?.anh?.url,
+                  name: item?.userCmtInfor?.ten,
+                  userId: item?.userCmtInfor?.ma_nguoi_dung,
+                  text: item?.comment,
+                  createdAt: item?.commentAt,
+                  id: item?._id,
+                } as CommentType;
+              }
+            );
+            setComments(listComment);
+            if (data?.payload?.comments?.length < numCommentPost) {
+              setIsHasComment(false);
             }
-          );
-          setComments(listComment.reverse());
-        }
-      });
+          } else {
+            setIsHasComment(false);
+          }
+        })
+        .catch(() => {
+          setIsHasComment(false);
+        });
     }
   }, [id]);
+
+  function nextComment() {
+    if (id) {
+      articleApi
+        .getCommentStartFrom(id, indexCommentPost.current, numCommentPost)
+        .then((data) => {
+          if (data?.status == 200) {
+            const listComment: CommentType[] = data?.payload?.comments?.map(
+              (item: any) => {
+                return {
+                  photoURL: item?.userCmtInfor?.anh?.url,
+                  name: item?.userCmtInfor?.ten,
+                  userId: item?.userCmtInfor?.ma_nguoi_dung,
+                  text: item?.comment,
+                  createdAt: item?.commentAt,
+                  id: item?._id,
+                } as CommentType;
+              }
+            );
+            setComments([...comments, ...listComment]);
+            if (data?.payload?.comments?.length < numCommentPost) {
+              setIsHasComment(false);
+            }
+          } else {
+            setIsHasComment(false);
+          }
+        })
+        .catch(() => {
+          setIsHasComment(false);
+        });
+    }
+  }
+
   useEffect(() => {
     if (id) {
       articleApi.isUserFollowedPost(id).then((data) => {
@@ -255,13 +306,14 @@ export default function BaiChiaSe() {
   function reportArticle() {
     if (id) {
       articleApi
-        .reportArticle(id)
+        .reportArticle(id, textFlag)
         .then((data) => {
           if (data?.status == 200) {
             setIsFollow(false);
             enqueueSnackbar(`Bạn đã báo cáo bài viết thành công`, {
               variant: 'info',
             });
+            setOpenFlag(false);
           }
         })
         .catch((err) => {
@@ -316,6 +368,65 @@ export default function BaiChiaSe() {
                 position: 'relative',
               }}
             >
+              <Dialog onClose={() => setOpenFlag(false)} open={openFlag}>
+                <Box
+                  sx={{
+                    minWidth: '300px',
+                    padding: '20px',
+                  }}
+                >
+                  <Typography
+                    align="center"
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '500',
+                      fontSize: '15px',
+                      mb: '16px',
+                    }}
+                  >
+                    Lý do báo cáo bài viết
+                  </Typography>
+                  <StyledTextField
+                    fullWidth
+                    size="small"
+                    placeholder="Viết lý do"
+                    name="lydo"
+                    multiline
+                    minRows={2}
+                    maxRows={6}
+                    color="info"
+                    value={textFlag || ''}
+                    onChange={(e) => {
+                      setTextFlag(e.target.value as string);
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-around',
+                      mt: '20px',
+                    }}
+                  >
+                    <Button
+                      onClick={() => setOpenFlag(false)}
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      sx={{}}
+                    >
+                      Hủy
+                    </Button>
+                    <Button
+                      onClick={reportArticle}
+                      variant="contained"
+                      color="info"
+                      size="small"
+                    >
+                      Báo cáo
+                    </Button>
+                  </Box>
+                </Box>
+              </Dialog>
               <Box
                 sx={{
                   display: 'flex',
@@ -324,7 +435,6 @@ export default function BaiChiaSe() {
                   paddingLeft: '20px',
                   position: 'fixed',
                   left: '280px',
-                
                 }}
               >
                 <IconButton
@@ -410,7 +520,7 @@ export default function BaiChiaSe() {
                       padding: '10px',
                       marginTop: '16px',
                     }}
-                    onClick={reportArticle}
+                    onClick={() => setOpenFlag(true)}
                   >
                     <AssistantPhotoRoundedIcon
                       sx={{
@@ -457,7 +567,7 @@ export default function BaiChiaSe() {
                   paddingBottom: '20px',
                   marginLeft: '80px',
                   width: '100%',
-                  paddingRight:"20px"
+                  paddingRight: '20px',
                 }}
               >
                 <Box
@@ -565,9 +675,50 @@ export default function BaiChiaSe() {
                     marginTop: '20px',
                   }}
                 />
+                <CreateComment
+                  onSuccess={(cmt) => {
+                    // setReloadComment(!reloadComment);
+                    // console.log('reload laij nef');
+                    // if (status) {
+                    //   setStatus({
+                    //     ...status,
+                    //     numOfComment: status?.numOfComment + 1,
+                    //   });
+                    // }
+                    const arr = [cmt];
+                    setComments([...arr, ...comments]);
+                    indexCommentPost.current = indexCommentPost.current + 1;
+                  }}
+                  // idStatus={status?.id}
+                  idStatus={article?.id}
+                />
                 {comments?.map((comment) => {
                   return <Comment comment={comment} onRemove={() => {}} />;
                 })}
+                {isHasComment && (
+                  <Typography
+                    align="center"
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '500',
+                      fontSize: '15px',
+                      margin: '16px 16px 10px 0px',
+                      color: '#0c4195',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                      paddingBottom: '30px',
+                    }}
+                    onClick={() => {
+                      indexCommentPost.current =
+                        indexCommentPost.current + numCommentPost;
+                      // setIndexCommentPost(indexCommentPost + numCommentPost);
+                      nextComment();
+                    }}
+                  >
+                    {' '}
+                    Xem thêm bình luận{' '}
+                  </Typography>
+                )}
                 {/* <Comment
               comment={{
                 photoURL: 'string',
@@ -588,22 +739,6 @@ export default function BaiChiaSe() {
               }}
               onRemove={() => {}}
             /> */}
-                <CreateComment
-                  onSuccess={(cmt) => {
-                    // setReloadComment(!reloadComment);
-                    // console.log('reload laij nef');
-                    // if (status) {
-                    //   setStatus({
-                    //     ...status,
-                    //     numOfComment: status?.numOfComment + 1,
-                    //   });
-                    // }
-                    const arr = [cmt];
-                    setComments([...comments, ...arr]);
-                  }}
-                  // idStatus={status?.id}
-                  idStatus={article?.id}
-                />
               </Box>
             </Box>
           </Grid>
@@ -697,6 +832,7 @@ function CreateComment(props: {
           // background: '#fff',
           // padding: '0px 20px 12px 20px',
           borderRadius: '12px',
+          mb: '20px',
         }}
       >
         <img
@@ -767,6 +903,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [isFix, setIsFix] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const showDialog = useShowDialog();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     console.log('Vaao click nè');
@@ -778,15 +915,20 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
     setComment(props?.comment);
   }, [props?.comment]);
   function handleDeleteCmt() {
-    if (props.comment.id) {
-      articleApi.deleteComment(props.comment.id).then((data) => {
-        if (data?.status == 200) {
-          setIsFinish(false);
-          props.onRemove();
-        } else {
+    showDialog({
+      content: `Bạn chắc chắn xóa bình luận này không ?`,
+      onOk: () => {
+        if (props.comment.id) {
+          articleApi.deleteComment(props.comment.id).then((data) => {
+            if (data?.status == 200) {
+              setIsFinish(false);
+              props.onRemove();
+            } else {
+            }
+          });
         }
-      });
-    }
+      },
+    });
   }
 
   function handleFix() {

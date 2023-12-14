@@ -3141,7 +3141,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"searchKey\":\"Should you be Concerned About Fatty Tumors\",\n    \"tags\":[\"cách chăm sóc\"],\n    \"index\":null,\n    \"num\":null\n}",
+					"raw": "{\n    \"searchKey\":\"\",\n    \"tags\":[\"cách chăm sóc\"],\n    \"sortBy\":\"SCORE_DESC\",\n    \"authorName\":\"Hung\",\n    \"index\":0,\n    \"num\":10\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3370,6 +3370,77 @@
 					"path": [
 						"pet",
 						"capnhatanhdaidien"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "79_article_getAllAuthorOfArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/post/article/getAllAuthorOfArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"getAllAuthorOfArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "80_article_filterArticles_v2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"searchKey\":\"\",\n    \"tags\":[\"cách chăm sóc\"],\n    \"sortBy\":\"SCORE_DESC\",\n    \"authorId\":3,\n    \"index\":0,\n    \"num\":5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/filterArticles_v2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"filterArticles_v2"
 					]
 				}
 			},
