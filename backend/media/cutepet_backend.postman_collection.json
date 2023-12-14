@@ -1077,7 +1077,7 @@
 						},
 						{
 							"key": "num",
-							"value": "4",
+							"value": "2",
 							"type": "text"
 						}
 					]
@@ -2240,8 +2240,7 @@
 						{
 							"key": "num",
 							"value": "1",
-							"type": "text",
-							"disabled": true
+							"type": "text"
 						}
 					]
 				},
