@@ -23,7 +23,7 @@ import { StyledTypography } from './styled';
 import { StyledTextField } from './FormItem';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
-import react, { useEffect, useState } from 'react';
+import react, { useEffect, useRef, useState } from 'react';
 import { NotifycationItemClick } from './NotificationItem';
 import notiApi from '../api/noti';
 import { list } from 'firebase/storage';
@@ -58,27 +58,64 @@ const Header = (props: Props) => {
   const numNoti = useSelector((state: RootState) => state.noti.numNoti);
   const navigate = useNavigate();
 
+  // search phân trang
+  const indexPeople = useRef(0);
+  const [numberSearch, setMumberSearch] = useState(5);
+  const [isHasSearch, setIsHasSearch] = useState(false);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClick1 = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl1(event.currentTarget);
     console.log(valueSearch);
-    friendApi.searchPeople(valueSearch, 0, 10).then((data) => {
-      console.log(data, 'data');
-      if (data?.status == 200) {
-        const list = data?.payload?.map((item: any) => {
-          return {
-            name: item?.ten,
-            user: item?.tai_khoan,
-            url: item?.anh?.url,
-            id: item?.ma_nguoi_dung,
-          };
-        });
-        setFriends(list);
-      }
-    });
+    indexPeople.current = 0;
+    friendApi
+      .searchPeople(valueSearch, indexPeople.current, numberSearch)
+      .then((data) => {
+        console.log(data, 'data');
+        if (data?.status == 200) {
+          const list = data?.payload?.map((item: any) => {
+            return {
+              name: item?.ten,
+              user: item?.tai_khoan,
+              url: item?.anh?.url,
+              id: item?.ma_nguoi_dung,
+            };
+          });
+          setFriends(list);
+          if (data?.payload?.length < numberSearch) {
+            setIsHasSearch(false);
+          } else {
+            setIsHasSearch(true);
+          }
+        }
+      });
   };
+
+  function nextSearch() {
+    friendApi
+      .searchPeople(valueSearch, indexPeople.current, numberSearch)
+      .then((data) => {
+        console.log(data, 'data');
+        if (data?.status == 200) {
+          const list = data?.payload?.map((item: any) => {
+            return {
+              name: item?.ten,
+              user: item?.tai_khoan,
+              url: item?.anh?.url,
+              id: item?.ma_nguoi_dung,
+            };
+          });
+          setFriends([...friends, ...list]);
+          if (data?.payload?.length < numberSearch) {
+            setIsHasSearch(false);
+          } else {
+            setIsHasSearch(true);
+          }
+        }
+      });
+  }
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -287,6 +324,9 @@ const Header = (props: Props) => {
             vertical: 'bottom',
             horizontal: 'left',
           }}
+          sx={{
+            maxHeight: '70vh',
+          }}
         >
           <NotifycationComponent />
         </Popover>
@@ -381,7 +421,7 @@ const Header = (props: Props) => {
               onChange={(e) => {
                 setValueSearch(e.target.value as string);
               }}
-              placeholder="Search"
+              placeholder="Tìm kiếm người dùng"
               inputProps={{ 'aria-label': 'search google maps' }}
             />
             <IconButton
@@ -401,6 +441,7 @@ const Header = (props: Props) => {
         <Popover
           sx={{
             width: '1500px',
+            maxHeight: '70vh',
           }}
           id={id1}
           open={open1}
@@ -417,7 +458,7 @@ const Header = (props: Props) => {
         >
           <Box
             sx={{
-              width: '250px',
+              width: '400px',
               padding: '20px',
             }}
           >
@@ -433,6 +474,30 @@ const Header = (props: Props) => {
                   );
                 })
               : 'Không tìm thấy'}
+
+            {isHasSearch && (
+              <Typography
+                align="center"
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  margin: '16px 16px 10px 0px',
+                  color: '   #65676b',
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  paddingBottom: '30px',
+                }}
+                onClick={() => {
+                  indexPeople.current = indexPeople.current + numberSearch;
+                  // setIndexCommentPost(indexCommentPost + numCommentPost);
+                  nextSearch();
+                }}
+              >
+                {' '}
+                Xem thêm người dùng
+              </Typography>
+            )}
           </Box>
 
           {/* <NotifycationComponent /> */}
@@ -501,7 +566,7 @@ function NotifycationComponent() {
       hasRead: boolean;
       idNoti?: string;
       isRequestFriend?: boolean;
-      isArticle?:boolean;
+      isArticle?: boolean;
     }[]
   >([]);
 
@@ -714,8 +779,8 @@ function NotifycationComponent() {
             };
           }
 
-           //10
-           if (noti?.type == 'COMMENT_ARTICLE') {
+          //10
+          if (noti?.type == 'COMMENT_ARTICLE') {
             return {
               name: noti?.payload?.userComment?.ten,
               url: noti?.payload?.userComment?.anh?.url,
@@ -820,7 +885,7 @@ function NotifycationComponent() {
                 url={item?.url}
                 isReaded={item?.hasRead}
                 isRequestFriend={item?.isRequestFriend || false}
-                isArticle ={item?.isArticle || false}
+                isArticle={item?.isArticle || false}
               />
             </>
           );

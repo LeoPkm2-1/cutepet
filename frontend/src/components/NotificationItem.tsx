@@ -81,9 +81,6 @@ export function NotifycationItemClick(props: Props) {
       return `/home/trang-chia-se/${props?.idPost}`;
 
     }
-    if(props?.idPost){
-      dispatch(SocketActions.setHasPostId(props?.idPost));
-    }
     return `post/${props?.idPost}`;
   }
 
@@ -95,6 +92,10 @@ export function NotifycationItemClick(props: Props) {
           if (props?.idNoti) {
             notiApi.postNotificationHasReaded(props?.idNoti).then((data) => {
               dispatch(NotiActions.setNumNoti(numNoti - 1));
+              if(props?.idPost){
+                dispatch(SocketActions.setHasPostId(props?.idPost));
+                dispatch(NotiActions.setNewId(props?.idPost));
+              }
               setIsReaded(true);
             });
           }

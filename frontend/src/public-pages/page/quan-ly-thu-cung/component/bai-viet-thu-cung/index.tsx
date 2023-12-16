@@ -22,11 +22,12 @@ export default function BaiVietThuCung() {
   const [timePost, setTimePost] = useState('none');
   const [petInfo, setPetInfo] = useState<PetType>({});
   const profile = useSelector((state: RootState) => state.user.profile);
+  const [numberPost, setNumberPost] = useState(10);
   const navigate = useNavigate();
   useEffect(() => {
     if (id) {
       petApi
-        .getPostHavePet(id, new Date(), 10)
+        .getPostHavePet(id, new Date(), numberPost)
         .then((data) => {
           if (data?.status == 200) {
             console.log(data, 'data lan 1');
@@ -78,9 +79,11 @@ export default function BaiVietThuCung() {
               } as StatusType;
             });
             setListPost(list);
-            if (data?.payload?.length < 10) {
+            if (data?.payload?.length < numberPost) {
               setTimePost('');
               return;
+            } else {
+              setTimePost('none');
             }
           } else {
             setTimePost('');
@@ -117,8 +120,8 @@ export default function BaiVietThuCung() {
 
   useEffect(() => {
     if (id && profile?.id && timePost && timePost !== 'none') {
-      profileApi
-        .getPostUserById(id, timePost)
+      petApi
+        .getPostHavePet(id, timePost, numberPost)
         .then((data) => {
           if (data?.status == 200) {
             console.log(data, 'data lan 1');
@@ -168,8 +171,8 @@ export default function BaiVietThuCung() {
                 owner_id: item?.owner_id,
               } as StatusType;
             });
-            setListPost(list);
-            if (data?.payload?.length < 10) {
+            setListPost([...listPost, ...list]);
+            if (data?.payload?.length < numberPost) {
               setTimePost('');
               return;
             }
@@ -298,7 +301,8 @@ export default function BaiVietThuCung() {
                   }}
                 />
 
-                {petInfo?.ngay_sinh && moment(petInfo?.ngay_sinh).format('DD-MM-YYYY')}
+                {petInfo?.ngay_sinh &&
+                  moment(petInfo?.ngay_sinh).format('DD-MM-YYYY')}
               </Typography>
 
               <Typography
@@ -506,10 +510,10 @@ export default function BaiVietThuCung() {
                   align="center"
                   sx={{
                     fontFamily: 'quicksand',
-                    fontWeight: '500',
+                    fontWeight: '600',
                     fontSize: '15px',
                     margin: '16px 16px 10px 0px',
-                    color: '#0c4195',
+                    color: 'rgb(14, 100, 126)',
                     textDecoration: 'underline',
                     cursor: 'pointer',
                   }}
