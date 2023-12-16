@@ -166,10 +166,10 @@ export default function MangXaHoi() {
               align="center"
               sx={{
                 fontFamily: 'quicksand',
-                fontWeight: '500',
+                fontWeight: '600',
                 fontSize: '15px',
                 margin: '16px 16px 10px 0px',
-                color: '#0c4195',
+                color: 'rgb(14, 100, 126)',
                 textDecoration: 'underline',
                 cursor: 'pointer',
               }}

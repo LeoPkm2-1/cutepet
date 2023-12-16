@@ -5,6 +5,7 @@ export const NotiActionEnum = {
   SET_NUM_NOTI: 'noti/SET_NUM_NOTI',
   SET_NEW_NOTI: 'noti/SET_NEW_NOTI',
   SET_INCRE_NOTI: 'noti/SET_INCRE_NOTI',
+  SET_NEW_ID: 'noti/SET_NEW_ID',
   RESET: 'RESET',
 } as const;
 
@@ -21,10 +22,14 @@ function setNewNoti() {
   return typedAction(NotiActionEnum.SET_NEW_NOTI);
 }
 
+function setNewId(id: string) {
+  return typedAction(NotiActionEnum.SET_NEW_ID, id);
+}
 export type NotiActionTypes =
   | ReturnType<typeof setNumNoti>
   | ReturnType<typeof setNewNoti>
   | ReturnType<typeof setIncreNumNoti>
+  | ReturnType<typeof setNewId>
   | { type: typeof NotiActionEnum.RESET };
 
-export default { setNumNoti,setNewNoti,setIncreNumNoti };
+export default { setNumNoti, setNewNoti, setIncreNumNoti, setNewId };

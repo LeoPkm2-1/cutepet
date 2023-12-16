@@ -110,6 +110,8 @@ export default function PopUpCreatePost(props: Props) {
         setIsloading(false);
         setText('');
         setSelectedFile(null);
+        setFriend([]);
+        setPetsTag([]);
         props.onClose();
       })
       .catch((err) => {

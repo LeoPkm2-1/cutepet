@@ -18,7 +18,7 @@ import { useEffect, useRef, useState } from 'react';
 import postApi from '../../../../../api/post';
 import { useSnackbar } from 'notistack';
 import { CommentType, StatusType } from '../../../../../models/post';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../redux';
 import moment from 'moment';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -39,6 +39,7 @@ import UpdatePost from '../chinh-sua-bai-viet';
 import { deepCopy } from '@firebase/util';
 import { StyledTextField } from '../../../../../components/FormItem';
 import Button from '../../../../../components/Button';
+import { NotiActions } from '../../../../../redux/noti';
 
 type Props = {
   idStatus?: string;
@@ -58,7 +59,8 @@ export default function PostComponent(props: Props) {
   const showDialog = useShowDialog();
   const [openUpdate, setOpenUpdate] = useState(false);
   const profile = useSelector((state: RootState) => state.user.profile);
-  const postIdNew = useSelector((state: RootState) => state.socket.hasPostId);
+  // const postIdNew = useSelector((state: RootState) => state.socket.hasPostId);
+  const postIdNew = useSelector((state: RootState) => state.noti.newId);
   const indexCommentPost = useRef(0);
   const [isLoadComment, setIsLoadComment] = useState(false);
   const [isHasComment, setIsHasComment] = useState(true);
@@ -71,6 +73,7 @@ export default function PostComponent(props: Props) {
       name: string;
     }[]
   >([]);
+  const dispatch = useDispatch();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -154,31 +157,6 @@ export default function PostComponent(props: Props) {
   }, [reloadComment]);
 
   useEffect(() => {
-    // if (props.status && props.status?.id) {
-    if (status?.id && postIdNew == status?.id) {
-      postApi.getAllComment(status?.id).then((data) => {
-        if (data?.status == 200) {
-          const comments = data?.payload?.comments?.map((item: any) => {
-            return {
-              photoURL: item?.userCmtInfor?.anh?.url,
-              name: item?.userCmtInfor?.ten,
-              text: item?.comment,
-              createdAt: item?.commentAt,
-              id: item?._id,
-              numOfLike: item?.numOfLike,
-              numOfReply: item?.numOfReply,
-              postUserId: status?.userInfor?.id,
-              userId: item?.userCmtInfor?.ma_nguoi_dung,
-              hasLike: item?.hasLike,
-            } as CommentType;
-          });
-          setComments(comments);
-        }
-      });
-    }
-  }, [postIdNew]);
-
-  useEffect(() => {
     if (props?.status?.id) {
       postApi?.getIsUserFollowedPost(props?.status?.id).then((data) => {
         if (data?.status == 200) {
@@ -227,6 +205,16 @@ export default function PostComponent(props: Props) {
     }
   }, [isLoadComment]);
 
+  useEffect(() => {
+    console.log('vao đay nè 1');
+
+    // if (props.status && props.status?.id) {
+    if (status?.id && postIdNew == status?.id) {
+      console.log('vao đay nè');
+      handleClickComment();
+      dispatch(NotiActions.setNewId(''));
+    }
+  }, [postIdNew]);
   function handleLike() {
     if (status?.id) {
       postApi
@@ -312,6 +300,7 @@ export default function PostComponent(props: Props) {
               variant: 'info',
             });
             setOpenFlag(false);
+            setTextFlag('');
           }
         })
         .catch((err) => {
@@ -324,7 +313,7 @@ export default function PostComponent(props: Props) {
     // if (props.status && props.status?.numOfComment > 0 && props.status?.id) {
     if (status && (status?.numOfComment || 0) > 0 && status?.id) {
       // await postApi.getAllComment(props.status?.id).then((data) => {
-
+      indexCommentPost.current = 0;
       await postApi
         .getCommentStartFrom(
           status?.id,
@@ -349,6 +338,8 @@ export default function PostComponent(props: Props) {
             });
             if (data?.payload?.comments?.length < numCommentPost) {
               setIsHasComment(false);
+            } else {
+              setIsHasComment(true);
             }
             setComments(commemts);
           } else {
@@ -948,10 +939,12 @@ export default function PostComponent(props: Props) {
                     align="center"
                     sx={{
                       fontFamily: 'quicksand',
-                      fontWeight: '500',
+                      fontWeight: '600',
                       fontSize: '15px',
                       margin: '16px 16px 10px 0px',
-                      color: '#0c4195',
+                      // color: '#0c4195',
+                      color: '   #65676b',
+
                       textDecoration: 'underline',
                       cursor: 'pointer',
                       paddingBottom: '30px',
@@ -980,6 +973,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [isReply, setIsReply] = useState(false);
   const [isReload, setIsReload] = useState(false);
   const [replys, setReplys] = useState<CommentType[]>([]);
+  const [isShowReply, setIsShowReply] = useState(false);
   const [isFinish, setIsFinish] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   useEffect(() => {
@@ -1012,7 +1006,6 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
 
   const [comment, setComment] = useState<CommentType>(props?.comment);
   const { enqueueSnackbar } = useSnackbar();
-
   const profile = useSelector((state: RootState) => state.user.profile);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -1215,10 +1208,10 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
                       onClick={() => setIsReply(true)}
                       sx={{
                         fontFamily: 'quicksand',
-                        fontWeight: '500',
-                        fontSize: '16px',
+                        fontWeight: '600',
+                        fontSize: '14px',
                         color: 'gray',
-                        mr: '15px',
+                        mr: '14px',
                         cursor: 'pointer',
                       }}
                     >
@@ -1310,27 +1303,75 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
                       </>
                     )}
                   </Box>
+                  {replys?.length > 0 && (
+                    <>
+                      {!isShowReply ? (
+                        <Typography
+                          sx={{
+                            fontFamily: 'quicksand',
+                            fontWeight: '600',
+                            fontSize: '13px',
+                            margin: '0px 16px 10px 20px',
+                            // color: '#0c4195',
+                            color: '   #65676b',
+
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                            paddingBottom: '0px',
+                          }}
+                          onClick={() => setIsShowReply(true)}
+                        >
+                          {' '}
+                          Xem tất cả {replys?.length} phản hồi
+                        </Typography>
+                      ) : (
+                        <Typography
+                          sx={{
+                            fontFamily: 'quicksand',
+                            fontWeight: '600',
+                            fontSize: '13px',
+                            margin: '0px 16px 10px 20px',
+                            // color: '#0c4195',
+                            color: '   #65676b',
+
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                            paddingBottom: '0px',
+                          }}
+                          onClick={() => setIsShowReply(false)}
+                        >
+                          {' '}
+                          Ẩn phản hồi
+                        </Typography>
+                      )}
+                    </>
+                  )}
                 </Box>
               </Box>
               <Box
                 sx={{
-                  marginLeft: '30px',
+                  marginLeft: '60px',
                 }}
               >
-                {replys.length > 0 &&
-                  replys.map((item) => {
-                    return (
-                      <Reply
-                        onHandleReply={() => setIsReply(true)}
-                        reply={item}
-                      />
-                    );
-                  })}
+                {isShowReply && (
+                  <>
+                    {replys.length > 0 &&
+                      replys.map((item) => {
+                        return (
+                          <Reply
+                            onHandleReply={() => setIsReply(true)}
+                            reply={item}
+                          />
+                        );
+                      })}
+                  </>
+                )}
                 {isReply && (
                   <CreateReply
                     onSuccess={() => {
                       setIsReload(!isReload);
                       setIsReply(false);
+                      setIsShowReply(true);
                     }}
                     idStatus={props.comment.id}
                   />
@@ -1396,12 +1437,12 @@ function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
             >
               <img
                 style={{
-                  height: '40px',
-                  width: '40px',
+                  height: '35px',
+                  width: '35px',
                   objectFit: 'cover',
                   borderRadius: '30px',
-                  minWidth: '40px',
-                  minHeight: '40px',
+                  minWidth: '35px',
+                  minHeight: '35px',
                 }}
                 src={props?.reply?.photoURL}
               />
@@ -1426,7 +1467,7 @@ function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
                       sx={{
                         fontFamily: 'quicksand',
                         fontWeight: '700',
-                        fontSize: '15px',
+                        fontSize: '13px',
                       }}
                     >
                       {props?.reply?.name}
@@ -1435,7 +1476,7 @@ function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
                       sx={{
                         fontFamily: 'quicksand',
                         fontWeight: '400',
-                        fontSize: '14px',
+                        fontSize: '13px',
                         color: '',
                       }}
                     >
@@ -1504,9 +1545,9 @@ function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
                     sx={{
                       fontFamily: 'quicksand',
                       fontWeight: '600',
-                      fontSize: '15px',
+                      fontSize: '14px',
                       color: 'gray',
-                      mr: '15px',
+                      mr: '14px',
                       cursor: 'pointer',
                     }}
                   >
@@ -1841,12 +1882,12 @@ function CreateReply(props: { idStatus: string; onSuccess: () => void }) {
         >
           <img
             style={{
-              height: '40px',
-              width: '40px',
+              height: '35px',
+              width: '35px',
               objectFit: 'cover',
               borderRadius: '30px',
-              minWidth: '40px',
-              minHeight: '40px',
+              minWidth: '35px',
+              minHeight: '35px',
             }}
             src={infoUser?.photoURL || ''}
           />
@@ -1869,7 +1910,7 @@ function CreateReply(props: { idStatus: string; onSuccess: () => void }) {
                 flex: 1,
                 fontFamily: 'quicksand',
                 fontWeight: '400',
-                fontSize: '14px',
+                fontSize: '13px',
                 paddingRight: '60px',
               }}
               placeholder="Phản hồi của bạn ..."

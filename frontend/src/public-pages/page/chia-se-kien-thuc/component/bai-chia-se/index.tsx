@@ -19,7 +19,7 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../redux';
 import { useSnackbar } from 'notistack';
 import postApi from '../../../../../api/post';
@@ -41,6 +41,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useShowDialog } from '../../../../../hooks/dialog';
 import Button from '../../../../../components/Button';
 import { StyledTextField } from '../../../../../components/FormItem';
+import { NotiActions } from '../../../../../redux/noti';
 export default function BaiChiaSe() {
   const [article, setArticle] = useState<ArticleType>({
     id: '',
@@ -74,6 +75,8 @@ export default function BaiChiaSe() {
   const [isHasComment, setIsHasComment] = useState(true);
   const [numCommentPost, setNumCommentPost] = useState(5);
   const profileId = useSelector((state: RootState) => state.user.profile?.id);
+  const postIdNew = useSelector((state: RootState) => state.noti.newId);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (id) {
       articleApi
@@ -143,6 +146,7 @@ export default function BaiChiaSe() {
   }, [article?.categories]);
 
   useEffect(() => {
+    indexCommentPost.current = 0;
     if (id) {
       articleApi
         .getCommentStartFrom(id, indexCommentPost.current, numCommentPost)
@@ -164,6 +168,8 @@ export default function BaiChiaSe() {
             setComments(listComment);
             if (data?.payload?.comments?.length < numCommentPost) {
               setIsHasComment(false);
+            } else {
+              setIsHasComment(true);
             }
           } else {
             setIsHasComment(false);
@@ -174,6 +180,48 @@ export default function BaiChiaSe() {
         });
     }
   }, [id]);
+
+  useEffect(() => {
+    console.log('vao đay nè 1');
+    indexCommentPost.current = 0;
+    // if (props.status && props.status?.id) {
+    if (id && postIdNew == id) {
+      console.log('vao đay nè');
+      if (id) {
+        articleApi
+          .getCommentStartFrom(id, indexCommentPost.current, numCommentPost)
+          .then((data) => {
+            if (data?.status == 200) {
+              console.log(data, 'COmment');
+              const listComment: CommentType[] = data?.payload?.comments?.map(
+                (item: any) => {
+                  return {
+                    photoURL: item?.userCmtInfor?.anh?.url,
+                    name: item?.userCmtInfor?.ten,
+                    userId: item?.userCmtInfor?.ma_nguoi_dung,
+                    text: item?.comment,
+                    createdAt: item?.commentAt,
+                    id: item?._id,
+                  } as CommentType;
+                }
+              );
+              setComments(listComment);
+              if (data?.payload?.comments?.length < numCommentPost) {
+                setIsHasComment(false);
+              } else {
+                setIsHasComment(true);
+              }
+            } else {
+              setIsHasComment(false);
+            }
+          })
+          .catch(() => {
+            setIsHasComment(false);
+          });
+      }
+      dispatch(NotiActions.setNewId(''));
+    }
+  }, [postIdNew]);
 
   function nextComment() {
     if (id) {
@@ -314,6 +362,7 @@ export default function BaiChiaSe() {
               variant: 'info',
             });
             setOpenFlag(false);
+            setTextFlag('');
           }
         })
         .catch((err) => {
@@ -712,10 +761,10 @@ export default function BaiChiaSe() {
                     align="center"
                     sx={{
                       fontFamily: 'quicksand',
-                      fontWeight: '500',
-                      fontSize: '15px',
+                      fontWeight: '600',
+                      fontSize: '14px',
                       margin: '16px 16px 10px 0px',
-                      color: '#0c4195',
+                      color: '   #65676b',
                       textDecoration: 'underline',
                       cursor: 'pointer',
                       paddingBottom: '30px',
