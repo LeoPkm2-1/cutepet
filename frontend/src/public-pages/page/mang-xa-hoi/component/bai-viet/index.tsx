@@ -82,6 +82,7 @@ export default function PostComponent(props: Props) {
   };
 
   useEffect(() => {
+    dispatch(NotiActions.setNewId(''));
     if (props?.idStatus) {
       postApi.getStatusById(props.idStatus).then((data: any) => {
         if (data?.status == 200) {
@@ -345,6 +346,7 @@ export default function PostComponent(props: Props) {
           } else {
             setIsHasComment(false);
           }
+          dispatch(NotiActions.setNewId(''));
         });
     }
 
