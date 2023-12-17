@@ -1,49 +1,69 @@
 
-## ---DONE--- ||==DONE== 68. khi xóa bài viết cần phải cho bài viết đó biến mất
-Biến mất cả ở trong trang chi tiết của bài viết
+## --DONE-- || ==ERR== 84. khi đã đứng ở trong bài viết chia sẻ trạng thái mà có bấm vào thông báo navigate đến bài viết đó thì không cập nhật lại danh sách mới nhất
 
-
-
-
-
-
-
-## --DONE-- || ==DONE== 84. khi đã đứng ở trong bài viết chia sẻ trạng thái mà có bấm vào thông báo navigate đến bài viết đó thì không cập nhật lại danh sách mới nhất
+`chỉnh mới cập nhật được cmt chưa cập nhật được trạng tahi1 của like với reply với like comment`
 
 ![](../media/img/err/img41.png)
 
 
-## 90. ==DONE== thêm đoạn mô tả ở flag cả ở trang mạng xã hội lẫn chia sẻ kiến thức
-
-XÂY DỰNG MẠNG XÃ HỘI DÀNH CHO NGƯỜI NUÔI THÚ CƯNG
-
-**nhớ xóa cái text sau khi báo cáo xong**
 
 
 
-## ---DONE--- || ==DONE== 96. làm trang chi tiết thú cưng, có loading .
-**lúc lấy thêm bài post của con thú bị sai do gọi lộn api lấy bài viết của người dùng**
+## 115. ---DONE--- ||==ERR==  đang dứng trong bài viết bấm vào thông báo đến bài viết đó thì không cập nhật cmt với reply mới nhất... trong cả bài status với article
+
+`article ok`
+`status chỉnh mới cập nhật được cmt, chưa cập nhật được like reply với like comment`
+
+
+
+## 119. nên sửa lại cái khung lọc thể loại ở trang bài viết chia sẻ kiến thức
+
+`nên cho chiều dài bằng với chiều dài của các bộ lọc tác giả, thời gian`
+
+![](../media/img/err/img42.png)
+
+
+## 120. sau khi xóa bài viết và đăng lại bài viết mới thì cái bài viết cập nhật trên giao diện bị sai
+
+`bài viết hihihi này đã bị xóa nhưng khi đăng bài mới lên thì nó vẫn in ra giao diện`
+
+
+
+![](../media/img/err/img43_a.png)
+
+`thông tin socket gửi đúng. Bài viết phải là bug 1 mới đúng`
+
+![](../media/img/err/img43_b.png)
+
+
+
+## 121. khi dứng ở trang 404 bấm vào thông báo thì không navigate đến bài viết đó
+
+![](../media/img/err/img44_a.png)
+![](../media/img/err/img44_b.png)
+
+
+## 122. khi cmt lần đầu tiên ở bài viết status bấm vào thông báo thì không render ra bình luận.
+
+![](../media/img/err/img46_a.png)
+![](../media/img/err/img46_b.png)
+
+`like cũng sai`
+![](../media/img/err/img46_c.png)
+
+`khi refresh lại trang thì mới render ra được`
+`like cmt chưa hiện thực`
+![](../media/img/err/img46_d.png)
+![](../media/img/err/img46_e.png)
+![](../media/img/err/img46_f.png)
 
 
 
 
-## 101. load thêm hình luận.
+## 123. khi đang đứng ở bài viết chia sẻ trạng thái A mà bấm vào thông báo để navigate đến bài viết chia sẻ trạng thái B thì nó chỉ hiển thị phần nội dung bài viết còn phần bình luận nó giữ nguyên của bài viết A
 
-<!-- ## 106. hàm trả về ngươi dùng trong thanh tìm kiếm bị thiếu -->
-
-
-
-## --Chưa có API hoặc trong struct a chưa thấy--- 111. search người dùng phân trang
-**tham khảo post man số 25** và **[Route_Struture/userInfor.md](./userInfor.md)**
-![](../media/img/err/img36.png)
+`kiểm tra tương tự cho article`
 
 
-## ---DONE--- 115. đang dứng trong bài viết bấm vào thông báo đến bài viết đó thì không cập nhật cmt với reply mới nhất... trong cả bài status với article
+![](../media/img/err/img45.png)
 
-## ---DONE--- 116. sau khi đăng bài viết tag người dùng xong thì phải reset lại cái khung đăng bài cả ở status lẫn chia sẻ kiến thức
-
-## ---DONE--- 117. reset lại text của báo cáo sau khi báo cáo xong ( status và article)
-
-## --- Đã fix theo hướng ẩn - show như fb. Vì phản hồi cũng ko phải nhiều nên a làm gọn v cho gọn ( phân trang UI sẽ rối hơn ) ---- 118. nên phân trang cho trả lời bình luận ở bài viết chia sẻ trạng thái
-
-**tham khảo trong [Route_Struture/userInfor.md](./post.md#9-phân-trang-cho-phản-hồi)** và **postman số 52**
