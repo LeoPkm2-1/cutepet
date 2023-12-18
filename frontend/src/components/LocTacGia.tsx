@@ -40,7 +40,7 @@ export default function MixedBy(props: Props) {
       size="small"
       value={props.value}
       onChange={(event, newValue) => {
-        console.log(newValue, 'new');
+
 
         // if (typeof newValue === 'string') {
         //   props.onChange?.({ name: newValue, id: 0, user: '', numberPet: 0 });
@@ -62,7 +62,7 @@ export default function MixedBy(props: Props) {
         if (typeof newValue === 'string') {
         } else if (newValue) {
           props.onChange?.(newValue);
-          console.log(newValue, 'new 2');
+
         }
       }}
       filterOptions={(options, params) => {

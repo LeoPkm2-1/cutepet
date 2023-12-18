@@ -48,7 +48,7 @@ export default function (props: P) {
           key={idx}
           file={url}
           onRemove={() => {
-            console.log(url);
+
 
             props.onUrlChange?.(props.fileUrls.filter((u) => u !== url));
           }}

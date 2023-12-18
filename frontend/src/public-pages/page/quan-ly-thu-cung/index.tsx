@@ -13,7 +13,7 @@ export function QuanLyThuCung() {
   const [listPet, setListPet] = useState<PetType[]>([]);
   useEffect(() => {
     petApi.getAllPet().then((data) => {
-      console.log(data, ' data nè: ');
+
       if (data?.status == 200) {
         const list: PetType[] = data?.payload?.map((item: any) => {
           return {
@@ -56,7 +56,7 @@ export function QuanLyThuCung() {
                         onRemove={() => {
                           const list: PetType[] = deepCopy(listPet);
                           list.splice(index, 1);
-                          console.log(list, ' list nè');
+             
 
                           setListPet(list);
                         }}

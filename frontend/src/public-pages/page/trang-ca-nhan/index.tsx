@@ -40,7 +40,7 @@ export default function TrangCaNhan() {
 
   useEffect(() => {
     profileApi.getMyProfile().then((data) => {
-      console.log(data);
+
       setProfile({
         name: data?.thong_tin_profile_user?.ten,
         id: data?.thong_tin_profile_user?.ma_nguoi_dung,
@@ -165,7 +165,7 @@ export default function TrangCaNhan() {
 
 
   useEffect(() => {
-    console.log(newPostFromStore, ' newPostFromStore nè');
+
 
     if (newPostFromStore?.id) {
       let arr: StatusType[] = deepCopy(listPost);

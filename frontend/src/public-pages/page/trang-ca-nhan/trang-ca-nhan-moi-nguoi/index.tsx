@@ -139,7 +139,7 @@ export default function TrangCaNhanMoiNguoi() {
         .getPostUserById(id, new Date())
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'data lan 1');
+          
             if (data?.payload?.length == 0) {
               setTimePost('');
               setListPost([]);
@@ -195,7 +195,7 @@ export default function TrangCaNhanMoiNguoi() {
         .getPostUserById(id, timePost)
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'data lan 1');
+       
             if (data?.payload?.length == 0) {
               setTimePost('');
               return;
@@ -356,7 +356,7 @@ export default function TrangCaNhanMoiNguoi() {
       friendApi
         .responeAddFriend(profile?.id, type)
         .then((data) => {
-          console.log(data, ' dtata nef');
+     
           if (data?.status == 200) {
             if (data?.payload?.accepted) {
               enqueueSnackbar(`Kết bạn với ${profile?.name} thành công`, {

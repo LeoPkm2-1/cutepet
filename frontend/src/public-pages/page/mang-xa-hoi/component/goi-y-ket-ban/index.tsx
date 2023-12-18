@@ -24,7 +24,7 @@ export default function GoiYKetBan(props: { isPageFriend?: boolean }) {
   useEffect(() => {
     friendApi.getListSuggestedFriends().then((data) => {
       if (data?.status == 200) {
-        console.log(data, ' dtaa loi moi');
+
         if (data?.payload?.length == 0) {
           setUserList([]);
           return;

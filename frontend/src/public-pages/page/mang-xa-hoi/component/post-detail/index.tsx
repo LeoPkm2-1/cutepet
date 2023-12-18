@@ -14,14 +14,16 @@ export default function PostDetail() {
         .then((data: any) => {
           if (data?.status !== 200) {
             setIsData(false);
+          } else {
+            setIsData(true);
           }
         })
         .catch(() => {
           setIsData(false);
         });
     }
-  });
-  
+  }, [id]);
+
   return (
     <>
       {isData ? (

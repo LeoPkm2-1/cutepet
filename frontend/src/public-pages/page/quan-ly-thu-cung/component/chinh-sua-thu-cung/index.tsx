@@ -104,7 +104,7 @@ export default function ChinhSuaThuCung() {
   }, [pet?.ma_loai]);
 
   async function updatePet() {
-    console.log(pet, 'Pet nè: ');
+   
     let url: string = '';
     setIsLoading(true);
     if (!pet?.ten_thu_cung?.trim()) {
@@ -254,7 +254,7 @@ export default function ChinhSuaThuCung() {
                       value={dayjs(pet?.ngay_sinh)}
                       onChange={(newValue) => {
                         if (newValue) {
-                          console.log(newValue.format('YYYY-MM-DD'));
+         
                           setPet({
                             ...pet,
                             ngay_sinh: newValue.format('YYYY-MM-DD'),

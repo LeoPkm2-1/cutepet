@@ -42,7 +42,6 @@ export function FriendList() {
   useEffect(() => {
     friendApi.getListFriend().then((data) => {
       if (data?.status == 200) {
-        console.log(data);
         const list = data?.payload.map((item: any) => {
           return {
             name: item?.ten,
@@ -397,7 +396,6 @@ function BanBe() {
   useEffect(() => {
     friendApi.getListFriend().then((data) => {
       if (data?.status == 200) {
-        console.log(data);
         const list = data?.payload.map((item: any) => {
           return {
             name: item?.ten,

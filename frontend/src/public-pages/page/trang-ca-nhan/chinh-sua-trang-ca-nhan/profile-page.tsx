@@ -30,7 +30,7 @@ import { uploadTaskPromise } from '../../../../api/upload';
 import Loading from '../../../../components/loading';
 import ProfileHeader from './profile-header';
 import { UserActions } from '../../../../redux/user';
-import { profile } from 'console';
+
 import { UserProfile } from '../../../../models/user-profile';
 
 const defaultState = {
@@ -55,7 +55,7 @@ function UpdateProfilePage() {
   });
   useEffect(() => {
     profileApi.getMyProfile().then((data) => {
-      console.log(data);
+   
       setProfile({
         name: data?.thong_tin_profile_user?.ten,
         id: data?.thong_tin_profile_user?.ma_nguoi_dung,
@@ -74,7 +74,6 @@ function UpdateProfilePage() {
     e
   ) => {
     e.preventDefault();
-    console.log(profile, ' profile');
     setLoading(true);
     let url = profile?.url;
     if (file) {
@@ -283,7 +282,7 @@ function UpdateProfilePage() {
                               )}
                               onChange={(newValue) => {
                                 if (newValue) {
-                                  console.log(newValue.format('YYYY-MM-DD'));
+                    
                                   setProfile({
                                     ...profile,
                                     ngay_sinh: newValue.format('YYYY-MM-DD'),

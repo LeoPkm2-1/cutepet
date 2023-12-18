@@ -51,7 +51,7 @@ export default function TagNameSelect(props: Props) {
 //   }, []);
 
   return (
-    <StyledFormControl sx={{ width: "300px" }} margin="dense">
+    <StyledFormControl sx={{ width: "100%" }} margin="dense">
       {/* <Label>{props.label ?? "Select user"}</Label> */}
       <Autocomplete
         readOnly = {!!props?.readonly}

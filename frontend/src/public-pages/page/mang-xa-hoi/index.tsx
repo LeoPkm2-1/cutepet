@@ -29,7 +29,6 @@ export default function MangXaHoi() {
   useEffect(() => {
     postApi.getPostForNewsfeed(indexPost, []).then((data: any) => {
       if (data?.status == 200) {
-        console.log(data, 'data lan 1 nha ggigi');
         if (data?.payload?.length == 0) {
           setIsPost(false);
           return;
@@ -81,7 +80,6 @@ export default function MangXaHoi() {
         .getPostForNewsfeed(indexPost, listId as string[])
         .then((data: any) => {
           if (data?.status == 200) {
-            console.log(data, 'data lần 2');
             if (data?.payload?.length == 0) {
               setIsPost(false);
               return;
@@ -124,7 +122,6 @@ export default function MangXaHoi() {
             const setB = new Set(list);
             const result = difference(setB, setA);
             const newListPost = Array.from(result);
-            console.log(Array.from(result), ' result');
             setListPost([...listPost, ...newListPost]);
           } else {
             setIsPost(false);
@@ -134,15 +131,12 @@ export default function MangXaHoi() {
   }, [indexPost]);
 
   useEffect(() => {
-    console.log(newPostFromStore, ' newPostFromStore nè');
 
     if (newPostFromStore?.id) {
-      let arr: StatusType[] = deepCopy(listPost);
-      console.log(listPost, ' list pót');
-
-      arr.unshift(newPostFromStore);
-      console.log(arr, ' arr');
-      setListPost(arr);
+      let list: StatusType[] = deepCopy(listPost);
+      const arr: StatusType[] = [newPostFromStore];
+      setListPost([...arr, ...list]);
+      
     }
   }, [newPostFromStore?.id]);
 
@@ -158,8 +152,13 @@ export default function MangXaHoi() {
         >
           <CreatePost />
           {listPost &&
-            listPost?.map((status) => {
-              return <PostComponent status={status} />;
+            listPost?.map((status, index) => {
+              return <PostComponent onRemove={() => {
+                let list: StatusType[] = deepCopy(listPost);
+                list.splice(index, 1);
+                
+                setListPost(list);
+              }} status={status} />;
             })}
           {isPost && (
             <Typography

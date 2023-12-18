@@ -27,6 +27,7 @@ import PetsIcon from '@mui/icons-material/Pets';
 import { PetType } from '../../../../../models/pet';
 import petApi from '../../../../../api/pet';
 import Tag from '../../../../../components/tag';
+import friendApi from '../../../../../api/friend';
 type Props = {
   open: boolean;
   onClose: () => void;
@@ -41,13 +42,31 @@ export default function PopUpCreatePost(props: Props) {
   const { enqueueSnackbar } = useSnackbar();
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const [isloading, setIsloading] = useState(false);
-  const friends = useSelector((state: RootState) => state.friend.friend);
+  const [friends, setFriends] = useState<FriendType[]>([]);
   const [listOptionTag, setListOptionTag] = useState<FriendType[]>([]);
   useEffect(() => {
     if (friends) {
       setListOptionTag(friends);
     }
   }, [friends]);
+
+  useEffect(() => {
+    friendApi.getListFriend().then((data) => {
+      if (data?.status == 200) {
+
+        const list = data?.payload.map((item: any) => {
+          return {
+            name: item?.ten,
+            user: item?.tai_khoan,
+            url: item?.anh?.url,
+            isOnline: item?.isOnline || false,
+            id: item?.ma_nguoi_dung,
+          } as FriendType;
+        });
+        setFriends(list);
+      }
+    });
+  }, []);
 
   const [friend, setFriend] = useState<
     {
@@ -66,7 +85,7 @@ export default function PopUpCreatePost(props: Props) {
   const [listPet, setListPet] = useState<PetType[]>([]);
   useEffect(() => {
     petApi.getAllPet().then((data) => {
-      console.log(data, ' data nè: ');
+
       if (data?.status == 200) {
         const list: PetType[] = data?.payload?.map((item: any) => {
           return {
@@ -106,7 +125,7 @@ export default function PopUpCreatePost(props: Props) {
         [storageUrl]
       )
       .then(() => {
-        enqueueSnackbar('Tạo bài viết thành công', { variant: "info" });
+        enqueueSnackbar('Tạo bài viết thành công', { variant: 'info' });
         setIsloading(false);
         setText('');
         setSelectedFile(null);
@@ -116,7 +135,7 @@ export default function PopUpCreatePost(props: Props) {
       })
       .catch((err) => {
         setIsloading(false);
-        console.log(err, 'err');
+
         enqueueSnackbar(`${err}`, { variant: 'error' });
       });
   }
@@ -284,7 +303,7 @@ export default function PopUpCreatePost(props: Props) {
                       fontFamily: 'quicksand',
                       fontWeight: '600',
                       color: '#ff5b2e',
-                      marginRight:"12px"
+                      marginRight: '12px',
                     }}
                   >
                     @{pet?.name?.trim()}
@@ -511,14 +530,14 @@ export default function PopUpCreatePost(props: Props) {
                                 ...petsTag,
                                 {
                                   id: item?.ma_thu_cung || 0,
-                                  name: item?.ten_thu_cung ||"",
+                                  name: item?.ten_thu_cung || '',
                                 },
                               ]);
                             }
                           }}
                           isSelect={isSele}
                           id={item?.ma_thu_cung || ''}
-                          name={item?.ten_thu_cung ||""}
+                          name={item?.ten_thu_cung || ''}
                           user={item?.ten_giong || ''}
                           url={item?.url_anh || ''}
                           isOnline={false}
@@ -550,7 +569,7 @@ export default function PopUpCreatePost(props: Props) {
               </Box>
             </Box>
             <Button
-              disabled = {!text?.trim() && !selectedFile}
+              disabled={!text?.trim() && !selectedFile}
               onClick={handleSubmit}
               fullWidth
               variant="contained"

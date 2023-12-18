@@ -73,7 +73,6 @@ export function TrangChiaSe() {
         num
       )
       .then((data) => {
-        console.log(data, ' data art');
 
         if (data?.status == 200) {
           const list: ArticleType[] = data?.payload?.articles?.map(
@@ -106,7 +105,6 @@ export function TrangChiaSe() {
     const idAuthor = sp.get('author');
     if (idAuthor) {
       setIdAuthorDefault(parseInt(idAuthor));
-      console.log(idAuthor, ' có nè');
       if (user?.length > 0) {
         const newPeople: PeopleType | undefined = user.find(
           (item) => `${item?.id}` == idAuthor

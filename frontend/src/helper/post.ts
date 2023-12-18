@@ -1,6 +1,6 @@
 export const timeAgo = (time: string) => {
     const date = new Date(time).getTime();
-    console.log(date, "date");
+   
     
     const seconds = Math.floor((new Date().getTime() - date) / 1000);
   
