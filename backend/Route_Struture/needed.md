@@ -1,5 +1,7 @@
 
-## --DONE-- || ==DONE== 84. khi đã đứng ở trong bài viết chia sẻ trạng thái mà có bấm vào thông báo navigate đến bài viết đó thì không cập nhật lại danh sách mới nhất
+## --DONE-- || ==ERR== 84. khi đã đứng ở trong bài viết chia sẻ trạng thái mà có bấm vào thông báo navigate đến bài viết đó thì không cập nhật lại danh sách mới nhất
+
+`nhớ test lại sau khi fix các bug lớn hơn 100`
 
 `chỉnh mới cập nhật được cmt chưa cập nhật được trạng tahi1 của like với reply với like comment`
 
@@ -9,17 +11,17 @@
 
 
 
-## 115. ---DONE--- ||==DONE==  đang dứng trong bài viết bấm vào thông báo đến bài viết đó thì không cập nhật cmt với reply mới nhất... trong cả bài status với article
+<!-- ## 115. ---DONE--- ||==DONE==  đang dứng trong bài viết bấm vào thông báo đến bài viết đó thì không cập nhật cmt với reply mới nhất... trong cả bài status với article
 
 `article ok`
-`status chỉnh mới cập nhật được cmt, chưa cập nhật được like reply với like comment`
+`status chỉnh mới cập nhật được cmt, chưa cập nhật được like reply với like comment` -->
 
 
 
 
 
 
-## ---DONE--- 122. khi cmt lần đầu tiên ở bài viết status bấm vào thông báo thì không render ra bình luận.
+## 122. ---DONE--- ||==ERR==  khi cmt lần đầu tiên ở bài viết status bấm vào thông báo thì không render ra bình luận.
 
 ![](../media/img/err/img46_a.png)
 ![](../media/img/err/img46_b.png)
@@ -36,9 +38,9 @@
 
 
 
-## --DONE--- 123. khi đang đứng ở bài viết chia sẻ trạng thái A mà bấm vào thông báo để navigate đến bài viết chia sẻ trạng thái B thì nó chỉ hiển thị phần nội dung bài viết còn phần bình luận nó giữ nguyên của bài viết A
+## --DONE---||==ERR== 123. khi đang đứng ở bài viết chia sẻ trạng thái A mà bấm vào thông báo để navigate đến bài viết chia sẻ trạng thái B thì nó chỉ hiển thị phần nội dung bài viết còn phần bình luận nó giữ nguyên của bài viết A
 
-`kiểm tra tương tự cho article`
+`nhớ kiểm tra lại sau khi đã fix 132`
 
 
 ![](../media/img/err/img45.png)
@@ -78,3 +80,6 @@
 ## 130. người dùng online ofline có vấn đề, test tầm 2 - 3 lần là nó không hoạt động được nữa
 
 ## 131. bật tắt bình luận
+
+## 132. bình luận của bài viết cũ còn nguyên khi đang đứng tại trang chi tiết của bài viết A mà navigate tới bài viết B
+![](../media/img/err/img52.png)
