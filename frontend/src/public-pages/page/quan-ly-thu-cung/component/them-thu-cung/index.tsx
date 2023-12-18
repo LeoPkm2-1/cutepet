@@ -78,7 +78,7 @@ export default function ThemThuCung() {
   }, [pet?.ma_loai]);
 
   async function addPet() {
-    console.log(pet, 'Pet nè: ');
+
     let url: string = '';
     setIsLoading(true);
     if (!pet?.ten_thu_cung?.trim()) {
@@ -235,7 +235,7 @@ export default function ThemThuCung() {
                   value={dayjs(pet?.ngay_sinh)}
                   onChange={(newValue) => {
                     if (newValue) {
-                      console.log(newValue.format('YYYY-MM-DD'));
+            
                       setPet({
                         ...pet,
                         ngay_sinh: newValue.format('YYYY-MM-DD'),

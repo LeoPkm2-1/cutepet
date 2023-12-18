@@ -46,7 +46,7 @@ export function SuaBaiChiaSe() {
         .getArticleById(id)
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'data arcticle ');
+            setIsData(true);
             const art = {
               id: data?.payload?._id,
               title: data?.payload?.title,
@@ -89,12 +89,10 @@ export function SuaBaiChiaSe() {
         .editArticle(id, title, urlPhoto, decrition, content, tag)
         .then((data) => {
           if (data?.status == 200) {
-            console.log('Thanh cong');
             enqueueSnackbar('Cập nhật bài viết thành công', {
               variant: 'info',
             });
             setIsLoading(false);
-            console.log(data);
 
             if (id) {
               navigate(`/home/trang-chia-se/${id}`);
@@ -245,18 +243,14 @@ export function SuaBaiChiaSe() {
                     data={content}
                     onReady={(editor) => {
                       // You can store the "editor" and use when it is needed.
-                      console.log('Editor is ready to use!', editor);
                     }}
                     onChange={(event, editor) => {
                       const data = editor.getData();
-                      console.log({ event, editor, data });
                       setContent(data);
                     }}
                     onBlur={(event, editor) => {
-                      console.log('Blur.', editor);
                     }}
                     onFocus={(event, editor) => {
-                      console.log('Focus.', editor);
                     }}
                   />
                 </Box>

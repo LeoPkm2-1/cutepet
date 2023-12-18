@@ -44,6 +44,7 @@ import { NotiActions } from '../../../../../redux/noti';
 type Props = {
   idStatus?: string;
   status?: StatusType;
+  onRemove?: () => void;
 };
 export default function PostComponent(props: Props) {
   const [status, setStatus] = useState<StatusType | null>(null);
@@ -67,6 +68,7 @@ export default function PostComponent(props: Props) {
   const [numCommentPost, setNumCommentPost] = useState(5);
   const [textFlag, setTextFlag] = useState('');
   const [openFlag, setOpenFlag] = useState(false);
+  const [reload, setReload] = useState(false);
   const [friendTag, setFriendTag] = useState<
     {
       id: string;
@@ -83,6 +85,7 @@ export default function PostComponent(props: Props) {
 
   useEffect(() => {
     dispatch(NotiActions.setNewId(''));
+    setIsHasComment(false);
     if (props?.idStatus) {
       postApi.getStatusById(props.idStatus).then((data: any) => {
         if (data?.status == 200) {
@@ -121,41 +124,11 @@ export default function PostComponent(props: Props) {
       return;
     }
     if (props?.status) {
-      console.log(props?.status, ' status nè');
-
       setStatus(props?.status);
     }
+
     // get comment
-  }, [props?.idStatus, props?.status?.id]);
-
-  useEffect(() => {
-    console.log('reload comment');
-
-    // if (props.status && props.status?.id) {
-    // if (status?.id) {
-    //   postApi.getAllComment(status?.id).then((data) => {
-    //     if (data?.status == 200) {
-    //       const comments = data?.payload?.comments?.map((item: any) => {
-    //         return {
-    //           photoURL: item?.userCmtInfor?.anh?.url,
-    //           name: item?.userCmtInfor?.ten,
-    //           text: item?.comment,
-    //           createdAt: item?.commentAt,
-    //           id: item?._id,
-    //           numOfLike: item?.numOfLike,
-    //           numOfReply: item?.numOfReply,
-    //           postUserId: status?.userInfor?.id,
-    //           userId: item?.userCmtInfor?.ma_nguoi_dung,
-    //           hasLike: item?.hasLike,
-    //         } as CommentType;
-    //       });
-    //       console.log(comments, 'Comment');
-
-    //       setComments(comments);
-    //     }
-    //   });
-    // }
-  }, [reloadComment]);
+  }, [props?.idStatus, props?.status?.id, reload]);
 
   useEffect(() => {
     if (props?.status?.id) {
@@ -167,7 +140,7 @@ export default function PostComponent(props: Props) {
         }
       });
     }
-  }, [props?.status?.id]);
+  }, [props?.status?.id, reload]);
 
   useEffect(() => {
     if (indexCommentPost.current > 0 && status?.id) {
@@ -178,8 +151,6 @@ export default function PostComponent(props: Props) {
           numCommentPost
         )
         .then((data: any) => {
-          console.log(data, ' data comment');
-
           if (data?.status == 200) {
             const newComments = data?.payload?.comments?.map((item: any) => {
               return {
@@ -207,12 +178,53 @@ export default function PostComponent(props: Props) {
   }, [isLoadComment]);
 
   useEffect(() => {
-    console.log('vao đay nè 1');
+    if (status && (status?.numOfComment || 0) > 0 && status?.id) {
+      // await postApi.getAllComment(props.status?.id).then((data) => {
+      indexCommentPost.current = 0;
+      postApi
+        .getCommentStartFrom(
+          status?.id,
+          indexCommentPost.current,
+          numCommentPost
+        )
+        .then((data) => {
+          if (data?.status == 200) {
+            const commemts = data?.payload?.comments?.map((item: any) => {
+              return {
+                photoURL: item?.userCmtInfor?.anh?.url,
+                name: item?.userCmtInfor?.ten,
+                text: item?.comment,
+                createdAt: item?.commentAt,
+                id: item?._id,
+                numOfLike: item?.numOfLike,
+                numOfReply: item?.numOfReply,
+                postUserId: status?.userInfor?.id,
+                userId: item?.userCmtInfor?.ma_nguoi_dung,
+                hasLiked: item?.hasLiked,
+              } as CommentType;
+            });
+            if (data?.payload?.comments?.length < numCommentPost) {
+              setIsHasComment(false);
+            } else {
+              setIsHasComment(true);
+            }
+            setComments(commemts);
+          } else {
+            setIsHasComment(false);
+          }
+          dispatch(NotiActions.setNewId(''));
+        });
+    }
 
+    if ((status?.numOfComment || 0) == 0) {
+      setIsHasComment(false);
+    }
+  }, [status?.id, reload]);
+
+  useEffect(() => {
     // if (props.status && props.status?.id) {
     if (status?.id && postIdNew == status?.id) {
-      console.log('vao đay nè');
-      handleClickComment();
+      setReload(!reload);
       dispatch(NotiActions.setNewId(''));
     }
   }, [postIdNew]);
@@ -246,11 +258,12 @@ export default function PostComponent(props: Props) {
             .removePost(status?.id)
             .then((data) => {
               if (data?.status == 200) {
-                setIsRender(false);
                 enqueueSnackbar(`Xóa bài viết thành công`, {
                   variant: 'info',
                 });
-                setIsRender(false);
+                // setIsRender(false);
+                props?.onRemove?.();
+                handleClose();
               }
             })
             .catch((err) => {
@@ -302,6 +315,7 @@ export default function PostComponent(props: Props) {
             });
             setOpenFlag(false);
             setTextFlag('');
+            handleClose();
           }
         })
         .catch((err) => {
@@ -312,47 +326,47 @@ export default function PostComponent(props: Props) {
 
   async function handleClickComment() {
     // if (props.status && props.status?.numOfComment > 0 && props.status?.id) {
-    if (status && (status?.numOfComment || 0) > 0 && status?.id) {
-      // await postApi.getAllComment(props.status?.id).then((data) => {
-      indexCommentPost.current = 0;
-      await postApi
-        .getCommentStartFrom(
-          status?.id,
-          indexCommentPost.current,
-          numCommentPost
-        )
-        .then((data) => {
-          if (data?.status == 200) {
-            const commemts = data?.payload?.comments?.map((item: any) => {
-              return {
-                photoURL: item?.userCmtInfor?.anh?.url,
-                name: item?.userCmtInfor?.ten,
-                text: item?.comment,
-                createdAt: item?.commentAt,
-                id: item?._id,
-                numOfLike: item?.numOfLike,
-                numOfReply: item?.numOfReply,
-                postUserId: status?.userInfor?.id,
-                userId: item?.userCmtInfor?.ma_nguoi_dung,
-                hasLike: item?.hasLike,
-              } as CommentType;
-            });
-            if (data?.payload?.comments?.length < numCommentPost) {
-              setIsHasComment(false);
-            } else {
-              setIsHasComment(true);
-            }
-            setComments(commemts);
-          } else {
-            setIsHasComment(false);
-          }
-          dispatch(NotiActions.setNewId(''));
-        });
-    }
+    // if (status && (status?.numOfComment || 0) > 0 && status?.id) {
+    //   // await postApi.getAllComment(props.status?.id).then((data) => {
+    //   indexCommentPost.current = 0;
+    //   await postApi
+    //     .getCommentStartFrom(
+    //       status?.id,
+    //       indexCommentPost.current,
+    //       numCommentPost
+    //     )
+    //     .then((data) => {
+    //       if (data?.status == 200) {
+    //         const commemts = data?.payload?.comments?.map((item: any) => {
+    //           return {
+    //             photoURL: item?.userCmtInfor?.anh?.url,
+    //             name: item?.userCmtInfor?.ten,
+    //             text: item?.comment,
+    //             createdAt: item?.commentAt,
+    //             id: item?._id,
+    //             numOfLike: item?.numOfLike,
+    //             numOfReply: item?.numOfReply,
+    //             postUserId: status?.userInfor?.id,
+    //             userId: item?.userCmtInfor?.ma_nguoi_dung,
+    //             hasLike: item?.hasLike,
+    //           } as CommentType;
+    //         });
+    //         if (data?.payload?.comments?.length < numCommentPost) {
+    //           setIsHasComment(false);
+    //         } else {
+    //           setIsHasComment(true);
+    //         }
+    //         setComments(commemts);
+    //       } else {
+    //         setIsHasComment(false);
+    //       }
+    //       dispatch(NotiActions.setNewId(''));
+    //     });
+    // }
 
-    if ((status?.numOfComment || 0) == 0) {
-      setIsHasComment(false);
-    }
+    // if ((status?.numOfComment || 0) == 0) {
+    //   setIsHasComment(false);
+    // }
     setIsComment(true);
   }
 
@@ -978,6 +992,22 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [isShowReply, setIsShowReply] = useState(false);
   const [isFinish, setIsFinish] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
+
+  const [comment, setComment] = useState<CommentType>(props?.comment);
+  const { enqueueSnackbar } = useSnackbar();
+  const profile = useSelector((state: RootState) => state.user.profile);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+  const showDialog = useShowDialog();
+
+  const [isLike, setIsLike] = useState(props?.comment?.hasLiked);
+
+  useEffect(() => {
+    setComment(props?.comment);
+    setIsLike(props?.comment.hasLiked);
+  }, [props?.comment]);
+
   useEffect(() => {
     if (props.comment.id) {
       postApi.getAllReply(props.comment.id).then((data) => {
@@ -995,7 +1025,7 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
               } as CommentType;
             }
           );
-          console.log('lấy phản hổi thanh cong', reps);
+
           setReplys(reps.reverse());
           setIsFinish(true);
           return;
@@ -1003,21 +1033,9 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
       });
     }
     setIsFinish(true);
-  }, [props.comment.id, isReload]);
-  console.log(props?.comment);
-
-  const [comment, setComment] = useState<CommentType>(props?.comment);
-  const { enqueueSnackbar } = useSnackbar();
-  const profile = useSelector((state: RootState) => state.user.profile);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const navigate = useNavigate();
-  const showDialog = useShowDialog();
-
-  const [isLike, setIsLike] = useState(props?.comment?.hasLike);
+  }, [props.comment, isReload]);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    console.log('Vaao click nè');
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -1070,11 +1088,6 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
       }
     });
   }
-
-  useEffect(() => {
-    setComment(props?.comment);
-    setIsLike(props?.comment?.hasLike);
-  }, [props?.comment?.id]);
 
   return (
     <>
@@ -1144,6 +1157,14 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
                           fontFamily: 'quicksand',
                           fontWeight: '700',
                           fontSize: '15px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => {
+                          profile?.id == comment.userId
+                            ? navigate('/home/trang-ca-nhan')
+                            : navigate(
+                                `/home/trang-ca-nhan-nguoi-dung/${comment.userId}`
+                              );
                         }}
                       >
                         {props.comment.name}
@@ -1392,6 +1413,7 @@ function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
   const [isRemove, setIsRemove] = useState(false);
   const [reply, setReply] = useState<CommentType>(props?.reply);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -1404,8 +1426,7 @@ function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
 
   useEffect(() => {
     setReply(props?.reply);
-    console.log(props?.reply, ' props?.reply');
-  }, [props?.reply?.id]);
+  }, [props?.reply]);
   function handleDeleteReply() {
     if (props.reply.id) {
       postApi.removeReply(props.reply.id).then((data) => {
@@ -1438,6 +1459,13 @@ function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
               }}
             >
               <img
+                onClick={() => {
+                  profile?.id == reply.userId
+                    ? navigate('/home/trang-ca-nhan')
+                    : navigate(
+                        `/home/trang-ca-nhan-nguoi-dung/${reply.userId}`
+                      );
+                }}
                 style={{
                   height: '35px',
                   width: '35px',
@@ -1445,6 +1473,7 @@ function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
                   borderRadius: '30px',
                   minWidth: '35px',
                   minHeight: '35px',
+                  cursor: 'pointer',
                 }}
                 src={props?.reply?.photoURL}
               />
@@ -1470,6 +1499,14 @@ function Reply(props: { reply: CommentType; onHandleReply: () => void }) {
                         fontFamily: 'quicksand',
                         fontWeight: '700',
                         fontSize: '13px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => {
+                        profile?.id == reply.userId
+                          ? navigate('/home/trang-ca-nhan')
+                          : navigate(
+                              `/home/trang-ca-nhan-nguoi-dung/${reply.userId}`
+                            );
                       }}
                     >
                       {props?.reply?.name}
@@ -1662,8 +1699,6 @@ function CreateComment(props: {
     postApi
       .commentStatus(props.idStatus, value)
       .then((data) => {
-        console.log('data new cmt', data);
-
         if (data?.status == 200) {
           const cmt: CommentType = {
             photoURL: infoUser?.photoURL,

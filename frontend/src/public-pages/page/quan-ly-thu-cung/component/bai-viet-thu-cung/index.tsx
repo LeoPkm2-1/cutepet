@@ -30,7 +30,7 @@ export default function BaiVietThuCung() {
         .getPostHavePet(id, new Date(), numberPost)
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'data lan 1');
+       
             if (data?.payload?.length == 0) {
               setTimePost('');
               setListPost([]);
@@ -97,24 +97,31 @@ export default function BaiVietThuCung() {
 
   useEffect(() => {
     if (id) {
-      petApi?.getPetById(id).then((data) => {
-        if (data?.status == 200) {
-          const pet: PetType = {
-            ten_thu_cung: data?.payload?.ten_thu_cung,
-            ngay_sinh: data?.payload?.ngay_sinh,
-            gioi_tinh: data?.payload?.gioi_tinh,
-            ghi_chu: data?.payload?.ghi_chu,
-            url_anh: data?.payload?.anh?.url,
-            chieu_cao: data?.payload?.thong_tin_suc_khoe?.chieu_cao,
-            can_nang: data?.payload?.thong_tin_suc_khoe?.can_nang,
-            ten_giong: data?.payload?.giong_loai?.ten_giong,
-            ten_loai: data?.payload?.giong_loai?.ten_loai,
-            ma_thu_cung: data?.payload?.ma_thu_cung || 0,
-            ma_nguoi_chu: data?.payload?.ma_nguoi_chu || 0,
-          };
-          setPetInfo(pet);
-        }
-      });
+      petApi
+        ?.getPetById(id)
+        .then((data) => {
+          if (data?.status == 200) {
+            const pet: PetType = {
+              ten_thu_cung: data?.payload?.ten_thu_cung,
+              ngay_sinh: data?.payload?.ngay_sinh,
+              gioi_tinh: data?.payload?.gioi_tinh,
+              ghi_chu: data?.payload?.ghi_chu,
+              url_anh: data?.payload?.anh?.url,
+              chieu_cao: data?.payload?.thong_tin_suc_khoe?.chieu_cao,
+              can_nang: data?.payload?.thong_tin_suc_khoe?.can_nang,
+              ten_giong: data?.payload?.giong_loai?.ten_giong,
+              ten_loai: data?.payload?.giong_loai?.ten_loai,
+              ma_thu_cung: data?.payload?.ma_thu_cung || 0,
+              ma_nguoi_chu: data?.payload?.ma_nguoi_chu || 0,
+            };
+            setPetInfo(pet);
+          } else {
+            setPetInfo({});
+          }
+        })
+        .catch(() => {
+          setPetInfo({});
+        });
     }
   }, [id]);
 
@@ -124,7 +131,7 @@ export default function BaiVietThuCung() {
         .getPostHavePet(id, timePost, numberPost)
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'data lan 1');
+     
             if (data?.payload?.length == 0) {
               setTimePost('');
               return;

@@ -83,7 +83,6 @@ export default function BaiChiaSe() {
         .getArticleById(id)
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'data arcticle ');
             const art = {
               id: data?.payload?._id,
               title: data?.payload?.title,
@@ -103,6 +102,7 @@ export default function BaiChiaSe() {
               data?.payload?.numOfUpVote - data?.payload?.numOfDownVote
             );
             setArticle(art);
+            setIsData(true);
           } else {
             setIsData(false);
           }
@@ -152,7 +152,6 @@ export default function BaiChiaSe() {
         .getCommentStartFrom(id, indexCommentPost.current, numCommentPost)
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'COmment');
             const listComment: CommentType[] = data?.payload?.comments?.map(
               (item: any) => {
                 return {
@@ -182,17 +181,14 @@ export default function BaiChiaSe() {
   }, [id]);
 
   useEffect(() => {
-    console.log('vao đay nè 1');
     indexCommentPost.current = 0;
     // if (props.status && props.status?.id) {
     if (id && postIdNew == id) {
-      console.log('vao đay nè');
       if (id) {
         articleApi
           .getCommentStartFrom(id, indexCommentPost.current, numCommentPost)
           .then((data) => {
             if (data?.status == 200) {
-              console.log(data, 'COmment');
               const listComment: CommentType[] = data?.payload?.comments?.map(
                 (item: any) => {
                   return {
@@ -967,7 +963,6 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const showDialog = useShowDialog();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    console.log('Vaao click nè');
   };
   const handleClose = () => {
     setAnchorEl(null);

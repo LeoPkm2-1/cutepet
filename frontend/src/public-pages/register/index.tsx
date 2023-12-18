@@ -166,7 +166,6 @@ const RegisterPage = (props: P) => {
         userInfo.email
       )
       .then((res) => {
-        console.log(res, ' res nè');
         if (res?.status == 200) {
           enqueueSnackbar(
             'Đăng ký thành công. Vui lòng kiểm tra email để xác thực !',

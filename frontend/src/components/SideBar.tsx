@@ -88,20 +88,18 @@ export default function SideBar(props: {
   }, [pathname]);
 
   function logOut() {
-    // console.log("vao ne hhfhh");
 
     authApi
       .logoutUser()
       .then(() => {
         naviagte('/login');
-        console.log('Thành công');
+
         localStorage.removeItem('accessToken');
         dispatch(AuthActions.setAuth(false));
         // socket.disconnect();
       })
       .catch((err) => {
         naviagte('/login');
-        console.log('Thất bại', err);
         localStorage.removeItem('accessToken');
         dispatch(AuthActions.setAuth(false));
       });

@@ -68,12 +68,11 @@ const Header = (props: Props) => {
   };
   const handleClick1 = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl1(event.currentTarget);
-    console.log(valueSearch);
     indexPeople.current = 0;
     friendApi
       .searchPeople(valueSearch, indexPeople.current, numberSearch)
       .then((data) => {
-        console.log(data, 'data');
+
         if (data?.status == 200) {
           const list = data?.payload?.map((item: any) => {
             return {
@@ -97,7 +96,7 @@ const Header = (props: Props) => {
     friendApi
       .searchPeople(valueSearch, indexPeople.current, numberSearch)
       .then((data) => {
-        console.log(data, 'data');
+  
         if (data?.status == 200) {
           const list = data?.payload?.map((item: any) => {
             return {
@@ -129,17 +128,17 @@ const Header = (props: Props) => {
   const open1 = Boolean(anchorEl1);
   const id1 = open1 ? 'simple-popover1' : undefined;
   const location = useLocation();
-  console.log(location, 'location');
+
 
   const dispatch = useDispatch();
   useEffect(() => {
     notiApi.getNotificationStartFrom(0, 5).then((data: any) => {
-      console.log(data, ' data notification: ');
+
 
       if (data?.status == 200) {
         let num = 0;
         const list = data?.payload?.map((noti: any) => {
-          console.log(noti, ' notu nef');
+  
           if (!noti?.hasRead) {
             num++;
           }
@@ -193,7 +192,7 @@ const Header = (props: Props) => {
           //   };
           // }
         });
-        console.log(list, 'List');
+
         dispatch(NotiActions.setNumNoti(num));
         // setNoti(list);
       }
@@ -328,7 +327,7 @@ const Header = (props: Props) => {
             maxHeight: '70vh',
           }}
         >
-          <NotifycationComponent />
+          <NotifycationComponent onClick={() => handleClose()} />
         </Popover>
         <IconButton
           onClick={() => {
@@ -556,7 +555,7 @@ const OrgName = styled.span`
   font-weight: 500;
 `;
 
-function NotifycationComponent() {
+function NotifycationComponent(props: { onClick: () => void }) {
   const [noti, setNoti] = useState<
     {
       name?: string;
@@ -801,7 +800,7 @@ function NotifycationComponent() {
           }
         });
 
-        console.log(list, 'List');
+
         setNoti([...noti, ...list]);
         if (data?.payload?.length < 5) {
           setIsNoti(false);
@@ -886,6 +885,7 @@ function NotifycationComponent() {
                 isReaded={item?.hasRead}
                 isRequestFriend={item?.isRequestFriend || false}
                 isArticle={item?.isArticle || false}
+                onClick={() => props.onClick()}
               />
             </>
           );

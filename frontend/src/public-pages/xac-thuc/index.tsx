@@ -56,7 +56,7 @@ const XacThucPage = (props: P) => {
           setIsComFirm(true);
         }
       }).catch((err) => {
-        console.log(err);
+       
         
       });
     }

@@ -135,11 +135,10 @@ const LoginPage = (props: P) => {
     authApi
       .loginTest(email, password)
       .then((res: any) => {
-        console.log(res, ' res');
+
         if (res?.status == 200) {
           if (res?.payload[0]?.token) {
             storage.setTokens(res.payload[0]?.token);
-            console.log('Thành còng token :', res.payload[0]?.token);
             dispatch(AuthActions.setAuth(true));
             enqueueSnackbar('Đăng nhập thành công', { variant: 'info' });
           }

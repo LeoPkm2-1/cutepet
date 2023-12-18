@@ -88,7 +88,7 @@ export default function UpdatePost(props: Props) {
   const [listPet, setListPet] = useState<PetType[]>([]);
   useEffect(() => {
     petApi.getAllPet().then((data) => {
-      console.log(data, ' data nè: ');
+
       if (data?.status == 200) {
         const list: PetType[] = data?.payload?.map((item: any) => {
           return {
@@ -150,7 +150,7 @@ export default function UpdatePost(props: Props) {
         })
         .catch((err) => {
           setIsloading(false);
-          console.log(err, 'err');
+
           enqueueSnackbar(`${err?.message}`, { variant: 'error' });
         });
     }
