@@ -483,9 +483,9 @@ export default function BaiChiaSe() {
                 }}
               >
                 <IconButton
-                  disabled={article?.isUpVote}
+                  disabled={article?.isUpVote || profileId == article?.user_id}
                   sx={{
-                    border: '1px solid gray',
+                    border:  article?.isDownVote || profileId == article?.user_id ? '1px solid #77737369' : '1px solid gray',
                     padding: '5px',
                   }}
                   onClick={upVote}
@@ -510,9 +510,11 @@ export default function BaiChiaSe() {
                   {numAve}{' '}
                 </span>
                 <IconButton
-                  disabled={article?.isDownVote}
+                  disabled={
+                    article?.isDownVote || profileId == article?.user_id
+                  }
                   sx={{
-                    border: '1px solid gray',
+                    border:  article?.isDownVote || profileId == article?.user_id ? '1px solid #77737369' : '1px solid gray',
                     padding: '5px',
                   }}
                   onClick={downVote}
