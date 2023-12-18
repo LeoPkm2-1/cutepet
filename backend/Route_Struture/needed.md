@@ -16,31 +16,7 @@
 
 
 
-## --DONE--- 119. nên sửa lại cái khung lọc thể loại ở trang bài viết chia sẻ kiến thức
 
-`nên cho chiều dài bằng với chiều dài của các bộ lọc tác giả, thời gian`
-
-![](../media/img/err/img42.png)
-
-
-## ---DONE--- 120. sau khi xóa bài viết và đăng lại bài viết mới thì cái bài viết cập nhật trên giao diện bị sai
-
-`bài viết hihihi này đã bị xóa nhưng khi đăng bài mới lên thì nó vẫn in ra giao diện`
-
-
-
-![](../media/img/err/img43_a.png)
-
-`thông tin socket gửi đúng. Bài viết phải là bug 1 mới đúng`
-
-![](../media/img/err/img43_b.png)
-
-
-
-## --DONE-- 121. khi dứng ở trang 404 bấm vào thông báo thì không navigate đến bài viết đó
-
-![](../media/img/err/img44_a.png)
-![](../media/img/err/img44_b.png)
 
 
 ## ---DONE--- 122. khi cmt lần đầu tiên ở bài viết status bấm vào thông báo thì không render ra bình luận.
@@ -67,3 +43,38 @@
 
 ![](../media/img/err/img45.png)
 
+
+## 124. xóa bài viết status thì comment của bài viết đó nhảy xuống bài nằm lên bài viết ở dưới
+
+`kiểm tra cho cả trường hợp bài viết ở dưới có cmt và không có cmt`
+
+![](../media/img/err/img47_a.png)
+
+![](../media/img/err/img47_b.png)
+
+## 125. xóa bài viết trong trang chi tiết bài viết thì nó không biến mất
+
+![](../media/img/err/img48.png)
+
+## 126. khi đang đứng ở bài viết status mà chưa có comment hay like mà bấm vào thông báo comment,like của bài viết đó thì nó vẫn cập nhật
+
+`bấm vào lần đầu tiên không được`
+
+![](../media/img/err/img49_a.png)
+
+![](../media/img/err/img49_b.png)
+
+
+
+## 127. còn lại comment của bài viết đã xóa trước đó
+![](../media/img/err/img50.png)
+
+## 128. chưa cập nhật lại số lượng like của bài viết chia sẻ kiếm thức
+
+
+## 129. bình luận của bài viết dưới bị đẩy lên trên
+![](../media/img/err/img51.png)
+
+## 130. người dùng online ofline có vấn đề, test tầm 2 - 3 lần là nó không hoạt động được nữa
+
+## 131. bật tắt bình luận
