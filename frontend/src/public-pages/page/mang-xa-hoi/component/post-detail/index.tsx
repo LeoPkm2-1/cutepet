@@ -35,7 +35,7 @@ export default function PostDetail() {
             xs={8}
             item
           >
-            <PostComponent idStatus={id} />
+            <PostComponent onRemove={() => setIsData(false)} idStatus={id} />
           </Grid>
           <Grid
             sx={{

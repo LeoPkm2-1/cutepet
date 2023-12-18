@@ -7,6 +7,7 @@ import { StatusType } from '../../../../models/post';
 import CreatePost from '../../mang-xa-hoi/component/tao-bai-viet';
 import PostComponent from '../../mang-xa-hoi/component/bai-viet';
 import { QuanLyThuCung } from '../../quan-ly-thu-cung';
+import { deepCopy } from '@firebase/util';
 
 import { useNavigate, useParams } from 'react-router-dom';
 import { RootState } from '../../../../redux';
@@ -715,8 +716,12 @@ export default function TrangCaNhanMoiNguoi() {
             }}
           >
             {listPost?.length ? (
-              listPost?.map((status) => {
-                return <PostComponent status={status} />;
+              listPost?.map((status,index) => {
+                return <PostComponent onRemove={() => {
+                  const newList = deepCopy(listPost);
+                  newList.splice(index, 1);
+                  setListPost(newList);
+                 }} status={status} />;
               })
             ) : (
               <>

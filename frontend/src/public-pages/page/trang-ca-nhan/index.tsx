@@ -39,8 +39,7 @@ export default function TrangCaNhan() {
   const [listPost, setListPost] = useState<StatusType[]>([]);
 
   useEffect(() => {
-    profileApi.getMyProfile().then((data) => {
-
+    profileApi.getMyProfile().then((data:any) => {
       setProfile({
         name: data?.thong_tin_profile_user?.ten,
         id: data?.thong_tin_profile_user?.ma_nguoi_dung,
@@ -420,8 +419,12 @@ export default function TrangCaNhan() {
           >
             <CreatePost />
             {listPost &&
-              listPost?.map((status) => {
-                return <PostComponent status={status} />;
+              listPost?.map((status, index) => {
+                return <PostComponent onRemove={() => {
+                  const newList = deepCopy(listPost);
+                  newList.splice(index, 1);
+                  setListPost(newList);
+                }} status={status} />;
               })}
           </Box>
           <Box

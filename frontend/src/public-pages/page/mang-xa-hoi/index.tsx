@@ -134,7 +134,8 @@ export default function MangXaHoi() {
 
     if (newPostFromStore?.id) {
       let list: StatusType[] = deepCopy(listPost);
-      const arr: StatusType[] = [newPostFromStore];
+      const arr: StatusType[] = [];
+      arr.push(newPostFromStore);
       setListPost([...arr, ...list]);
       
     }
@@ -156,9 +157,9 @@ export default function MangXaHoi() {
               return <PostComponent onRemove={() => {
                 let list: StatusType[] = deepCopy(listPost);
                 list.splice(index, 1);
-                
                 setListPost(list);
-              }} status={status} />;
+              // }} idStatus={status?.id} />;
+            }} status={status} />;
             })}
           {isPost && (
             <Typography
