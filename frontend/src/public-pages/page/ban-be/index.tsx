@@ -38,6 +38,7 @@ export function FriendList() {
   const userOffline = useSelector(
     (state: RootState) => state?.socket.offLine.idUser
   );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     friendApi.getListFriend().then((data) => {
@@ -59,6 +60,7 @@ export function FriendList() {
   useEffect(() => {
     if (userOnline && friends?.length > 0) {
       if (friends?.find((friend) => friend?.userId == userOnline)) {
+        dispatch(SocketActions.setOnline(0));
         setReload(!reload);
       }
     }
@@ -67,6 +69,7 @@ export function FriendList() {
   useEffect(() => {
     if (userOffline && friends?.length > 0) {
       if (friends?.find((friend) => friend?.userId == userOffline)) {
+        dispatch(SocketActions.setOffline(0));
         setReload(!reload);
       }
     }
@@ -413,6 +416,8 @@ function BanBe() {
   useEffect(() => {
     if (userOnline && friends?.length > 0) {
       if (friends?.find((friend) => friend?.userId == userOnline)) {
+        console.log("Có user online", userOnline );
+        
         setReload(!reload);
       }
     }
@@ -421,6 +426,7 @@ function BanBe() {
   useEffect(() => {
     if (userOffline && friends?.length > 0) {
       if (friends?.find((friend) => friend?.userId == userOffline)) {
+        console.log("Có user offline", userOffline );
         setReload(!reload);
       }
     }
