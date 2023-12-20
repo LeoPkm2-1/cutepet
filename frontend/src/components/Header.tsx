@@ -28,7 +28,10 @@ import { NotifycationItemClick } from './NotificationItem';
 import notiApi from '../api/noti';
 import { list } from 'firebase/storage';
 import friendApi from '../api/friend';
-import { PersonComponent, PersonComponentSearch } from '../public-pages/page/ban-be';
+import {
+  PersonComponent,
+  PersonComponentSearch,
+} from '../public-pages/page/ban-be';
 import ArticleIcon from '@mui/icons-material/Article';
 import { NotiActions } from '../redux/noti';
 type Props = ReturnType<typeof mapStateToProps> & {
@@ -85,9 +88,9 @@ const Header = (props: Props) => {
               isFriend: item?.isFriend,
             };
           });
-          const newList1 = list?.filter((a:any) => a?.isFriend);
-          const newList2 = list?.filter((a:any) => !a?.isFriend);
-          setFriends([...newList1,...newList2]);
+          const newList1 = list?.filter((a: any) => a?.isFriend);
+          const newList2 = list?.filter((a: any) => !a?.isFriend);
+          setFriends([...newList1, ...newList2]);
           if (data?.payload?.length < numberSearch) {
             setIsHasSearch(false);
           } else {
@@ -473,21 +476,27 @@ const Header = (props: Props) => {
           >
             {friends?.length > 0 ? (
               <>
-                {friends?.map((item) => {
-                  if (`${item?.id}` === `${userInfoId}`) {
-                    return;
-                  }
-                  return (
-                    <PersonComponentSearch
-                      onClickComponent={() => handleClose1()}
-                      name={item.name}
-                      user={item.user}
-                      url={item.url}
-                      userId={item?.id}
-                      isFriend={item?.isFriend}
-                    />
-                  );
-                })}
+                {friends?.length == 1 && friends[0]?.id == userInfoId ? (
+                  'Không tìm thấy'
+                ) : (
+                  <>
+                    {friends?.map((item) => {
+                      if (`${item?.id}` === `${userInfoId}`) {
+                        return;
+                      }
+                      return (
+                        <PersonComponentSearch
+                          onClickComponent={() => handleClose1()}
+                          name={item.name}
+                          user={item.user}
+                          url={item.url}
+                          userId={item?.id}
+                          isFriend={item?.isFriend}
+                        />
+                      );
+                    })}
+                  </>
+                )}
               </>
             ) : (
               'Không tìm thấy'

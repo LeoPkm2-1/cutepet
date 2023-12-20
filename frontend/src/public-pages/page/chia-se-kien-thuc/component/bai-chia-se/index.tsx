@@ -533,7 +533,7 @@ export default function BaiChiaSe() {
                   TransitionComponent={Fade}
                   TransitionProps={{ timeout: 600 }}
                   placement="top"
-                  title={'Upvote'}
+                  title={'Up vote'}
                   key={'upvote'}
                 >
                   <IconButton
