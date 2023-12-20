@@ -5,6 +5,15 @@ export interface ArticleType {
   intro: string;
   content: string;
   categories: string[];
+  user_id?: number;
   user_name: string;
   user_avatar: string;
+  isUpVote?: boolean;
+  isDownVote?: boolean;
+  numUpVote?: number;
+  numDownVote?: number;
+  owner_id?: number;
+  createAt?: string;
+  numOfComment?: number;
+
 }

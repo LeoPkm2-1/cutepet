@@ -26,6 +26,15 @@ import TrangCaNhanMoiNguoi from './trang-ca-nhan/trang-ca-nhan-moi-nguoi';
 import { SocketActions } from '../../redux/socket';
 import { StatusType } from '../../models/post';
 import { LoiMoiType } from '../../models/user';
+import { SuaBaiChiaSe } from './chia-se-kien-thuc/component/sua-bai-chia-se';
+import ChinhSuaTrangCaNhan from './trang-ca-nhan/chinh-sua-trang-ca-nhan/profile-header';
+import UpdateProfilePage from './trang-ca-nhan/chinh-sua-trang-ca-nhan/profile-page';
+import ProfileHeader from './trang-ca-nhan/chinh-sua-trang-ca-nhan/profile-header';
+import MeRouting from './trang-ca-nhan/chinh-sua-trang-ca-nhan';
+import ChangePasswordPage from './trang-ca-nhan/chinh-sua-trang-ca-nhan/change-pass';
+import BaiVietThuCung from './quan-ly-thu-cung/component/bai-viet-thu-cung';
+import UpdatePost from './mang-xa-hoi/component/chinh-sua-bai-viet';
+import ChinhSuaThuCung from './quan-ly-thu-cung/component/chinh-sua-thu-cung';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -39,12 +48,9 @@ export default function PageRouting() {
     });
   }, [matches]);
 
-  console.log('Vaof Thuyen ne');
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    console.log(token, 'token ne lay socket: ');
-    console.log('Vào conect fe');
     if (token) {
       const socket = io(`http://localhost:3000/norm_user`, {
         extraHeaders: {
@@ -55,7 +61,6 @@ export default function PageRouting() {
 
       // 1
       socket.on('COMMENT_STATUS_POST', (data) => {
-        console.log(data, ' Data comment from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -71,7 +76,6 @@ export default function PageRouting() {
 
       // 2
       socket.on('LIKE_STATUS_POST', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -87,7 +91,6 @@ export default function PageRouting() {
 
       // 3
       socket.on('LIKE_COMMENT_IN_STATUS_POST', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -102,13 +105,12 @@ export default function PageRouting() {
       });
       // 4
       socket.on('REPLY_COMMENT_IN_STATUS_POST', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
             name={data?.userReply?.ten}
             type="trả lời một bình luận của bạn"
-            url={data?.userLike?.anh?.url}
+            url={data?.userReply?.anh?.url}
           />,
           {
             variant: 'info',
@@ -118,25 +120,26 @@ export default function PageRouting() {
 
       // 5
       socket.on('USER_IS_ONLINE', (data) => {
-        console.log(data, ' Data online nè:');
         dispatch(SocketActions.setOnline(data?.user_id));
+        console.log("Có online");
+        
       });
 
       // 6
       socket.on('USER_IS_OFFLINE', (data) => {
-        console.log(data, ' Data chat from server:');
+        console.log("Có offline");
+
         dispatch(SocketActions.setOffline(data?.user_id));
       });
 
       // 7
       socket.on('TAG_USER_IN_STATUS_POST', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
             name={data?.userTag?.ten}
             type="tag tên bạn trong một bài viết"
-            url={data?.userLike?.anh?.url}
+            url={data?.userTag?.anh?.url}
           />,
           {
             variant: 'info',
@@ -146,21 +149,19 @@ export default function PageRouting() {
 
       // 8
       socket.on('REQUEST_ADD_FRIEND', (data) => {
-        
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
-        const loiMoi :LoiMoiType = {
+        const loiMoi: LoiMoiType = {
           name: data?.requestUser?.ten,
           url: data?.requestUser?.anh?.url,
           time: data?.requestAt,
-          senderID:data?.requestUser?.ma_nguoi_dung,
-        }
+          senderID: data?.requestUser?.ma_nguoi_dung,
+        };
         dispatch(SocketActions.setNewRequest(loiMoi));
         enqueueSnackbar(
           <NotifycationItem
             name={data?.requestUser?.ten}
             type="gửi lời mời kết bạn"
-            url={data?.userLike?.anh?.url}
+            url={data?.requestUser?.anh?.url}
           />,
           {
             variant: 'info',
@@ -169,16 +170,16 @@ export default function PageRouting() {
       });
       // 9
       socket.on('ACCEPT_ADD_FRIEND', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
-        console.log(data?.acceptUser?.ma_nguoi_dung, " data?.acceptUser?.ma_nguoi_dung");
-        
-        dispatch(SocketActions.setAcceptFriend(data?.acceptUser?.ma_nguoi_dung));
+
+        dispatch(
+          SocketActions.setAcceptFriend(data?.acceptUser?.ma_nguoi_dung)
+        );
         enqueueSnackbar(
           <NotifycationItem
             name={data?.acceptUser?.ten}
             type="chấp nhận lời mời kết bạn của bạn."
-            url={data?.userLike?.anh?.url}
+            url={data?.acceptUser?.anh?.url}
           />,
           {
             variant: 'info',
@@ -187,10 +188,9 @@ export default function PageRouting() {
       });
       // 10
       socket.on('NEW_STATUS_POST_APPEAR', (data) => {
-        console.log(data, ' Data chat from server:');
-        if(data?.areYouOwner){
+        if (data?.areYouOwner) {
           const item = data?.postInfor;
-          const post : StatusType = {
+          const post: StatusType = {
             id: `${item?._id}`,
             media: item?.media as {
               type: string;
@@ -220,19 +220,18 @@ export default function PageRouting() {
                 name: tagPet?.ten_thu_cung,
               };
             }),
-          }
-          dispatch(SocketActions.setNewPost(post))
+          };
+          dispatch(SocketActions.setNewPost(post));
         }
       });
       // 11
       socket.on('UPVOTE_ARTICLE', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
             name={data?.userUpvote?.ten}
             type="thích bài viết chia sẽ của bạn"
-            url={data?.userLike?.anh?.url}
+            url={data?.userUpvote?.anh?.url}
           />,
           {
             variant: 'info',
@@ -241,13 +240,27 @@ export default function PageRouting() {
       });
       // 12
       socket.on('DOWNVOTE_ARTICLE', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
             name={data?.userDownvote?.ten}
             type="không thích bài viết chia sẽ của bạn"
-            url={data?.userLike?.anh?.url}
+            url={data?.userDownvote?.anh?.url}
+          />,
+          {
+            variant: 'info',
+          }
+        );
+      });
+      // 13
+      socket.on('COMMENT_ARTICLE', (data) => {
+
+        dispatch(NotiActions.setIncreNumNoti());
+        enqueueSnackbar(
+          <NotifycationItem
+            name={data?.userComment?.ten}
+            type="bình luận bài viết chia sẽ của bạn"
+            url={data?.userComment?.anh?.url}
           />,
           {
             variant: 'info',
@@ -271,6 +284,7 @@ export default function PageRouting() {
       />
       <div
         style={{ position: 'relative', background: '#f9fafb' }}
+        // style={{ position: 'relative', background: 'green', height:"100px" }}
         className="row expanded"
       >
         <SideBar open={drawerOpen} mobile={!matches} onClose={closeDrawer} />
@@ -278,19 +292,35 @@ export default function PageRouting() {
           <div className="expanded col">
             <Routes>
               <Route path="mang-xa-hoi" element={<MangXaHoi />} />
+              {/* <Route path="chinh-sua-bai-viet-trang-thai/:id" element={<UpdatePost />} /> */}
+              <Route
+                path="thong-tin-thu-cung/:id"
+                element={<BaiVietThuCung />}
+              />
               <Route path="trang-ca-nhan" element={<TrangCaNhan />} />
+              <Route path="chinh-sua-trang-ca-nhan" element={<MeRouting />} />
+              <Route
+                path="chinh-sua-trang-ca-nhan/profile"
+                element={<UpdateProfilePage />}
+              />
+              <Route
+                path="chinh-sua-trang-ca-nhan/change-pass"
+                element={<ChangePasswordPage />}
+              />
               <Route
                 path="trang-ca-nhan-nguoi-dung/:id"
                 element={<TrangCaNhanMoiNguoi />}
               />
               <Route path="quan-ly-thu-cung" element={<QuanLyThuCung />} />
+              <Route path="chinh-sua-thu-cung/:id" element={<ChinhSuaThuCung />} />
               <Route path="them-thu-cung" element={<ThemThuCung />} />
               <Route path="ban-be" element={<FriendList />} />
               <Route path="trang-chia-se" element={<TrangChiaSe />} />
               <Route path="trang-chia-se/:id" element={<BaiChiaSe />} />
               <Route path="tao-bai-chia-se" element={<TaoBaiChiaSe />} />
+              <Route path="sua-bai-chia-se/:id" element={<SuaBaiChiaSe />} />
               <Route path="post/:id" element={<PostDetail />} />
-              <Route path="*" element={<HomePage />} />
+              <Route path="*" element={<MangXaHoi />} />
             </Routes>
           </div>
         </ScrollView>
@@ -298,3 +328,53 @@ export default function PageRouting() {
     </Root>
   );
 }
+
+//   return (
+//     // <div className="fullsize row" style={{ overflow: 'hidden' }}>
+
+//       <ScrollView
+//         contentContainerProps={{
+//           style: {
+//             backgroundImage:
+//               'radial-gradient(at left top, #f4fffd 50%, rgb(125,215,230) 100%)',
+//           },
+//         }}
+//       >
+//         <div className="expanded col">
+//           {/* <Header
+//             // showHambuger={!matches}
+//             onHambuger={() => setDrawerOpen(!drawerOpen)}
+//           /> */}
+//           <Routes>
+//             <Route path="mang-xa-hoi" element={<MangXaHoi />} />
+//             {/* <Route path="chinh-sua-bai-viet-trang-thai/:id" element={<UpdatePost />} />  */}
+//             <Route path="bai-viet-thu-cung/:id" element={<BaiVietThuCung />} />
+//             <Route path="trang-ca-nhan" element={<TrangCaNhan />} />
+//             <Route path="chinh-sua-trang-ca-nhan" element={<MeRouting />} />
+//             <Route
+//               path="chinh-sua-trang-ca-nhan/profile"
+//               element={<UpdateProfilePage />}
+//             />
+//             <Route
+//               path="chinh-sua-trang-ca-nhan/change-pass"
+//               element={<ChangePasswordPage />}
+//             />
+//             <Route
+//               path="trang-ca-nhan-nguoi-dung/:id"
+//               element={<TrangCaNhanMoiNguoi />}
+//             />
+//             <Route path="quan-ly-thu-cung" element={<QuanLyThuCung />} />
+//             <Route path="them-thu-cung" element={<ThemThuCung />} />
+//             <Route path="ban-be" element={<FriendList />} />
+//             <Route path="trang-chia-se" element={<TrangChiaSe />} />
+//             <Route path="trang-chia-se/:id" element={<BaiChiaSe />} />
+//             <Route path="tao-bai-chia-se" element={<TaoBaiChiaSe />} />
+//             <Route path="sua-bai-chia-se/:id" element={<SuaBaiChiaSe />} />
+//             <Route path="post/:id" element={<PostDetail />} />
+//             <Route path="*" element={<MangXaHoi />} />
+//           </Routes>
+//         </div>
+//       </ScrollView>
+//     // </div>
+//   );
+// }

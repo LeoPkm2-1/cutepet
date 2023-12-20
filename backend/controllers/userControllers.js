@@ -138,6 +138,7 @@ const updateAvatarController = async (req, res) => {
 
 const updateBasicInforController = async (req, res) => {
   const { ten, ngay_sinh, so_dien_thoai, gioi_tinh } = req.body;
+  console.log({gioi_tinh});
   const update_userId = parseInt(req.auth_decoded.ma_nguoi_dung);
   // console.log({ ten, ngay_sinh, so_dien_thoai, gioi_tinh });
   const process = await userModel

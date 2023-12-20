@@ -8,22 +8,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../redux';
 import { LoiMoiType } from '../../../../../models/user';
 import { SocketActions } from '../../../../../redux/socket';
+import { useNavigate } from 'react-router-dom';
 
-export default function LoiMoiKetBan() {
-  const [userList, setUserList] = useState<
-  LoiMoiType[]
-  >([]);
+export default function LoiMoiKetBan(props: { isPageFriend?: boolean }) {
+  const [userList, setUserList] = useState<LoiMoiType[]>([]);
 
   const [isShowAll, setIsShowAll] = useState(true);
   const [reload, setReload] = useState(false);
 
-  const newRequestAddFriend= useSelector((state:RootState) => state.socket.newRequestAddFriend.request)
+  const newRequestAddFriend = useSelector(
+    (state: RootState) => state.socket.newRequestAddFriend.request
+  );
 
   useEffect(() => {
     friendApi.getRequestAddFriendList().then((data) => {
       if (data?.status == 200) {
         console.log(data, ' dtaa loi moi');
-        if(data?.payload?.length == 0){
+        if (data?.payload?.length == 0) {
           setUserList([]);
           return;
         }
@@ -45,28 +46,18 @@ export default function LoiMoiKetBan() {
     });
   }, [reload]);
 
-
   useEffect(() => {
-    if(newRequestAddFriend.senderID){
-      console.log("vào nè hihi sénderID");
-      
-      const arr:LoiMoiType[] = [];
+    if (newRequestAddFriend.senderID) {
+      console.log('vào nè hihi sénderID');
+
+      const arr: LoiMoiType[] = [];
       arr.push(newRequestAddFriend);
       setUserList([...arr, ...userList]);
     }
-  }, [newRequestAddFriend.senderID])
+  }, [newRequestAddFriend.senderID]);
 
   return (
     <>
-      <Typography
-        sx={{
-          fontFamily: 'quicksand',
-          fontWeight: '700',
-          fontSize: '24px',
-        }}
-      >
-        Lời mời kết bạn
-      </Typography>
       {/* {userList.map((item, index) => {
         if (index < 4) {
           return <LoiMoi name={item?.name} url={item?.url} time={item?.time} />;
@@ -86,7 +77,7 @@ export default function LoiMoiKetBan() {
                     <LoiMoi
                       onSuccess={() => setReload(!reload)}
                       senderID={item?.senderID || 0}
-                      name={item?.name || ""}
+                      name={item?.name || ''}
                       url={item?.url}
                       time={item?.time}
                     />
@@ -108,7 +99,7 @@ export default function LoiMoiKetBan() {
                       fontFamily: 'quicksand',
                       fontWeight: '600',
                       fontSize: '14px',
-                      color: 'blue',
+                      color: 'rgb(14, 100, 126)',
                       marginTop: '20px',
                     }}
                   >
@@ -124,7 +115,7 @@ export default function LoiMoiKetBan() {
                   <LoiMoi
                     onSuccess={() => setReload(!reload)}
                     senderID={item?.senderID || 0}
-                    name={item?.name ||""}
+                    name={item?.name || ''}
                     url={item?.url}
                     time={item?.time}
                   />
@@ -145,7 +136,8 @@ export default function LoiMoiKetBan() {
                       fontFamily: 'quicksand',
                       fontWeight: '600',
                       fontSize: '14px',
-                      color: 'blue',
+                      color: 'rgb(14, 100, 126)',
+
                       marginTop: '20px',
                     }}
                   >
@@ -158,11 +150,14 @@ export default function LoiMoiKetBan() {
         </>
       ) : (
         <Typography
+          align="center"
           sx={{
             fontFamily: 'quicksand',
             fontWeight: '500',
             fontSize: '16px',
-            marginTop: '12px',
+            marginTop: props?.isPageFriend ? '200px' : '12px',
+            marginBottom: '20px',
+            color: 'gray',
           }}
         >
           Chưa có lời mời kết bạn
@@ -182,23 +177,39 @@ type PropsLoiMoi = {
 function LoiMoi(props: PropsLoiMoi) {
   const { enqueueSnackbar } = useSnackbar();
   const dispatth = useDispatch();
+  const navigate = useNavigate();
   function handleSubmit(type: string) {
-    friendApi.responeAddFriend(props.senderID, type).then((data) => {
-      console.log(data, ' dtata nef');
-      if (data?.status == 200) {
-        if (data?.payload?.accepted) {
-          enqueueSnackbar(`Kết bạn với ${props?.name} thành công`, {
-            variant: 'success',
-          });
-        } else {
-          enqueueSnackbar(`Xóa lời mời kết bạn với ${props?.name} thành công`, {
-            variant: 'success',
+    friendApi
+      .responeAddFriend(props.senderID, type)
+      .then((data) => {
+        console.log(data, ' dtata nef');
+        if (data?.status == 200) {
+          if (data?.payload?.accepted) {
+            enqueueSnackbar(`Kết bạn với ${props?.name} thành công`, {
+              variant: 'info',
+            });
+          } else {
+            enqueueSnackbar(
+              `Xóa lời mời kết bạn với ${props?.name} thành công`,
+              {
+                variant: 'info',
+              }
+            );
+          }
+          props?.onSuccess();
+          dispatth(SocketActions.setNewRequest({}));
+        } else if (data?.status == 400) {
+          enqueueSnackbar(`Không tồn tại lời mời kết bạn`, {
+            variant: 'error',
           });
         }
+      })
+      .catch((err) => {
+        enqueueSnackbar(`${err?.message}`, {
+          variant: 'error',
+        });
         props?.onSuccess();
-        dispatth(SocketActions.setNewRequest({}))
-      }
-    });
+      });
   }
 
   return (
@@ -211,11 +222,15 @@ function LoiMoi(props: PropsLoiMoi) {
         }}
       >
         <img
+          onClick={() =>
+            navigate(`/home/trang-ca-nhan-nguoi-dung/${props?.senderID}`)
+          }
           height={50}
           width={50}
           style={{
             objectFit: 'cover',
             borderRadius: '50px',
+            cursor: 'pointer',
           }}
           src={props?.url}
         />
@@ -232,11 +247,15 @@ function LoiMoi(props: PropsLoiMoi) {
             }}
           >
             <Typography
+              onClick={() =>
+                navigate(`/home/trang-ca-nhan-nguoi-dung/${props?.senderID}`)
+              }
               sx={{
                 fontFamily: 'quicksand',
                 fontWeight: '700',
                 fontSize: '16px',
                 marginBottom: '12px',
+                cursor: 'pointer',
               }}
             >
               {props.name}
@@ -261,8 +280,14 @@ function LoiMoi(props: PropsLoiMoi) {
           >
             <Button
               onClick={() => handleSubmit('accept')}
+              color="inherit"
               sx={{
                 minWidth: '100px',
+                backgroundColor: 'rgb(14, 100, 126)',
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                },
               }}
               variant="contained"
             >

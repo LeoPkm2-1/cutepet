@@ -88,20 +88,18 @@ export default function SideBar(props: {
   }, [pathname]);
 
   function logOut() {
-    // console.log("vao ne hhfhh");
-    
+
     authApi
       .logoutUser()
       .then(() => {
         naviagte('/login');
-        console.log('Thành công');
+
         localStorage.removeItem('accessToken');
         dispatch(AuthActions.setAuth(false));
         // socket.disconnect();
       })
       .catch((err) => {
         naviagte('/login');
-        console.log('Thất bại', err);
         localStorage.removeItem('accessToken');
         dispatch(AuthActions.setAuth(false));
       });
@@ -119,8 +117,8 @@ export default function SideBar(props: {
         <Root>
           {/* <PermissionRequired accountTypes={[]}> */}
           <Box
-            onClick = {() => {
-              naviagte("/home/trang-ca-nhan")
+            onClick={() => {
+              naviagte('/home/trang-ca-nhan');
             }}
             sx={{
               display: 'flex',
@@ -128,7 +126,7 @@ export default function SideBar(props: {
               padding: '20px 20px',
               margin: '20px 10px',
               borderRadius: '12px',
-              cursor:"pointer",
+              cursor: 'pointer',
             }}
           >
             <img
@@ -177,16 +175,17 @@ export default function SideBar(props: {
               color="inherit"
               sx={{
                 textTransform: 'none',
-                background: '#0c4195',
+                background: 'rgb(14, 100, 126)',
                 color: '#fff',
                 borderRadius: '20px',
+                fontFamily:"quicksand",
                 margin: '0 10px',
                 '&:hover': {
-                  background: '#0c4195eb',
+                  background: 'rgba(14, 100, 126, 0.9)',
                 },
               }}
             >
-              Logout
+              Đăng xuất
             </Button>
           </div>
           {/* </PermissionRequired> */}

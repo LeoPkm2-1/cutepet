@@ -131,16 +131,20 @@ export interface FriendType {
 
 export interface PeopleType {
   name: string;
-  id: string;
+  id: number;
   user: string;
   url: string;
-  numberPet: number;
+  numberPet?: number;
   isFriend?: boolean;
+  ngay_sinh?: string;
+  email?: string;
+  so_dien_thoai?: string;
+  gioi_tinh?: number;
 }
 
 export interface LoiMoiType {
   name?: string;
   url?: string;
   time?: string;
-  senderID?: number | string;
+  senderID?: number;
 }

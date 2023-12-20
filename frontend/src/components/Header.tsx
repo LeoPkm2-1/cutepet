@@ -5,7 +5,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Image from './Image';
 import { RootState } from '../redux';
-import logo from '../assets/img/logo.png';
+import logo from '../assets/img/cutepet.png';
 import { Box } from '@mui/system';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -23,12 +23,15 @@ import { StyledTypography } from './styled';
 import { StyledTextField } from './FormItem';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
-import react, { useEffect, useState } from 'react';
+import react, { useEffect, useRef, useState } from 'react';
 import { NotifycationItemClick } from './NotificationItem';
 import notiApi from '../api/noti';
 import { list } from 'firebase/storage';
 import friendApi from '../api/friend';
-import { PersonComponent } from '../public-pages/page/ban-be';
+import {
+  PersonComponent,
+  PersonComponentSearch,
+} from '../public-pages/page/ban-be';
 import ArticleIcon from '@mui/icons-material/Article';
 import { NotiActions } from '../redux/noti';
 type Props = ReturnType<typeof mapStateToProps> & {
@@ -49,36 +52,77 @@ const Header = (props: Props) => {
       name: string;
       user: string;
       url: string;
-      id: number | string;
+      id: number;
+      isFriend: boolean;
     }[]
   >([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
   const [valueSearch, setValueSearch] = useState('');
   const numNoti = useSelector((state: RootState) => state.noti.numNoti);
+  const userInfoId = useSelector((state: RootState) => state.user.profile?.id);
   const navigate = useNavigate();
+
+  // search phân trang
+  const indexPeople = useRef(0);
+  const [numberSearch, setMumberSearch] = useState(5);
+  const [isHasSearch, setIsHasSearch] = useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClick1 = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl1(event.currentTarget);
-    console.log(valueSearch);
-    friendApi.searchPeople(valueSearch, 0, 10).then((data) => {
-      console.log(data, 'data');
-      if (data?.status == 200) {
-        const list = data?.payload?.map((item: any) => {
-          return {
-            name: item?.ten,
-            user: item?.tai_khoan,
-            url: item?.anh?.url,
-            id: item?.ma_nguoi_dung,
-          };
-        });
-        setFriends(list);
-      }
-    });
+    indexPeople.current = 0;
+    friendApi
+      .searchPeople(valueSearch, indexPeople.current, numberSearch)
+      .then((data) => {
+        if (data?.status == 200) {
+          console.log('data', data);
+          const list = data?.payload?.map((item: any) => {
+            return {
+              name: item?.ten,
+              user: item?.tai_khoan,
+              url: item?.anh?.url,
+              id: item?.ma_nguoi_dung,
+              isFriend: item?.isFriend,
+            };
+          });
+          const newList1 = list?.filter((a: any) => a?.isFriend);
+          const newList2 = list?.filter((a: any) => !a?.isFriend);
+          setFriends([...newList1, ...newList2]);
+          if (data?.payload?.length < numberSearch) {
+            setIsHasSearch(false);
+          } else {
+            setIsHasSearch(true);
+          }
+        }
+      });
   };
+
+  function nextSearch() {
+    friendApi
+      .searchPeople(valueSearch, indexPeople.current, numberSearch)
+      .then((data) => {
+        if (data?.status == 200) {
+          const list = data?.payload?.map((item: any) => {
+            return {
+              name: item?.ten,
+              user: item?.tai_khoan,
+              url: item?.anh?.url,
+              id: item?.ma_nguoi_dung,
+              isFriend: item?.isFriend,
+            };
+          });
+          setFriends([...friends, ...list]);
+          if (data?.payload?.length < numberSearch) {
+            setIsHasSearch(false);
+          } else {
+            setIsHasSearch(true);
+          }
+        }
+      });
+  }
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -92,67 +136,67 @@ const Header = (props: Props) => {
   const open1 = Boolean(anchorEl1);
   const id1 = open1 ? 'simple-popover1' : undefined;
   const location = useLocation();
-  console.log(location, 'location');
 
   const dispatch = useDispatch();
   useEffect(() => {
     notiApi.getNotificationStartFrom(0, 5).then((data: any) => {
-      console.log(data, ' data notification: ');
-
       if (data?.status == 200) {
         let num = 0;
         const list = data?.payload?.map((noti: any) => {
-          console.log(noti, ' notu nef');
           if (!noti?.hasRead) {
             num++;
           }
-          if (noti?.type == 'COMMENT_STATUS_POST') {
-            return {
-              name: noti?.payload?.userComment?.ten,
-              url: noti?.payload?.userComment?.anh?.url,
-              idPost: noti?.payload?.postInfor?._id,
-              hasRead: noti?.hasRead || false,
-              type: 'bình luận một bài viết.',
-            } as {
-              name?: string;
-              url?: string;
-              idPost?: string;
-              type?: string;
-              hasRead: boolean;
-            };
-          }
-          if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
-            return {
-              name: noti?.payload?.userReply?.ten,
-              url: noti?.payload?.userReply?.anh?.url,
-              idPost: noti?.payload?.commentInfor?.postId,
-              hasRead: noti?.payload?.hasRead,
-              type: 'trả lời bình luận trong một bài viết',
-            } as {
-              name?: string;
-              url?: string;
-              idPost?: string;
-              type?: string;
-              hasRead: boolean;
-            };
-          }
-          if (noti?.type == 'LIKE_STATUS_POST') {
-            return {
-              name: noti?.payload?.userReply?.ten,
-              url: noti?.payload?.userReply?.anh?.url,
-              idPost: noti?.payload?.commentInfor?.postId,
-              hasRead: noti?.payload?.hasRead,
-              type: 'đã thích một bài viết',
-            } as {
-              name?: string;
-              url?: string;
-              idPost?: string;
-              type?: string;
-              hasRead: boolean;
-            };
-          }
+          //1
+          // if (noti?.type == 'COMMENT_STATUS_POST') {
+          //   return {
+          //     name: noti?.payload?.userComment?.ten,
+          //     url: noti?.payload?.userComment?.anh?.url,
+          //     idPost: noti?.payload?.postInfor?._id,
+          //     hasRead: noti?.hasRead || false,
+          //     type: 'bình luận một bài viết.',
+          //   } as {
+          //     name?: string;
+          //     url?: string;
+          //     idPost?: string;
+          //     type?: string;
+          //     hasRead: boolean;
+          //   };
+          // }
+          // //2
+          // if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
+          //   return {
+          //     name: noti?.payload?.userReply?.ten,
+          //     url: noti?.payload?.userReply?.anh?.url,
+          //     idPost: noti?.payload?.commentInfor?.postId,
+          //     hasRead: noti?.payload?.hasRead,
+          //     type: 'trả lời bình luận trong một bài viết',
+          //   } as {
+          //     name?: string;
+          //     url?: string;
+          //     idPost?: string;
+          //     type?: string;
+          //     hasRead: boolean;
+          //   };
+          // }
+
+          // //3
+          // if (noti?.type == 'LIKE_STATUS_POST') {
+          //   return {
+          //     name: noti?.payload?.userReply?.ten,
+          //     url: noti?.payload?.userReply?.anh?.url,
+          //     idPost: noti?.payload?.commentInfor?.postId,
+          //     hasRead: noti?.payload?.hasRead,
+          //     type: 'đã thích một bài viết',
+          //   } as {
+          //     name?: string;
+          //     url?: string;
+          //     idPost?: string;
+          //     type?: string;
+          //     hasRead: boolean;
+          //   };
+          // }
         });
-        console.log(list, 'List');
+
         dispatch(NotiActions.setNumNoti(num));
         // setNoti(list);
       }
@@ -172,13 +216,23 @@ const Header = (props: Props) => {
         </Button> */}
       </div>
 
-      <Title>Cute</Title>
+      <Title
+        style={{
+          cursor: 'pointer',
+        }}
+        onClick={() => navigate('/home/mang-xa-hoi')}
+      >
+        Cute
+      </Title>
       <StyledTypography
+        onClick={() => navigate('/home/mang-xa-hoi')}
         sx={{
           color: '#fff',
           padding: '4px 8px',
           borderRadius: '6px',
           margin: '0 10px',
+          background: 'rgb(14, 100, 126)',
+          cursor: 'pointer',
         }}
         textAlign="center"
       >
@@ -204,7 +258,9 @@ const Header = (props: Props) => {
           onClick={() => navigate('/home/mang-xa-hoi')}
           sx={{
             color:
-              location.pathname == '/home/mang-xa-hoi' ? '#0C4195' : 'inherit',
+              location.pathname == '/home/mang-xa-hoi'
+                ? 'rgb(14, 100, 126)'
+                : 'inherit',
             mx: '20px',
             padding: '12px 30px',
             borderRadius: '5px',
@@ -220,7 +276,10 @@ const Header = (props: Props) => {
         <IconButton
           onClick={() => navigate('/home/ban-be')}
           sx={{
-            color: location.pathname == '/home/ban-be' ? '#0C4195' : 'inherit',
+            color:
+              location.pathname == '/home/ban-be'
+                ? 'rgb(14, 100, 126)'
+                : 'inherit',
             mx: '20px',
             padding: '12px 30px',
             borderRadius: '5px',
@@ -277,8 +336,11 @@ const Header = (props: Props) => {
             vertical: 'bottom',
             horizontal: 'left',
           }}
+          sx={{
+            maxHeight: '70vh',
+          }}
         >
-          <NotifycationComponent />
+          <NotifycationComponent onClick={() => handleClose()} />
         </Popover>
         <IconButton
           onClick={() => {
@@ -287,7 +349,7 @@ const Header = (props: Props) => {
           sx={{
             color:
               location.pathname == '/home/trang-chia-se'
-                ? '#0C4195'
+                ? 'rgb(14, 100, 126)'
                 : 'inherit',
             mx: '20px',
             padding: '12px 30px',
@@ -308,7 +370,7 @@ const Header = (props: Props) => {
           sx={{
             color:
               location.pathname == '/home/trang-ca-nhan'
-                ? '#0C4195'
+                ? 'rgb(14, 100, 126)'
                 : 'inherit',
             mx: '20px',
             padding: '12px 30px',
@@ -364,14 +426,14 @@ const Header = (props: Props) => {
                 flex: 1,
                 pl: '10px',
                 fontFamily: 'quicksand',
-                color: '#0c4195',
+                color: 'rgb(14, 100, 126)',
                 fontWeight: '600',
               }}
               value={valueSearch}
               onChange={(e) => {
                 setValueSearch(e.target.value as string);
               }}
-              placeholder="Search"
+              placeholder="Tìm kiếm người dùng"
               inputProps={{ 'aria-label': 'search google maps' }}
             />
             <IconButton
@@ -382,7 +444,7 @@ const Header = (props: Props) => {
             >
               <SearchIcon
                 sx={{
-                  color: '#0c4195',
+                  color: 'rgb(14, 100, 126)',
                 }}
               />
             </IconButton>
@@ -391,6 +453,7 @@ const Header = (props: Props) => {
         <Popover
           sx={{
             width: '1500px',
+            maxHeight: '70vh',
           }}
           id={id1}
           open={open1}
@@ -407,22 +470,61 @@ const Header = (props: Props) => {
         >
           <Box
             sx={{
-              width: '250px',
+              width: '400px',
               padding: '20px',
             }}
           >
-            {friends?.length > 0
-              ? friends?.map((item) => {
-                  return (
-                    <PersonComponent
-                      name={item.name}
-                      user={item.user}
-                      url={item.url}
-                      userId={item?.id}
-                    />
-                  );
-                })
-              : 'Không tìm thấy'}
+            {friends?.length > 0 ? (
+              <>
+                {friends?.length == 1 && friends[0]?.id == userInfoId ? (
+                  'Không tìm thấy'
+                ) : (
+                  <>
+                    {friends?.map((item) => {
+                      if (`${item?.id}` === `${userInfoId}`) {
+                        return;
+                      }
+                      return (
+                        <PersonComponentSearch
+                          onClickComponent={() => handleClose1()}
+                          name={item.name}
+                          user={item.user}
+                          url={item.url}
+                          userId={item?.id}
+                          isFriend={item?.isFriend}
+                        />
+                      );
+                    })}
+                  </>
+                )}
+              </>
+            ) : (
+              'Không tìm thấy'
+            )}
+
+            {isHasSearch && (
+              <Typography
+                align="center"
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  margin: '16px 16px 10px 0px',
+                  color: '   #65676b',
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  paddingBottom: '30px',
+                }}
+                onClick={() => {
+                  indexPeople.current = indexPeople.current + numberSearch;
+                  // setIndexCommentPost(indexCommentPost + numCommentPost);
+                  nextSearch();
+                }}
+              >
+                {' '}
+                Xem thêm người dùng
+              </Typography>
+            )}
           </Box>
 
           {/* <NotifycationComponent /> */}
@@ -450,12 +552,13 @@ const Root = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  color: #0c4195;
+  color: 'rgb(14, 100, 126)';
 `;
 
 const Title = styled.div`
   font-size: 24px;
   font-weight: 700;
+  color: rgb(14, 100, 126);
   @media (max-width: 600px) {
     display: none;
   }
@@ -480,7 +583,7 @@ const OrgName = styled.span`
   font-weight: 500;
 `;
 
-function NotifycationComponent() {
+function NotifycationComponent(props: { onClick: () => void }) {
   const [noti, setNoti] = useState<
     {
       name?: string;
@@ -489,7 +592,8 @@ function NotifycationComponent() {
       type?: string;
       hasRead: boolean;
       idNoti?: string;
-      isRequestFriend?:boolean;
+      isRequestFriend?: boolean;
+      isArticle?: boolean;
     }[]
   >([]);
 
@@ -506,10 +610,11 @@ function NotifycationComponent() {
           return;
         }
         const list = data?.payload?.map((noti: any) => {
-          console.log(noti, ' notu nef');
           if (!noti?.hasRead) {
             num++;
           }
+
+          //1
           if (noti?.type == 'COMMENT_STATUS_POST') {
             return {
               name: noti?.payload?.userComment?.ten,
@@ -527,7 +632,7 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
-
+          //2
           if (noti?.type == 'LIKE_STATUS_POST') {
             return {
               name: noti?.payload?.userLike?.ten,
@@ -545,7 +650,7 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
-
+          //3
           if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
             return {
               name: noti?.payload?.userReply?.ten,
@@ -563,7 +668,7 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
-
+          //4
           if (noti?.type == 'LIKE_COMMENT_IN_STATUS_POST') {
             return {
               name: noti?.payload?.userLike?.ten,
@@ -581,7 +686,7 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
-
+          //5
           if (noti?.type == 'REPLY_COMMENT_IN_STATUS_POST') {
             return {
               name: noti?.payload?.userReply?.ten,
@@ -599,7 +704,7 @@ function NotifycationComponent() {
               idNoti?: string;
             };
           }
-
+          //  6
           if (noti?.type == 'TAG_USER_IN_STATUS_POST') {
             return {
               name: noti?.payload?.userTag?.ten,
@@ -618,7 +723,7 @@ function NotifycationComponent() {
             };
           }
 
-          // Không link đến
+          //7 Không link đến
 
           if (noti?.type == 'REQUEST_ADD_FRIEND') {
             return {
@@ -636,10 +741,10 @@ function NotifycationComponent() {
               type?: string;
               hasRead: boolean;
               idNoti?: string;
-              isRequestFriend: boolean,
+              isRequestFriend: boolean;
             };
           }
-
+          //8
           if (noti?.type == 'ACCEPT_ADD_FRIEND') {
             return {
               name: noti?.payload?.acceptUser?.ten,
@@ -656,12 +761,73 @@ function NotifycationComponent() {
               type?: string;
               hasRead: boolean;
               idNoti?: string;
-              isRequestFriend: boolean,
+              isRequestFriend: boolean;
             };
           }
 
+          //9
+          if (noti?.type == 'UPVOTE_ARTICLE') {
+            return {
+              name: noti?.payload?.userUpvote?.ten,
+              url: noti?.payload?.userUpvote?.anh?.url,
+              idPost: noti?.payload?.articleInfor?._id,
+              hasRead: noti?.payload?.hasRead,
+              type: 'thích bài chia sẽ kiến thức của bạn',
+              idNoti: noti?._id,
+              isArticle: true,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+              isArticle: boolean;
+            };
+          }
+          //10
+          if (noti?.type == 'DOWNVOTE_ARTICLE') {
+            return {
+              name: noti?.payload?.userDownvote?.ten,
+              url: noti?.payload?.userDownvote?.anh?.url,
+              idPost: noti?.payload?.articleInfor?._id,
+              hasRead: noti?.payload?.hasRead,
+              type: 'không thích bài chia sẽ kiến thức của bạn',
+              idNoti: noti?._id,
+              isArticle: true,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+              isArticle: boolean;
+            };
+          }
+
+          //10
+          if (noti?.type == 'COMMENT_ARTICLE') {
+            return {
+              name: noti?.payload?.userComment?.ten,
+              url: noti?.payload?.userComment?.anh?.url,
+              idPost: noti?.payload?.articleInfor?._id,
+              hasRead: noti?.payload?.hasRead,
+              type: 'bình luận bài chia sẽ kiến thức của bạn',
+              idNoti: noti?._id,
+              isArticle: true,
+            } as {
+              name?: string;
+              url?: string;
+              idPost?: string;
+              type?: string;
+              hasRead: boolean;
+              idNoti?: string;
+              isArticle: boolean;
+            };
+          }
         });
-        console.log(list, 'List');
+
         setNoti([...noti, ...list]);
         if (data?.payload?.length < 5) {
           setIsNoti(false);
@@ -723,7 +889,7 @@ function NotifycationComponent() {
                 fontWeight: '500',
                 fontSize: '15px',
                 margin: '16px 16px 10px 0px',
-                color: '#0c4195',
+                color: 'rgb(14, 100, 126)',
 
                 textDecoration: 'underline',
                 cursor: 'pointer',
@@ -744,7 +910,9 @@ function NotifycationComponent() {
                 type={item?.type}
                 url={item?.url}
                 isReaded={item?.hasRead}
-                isRequestFriend= {item?.isRequestFriend || false}
+                isRequestFriend={item?.isRequestFriend || false}
+                isArticle={item?.isArticle || false}
+                onClick={() => props.onClick()}
               />
             </>
           );
@@ -758,7 +926,7 @@ function NotifycationComponent() {
               fontWeight: '500',
               fontSize: '15px',
               margin: '12px 0px 10px 0px',
-              color: '#0c4195',
+              color: 'rgb(14, 100, 126)',
               paddingBottom: '5px',
               textDecoration: 'underline',
               cursor: 'pointer',

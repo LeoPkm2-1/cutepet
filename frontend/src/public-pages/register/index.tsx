@@ -5,6 +5,8 @@ import {
   Paper,
   Stack,
   Divider,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import {
   getAuth,
@@ -39,6 +41,8 @@ import {
   Title,
 } from './styled';
 import { useSnackbar } from 'notistack';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import Loading from '../../components/loading';
 
 interface ErrorObj {
   [key: string]: string | undefined;
@@ -51,6 +55,7 @@ const RegisterPage = (props: P) => {
   const navigate = useNavigate();
   const from = (useLocation().state as { from?: Location })?.from;
   const [isLoading, setIsLoading] = useState(false);
+  const [isFinish, setIsFinish] = useState(false);
   const [errors, setErrors] = useState<ErrorObj>({});
   const { enqueueSnackbar } = useSnackbar();
   const [userInfo, setUserinfo] = useState<{
@@ -64,8 +69,7 @@ const RegisterPage = (props: P) => {
     tai_khoan: '',
     mat_khau: '',
     email: '',
-    nhap_lai_mat_khau: "",
-
+    nhap_lai_mat_khau: '',
   });
   useEffect(() => {
     document.title = 'CutePet - Login';
@@ -77,23 +81,46 @@ const RegisterPage = (props: P) => {
     setErrors(newErrors);
   }
 
-  const verifyData = (
-    data: Partial<{
-      email: string;
-      password: string;
-    }>
-  ) => {
+  const verifyData = (email: string, password: string) => {
     const errors: ErrorObj = {};
-    if (!data.email) {
+    if (!userInfo?.ten) {
+      errors.name = 'Tên không được để trống';
+    }
+    if (!userInfo?.tai_khoan) {
+      errors.tai_khoan = 'Tài khoản không được để trống';
+    }
+    if (!email) {
       errors.email = 'Email is required.';
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      errors.email = 'Định dạnh email không đúng.';
+    }
+
+    if (!password) {
+      errors.password = 'Mật khẩu không được để trống.';
+    } else if (password?.length < 8) {
+      errors.password = 'Mật khẩu tối thiểu 8 kí tự';
     } else if (
-      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.email)
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/.test(password)
     ) {
-      errors.email = 'Invalid email address.';
+      errors.password =
+        'Mật khẩu phải bao gôm kí tự hoa, thường, chữ số và kí tự đặc biệt';
     }
-    if (!data.password) {
-      errors.password = 'Password is required.';
+
+    if (!userInfo?.nhap_lai_mat_khau) {
+      errors.re_password = 'Mật khẩu xác thực không được để trống.';
+    } else if (userInfo?.nhap_lai_mat_khau?.length < 8) {
+      errors.re_password = 'Mật khẩu xác nhận tối thiểu 8 kí tự';
+    } else if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/.test(
+        userInfo?.nhap_lai_mat_khau
+      )
+    ) {
+      errors.re_password =
+        'Mật khẩu phải bao gôm kí tự hoa, thường, chữ số và kí tự đặc biệt';
+    } else if (!(userInfo?.nhap_lai_mat_khau == userInfo.mat_khau)) {
+      errors.re_password = 'Mật khẩu xác nhận không khớp';
     }
+
     if (Object.keys(errors).length) {
       return errors;
     }
@@ -121,48 +148,34 @@ const RegisterPage = (props: P) => {
     //   });
   }
 
-  const loginWithGoogle = () => {
-    setIsLoading(true);
-    signInWithPopup(auth, googleProvider)
-      .then((result) =>
-        loginWithUserCredential(result, SocialProviderEnum.GOOGLE)
-      )
-
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
   const handleFormSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    const tai_khoan =
-      (e.currentTarget['user-name'] as HTMLInputElement)?.value ?? '';
-    const mat_khau =
-      (e.currentTarget['password'] as HTMLInputElement)?.value ?? '';
-    const ten = (e.currentTarget['ten'] as HTMLInputElement)?.value ?? '';
-
-    // const errors = verifyData({ email, password });
-    // if (errors) {
-    //   setErrors(errors);
-    //   return;
-    // }
-    if(userInfo.mat_khau.trim().length < 6){
-      enqueueSnackbar(
-         'Mật khẩu tối thiểu 6 kí tự !',
-        { variant: 'error' }
-      );
+    const errors = verifyData(userInfo.email, userInfo.mat_khau);
+    if (errors) {
+      setErrors(errors);
+      return;
+    }
+    if (userInfo.mat_khau.trim().length < 6) {
+      enqueueSnackbar('Mật khẩu tối thiểu 6 kí tự !', { variant: 'error' });
       return;
     }
     setIsLoading(true);
 
     authApi
-      .register(userInfo.ten, userInfo.tai_khoan, userInfo.mat_khau, userInfo.email)
+      .register(
+        userInfo.ten,
+        userInfo.tai_khoan,
+        userInfo.mat_khau,
+        userInfo.email
+      )
       .then((res) => {
-        console.log(res, " res nè");
         if (res?.status == 200) {
-          
-          enqueueSnackbar('Đăng ký thành công. Vui lòng kiểm tra email để xác thực !', { variant: 'success' });
+          enqueueSnackbar(
+            'Đăng ký thành công. Vui lòng kiểm tra email để xác thực !',
+            { variant: 'info' }
+          );
           setIsLoading(false);
+          setIsFinish(true);
         } else {
           enqueueSnackbar(
             `${res?.message || 'Lỗi đăng ký. Vui lòng thử lại !'}`,
@@ -173,9 +186,9 @@ const RegisterPage = (props: P) => {
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err, " Lõi nè");
-        
-        enqueueSnackbar(`${err?.message || "Có lỗi vui lòng thử lại"}`, {
+        console.log(err, ' Lõi nè');
+
+        enqueueSnackbar(`${err?.message || 'Có lỗi vui lòng thử lại'}`, {
           variant: 'error',
         });
       });
@@ -232,13 +245,14 @@ const RegisterPage = (props: P) => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent:"space-around"
               },
             }}
           >
             <Box
               sx={{
                 display: 'flex',
-                mt: '60px',
+                mt: '30px',
               }}
             >
               <Title>Cute</Title>
@@ -256,131 +270,170 @@ const RegisterPage = (props: P) => {
                 pet
               </StyledTypography>
             </Box>
-            <Form onSubmit={handleFormSubmit}>
-              <LoginTitle>Đăng Ký</LoginTitle>
-              <TextField
-                name="ten"
-                placeholder="Tên hiển thị"
-                margin="dense"
-                size="small"
-                value={userInfo.ten}
-                onChange={(e) => {
-                  setUserinfo({
-                    ...userInfo,
-                    ten: e.target.value,
-                  });
-                }}
-              />
-              <TextField
-                name="ten"
-                placeholder="Tài khoản"
-                margin="dense"
-                size="small"
-                error={!!errors.email}
-                helperText={errors.email}
-                value={userInfo.tai_khoan}
-                onChange={(e) => {
-                  setUserinfo({
-                    ...userInfo,
-                    tai_khoan: e.target.value,
-                  });
-                }}
-              />
-              <TextField
-                name="Email"
-                placeholder="Email"
-                margin="dense"
-                size="small"
-                error={!!errors.email}
-                helperText={errors.email}
-                onChange={(e) => {
-                  if (errors.email) {
-                    clearError('email');
-                  }
-                  setUserinfo({
-                    ...userInfo,
-                    email: e.target.value,
-                  });
-                }}
-              />
-              <TextField
-                name="password"
-                type="password"
-                placeholder="Mật khẩu ( tối thiểu 6 kí tự )"
-                margin="dense"
-                autoSave="no"
-                autoComplete="no"
-                size="small"
-                error={!!errors.password}
-                helperText={errors.password}
-                onChange={(e) => {
-                  if (errors.password) {
-                    clearError('password');
-                  }
-                  setUserinfo({
-                    ...userInfo,
-                    mat_khau: e.target.value,
-                  });
-                }}
-              />
-
-              <TextField
-                name="password"
-                type="password"
-                placeholder="Nhập lại mật khẩu"
-                margin="dense"
-                autoSave="no"
-                autoComplete="no"
-                size="small"
-                value={userInfo.nhap_lai_mat_khau}
-                error={!!errors.password}
-                helperText={errors.password}
-                onChange={(e) => {
-                  if (errors.password) {
-                    clearError('password');
-                  }
-                  setUserinfo({
-                    ...userInfo,
-                    nhap_lai_mat_khau: e.target.value,
-                  });
-                }}
-              />
-              {!!errors.all && (
-                <StyledFormHelperText
+            {isFinish ? (
+              <>
+                <StyledTypography
                   sx={{
-                    textAlign: 'center',
-                    marginTop: 3,
-                    color: '#ba2121',
+                    color: '#fff',
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    margin: '0 10px',
+                    fontSize: '18px !important',
+                    mt:"100px",
+                    
                   }}
-                  error={!!errors.all}
+                  textAlign="center"
                 >
-                  {errors.all}
-                </StyledFormHelperText>
-              )}
-              {/* <div className="text-small" style={{ marginTop: 16 }}>
+                  Vui lòng kiểm tra email để xác thực.
+                </StyledTypography>
+              </>
+            ) : (
+              <Form onSubmit={handleFormSubmit}>
+                <LoginTitle>Đăng Ký</LoginTitle>
+                <TextField
+                  name="ten"
+                  placeholder="Tên hiển thị"
+                  margin="dense"
+                  size="small"
+                  error={!!errors.name}
+                  helperText={errors.name}
+                  value={userInfo.ten}
+                  onChange={(e) => {
+                    if (errors.name) {
+                      clearError('name');
+                    }
+                    setUserinfo({
+                      ...userInfo,
+                      ten: e.target.value,
+                    });
+                  }}
+                />
+                <TextField
+                  name="ten"
+                  placeholder="Tài khoản"
+                  margin="dense"
+                  size="small"
+                  error={!!errors.tai_khoan}
+                  helperText={errors.tai_khoan}
+                  value={userInfo.tai_khoan}
+                  onChange={(e) => {
+                    if (errors.tai_khoan) {
+                      clearError('tai_khoan');
+                    }
+                    setUserinfo({
+                      ...userInfo,
+                      tai_khoan: e.target.value,
+                    });
+                  }}
+                />
+                <TextField
+                  name="Email"
+                  placeholder="Email"
+                  margin="dense"
+                  size="small"
+                  error={!!errors.email}
+                  helperText={errors.email}
+                  onChange={(e) => {
+                    if (errors.email) {
+                      clearError('email');
+                    }
+                    setUserinfo({
+                      ...userInfo,
+                      email: e.target.value,
+                    });
+                  }}
+                />
+                <TextField
+                  name="password"
+                  type="password"
+                  placeholder="Mật khẩu"
+                  margin="dense"
+                  autoSave="no"
+                  autoComplete="no"
+                  size="small"
+                  error={!!errors.password}
+                  helperText={errors.password}
+                  onChange={(e) => {
+                    if (errors.password) {
+                      clearError('password');
+                    }
+                    setUserinfo({
+                      ...userInfo,
+                      mat_khau: e.target.value,
+                    });
+                  }}
+                />
+
+                <TextField
+                  name="password"
+                  type="password"
+                  placeholder="Nhập lại mật khẩu"
+                  margin="dense"
+                  autoSave="no"
+                  autoComplete="no"
+                  size="small"
+                  value={userInfo.nhap_lai_mat_khau}
+                  error={!!errors.re_password}
+                  helperText={errors.re_password}
+                  onChange={(e) => {
+                    if (errors.re_password) {
+                      clearError('re_password');
+                    }
+                    setUserinfo({
+                      ...userInfo,
+                      nhap_lai_mat_khau: e.target.value,
+                    });
+                  }}
+                />
+                {!!errors.all && (
+                  <StyledFormHelperText
+                    sx={{
+                      textAlign: 'center',
+                      marginTop: 3,
+                      color: '#ba2121',
+                    }}
+                    error={!!errors.all}
+                  >
+                    {errors.all}
+                  </StyledFormHelperText>
+                )}
+                {/* <div className="text-small" style={{ marginTop: 16 }}>
             Not remember your password?{' '}
             <StyledLink to="/forgot-password">Forgot password</StyledLink>
           </div> */}
-              <LoginButton
-                variant="contained"
-                type="submit"
-                sx={{
-                  marginTop: 2,
-                  textTransform: 'none',
-                }}
-                disabled={!userInfo.ten || !userInfo.tai_khoan || !userInfo.mat_khau ||!userInfo.email || !userInfo.nhap_lai_mat_khau ||  userInfo.nhap_lai_mat_khau.trim() !=  userInfo.mat_khau.trim() }
-              >
-                Đăng ký ngay
-              </LoginButton>
-            </Form>
+                <LoginButton
+                  variant="contained"
+                  type="submit"
+                  sx={{
+                    marginTop: 2,
+                    textTransform: 'none',
+                  }}
+                  // disabled={
+                  //   !userInfo.ten ||
+                  //   !userInfo.tai_khoan ||
+                  //   !userInfo.mat_khau ||
+                  //   !userInfo.email ||
+                  //   !userInfo.nhap_lai_mat_khau ||
+                  //   userInfo.nhap_lai_mat_khau.trim() != userInfo.mat_khau.trim()
+                  // }
+                >
+                  Đăng ký ngay
+                </LoginButton>
+              </Form>
+            )}
             <Footer>
+
               <div style={{ textAlign: 'center' }}>
                 Bạn đã có tài khoản ?{' '}
-                <StyledHref onClick={() => navigate("/login")} >Đang nhập ngay !</StyledHref>
+                <StyledHref style={{
+                  cursor:"pointer"
+                }} onClick={() => navigate('/login')}>
+                  Đăng nhập ngay !
+                </StyledHref>
               </div>
             </Footer>
           </ScrollView>
-          <Backdrop
+          {/* <Backdrop
             sx={{
               color: '#fff',
               zIndex: (theme) => theme.zIndex.drawer + 1,
@@ -396,7 +449,8 @@ const RegisterPage = (props: P) => {
                 src={`${process.env.PUBLIC_URL}/assets/images/logo.png`}
               />
             </div>
-          </Backdrop>
+          </Backdrop> */}
+          <Loading open={isLoading} />
         </Root>
         <Box
           sx={{

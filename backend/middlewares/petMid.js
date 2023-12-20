@@ -67,8 +67,32 @@ const preChangePet = async (req, res, next) => {
   next();
 };
 
+const updateAvatarPetMid = async (req, res, next) => {
+  let { url_anh } = req.body;
+  console.log(typeof url_anh);
+  if (
+    typeof url_anh == "undefined" ||
+    url_anh == null ||
+    (typeof url_anh == "string" && url_anh.trim() == "")
+  ) {
+    res
+      .status(200)
+      .json(new Response(200, [], "url_anh rỗng nên ảnh không thay đổi"));
+    return;
+  }
+
+  if (typeof url_anh != "string") {
+    res.status(400).json(new Response(400, [], "vui lòng nhập url ảnh"));
+    return;
+  }
+
+  req.body.url_anh = url_anh.trim();
+  next();
+};
+
 module.exports = {
   addPetMiddleWare,
   preChangePet,
   checkPetExistMid,
+  updateAvatarPetMid,
 };

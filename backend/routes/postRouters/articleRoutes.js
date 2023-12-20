@@ -143,7 +143,7 @@ router.post(
 // tố cáo bài viết chia sẻ trạng thái
 router.post(
   "/reportArticle",
-  [articleMiddle.checkArticleExistMid],
+  [articleMiddle.checkArticleExistMid, articleMiddle.preProcessReport],
   articleController.reportArticleController
 );
 
@@ -154,13 +154,38 @@ router.post(
 );
 
 router.post(
-  "/filterArticles",
+  "/filterArticles_old",
   [
     articleMiddle.preFilterArticleMid,
     articleMiddle.navigateToSuitableFilterArricleMid,
   ],
   articleController.filterArticlesController
 );
+
+router.post(
+  "/filterArticles",
+  [
+    articleMiddle.preFilterArticleMid_2,
+    articleMiddle.navigateToSuitableFilterArricleMid_2,
+  ],
+  articleController.filterArticlesController_2
+);
+
+router.post(
+  "/getAllAuthorOfArticle",
+  articleController.getAllAuthorOfArticleController
+);
+
+router.post(
+  "/filterArticles_v2",
+  [
+    articleMiddle.preFilterArticleMid_3,
+    articleMiddle.navigateToSuitableFilterArricleMid_3,
+  ],
+  articleController.filterArticlesController_3
+);
+
+// router.post
 
 // // search article
 // router.post(

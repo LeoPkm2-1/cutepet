@@ -819,15 +819,15 @@ nếu bình luận không tồn tại:
 
 ```javascript
 {
-    post_id: mã của bài viết muốn chỉnh sửa thông tin
-    text: string,
-    visibility: "PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
+    post_id:"655f82e8cc542f348fe2007b",
+    text: "ahihi",
+    visibility:"PUBLIC" || "JUST_FRIENDS" || "PRIVATE",
     taggedUsersId: Array[id_users],
-    media:
-        undefined || {
-            type:"video" || "images"
-            data:[url]
-        }
+    myPetIds:Array[id_pets],
+    media: {
+        "type":"images",
+        "data":["https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa"]
+    }
 }
 ```
 
@@ -851,9 +851,55 @@ nếu bình luận không tồn tại:
 {
     "status": 400,
     "payload": [],
-    "message": "Bạn không có quyền xóa bài viết này",
+    "message": "Bạn không có quyền cập nhật bài viết này",
     "errno": 300,
     "errcode": 300
+}
+```
+
+- khi cập nhật thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "text": "ahihi",
+        "postType": "STATUS",
+        "visibility": "PUBLIC",
+        "media": {
+            "type": "images",
+            "data": [
+                "https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa"
+            ]
+        },
+        "taggedUsers": [
+            {
+                "ma_nguoi_dung": 5,
+                "ten": "Leo",
+                "ngay_sinh": "1991-10-02T17:00:00.000Z",
+                "tai_khoan": "leo",
+                "email": "leo@gmail.com",
+                "so_dien_thoai": "0912345682",
+                "gioi_tinh": 1,
+                "anh": {
+                    "ma_anh": null,
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                    "ngay_cap_nhat": null,
+                    "ma_nguoi_dung": "5",
+                    "is_active": null
+                }
+            }
+        ],
+        "withPets": [],
+        "createAt": "2023-11-26T02:17:34.999Z",
+        "numOfLike": 1,
+        "numOfComment": 0,
+        "modifiedAt": "2023-12-01T06:00:52.184Z",
+        "owner_id": 2
+    },
+    "message": "cập nhật thành công",
+    "errno": null,
+    "errcode": null
 }
 ```
 
@@ -867,7 +913,8 @@ nếu bình luận không tồn tại:
 
 ```javascript
 {
-    post_id: string (bắt buộc)
+    post_id: string (bắt buộc),
+    report_Reason: string (bắt buộc),
 }
 ```
 
@@ -1115,7 +1162,7 @@ nếu bình luận không tồn tại:
                     },
                     "anh": {
                         "ma_anh": 49,
-                        "url": "...............................",
+                        "url": "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?w=512&ssl=1",
                         "ngay_cap_nhat": "2023-09-02T04:43:12.000Z",
                         "ma_thu_cung": 1,
                         "is_active": 1
@@ -1130,86 +1177,26 @@ nếu bình luận không tồn tại:
                 }
             ],
             "createAt": "2023-11-23T16:55:19.419Z",
-            "numOfLike": 0,
+            "numOfLike": 1,
             "numOfComment": 0,
             "modifiedAt": null,
-            "owner_id": 1
-        },
-        {
-            "_id": "655f83ef8c54dd810bb61687",
-            "text": "ae ơi 3",
-            "postType": "STATUS",
-            "visibility": "PUBLIC",
-            "media": {
-                "type": "images",
-                "data": [
-                    "https://pbs.twimg.com/media/D7dBfozUEAEkItp.jpg"
-                ]
-            },
-            "taggedUsers": [],
-            "withPets": [
-                {
-                    "ma_thu_cung": 1,
-                    "ten_thu_cung": "tom",
-                    "ngay_sinh": "2019-10-09T17:00:00.000Z",
-                    "gioi_tinh": 1,
-                    "ghi_chu": "chú mèo béo lười",
-                    "ma_nguoi_chu": 1,
-                    "giong_loai": {
-                        "ma_giong": 205,
-                        "ten_giong": "British Shorthair",
-                        "ma_loai": 2,
-                        "ten_loai": "mèo"
-                    },
-                    "anh": {
-                        "ma_anh": 49,
-                        "url": ".....................",
-                        "ngay_cap_nhat": "2023-09-02T04:43:12.000Z",
-                        "ma_thu_cung": 1,
-                        "is_active": 1
-                    },
-                    "thong_tin_suc_khoe": {
-                        "ma_suc_khoe": 14,
-                        "ma_thu_cung": 1,
-                        "thoi_gian": "2023-09-04T04:29:06.000Z",
-                        "can_nang": null,
-                        "chieu_cao": 100
-                    }
-                },
-                {
-                    "ma_thu_cung": 5,
-                    "ten_thu_cung": "Bella",
-                    "ngay_sinh": "2019-10-13T17:00:00.000Z",
-                    "gioi_tinh": 0,
-                    "ghi_chu": "chú mèo béo lười",
-                    "ma_nguoi_chu": 1,
-                    "giong_loai": {
-                        "ma_giong": 205,
-                        "ten_giong": "British Shorthair",
-                        "ma_loai": 2,
-                        "ten_loai": "mèo"
-                    },
-                    "anh": {
-                        "ma_anh": null,
-                        "url": "............................",
-                        "ngay_cap_nhat": null,
-                        "ma_thu_cung": 5,
-                        "is_active": null
-                    },
-                    "thong_tin_suc_khoe": {
-                        "ma_suc_khoe": null,
-                        "ma_thu_cung": 5,
-                        "thoi_gian": null,
-                        "can_nang": null,
-                        "chieu_cao": null
-                    }
+            "owner_id": 1,
+            "owner_infor": {
+                "ma_nguoi_dung": 1,
+                "ten": "Nam Trần",
+                "ngay_sinh": "2000-10-17T17:00:00.000Z",
+                "tai_khoan": "nam",
+                "email": "nam@gmail.com",
+                "so_dien_thoai": "01234",
+                "gioi_tinh": 1,
+                "anh": {
+                    "ma_anh": 89,
+                    "url": "https://storage.googleapis.com/pod_public/1300/159184.jpg",
+                    "ngay_cap_nhat": "2023-11-17T04:18:08.000Z",
+                    "ma_nguoi_dung": 1,
+                    "is_active": 1
                 }
-            ],
-            "createAt": "2023-11-23T16:55:11.306Z",
-            "numOfLike": 0,
-            "numOfComment": 0,
-            "modifiedAt": null,
-            "owner_id": 1
+            }
         }
     ],
     "message": "Lấy dữ liệu thành công",
@@ -1218,14 +1205,317 @@ nếu bình luận không tồn tại:
 }
 ```
 
-##
+## 19. chỉnh sửa bình luận của bài viết chia sẻ trạng thái
 
-##
+**(postman số 10)**
 
-##
+1. phương thức:
 
-##
+   POST http://localhost:3000/post/statusPost/updateComment
 
-##
+2. cấu trúc:
 
-##
+```javascript
+{
+    cmt_id: string,
+    content: string,
+}
+```
+
+3. trả về:
+
+- khi bạn không có quuyền chỉnh sửa
+
+```javascript
+{
+    "status": 400,
+    "payload": "Bạn không có quyền chỉnh sửa bình luận này",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi comment không tồn tại:
+
+```javascript
+{
+    "status": 400,
+    "payload": "Bình luật không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi comment thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "modifiedCount": 1,
+        "upsertedId": null,
+        "upsertedCount": 0,
+        "matchedCount": 1
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 20. chỉnh sửa phản hồi của bình luận của bài viết chia sẻ trạng thái
+
+**(postman số 13)**
+
+1. phương thức 
+
+    POST http://localhost:3000/post/statusPost/updateReply
+
+2. cấu trúc:
+
+```javascript
+{
+    reply_id: string,
+    content: string,
+}
+```
+
+3. trả về:
+
+- khi phản hồi không tồn tại:
+```javascript
+{
+    "status": 400,
+    "payload": "Phản hồi không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi không có quyền chỉnh sửa phản hồi:
+```javascript
+{
+    "status": 400,
+    "payload": "Bạn không có quyền chỉnh sửa phản hồi này",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi chỉnh sửa thành công
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "modifiedCount": 1,
+        "upsertedId": null,
+        "upsertedCount": 0,
+        "matchedCount": 1
+    },
+    "message": "",
+    "errno": null,
+    "errcode": null
+}
+```
+
+
+
+## 21. xóa bài viết trạng thái
+
+**(postman số 16)**
+
+1. phương thức:
+
+   POST http://localhost:3000/post/statusPost/deletePost
+
+2. cấu trúc:
+
+```javascript
+{
+  post_id: string;
+}
+```
+
+3. trả về:
+
+- khi bài viết không tồi tại.
+
+```javascript
+{
+    "status": 400,
+    "payload": "Bài viết không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi bạn không có quyền xóa.
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bạn không có quyền xóa bài viết này",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "isDeleted": true,
+        "post_id": "6562aabf0acaafe756be1eb7"
+    },
+    "message": "Xóa bài viết thành công bài viết 6562aabf0acaafe756be1eb7",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi xóa thất bại:
+
+```javascript
+{
+    "status": 400,
+    "payload": {
+        "isDeleted": false,
+        "post_id": "6562aabf0acaafe756be1eb7"
+    },
+    "message": "xóa bài viết thất bại: 6562aabf0acaafe756be1eb7",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+## 22. xóa bình luận của bài viết trạng thái
+
+**(postman số 15)**
+
+1. phương thức:
+
+    POST http://localhost:3000/post/statusPost/deleteComment
+
+2. cấu trúc:
+
+```javascript
+{
+    cmt_id: string
+}
+```
+
+3. trả về:
+
+
+- khi bình luận không tồn tại.
+```javascript
+{
+    "status": 400,
+    "payload": "Bình luật không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi bạn không có quyền xóa bình luận:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bạn không có quyền xóa bình luận này",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "cmt_id": "655e15986f6e342ed081d45b"
+    },
+    "message": "xóa thành công bình luận:655e15986f6e342ed081d45b",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 23. xóa phản hồi của bình luận trong bài viết chia sẻ kiến thức
+
+**(postman số 14)**
+
+1. phương thức:
+
+    POST http://localhost:3000/post/statusPost/deleteReply
+
+2. cấu trúc:
+
+```javascript
+{
+    reply_id: string
+}
+```
+3. trả về :
+
+- khi phản hồi không tồn tại:
+
+```javascript
+{
+    "status": 400,
+    "payload": "Phản hồi không tồn tại",
+    "message": 300,
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi bạn không có quyền:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Bạn không có quyền xóa phản hồi này",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi xóa thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": {
+        "acknowledged": true,
+        "deletedCount": 1,
+        "reply_id": "65697981e92f526f137528ec"
+    },
+    "message": "xóa thành công phản hồi:65697981e92f526f137528ec",
+    "errno": null,
+    "errcode": null
+}
+```
+
+
+
+
+
+
+
+
+

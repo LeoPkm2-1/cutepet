@@ -242,6 +242,64 @@ const updateUserBasicInfor = async (
     .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
 };
 
+const getUserIdThatNoteContainUsers = async (
+  not_contain_user_id_list,
+  limitNum = undefined
+) => {
+  let sqlStmt = "";
+  if (typeof limitNum == "number") {
+    sqlStmt = `select DISTINCT ma_nguoi_dung
+              from NguoiDung
+              where ma_nguoi_dung not in (?)
+              limit ?`;
+    data = [not_contain_user_id_list, limitNum];
+  } else {
+    sqlStmt = `select DISTINCT ma_nguoi_dung
+                from NguoiDung
+                where ma_nguoi_dung not in (?)`;
+    data = [not_contain_user_id_list];
+  }
+  return await sqlQuery(sqlStmt, data)
+    .then(
+      (data) =>
+        new Response(
+          200,
+          data.map((maNguoiDungObj) => maNguoiDungObj.ma_nguoi_dung),
+          ""
+        )
+    )
+    .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
+};
+
+const tenNguoiDungT0MaNguoiDung = async (tenNguoiDung) => {
+  const sqlStmt = `select ma_nguoi_dung from NguoiDung where ten = ? COLLATE utf8mb4_vietnamese_ci`;
+  return await sqlQuery(sqlStmt, [tenNguoiDung])
+    .then((data) => data.map((userIDObj) => parseInt(userIDObj.ma_nguoi_dung)))
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
+};
+
+const getListUserIdsWhenTenContain = async (partOfName) => {
+  const sqlStmt =
+    `select ma_nguoi_dung from NguoiDung where ten  LIKE '%` +
+    partOfName +
+    `%' COLLATE utf8mb4_vietnamese_ci`;
+  return await sqlQuery(sqlStmt)
+    .then((data) => data.map((userIDObj) => parseInt(userIDObj.ma_nguoi_dung)))
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
+};
+
+// (async function () {
+//   const data = await getListUserIdsWhenTenContain('Hùng');
+//   console.log(data);
+// })()
+
+// (async function () {
+//   const data = await tenNguoiDungT0MaNguoiDung("");
+//   console.log(data);
+// })();
+
 module.exports = {
   getUserByUsername,
   getUserByEmail,
@@ -262,4 +320,7 @@ module.exports = {
   searchUserBySearchKey,
   updateUserPasswordByUserName,
   updateUserBasicInfor,
+  getUserIdThatNoteContainUsers,
+  tenNguoiDungT0MaNguoiDung,
+  getListUserIdsWhenTenContain,
 };

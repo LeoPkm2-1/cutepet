@@ -541,11 +541,16 @@ const updatePostController = async (req, res) => {
           (user) => !req.body.UNFOLLOW_USER_ID.includes(user.ma_nguoi_dung)
         )
       : postBeforeDelete.taggedUsers;
-  // res.json(remainingTaggedUser);
+  // // res.json(remainingTaggedUser);
+  // let taggedUsers = await userHelper.getUserPublicInforByListIds(
+  //   req.body.NEW_FOLLOW_USER_ID
+  // );
+  // taggedUsers = remainingTaggedUser.concat(taggedUsers);
   let taggedUsers = await userHelper.getUserPublicInforByListIds(
-    req.body.NEW_FOLLOW_USER_ID
+    req.body.taggedUsersId
   );
-  taggedUsers = remainingTaggedUser.concat(taggedUsers);
+
+  const withPets = await petHelper.publicInforOfListPet(req.body.myPetIds);
 
   // delete _id field in old object post
   delete postBeforeDelete._id;
@@ -555,6 +560,7 @@ const updatePostController = async (req, res) => {
     visibility,
     media,
     taggedUsers,
+    withPets,
     modifiedAt: new Date(),
   };
   const updateProcess = await StatusPostModel.updatePost(post_id, newPost);
@@ -626,7 +632,34 @@ const deletePostController = async (req, res) => {
       // xóa theo dõi
       await followModel.deleteAllFollowOfStatusPost(post_id),
     ]);
-    res.json(deleteProcess);
+    const everyOk = deleteProcess.every(
+      (elemProcess) => elemProcess.status == 200
+    );
+    // console.log({ everyOk });
+    if (everyOk) {
+      res.status(200).json(
+        new Response(
+          200,
+          {
+            isDeleted: true,
+            post_id,
+          },
+          "Xóa bài viết thành công bài viết " + post_id
+        )
+      );
+      return;
+    } else {
+      res.status(400).json(
+        new Response(
+          400,
+          {
+            isDeleted: false,
+            post_id,
+          },
+          "xóa bài viết thất bại: " + post_id
+        )
+      );
+    }
   } catch (error) {
     console.log(error);
   }
@@ -678,11 +711,12 @@ const followPostController = async (req, res) => {
 };
 
 const reportPostController = async (req, res) => {
-  const { post_id } = req.body;
+  const { post_id, report_Reason } = req.body;
   const user_report_id = req.auth_decoded.ma_nguoi_dung;
   const reportProcess = await statusPostHelper.reportPost(
     post_id,
     user_report_id,
+    report_Reason,
     true
   );
   res.status(200).json(reportProcess);
@@ -693,7 +727,7 @@ const calNumOfPostOfEachUser = async (
   NEEDED_NUM_OF_POST = 10,
   numOfPeopleGetPost = undefined
 ) => {
-  console.log({ NEEDED_NUM_OF_POST });
+  // console.log({ NEEDED_NUM_OF_POST });
   if (typeof numOfPeopleGetPost == "undefined") {
     const numOfFriend = await banbeHelper.getNumOfFriendOfUser(user_id);
     return Math.ceil(NEEDED_NUM_OF_POST / (numOfFriend + 1));
@@ -768,7 +802,7 @@ const getPostForNewsfeedController = async (req, res) => {
     user_id,
     NEEDED_NUM_OF_POST
   );
-  console.log({ numOfPostForEachUser });
+  // console.log({ numOfPostForEachUser });
   const ds_ban_be = await laBanBeModel
     .getAllFriendIdsOfUser(user_id)
     .then((data) =>
@@ -849,7 +883,7 @@ const getPostForNewsfeedController = async (req, res) => {
   // insert infor to indicate that  has user liked each post?
   await statusPostHelper.insertUserLikePostInforOfListPosts(user_id, posts);
 
-  console.log({ len_2: posts.length });
+  // console.log({ len_2: posts.length });
 
   res.status(200).json(new Response(200, posts, ""));
   console.log("heheheh");
@@ -974,6 +1008,7 @@ const getPostHavePetController = async (req, res) => {
       before,
       num
     );
+    await statusPostHelper.InsertOwnerInforOfListPosts(posts.payload);
     res
       .status(200)
       .json(new Response(200, posts.payload, "Lấy dữ liệu thành công"));
@@ -994,6 +1029,9 @@ const getPostHavePetController = async (req, res) => {
       before,
       num
     );
+    await statusPostHelper.InsertOwnerInforOfListPosts(posts.payload);
+    // console.log(posts.payload);
+    // console.log('hehe');
     res
       .status(200)
       .json(new Response(200, posts.payload, "Lấy dữ liệu thành công"));

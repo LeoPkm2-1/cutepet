@@ -326,9 +326,109 @@
 }
 ```
 
-##
+## 7. chỉnh sửa thông tin cơ bản cho thú cưng
 
-##
+(**postman số 77**)
+
+1. phương thức:
+
+   POST http://localhost:3000/pet/capnhatthongtin/:pet_id
+
+2. cấu trúc:
+
+```javascript
+{
+  ten_thu_cung: string;
+  ngay_sinh: string;
+  gioi_tinh: boolean;
+  ghi_chu: string;
+  ma_giong: number;
+}
+```
+
+3. trả về:
+
+- khi không có quyền:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "Người dùng không thể chỉ sửa thú cưng mà không sở hữu",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": [],
+    "message": "cập nhật thú cưng thành công",
+    "errno": null,
+    "errcode": null
+}
+```
+
+## 8. cập nhật ảnh đại diện thú cưng
+
+**(postman số 78)**
+
+1. phương thức:
+
+   POST http://localhost:3000/pet/capnhatanhdaidien
+
+2. cấu trúc:
+
+```javascript
+{
+  url_anh: string;
+  pet_id: number;
+}
+```
+
+- trong đó:
+  - **url_anh**:  url của ảnh đại diện cần cập nhật
+  - **pet_id**: mô tả mã của thú cưng cần cập nhật ảnh đại diện
+
+3. trả về:
+
+- khi không có quyền:
+
+```javascript
+{
+    "status": 400,
+    "payload": [],
+    "message": "bạn không phải là chủ thú cưng",
+    "errno": 300,
+    "errcode": 300
+}
+```
+
+- khi url bị để trống bằng **null** hoặc **undefined**
+```javascript
+{
+    "status": 200,
+    "payload": [],
+    "message": "url_anh rỗng nên ảnh không thay đổi",
+    "errno": null,
+    "errcode": null
+}
+```
+
+- khi cập nhật ảnh đại diện thành công:
+
+```javascript
+{
+    "status": 200,
+    "payload": [],
+    "message": "cập nhật ảnh đại diện cho thú cưng thành công",
+    "errno": null,
+    "errcode": null
+}
+```
 
 ##
 

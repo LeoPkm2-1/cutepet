@@ -347,6 +347,18 @@ async function preProcessUpdatePost_1(req, res, next) {
     ),
   ];
 
+  // lọc danh sách thú cưng
+  let myPetIds = req.body.myPetIds || [];
+  myPetIds = myPetIds.map((petId) => parseInt(petId, 10)); // change index to int type
+  // remove dulplicate
+  myPetIds = [...new Set(myPetIds)];
+  // danh sách thú cưng mới dc tag
+  const newTaggedPetIds = (req.body.myPetIds =
+    await petHelper.getOwnPetIdsOfUserInListOfPetIds(
+      req.auth_decoded.ma_nguoi_dung,
+      myPetIds
+    ));
+
   next();
 }
 
@@ -398,6 +410,14 @@ async function preProcessDeleteComment(req, res, next) {
     .getPostById(req.body.CMT_POST_INFOR.postId)
     .then((data) => data.payload[0]);
   console.log({ postInfor });
+  if (typeof postInfor == "undefined") {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Bài viết chứa bình luận không tồn tại", 300, 300)
+      );
+    return;
+  }
   if (req.auth_decoded.ma_nguoi_dung == postInfor.owner_id) {
     next();
     return;
@@ -501,6 +521,42 @@ async function preProcessGetPostHavePet(req, res, next) {
   next();
 }
 
+const checkRightToReadPostMid = async (req, res, next) => {
+  const { visibility } = req.body.STATUS_POST_INFOR;
+  const reader_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const owner_id = parseInt(req.body.STATUS_POST_INFOR.owner_id);
+  const userTaggedIdList = req.body.STATUS_POST_INFOR.taggedUsers.map(
+    (user) => user.ma_nguoi_dung
+  );
+  console.log({ userTaggedIdList });
+  const isTagged = userTaggedIdList.includes(reader_id);
+  console.log({ isTagged });
+
+  const isFriend = await banBeHelper.haveFriendShipBetween(reader_id, owner_id);
+  if (reader_id == owner_id || visibility == "PUBLIC") {
+    next();
+    return;
+  } else if (visibility == "JUST_FRIENDS" && isFriend) {
+    next();
+    return;
+  } else if (visibility == "PRIVATE" && isTagged) {
+    next();
+    return;
+  }
+
+  res
+    .status(400)
+    .json(new Response(400, {}, "Bài viết này không thể xem", 300, 300));
+  return;
+};
+
+const preProcessReportPost = async (req, res, next) => {
+  let { report_Reason } = req.body;
+  report_Reason = report_Reason || "";
+  req.body.report_Reason = report_Reason.trim();
+  next();
+};
+
 module.exports = {
   preProcessAddPost,
   preProcessLikePost,
@@ -522,4 +578,6 @@ module.exports = {
   preProcessUpdatePost_2,
   preProccessToGetNewFeed,
   preProcessGetPostHavePet,
+  checkRightToReadPostMid,
+  preProcessReportPost,
 };

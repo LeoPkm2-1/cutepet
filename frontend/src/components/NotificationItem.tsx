@@ -6,6 +6,7 @@ import notiApi from '../api/noti';
 import { useDispatch, useSelector } from 'react-redux';
 import { NotiActions } from '../redux/noti';
 import { RootState } from '../redux';
+import { SocketActions } from '../redux/socket';
 type Props = {
   name?: string;
   url?: string;
@@ -14,8 +15,9 @@ type Props = {
   onClick?: () => void;
   idNoti?: string;
   isReaded?: boolean;
-  isRequestFriend?:boolean;
-  isFriend?:boolean;
+  isRequestFriend?: boolean;
+  isFriend?: boolean;
+  isArticle?: boolean;
 };
 export function NotifycationItem(props: Props) {
   return (
@@ -65,24 +67,34 @@ export function NotifycationItemClick(props: Props) {
   useEffect(() => {
     setIsReaded(props?.isReaded);
   }, [props?.idPost, props?.isReaded]);
-  const numNoti = useSelector((state:RootState) => state?.noti?.numNoti)
+  const numNoti = useSelector((state: RootState) => state?.noti?.numNoti);
   const dispatch = useDispatch();
-  function naviga(){
-    if(props?.isRequestFriend){
-      return `/home/trang-ca-nhan-nguoi-dung/${props?.idPost}`
+
+  function naviga() {
+    if (props?.isRequestFriend) {
+      return `/home/trang-ca-nhan-nguoi-dung/${props?.idPost}`;
     }
-    if(props?.isFriend){
-      return `/home/trang-ca-nhan-nguoi-dung/${props?.idPost}`
+    if (props?.isFriend) {
+      return `/home/trang-ca-nhan-nguoi-dung/${props?.idPost}`;
+    }
+    if (props?.isArticle) {
+      return `/home/trang-chia-se/${props?.idPost}`;
     }
     return `post/${props?.idPost}`;
   }
+
   return (
     <>
       <Link
         onClick={() => {
           if (props?.idNoti) {
+            props?.onClick?.();
             notiApi.postNotificationHasReaded(props?.idNoti).then((data) => {
               dispatch(NotiActions.setNumNoti(numNoti - 1));
+              if (props?.idPost) {
+                dispatch(SocketActions.setHasPostId(props?.idPost));
+                dispatch(NotiActions.setNewId(props?.idPost));
+              }
               setIsReaded(true);
             });
           }
@@ -135,13 +147,13 @@ export function NotifycationItemClick(props: Props) {
               <span style={{ fontWeight: '700' }}>
                 {props?.name || 'No name'}
               </span>{' '}
-              đã {props?.type} 
+              đã {props?.type}
             </Typography>
           </Box>
           {!isReaded && (
             <FiberManualRecordRoundedIcon
               sx={{
-                color: '#1876f2',
+                color: 'rgb(14, 100, 126)',
               }}
             />
           )}

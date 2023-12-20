@@ -7,6 +7,7 @@ import { StatusType } from '../../../../models/post';
 import CreatePost from '../../mang-xa-hoi/component/tao-bai-viet';
 import PostComponent from '../../mang-xa-hoi/component/bai-viet';
 import { QuanLyThuCung } from '../../quan-ly-thu-cung';
+import { deepCopy } from '@firebase/util';
 
 import { useNavigate, useParams } from 'react-router-dom';
 import { RootState } from '../../../../redux';
@@ -16,20 +17,30 @@ import { DanhSachThuCung } from '../../quan-ly-thu-cung/component/danh-sach-thu-
 import Button from '../../../../components/Button';
 import friendApi from '../../../../api/friend';
 import { useSnackbar } from 'notistack';
-
+import EmailIcon from '@mui/icons-material/Email';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import moment from 'moment';
+import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
 export default function TrangCaNhanMoiNguoi() {
   // const profile = useSelector((state: RootState) => state.user.profile);
   const { id } = useParams();
   const navigate = useNavigate();
   const [tab, setTab] = useState('post');
+  const userProfile = useSelector((state: RootState) => state.user.profile);
 
   const [profile, setProfile] = useState<PeopleType>({
     name: '',
-    id: '',
+    id: 0,
     user: '',
     url: '',
     numberPet: 0,
     isFriend: false,
+    ngay_sinh: '',
+    email: '',
+    so_dien_thoai: '',
+    gioi_tinh: 0,
   });
 
   const [isFriend, setIsFriend] = useState(0);
@@ -41,9 +52,13 @@ export default function TrangCaNhanMoiNguoi() {
   const [friend, setFriend] = useState<FriendType[]>([]);
   const [listPost, setListPost] = useState<StatusType[]>([]);
   const [listPet, setListPet] = useState<PetType[]>([]);
-  const newRequestAddFriend = useSelector((state:RootState) => state?.socket.newRequestAddFriend?.request)
-  
-  const newFriendId = useSelector((state:RootState) => state?.socket.acceptFriend?.idUser)
+  const newRequestAddFriend = useSelector(
+    (state: RootState) => state?.socket.newRequestAddFriend?.request
+  );
+
+  const newFriendId = useSelector(
+    (state: RootState) => state?.socket.acceptFriend?.idUser
+  );
 
   const acceptUser = useSelector(
     (state: RootState) => state?.socket.acceptFriend.idUser
@@ -56,7 +71,11 @@ export default function TrangCaNhanMoiNguoi() {
     if (id) {
       setTab('post');
       profileApi.getUserProfileById(id).then((data) => {
-        console.log(data, " data profile");
+        if (id === `${userProfile?.id}`) {
+          navigate('/home/trang-ca-nhan');
+          return;
+        }
+
         setProfile({
           name: data?.thong_tin_profile_user?.ten,
           id: data?.thong_tin_profile_user?.ma_nguoi_dung,
@@ -64,16 +83,25 @@ export default function TrangCaNhanMoiNguoi() {
           url: data?.thong_tin_profile_user?.anh?.url,
           numberPet: data?.danh_sach_thu_cung?.length,
           isFriend: data?.la_ban_be,
+          ngay_sinh: data?.thong_tin_profile_user?.ngay_sinh,
+          email: data?.thong_tin_profile_user?.email,
+          so_dien_thoai: data?.thong_tin_profile_user?.so_dien_thoai,
+          gioi_tinh: data?.thong_tin_profile_user?.gioi_tinh,
         });
 
         if (data?.la_ban_be) {
           setIsFriend(1);
         } else {
-          if(data?.thong_tin_ve_gui_loi_moi_ket_ban == "HAS_SEND_REQUEST_ADD_FRIEND"){
+          if (
+            data?.thong_tin_ve_gui_loi_moi_ket_ban ==
+            'HAS_SEND_REQUEST_ADD_FRIEND'
+          ) {
             setIsFriend(-1);
             return;
           }
-          if(data?.thong_tin_ve_gui_loi_moi_ket_ban == "WAITTING_YOUR_RESPONE"){
+          if (
+            data?.thong_tin_ve_gui_loi_moi_ket_ban == 'WAITTING_YOUR_RESPONE'
+          ) {
             setIsFriend(-2);
             return;
           }
@@ -98,6 +126,7 @@ export default function TrangCaNhanMoiNguoi() {
             ngay_sinh: item?.ngay_sinh,
             gioi_tinh: item?.gioi_tinh,
             url_anh: item?.anh?.url,
+            ma_thu_cung: item?.ma_thu_cung,
           } as PetType;
         });
         setListPet(pets);
@@ -111,9 +140,10 @@ export default function TrangCaNhanMoiNguoi() {
         .getPostUserById(id, new Date())
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'data lan 1');
+          
             if (data?.payload?.length == 0) {
               setTimePost('');
+              setListPost([]);
               return;
             }
             const list: StatusType[] = data?.payload?.map((item: any) => {
@@ -128,9 +158,9 @@ export default function TrangCaNhanMoiNguoi() {
                 numOfComment: item?.numOfComment,
                 visibility: item?.visibility,
                 userInfor: {
-                  id: profile.id,
-                  name: profile.name,
-                  avatarURL: profile.url,
+                  id: item?.owner_infor?.ma_nguoi_dung,
+                  name: item?.owner_infor?.ten,
+                  avatarURL: item?.owner_infor?.anh?.url,
                 },
                 hasLiked: item?.hasLiked,
                 text: item?.text,
@@ -158,7 +188,7 @@ export default function TrangCaNhanMoiNguoi() {
           setTimePost('');
         });
     }
-  }, [profile.id]);
+  }, [profile.id, id]);
 
   useEffect(() => {
     if (id && profile?.id && timePost && timePost !== 'none') {
@@ -166,7 +196,7 @@ export default function TrangCaNhanMoiNguoi() {
         .getPostUserById(id, timePost)
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'data lan 1');
+       
             if (data?.payload?.length == 0) {
               setTimePost('');
               return;
@@ -182,9 +212,9 @@ export default function TrangCaNhanMoiNguoi() {
                 numOfLike: item?.numOfLike,
                 numOfComment: item?.numOfComment,
                 userInfor: {
-                  id: profile.id,
-                  name: profile.name,
-                  avatarURL: profile.url,
+                  id: item?.owner_infor?.ma_nguoi_dung,
+                  name: item?.owner_infor?.ten,
+                  avatarURL: item?.owner_infor?.anh?.url,
                 },
                 hasLiked: item?.hasLiked,
                 text: item?.text,
@@ -217,7 +247,7 @@ export default function TrangCaNhanMoiNguoi() {
           setTimePost('');
         });
     }
-  }, [profile.id, timePost]);
+  }, [profile.id, timePost, id]);
 
   useEffect(() => {
     if (profile?.id == acceptUser) {
@@ -226,22 +256,20 @@ export default function TrangCaNhanMoiNguoi() {
   }, [acceptUser]);
 
   useEffect(() => {
-    if(newRequestAddFriend?.senderID && profile?.id){
-      if(newRequestAddFriend?.senderID == profile?.id){
+    if (newRequestAddFriend?.senderID && profile?.id) {
+      if (newRequestAddFriend?.senderID == profile?.id) {
         setIsFriend(-2);
       }
     }
-
-  }, [newRequestAddFriend?.senderID])
+  }, [newRequestAddFriend?.senderID]);
 
   useEffect(() => {
-    if(newFriendId && profile?.id){
-      if(newFriendId == profile?.id){
+    if (newFriendId && profile?.id) {
+      if (newFriendId == profile?.id) {
         setIsFriend(1);
       }
     }
-
-  }, [newFriendId])
+  }, [newFriendId]);
 
   function handleUnfriend() {
     if (profile?.id) {
@@ -250,7 +278,7 @@ export default function TrangCaNhanMoiNguoi() {
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Đã hủy kết bạn với ${profile?.name}`, {
-              variant: 'success',
+              variant: 'info',
             });
             setIsFriend(0);
           } else {
@@ -277,7 +305,7 @@ export default function TrangCaNhanMoiNguoi() {
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Đã gửi lời mời kết bạn với ${profile?.name}`, {
-              variant: 'success',
+              variant: 'info',
             });
             setIsFriend(-1);
           } else {
@@ -296,26 +324,63 @@ export default function TrangCaNhanMoiNguoi() {
         });
     }
   }
-
-  function handleSubmit(type: string) {
-    if(profile?.id){
-      friendApi.responeAddFriend(profile?.id, type).then((data) => {
-        console.log(data, ' dtata nef');
-        if (data?.status == 200) {
-          if (data?.payload?.accepted) {
-            enqueueSnackbar(`Kết bạn với ${profile?.name} thành công`, {
-              variant: 'success',
-            });
-            setIsFriend(1);
-          } else {
-            enqueueSnackbar(`Xóa lời mời kết bạn với ${profile?.name} thành công`, {
-              variant: 'success',
+  function thuHoiLoiMoi() {
+    if (profile?.id) {
+      friendApi
+        .removeRequestAddFriendById(profile?.id)
+        .then((data) => {
+          if (data?.status == 200) {
+            enqueueSnackbar(`Đã thu hồi lời mời kết bạn với ${profile?.name}`, {
+              variant: 'info',
             });
             setIsFriend(0);
-          };
-          
-        }
-      });
+          } else {
+            enqueueSnackbar(
+              `${data?.message || 'Thất bại vui lòng thử lại !'}`,
+              {
+                variant: 'error',
+              }
+            );
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message || 'Thất bại vui lòng thử lại !'}`, {
+            variant: 'error',
+          });
+          setIsFriend(0);
+        });
+    }
+  }
+
+  function handleSubmit(type: string) {
+    if (profile?.id) {
+      friendApi
+        .responeAddFriend(profile?.id, type)
+        .then((data) => {
+     
+          if (data?.status == 200) {
+            if (data?.payload?.accepted) {
+              enqueueSnackbar(`Kết bạn với ${profile?.name} thành công`, {
+                variant: 'info',
+              });
+              setIsFriend(1);
+            } else {
+              enqueueSnackbar(
+                `Xóa lời mời kết bạn với ${profile?.name} thành công`,
+                {
+                  variant: 'info',
+                }
+              );
+              setIsFriend(0);
+            }
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(`${err?.message}`, {
+            variant: 'error',
+          });
+          setIsFriend(0);
+        });
     }
   }
 
@@ -323,7 +388,7 @@ export default function TrangCaNhanMoiNguoi() {
     <>
       <Box
         sx={{
-          paddingBottom: '120px',
+          paddingBottom: '20px',
         }}
       >
         <Box
@@ -331,9 +396,17 @@ export default function TrangCaNhanMoiNguoi() {
             display: 'flex',
             alignItems: 'center',
             padding: '0 200px',
+            justifyContent: 'center',
           }}
         >
-          <img src={profile?.url} height={100} width={100} />
+          <img
+            style={{
+              borderRadius: '100%',
+            }}
+            src={profile?.url}
+            height={200}
+            width={200}
+          />
           <Box
             sx={{
               ml: '80px',
@@ -360,7 +433,14 @@ export default function TrangCaNhanMoiNguoi() {
                 <Button
                   onClick={handleUnfriend}
                   variant="contained"
-                  color="info"
+                  color="inherit"
+                  sx={{
+                    backgroundColor: 'rgb(14, 100, 126)',
+                    color: '#fff',
+                    '&:hover': {
+                      backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                    },
+                  }}
                 >
                   Hủy kết bạn
                 </Button>
@@ -369,45 +449,75 @@ export default function TrangCaNhanMoiNguoi() {
                 <Button
                   onClick={handleAddfriend}
                   variant="contained"
-                  color="info"
+                  color="inherit"
+                  sx={{
+                    backgroundColor: 'rgb(14, 100, 126)',
+                    color: '#fff',
+                    '&:hover': {
+                      backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                    },
+                  }}
                 >
                   Kết bạn
                 </Button>
               )}
 
               {isFriend == -1 && (
-                <Button disabled variant="contained" color="info">
-                  Đang chờ phản hồi
-                </Button>
+                <>
+                  <Button disabled variant="contained" color="info">
+                    Đang chờ phản hồi
+                  </Button>
+                  <Button
+                    onClick={thuHoiLoiMoi}
+                    variant="contained"
+                    color="inherit"
+                    sx={{
+                      ml: '12px',
+                      backgroundColor: 'rgb(14, 100, 126)',
+                      color: '#fff',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                      },
+                    }}
+                  >
+                    Thu hồi
+                  </Button>
+                </>
               )}
-                {isFriend == -2 && (
+              {isFriend == -2 && (
                 <Box
-                sx={{
-                  display: 'flex',
-                }}
-              >
-                <Button
-                  onClick={() => handleSubmit('accept')}
                   sx={{
-                    minWidth: '100px',
-                  }}
-                  variant="contained"
-                >
-                  Xác Nhận
-                </Button>
-                <Button
-                  onClick={() => handleSubmit('reject')}
-                  variant="contained"
-                  color="inherit"
-                  sx={{
-                    minWidth: '100px',
-                    color: 'gray',
-                    ml: '20px',
+                    display: 'flex',
                   }}
                 >
-                  Xóa
-                </Button>
-              </Box>
+                  <Button
+                    onClick={() => handleSubmit('accept')}
+                    color="inherit"
+                    sx={{
+                      minWidth: '100px',
+                      backgroundColor: 'rgb(14, 100, 126)',
+                      color: '#fff',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                      },
+                    }}
+                    variant="contained"
+                  >
+                    Xác Nhận
+                  </Button>
+                  <Button
+                    onClick={() => handleSubmit('reject')}
+                    variant="contained"
+                    color="inherit"
+                    sx={{
+                      minWidth: '100px',
+                      color: 'gray',
+                      ml: '20px',
+                    }}
+                  >
+                    Xóa
+                  </Button>
+                </Box>
               )}
             </Box>
             <Typography
@@ -420,15 +530,96 @@ export default function TrangCaNhanMoiNguoi() {
             >
               {`@${profile.user}`}
             </Typography>
+
             <Typography
               sx={{
                 fontFamily: 'quicksand',
                 fontSize: '14px',
                 fontWeight: '500',
                 mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
-              Tiểu sử
+              <EmailIcon
+                sx={{
+                  color: 'gray',
+                  fontSize: '20px',
+                  marginRight: '6px',
+                }}
+              />
+
+              {profile?.email}
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontSize: '14px',
+                fontWeight: '500',
+                mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <LocalPhoneIcon
+                sx={{
+                  color: 'gray',
+                  fontSize: '20px',
+                  marginRight: '6px',
+                }}
+              />
+
+              {profile?.so_dien_thoai}
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontSize: '14px',
+                fontWeight: '500',
+                mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <CalendarMonthIcon
+                sx={{
+                  color: 'gray',
+                  fontSize: '20px',
+                  marginRight: '6px',
+                }}
+              />
+
+              { profile?.ngay_sinh && moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
+            </Typography>
+
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontSize: '14px',
+                fontWeight: '500',
+                mt: '8px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {profile?.gioi_tinh ? (
+                <FemaleIcon
+                  sx={{
+                    color: 'gray',
+                    fontSize: '24px',
+                    marginRight: '6px',
+                  }}
+                />
+              ) : (
+                <MaleIcon
+                  sx={{
+                    color: 'gray',
+                    fontSize: '24px',
+                    marginRight: '6px',
+                  }}
+                />
+              )}
+              {profile?.gioi_tinh ? 'Nữ' : 'Nam'}
             </Typography>
             <Box
               sx={{
@@ -454,7 +645,7 @@ export default function TrangCaNhanMoiNguoi() {
                     fontSize: '15px',
                   }}
                 >
-                  6
+                  {listPost?.length || 0}
                 </span>{' '}
                 bài viết{' '}
               </Typography>
@@ -520,13 +711,33 @@ export default function TrangCaNhanMoiNguoi() {
           <Box
             sx={{
               maxWidth: '50vw',
+              width: '100%',
               display: tab == 'post' ? 'block' : 'none',
             }}
           >
-            {listPost &&
-              listPost?.map((status) => {
-                return <PostComponent status={status} />;
-              })}
+            {listPost?.length ? (
+              listPost?.map((status,index) => {
+                return <PostComponent onRemove={() => {
+                  const newList = deepCopy(listPost);
+                  newList.splice(index, 1);
+                  setListPost(newList);
+                 }} status={status} />;
+              })
+            ) : (
+              <>
+                <Typography
+                  align="center"
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontSize: '16px',
+                    fontWeight: '500',
+                    color: 'gray',
+                  }}
+                >
+                  Chưa có bài viết{' '}
+                </Typography>
+              </>
+            )}
           </Box>
           <Box
             sx={{
@@ -591,20 +802,20 @@ export default function TrangCaNhanMoiNguoi() {
             )}
           </Box>
         </Box>
-        {timePost && tab == "post" && (
+        {timePost && tab == 'post' && (
           <Typography
             align="center"
             sx={{
               fontFamily: 'quicksand',
-              fontWeight: '500',
+              fontWeight: '600',
               fontSize: '15px',
               margin: '16px 16px 10px 0px',
-              color: '#0c4195',
+              color: 'rgb(14, 100, 126)',
               textDecoration: 'underline',
               cursor: 'pointer',
             }}
             onClick={() => {
-              setTimePost(listPost[listPost?.length - 1]?.createAt ||"");
+              setTimePost(listPost[listPost?.length - 1]?.createAt || '');
             }}
           >
             {' '}

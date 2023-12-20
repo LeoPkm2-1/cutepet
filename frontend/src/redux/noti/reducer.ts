@@ -5,11 +5,13 @@ import { NotiActionEnum, NotiActionTypes } from './action';
 type NotiState = {
   numNoti: number;
   isHaveNewNoti: boolean;
+  newId: string;
 };
 
 const initState = Object.freeze<NotiState>({
   numNoti: 0,
   isHaveNewNoti: false,
+  newId: "",
 });
 
 export default function (
@@ -36,6 +38,14 @@ export default function (
         isHaveNewNoti: !state.isHaveNewNoti,
       };
     }
+
+    case NotiActionEnum.SET_NEW_ID: {
+      return {
+        ...state,
+        newId: action.payload,
+      };
+    }
+
 
     case NotiActionEnum.RESET: {
       return initState;

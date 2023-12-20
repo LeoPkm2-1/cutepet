@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "thuy",
+							"value": "karendurham",
 							"type": "text"
 						},
 						{
@@ -451,7 +451,7 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "6545b0929d829001b64f5dd0",
+							"value": "65561fa45b4503906b609533",
 							"type": "text"
 						},
 						{
@@ -572,7 +572,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_4}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -584,12 +584,12 @@
 					"urlencoded": [
 						{
 							"key": "reply_id",
-							"value": "6545a85d8f0d07ad15bd7d8d",
+							"value": "65697981e92f526f137528ec",
 							"type": "text"
 						},
 						{
 							"key": "content",
-							"value": "thành rep updated rồi nha",
+							"value": "Dũng rep updated rồi nha",
 							"type": "text"
 						}
 					]
@@ -618,7 +618,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -630,7 +630,7 @@
 					"urlencoded": [
 						{
 							"key": "reply_id",
-							"value": "6545ad119d829001b64f5d9e",
+							"value": "65697981e92f526f137528ec",
 							"type": "text"
 						}
 					]
@@ -659,7 +659,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -671,7 +671,7 @@
 					"urlencoded": [
 						{
 							"key": "cmt_id",
-							"value": "65459cc8bbf363cd325af860",
+							"value": "6561660b62fd1ddcea138304",
 							"type": "text"
 						}
 					]
@@ -712,7 +712,7 @@
 					"urlencoded": [
 						{
 							"key": "post_id",
-							"value": "654599ed01b55d7d2f7928dd",
+							"value": "6562aabf0acaafe756be1eb7",
 							"type": "text"
 						}
 					]
@@ -1077,9 +1077,8 @@
 						},
 						{
 							"key": "num",
-							"value": "4",
-							"type": "text",
-							"disabled": true
+							"value": "2",
+							"type": "text"
 						}
 					]
 				},
@@ -1537,7 +1536,7 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "654f9e8f479ad1da822047b4",
+							"value": "657086c7d1bbd4fc3e2f3f5a",
 							"type": "text"
 						}
 					]
@@ -1619,12 +1618,12 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "654f9e8f479ad1da822047b4",
+							"value": "657086c7d1bbd4fc3e2f3f5a",
 							"type": "text"
 						},
 						{
 							"key": "comment",
-							"value": "vui quá 123",
+							"value": "a",
 							"type": "text"
 						}
 					]
@@ -1926,7 +1925,7 @@
 					"urlencoded": [
 						{
 							"key": "article_id",
-							"value": "6549106cd55fe46e0f9dd857",
+							"value": "657086c7d1bbd4fc3e2f3f5a",
 							"type": "text"
 						}
 					]
@@ -2241,8 +2240,7 @@
 						{
 							"key": "num",
 							"value": "1",
-							"type": "text",
-							"disabled": true
+							"type": "text"
 						}
 					]
 				},
@@ -2440,7 +2438,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -2449,7 +2447,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"post_id\":\"6550ecdbe158c8fc09206db2\",\n    \"text\": \"ahihi\",\n    \"visibility\":\"PUBLIC\",\n   \"taggedUsersId\":[3,4,5],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa\"]\n    }\n}",
+					"raw": "{\n    \"post_id\":\"655feb605232b05af79727e3\",\n    \"text\": \"ahihi xin chào\",\n    \"visibility\":\"PRIVATE\",\n   \"taggedUsersId\":[3,4,5],\n   \"myPetIds\":[],\n    \"media\": {\n        \"type\":\"images\",\n        \"data\":[\"https://down-vn.img.susercontent.com/file/9dc467fc279064c555d502ddfbad06fa\"]\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2615,6 +2613,11 @@
 							"key": "article_id",
 							"value": "65555eee151a2e67690ca296",
 							"type": "text"
+						},
+						{
+							"key": "report_Reason",
+							"value": "tệ",
+							"type": "text"
 						}
 					]
 				},
@@ -2656,6 +2659,11 @@
 							"key": "post_id",
 							"value": "654fae52a09d67af78165cb9",
 							"type": "text"
+						},
+						{
+							"key": "report_Reason",
+							"value": "tệ lắm",
+							"type": "text"
 						}
 					]
 				},
@@ -2691,13 +2699,14 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"index\":1,\n    \"PostIdsHaveRendered\":[\"123456789012123456789138\",\"123456789012123456789118\",\"123456789012123456789132\",\"655f83f78c54dd810bb61689\",\n\"655f83ef8c54dd810bb61687\"]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "index",
+							"value": "8",
+							"type": "text"
 						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3000/post/statusPost/getPostForNewsfeed",
@@ -2976,67 +2985,6 @@
 			"response": []
 		},
 		{
-			"name": "capnhatthongtinthucung",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjoxLCJ0ZW4iOiJOYW0iLCJuZ2F5X3NpbmgiOiIxOTkxLTA5LTI4VDE3OjAwOjAwLjAwMFoiLCJ0YWlfa2hvYW4iOiJuYW0iLCJlbWFpbCI6Im5hbUBnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY3OCIsImdpb2lfdGluaCI6MSwiaWF0IjoxNjkxOTgwODMzLCJleHAiOjE2OTE5ODM4MzN9.0lpa7HU0dz6EMoAJCnEkzvfvybDKFw4xL-0FMa4qYIOv_xOi9MPXzyNB6lQDykVwn9Hx0ZkSKGq0s42mXD1cgw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "ten_thu_cung",
-							"value": "tony-2",
-							"type": "text"
-						},
-						{
-							"key": "ngay_sinh",
-							"value": "2019-10-14",
-							"type": "text"
-						},
-						{
-							"key": "gioi_tinh",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "ghi_chu",
-							"value": "mập béo lười",
-							"type": "text"
-						},
-						{
-							"key": "ma_giong",
-							"value": "202",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/pet/capnhatthongtin/18",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"pet",
-						"capnhatthongtin",
-						"18"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "70_getUnReadNotiStartFrom",
 			"request": {
 				"auth": {
@@ -3056,13 +3004,14 @@
 					"urlencoded": [
 						{
 							"key": "index",
-							"value": "1",
+							"value": "0",
 							"type": "text"
 						},
 						{
 							"key": "num",
 							"value": "2",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -3107,12 +3056,14 @@
 						{
 							"key": "before",
 							"value": "2023-11-23T16:55:11z",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						},
 						{
 							"key": "num",
 							"value": "",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -3189,7 +3140,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"searchKey\":\"\",\n    \"tags\":[],\n    \"index\":2,\n    \"num\":1\n}",
+					"raw": "{\n    \"searchKey\":\"\",\n    \"tags\":[\"cách chăm sóc\"],\n    \"sortBy\":\"SCORE_DESC\",\n    \"authorName\":\"Hung\",\n    \"index\":0,\n    \"num\":10\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3207,6 +3158,288 @@
 						"post",
 						"article",
 						"filterArticles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "74_friend_getListSuggestedFriends",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:3000/friend/getListSuggestedFriends",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"getListSuggestedFriends"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "75_friend_getListOfAllUserrecievedRequestAddFriendFromMe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_4}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/friend/getListOfAllUserrecievedRequestAddFriendFromMe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"friend",
+						"getListOfAllUserrecievedRequestAddFriendFromMe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "76_getPostBypost_id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "post_id",
+							"value": "6550dec7bd7587177b41a789",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/getPost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"getPost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "77_capnhatthongtinthucung",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ten_thu_cung",
+							"value": "tony-2",
+							"type": "text"
+						},
+						{
+							"key": "ngay_sinh",
+							"value": "2019-10-14",
+							"type": "text"
+						},
+						{
+							"key": "gioi_tinh",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "ghi_chu",
+							"value": "mập béo lười",
+							"type": "text"
+						},
+						{
+							"key": "ma_giong",
+							"value": "202",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/pet/capnhatthongtin/18",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"pet",
+						"capnhatthongtin",
+						"18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "78_pet_capnhatanhdaidien",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "url_anh",
+							"value": "https://i.pinimg.com/236x/e4/21/92/e42192b0682ede9d80d92260fb5e17cd.jpg",
+							"type": "text"
+						},
+						{
+							"key": "pet_id",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/pet/capnhatanhdaidien",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"pet",
+						"capnhatanhdaidien"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "79_article_getAllAuthorOfArticle",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/post/article/getAllAuthorOfArticle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"getAllAuthorOfArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "80_article_filterArticles_v2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"searchKey\":\"\",\n    \"tags\":[\"cách chăm sóc\"],\n    \"sortBy\":\"SCORE_DESC\",\n    \"authorId\":3,\n    \"index\":0,\n    \"num\":5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/article/filterArticles_v2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"article",
+						"filterArticles_v2"
 					]
 				}
 			},
@@ -3267,47 +3500,6 @@
 					"port": "3000",
 					"path": [
 						"logout"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getPostBypost_id",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "post_id",
-							"value": "6550dec7bd7587177b41a789",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/post/statusPost/getPost",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"post",
-						"statusPost",
-						"getPost"
 					]
 				}
 			},

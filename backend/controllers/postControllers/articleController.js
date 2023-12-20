@@ -556,11 +556,12 @@ async function editArticleController(req, res) {
 }
 
 const reportArticleController = async (req, res) => {
-  const { article_id } = req.body;
+  const { article_id, report_Reason } = req.body;
   const user_report_id = req.auth_decoded.ma_nguoi_dung;
   const reportProcess = await articleHelper.reportArticle(
     article_id,
     user_report_id,
+    report_Reason,
     true
   );
   res.status(200).json(reportProcess);
@@ -675,9 +676,72 @@ const filterArticlesController = async (req, res) => {
   }
 };
 
-// const filterArticleController = async (req, res) => {
-//   res.send("ahi jjaja");
-// };
+const filterArticlesController_2 = async (req, res) => {
+  const { FILTER_PARAMS } = req.body;
+  const articles = await articleModel
+    .filterArticleModel(FILTER_PARAMS)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  // console.log(FILTER_PARAMS.filterObj);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(articles);
+  const totalNumOfArticles = await articleModel
+    .getTotalNumOfArticleFilter(FILTER_PARAMS)
+    .then((data) =>
+      FILTER_PARAMS.type == "FIND"
+        ? data.payload
+        : data.payload.length <= 0
+        ? 0
+        : data.payload[0].totalNumOfArticles
+    );
+  // console.log({ totalNumOfArticles });
+  const data = {
+    articles: articles,
+    totalNumOfArticles: totalNumOfArticles,
+    remainNumOfArticles:
+      FILTER_PARAMS.index + articles.length - 1 >= totalNumOfArticles - 1
+        ? 0
+        : totalNumOfArticles - 1 - (FILTER_PARAMS.index + articles.length - 1),
+  };
+  res.status(200).json(new Response(200, data, ""));
+};
+
+const getAllAuthorOfArticleController = async (req, res) => {
+  const AllAuthorId = await articleModel
+    .getAllAuthorIdOfArticle()
+    .then((data) => data.payload.map((userid) => parseInt(userid)));
+  const allAuthor = await userHelper.getUserPublicInforByListIds(AllAuthorId);
+
+  res.status(200).json(new Response(200, allAuthor, ""));
+};
+
+const filterArticlesController_3 = async (req, res) => {
+  const { FILTER_PARAMS } = req.body;
+  const articles = await articleModel
+    .filterArticleModel(FILTER_PARAMS)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  // console.log(FILTER_PARAMS.filterObj);
+  await articleHelper.insertUserWriteArticleInforToListOfArticle(articles);
+  const totalNumOfArticles = await articleModel
+    .getTotalNumOfArticleFilter(FILTER_PARAMS)
+    .then((data) =>
+      FILTER_PARAMS.type == "FIND"
+        ? data.payload
+        : data.payload.length <= 0
+        ? 0
+        : data.payload[0].totalNumOfArticles
+    );
+  // console.log({ totalNumOfArticles });
+  const data = {
+    articles: articles,
+    totalNumOfArticles: totalNumOfArticles,
+    remainNumOfArticles:
+      FILTER_PARAMS.index + articles.length - 1 >= totalNumOfArticles - 1
+        ? 0
+        : totalNumOfArticles - 1 - (FILTER_PARAMS.index + articles.length - 1),
+  };
+  res.status(200).json(new Response(200, data, ""));
+};
 
 module.exports = {
   addArticleControler,
@@ -703,5 +767,8 @@ module.exports = {
   reportArticleController,
   getArticlesByIndexAndNumController,
   filterArticlesController,
+  filterArticlesController_2,
+  getAllAuthorOfArticleController,
+  filterArticlesController_3,
   // filterArticleController,
 };

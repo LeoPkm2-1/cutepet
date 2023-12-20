@@ -75,14 +75,10 @@ const LoginPage = (props: P) => {
   ) => {
     const errors: ErrorObj = {};
     if (!data.email) {
-      errors.email = 'Email is required.';
-    } else if (
-      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.email)
-    ) {
-      errors.email = 'Invalid email address.';
+      errors.email = 'Tài khoản không được để trống';
     }
     if (!data.password) {
-      errors.password = 'Password is required.';
+      errors.password = 'Mật khẩu không được để trống';
     }
     if (Object.keys(errors).length) {
       return errors;
@@ -90,8 +86,6 @@ const LoginPage = (props: P) => {
     return;
   };
 
-  // function loginWithUserCredential(
-  //   userCredential: UserCredential,
   //   provider: SocialProviderEnum
   // ) {
   //   return userCredential.user
@@ -131,24 +125,23 @@ const LoginPage = (props: P) => {
     const password =
       (e.currentTarget['password'] as HTMLInputElement)?.value ?? '';
 
-    // const errors = verifyData({ email, password });
-    // if (errors) {
-    //   setErrors(errors);
-    //   return;
-    // }
+    const errors = verifyData({ email, password });
+    if (errors) {
+      setErrors(errors);
+      return;
+    }
     setIsLoading(true);
 
     authApi
       .loginTest(email, password)
-      .then((res:any) => {
-        console.log(res, ' res');
-        if(res?.status ==200){
+      .then((res: any) => {
+
+        if (res?.status == 200) {
           if (res?.payload[0]?.token) {
             storage.setTokens(res.payload[0]?.token);
-            console.log('Thành còng token :', res.payload[0]?.token);
             dispatch(AuthActions.setAuth(true));
-            enqueueSnackbar('Đăng nhập thành công', { variant: 'success' });
-          } 
+            enqueueSnackbar('Đăng nhập thành công', { variant: 'info' });
+          }
           const profile: UserProfile = {
             id: res?.payload[0]?.ma_nguoi_dung,
             name: res?.payload[0]?.ten,
@@ -170,9 +163,12 @@ const LoginPage = (props: P) => {
         // navigate("/home");
         // Test no server
         setIsLoading(false);
-        enqueueSnackbar(`${err?.message || 'Lỗi đăng nhập. Vui lòng thử lại !' }`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          `${err?.message || 'Lỗi đăng nhập. Vui lòng thử lại !'}`,
+          {
+            variant: 'error',
+          }
+        );
       });
 
     // setIsLoading(true);
@@ -199,7 +195,7 @@ const LoginPage = (props: P) => {
   };
 
   // if (props.auth.mindfullyAuth && props.auth.firebaseUser) {
-    if (props.auth.mindfullyAuth) {
+  if (props.auth.mindfullyAuth) {
     return (
       <Navigate
         to={{
@@ -314,7 +310,11 @@ const LoginPage = (props: P) => {
             <Footer>
               <div style={{ textAlign: 'center' }}>
                 Bạn chưa có tài khoản ?{' '}
-                <StyledHref onClick={() => navigate("/register")}>Đang ký ngay !</StyledHref>
+                <StyledHref style={{
+                  cursor:"pointer"
+                }} onClick={() => navigate('/register')}>
+                  Đăng ký ngay !
+                </StyledHref>
               </div>
             </Footer>
           </ScrollView>
@@ -330,8 +330,8 @@ const LoginPage = (props: P) => {
           >
             <div>
               <AspectRatioImg
-                style={{ width: 64 }}
-                src={`${process.env.PUBLIC_URL}/assets/images/logo.png`}
+                style={{ width: 64, borderRadius: '100%' }}
+                src={`${process.env.PUBLIC_URL}/assets/images/cutepet.png`}
               />
             </div>
           </Backdrop>

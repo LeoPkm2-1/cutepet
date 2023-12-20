@@ -8,7 +8,7 @@ export interface StatusType {
   numOfLike?: number;
   numOfComment?: number;
   userInfor?: {
-    id: number | string;
+    id: number;
     name: string;
     avatarURL: string;
   };
@@ -16,11 +16,11 @@ export interface StatusType {
   text?: string;
   visibility?: string;
   taggedUsers?: {
-    id: string | number;
+    id:  number;
     name: string;
   }[];
   taggedPets?: {
-    id: string | number;
+    id:  number;
     name: string;
   }[];
   owner_id?: number;
@@ -33,4 +33,9 @@ export interface CommentType {
   text: string;
   createdAt: string;
   id: string;
+  numOfLike?: number;
+  numOfReply?: number;
+  postUserId?: number;
+  hasLiked?: boolean;
+
 }

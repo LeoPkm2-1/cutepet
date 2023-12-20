@@ -83,7 +83,7 @@ const updateBasicInforMid = async (req, res, next) => {
     req.body.so_dien_thoai = so_dien_thoai = so_dien_thoai.trim();
   }
   // kiểm tra giới tính
-  if (!gioi_tinh) {
+  if (!gioi_tinh && gioi_tinh != 0 ) {
     req.body.gioi_tinh = gioi_tinh = null;
   } else if (
     Number.isNaN(parseInt(gioi_tinh)) ||

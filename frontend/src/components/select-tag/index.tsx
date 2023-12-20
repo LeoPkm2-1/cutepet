@@ -1,7 +1,7 @@
 import * as React from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
-import { StyledFormControl, StyledTextField } from "../FormItem";
+import { Label, StyledFormControl, StyledTextField } from "../FormItem";
 import { Box, Chip, SvgIcon } from "@mui/material";
 import styled from "@emotion/styled";
 import { mdiCheck } from "@mdi/js";
@@ -51,11 +51,12 @@ export default function TagNameSelect(props: Props) {
 //   }, []);
 
   return (
-    <StyledFormControl sx={{ width: "300px" }} margin="dense">
+    <StyledFormControl sx={{ width: "100%" }} margin="dense">
       {/* <Label>{props.label ?? "Select user"}</Label> */}
       <Autocomplete
         readOnly = {!!props?.readonly}
         disabled = {!!props?.disabled}
+        
         multiple
         sx={{
           backgroundColor: props.disabled ? "#f9f9f9" : "transparent",

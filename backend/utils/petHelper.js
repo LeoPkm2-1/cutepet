@@ -181,12 +181,6 @@ const publicInforOfPet = async (petid) => {
   };
 };
 
-// (async function () {
-//   const data = await publicInforOfPet(1);
-//   const ma_thu_cung = data.ma_thu_cung;
-//   console.log(typeof ma_thu_cung, ma_thu_cung);
-// })();
-
 const publicInforOfListPet = async (petid_list) => {
   return await Promise.all(
     petid_list.map(async (petid) => await publicInforOfPet(petid))
@@ -216,8 +210,27 @@ const getOwnerIdOfPet = async (petid) => {
   return typeof data == "undefined" ? null : data.ma_nguoi_chu;
 };
 
+const getAllGiongOfPetsOwnedByUser = async (user_id) => {
+  const petList = await petModel
+    .getAllOwnsPetOf(user_id)
+    .then((data) => data.payload);
+  return petList.map((pet) => pet.ma_giong);
+};
+
+const getOwnPetIdsOfUserInListOfPetIds = async (userid, petid_list=[]) => {
+  petid_list = petid_list.map((petid) => parseInt(petid));
+  const allPetIdsOfUser = await petModel
+    .getAllOwnsPetOf(userid)
+    .then((data) => data.payload)
+    .then((listpet) => listpet.map((pet) => pet.ma_thu_cung));
+
+  // console.log({ allPetIdsOfUser });
+  return petid_list.filter((petId) => allPetIdsOfUser.includes(petId));
+};
+
+
 // (async function () {
-//   const data = await getOwnerIdOfPet(420);
+//   const data = await getOwnPetIdsOfUserInListOfPetIds(2,[2,40,2001]);
 //   console.log(data);
 // })();
 
@@ -234,4 +247,6 @@ module.exports = {
   publicInforOfListPet,
   getPetsIdOwnedByUserInListOfPetIds,
   getOwnerIdOfPet,
+  getAllGiongOfPetsOwnedByUser,
+  getOwnPetIdsOfUserInListOfPetIds,
 };

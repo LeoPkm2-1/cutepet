@@ -435,11 +435,12 @@ const updateArticle = async (article_id, edited_Article_Obj) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-const reportArticle = async (article_id, user_report_id) => {
+const reportArticle = async (article_id, user_report_id, reportReason = "") => {
   user_report_id = parseInt(user_report_id);
   const reportObject = new articleComposStructure.ReportArticle(
     article_id,
-    user_report_id
+    user_report_id,
+    reportReason
   );
   async function executor(collection) {
     return await collection.insertOne(reportObject);
@@ -542,11 +543,13 @@ const findArticlesByKeyWordInTitle = async (
 ) => {
   index = parseInt(index);
   let executor = undefined;
+  const patern = new RegExp("\\b" + keyWord + "\\b", "i");
   if (typeof num == "undefined") {
     executor = async (collection) => {
       return await collection
         .find({
-          $text: { $search: keyWord },
+          // $text: { $search: keyWord },
+          title: { $regex: patern },
           postType: articleComposStructure.Article.type,
         })
         .sort({
@@ -560,7 +563,8 @@ const findArticlesByKeyWordInTitle = async (
     executor = async (collection) => {
       return await collection
         .find({
-          $text: { $search: keyWord },
+          // $text: { $search: keyWord },
+          title: { $regex: patern },
           postType: articleComposStructure.Article.type,
         })
         .sort({
@@ -578,9 +582,11 @@ const findArticlesByKeyWordInTitle = async (
 };
 
 const getTotalNumOfArticleHaveKeyWordInTitle = async (keyWord) => {
+  const patern = new RegExp("\\b" + keyWord + "\\b", "i");
   async function executor(collection) {
     return await collection.countDocuments({
-      $text: { $search: keyWord },
+      // $text: { $search: keyWord },
+      title: { $regex: patern },
       postType: articleComposStructure.Article.type,
     });
   }
@@ -651,12 +657,15 @@ const findArticlesByKeyWordInTitleAndCategories = async (
 ) => {
   index = parseInt(index);
   let executor = undefined;
+  const patern = new RegExp("\\b" + keyWord + "\\b", "i");
   if (typeof num == "undefined") {
+    // console.log('heheh');
     executor = async (collection) => {
       return await collection
         .find({
           postType: articleComposStructure.Article.type,
-          $text: { $search: keyWord },
+          // $text: { $search: keyWord },
+          title: { $regex: patern },
           categories: { $all: list_of_categories },
         })
         .sort({
@@ -671,7 +680,8 @@ const findArticlesByKeyWordInTitleAndCategories = async (
       return await collection
         .find({
           postType: articleComposStructure.Article.type,
-          $text: { $search: keyWord },
+          // $text: { $search: keyWord },
+          title: { $regex: patern },
           categories: { $all: list_of_categories },
         })
         .sort({
@@ -692,10 +702,12 @@ const getTotalNumOfArticleHaveKeywWordInTitleAndCategories = async (
   keyWord,
   list_of_categories
 ) => {
+  const patern = new RegExp("\\b" + keyWord + "\\b", "i");
   async function executor(collection) {
     return await collection.countDocuments({
       postType: articleComposStructure.Article.type,
-      $text: { $search: keyWord },
+      // $text: { $search: keyWord },
+      title: { $regex: patern },
       categories: { $all: list_of_categories },
     });
   }
@@ -703,15 +715,177 @@ const getTotalNumOfArticleHaveKeywWordInTitleAndCategories = async (
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
+
+const filterArticleModel = async (filter_params) => {
+  const { type, filterObj, index, num, sortObj } = filter_params;
+  // index = parseInt(index);
+  let executor = undefined;
+  if (type == "FIND") {
+    executor = async (collection) => {
+      if (typeof num == "undefined") {
+        return await collection
+          .find(filterObj)
+          .sort(sortObj)
+          .skip(index)
+          .toArray();
+      } else {
+        return await collection
+          .find(filterObj)
+          .sort(sortObj)
+          .skip(index)
+          .limit(num)
+          .toArray();
+      }
+    };
+  } else {
+    executor = async (collection) => {
+      if (typeof num == "undefined") {
+        return await collection
+          .aggregate([
+            {
+              $match: filterObj,
+            },
+            {
+              $addFields: {
+                score: {
+                  $subtract: ["$numOfUpVote", "$numOfDownVote"],
+                },
+              },
+            },
+            {
+              $sort: sortObj,
+            },
+            {
+              $skip: index,
+            },
+          ])
+          .toArray();
+      } else {
+        return await collection
+          .aggregate([
+            {
+              $match: filterObj,
+            },
+            {
+              $addFields: {
+                score: {
+                  $subtract: ["$numOfUpVote", "$numOfDownVote"],
+                },
+              },
+            },
+            {
+              $sort: sortObj,
+            },
+            {
+              $skip: index,
+            },
+            {
+              $limit: num,
+            },
+          ])
+          .toArray();
+      }
+    };
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getTotalNumOfArticleFilter = async (filter_params) => {
+  const { type, filterObj, index, num, sortObj } = filter_params;
+  let executor = undefined;
+  if (type == "FIND") {
+    executor = async (collection) => {
+      return await collection.countDocuments(filterObj);
+    };
+  } else {
+    // console.log('heheh');
+    executor = async (collection) => {
+      return await collection
+        .aggregate([
+          {
+            $match: filterObj,
+          },
+          { $count: "totalNumOfArticles" },
+        ])
+        .toArray();
+    };
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getAllAuthorIdOfArticle = async () => {
+  async function executor(collection) {
+    return await collection
+      .distinct("owner_id", { postType: "ARTICLE" })
+      
+  }
+  return await nonSQLQuery(executor, "BaiViet")
+  .then((data) => new Response(200, data, ""))
+  .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // (async function () {
-//   const data = await getTotalNumOfArticleHaveListOfCategories(['CÁCH CHĂM SÓC','MÈO']);
+//   const data = await getAllAuthorIdOfArticle();
 //   console.log(data);
 // })()
 
+// async function test() {
+//   async function executor(collection) {
+//     return await collection
+//       .aggregate([
+//         {
+//           $match: {
+//             postType: "ARTICLE",
+//           },
+//         },
+//         {
+//           $addFields: {
+//             score: {
+//               $subtract: ["$numOfUpVote", "$numOfDownVote"],
+//             },
+//           },
+//         },
+//         {
+//           $project: {
+//             _id: 1,
+//             title: 1,
+//           },
+//         },
+//       ])
+//       .toArray();
+//   }
+//   return await nonSQLQuery(executor, "BaiViet")
+//     .then((data) => new Response(200, data, ""))
+//     .catch((err) => new Response(400, err, "", 300, 300));
+// }
+
+// async function test_1() {
+//   async function executor(collection) {
+//     return await collection
+//       .aggregate([
+//         {
+//           $match: {
+//             postType: "ARTICLE",
+//             // owner_id:109999
+//           },
+//         },
+//         { $count: "heee" },
+//       ])
+//       .toArray();
+//   }
+//   return await nonSQLQuery(executor, "BaiViet")
+//     .then((data) => new Response(200, data, ""))
+//     .catch((err) => new Response(400, err, "", 300, 300));
+// }
+
 // (async function () {
-//   const data = await getAllCommentsOfArticle("6548f00bb7221c7de43e80f6");
-//   console.log(data);
-// })();
+//   const data = await test_1();
+//   console.log(data.payload[0]);
+// })()
 
 module.exports = {
   addArticle,
@@ -755,4 +929,7 @@ module.exports = {
   getTotalNumOfArticleHaveListOfCategories,
   findArticlesByKeyWordInTitleAndCategories,
   getTotalNumOfArticleHaveKeywWordInTitleAndCategories,
+  filterArticleModel,
+  getTotalNumOfArticleFilter,
+  getAllAuthorIdOfArticle,
 };

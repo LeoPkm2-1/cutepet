@@ -97,8 +97,74 @@ async function deletePetInfor(pet_id) {
     });
 }
 
+const getListUserIdsHaveGiongOfPetMatchListOfGiong_1 = async (
+  listOfMaGiong,
+  limitNum = undefined
+) => {
+  let sqlStmt = "";
+  let data = [];
+  if (typeof limitNum == "number") {
+    sqlStmt = `select DISTINCT ma_nguoi_chu
+                    from ThuCung
+                    where ma_giong in (?) 
+                    limit  ?`;
+    data = [listOfMaGiong, limitNum];
+  } else {
+    sqlStmt = `select DISTINCT ma_nguoi_chu
+                  from ThuCung
+                  where ma_giong in (?)`;
+    data = [listOfMaGiong];
+  }
+  return await sqlQuery(sqlStmt, data)
+    .then(
+      (data) =>
+        new Response(
+          200,
+          data.map((maNguoiDungObj) => maNguoiDungObj.ma_nguoi_chu),
+          ""
+        )
+    )
+    .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
+};
+const getListUserIdsHaveGiongOfPetMatchListOfGiong_2 = async (
+  listOfMaGiong,
+  not_contain_user_id_list,
+  limitNum = undefined
+) => {
+  let sqlStmt = "";
+  let data = [];
+  if (typeof limitNum == "number") {
+    sqlStmt = `select DISTINCT ma_nguoi_chu
+                    from ThuCung
+                    where ma_giong in (?) and
+                          ma_nguoi_chu not in (?)
+                    limit  ?`;
+    data = [listOfMaGiong, not_contain_user_id_list, limitNum];
+  } else {
+    sqlStmt = `select DISTINCT ma_nguoi_chu
+                  from ThuCung
+                  where ma_giong in (?) and
+                        ma_nguoi_chu not in (?)`;
+    data = [listOfMaGiong, not_contain_user_id_list];
+  }
+  return await sqlQuery(sqlStmt, data)
+    .then(
+      (data) =>
+        new Response(
+          200,
+          data.map((maNguoiChuObj) => maNguoiChuObj.ma_nguoi_chu),
+          ""
+        )
+    )
+    .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
+};
+
 // (async function () {
-//   const data = await getAllOwnsPetOf(2);
+//   const data = await getListUserIdsHaveGiongOfPetMatchListOfGiong_1(
+//     [ 403],
+//     // [4,7],
+//     100
+//   );
 //   console.log(data);
 // })();
 
@@ -109,4 +175,6 @@ module.exports = {
   addPet,
   updatePetInfor,
   deletePetInfor,
+  getListUserIdsHaveGiongOfPetMatchListOfGiong_1,
+  getListUserIdsHaveGiongOfPetMatchListOfGiong_2,
 };

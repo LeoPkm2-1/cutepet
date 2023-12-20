@@ -118,7 +118,7 @@ tham khảo tại: **[article.md](./article.md)**
 
     (xem chi tiến trong summary)
 
-## 32. cập nhật lại hàm lấy bài viết trên newFeed
+## 32. ==OK== cập nhật lại hàm lấy bài viết trên newFeed
 
 (**thanh kéo trong load hình ảnh bị sai khi số lượng bài viết nhiều**)
 
@@ -149,7 +149,7 @@ tham khảo tại: **[article.md](./article.md)**
 
 lý do value của visibility là `JUST_FRIENDS` mà lại gửi lên là `friend` nên bị sai không chạy dc
 
-## 35. cập nhật lại giao diện của newfeed khi có 1 bài viết mới được đăng lên
+## 35. ==OK== cập nhật lại giao diện của newfeed khi có 1 bài viết mới được đăng lên
 
 xem chi tiết tại: **[Route_Struture/socket.md](./socket.md#10-thông-báo-khi-có-bài-viết-status-mới-được-đăng-lên)**
 
@@ -185,9 +185,9 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 48. xóa lời mời kết bạn cuối cùng đi
 
-## 49. lắng nghe khi có ai đó gửi lời mời kết bạn tới
+## 49.==OK== lắng nghe khi có ai đó gửi lời mời kết bạn tới
 
-## 50. up vote, downvote bài viết chia sẻ kiến thức, bình luận bài viết chia sẻ kiến thức
+## 50. ==OK== up vote, downvote bài viết chia sẻ kiến thức, bình luận bài viết chia sẻ kiến thức
 
 ## 51. --OK-- sai khi đánh dấu đọc thông báo là do truyền sai tham số
 
@@ -203,7 +203,7 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 56. ==OK== chưa loading bài viết trong trang cá nhân
 
-## 57. tùy vào loại thông báo mà có thể cho phép bấm vào hay không
+## 57. ==OK== tùy vào loại thông báo mà có thể cho phép bấm vào hay không
 
 (viết ra thông báo đó là thông báo nào đừng để noname)
 
@@ -221,32 +221,50 @@ Hủy xóa lời mời kết bạn khi lời mời đã dc gửi đi nhưng chư
 
 ## 64. xóa thú cưng
 
-## 65. khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diện
+## 65. thu hồi lời mời kết bạn
+
+tham khảo tại
+
+_chi tiết:_ **[Route_Struture/friend](./friend.md#4-thu-hồi-lời-mời-kết-bạn-xóa-lời-mời-kết-bạn-khi-nó-chưa-được-trả-lời)** và **postman số 68**
+
+## 66. ==OK== khi xóa bài viết chia sẻ trạng thái thì phải cho nó biến mất trên giao diệ
 
 ## 66. hiện thực like bài viết khi comment trong bài viết chia sẻ kiến thức
 
-## 67. khi xóa bài viết cần phải cho bài viết đó biến mất
+## 68. khi xóa bài viết cần phải cho bài viết đó biến mất
 
-## 68. con lăn trong mạng xãi hội có vấn đề
+## 69. ==OK== con lăn trong mạng xãi hội có vấn đề
 
-## 69. ảnh giao diện của thông báo nhảy ra góc dưới bên phải có vấn đề, trong cả trang mạng xã hội lẫn trang cá nhân
+## 70. ==OK== ảnh giao diện của thông báo nhảy ra góc dưới bên phải có vấn đề, trong cả trang mạng xã hội lẫn trang cá nhân
 
 ## 70. cần kiểm tra lại tất cả các hình ảnh và tên của thông báo góc bên phải khi socket đến
 
-## 71. load bài viết chia sẻ trạng thái theo thú cưng được tags
+## 72. load bài viết chia sẻ trạng thái theo thú cưng được tags
 
-## 72. resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
+## 73.==OK== resize lại ảnh trong bài viết của mạng xã hộ cho phù hợp
 
-## 73. trang cập nhật thông tin nguời dùng
+## 74. trang cập nhật thông tin nguời dùng
 
-## 74. đổi mật khẩu người dùng
+## 75. ==OK== đổi mật khẩu người dùng
 
-## 75. chỉnh sửa bài viết chia sẻ trạng thái
+## 76. chỉnh sửa bài viết chia sẻ trạng thái
 
-## 76. chỉnh sửa bài viết chia sẻ kiến thức
+## 77.==OK== chỉnh sửa bài viết chia sẻ kiến thức
 
-## 77. xóa bài viết chia sẻ kiến thức
+## 78. ==OK== xóa bài viết chia sẻ kiến thức
 
-## 78. giao diện gợi ý kết bạn
+## 79. ==OK== giao diện gợi ý kết bạn
+
+_chi tiết:_ **[Route_Struture/friend.md](./friend.md#5-lấy-danh-sách-người-dùng-gợi-ý-kết-bạn)** và **postman số 74**
+
+##
+
+##
+
+##
+
+##
+
+##
 
 ##
