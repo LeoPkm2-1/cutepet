@@ -25,10 +25,10 @@
 ## 139 ==OK == Fix ảnh đại diện update thú cưng
 ## 140. ==OK == Fix logo navigate
 
-## 141. --ERR-- thêm tootip
+## 141. ==OK== thêm tootip
 `Downvote viết liền giống Upvote`
 
-## 142. --DONE-- || ==ERR= Sửa thanh search
+## 142. ==OK== Sửa thanh search
 
 ## 143. ==OK== Fix bài viết của tôi
 
