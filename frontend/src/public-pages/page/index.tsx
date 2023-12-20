@@ -121,10 +121,14 @@ export default function PageRouting() {
       // 5
       socket.on('USER_IS_ONLINE', (data) => {
         dispatch(SocketActions.setOnline(data?.user_id));
+        console.log("Có online");
+        
       });
 
       // 6
       socket.on('USER_IS_OFFLINE', (data) => {
+        console.log("Có offline");
+
         dispatch(SocketActions.setOffline(data?.user_id));
       });
 
