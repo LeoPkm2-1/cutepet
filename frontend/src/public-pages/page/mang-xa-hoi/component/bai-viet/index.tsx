@@ -133,8 +133,8 @@ export default function PostComponent(props: Props) {
   }, [props?.idStatus, props?.status?.id, reload]);
 
   useEffect(() => {
-    if (props?.status?.id) {
-      postApi?.getIsUserFollowedPost(props?.status?.id).then((data) => {
+    if (props?.status?.id || props?.idStatus) {
+      postApi?.getIsUserFollowedPost(props?.status?.id || props?.idStatus || "").then((data) => {
         if (data?.status == 200) {
           if (data?.payload?.isFollowed) {
             setIsFollow(true);
@@ -1318,7 +1318,10 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
                         cursor: 'pointer',
                         paddingBottom: '0px',
                       }}
-                      onClick={() => setIsShowReply(false)}
+                      onClick={() => {
+                        setIsShowReply(false);
+                        setIsReply(false);
+                      }}
                     >
                       {' '}
                       Ẩn phản hồi

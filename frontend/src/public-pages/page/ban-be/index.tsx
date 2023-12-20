@@ -145,6 +145,8 @@ type PropsPerson = {
   user: string;
   isOnline?: boolean;
   userId?: number | string;
+  isFriend?: boolean;
+  onClickComponent?: () => void;
 };
 export function PersonComponent(props: PropsPerson) {
   const navigate = useNavigate();
@@ -249,6 +251,135 @@ export function PersonComponent(props: PropsPerson) {
         >
           Chat
         </Button> */}
+      </Box>
+    </>
+  );
+}
+
+export function PersonComponentSearch(props: PropsPerson) {
+  const navigate = useNavigate();
+  return (
+    <>
+      <Box
+        onClick={() => {
+          navigate(`/home/trang-ca-nhan-nguoi-dung/${props?.userId}`);
+          props?.onClickComponent?.();
+        }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginTop: '10px',
+          padding: '0 10px',
+          cursor: 'pointer',
+          borderRadius: '4px',
+          '&:hover': {
+            backgroundColor: 'rgb(99 93 93 / 5%)',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            position: 'relative',
+          }}
+        >
+          <img
+            height={50}
+            width={50}
+            style={{
+              objectFit: 'cover',
+              borderRadius: '50px',
+            }}
+            src={
+              props.url ||
+              'https://mega.com.vn/media/news/0406_anh-gai-xinh-115.jpg'
+            }
+          />
+          {/* {props?.isFriend && (
+            <FiberManualRecordIcon
+              sx={{
+                position: 'absolute',
+                color: 'green',
+                fontSize: '16px',
+                top: '38px',
+                left: '38px',
+              }}
+            />
+          )} */}
+          <Box
+            sx={{
+              marginLeft: '20px',
+            }}
+          >
+            <Box
+              sx={{
+                paddingTop: '5px',
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '700',
+                  fontSize: '16px',
+                  marginBottom: '5px',
+                }}
+              >
+                {props.name}
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '500',
+                  fontSize: '12px',
+                  marginBottom: '12px',
+                  color: 'gray',
+                }}
+              >
+                @{props.user || 'no.name'}
+              </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                display: 'flex',
+              }}
+            ></Box>
+          </Box>
+        </Box>
+        {!props?.isFriend ? (
+          <Button
+            size="small"
+            sx={{
+              height: '30px',
+              padding: '0 10px',
+              backgroundColor: '#e4e6eb',
+              color: '#000',
+              ':hover': {
+                backgroundColor: '#e4e6eb',
+              },
+            }}
+            variant="contained"
+          >
+            Chưa kết bạn
+          </Button>
+        ) : (
+          <Button
+            size="small"
+            sx={{
+              height: '30px',
+              padding: '0 10px',
+            }}
+            variant="contained"
+          >
+            Bạn bè
+          </Button>
+        )}
       </Box>
     </>
   );
@@ -416,8 +547,8 @@ function BanBe() {
   useEffect(() => {
     if (userOnline && friends?.length > 0) {
       if (friends?.find((friend) => friend?.userId == userOnline)) {
-        console.log("Có user online", userOnline );
-        
+        console.log('Có user online', userOnline);
+
         setReload(!reload);
       }
     }
@@ -426,7 +557,7 @@ function BanBe() {
   useEffect(() => {
     if (userOffline && friends?.length > 0) {
       if (friends?.find((friend) => friend?.userId == userOffline)) {
-        console.log("Có user offline", userOffline );
+        console.log('Có user offline', userOffline);
         setReload(!reload);
       }
     }

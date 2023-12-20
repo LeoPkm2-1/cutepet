@@ -62,20 +62,19 @@ const deletePet = (pet_id: number) => {
   });
 };
 
-const getPostHavePet = (pet_id: number |string, before: any, num: number) => {
+const getPostHavePet = (pet_id: number | string, before: any, num: number) => {
   return authRequest<any>({
     url: `/post/statusPost/getPostHavePet`,
     method: 'POST',
     body: {
       pet_id,
       before,
-      num
+      num,
     },
   });
 };
 
-
-const getPetById = (pet_id: number|string) => {
+const getPetById = (pet_id: number | string) => {
   return authRequest<any>({
     url: `/pet/infor`,
     method: 'POST',
@@ -85,7 +84,14 @@ const getPetById = (pet_id: number|string) => {
   });
 };
 
-const updatePetById = (pet_id: number|string, ten_thu_cung:string,ngay_sinh:string, gioi_tinh:number, ghi_chu: string, ma_giong: number) => {
+const updatePetById = (
+  pet_id: number | string,
+  ten_thu_cung: string,
+  ngay_sinh: string,
+  gioi_tinh: number,
+  ghi_chu: string,
+  ma_giong: number
+) => {
   return authRequest<any>({
     url: `/pet/capnhatthongtin/${pet_id}`,
     method: 'POST',
@@ -94,11 +100,21 @@ const updatePetById = (pet_id: number|string, ten_thu_cung:string,ngay_sinh:stri
       ngay_sinh,
       gioi_tinh,
       ghi_chu,
-      ma_giong
+      ma_giong,
     },
   });
 };
 
+const updatePhotoPet = (url_anh: string, pet_id: number) => {
+  return authRequest<any>({
+    url: `/pet/capnhatanhdaidien`,
+    method: 'POST',
+    body: {
+      url_anh,
+      pet_id,
+    },
+  });
+};
 
 const petApi = {
   getLoai,
@@ -108,7 +124,8 @@ const petApi = {
   deletePet,
   getPostHavePet,
   getPetById,
-  updatePetById
+  updatePetById,
+  updatePhotoPet,
 };
 
 export default petApi;

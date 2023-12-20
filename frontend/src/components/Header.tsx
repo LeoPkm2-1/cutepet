@@ -28,7 +28,7 @@ import { NotifycationItemClick } from './NotificationItem';
 import notiApi from '../api/noti';
 import { list } from 'firebase/storage';
 import friendApi from '../api/friend';
-import { PersonComponent } from '../public-pages/page/ban-be';
+import { PersonComponent, PersonComponentSearch } from '../public-pages/page/ban-be';
 import ArticleIcon from '@mui/icons-material/Article';
 import { NotiActions } from '../redux/noti';
 type Props = ReturnType<typeof mapStateToProps> & {
@@ -49,13 +49,15 @@ const Header = (props: Props) => {
       name: string;
       user: string;
       url: string;
-      id: number | string;
+      id: number;
+      isFriend: boolean;
     }[]
   >([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
   const [valueSearch, setValueSearch] = useState('');
   const numNoti = useSelector((state: RootState) => state.noti.numNoti);
+  const userInfoId = useSelector((state: RootState) => state.user.profile?.id);
   const navigate = useNavigate();
 
   // search phân trang
@@ -72,17 +74,20 @@ const Header = (props: Props) => {
     friendApi
       .searchPeople(valueSearch, indexPeople.current, numberSearch)
       .then((data) => {
-
         if (data?.status == 200) {
+          console.log('data', data);
           const list = data?.payload?.map((item: any) => {
             return {
               name: item?.ten,
               user: item?.tai_khoan,
               url: item?.anh?.url,
               id: item?.ma_nguoi_dung,
+              isFriend: item?.isFriend,
             };
           });
-          setFriends(list);
+          const newList1 = list?.filter((a:any) => a?.isFriend);
+          const newList2 = list?.filter((a:any) => !a?.isFriend);
+          setFriends([...newList1,...newList2]);
           if (data?.payload?.length < numberSearch) {
             setIsHasSearch(false);
           } else {
@@ -96,7 +101,6 @@ const Header = (props: Props) => {
     friendApi
       .searchPeople(valueSearch, indexPeople.current, numberSearch)
       .then((data) => {
-  
         if (data?.status == 200) {
           const list = data?.payload?.map((item: any) => {
             return {
@@ -104,6 +108,7 @@ const Header = (props: Props) => {
               user: item?.tai_khoan,
               url: item?.anh?.url,
               id: item?.ma_nguoi_dung,
+              isFriend: item?.isFriend,
             };
           });
           setFriends([...friends, ...list]);
@@ -129,16 +134,12 @@ const Header = (props: Props) => {
   const id1 = open1 ? 'simple-popover1' : undefined;
   const location = useLocation();
 
-
   const dispatch = useDispatch();
   useEffect(() => {
     notiApi.getNotificationStartFrom(0, 5).then((data: any) => {
-
-
       if (data?.status == 200) {
         let num = 0;
         const list = data?.payload?.map((noti: any) => {
-  
           if (!noti?.hasRead) {
             num++;
           }
@@ -212,14 +213,23 @@ const Header = (props: Props) => {
         </Button> */}
       </div>
 
-      <Title>Cute</Title>
+      <Title
+        style={{
+          cursor: 'pointer',
+        }}
+        onClick={() => navigate('/home/mang-xa-hoi')}
+      >
+        Cute
+      </Title>
       <StyledTypography
+        onClick={() => navigate('/home/mang-xa-hoi')}
         sx={{
           color: '#fff',
           padding: '4px 8px',
           borderRadius: '6px',
           margin: '0 10px',
           background: 'rgb(14, 100, 126)',
+          cursor: 'pointer',
         }}
         textAlign="center"
       >
@@ -461,18 +471,27 @@ const Header = (props: Props) => {
               padding: '20px',
             }}
           >
-            {friends?.length > 0
-              ? friends?.map((item) => {
+            {friends?.length > 0 ? (
+              <>
+                {friends?.map((item) => {
+                  if (`${item?.id}` === `${userInfoId}`) {
+                    return;
+                  }
                   return (
-                    <PersonComponent
+                    <PersonComponentSearch
+                      onClickComponent={() => handleClose1()}
                       name={item.name}
                       user={item.user}
                       url={item.url}
                       userId={item?.id}
+                      isFriend={item?.isFriend}
                     />
                   );
-                })
-              : 'Không tìm thấy'}
+                })}
+              </>
+            ) : (
+              'Không tìm thấy'
+            )}
 
             {isHasSearch && (
               <Typography
@@ -799,7 +818,6 @@ function NotifycationComponent(props: { onClick: () => void }) {
             };
           }
         });
-
 
         setNoti([...noti, ...list]);
         if (data?.payload?.length < 5) {

@@ -56,7 +56,9 @@ export default function ChinhSuaThuCung() {
         if (data?.status == 200) {
           const pet: PetType = {
             ten_thu_cung: data?.payload?.ten_thu_cung,
-            ngay_sinh: data?.payload?.ngay_sinh ? moment(data?.payload?.ngay_sinh).format("YYYY-MM-DD") : "",
+            ngay_sinh: data?.payload?.ngay_sinh
+              ? moment(data?.payload?.ngay_sinh).format('YYYY-MM-DD')
+              : '',
             gioi_tinh: data?.payload?.gioi_tinh,
             ghi_chu: data?.payload?.ghi_chu,
             url_anh: data?.payload?.anh?.url,
@@ -104,17 +106,22 @@ export default function ChinhSuaThuCung() {
   }, [pet?.ma_loai]);
 
   async function updatePet() {
-   
-    let url: string = '';
     setIsLoading(true);
     if (!pet?.ten_thu_cung?.trim()) {
       enqueueSnackbar(`Tên thú cưng bắt buộc`, { variant: 'error' });
       setIsLoading(false);
       return;
     }
-    // if (file) {
-    //   url = (await uploadTaskPromise(file)) as string;
-    // }
+    if (file) {
+      const url = (await uploadTaskPromise(file)) as string;
+      if (url && pet?.ma_thu_cung) {
+        petApi.updatePhotoPet(url, pet?.ma_thu_cung).catch((err) => {
+          enqueueSnackbar(`${err?.message || 'Cập nhật thú cưng thất bại'}`, {
+            variant: 'error',
+          });
+        });
+      }
+    }
     petApi
       .updatePetById(
         pet?.ma_thu_cung || 0,
@@ -132,7 +139,7 @@ export default function ChinhSuaThuCung() {
         }
       })
       .catch((err) => {
-        enqueueSnackbar(`${err?.message || 'Thêm thú cưng thất bại'}`, {
+        enqueueSnackbar(`${err?.message || 'Cập nhật thú cưng thất bại'}`, {
           variant: 'error',
         });
         setIsLoading(false);
@@ -254,7 +261,6 @@ export default function ChinhSuaThuCung() {
                       value={dayjs(pet?.ngay_sinh)}
                       onChange={(newValue) => {
                         if (newValue) {
-         
                           setPet({
                             ...pet,
                             ngay_sinh: newValue.format('YYYY-MM-DD'),

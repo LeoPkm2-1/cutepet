@@ -310,7 +310,9 @@ const LoginPage = (props: P) => {
             <Footer>
               <div style={{ textAlign: 'center' }}>
                 Bạn chưa có tài khoản ?{' '}
-                <StyledHref onClick={() => navigate('/register')}>
+                <StyledHref style={{
+                  cursor:"pointer"
+                }} onClick={() => navigate('/register')}>
                   Đăng ký ngay !
                 </StyledHref>
               </div>
