@@ -2,16 +2,20 @@ import {
   Box,
   Dialog,
   Divider,
+  Fade,
   Grid,
   IconButton,
   InputBase,
   Menu,
   MenuItem,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { ArticleType } from '../../../../../models/article';
 import parse from 'html-react-parser';
+import TextsmsIcon from '@mui/icons-material/Textsms';
+
 import articleApi from '../../../../../api/article';
 import {
   useLocation,
@@ -42,6 +46,7 @@ import { useShowDialog } from '../../../../../hooks/dialog';
 import Button from '../../../../../components/Button';
 import { StyledTextField } from '../../../../../components/FormItem';
 import { NotiActions } from '../../../../../redux/noti';
+import moment from 'moment';
 export default function BaiChiaSe() {
   const [article, setArticle] = useState<ArticleType>({
     id: '',
@@ -97,6 +102,8 @@ export default function BaiChiaSe() {
               numUpVote: data?.payload?.numOfUpVote,
               numDownVote: data?.payload?.numOfDownVote,
               user_id: data?.payload?.owner_infor?.ma_nguoi_dung,
+              createAt: data?.payload?.createAt,
+              numOfComment: data?.payload?.numOfComment,
             };
             setNumAve(
               data?.payload?.numOfUpVote - data?.payload?.numOfDownVote
@@ -216,6 +223,43 @@ export default function BaiChiaSe() {
           });
       }
       dispatch(NotiActions.setNewId(''));
+    }
+  }, [postIdNew]);
+
+  useEffect(() => {
+    if (id && id == postIdNew) {
+      articleApi
+        .getArticleById(id)
+        .then((data) => {
+          if (data?.status == 200) {
+            const art = {
+              id: data?.payload?._id,
+              title: data?.payload?.title,
+              main_image: data?.payload?.main_image,
+              intro: data?.payload?.intro,
+              content: data?.payload?.content,
+              categories: data?.payload?.categories,
+              user_avatar: data?.payload?.owner_infor?.anh?.url,
+              user_name: data?.payload?.owner_infor?.ten,
+              isUpVote: data?.payload?.hasUpVoted,
+              isDownVote: data?.payload?.hasDownVoted,
+              numUpVote: data?.payload?.numOfUpVote,
+              numDownVote: data?.payload?.numOfDownVote,
+              user_id: data?.payload?.owner_infor?.ma_nguoi_dung,
+              createAt: data?.payload?.createAt,
+            };
+            setNumAve(
+              data?.payload?.numOfUpVote - data?.payload?.numOfDownVote
+            );
+            setArticle(art);
+            setIsData(true);
+          } else {
+            setIsData(false);
+          }
+        })
+        .catch(() => {
+          setIsData(false);
+        });
     }
   }, [postIdNew]);
 
@@ -482,20 +526,36 @@ export default function BaiChiaSe() {
                   left: '280px',
                 }}
               >
-                <IconButton
-                  disabled={article?.isUpVote || profileId == article?.user_id}
-                  sx={{
-                    border:  article?.isDownVote || profileId == article?.user_id ? '1px solid #77737369' : '1px solid gray',
-                    padding: '5px',
+                <Tooltip
+                  classes={{
+                    tooltip: 'custom-tooltip',
                   }}
-                  onClick={upVote}
+                  TransitionComponent={Fade}
+                  TransitionProps={{ timeout: 600 }}
+                  placement="top"
+                  title={'Upvote'}
+                  key={'upvote'}
                 >
-                  <ArrowDropUpRoundedIcon
+                  <IconButton
+                    disabled={
+                      article?.isUpVote || profileId == article?.user_id
+                    }
                     sx={{
-                      fontSize: '32px',
+                      border:
+                        article?.isDownVote || profileId == article?.user_id
+                          ? '1px solid #77737369'
+                          : '1px solid gray',
+                      padding: '5px',
                     }}
-                  />
-                </IconButton>
+                    onClick={upVote}
+                  >
+                    <ArrowDropUpRoundedIcon
+                      sx={{
+                        fontSize: '32px',
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
 
                 <span
                   style={{
@@ -509,103 +569,172 @@ export default function BaiChiaSe() {
                   {' '}
                   {numAve}{' '}
                 </span>
-                <IconButton
-                  disabled={
-                    article?.isDownVote || profileId == article?.user_id
-                  }
-                  sx={{
-                    border:  article?.isDownVote || profileId == article?.user_id ? '1px solid #77737369' : '1px solid gray',
-                    padding: '5px',
+                <Tooltip
+                  classes={{
+                    tooltip: 'custom-tooltip',
                   }}
-                  onClick={downVote}
+                  TransitionComponent={Fade}
+                  TransitionProps={{ timeout: 600 }}
+                  placement="top"
+                  title={'Down vote'}
+                  key={'downvote'}
                 >
-                  <ArrowDropDownRoundedIcon
+                  <IconButton
+                    disabled={
+                      article?.isDownVote || profileId == article?.user_id
+                    }
                     sx={{
-                      fontSize: '32px',
+                      border:
+                        article?.isDownVote || profileId == article?.user_id
+                          ? '1px solid #77737369'
+                          : '1px solid gray',
+                      padding: '5px',
                     }}
-                  />
-                </IconButton>
+                    onClick={downVote}
+                  >
+                    <ArrowDropDownRoundedIcon
+                      sx={{
+                        fontSize: '32px',
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
                 {profileId == article?.user_id && (
                   <>
                     {isFollow ? (
-                      <IconButton
-                        sx={{
-                          border: '1px solid gray',
-                          padding: '10px',
-                          marginTop: '16px',
+                      <Tooltip
+                        classes={{
+                          tooltip: 'custom-tooltip',
                         }}
-                        onClick={unFollowArticle}
+                        TransitionComponent={Fade}
+                        TransitionProps={{ timeout: 600 }}
+                        placement="top"
+                        title={'Tắt thông báo'}
+                        key={'tat-thong-bao'}
                       >
-                        <NotificationsOffRoundedIcon
+                        <IconButton
                           sx={{
-                            fontSize: '22px',
+                            border: '1px solid gray',
+                            padding: '10px',
+                            marginTop: '16px',
                           }}
-                        />
-                      </IconButton>
+                          onClick={unFollowArticle}
+                        >
+                          <NotificationsOffRoundedIcon
+                            sx={{
+                              fontSize: '22px',
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
                     ) : (
-                      <IconButton
-                        sx={{
-                          border: '1px solid gray',
-                          padding: '10px',
-                          marginTop: '16px',
+                      <Tooltip
+                        classes={{
+                          tooltip: 'custom-tooltip',
                         }}
-                        onClick={followArticle}
+                        TransitionComponent={Fade}
+                        TransitionProps={{ timeout: 600 }}
+                        placement="top"
+                        title={'Bật thông báo'}
+                        key={'bat-thong-bao'}
                       >
-                        <NotificationsActiveRoundedIcon
+                        <IconButton
                           sx={{
-                            fontSize: '22px',
+                            border: '1px solid gray',
+                            padding: '10px',
+                            marginTop: '16px',
                           }}
-                        />
-                      </IconButton>
+                          onClick={followArticle}
+                        >
+                          <NotificationsActiveRoundedIcon
+                            sx={{
+                              fontSize: '22px',
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
                     )}
                   </>
                 )}
                 {profileId !== article?.user_id && (
-                  <IconButton
-                    sx={{
-                      border: '1px solid gray',
-                      padding: '10px',
-                      marginTop: '16px',
+                  <Tooltip
+                    classes={{
+                      tooltip: 'custom-tooltip',
                     }}
-                    onClick={() => setOpenFlag(true)}
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 600 }}
+                    placement="top"
+                    title={'Báo cáo'}
+                    key={'bao-cao'}
                   >
-                    <AssistantPhotoRoundedIcon
+                    <IconButton
                       sx={{
-                        fontSize: '22px',
+                        border: '1px solid gray',
+                        padding: '10px',
+                        marginTop: '16px',
                       }}
-                    />
-                  </IconButton>
+                      onClick={() => setOpenFlag(true)}
+                    >
+                      <AssistantPhotoRoundedIcon
+                        sx={{
+                          fontSize: '22px',
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 )}
                 {profileId === article?.user_id && (
                   <>
-                    <IconButton
-                      sx={{
-                        border: '1px solid gray',
-                        padding: '10px',
-                        marginTop: '20px',
+                    <Tooltip
+                      classes={{
+                        tooltip: 'custom-tooltip',
                       }}
-                      onClick={updateArticle}
+                      TransitionComponent={Fade}
+                      TransitionProps={{ timeout: 600 }}
+                      placement="top"
+                      title={'Chỉnh sửa'}
+                      key={'chinh-sua'}
                     >
-                      <BuildIcon
+                      <IconButton
                         sx={{
-                          fontSize: '22px',
+                          border: '1px solid gray',
+                          padding: '10px',
+                          marginTop: '20px',
                         }}
-                      />
-                    </IconButton>
-                    <IconButton
-                      sx={{
-                        border: '1px solid gray',
-                        padding: '10px',
-                        marginTop: '20px',
+                        onClick={updateArticle}
+                      >
+                        <BuildIcon
+                          sx={{
+                            fontSize: '22px',
+                          }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip
+                      classes={{
+                        tooltip: 'custom-tooltip',
                       }}
-                      onClick={removeArticle}
+                      TransitionComponent={Fade}
+                      TransitionProps={{ timeout: 600 }}
+                      placement="top"
+                      title={'Xóa'}
+                      key={'xoa'}
                     >
-                      <DeleteOutlineIcon
+                      <IconButton
                         sx={{
-                          fontSize: '22px',
+                          border: '1px solid gray',
+                          padding: '10px',
+                          marginTop: '20px',
                         }}
-                      />
-                    </IconButton>
+                        onClick={removeArticle}
+                      >
+                        <DeleteOutlineIcon
+                          sx={{
+                            fontSize: '22px',
+                          }}
+                        />
+                      </IconButton>
+                    </Tooltip>
                   </>
                 )}
               </Box>
@@ -660,6 +789,18 @@ export default function BaiChiaSe() {
                     {article.title?.length > 100
                       ? article.title?.substring(0, 100)
                       : article.title}
+                  </Typography>
+                  <Typography
+                    align="center"
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '500',
+                      fontSize: '12px',
+                      minWidth: '60px',
+                      mb: '10px',
+                    }}
+                  >
+                    {moment(article?.createAt).format('DD-MM-YYYY')}
                   </Typography>
                   <Box
                     sx={{
@@ -734,6 +875,27 @@ export default function BaiChiaSe() {
                     marginTop: '20px',
                   }}
                 />
+                <Typography
+                  align="right"
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    minWidth: '60px',
+                    mb: '12px',
+                  }}
+                >
+                  <span>{article?.numOfComment}</span>
+                  <TextsmsIcon
+                    sx={{
+                      color: '#8080808f',
+                      ml: '5px',
+                    }}
+                  />{' '}
+                </Typography>
                 <CreateComment
                   onSuccess={(cmt) => {
                     // setReloadComment(!reloadComment);
@@ -746,6 +908,10 @@ export default function BaiChiaSe() {
                     // }
                     const arr = [cmt];
                     setComments([...arr, ...comments]);
+                    setArticle({
+                      ...article,
+                      numOfComment: (article?.numOfComment || 0) + 1,
+                    });
                     indexCommentPost.current = indexCommentPost.current + 1;
                   }}
                   // idStatus={status?.id}

@@ -18,11 +18,11 @@ type Props = {
 export default function MixedBy(props: Props) {
   const [users, setUsers] = useState<PeopleType[]>([]);
   const filter = createFilterOptions<PeopleType>();
-  const userData = useSelector((state: RootState) => state.user);
+  const userInfo = useSelector((state: RootState) => state.user.profile);
   useEffect(() => {
     articleApi.getAllAuthorOfArticle().then((data) => {
       if (data?.status == 200) {
-        const listAuthor = data?.payload?.map((item: any) => {
+        const listAuthor: PeopleType[] = data?.payload?.map((item: any) => {
           return {
             name: item?.ten,
             id: item?.ma_nguoi_dung,
@@ -30,18 +30,23 @@ export default function MixedBy(props: Props) {
             url: item?.anh?.url,
           } as PeopleType;
         });
+        listAuthor.sort((a,b) => {
+          if(a?.id === userInfo?.id){
+            return -1;
+          }else {
+            return 0;
+          }
+        })
         setUsers(listAuthor);
       }
     });
-  }, [userData]);
+  }, [userInfo]);
 
   return (
     <Autocomplete
       size="small"
       value={props.value}
       onChange={(event, newValue) => {
-
-
         // if (typeof newValue === 'string') {
         //   props.onChange?.({ name: newValue, id: 0, user: '', numberPet: 0 });
         // setValue({
@@ -62,7 +67,6 @@ export default function MixedBy(props: Props) {
         if (typeof newValue === 'string') {
         } else if (newValue) {
           props.onChange?.(newValue);
-
         }
       }}
       filterOptions={(options, params) => {
@@ -103,7 +107,14 @@ export default function MixedBy(props: Props) {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar sx={{ marginRight: '10px' }} alt="img" src={option.url} />
-              {option.name || option.user}
+              {userInfo?.id && option.id && option.id == userInfo?.id ? (
+                <Box sx={{ marginLeft: '10px' }}>
+                  {option.name || option.user}
+                  {' ( Bạn ) '}
+                </Box>
+              ) : (
+                <>{option.name || option.user}</>
+              )}
             </Box>
             {/* {
               (option.id == userData.id && option.id) &&  (

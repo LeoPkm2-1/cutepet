@@ -73,8 +73,9 @@ export function TrangChiaSe() {
         num
       )
       .then((data) => {
-
         if (data?.status == 200) {
+          console.log('data', data);
+
           const list: ArticleType[] = data?.payload?.articles?.map(
             (art: any) => {
               return {
@@ -86,6 +87,10 @@ export function TrangChiaSe() {
                 categories: art?.categories,
                 user_name: art?.owner_infor?.ten,
                 user_avatar: art?.owner_infor?.anh?.url,
+                createAt: art?.createAt,
+                numDownVote: art?.numOfDownVote,
+                numUpVote: art?.numOfUpVote,
+                numOfComment: art?.numOfComment,
               } as ArticleType;
             }
           );
@@ -253,6 +258,7 @@ export function TrangChiaSe() {
               })}
               onChange={(v) => {
                 if (typeof (v?.value == 'string')) {
+                  setPage(1);
                   setTypeSort(v?.value as TypeSort);
                 }
               }}
