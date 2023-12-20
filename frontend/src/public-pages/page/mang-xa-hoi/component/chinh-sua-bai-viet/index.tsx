@@ -77,7 +77,7 @@ export default function UpdatePost(props: Props) {
         setPetsTag(props?.status?.taggedPets);
       }
     }
-  }, [props.status.id]);
+  }, [props.status]);
 
   useEffect(() => {
     if (friends) {
@@ -142,7 +142,7 @@ export default function UpdatePost(props: Props) {
               visibility: visibility,
               media: {
                 ...props?.status?.media,
-                data: [urlPhotoDefault],
+                data: [storageUrl],
               },
             };
             props.onSuccess(newStatus);

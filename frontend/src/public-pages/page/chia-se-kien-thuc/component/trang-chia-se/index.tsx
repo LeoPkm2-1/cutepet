@@ -235,7 +235,7 @@ export function TrangChiaSe() {
               }}
               variant="contained"
             >
-              Tạo Bài Chia Sẽ
+              Tạo Bài Chia Sẻ
             </Button>
           </Box>
 
