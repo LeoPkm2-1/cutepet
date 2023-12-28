@@ -8,6 +8,7 @@ import persistReducer from 'redux-persist/es/persistReducer';
 import { friendReducer } from './friend';
 import { notiReducer } from './noti';
 import { socketReducer } from './socket';
+import { scrollReducer } from './scroll';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -18,6 +19,7 @@ export const rootReducer = combineReducers({
   friend: friendReducer,
   noti:notiReducer,
   socket:socketReducer,
+  scroll: scrollReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
