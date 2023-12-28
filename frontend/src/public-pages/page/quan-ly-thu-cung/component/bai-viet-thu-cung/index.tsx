@@ -22,7 +22,8 @@ export default function BaiVietThuCung() {
   const [timePost, setTimePost] = useState('none');
   const [petInfo, setPetInfo] = useState<PetType>({});
   const profile = useSelector((state: RootState) => state.user.profile);
-  const [numberPost, setNumberPost] = useState(10);
+  const endPage = useSelector((state: RootState) => state.scroll.endPageHome);
+  const [numberPost, setNumberPost] = useState(5);
   const navigate = useNavigate();
   useEffect(() => {
     if (id) {
@@ -30,7 +31,6 @@ export default function BaiVietThuCung() {
         .getPostHavePet(id, new Date(), numberPost)
         .then((data) => {
           if (data?.status == 200) {
-       
             if (data?.payload?.length == 0) {
               setTimePost('');
               setListPost([]);
@@ -131,7 +131,6 @@ export default function BaiVietThuCung() {
         .getPostHavePet(id, timePost, numberPost)
         .then((data) => {
           if (data?.status == 200) {
-     
             if (data?.payload?.length == 0) {
               setTimePost('');
               return;
@@ -192,6 +191,12 @@ export default function BaiVietThuCung() {
         });
     }
   }, [profile?.id, timePost, id]);
+
+  useEffect(() => {
+    if (endPage && timePost) {
+      setTimePost(listPost[listPost?.length - 1]?.createAt || '');
+    }
+  }, [endPage]);
   return (
     <>
       {petInfo?.ma_thu_cung ? (
