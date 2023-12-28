@@ -5,7 +5,7 @@ import PostComponent from './component/bai-viet';
 import { Button, Divider, Grid, Typography } from '@mui/material';
 import CreatePost from './component/tao-bai-viet';
 import postApi from '../../../api/post';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StatusType } from '../../../models/post';
 import userApis from '../../../api/user';
 import LoiMoiKetBan from './component/loi-moi-ket-ban';
@@ -25,6 +25,9 @@ export default function MangXaHoi() {
   const [isPost, setIsPost] = useState(true);
   const newPostFromStore = useSelector(
     (state: RootState) => state?.socket?.newPost.post
+  );
+  const endPageHome = useSelector(
+    (state: RootState) => state.scroll.endPageHome
   );
   useEffect(() => {
     postApi.getPostForNewsfeed(indexPost, []).then((data: any) => {
@@ -131,15 +134,22 @@ export default function MangXaHoi() {
   }, [indexPost]);
 
   useEffect(() => {
-
     if (newPostFromStore?.id) {
       let list: StatusType[] = deepCopy(listPost);
       const arr: StatusType[] = [];
       arr.push(newPostFromStore);
       setListPost([...arr, ...list]);
-      
     }
   }, [newPostFromStore?.id]);
+  console.log('Lấy tiếp ngoai');
+
+  useEffect(() => {
+    if (endPageHome && isPost) {
+      console.log('Lấy tiếp');
+
+      setIndexPost(indexPost + 1);
+    }
+  }, [endPageHome]);
 
   return (
     <>
@@ -154,12 +164,17 @@ export default function MangXaHoi() {
           <CreatePost />
           {listPost &&
             listPost?.map((status, index) => {
-              return <PostComponent onRemove={() => {
-                let list: StatusType[] = deepCopy(listPost);
-                list.splice(index, 1);
-                setListPost(list);
-              // }} idStatus={status?.id} />;
-            }} status={status} />;
+              return (
+                <PostComponent
+                  onRemove={() => {
+                    let list: StatusType[] = deepCopy(listPost);
+                    list.splice(index, 1);
+                    setListPost(list);
+                    // }} idStatus={status?.id} />;
+                  }}
+                  status={status}
+                />
+              );
             })}
           {isPost && (
             <Typography

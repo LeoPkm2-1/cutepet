@@ -64,6 +64,10 @@ export default function TrangCaNhanMoiNguoi() {
     (state: RootState) => state?.socket.acceptFriend.idUser
   );
 
+  const endPage = useSelector(
+    (state: RootState) => state.scroll.endPageHome
+  );
+
   const { enqueueSnackbar } = useSnackbar();
   const [timePost, setTimePost] = useState('none');
 
@@ -270,6 +274,12 @@ export default function TrangCaNhanMoiNguoi() {
       }
     }
   }, [newFriendId]);
+
+  useEffect(() => {
+    if (timePost && tab == 'post' && endPage) {
+      setTimePost(listPost[listPost?.length - 1]?.createAt || '');
+    }
+  }, [endPage]);
 
   function handleUnfriend() {
     if (profile?.id) {
