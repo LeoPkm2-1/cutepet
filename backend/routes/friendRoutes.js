@@ -52,9 +52,19 @@ router.post(
   friendController.getListSuggestedFriendController
 );
 
+router.post(
+  "/getListSuggestedFriends_v2",
+  [
+    addFriendMid.preProccessSuggestFriendMid_v2,
+    addFriendMid.preProcessSuggestFriendNavMid,
+  ],
+  friendController.getListSuggestedFriendController_v2,
+  friendController.scoringForSuggestedFriendController
+);
+
 // get list of all user who has recieved request add friend from current user
 router.post(
-  '/getListOfAllUserrecievedRequestAddFriendFromMe',
+  "/getListOfAllUserrecievedRequestAddFriendFromMe",
   friendController.getListOfAllUserrecievedRequestAddFriendFromMe
-)
+);
 module.exports = router;

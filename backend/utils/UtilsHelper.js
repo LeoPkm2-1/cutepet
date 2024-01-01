@@ -68,6 +68,10 @@ const isValidVietnameseName = (name) => {
   return vietnameseNamePattern.test(name);
 };
 
+const areTwoSetsEqual = (setA, setB) => {
+  return [...setA].every((value) => setB.has(value)) && setA.size === setB.size;
+};
+
 module.exports = {
   filter_keys_in_Obj,
   filter_keys_in_list_Objs,
@@ -76,6 +80,7 @@ module.exports = {
   isPhoneNumberValid,
   isValidVietnameseName,
   generateNumRandomNumbersInRangeOf10,
+  areTwoSetsEqual,
 };
 
 // let obj = {

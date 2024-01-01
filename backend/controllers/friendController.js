@@ -4,6 +4,7 @@ const userHelper = require("./../utils/userHelper");
 const { Response } = require("./../utils/index");
 const userOnlineModel = require("./../models/UserOnline/userOnlineModel");
 const theodoiHelper = require("../utils/theodoiHelper");
+const suggestFriendModel = require("../models/goiYBanBe/suggestFriendModel");
 const {
   notifyRequestAddFriend,
   notifyAcceptAddFriend,
@@ -331,9 +332,7 @@ const getListSuggestedFriendController = async (req, res) => {
   const userSuggestInfor = await userHelper.getUserPublicInforByListIds(
     suggestedUserIdSortByScore
   );
-  res
-    .status(200)
-    .json(new Response(200, userSuggestInfor, ""));
+  res.status(200).json(new Response(200, userSuggestInfor, ""));
   return;
 };
 
@@ -357,6 +356,182 @@ const getListOfAllUserrecievedRequestAddFriendFromMe = async (req, res) => {
   res.status(200).json(new Response(200, listUserHaveRecievedMyRequest, ""));
   return;
 };
+
+const handleReturnListSuggestedFriend = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const { UN_SUGGESTED_FRIEND_IDS, DANH_SACH_MA_GIONG, NUM_OF_USER_SUGGEST } =
+    req.body;
+  const { returnSuggested } = req.body.ACTION;
+  let user_suggest_id = [];
+  if (returnSuggested == "RANDOM") {
+    const userid_list_match_pet = await petModel
+      .getListUserIdsHaveGiongOfPetMatchListOfGiong_2(
+        DANH_SACH_MA_GIONG,
+        UN_SUGGESTED_FRIEND_IDS,
+        Math.round(NUM_OF_USER_SUGGEST * 0.6)
+      )
+      .then((data) => data.payload);
+    const random_user_id_set = await userModel
+      .getUserIdThatNoteContainUsers(
+        [...userid_list_match_pet, ...UN_SUGGESTED_FRIEND_IDS],
+        NUM_OF_USER_SUGGEST
+      )
+      .then((data) => data.payload);
+    const random_user_id = userHelper.randomGetUserIdInlistId(
+      random_user_id_set,
+      NUM_OF_USER_SUGGEST - userid_list_match_pet.length
+    );
+    user_suggest_id = [...userid_list_match_pet, ...random_user_id];
+  } else {
+    const suggestRecord = await suggestFriendModel
+      .getSuggestedFriendForUser(user_id)
+      .then((data) => data.payload);
+    user_suggest_id = [...suggestRecord.suggestedFriends];
+  }
+  const usersSuggestedInfor = await userHelper.getUserPublicInforByListIds(
+    user_suggest_id
+  );
+  res.status(200).json(new Response(200, usersSuggestedInfor, ""));
+  // return;
+};
+const getListSuggestedFriendController_v2 = async (req, res, next) => {
+  const NUM_OF_USER_SUGGEST = 10;
+  req.body.NUM_OF_USER_SUGGEST = NUM_OF_USER_SUGGEST;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const { UN_SUGGESTED_FRIEND_IDS, DANH_SACH_MA_GIONG, FRIEND_IDS } = req.body;
+  // handle return list suggested friend
+  handleReturnListSuggestedFriend(req, res);
+  // handle update suggest record
+  let user_suggest_id = [];
+  // // user have same breed
+  const userid_list_match_pet = await petModel
+    .getListUserIdsHaveGiongOfPetMatchListOfGiong_2(
+      DANH_SACH_MA_GIONG,
+      UN_SUGGESTED_FRIEND_IDS,
+      Math.round(NUM_OF_USER_SUGGEST * 0.6)
+    )
+    .then((data) => data.payload);
+  // // random user
+  const random_user_id_set = await userModel
+    .getUserIdThatNoteContainUsers(
+      [...userid_list_match_pet, ...UN_SUGGESTED_FRIEND_IDS],
+      // NUM_OF_USER_SUGGEST - userid_list_match_pet.length
+      NUM_OF_USER_SUGGEST
+    )
+    .then((data) => data.payload);
+  const random_user_id = userHelper.randomGetUserIdInlistId(
+    random_user_id_set,
+    NUM_OF_USER_SUGGEST - userid_list_match_pet.length
+  );
+  user_suggest_id = [...userid_list_match_pet, ...random_user_id];
+  req.body.USER_SUGGEST_ID = user_suggest_id;
+  req.body.UN_SUGGESTED_FRIEND_IDS = [
+    ...user_suggest_id,
+    ...UN_SUGGESTED_FRIEND_IDS,
+  ];
+  // // friend of friend
+  const listFriendIdsOfFriends = await laBanBeModel
+    .getFriendOfFriendForUser(user_id, req.body.UN_SUGGESTED_FRIEND_IDS)
+    .then((data) => data.payload.map((idObj) => idObj.friend_of_friend_id));
+  req.body.USER_SUGGEST_ID = [
+    ...req.body.USER_SUGGEST_ID,
+    ...listFriendIdsOfFriends,
+  ];
+  req.body.UN_SUGGESTED_FRIEND_IDS = [
+    ...req.body.UN_SUGGESTED_FRIEND_IDS,
+    ...listFriendIdsOfFriends,
+  ];
+  next();
+  // console.log({ listFriendIdsOfFriends });
+  // console.log({ userid_list_match_pet });
+  // console.log({ random_user_id });
+  // console.log({ USER_SUGGEST_ID: req.body.USER_SUGGEST_ID });
+  // console.log({ UN_SUGGESTED_FRIEND_IDS: req.body.UN_SUGGESTED_FRIEND_IDS });
+};
+
+const timeScoreBetweenSuggestedCandidateAndUser = async (
+  user_id,
+  suggest_user_id
+) => {
+  const commonFriendsId = await laBanBeModel
+    .getCommonFriendIdsOfTwoDisTinctUsers(user_id, suggest_user_id)
+    .then((data) =>
+      data.payload.map((commonObjId) => commonObjId.common_friend_id)
+    );
+  if (commonFriendsId.length == 0) return 0;
+
+  const timeDate = await Promise.all(
+    commonFriendsId.map(async (commonId) => {
+      const timeStartOfUserAndCommon = await laBanBeModel
+        .startTimeOfFriendShipBetween(user_id, commonId)
+        .then((data) => data.payload[0].ngay_bat_dau);
+
+      const timeStartOfCommonAndCandidate = await laBanBeModel
+        .startTimeOfFriendShipBetween(commonId, suggest_user_id)
+        .then((data) => data.payload[0].ngay_bat_dau);
+
+      const delta_1 = new Date() - timeStartOfUserAndCommon; // milliseconds
+      const delta_2 = new Date() - timeStartOfCommonAndCandidate; // milliseconds
+      timeScore = (delta_1 * 3 + delta_2) / (1000 * 60 * 60 * 24 * 7);
+      // console.log(`${user_id} - ${commonId} - ${suggest_user_id}`);
+      return timeScore;
+    })
+  );
+  // console.log({ timeDate });
+  return Math.max(...timeDate);
+};
+
+const scoringForSuggestedFriendController = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const {
+    UN_SUGGESTED_FRIEND_IDS,
+    NUM_OF_USER_SUGGEST,
+    DANH_SACH_MA_GIONG,
+    USER_SUGGEST_ID,
+  } = req.body;
+  // console.log({ DANH_SACH_MA_GIONG });
+  req.body.TABLE_SCORES_FOR_SUGGEST = await Promise.all(
+    req.body.USER_SUGGEST_ID.map(async (suggest_user_id) => {
+      const numOfCommonFriend =
+        await laBanBeModel.getNumberOfCommonFriendOfTwoDisTinctUsers(
+          user_id,
+          suggest_user_id
+        );
+      const danhSachGiong = await petHelper
+        .getAllGiongOfPetsOwnedByUser(suggest_user_id)
+        .then((data) => [...new Set(data)]);
+      const danh_sach_giong_chung = commonMaGiongOfTwoDanhSachGiong(
+        danhSachGiong,
+        DANH_SACH_MA_GIONG
+      );
+      const commonFriendsId = await laBanBeModel
+        .getCommonFriendIdsOfTwoDisTinctUsers(user_id, suggest_user_id)
+        .then((data) =>
+          data.payload.map((commonObjId) => commonObjId.common_friend_id)
+        );
+      const timeScoreBetweenUserAndCandidate =
+        await timeScoreBetweenSuggestedCandidateAndUser(
+          user_id,
+          suggest_user_id
+        );
+      // console.log({ suggest_user_id, numOfCommonFriend, commonFriendsId });
+      console.log({ user_id, suggest_user_id });
+      console.log({ timeScoreBetweenUserAndCandidate });
+      console.log("\n");
+
+      return {
+        user_suggested_id: suggest_user_id,
+        num_of_common_friend: numOfCommonFriend,
+        common_friends_id: commonFriendsId,
+        danh_sach_giong: danhSachGiong,
+        giong_chung: danh_sach_giong_chung,
+        score: 0,
+      };
+    })
+  );
+  // console.log(req.body.TABLE_SCORES_FOR_SUGGEST);
+};
+
 module.exports = {
   requestAddFriend,
   responeAddFriend,
@@ -367,4 +542,6 @@ module.exports = {
   removeRequestAddFriend,
   getListSuggestedFriendController,
   getListOfAllUserrecievedRequestAddFriendFromMe,
+  getListSuggestedFriendController_v2,
+  scoringForSuggestedFriendController,
 };
