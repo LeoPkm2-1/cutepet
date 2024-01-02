@@ -59,7 +59,8 @@ router.post(
     addFriendMid.preProcessSuggestFriendNavMid,
   ],
   friendController.getListSuggestedFriendController_v2,
-  friendController.scoringForSuggestedFriendController
+  friendController.scoringForSuggestedFriendController,
+  friendController.storingSuggestedFriendController
 );
 
 // get list of all user who has recieved request add friend from current user

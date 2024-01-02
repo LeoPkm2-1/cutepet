@@ -193,7 +193,7 @@ const preProcessSuggestFriendNavMid = async (req, res, next) => {
     req.body.ACTION.returnSuggested = "OLD_RECORD";
     req.body.ACTION.evaluateNew = true;
   }
-  console.log(req.body.ACTION);
+  // console.log(req.body.ACTION);
   next();
 };
 
@@ -206,7 +206,7 @@ const preProccessSuggestFriendMid_v2 = async (req, res, next) => {
   req.body.DANH_SACH_MA_GIONG = await petHelper
     .getAllGiongOfPetsOwnedByUser(user_id)
     .then((data) => [...new Set(data)]);
-  console.log({ DANH_SACH_MA_GIONG_222: req.body.DANH_SACH_MA_GIONG });
+
   next();
 };
 

@@ -49,13 +49,13 @@ const getFriendOfFriendForUser = async (
 ) => {
   let sqlStmt = "";
   let data = [];
-  if (typeof limitNum == Number) {
+  if (typeof limitNum == "number") {
     sqlStmt = `select DISTINCT FRIENDS_OF_FRIENDS.ma_nguoi_dung_2 as friend_of_friend_id
                 from LaBanBe as USER_FRIENDS
                 join LaBanBe as FRIENDS_OF_FRIENDS
                   on USER_FRIENDS.ma_nguoi_dung_2=FRIENDS_OF_FRIENDS.ma_nguoi_dung_1
 
-                where USER_FRIEND.ma_nguoi_dung_1 =? and 
+                where USER_FRIENDS.ma_nguoi_dung_1 =? and 
 
                           FRIENDS_OF_FRIENDS.ma_nguoi_dung_2 not in (?)
 
