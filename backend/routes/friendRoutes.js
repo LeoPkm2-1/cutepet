@@ -47,13 +47,13 @@ router.post(
 
 // get list suggested friend
 router.post(
-  "/getListSuggestedFriends_old",
+  "/getListSuggestedFriends",
   addFriendMid.preProccessSuggestFriendMid,
   friendController.getListSuggestedFriendController
 );
 
 router.post(
-  "/getListSuggestedFriends",
+  "/getListSuggestedFriends_v2",
   [
     addFriendMid.preProccessSuggestFriendMid_v2,
     addFriendMid.preProcessSuggestFriendNavMid,
