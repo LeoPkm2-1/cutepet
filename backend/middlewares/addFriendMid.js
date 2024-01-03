@@ -193,7 +193,7 @@ const preProcessSuggestFriendNavMid = async (req, res, next) => {
     req.body.ACTION.returnSuggested = "OLD_RECORD";
     req.body.ACTION.evaluateNew = true;
   }
-  console.log(req.body.ACTION);
+  // console.log(req.body.ACTION);
   next();
 };
 
