@@ -14,7 +14,7 @@ const { handleRegister } = require("./../controllers/registerController");
 const { registerMid } = require("../middlewares/registerMid");
 
 // đăng nhập - dăng ký
-router.use(["/login", "/register"], nonRequireLogined);
+// router.use(["/login", "/register"], nonRequireLogined);
 router.post("/login", handlLogin);
 router.post("/register", registerMid, handleRegister);
 // đăng xuất
