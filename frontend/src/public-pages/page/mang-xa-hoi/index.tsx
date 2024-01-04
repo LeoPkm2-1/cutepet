@@ -141,12 +141,10 @@ export default function MangXaHoi() {
       setListPost([...arr, ...list]);
     }
   }, [newPostFromStore?.id]);
-  console.log('Lấy tiếp ngoai');
+
 
   useEffect(() => {
     if (endPageHome && isPost) {
-      console.log('Lấy tiếp');
-
       setIndexPost(indexPost + 1);
     }
   }, [endPageHome]);
@@ -172,7 +170,8 @@ export default function MangXaHoi() {
                     setListPost(list);
                     // }} idStatus={status?.id} />;
                   }}
-                  status={status}
+                  // status={status}
+                  idStatus={status?.id}
                 />
               );
             })}
