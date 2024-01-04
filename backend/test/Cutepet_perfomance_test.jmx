@@ -2433,20 +2433,20 @@
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Cutepet_perfomance_social_test_token_dynamic" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-          <stringProp name="LoopController.loops">1</stringProp>
+          <intProp name="LoopController.loops">-1</intProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">200</stringProp>
         <stringProp name="ThreadGroup.ramp_time">60</stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
-        <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="ThreadGroup.duration">300</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">600</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
       </ThreadGroup>
       <hashTree>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV ACCESS TOKEN" enabled="true">
-          <stringProp name="filename">/home/leo2_1/Documents/doantotnghiep/hien_thuc/cutepet/backend/test/datatest/temp_token.csv</stringProp>
+          <stringProp name="filename">/home/leo2_1/Documents/doantotnghiep/hien_thuc/cutepet/backend/test/datatest/login_token.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">ACCESS_TOKEN</stringProp>
           <boolProp name="ignoreFirstLine">true</boolProp>
@@ -2510,7 +2510,7 @@
           </collectionProp>
         </ModuleController>
         <hashTree/>
-        <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="log_user_infor" enabled="true">
+        <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="log_user_infor" enabled="false">
           <collectionProp name="ModuleController.node_path">
             <stringProp name="764597751">Test Plan</stringProp>
             <stringProp name="764597751">Test Plan</stringProp>
