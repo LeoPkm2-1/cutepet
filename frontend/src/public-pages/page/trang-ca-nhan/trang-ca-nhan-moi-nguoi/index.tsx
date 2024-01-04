@@ -23,12 +23,14 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import moment from 'moment';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
+import { Page404 } from '../../mang-xa-hoi/component/post-detail';
 export default function TrangCaNhanMoiNguoi() {
   // const profile = useSelector((state: RootState) => state.user.profile);
   const { id } = useParams();
   const navigate = useNavigate();
   const [tab, setTab] = useState('post');
   const userProfile = useSelector((state: RootState) => state.user.profile);
+  const [isNotPage, setIsNotPage] = useState(false);
 
   const [profile, setProfile] = useState<PeopleType>({
     name: '',
@@ -64,9 +66,7 @@ export default function TrangCaNhanMoiNguoi() {
     (state: RootState) => state?.socket.acceptFriend.idUser
   );
 
-  const endPage = useSelector(
-    (state: RootState) => state.scroll.endPageHome
-  );
+  const endPage = useSelector((state: RootState) => state.scroll.endPageHome);
 
   const { enqueueSnackbar } = useSnackbar();
   const [timePost, setTimePost] = useState('none');
@@ -74,67 +74,72 @@ export default function TrangCaNhanMoiNguoi() {
   useEffect(() => {
     if (id) {
       setTab('post');
-      profileApi.getUserProfileById(id).then((data) => {
-        if (id === `${userProfile?.id}`) {
-          navigate('/home/trang-ca-nhan');
-          return;
-        }
-
-        setProfile({
-          name: data?.thong_tin_profile_user?.ten,
-          id: data?.thong_tin_profile_user?.ma_nguoi_dung,
-          user: data?.thong_tin_profile_user?.tai_khoan,
-          url: data?.thong_tin_profile_user?.anh?.url,
-          numberPet: data?.danh_sach_thu_cung?.length,
-          isFriend: data?.la_ban_be,
-          ngay_sinh: data?.thong_tin_profile_user?.ngay_sinh,
-          email: data?.thong_tin_profile_user?.email,
-          so_dien_thoai: data?.thong_tin_profile_user?.so_dien_thoai,
-          gioi_tinh: data?.thong_tin_profile_user?.gioi_tinh,
-        });
-
-        if (data?.la_ban_be) {
-          setIsFriend(1);
-        } else {
-          if (
-            data?.thong_tin_ve_gui_loi_moi_ket_ban ==
-            'HAS_SEND_REQUEST_ADD_FRIEND'
-          ) {
-            setIsFriend(-1);
+      profileApi
+        .getUserProfileById(id)
+        .then((data) => {
+          if (id === `${userProfile?.id}`) {
+            navigate('/home/trang-ca-nhan');
             return;
           }
-          if (
-            data?.thong_tin_ve_gui_loi_moi_ket_ban == 'WAITTING_YOUR_RESPONE'
-          ) {
-            setIsFriend(-2);
-            return;
-          }
-          setIsFriend(0);
-        }
-        const fri: FriendType[] = data?.danh_sach_ban_be?.map((item: any) => {
-          return {
-            name: item?.ten,
-            id: item?.ma_nguoi_dung,
-            user: item?.tai_khoan,
-            url: item?.anh?.url,
-          } as FriendType;
-        });
-        setFriend(fri);
+          setIsNotPage(false);
+          setProfile({
+            name: data?.thong_tin_profile_user?.ten,
+            id: data?.thong_tin_profile_user?.ma_nguoi_dung,
+            user: data?.thong_tin_profile_user?.tai_khoan,
+            url: data?.thong_tin_profile_user?.anh?.url,
+            numberPet: data?.danh_sach_thu_cung?.length,
+            isFriend: data?.la_ban_be,
+            ngay_sinh: data?.thong_tin_profile_user?.ngay_sinh,
+            email: data?.thong_tin_profile_user?.email,
+            so_dien_thoai: data?.thong_tin_profile_user?.so_dien_thoai,
+            gioi_tinh: data?.thong_tin_profile_user?.gioi_tinh,
+          });
 
-        // set pet
-        const pets: PetType[] = data?.danh_sach_thu_cung?.map((item: any) => {
-          return {
-            ten_thu_cung: item?.ten_thu_cung,
-            ten_giong: item?.giong_loai?.ten_giong,
-            ten_loai: item?.giong_loai?.ten_loai,
-            ngay_sinh: item?.ngay_sinh,
-            gioi_tinh: item?.gioi_tinh,
-            url_anh: item?.anh?.url,
-            ma_thu_cung: item?.ma_thu_cung,
-          } as PetType;
+          if (data?.la_ban_be) {
+            setIsFriend(1);
+          } else {
+            if (
+              data?.thong_tin_ve_gui_loi_moi_ket_ban ==
+              'HAS_SEND_REQUEST_ADD_FRIEND'
+            ) {
+              setIsFriend(-1);
+              return;
+            }
+            if (
+              data?.thong_tin_ve_gui_loi_moi_ket_ban == 'WAITTING_YOUR_RESPONE'
+            ) {
+              setIsFriend(-2);
+              return;
+            }
+            setIsFriend(0);
+          }
+          const fri: FriendType[] = data?.danh_sach_ban_be?.map((item: any) => {
+            return {
+              name: item?.ten,
+              id: item?.ma_nguoi_dung,
+              user: item?.tai_khoan,
+              url: item?.anh?.url,
+            } as FriendType;
+          });
+          setFriend(fri);
+
+          // set pet
+          const pets: PetType[] = data?.danh_sach_thu_cung?.map((item: any) => {
+            return {
+              ten_thu_cung: item?.ten_thu_cung,
+              ten_giong: item?.giong_loai?.ten_giong,
+              ten_loai: item?.giong_loai?.ten_loai,
+              ngay_sinh: item?.ngay_sinh,
+              gioi_tinh: item?.gioi_tinh,
+              url_anh: item?.anh?.url,
+              ma_thu_cung: item?.ma_thu_cung,
+            } as PetType;
+          });
+          setListPet(pets);
+        })
+        .catch(() => {
+          setIsNotPage(true);
         });
-        setListPet(pets);
-      });
     }
   }, [id]);
 
@@ -144,7 +149,6 @@ export default function TrangCaNhanMoiNguoi() {
         .getPostUserById(id, new Date())
         .then((data) => {
           if (data?.status == 200) {
-          
             if (data?.payload?.length == 0) {
               setTimePost('');
               setListPost([]);
@@ -200,7 +204,6 @@ export default function TrangCaNhanMoiNguoi() {
         .getPostUserById(id, timePost)
         .then((data) => {
           if (data?.status == 200) {
-       
             if (data?.payload?.length == 0) {
               setTimePost('');
               return;
@@ -367,7 +370,6 @@ export default function TrangCaNhanMoiNguoi() {
       friendApi
         .responeAddFriend(profile?.id, type)
         .then((data) => {
-     
           if (data?.status == 200) {
             if (data?.payload?.accepted) {
               enqueueSnackbar(`Kết bạn với ${profile?.name} thành công`, {
@@ -396,443 +398,453 @@ export default function TrangCaNhanMoiNguoi() {
 
   return (
     <>
-      <Box
-        sx={{
-          paddingBottom: '20px',
-        }}
-      >
+      {isNotPage ? (
+        <Page404 />
+      ) : (
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 200px',
-            justifyContent: 'center',
+            paddingBottom: '20px',
           }}
         >
-          <img
-            style={{
-              borderRadius: '100%',
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 200px',
+              justifyContent: 'center',
             }}
-            src={profile?.url}
-            height={200}
-            width={200}
+          >
+            <img
+              style={{
+                borderRadius: '100%',
+              }}
+              src={profile?.url}
+              height={200}
+              width={200}
+            />
+            <Box
+              sx={{
+                ml: '80px',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontSize: '22px',
+                    fontWeight: '600',
+                    marginRight: '20px',
+                  }}
+                >
+                  {profile?.name}
+                </Typography>
+                {isFriend == 1 && (
+                  <Button
+                    onClick={handleUnfriend}
+                    variant="contained"
+                    color="inherit"
+                    sx={{
+                      backgroundColor: 'rgb(14, 100, 126)',
+                      color: '#fff',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                      },
+                    }}
+                  >
+                    Hủy kết bạn
+                  </Button>
+                )}
+                {isFriend == 0 && (
+                  <Button
+                    onClick={handleAddfriend}
+                    variant="contained"
+                    color="inherit"
+                    sx={{
+                      backgroundColor: 'rgb(14, 100, 126)',
+                      color: '#fff',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                      },
+                    }}
+                  >
+                    Kết bạn
+                  </Button>
+                )}
+
+                {isFriend == -1 && (
+                  <>
+                    <Button disabled variant="contained" color="info">
+                      Đang chờ phản hồi
+                    </Button>
+                    <Button
+                      onClick={thuHoiLoiMoi}
+                      variant="contained"
+                      color="inherit"
+                      sx={{
+                        ml: '12px',
+                        backgroundColor: 'rgb(14, 100, 126)',
+                        color: '#fff',
+                        '&:hover': {
+                          backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                        },
+                      }}
+                    >
+                      Thu hồi
+                    </Button>
+                  </>
+                )}
+                {isFriend == -2 && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                    }}
+                  >
+                    <Button
+                      onClick={() => handleSubmit('accept')}
+                      color="inherit"
+                      sx={{
+                        minWidth: '100px',
+                        backgroundColor: 'rgb(14, 100, 126)',
+                        color: '#fff',
+                        '&:hover': {
+                          backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                        },
+                      }}
+                      variant="contained"
+                    >
+                      Xác Nhận
+                    </Button>
+                    <Button
+                      onClick={() => handleSubmit('reject')}
+                      variant="contained"
+                      color="inherit"
+                      sx={{
+                        minWidth: '100px',
+                        color: 'gray',
+                        ml: '20px',
+                      }}
+                    >
+                      Xóa
+                    </Button>
+                  </Box>
+                )}
+              </Box>
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontSize: '14px',
+                  fontWeight: '400',
+                  my: '5px',
+                }}
+              >
+                {`@${profile.user}`}
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  mt: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <EmailIcon
+                  sx={{
+                    color: 'gray',
+                    fontSize: '20px',
+                    marginRight: '6px',
+                  }}
+                />
+
+                {profile?.email}
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  mt: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <LocalPhoneIcon
+                  sx={{
+                    color: 'gray',
+                    fontSize: '20px',
+                    marginRight: '6px',
+                  }}
+                />
+
+                {profile?.so_dien_thoai}
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  mt: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <CalendarMonthIcon
+                  sx={{
+                    color: 'gray',
+                    fontSize: '20px',
+                    marginRight: '6px',
+                  }}
+                />
+
+                {profile?.ngay_sinh &&
+                  moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  mt: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                {profile?.gioi_tinh ? (
+                  <FemaleIcon
+                    sx={{
+                      color: 'gray',
+                      fontSize: '24px',
+                      marginRight: '6px',
+                    }}
+                  />
+                ) : (
+                  <MaleIcon
+                    sx={{
+                      color: 'gray',
+                      fontSize: '24px',
+                      marginRight: '6px',
+                    }}
+                  />
+                )}
+                {profile?.gioi_tinh ? 'Nữ' : 'Nam'}
+              </Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  mt: '10px',
+                }}
+              >
+                <Typography
+                  onClick={() => setTab('post')}
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontSize: '14px',
+                    fontWeight: '400',
+                    marginRight: '30px',
+                    padding: '2px',
+                    borderBottom: tab == 'post' ? '2px solid #000' : 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontWeight: '600',
+                      fontSize: '15px',
+                    }}
+                  >
+                    {listPost?.length || 0}
+                  </span>{' '}
+                  bài viết{' '}
+                </Typography>
+                <Typography
+                  onClick={() => setTab('pet')}
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontSize: '14px',
+                    fontWeight: '400',
+                    marginRight: '30px',
+                    padding: '2px',
+                    borderBottom: tab == 'pet' ? '2px solid #000' : 'none',
+
+                    cursor: 'pointer',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontWeight: '600',
+                      fontSize: '15px',
+                    }}
+                  >
+                    {profile?.numberPet}
+                  </span>{' '}
+                  thú cưng{' '}
+                </Typography>
+                <Typography
+                  onClick={() => setTab('friend')}
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontSize: '14px',
+                    fontWeight: '400',
+                    padding: '2px',
+                    borderBottom: tab == 'friend' ? '2px solid #000' : 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontWeight: '600',
+                      fontSize: '15px',
+                    }}
+                  >
+                    {friend?.length}
+                  </span>{' '}
+                  bạn bè
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+          <Divider
+            sx={{
+              my: '16px',
+            }}
           />
           <Box
             sx={{
-              ml: '80px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <Box
               sx={{
-                display: 'flex',
-
-                alignItems: 'center',
+                maxWidth: '50vw',
+                width: '100%',
+                display: tab == 'post' ? 'block' : 'none',
               }}
             >
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontSize: '22px',
-                  fontWeight: '600',
-                  marginRight: '20px',
-                }}
-              >
-                {profile?.name}
-              </Typography>
-              {isFriend == 1 && (
-                <Button
-                  onClick={handleUnfriend}
-                  variant="contained"
-                  color="inherit"
-                  sx={{
-                    backgroundColor: 'rgb(14, 100, 126)',
-                    color: '#fff',
-                    '&:hover': {
-                      backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                    },
-                  }}
-                >
-                  Hủy kết bạn
-                </Button>
-              )}
-              {isFriend == 0 && (
-                <Button
-                  onClick={handleAddfriend}
-                  variant="contained"
-                  color="inherit"
-                  sx={{
-                    backgroundColor: 'rgb(14, 100, 126)',
-                    color: '#fff',
-                    '&:hover': {
-                      backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                    },
-                  }}
-                >
-                  Kết bạn
-                </Button>
-              )}
-
-              {isFriend == -1 && (
+              {listPost?.length ? (
+                listPost?.map((status, index) => {
+                  return (
+                    <PostComponent
+                      onRemove={() => {
+                        const newList = deepCopy(listPost);
+                        newList.splice(index, 1);
+                        setListPost(newList);
+                      }}
+                      status={status}
+                    />
+                  );
+                })
+              ) : (
                 <>
-                  <Button disabled variant="contained" color="info">
-                    Đang chờ phản hồi
-                  </Button>
-                  <Button
-                    onClick={thuHoiLoiMoi}
-                    variant="contained"
-                    color="inherit"
+                  <Typography
+                    align="center"
                     sx={{
-                      ml: '12px',
-                      backgroundColor: 'rgb(14, 100, 126)',
-                      color: '#fff',
-                      '&:hover': {
-                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                      },
+                      fontFamily: 'quicksand',
+                      fontSize: '16px',
+                      fontWeight: '500',
+                      color: 'gray',
                     }}
                   >
-                    Thu hồi
-                  </Button>
+                    Chưa có bài viết{' '}
+                  </Typography>
                 </>
               )}
-              {isFriend == -2 && (
-                <Box
-                  sx={{
-                    display: 'flex',
-                  }}
-                >
-                  <Button
-                    onClick={() => handleSubmit('accept')}
-                    color="inherit"
-                    sx={{
-                      minWidth: '100px',
-                      backgroundColor: 'rgb(14, 100, 126)',
-                      color: '#fff',
-                      '&:hover': {
-                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                      },
-                    }}
-                    variant="contained"
-                  >
-                    Xác Nhận
-                  </Button>
-                  <Button
-                    onClick={() => handleSubmit('reject')}
-                    variant="contained"
-                    color="inherit"
-                    sx={{
-                      minWidth: '100px',
-                      color: 'gray',
-                      ml: '20px',
-                    }}
-                  >
-                    Xóa
-                  </Button>
-                </Box>
-              )}
             </Box>
-            <Typography
-              sx={{
-                fontFamily: 'quicksand',
-                fontSize: '14px',
-                fontWeight: '400',
-                my: '5px',
-              }}
-            >
-              {`@${profile.user}`}
-            </Typography>
-
-            <Typography
-              sx={{
-                fontFamily: 'quicksand',
-                fontSize: '14px',
-                fontWeight: '500',
-                mt: '8px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <EmailIcon
-                sx={{
-                  color: 'gray',
-                  fontSize: '20px',
-                  marginRight: '6px',
-                }}
-              />
-
-              {profile?.email}
-            </Typography>
-            <Typography
-              sx={{
-                fontFamily: 'quicksand',
-                fontSize: '14px',
-                fontWeight: '500',
-                mt: '8px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <LocalPhoneIcon
-                sx={{
-                  color: 'gray',
-                  fontSize: '20px',
-                  marginRight: '6px',
-                }}
-              />
-
-              {profile?.so_dien_thoai}
-            </Typography>
-            <Typography
-              sx={{
-                fontFamily: 'quicksand',
-                fontSize: '14px',
-                fontWeight: '500',
-                mt: '8px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <CalendarMonthIcon
-                sx={{
-                  color: 'gray',
-                  fontSize: '20px',
-                  marginRight: '6px',
-                }}
-              />
-
-              { profile?.ngay_sinh && moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
-            </Typography>
-
-            <Typography
-              sx={{
-                fontFamily: 'quicksand',
-                fontSize: '14px',
-                fontWeight: '500',
-                mt: '8px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              {profile?.gioi_tinh ? (
-                <FemaleIcon
-                  sx={{
-                    color: 'gray',
-                    fontSize: '24px',
-                    marginRight: '6px',
-                  }}
-                />
-              ) : (
-                <MaleIcon
-                  sx={{
-                    color: 'gray',
-                    fontSize: '24px',
-                    marginRight: '6px',
-                  }}
-                />
-              )}
-              {profile?.gioi_tinh ? 'Nữ' : 'Nam'}
-            </Typography>
             <Box
               sx={{
-                display: 'flex',
-                mt: '10px',
+                display: tab == 'pet' ? 'block' : 'none',
+                width: '50vw',
               }}
             >
-              <Typography
-                onClick={() => setTab('post')}
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontSize: '14px',
-                  fontWeight: '400',
-                  marginRight: '30px',
-                  padding: '2px',
-                  borderBottom: tab == 'post' ? '2px solid #000' : 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                <span
-                  style={{
-                    fontWeight: '600',
-                    fontSize: '15px',
-                  }}
-                >
-                  {listPost?.length || 0}
-                </span>{' '}
-                bài viết{' '}
-              </Typography>
-              <Typography
-                onClick={() => setTab('pet')}
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontSize: '14px',
-                  fontWeight: '400',
-                  marginRight: '30px',
-                  padding: '2px',
-                  borderBottom: tab == 'pet' ? '2px solid #000' : 'none',
-
-                  cursor: 'pointer',
-                }}
-              >
-                <span
-                  style={{
-                    fontWeight: '600',
-                    fontSize: '15px',
-                  }}
-                >
-                  {profile?.numberPet}
-                </span>{' '}
-                thú cưng{' '}
-              </Typography>
-              <Typography
-                onClick={() => setTab('friend')}
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontSize: '14px',
-                  fontWeight: '400',
-                  padding: '2px',
-                  borderBottom: tab == 'friend' ? '2px solid #000' : 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                <span
-                  style={{
-                    fontWeight: '600',
-                    fontSize: '15px',
-                  }}
-                >
-                  {friend?.length}
-                </span>{' '}
-                bạn bè
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Divider
-          sx={{
-            my: '16px',
-          }}
-        />
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Box
-            sx={{
-              maxWidth: '50vw',
-              width: '100%',
-              display: tab == 'post' ? 'block' : 'none',
-            }}
-          >
-            {listPost?.length ? (
-              listPost?.map((status,index) => {
-                return <PostComponent onRemove={() => {
-                  const newList = deepCopy(listPost);
-                  newList.splice(index, 1);
-                  setListPost(newList);
-                 }} status={status} />;
-              })
-            ) : (
-              <>
+              {listPet.length > 0 ? (
+                <>
+                  <Grid container spacing={2}>
+                    {listPet?.map((pet) => {
+                      return (
+                        <Grid item xs={4}>
+                          <DanhSachThuCung pet={pet} />
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </>
+              ) : (
                 <Typography
-                  align="center"
                   sx={{
                     fontFamily: 'quicksand',
                     fontSize: '16px',
                     fontWeight: '500',
-                    color: 'gray',
                   }}
                 >
-                  Chưa có bài viết{' '}
+                  Chưa có thú cưng
                 </Typography>
-              </>
-            )}
-          </Box>
-          <Box
-            sx={{
-              display: tab == 'pet' ? 'block' : 'none',
-              width: '50vw',
-            }}
-          >
-            {listPet.length > 0 ? (
-              <>
-                <Grid container spacing={2}>
-                  {listPet?.map((pet) => {
+              )}
+            </Box>
+            <Box
+              sx={{
+                display: tab == 'friend' ? 'block' : 'none',
+                width: '50vw',
+              }}
+            >
+              {friend.length > 0 ? (
+                <>
+                  {friend?.map((item) => {
                     return (
-                      <Grid item xs={4}>
-                        <DanhSachThuCung pet={pet} />
-                      </Grid>
+                      <PersonComponent
+                        userId={item?.id}
+                        name={item.name}
+                        user={item.user}
+                        url={item.url}
+                        isOnline={item?.isOnline}
+                      />
                     );
                   })}
-                </Grid>
-              </>
-            ) : (
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                }}
-              >
-                Chưa có thú cưng
-              </Typography>
-            )}
+                </>
+              ) : (
+                <Typography
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontSize: '16px',
+                    fontWeight: '500',
+                  }}
+                >
+                  Chưa có bạn bè
+                </Typography>
+              )}
+            </Box>
           </Box>
-          <Box
-            sx={{
-              display: tab == 'friend' ? 'block' : 'none',
-              width: '50vw',
-            }}
-          >
-            {friend.length > 0 ? (
-              <>
-                {friend?.map((item) => {
-                  return (
-                    <PersonComponent
-                      userId={item?.id}
-                      name={item.name}
-                      user={item.user}
-                      url={item.url}
-                      isOnline={item?.isOnline}
-                    />
-                  );
-                })}
-              </>
-            ) : (
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                }}
-              >
-                Chưa có bạn bè
-              </Typography>
-            )}
-          </Box>
+          {timePost && tab == 'post' && (
+            <Typography
+              align="center"
+              sx={{
+                fontFamily: 'quicksand',
+                fontWeight: '600',
+                fontSize: '15px',
+                margin: '16px 16px 10px 0px',
+                color: 'rgb(14, 100, 126)',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                setTimePost(listPost[listPost?.length - 1]?.createAt || '');
+              }}
+            >
+              {' '}
+              Xem thêm bài viết{' '}
+            </Typography>
+          )}
         </Box>
-        {timePost && tab == 'post' && (
-          <Typography
-            align="center"
-            sx={{
-              fontFamily: 'quicksand',
-              fontWeight: '600',
-              fontSize: '15px',
-              margin: '16px 16px 10px 0px',
-              color: 'rgb(14, 100, 126)',
-              textDecoration: 'underline',
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              setTimePost(listPost[listPost?.length - 1]?.createAt || '');
-            }}
-          >
-            {' '}
-            Xem thêm bài viết{' '}
-          </Typography>
-        )}
-      </Box>
+      )}
     </>
   );
 }
