@@ -548,6 +548,7 @@ const scoringForSuggestedFriendController = async (req, res, next) => {
       };
     })
   );
+  // find max time score in tables
   const MaxTimeScoreInTable = req.body.TABLE_SCORES_FOR_SUGGEST.reduce(
     (acc, suggest_user) => {
       return Math.max(acc, suggest_user.time_score_between_user_candidate);
