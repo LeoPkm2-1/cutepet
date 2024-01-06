@@ -52,8 +52,6 @@ export default function PopUpCreatePost(props: Props) {
   }, [friends]);
 
   useEffect(() => {
-    console.log("Vào lấy bạn bè");
-    
     friendApi.getListFriend().then((data) => {
       if (data?.status == 200) {
 
