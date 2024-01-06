@@ -10,7 +10,7 @@
 
 ![](./../media/img/err/img60.png)
 
-## 146. ==ERR== khi đăng một status không có hình ảnh và bài viết ngay dưới đó có hình ảnh thì khi chỉnh sửa status ở trên hình ảnh bên dưới sẽ tự động nhảy lên phần chỉnh sửa.
+## 146. ==OK== khi đăng một status không có hình ảnh và bài viết ngay dưới đó có hình ảnh thì khi chỉnh sửa status ở trên hình ảnh bên dưới sẽ tự động nhảy lên phần chỉnh sửa.
 
 `đăng một status không có hình ảnh ngay dưới đó là một status có hình ảnh (của bất kỳ ai), `
 
