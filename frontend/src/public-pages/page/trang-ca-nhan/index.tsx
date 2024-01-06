@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux';
 import { useEffect, useState } from 'react';
 import profileApi from '../../../api/profile';
-import { PeopleType } from '../../../models/user';
+import { FriendType, PeopleType } from '../../../models/user';
 import { StatusType } from '../../../models/post';
 import CreatePost from '../mang-xa-hoi/component/tao-bai-viet';
 import PostComponent from '../mang-xa-hoi/component/bai-viet';
@@ -19,6 +19,7 @@ import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import Button from '../../../components/Button';
 import { deepCopy } from '@firebase/util';
+import friendApi from '../../../api/friend';
 
 export default function TrangCaNhan() {
   // const profile = useSelector((state: RootState) => state.user.profile);
@@ -35,9 +36,12 @@ export default function TrangCaNhan() {
   const newPostFromStore = useSelector(
     (state: RootState) => state?.socket?.newPost.post
   );
-  const friend = useSelector((state: RootState) => state.friend.friend);
+
   const endPage = useSelector((state: RootState) => state.scroll.endPageHome);
   const [listPost, setListPost] = useState<StatusType[]>([]);
+  const [friends, setFriends] = useState<FriendType[]>([]);
+  const isChangeFriend = useSelector((state: RootState) => state.friend.isChangeFriend);
+
 
   useEffect(() => {
     profileApi.getMyProfile().then((data: any) => {
@@ -63,6 +67,7 @@ export default function TrangCaNhan() {
           if (data?.status == 200) {
             if (data?.payload?.length == 0) {
               setTimePost('');
+              setListPost([]);
               return;
             }
             const list: StatusType[] = data?.payload?.map((item: any) => {
@@ -176,6 +181,24 @@ export default function TrangCaNhan() {
       setTimePost(listPost[listPost?.length - 1]?.createAt || '');
     }
   }, [endPage]);
+
+  useEffect(() => {
+    friendApi.getListFriend().then((data) => {
+      if (data?.status == 200) {
+
+        const list = data?.payload.map((item: any) => {
+          return {
+            name: item?.ten,
+            user: item?.tai_khoan,
+            url: item?.anh?.url,
+            isOnline: item?.isOnline || false,
+            id: item?.ma_nguoi_dung,
+          } as FriendType;
+        });
+        setFriends(list);
+      }
+    });
+  }, [isChangeFriend]);
 
   return (
     <>
@@ -384,7 +407,7 @@ export default function TrangCaNhan() {
                     fontSize: '15px',
                   }}
                 >
-                  {friend?.length}
+                  {friends?.length}
                 </span>{' '}
                 bạn bè
               </Typography>

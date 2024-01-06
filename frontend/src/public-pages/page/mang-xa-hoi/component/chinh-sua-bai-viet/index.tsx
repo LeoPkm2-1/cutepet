@@ -28,6 +28,7 @@ import { PetType } from '../../../../../models/pet';
 import petApi from '../../../../../api/pet';
 import Tag from '../../../../../components/tag';
 import { StatusType } from '../../../../../models/post';
+import friendApi from '../../../../../api/friend';
 type Props = {
   open: boolean;
   onClose?: () => void;
@@ -45,12 +46,12 @@ export default function UpdatePost(props: Props) {
   const { enqueueSnackbar } = useSnackbar();
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const [isloading, setIsloading] = useState(false);
-  const friends = useSelector((state: RootState) => state.friend.friend);
   const isChangeFriend = useSelector(
     (state: RootState) => state.friend.isChangeFriend
   );
   const [listOptionTag, setListOptionTag] = useState<FriendType[]>([]);
   const [status, setStatus] = useState<StatusType>(props.status);
+  const [friends, setFriends] = useState<FriendType[]>([]);
   const [friend, setFriend] = useState<
     {
       id: number;
@@ -93,6 +94,22 @@ export default function UpdatePost(props: Props) {
       setListOptionTag(friends);
     }
   }, [friends]);
+  useEffect(() => {
+    friendApi.getListFriend().then((data) => {
+      if (data?.status == 200) {
+        const list = data?.payload.map((item: any) => {
+          return {
+            name: item?.ten,
+            user: item?.tai_khoan,
+            url: item?.anh?.url,
+            isOnline: item?.isOnline || false,
+            id: item?.ma_nguoi_dung,
+          } as FriendType;
+        });
+        setFriends(list);
+      }
+    });
+  }, [isChangeFriend]);
 
   const [listPet, setListPet] = useState<PetType[]>([]);
   useEffect(() => {
@@ -112,7 +129,7 @@ export default function UpdatePost(props: Props) {
         setListPet(list);
       }
     });
-  }, [isChangeFriend]);
+  }, []);
 
   const changeHandler = (event: any) => {
     setSelectedFile(event.target.files[0]);
