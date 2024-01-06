@@ -75,6 +75,7 @@ export default function UpdatePost(props: Props) {
         setUrlPhotoDefault(props?.status?.media?.data[0]);
       } else {
         setIsPhoto(false);
+        setUrlPhotoDefault("");
       }
       if (props?.status?.taggedUsers) {
         setFriend(props?.status?.taggedUsers);

@@ -132,6 +132,7 @@ export default function PopUpCreatePost(props: Props) {
         setSelectedFile(null);
         setFriend([]);
         setPetsTag([]);
+        setIsPhoto(false);
         props.onClose();
       })
       .catch((err) => {
