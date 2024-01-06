@@ -41,6 +41,7 @@ export default function PopUpCreatePost(props: Props) {
   const [visibility, setVisibility] = useState('PUBLIC');
   const { enqueueSnackbar } = useSnackbar();
   const infoUser = useSelector((state: RootState) => state.user.profile);
+  const isChangeFriend = useSelector((state: RootState) => state.friend.isChangeFriend);
   const [isloading, setIsloading] = useState(false);
   const [friends, setFriends] = useState<FriendType[]>([]);
   const [listOptionTag, setListOptionTag] = useState<FriendType[]>([]);
@@ -51,6 +52,8 @@ export default function PopUpCreatePost(props: Props) {
   }, [friends]);
 
   useEffect(() => {
+    console.log("Vào lấy bạn bè");
+    
     friendApi.getListFriend().then((data) => {
       if (data?.status == 200) {
 
@@ -66,7 +69,7 @@ export default function PopUpCreatePost(props: Props) {
         setFriends(list);
       }
     });
-  }, []);
+  }, [isChangeFriend]);
 
   const [friend, setFriend] = useState<
     {
