@@ -10,7 +10,7 @@
 
 ![](./../media/img/err/img60.png)
 
-## 146. ==OK== khi đăng một status không có hình ảnh và bài viết ngay dưới đó có hình ảnh thì khi chỉnh sửa status ở trên hình ảnh bên dưới sẽ tự động nhảy lên phần chỉnh sửa.
+## 146. ==ERR== khi đăng một status không có hình ảnh và bài viết ngay dưới đó có hình ảnh thì khi chỉnh sửa status ở trên hình ảnh bên dưới sẽ tự động nhảy lên phần chỉnh sửa.
 
 `đăng một status không có hình ảnh ngay dưới đó là một status có hình ảnh (của bất kỳ ai), `
 
@@ -25,7 +25,7 @@
 
 ![](./../media/img/err/img63.png)
 
-## 148. và trang cá nhân của người khác kết bạn sau đó về trang chủ đang status có tag người bạn đó và ngày sau đó edit tag bạn bè trong status thì danh sách bạn bè của phần tag không có người đó
+## 148. ==OK== và trang cá nhân của người khác kết bạn sau đó về trang chủ đang status có tag người bạn đó và ngày sau đó edit tag bạn bè trong status thì danh sách bạn bè của phần tag không có người đó
 
 `1. vào trang cá nhân của người dùng khác để gửi lời mời kết bạn và chờ cho đến khi được đồng ý rồi quay lại trang chủ đăng status và tag người dùng đó`
 
@@ -43,7 +43,7 @@
 ![](./../media/img/err/img67.png)
 
 
-## 149 ==ERR== bài viết đăng xong xóa ở trang mạng xã hội chưa được xóa trong trang cá nhân
+## 149 ==OK== bài viết đăng xong xóa ở trang mạng xã hội chưa được xóa trong trang cá nhân
 
 `1. đăng một bài viết ở trang mạng xã hội và ngay lập tức xóa bài viết đó`
 
