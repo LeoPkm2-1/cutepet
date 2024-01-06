@@ -156,6 +156,10 @@ export default function SideBar(props: {
                   fontFamily: 'quicksand',
                   fontWeight: '400',
                   fontSize: '13px',
+                  width:"120px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis", 
+                  whiteSpace: "nowrap",
                 }}
               >
                 {infoUser?.email}

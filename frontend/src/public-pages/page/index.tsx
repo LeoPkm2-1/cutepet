@@ -17,7 +17,7 @@ import { TaoBaiChiaSe } from './chia-se-kien-thuc/component/tao-bai-chia-se';
 import { TrangChiaSe } from './chia-se-kien-thuc/component/trang-chia-se';
 import BaiChiaSe from './chia-se-kien-thuc/component/bai-chia-se';
 // import { socket } from '../../socket';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { NotifycationItem } from '../../components/NotificationItem';
 import { NotiActions } from '../../redux/noti';
@@ -35,12 +35,15 @@ import ChangePasswordPage from './trang-ca-nhan/chinh-sua-trang-ca-nhan/change-p
 import BaiVietThuCung from './quan-ly-thu-cung/component/bai-viet-thu-cung';
 import UpdatePost from './mang-xa-hoi/component/chinh-sua-bai-viet';
 import ChinhSuaThuCung from './quan-ly-thu-cung/component/chinh-sua-thu-cung';
+import { FriendActions } from '../../redux/friend';
+import { RootState } from '../../redux';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
   const [drawerOpen, setDrawerOpen] = useState(matches);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const isChange = useSelector((state:RootState) => state.friend.isChangeFriend);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
   useEffect(() => {
     window.requestAnimationFrame(() => {
@@ -175,6 +178,7 @@ export default function PageRouting() {
         dispatch(
           SocketActions.setAcceptFriend(data?.acceptUser?.ma_nguoi_dung)
         );
+        dispatch(FriendActions.setChangeFriend(!isChange));
         enqueueSnackbar(
           <NotifycationItem
             name={data?.acceptUser?.ten}

@@ -9,6 +9,7 @@ import { RootState } from '../../../../../redux';
 import { LoiMoiType } from '../../../../../models/user';
 import { SocketActions } from '../../../../../redux/socket';
 import { useNavigate } from 'react-router-dom';
+import { FriendActions } from '../../../../../redux/friend';
 
 export default function LoiMoiKetBan(props: { isPageFriend?: boolean }) {
   const [userList, setUserList] = useState<LoiMoiType[]>([]);
@@ -176,8 +177,9 @@ type PropsLoiMoi = {
 };
 function LoiMoi(props: PropsLoiMoi) {
   const { enqueueSnackbar } = useSnackbar();
-  const dispatth = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isChange = useSelector((state:RootState) => state.friend.isChangeFriend)
   function handleSubmit(type: string) {
     friendApi
       .responeAddFriend(props.senderID, type)
@@ -188,6 +190,7 @@ function LoiMoi(props: PropsLoiMoi) {
             enqueueSnackbar(`Kết bạn với ${props?.name} thành công`, {
               variant: 'info',
             });
+            dispatch(FriendActions.setChangeFriend(!isChange))
           } else {
             enqueueSnackbar(
               `Xóa lời mời kết bạn với ${props?.name} thành công`,
@@ -197,7 +200,7 @@ function LoiMoi(props: PropsLoiMoi) {
             );
           }
           props?.onSuccess();
-          dispatth(SocketActions.setNewRequest({}));
+          dispatch(SocketActions.setNewRequest({}));
         } else if (data?.status == 400) {
           enqueueSnackbar(`Không tồn tại lời mời kết bạn`, {
             variant: 'error',

@@ -4,6 +4,7 @@ import { FriendActionEnum, FriendActionTypes } from "./action";
 
 type FriendState = {
   friend?: FriendType[];
+  isChangeFriend?: boolean;
 };
 
 const initState = Object.freeze<FriendState>({});
@@ -17,6 +18,12 @@ export default function (
       return {
         ...state,
         friend: action.payload,
+      };
+    }
+    case FriendActionEnum.SET_CHANGE_FRIEND: {
+      return {
+        ...state,
+        isChangeFriend: action.payload,
       };
     }
     case FriendActionEnum.RESET: {
