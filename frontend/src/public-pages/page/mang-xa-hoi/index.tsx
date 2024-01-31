@@ -5,7 +5,7 @@ import PostComponent from './component/bai-viet';
 import { Button, Divider, Grid, Typography } from '@mui/material';
 import CreatePost from './component/tao-bai-viet';
 import postApi from '../../../api/post';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StatusType } from '../../../models/post';
 import userApis from '../../../api/user';
 import LoiMoiKetBan from './component/loi-moi-ket-ban';
@@ -26,11 +26,12 @@ export default function MangXaHoi() {
   const newPostFromStore = useSelector(
     (state: RootState) => state?.socket?.newPost.post
   );
+  const endPageHome = useSelector(
+    (state: RootState) => state.scroll.endPageHome
+  );
   useEffect(() => {
-    
     postApi.getPostForNewsfeed(indexPost, []).then((data: any) => {
       if (data?.status == 200) {
-        console.log(data, 'data lan 1 nha ggigi');
         if (data?.payload?.length == 0) {
           setIsPost(false);
           return;
@@ -82,7 +83,6 @@ export default function MangXaHoi() {
         .getPostForNewsfeed(indexPost, listId as string[])
         .then((data: any) => {
           if (data?.status == 200) {
-            console.log(data, 'data lần 2');
             if (data?.payload?.length == 0) {
               setIsPost(false);
               return;
@@ -125,7 +125,6 @@ export default function MangXaHoi() {
             const setB = new Set(list);
             const result = difference(setB, setA);
             const newListPost = Array.from(result);
-            console.log(Array.from(result), ' result');
             setListPost([...listPost, ...newListPost]);
           } else {
             setIsPost(false);
@@ -134,20 +133,21 @@ export default function MangXaHoi() {
     }
   }, [indexPost]);
 
+  useEffect(() => {
+    if (newPostFromStore?.id) {
+      let list: StatusType[] = deepCopy(listPost);
+      const arr: StatusType[] = [];
+      arr.push(newPostFromStore);
+      setListPost([...arr, ...list]);
+    }
+  }, [newPostFromStore?.id]);
 
 
   useEffect(() => {
-    console.log(newPostFromStore, ' newPostFromStore nè');
-
-    if (newPostFromStore?.id) {
-      let arr: StatusType[] = deepCopy(listPost);
-      console.log(listPost, ' list pót');
-
-      arr.unshift(newPostFromStore);
-      console.log(arr, ' arr');
-      setListPost(arr);
+    if (endPageHome && isPost) {
+      setIndexPost(indexPost + 1);
     }
-  }, [newPostFromStore?.id]);
+  }, [endPageHome]);
 
   return (
     <>
@@ -161,18 +161,29 @@ export default function MangXaHoi() {
         >
           <CreatePost />
           {listPost &&
-            listPost?.map((status) => {
-              return <PostComponent status={status} />;
+            listPost?.map((status, index) => {
+              return (
+                <PostComponent
+                  onRemove={() => {
+                    let list: StatusType[] = deepCopy(listPost);
+                    list.splice(index, 1);
+                    setListPost(list);
+                    // }} idStatus={status?.id} />;
+                  }}
+                  // status={status}
+                  idStatus={status?.id}
+                />
+              );
             })}
           {isPost && (
             <Typography
               align="center"
               sx={{
                 fontFamily: 'quicksand',
-                fontWeight: '500',
+                fontWeight: '600',
                 fontSize: '15px',
                 margin: '16px 16px 10px 0px',
-                color: '#0c4195',
+                color: 'rgb(14, 100, 126)',
                 textDecoration: 'underline',
                 cursor: 'pointer',
               }}
@@ -192,11 +203,32 @@ export default function MangXaHoi() {
           xs={4}
           item
         >
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '600',
+              fontSize: '18px',
+            }}
+          >
+            Lời mời kết bạn
+          </Typography>
           <LoiMoiKetBan />
-          <Divider sx={{
-            mt:"30px"
-          }}/>
-          <GoiYKetBan/>
+          <Divider
+            sx={{
+              mt: '30px',
+            }}
+          />
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '600',
+              fontSize: '18px',
+              mt: '20px',
+            }}
+          >
+            Gợi ý kết bạn
+          </Typography>
+          <GoiYKetBan />
         </Grid>
       </Grid>
     </>
@@ -206,4 +238,3 @@ export default function MangXaHoi() {
 function difference(set1: any, set2: any) {
   return new Set([...set1].filter((element) => !set2.has(element)));
 }
-

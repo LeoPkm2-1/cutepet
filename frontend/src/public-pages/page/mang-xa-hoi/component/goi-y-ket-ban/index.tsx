@@ -11,7 +11,7 @@ import { SocketActions } from '../../../../../redux/socket';
 import { useNavigate } from 'react-router-dom';
 import { deepCopy } from '@firebase/util';
 
-export default function GoiYKetBan() {
+export default function GoiYKetBan(props: { isPageFriend?: boolean }) {
   const [userList, setUserList] = useState<LoiMoiType[]>([]);
 
   const [isShowAll, setIsShowAll] = useState(true);
@@ -24,7 +24,7 @@ export default function GoiYKetBan() {
   useEffect(() => {
     friendApi.getListSuggestedFriends().then((data) => {
       if (data?.status == 200) {
-        console.log(data, ' dtaa loi moi');
+
         if (data?.payload?.length == 0) {
           setUserList([]);
           return;
@@ -57,17 +57,6 @@ export default function GoiYKetBan() {
 
   return (
     <>
-      <Typography
-        sx={{
-          fontFamily: 'quicksand',
-          fontWeight: '600',
-          fontSize: '20px',
-          mt: '20px',
-        }}
-      >
-        Gợi ý kết bạn
-      </Typography>
-
       {userList?.length > 0 ? (
         <>
           {!isShowAll ? (
@@ -159,11 +148,14 @@ export default function GoiYKetBan() {
         </>
       ) : (
         <Typography
+          align="center"
           sx={{
             fontFamily: 'quicksand',
             fontWeight: '500',
             fontSize: '16px',
-            marginTop: '12px',
+            marginTop: props?.isPageFriend ? '200px' : '12px',
+            marginBottom: '20px',
+            color: 'gray',
           }}
         >
           Chưa có lời gợi ý kết bạn
@@ -180,7 +172,7 @@ type PropsLoiMoi = {
   senderID: number | string;
   onSuccess: () => void;
 };
-function LoiMoi(props: PropsLoiMoi) {
+export function LoiMoi(props: PropsLoiMoi) {
   const { enqueueSnackbar } = useSnackbar();
   const dispatth = useDispatch();
   const navigate = useNavigate();
@@ -280,8 +272,14 @@ function LoiMoi(props: PropsLoiMoi) {
           >
             <Button
               onClick={handleAddfriend}
+              color="inherit"
               sx={{
                 minWidth: '100px',
+                backgroundColor: 'rgb(14, 100, 126)',
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                },
               }}
               variant="contained"
             >

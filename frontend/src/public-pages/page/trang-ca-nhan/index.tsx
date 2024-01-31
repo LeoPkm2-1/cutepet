@@ -1,9 +1,9 @@
-import { Box,  Divider, Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux';
 import { useEffect, useState } from 'react';
 import profileApi from '../../../api/profile';
-import { PeopleType } from '../../../models/user';
+import { FriendType, PeopleType } from '../../../models/user';
 import { StatusType } from '../../../models/post';
 import CreatePost from '../mang-xa-hoi/component/tao-bai-viet';
 import PostComponent from '../mang-xa-hoi/component/bai-viet';
@@ -19,6 +19,7 @@ import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import Button from '../../../components/Button';
 import { deepCopy } from '@firebase/util';
+import friendApi from '../../../api/friend';
 
 export default function TrangCaNhan() {
   // const profile = useSelector((state: RootState) => state.user.profile);
@@ -35,12 +36,15 @@ export default function TrangCaNhan() {
   const newPostFromStore = useSelector(
     (state: RootState) => state?.socket?.newPost.post
   );
-  const friend = useSelector((state: RootState) => state.friend.friend);
+
+  const endPage = useSelector((state: RootState) => state.scroll.endPageHome);
   const [listPost, setListPost] = useState<StatusType[]>([]);
+  const [friends, setFriends] = useState<FriendType[]>([]);
+  const isChangeFriend = useSelector((state: RootState) => state.friend.isChangeFriend);
+
 
   useEffect(() => {
-    profileApi.getMyProfile().then((data) => {
-      console.log(data);
+    profileApi.getMyProfile().then((data: any) => {
       setProfile({
         name: data?.thong_tin_profile_user?.ten,
         id: data?.thong_tin_profile_user?.ma_nguoi_dung,
@@ -63,6 +67,7 @@ export default function TrangCaNhan() {
           if (data?.status == 200) {
             if (data?.payload?.length == 0) {
               setTimePost('');
+              setListPost([]);
               return;
             }
             const list: StatusType[] = data?.payload?.map((item: any) => {
@@ -163,16 +168,37 @@ export default function TrangCaNhan() {
     }
   }, [profile.id, timePost]);
 
-
   useEffect(() => {
-    console.log(newPostFromStore, ' newPostFromStore nè');
-
     if (newPostFromStore?.id) {
       let arr: StatusType[] = deepCopy(listPost);
       arr.unshift(newPostFromStore);
       setListPost(arr);
     }
   }, [newPostFromStore?.id]);
+
+  useEffect(() => {
+    if (timePost && isPostState && endPage) {
+      setTimePost(listPost[listPost?.length - 1]?.createAt || '');
+    }
+  }, [endPage]);
+
+  useEffect(() => {
+    friendApi.getListFriend().then((data) => {
+      if (data?.status == 200) {
+
+        const list = data?.payload.map((item: any) => {
+          return {
+            name: item?.ten,
+            user: item?.tai_khoan,
+            url: item?.anh?.url,
+            isOnline: item?.isOnline || false,
+            id: item?.ma_nguoi_dung,
+          } as FriendType;
+        });
+        setFriends(list);
+      }
+    });
+  }, [isChangeFriend]);
 
   return (
     <>
@@ -186,12 +212,17 @@ export default function TrangCaNhan() {
             display: 'flex',
             alignItems: 'center',
             padding: '0 200px',
-            justifyContent:"center"
+            justifyContent: 'center',
           }}
         >
-          <img style={{
-            borderRadius:"100%"
-          }} src={profile?.url} height={200} width={200} />
+          <img
+            style={{
+              borderRadius: '100%',
+            }}
+            src={profile?.url}
+            height={200}
+            width={200}
+          />
           <Box
             sx={{
               ml: '80px',
@@ -206,7 +237,7 @@ export default function TrangCaNhan() {
             >
               {profile?.name}
             </Typography>
-            
+
             <Typography
               sx={{
                 fontFamily: 'quicksand',
@@ -275,7 +306,8 @@ export default function TrangCaNhan() {
                 }}
               />
 
-              {moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
+              {profile?.ngay_sinh &&
+                moment(profile?.ngay_sinh).format('DD-MM-YYYY')}
             </Typography>
 
             <Typography
@@ -288,7 +320,6 @@ export default function TrangCaNhan() {
                 alignItems: 'center',
               }}
             >
-              
               {profile?.gioi_tinh ? (
                 <FemaleIcon
                   sx={{
@@ -306,7 +337,7 @@ export default function TrangCaNhan() {
                   }}
                 />
               )}
-              {profile?.gioi_tinh ? 'Nam' : 'Nữ'}
+              {profile?.gioi_tinh ? 'Nữ' : 'Nam'}
             </Typography>
 
             <Box
@@ -376,28 +407,28 @@ export default function TrangCaNhan() {
                     fontSize: '15px',
                   }}
                 >
-                  {friend?.length}
+                  {friends?.length}
                 </span>{' '}
                 bạn bè
               </Typography>
             </Box>
           </Box>
           <Button
-              color="inherit"
-              sx={{
-                backgroundColor: 'rgb(14, 100, 126)',
-                color: '#fff',
-                '&:hover': {
-                  backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                },
-              }}
-              onClick={() => {
-                navigate('/home/chinh-sua-trang-ca-nhan');
-              }}
-              variant="contained"
-            >
-              Chỉnh sửa trang cá nhân
-            </Button>
+            color="inherit"
+            sx={{
+              backgroundColor: 'rgb(14, 100, 126)',
+              color: '#fff',
+              '&:hover': {
+                backgroundColor: 'rgba(14, 100, 126, 0.9)',
+              },
+            }}
+            onClick={() => {
+              navigate('/home/chinh-sua-trang-ca-nhan');
+            }}
+            variant="contained"
+          >
+            Chỉnh sửa trang cá nhân
+          </Button>
         </Box>
         <Divider
           sx={{
@@ -420,8 +451,17 @@ export default function TrangCaNhan() {
           >
             <CreatePost />
             {listPost &&
-              listPost?.map((status) => {
-                return <PostComponent status={status} />;
+              listPost?.map((status, index) => {
+                return (
+                  <PostComponent
+                    onRemove={() => {
+                      const newList = deepCopy(listPost);
+                      newList.splice(index, 1);
+                      setListPost(newList);
+                    }}
+                    status={status}
+                  />
+                );
               })}
           </Box>
           <Box
@@ -438,10 +478,10 @@ export default function TrangCaNhan() {
             align="center"
             sx={{
               fontFamily: 'quicksand',
-              fontWeight: '500',
+              fontWeight: '600',
               fontSize: '15px',
               margin: '16px 16px 10px 0px',
-              color: '#0c4195',
+              color: ' rgb(14, 100, 126)',
               textDecoration: 'underline',
               cursor: 'pointer',
             }}

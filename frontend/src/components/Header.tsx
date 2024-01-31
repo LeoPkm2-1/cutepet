@@ -5,7 +5,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Image from './Image';
 import { RootState } from '../redux';
-import logo from '../assets/img/logo.png';
+import logo from '../assets/img/cutepet.png';
 import { Box } from '@mui/system';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -23,12 +23,15 @@ import { StyledTypography } from './styled';
 import { StyledTextField } from './FormItem';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
-import react, { useEffect, useState } from 'react';
+import react, { useEffect, useRef, useState } from 'react';
 import { NotifycationItemClick } from './NotificationItem';
 import notiApi from '../api/noti';
 import { list } from 'firebase/storage';
 import friendApi from '../api/friend';
-import { PersonComponent } from '../public-pages/page/ban-be';
+import {
+  PersonComponent,
+  PersonComponentSearch,
+} from '../public-pages/page/ban-be';
 import ArticleIcon from '@mui/icons-material/Article';
 import { NotiActions } from '../redux/noti';
 type Props = ReturnType<typeof mapStateToProps> & {
@@ -49,36 +52,77 @@ const Header = (props: Props) => {
       name: string;
       user: string;
       url: string;
-      id: number | string;
+      id: number;
+      isFriend: boolean;
     }[]
   >([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
   const [valueSearch, setValueSearch] = useState('');
   const numNoti = useSelector((state: RootState) => state.noti.numNoti);
+  const userInfoId = useSelector((state: RootState) => state.user.profile?.id);
   const navigate = useNavigate();
+
+  // search phân trang
+  const indexPeople = useRef(0);
+  const [numberSearch, setMumberSearch] = useState(5);
+  const [isHasSearch, setIsHasSearch] = useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClick1 = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl1(event.currentTarget);
-    console.log(valueSearch);
-    friendApi.searchPeople(valueSearch, 0, 10).then((data) => {
-      console.log(data, 'data');
-      if (data?.status == 200) {
-        const list = data?.payload?.map((item: any) => {
-          return {
-            name: item?.ten,
-            user: item?.tai_khoan,
-            url: item?.anh?.url,
-            id: item?.ma_nguoi_dung,
-          };
-        });
-        setFriends(list);
-      }
-    });
+    indexPeople.current = 0;
+    friendApi
+      .searchPeople(valueSearch, indexPeople.current, numberSearch)
+      .then((data) => {
+        if (data?.status == 200) {
+          console.log('data', data);
+          const list = data?.payload?.map((item: any) => {
+            return {
+              name: item?.ten,
+              user: item?.tai_khoan,
+              url: item?.anh?.url,
+              id: item?.ma_nguoi_dung,
+              isFriend: item?.isFriend,
+            };
+          });
+          const newList1 = list?.filter((a: any) => a?.isFriend);
+          const newList2 = list?.filter((a: any) => !a?.isFriend);
+          setFriends([...newList1, ...newList2]);
+          if (data?.payload?.length < numberSearch) {
+            setIsHasSearch(false);
+          } else {
+            setIsHasSearch(true);
+          }
+        }
+      });
   };
+
+  function nextSearch() {
+    friendApi
+      .searchPeople(valueSearch, indexPeople.current, numberSearch)
+      .then((data) => {
+        if (data?.status == 200) {
+          const list = data?.payload?.map((item: any) => {
+            return {
+              name: item?.ten,
+              user: item?.tai_khoan,
+              url: item?.anh?.url,
+              id: item?.ma_nguoi_dung,
+              isFriend: item?.isFriend,
+            };
+          });
+          setFriends([...friends, ...list]);
+          if (data?.payload?.length < numberSearch) {
+            setIsHasSearch(false);
+          } else {
+            setIsHasSearch(true);
+          }
+        }
+      });
+  }
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -92,17 +136,13 @@ const Header = (props: Props) => {
   const open1 = Boolean(anchorEl1);
   const id1 = open1 ? 'simple-popover1' : undefined;
   const location = useLocation();
-  console.log(location, 'location');
 
   const dispatch = useDispatch();
   useEffect(() => {
     notiApi.getNotificationStartFrom(0, 5).then((data: any) => {
-      console.log(data, ' data notification: ');
-
       if (data?.status == 200) {
         let num = 0;
         const list = data?.payload?.map((noti: any) => {
-          console.log(noti, ' notu nef');
           if (!noti?.hasRead) {
             num++;
           }
@@ -156,7 +196,7 @@ const Header = (props: Props) => {
           //   };
           // }
         });
-        console.log(list, 'List');
+
         dispatch(NotiActions.setNumNoti(num));
         // setNoti(list);
       }
@@ -176,14 +216,23 @@ const Header = (props: Props) => {
         </Button> */}
       </div>
 
-      <Title>Cute</Title>
+      <Title
+        style={{
+          cursor: 'pointer',
+        }}
+        onClick={() => navigate('/home/mang-xa-hoi')}
+      >
+        Cute
+      </Title>
       <StyledTypography
+        onClick={() => navigate('/home/mang-xa-hoi')}
         sx={{
           color: '#fff',
           padding: '4px 8px',
           borderRadius: '6px',
           margin: '0 10px',
           background: 'rgb(14, 100, 126)',
+          cursor: 'pointer',
         }}
         textAlign="center"
       >
@@ -287,8 +336,11 @@ const Header = (props: Props) => {
             vertical: 'bottom',
             horizontal: 'left',
           }}
+          sx={{
+            maxHeight: '70vh',
+          }}
         >
-          <NotifycationComponent />
+          <NotifycationComponent onClick={() => handleClose()} />
         </Popover>
         <IconButton
           onClick={() => {
@@ -381,7 +433,7 @@ const Header = (props: Props) => {
               onChange={(e) => {
                 setValueSearch(e.target.value as string);
               }}
-              placeholder="Search"
+              placeholder="Tìm kiếm người dùng"
               inputProps={{ 'aria-label': 'search google maps' }}
             />
             <IconButton
@@ -401,6 +453,7 @@ const Header = (props: Props) => {
         <Popover
           sx={{
             width: '1500px',
+            maxHeight: '70vh',
           }}
           id={id1}
           open={open1}
@@ -417,22 +470,61 @@ const Header = (props: Props) => {
         >
           <Box
             sx={{
-              width: '250px',
+              width: '400px',
               padding: '20px',
             }}
           >
-            {friends?.length > 0
-              ? friends?.map((item) => {
-                  return (
-                    <PersonComponent
-                      name={item.name}
-                      user={item.user}
-                      url={item.url}
-                      userId={item?.id}
-                    />
-                  );
-                })
-              : 'Không tìm thấy'}
+            {friends?.length > 0 ? (
+              <>
+                {friends?.length == 1 && friends[0]?.id == userInfoId ? (
+                  'Không tìm thấy'
+                ) : (
+                  <>
+                    {friends?.map((item) => {
+                      if (`${item?.id}` === `${userInfoId}`) {
+                        return;
+                      }
+                      return (
+                        <PersonComponentSearch
+                          onClickComponent={() => handleClose1()}
+                          name={item.name}
+                          user={item.user}
+                          url={item.url}
+                          userId={item?.id}
+                          isFriend={item?.isFriend}
+                        />
+                      );
+                    })}
+                  </>
+                )}
+              </>
+            ) : (
+              'Không tìm thấy'
+            )}
+
+            {isHasSearch && (
+              <Typography
+                align="center"
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  margin: '16px 16px 10px 0px',
+                  color: '   #65676b',
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  paddingBottom: '30px',
+                }}
+                onClick={() => {
+                  indexPeople.current = indexPeople.current + numberSearch;
+                  // setIndexCommentPost(indexCommentPost + numCommentPost);
+                  nextSearch();
+                }}
+              >
+                {' '}
+                Xem thêm người dùng
+              </Typography>
+            )}
           </Box>
 
           {/* <NotifycationComponent /> */}
@@ -491,7 +583,7 @@ const OrgName = styled.span`
   font-weight: 500;
 `;
 
-function NotifycationComponent() {
+function NotifycationComponent(props: { onClick: () => void }) {
   const [noti, setNoti] = useState<
     {
       name?: string;
@@ -501,7 +593,7 @@ function NotifycationComponent() {
       hasRead: boolean;
       idNoti?: string;
       isRequestFriend?: boolean;
-      isArticle?:boolean;
+      isArticle?: boolean;
     }[]
   >([]);
 
@@ -714,8 +806,8 @@ function NotifycationComponent() {
             };
           }
 
-           //10
-           if (noti?.type == 'COMMENT_ARTICLE') {
+          //10
+          if (noti?.type == 'COMMENT_ARTICLE') {
             return {
               name: noti?.payload?.userComment?.ten,
               url: noti?.payload?.userComment?.anh?.url,
@@ -736,7 +828,6 @@ function NotifycationComponent() {
           }
         });
 
-        console.log(list, 'List');
         setNoti([...noti, ...list]);
         if (data?.payload?.length < 5) {
           setIsNoti(false);
@@ -820,7 +911,8 @@ function NotifycationComponent() {
                 url={item?.url}
                 isReaded={item?.hasRead}
                 isRequestFriend={item?.isRequestFriend || false}
-                isArticle ={item?.isArticle || false}
+                isArticle={item?.isArticle || false}
+                onClick={() => props.onClick()}
               />
             </>
           );

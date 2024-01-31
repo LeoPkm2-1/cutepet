@@ -727,7 +727,7 @@ const calNumOfPostOfEachUser = async (
   NEEDED_NUM_OF_POST = 10,
   numOfPeopleGetPost = undefined
 ) => {
-  console.log({ NEEDED_NUM_OF_POST });
+  // console.log({ NEEDED_NUM_OF_POST });
   if (typeof numOfPeopleGetPost == "undefined") {
     const numOfFriend = await banbeHelper.getNumOfFriendOfUser(user_id);
     return Math.ceil(NEEDED_NUM_OF_POST / (numOfFriend + 1));
@@ -802,7 +802,7 @@ const getPostForNewsfeedController = async (req, res) => {
     user_id,
     NEEDED_NUM_OF_POST
   );
-  console.log({ numOfPostForEachUser });
+  // console.log({ numOfPostForEachUser });
   const ds_ban_be = await laBanBeModel
     .getAllFriendIdsOfUser(user_id)
     .then((data) =>
@@ -883,7 +883,7 @@ const getPostForNewsfeedController = async (req, res) => {
   // insert infor to indicate that  has user liked each post?
   await statusPostHelper.insertUserLikePostInforOfListPosts(user_id, posts);
 
-  console.log({ len_2: posts.length });
+  // console.log({ len_2: posts.length });
 
   res.status(200).json(new Response(200, posts, ""));
   console.log("heheheh");
@@ -1008,6 +1008,7 @@ const getPostHavePetController = async (req, res) => {
       before,
       num
     );
+    await statusPostHelper.InsertOwnerInforOfListPosts(posts.payload);
     res
       .status(200)
       .json(new Response(200, posts.payload, "Lấy dữ liệu thành công"));
@@ -1029,7 +1030,8 @@ const getPostHavePetController = async (req, res) => {
       num
     );
     await statusPostHelper.InsertOwnerInforOfListPosts(posts.payload);
-    // console.log(posts);
+    // console.log(posts.payload);
+    // console.log('hehe');
     res
       .status(200)
       .json(new Response(200, posts.payload, "Lấy dữ liệu thành công"));

@@ -287,8 +287,23 @@ _chi tiết_ **[Route_Struture/post.md](./post.md#18-lấy-bài-viết-có-tag-c
 
    _chi tiết:_ **[Route_Struture/friend.md](./friend.md#6-danh-sách-các-người-dũng-đã-gửi-lời-mời-kết-bạn-đang-chờ-phải-hồi)** và **postman số 75**
 
-##
+2. cập nhật thông tin cơ bản của thú cưng:
+   _chi tiết_ **[Route_Struture/pet.md](./pet.md#7-chỉnh-sửa-thông-tin-cơ-bản-cho-thú-cưng)** và **postman số 77**
 
-##
+
+## (11-12-2023):
+
+1. cập nhật ảnh đại diện cho thú cưng:
+
+   _chi tiết_ **[Route_Struture/pet.md](./pet.md#8-cập-nhật-ảnh-đại-diện-thú-cưng)** và **postman số 78**
+
+## (13-12-2023):
+1. lấy thông tin của tất cả các tác giả
+
+   *chi tiết* **[Route_Struture/article.md](./article.md#23-lấy-thông-tin-của-tất-cả-các-tác-giả-của-bài-viết-chia-sẻ-trạng-thái)** và **postman số 79**
+
+2. lọc bài viết chia sẻ kiến thức kèm theo id của tác giả
+
+*chi tiết* **[Route_Struture/article.md](./article.md#24-lọc-bài-viết-chia-sẻ-kiến-thức-theo-id-của-tác-giả)** và **postman số 80**
 
 ##

@@ -176,12 +176,13 @@ const unFollowPost = (post_id: string) => {
   });
 };
 
-const reportPost = (post_id: string) => {
+const reportPost = (post_id: string, report_Reason:string) => {
   return authRequest<any>({
     url: `/post/statusPost/reportPost`,
     method: 'POST',
     body: {
       post_id,
+      report_Reason
     },
   });
 };
@@ -233,6 +234,18 @@ const updatePost = (
   });
 };
 
+const getCommentStartFrom = (post_id: string, index: number, num: number) => {
+  return authRequest<any>({
+    url: `/post/statusPost/getCommentStartFrom`,
+    method: 'POST',
+    body: {
+      post_id,
+      index,
+      num,
+    },
+  });
+};
+
 const postApi = {
   createStatus,
   likeOrUnlikeStatus,
@@ -253,7 +266,8 @@ const postApi = {
   likeComment,
   updateComment,
   updateReply,
-  updatePost
+  updatePost,
+  getCommentStartFrom
 };
 
 export default postApi;

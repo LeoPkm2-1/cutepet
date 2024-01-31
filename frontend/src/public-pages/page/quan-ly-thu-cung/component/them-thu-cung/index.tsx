@@ -78,7 +78,7 @@ export default function ThemThuCung() {
   }, [pet?.ma_loai]);
 
   async function addPet() {
-    console.log(pet, 'Pet nè: ');
+
     let url: string = '';
     setIsLoading(true);
     if (!pet?.ten_thu_cung?.trim()) {
@@ -127,6 +127,7 @@ export default function ThemThuCung() {
         }}
       >
         <StyledTypography
+          align="center"
           sx={{
             fontSize: '20px',
             fontWeight: '600',
@@ -234,7 +235,7 @@ export default function ThemThuCung() {
                   value={dayjs(pet?.ngay_sinh)}
                   onChange={(newValue) => {
                     if (newValue) {
-                      console.log(newValue.format('YYYY-MM-DD'));
+            
                       setPet({
                         ...pet,
                         ngay_sinh: newValue.format('YYYY-MM-DD'),
@@ -325,14 +326,23 @@ export default function ThemThuCung() {
           </Grid>
         </Grid>
         <Box
-          onClick={addPet}
           sx={{
             display: 'flex',
-            justifyItems: 'center',
-            alignItems: 'center',
+            alignItem: 'center',
+            justifyContent:"center",
+            mt:"30px"
           }}
         >
-          <StyledButton>Thêm thú cưng</StyledButton>
+          <Box
+            onClick={addPet}
+            sx={{
+              display: 'flex',
+              justifyItems: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <StyledButton>Thêm thú cưng</StyledButton>
+          </Box>
         </Box>
       </Box>
     </>

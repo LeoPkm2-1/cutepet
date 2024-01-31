@@ -21,7 +21,7 @@ const createArticle = (
 };
 
 const editArticle = (
-  article_id:string,
+  article_id: string,
   title: string,
   main_image: string,
   intro: string,
@@ -41,8 +41,6 @@ const editArticle = (
     },
   });
 };
-
-
 
 const getArticleById = (article_id: string) => {
   return authRequest<any>({
@@ -137,12 +135,13 @@ const unFollowArticle = (article_id: string) => {
   });
 };
 
-const reportArticle = (article_id: string) => {
+const reportArticle = (article_id: string, report_Reason: string) => {
   return authRequest<any>({
     url: '/post/article/reportArticle',
     method: 'POST',
     body: {
       article_id,
+      report_Reason,
     },
   });
 };
@@ -186,9 +185,7 @@ const filterArticles = (
   });
 };
 
-const removeArticles = (
-  article_id: string
-) => {
+const removeArticles = (article_id: string) => {
   return authRequest<any>({
     url: '/post/article/deleteArticle',
     method: 'POST',
@@ -198,7 +195,56 @@ const removeArticles = (
   });
 };
 
+const getCommentStartFrom = (
+  article_id: string,
+  index: number,
+  num: number
+) => {
+  return authRequest<any>({
+    url: 'post/article/getCommentStartFrom',
+    method: 'POST',
+    body: {
+      article_id,
+      index,
+      num,
+    },
+  });
+};
 
+const getAllAuthorOfArticle = () => {
+  return authRequest<any>({
+    url: '/post/article/getAllAuthorOfArticle',
+    method: 'POST',
+  });
+};
+
+const filterArticles_v2 = (
+  searchKey: string | null,
+  tags: string[] | null,
+  sortBy:
+    | 'TIME_NEWEST_TO_OLDEST'
+    | 'TIME_OLDEST_TO_NEWEST'
+    | 'NUM_OF_COMMENT_DESC'
+    | 'NUM_OF_COMMENT_ASC'
+    | 'SCORE_DESC'
+    | 'SCORE_ASC',
+  authorId: number | null,
+  index: number | null,
+  num: number | null
+) => {
+  return authRequest<any>({
+    url: '/post/article/filterArticles_v2',
+    method: 'POST',
+    body: {
+      searchKey,
+      tags,
+      sortBy,
+      authorId,
+      index,
+      num,
+    },
+  });
+};
 
 const articleApi = {
   createArticle,
@@ -217,7 +263,10 @@ const articleApi = {
   updateComment,
   filterArticles,
   editArticle,
-  removeArticles
+  removeArticles,
+  getCommentStartFrom,
+  getAllAuthorOfArticle,
+  filterArticles_v2
 };
 
 export default articleApi;

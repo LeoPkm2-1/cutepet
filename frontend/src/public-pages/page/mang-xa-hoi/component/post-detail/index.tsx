@@ -14,14 +14,16 @@ export default function PostDetail() {
         .then((data: any) => {
           if (data?.status !== 200) {
             setIsData(false);
+          } else {
+            setIsData(true);
           }
         })
         .catch(() => {
           setIsData(false);
         });
     }
-  });
-  
+  }, [id]);
+
   return (
     <>
       {isData ? (
@@ -33,7 +35,7 @@ export default function PostDetail() {
             xs={8}
             item
           >
-            <PostComponent idStatus={id} />
+            <PostComponent onRemove={() => setIsData(false)} idStatus={id} />
           </Grid>
           <Grid
             sx={{

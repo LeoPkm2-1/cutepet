@@ -1,16 +1,21 @@
 import {
   Box,
+  Dialog,
   Divider,
+  Fade,
   Grid,
   IconButton,
   InputBase,
   Menu,
   MenuItem,
+  Tooltip,
   Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArticleType } from '../../../../../models/article';
 import parse from 'html-react-parser';
+import TextsmsIcon from '@mui/icons-material/Textsms';
+
 import articleApi from '../../../../../api/article';
 import {
   useLocation,
@@ -18,7 +23,7 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../redux';
 import { useSnackbar } from 'notistack';
 import postApi from '../../../../../api/post';
@@ -38,6 +43,10 @@ import { BaiVietCoBan } from '../bai-viet-co-ban';
 import BuildIcon from '@mui/icons-material/Build';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useShowDialog } from '../../../../../hooks/dialog';
+import Button from '../../../../../components/Button';
+import { StyledTextField } from '../../../../../components/FormItem';
+import { NotiActions } from '../../../../../redux/noti';
+import moment from 'moment';
 export default function BaiChiaSe() {
   const [article, setArticle] = useState<ArticleType>({
     id: '',
@@ -64,15 +73,21 @@ export default function BaiChiaSe() {
   const sp = new URLSearchParams(pargamSearch);
   const navigate = useNavigate();
   const showDialog = useShowDialog();
-
+  const [openFlag, setOpenFlag] = useState(false);
+  const [textFlag, setTextFlag] = useState('');
+  const indexCommentPost = useRef(0);
+  const [isLoadComment, setIsLoadComment] = useState(false);
+  const [isHasComment, setIsHasComment] = useState(true);
+  const [numCommentPost, setNumCommentPost] = useState(5);
   const profileId = useSelector((state: RootState) => state.user.profile?.id);
+  const postIdNew = useSelector((state: RootState) => state.noti.newId);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (id) {
       articleApi
         .getArticleById(id)
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'data arcticle ');
             const art = {
               id: data?.payload?._id,
               title: data?.payload?.title,
@@ -87,11 +102,14 @@ export default function BaiChiaSe() {
               numUpVote: data?.payload?.numOfUpVote,
               numDownVote: data?.payload?.numOfDownVote,
               user_id: data?.payload?.owner_infor?.ma_nguoi_dung,
+              createAt: data?.payload?.createAt,
+              numOfComment: data?.payload?.numOfComment,
             };
             setNumAve(
               data?.payload?.numOfUpVote - data?.payload?.numOfDownVote
             );
             setArticle(art);
+            setIsData(true);
           } else {
             setIsData(false);
           }
@@ -108,7 +126,7 @@ export default function BaiChiaSe() {
       .filterArticles(
         null,
         article?.categories?.length > 0 ? article?.categories : null,
-        0,
+        1,
         3
       )
       .then((data) => {
@@ -133,29 +151,150 @@ export default function BaiChiaSe() {
         }
       });
   }, [article?.categories]);
-  useEffect(() => {
-    if (id) {
-      articleApi.getAllComment(id).then((data) => {
-        if (data?.status == 200) {
-          console.log(data, 'COmment');
 
-          const listComment: CommentType[] = data?.payload?.comments?.map(
-            (item: any) => {
-              return {
-                photoURL: item?.userCmtInfor?.anh?.url,
-                name: item?.userCmtInfor?.ten,
-                userId: item?.userCmtInfor?.ma_nguoi_dung,
-                text: item?.comment,
-                createdAt: item?.commentAt,
-                id: item?._id,
-              } as CommentType;
+  useEffect(() => {
+    indexCommentPost.current = 0;
+    if (id) {
+      articleApi
+        .getCommentStartFrom(id, indexCommentPost.current, numCommentPost)
+        .then((data) => {
+          if (data?.status == 200) {
+            const listComment: CommentType[] = data?.payload?.comments?.map(
+              (item: any) => {
+                return {
+                  photoURL: item?.userCmtInfor?.anh?.url,
+                  name: item?.userCmtInfor?.ten,
+                  userId: item?.userCmtInfor?.ma_nguoi_dung,
+                  text: item?.comment,
+                  createdAt: item?.commentAt,
+                  id: item?._id,
+                } as CommentType;
+              }
+            );
+            setComments(listComment);
+            if (data?.payload?.comments?.length < numCommentPost) {
+              setIsHasComment(false);
+            } else {
+              setIsHasComment(true);
             }
-          );
-          setComments(listComment.reverse());
-        }
-      });
+          } else {
+            setIsHasComment(false);
+          }
+        })
+        .catch(() => {
+          setIsHasComment(false);
+        });
     }
   }, [id]);
+
+  useEffect(() => {
+    indexCommentPost.current = 0;
+    // if (props.status && props.status?.id) {
+    if (id && postIdNew == id) {
+      if (id) {
+        articleApi
+          .getCommentStartFrom(id, indexCommentPost.current, numCommentPost)
+          .then((data) => {
+            if (data?.status == 200) {
+              const listComment: CommentType[] = data?.payload?.comments?.map(
+                (item: any) => {
+                  return {
+                    photoURL: item?.userCmtInfor?.anh?.url,
+                    name: item?.userCmtInfor?.ten,
+                    userId: item?.userCmtInfor?.ma_nguoi_dung,
+                    text: item?.comment,
+                    createdAt: item?.commentAt,
+                    id: item?._id,
+                  } as CommentType;
+                }
+              );
+              setComments(listComment);
+              if (data?.payload?.comments?.length < numCommentPost) {
+                setIsHasComment(false);
+              } else {
+                setIsHasComment(true);
+              }
+            } else {
+              setIsHasComment(false);
+            }
+          })
+          .catch(() => {
+            setIsHasComment(false);
+          });
+      }
+      dispatch(NotiActions.setNewId(''));
+    }
+  }, [postIdNew]);
+
+  useEffect(() => {
+    if (id && id == postIdNew) {
+      articleApi
+        .getArticleById(id)
+        .then((data) => {
+          if (data?.status == 200) {
+            const art = {
+              id: data?.payload?._id,
+              title: data?.payload?.title,
+              main_image: data?.payload?.main_image,
+              intro: data?.payload?.intro,
+              content: data?.payload?.content,
+              categories: data?.payload?.categories,
+              user_avatar: data?.payload?.owner_infor?.anh?.url,
+              user_name: data?.payload?.owner_infor?.ten,
+              isUpVote: data?.payload?.hasUpVoted,
+              isDownVote: data?.payload?.hasDownVoted,
+              numUpVote: data?.payload?.numOfUpVote,
+              numDownVote: data?.payload?.numOfDownVote,
+              user_id: data?.payload?.owner_infor?.ma_nguoi_dung,
+              createAt: data?.payload?.createAt,
+            };
+            setNumAve(
+              data?.payload?.numOfUpVote - data?.payload?.numOfDownVote
+            );
+            setArticle(art);
+            setIsData(true);
+          } else {
+            setIsData(false);
+          }
+        })
+        .catch(() => {
+          setIsData(false);
+        });
+    }
+  }, [postIdNew]);
+
+  function nextComment() {
+    if (id) {
+      articleApi
+        .getCommentStartFrom(id, indexCommentPost.current, numCommentPost)
+        .then((data) => {
+          if (data?.status == 200) {
+            const listComment: CommentType[] = data?.payload?.comments?.map(
+              (item: any) => {
+                return {
+                  photoURL: item?.userCmtInfor?.anh?.url,
+                  name: item?.userCmtInfor?.ten,
+                  userId: item?.userCmtInfor?.ma_nguoi_dung,
+                  text: item?.comment,
+                  createdAt: item?.commentAt,
+                  id: item?._id,
+                } as CommentType;
+              }
+            );
+            setComments([...comments, ...listComment]);
+            if (data?.payload?.comments?.length < numCommentPost) {
+              setIsHasComment(false);
+            }
+          } else {
+            setIsHasComment(false);
+          }
+        })
+        .catch(() => {
+          setIsHasComment(false);
+        });
+    }
+  }
+
   useEffect(() => {
     if (id) {
       articleApi.isUserFollowedPost(id).then((data) => {
@@ -255,13 +394,15 @@ export default function BaiChiaSe() {
   function reportArticle() {
     if (id) {
       articleApi
-        .reportArticle(id)
+        .reportArticle(id, textFlag)
         .then((data) => {
           if (data?.status == 200) {
             setIsFollow(false);
             enqueueSnackbar(`Bạn đã báo cáo bài viết thành công`, {
               variant: 'info',
             });
+            setOpenFlag(false);
+            setTextFlag('');
           }
         })
         .catch((err) => {
@@ -316,6 +457,65 @@ export default function BaiChiaSe() {
                 position: 'relative',
               }}
             >
+              <Dialog onClose={() => setOpenFlag(false)} open={openFlag}>
+                <Box
+                  sx={{
+                    minWidth: '300px',
+                    padding: '20px',
+                  }}
+                >
+                  <Typography
+                    align="center"
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '500',
+                      fontSize: '15px',
+                      mb: '16px',
+                    }}
+                  >
+                    Lý do báo cáo bài viết
+                  </Typography>
+                  <StyledTextField
+                    fullWidth
+                    size="small"
+                    placeholder="Viết lý do"
+                    name="lydo"
+                    multiline
+                    minRows={2}
+                    maxRows={6}
+                    color="info"
+                    value={textFlag || ''}
+                    onChange={(e) => {
+                      setTextFlag(e.target.value as string);
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-around',
+                      mt: '20px',
+                    }}
+                  >
+                    <Button
+                      onClick={() => setOpenFlag(false)}
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      sx={{}}
+                    >
+                      Hủy
+                    </Button>
+                    <Button
+                      onClick={reportArticle}
+                      variant="contained"
+                      color="info"
+                      size="small"
+                    >
+                      Báo cáo
+                    </Button>
+                  </Box>
+                </Box>
+              </Dialog>
               <Box
                 sx={{
                   display: 'flex',
@@ -324,23 +524,38 @@ export default function BaiChiaSe() {
                   paddingLeft: '20px',
                   position: 'fixed',
                   left: '280px',
-                
                 }}
               >
-                <IconButton
-                  disabled={article?.isUpVote}
-                  sx={{
-                    border: '1px solid gray',
-                    padding: '5px',
+                <Tooltip
+                  classes={{
+                    tooltip: 'custom-tooltip',
                   }}
-                  onClick={upVote}
+                  TransitionComponent={Fade}
+                  TransitionProps={{ timeout: 600 }}
+                  placement="top"
+                  title={'Up vote'}
+                  key={'upvote'}
                 >
-                  <ArrowDropUpRoundedIcon
+                  <IconButton
+                    disabled={
+                      article?.isUpVote || profileId == article?.user_id
+                    }
                     sx={{
-                      fontSize: '32px',
+                      border:
+                        article?.isDownVote || profileId == article?.user_id
+                          ? '1px solid #77737369'
+                          : '1px solid gray',
+                      padding: '5px',
                     }}
-                  />
-                </IconButton>
+                    onClick={upVote}
+                  >
+                    <ArrowDropUpRoundedIcon
+                      sx={{
+                        fontSize: '32px',
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
 
                 <span
                   style={{
@@ -354,101 +569,172 @@ export default function BaiChiaSe() {
                   {' '}
                   {numAve}{' '}
                 </span>
-                <IconButton
-                  disabled={article?.isDownVote}
-                  sx={{
-                    border: '1px solid gray',
-                    padding: '5px',
+                <Tooltip
+                  classes={{
+                    tooltip: 'custom-tooltip',
                   }}
-                  onClick={downVote}
+                  TransitionComponent={Fade}
+                  TransitionProps={{ timeout: 600 }}
+                  placement="top"
+                  title={'Down vote'}
+                  key={'downvote'}
                 >
-                  <ArrowDropDownRoundedIcon
+                  <IconButton
+                    disabled={
+                      article?.isDownVote || profileId == article?.user_id
+                    }
                     sx={{
-                      fontSize: '32px',
+                      border:
+                        article?.isDownVote || profileId == article?.user_id
+                          ? '1px solid #77737369'
+                          : '1px solid gray',
+                      padding: '5px',
                     }}
-                  />
-                </IconButton>
+                    onClick={downVote}
+                  >
+                    <ArrowDropDownRoundedIcon
+                      sx={{
+                        fontSize: '32px',
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
                 {profileId == article?.user_id && (
                   <>
                     {isFollow ? (
-                      <IconButton
-                        sx={{
-                          border: '1px solid gray',
-                          padding: '10px',
-                          marginTop: '16px',
+                      <Tooltip
+                        classes={{
+                          tooltip: 'custom-tooltip',
                         }}
-                        onClick={unFollowArticle}
+                        TransitionComponent={Fade}
+                        TransitionProps={{ timeout: 600 }}
+                        placement="top"
+                        title={'Tắt thông báo'}
+                        key={'tat-thong-bao'}
                       >
-                        <NotificationsOffRoundedIcon
+                        <IconButton
                           sx={{
-                            fontSize: '22px',
+                            border: '1px solid gray',
+                            padding: '10px',
+                            marginTop: '16px',
                           }}
-                        />
-                      </IconButton>
+                          onClick={unFollowArticle}
+                        >
+                          <NotificationsOffRoundedIcon
+                            sx={{
+                              fontSize: '22px',
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
                     ) : (
-                      <IconButton
-                        sx={{
-                          border: '1px solid gray',
-                          padding: '10px',
-                          marginTop: '16px',
+                      <Tooltip
+                        classes={{
+                          tooltip: 'custom-tooltip',
                         }}
-                        onClick={followArticle}
+                        TransitionComponent={Fade}
+                        TransitionProps={{ timeout: 600 }}
+                        placement="top"
+                        title={'Bật thông báo'}
+                        key={'bat-thong-bao'}
                       >
-                        <NotificationsActiveRoundedIcon
+                        <IconButton
                           sx={{
-                            fontSize: '22px',
+                            border: '1px solid gray',
+                            padding: '10px',
+                            marginTop: '16px',
                           }}
-                        />
-                      </IconButton>
+                          onClick={followArticle}
+                        >
+                          <NotificationsActiveRoundedIcon
+                            sx={{
+                              fontSize: '22px',
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
                     )}
                   </>
                 )}
                 {profileId !== article?.user_id && (
-                  <IconButton
-                    sx={{
-                      border: '1px solid gray',
-                      padding: '10px',
-                      marginTop: '16px',
+                  <Tooltip
+                    classes={{
+                      tooltip: 'custom-tooltip',
                     }}
-                    onClick={reportArticle}
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 600 }}
+                    placement="top"
+                    title={'Báo cáo'}
+                    key={'bao-cao'}
                   >
-                    <AssistantPhotoRoundedIcon
+                    <IconButton
                       sx={{
-                        fontSize: '22px',
+                        border: '1px solid gray',
+                        padding: '10px',
+                        marginTop: '16px',
                       }}
-                    />
-                  </IconButton>
+                      onClick={() => setOpenFlag(true)}
+                    >
+                      <AssistantPhotoRoundedIcon
+                        sx={{
+                          fontSize: '22px',
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 )}
                 {profileId === article?.user_id && (
                   <>
-                    <IconButton
-                      sx={{
-                        border: '1px solid gray',
-                        padding: '10px',
-                        marginTop: '20px',
+                    <Tooltip
+                      classes={{
+                        tooltip: 'custom-tooltip',
                       }}
-                      onClick={updateArticle}
+                      TransitionComponent={Fade}
+                      TransitionProps={{ timeout: 600 }}
+                      placement="top"
+                      title={'Chỉnh sửa'}
+                      key={'chinh-sua'}
                     >
-                      <BuildIcon
+                      <IconButton
                         sx={{
-                          fontSize: '22px',
+                          border: '1px solid gray',
+                          padding: '10px',
+                          marginTop: '20px',
                         }}
-                      />
-                    </IconButton>
-                    <IconButton
-                      sx={{
-                        border: '1px solid gray',
-                        padding: '10px',
-                        marginTop: '20px',
+                        onClick={updateArticle}
+                      >
+                        <BuildIcon
+                          sx={{
+                            fontSize: '22px',
+                          }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip
+                      classes={{
+                        tooltip: 'custom-tooltip',
                       }}
-                      onClick={removeArticle}
+                      TransitionComponent={Fade}
+                      TransitionProps={{ timeout: 600 }}
+                      placement="top"
+                      title={'Xóa'}
+                      key={'xoa'}
                     >
-                      <DeleteOutlineIcon
+                      <IconButton
                         sx={{
-                          fontSize: '22px',
+                          border: '1px solid gray',
+                          padding: '10px',
+                          marginTop: '20px',
                         }}
-                      />
-                    </IconButton>
+                        onClick={removeArticle}
+                      >
+                        <DeleteOutlineIcon
+                          sx={{
+                            fontSize: '22px',
+                          }}
+                        />
+                      </IconButton>
+                    </Tooltip>
                   </>
                 )}
               </Box>
@@ -457,7 +743,7 @@ export default function BaiChiaSe() {
                   paddingBottom: '20px',
                   marginLeft: '80px',
                   width: '100%',
-                  paddingRight:"20px"
+                  paddingRight: '20px',
                 }}
               >
                 <Box
@@ -504,6 +790,18 @@ export default function BaiChiaSe() {
                       ? article.title?.substring(0, 100)
                       : article.title}
                   </Typography>
+                  <Typography
+                    align="center"
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '500',
+                      fontSize: '12px',
+                      minWidth: '60px',
+                      mb: '10px',
+                    }}
+                  >
+                    {moment(article?.createAt).format('DD-MM-YYYY')}
+                  </Typography>
                   <Box
                     sx={{
                       flex: 1,
@@ -530,10 +828,16 @@ export default function BaiChiaSe() {
                         style={{
                           objectFit: 'cover',
                           borderRadius: '50px',
+                          cursor: 'pointer',
                         }}
                         height={36}
                         width={36}
                         src={article?.user_avatar}
+                        onClick={() => {
+                          sp.set('author', `${article?.user_id}`);
+                          setSearchParams(sp);
+                          navigate(`/home/trang-chia-se?${sp}`);
+                        }}
                       />
                       <Typography
                         sx={{
@@ -541,6 +845,12 @@ export default function BaiChiaSe() {
                           fontWeight: '500',
                           fontSize: '14px',
                           ml: '16px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => {
+                          sp.set('author', `${article?.user_id}`);
+                          setSearchParams(sp);
+                          navigate(`/home/trang-chia-se?${sp}`);
                         }}
                       >
                         By {article.user_name}
@@ -565,9 +875,75 @@ export default function BaiChiaSe() {
                     marginTop: '20px',
                   }}
                 />
+                <Typography
+                  align="right"
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    minWidth: '60px',
+                    mb: '12px',
+                  }}
+                >
+                  <span>{article?.numOfComment}</span>
+                  <TextsmsIcon
+                    sx={{
+                      color: '#8080808f',
+                      ml: '5px',
+                    }}
+                  />{' '}
+                </Typography>
+                <CreateComment
+                  onSuccess={(cmt) => {
+                    // setReloadComment(!reloadComment);
+                    // console.log('reload laij nef');
+                    // if (status) {
+                    //   setStatus({
+                    //     ...status,
+                    //     numOfComment: status?.numOfComment + 1,
+                    //   });
+                    // }
+                    const arr = [cmt];
+                    setComments([...arr, ...comments]);
+                    setArticle({
+                      ...article,
+                      numOfComment: (article?.numOfComment || 0) + 1,
+                    });
+                    indexCommentPost.current = indexCommentPost.current + 1;
+                  }}
+                  // idStatus={status?.id}
+                  idStatus={article?.id}
+                />
                 {comments?.map((comment) => {
                   return <Comment comment={comment} onRemove={() => {}} />;
                 })}
+                {isHasComment && (
+                  <Typography
+                    align="center"
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '600',
+                      fontSize: '14px',
+                      margin: '16px 16px 10px 0px',
+                      color: '   #65676b',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                      paddingBottom: '30px',
+                    }}
+                    onClick={() => {
+                      indexCommentPost.current =
+                        indexCommentPost.current + numCommentPost;
+                      // setIndexCommentPost(indexCommentPost + numCommentPost);
+                      nextComment();
+                    }}
+                  >
+                    {' '}
+                    Xem thêm bình luận{' '}
+                  </Typography>
+                )}
                 {/* <Comment
               comment={{
                 photoURL: 'string',
@@ -588,22 +964,6 @@ export default function BaiChiaSe() {
               }}
               onRemove={() => {}}
             /> */}
-                <CreateComment
-                  onSuccess={(cmt) => {
-                    // setReloadComment(!reloadComment);
-                    // console.log('reload laij nef');
-                    // if (status) {
-                    //   setStatus({
-                    //     ...status,
-                    //     numOfComment: status?.numOfComment + 1,
-                    //   });
-                    // }
-                    const arr = [cmt];
-                    setComments([...comments, ...arr]);
-                  }}
-                  // idStatus={status?.id}
-                  idStatus={article?.id}
-                />
               </Box>
             </Box>
           </Grid>
@@ -697,6 +1057,7 @@ function CreateComment(props: {
           // background: '#fff',
           // padding: '0px 20px 12px 20px',
           borderRadius: '12px',
+          mb: '20px',
         }}
       >
         <img
@@ -767,9 +1128,9 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
   const [isFix, setIsFix] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const showDialog = useShowDialog();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    console.log('Vaao click nè');
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -778,15 +1139,20 @@ function Comment(props: { comment: CommentType; onRemove: () => void }) {
     setComment(props?.comment);
   }, [props?.comment]);
   function handleDeleteCmt() {
-    if (props.comment.id) {
-      articleApi.deleteComment(props.comment.id).then((data) => {
-        if (data?.status == 200) {
-          setIsFinish(false);
-          props.onRemove();
-        } else {
+    showDialog({
+      content: `Bạn chắc chắn xóa bình luận này không ?`,
+      onOk: () => {
+        if (props.comment.id) {
+          articleApi.deleteComment(props.comment.id).then((data) => {
+            if (data?.status == 200) {
+              setIsFinish(false);
+              props.onRemove();
+            } else {
+            }
+          });
         }
-      });
-    }
+      },
+    });
   }
 
   function handleFix() {

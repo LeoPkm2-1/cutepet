@@ -66,7 +66,7 @@ const getpublicImageInfor = async (pet_id, ma_loai = undefined) => {
     case 1:
       return {
         ma_anh: null,
-        url: "https://img.freepik.com/premium-photo/super-cute-little-beagle-rendered-style-pixar-cartoon-generative-ai_808510-519.jpg",
+        url: "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fmydog.png?alt=media&token=c6cd879f-2489-41ad-a7c5-3bda7d8aad76",
         ngay_cap_nhat: null,
         ma_thu_cung: pet_id,
         is_active: null,
@@ -74,7 +74,7 @@ const getpublicImageInfor = async (pet_id, ma_loai = undefined) => {
     case 2:
       return {
         ma_anh: null,
-        url: "https://img.freepik.com/free-photo/view-adorable-3d-cat_23-2150473746.jpg",
+        url: "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fmycat.png?alt=media&token=e19c4ba8-70af-4717-bac5-966fd6d19223",
         ngay_cap_nhat: null,
         ma_thu_cung: pet_id,
         is_active: null,
@@ -82,7 +82,7 @@ const getpublicImageInfor = async (pet_id, ma_loai = undefined) => {
     case 3:
       return {
         ma_anh: null,
-        url: "https://img.freepik.com/premium-photo/baby-shark-8_780593-78.jpg",
+        url: "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fmyshark.png?alt=media&token=f7c63057-233c-4693-af8d-21d7f9e12df8",
         ngay_cap_nhat: null,
         ma_thu_cung: pet_id,
         is_active: null,
@@ -90,7 +90,7 @@ const getpublicImageInfor = async (pet_id, ma_loai = undefined) => {
     case 4:
       return {
         ma_anh: null,
-        url: "https://img.freepik.com/premium-photo/animals-dog-cat-lion-tiger-parrot-bird-panda-giraffe-hippopotamus-wolf-elephant-monkey-snake-eagle_845967-16.jpg",
+        url: "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fmychicken.png?alt=media&token=57cb64e6-46b3-470d-9a8c-3e67789a65ba",
         ngay_cap_nhat: null,
         ma_thu_cung: pet_id,
         is_active: null,
@@ -99,7 +99,7 @@ const getpublicImageInfor = async (pet_id, ma_loai = undefined) => {
     default:
       return {
         ma_anh: null,
-        url: "https://img.freepik.com/premium-photo/super-cute-little-beagle-rendered-style-pixar-cartoon-generative-ai_808510-519.jpg",
+        url: "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fmydog.png?alt=media&token=c6cd879f-2489-41ad-a7c5-3bda7d8aad76",
         ngay_cap_nhat: null,
         ma_thu_cung: pet_id,
         is_active: null,

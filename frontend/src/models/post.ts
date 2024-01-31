@@ -36,6 +36,6 @@ export interface CommentType {
   numOfLike?: number;
   numOfReply?: number;
   postUserId?: number;
-  hasLike?: boolean;
+  hasLiked?: boolean;
 
 }

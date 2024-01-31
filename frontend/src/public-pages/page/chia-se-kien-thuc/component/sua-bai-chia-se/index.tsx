@@ -13,6 +13,8 @@ import { uploadTaskPromise } from '../../../../../api/upload';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArticleType } from '../../../../../models/article';
 import { Page404 } from '../../../mang-xa-hoi/component/post-detail';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../redux';
 export function SuaBaiChiaSe() {
   const [title, setTitle] = useState('');
   const [decrition, setDecrition] = useState('');
@@ -24,6 +26,7 @@ export function SuaBaiChiaSe() {
   const navigate = useNavigate();
   const [isData, setIsData] = useState(true);
   const [urlCover, setUrlCover] = useState('');
+  const profileId = useSelector((state: RootState) => state.user.profile?.id);
   const [article, setArticle] = useState<ArticleType>({
     id: '',
     title: '',
@@ -33,6 +36,7 @@ export function SuaBaiChiaSe() {
     categories: [],
     user_avatar: '',
     user_name: '',
+    owner_id: 0,
   });
 
   const { id } = useParams();
@@ -42,8 +46,7 @@ export function SuaBaiChiaSe() {
         .getArticleById(id)
         .then((data) => {
           if (data?.status == 200) {
-            console.log(data, 'data arcticle ');
-
+            setIsData(true);
             const art = {
               id: data?.payload?._id,
               title: data?.payload?.title,
@@ -57,7 +60,9 @@ export function SuaBaiChiaSe() {
               isDownVote: data?.payload?.hasDownVoted,
               numUpVote: data?.payload?.numOfUpVote,
               numDownVote: data?.payload?.numOfDownVote,
+              owner_id: data?.payload?.owner_id,
             };
+
             setTitle(data?.payload?.title);
             setDecrition(data?.payload?.intro);
             setTag(data?.payload?.categories);
@@ -84,10 +89,10 @@ export function SuaBaiChiaSe() {
         .editArticle(id, title, urlPhoto, decrition, content, tag)
         .then((data) => {
           if (data?.status == 200) {
-            console.log('Thanh cong');
-            enqueueSnackbar('Cập nhật bài viết thành công', { variant: "info" });
+            enqueueSnackbar('Cập nhật bài viết thành công', {
+              variant: 'info',
+            });
             setIsLoading(false);
-            console.log(data);
 
             if (id) {
               navigate(`/home/trang-chia-se/${id}`);
@@ -105,203 +110,224 @@ export function SuaBaiChiaSe() {
     <>
       {isData ? (
         <>
-          <Loading open={loading} />
-          <Box
-            sx={{
-              paddingBottom: '200px',
-            }}
-          >
-            <Box
-              sx={{
-                backgroundColor: '#fff',
-                mb: '20px',
-                borderRadius: '4px',
-                padding: '10px 20px',
-              }}
-            >
-              <Typography
+          {profileId === article?.owner_id ? (
+            <>
+              <Loading open={loading} />
+              <Box
                 sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '700',
-                  mb: '12px',
+                  paddingBottom: '30px',
                 }}
               >
-                Tiêu đề{' '}
-                <span
-                  style={{
-                    color: 'red',
+                <Box
+                  sx={{
+                    backgroundColor: '#fff',
+                    mb: '20px',
+                    borderRadius: '4px',
+                    padding: '10px 20px',
                   }}
                 >
-                  *
-                </span>
-              </Typography>
-              <StyledTextField
-                value={title}
-                fullWidth
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                backgroundColor: '#fff',
-                mb: '20px',
-                borderRadius: '4px',
-                padding: '10px 20px',
-              }}
-            >
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '700',
-                  mb: '12px',
-                }}
-              >
-                Ảnh bìa{' '}
-                <span
-                  style={{
-                    color: 'red',
+                  <Typography
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '700',
+                      mb: '12px',
+                    }}
+                  >
+                    Tiêu đề{' '}
+                    <span
+                      style={{
+                        color: 'red',
+                      }}
+                    >
+                      *
+                    </span>
+                  </Typography>
+                  <StyledTextField
+                    value={title}
+                    fullWidth
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                    }}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    backgroundColor: '#fff',
+                    mb: '20px',
+                    borderRadius: '4px',
+                    padding: '10px 20px',
                   }}
                 >
-                  *
-                </span>
-              </Typography>
-              <ImageSelect
-                aspectRatio={3}
-                defaultPreview={urlCover}
-                onFileChange={(file) => {
-                  if (file) {
-                    setFile(file);
-                  } else {
-                    setFile(null);
-                  }
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                backgroundColor: '#fff',
-                mb: '20px',
-                borderRadius: '4px',
-                padding: '10px 20px',
-              }}
-            >
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '700',
-                  mb: '12px',
-                }}
-              >
-                Mô tả
-              </Typography>
-              <StyledTextField
-                multiline
-                minRows={1}
-                maxRows={3}
-                value={decrition}
-                fullWidth
-                onChange={(e) => {
-                  setDecrition(e.target.value);
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                backgroundColor: '#fff',
-                mb: '20px',
-                borderRadius: '4px',
-                padding: '10px 20px',
-              }}
-            >
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '700',
-                  mb: '12px',
-                }}
-              >
-                Nội dung{' '}
-                <span
-                  style={{
-                    color: 'red',
+                  <Typography
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '700',
+                      mb: '12px',
+                    }}
+                  >
+                    Ảnh bìa{' '}
+                    <span
+                      style={{
+                        color: 'red',
+                      }}
+                    >
+                      *
+                    </span>
+                  </Typography>
+                  <ImageSelect
+                    aspectRatio={3}
+                    defaultPreview={urlCover}
+                    onFileChange={(file) => {
+                      if (file) {
+                        setFile(file);
+                      } else {
+                        setFile(null);
+                      }
+                    }}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    backgroundColor: '#fff',
+                    mb: '20px',
+                    borderRadius: '4px',
+                    padding: '10px 20px',
                   }}
                 >
-                  *
-                </span>
-              </Typography>
-              <CKEditor
-                editor={ClassicEditor}
-                data={content}
-                onReady={(editor) => {
-                  // You can store the "editor" and use when it is needed.
-                  console.log('Editor is ready to use!', editor);
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  console.log({ event, editor, data });
-                  setContent(data);
-                }}
-                onBlur={(event, editor) => {
-                  console.log('Blur.', editor);
-                }}
-                onFocus={(event, editor) => {
-                  console.log('Focus.', editor);
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                backgroundColor: '#fff',
-                mb: '20px',
-                borderRadius: '4px',
-                padding: '10px 20px',
-              }}
-            >
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '700',
-                  mb: '12px',
-                }}
-              >
-                Chọn chuyên mục{' '}
-                <span
-                  style={{
-                    color: 'red',
+                  <Typography
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '700',
+                      mb: '12px',
+                    }}
+                  >
+                    Mô tả
+                  </Typography>
+                  <StyledTextField
+                    multiline
+                    minRows={1}
+                    maxRows={3}
+                    value={decrition}
+                    fullWidth
+                    onChange={(e) => {
+                      setDecrition(e.target.value);
+                    }}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    backgroundColor: '#fff',
+                    mb: '20px',
+                    borderRadius: '4px',
+                    padding: '10px 20px',
                   }}
                 >
-                  *
-                </span>
-              </Typography>
-              <TagNameSelect
-                value={tag}
-                onChange={(value) => {
-                  setTag(value);
-                }}
-              />
-            </Box>
-            <Box
+                  <Typography
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '700',
+                      mb: '12px',
+                    }}
+                  >
+                    Nội dung{' '}
+                    <span
+                      style={{
+                        color: 'red',
+                      }}
+                    >
+                      *
+                    </span>
+                  </Typography>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={content}
+                    onReady={(editor) => {
+                      // You can store the "editor" and use when it is needed.
+                    }}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setContent(data);
+                    }}
+                    onBlur={(event, editor) => {
+                    }}
+                    onFocus={(event, editor) => {
+                    }}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    backgroundColor: '#fff',
+                    mb: '20px',
+                    borderRadius: '4px',
+                    padding: '10px 20px',
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: 'quicksand',
+                      fontWeight: '700',
+                      mb: '12px',
+                    }}
+                  >
+                    Chọn chuyên mục{' '}
+                    <span
+                      style={{
+                        color: 'red',
+                      }}
+                    >
+                      *
+                    </span>
+                  </Typography>
+                  <TagNameSelect
+                    value={tag}
+                    onChange={(value) => {
+                      setTag(value);
+                    }}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Button
+                    color="inherit"
+                    sx={{
+                      backgroundColor: 'rgb(14, 100, 126)',
+                      color: '#fff',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                      },
+                    }}
+                    disabled={
+                      (!file && !urlCover) ||
+                      !title ||
+                      !decrition ||
+                      tag?.length == 0
+                    }
+                    onClick={handleSubmit}
+                    variant="contained"
+                  >
+                    Cập nhật
+                  </Button>
+                </Box>
+              </Box>
+            </>
+          ) : (
+            <Typography
+              align="center"
               sx={{
-                display: 'flex',
-                justifyContent: 'center',
+                fontFamily: 'quicksand',
+                fontWeight: '500',
+                mt: '200px',
+                fontSize: '20',
+                color: 'gray',
               }}
             >
-              <Button
-                disabled={
-                  (!file && !urlCover) ||
-                  !title ||
-                  !decrition ||
-                  tag?.length == 0
-                }
-                onClick={handleSubmit}
-                variant="contained"
-              >
-                Cập nhật
-              </Button>
-            </Box>
-          </Box>
+              Bạn không có quyền chỉnh sửa bài viết !
+            </Typography>
+          )}
         </>
       ) : (
         <Page404 />

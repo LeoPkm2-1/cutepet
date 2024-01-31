@@ -4,6 +4,8 @@ const { Response } = require("./../utils");
 const loiMoiKetBanModel = require("./../models/loiMoiKetBanModel");
 const loiMoiKetBanHelper = require("../utils/loiMoiKetBanHelper");
 const petHelper = require("../utils/petHelper");
+const suggestFriendModel = require("../models/goiYBanBe/suggestFriendModel");
+const { areTwoSetsEqual } = require("../utils/UtilsHelper");
 
 const AddByUserIdMid = async (req, res, next) => {
   const ma_nguoi_dung = req.body.requestID;
@@ -130,7 +132,7 @@ const preProccessSuggestFriendMid = async (req, res, next) => {
     ...userIdsHaveSendRequest,
   ];
 
-  unSuggestedFriendIds.push(user_id)
+  unSuggestedFriendIds.push(user_id);
   // console.log(unSuggestedFriendIds);
 
   const danhsachGiong = await petHelper.getAllGiongOfPetsOwnedByUser(user_id);
@@ -141,6 +143,73 @@ const preProccessSuggestFriendMid = async (req, res, next) => {
   // const pets = await petModel.getAllOwnsPetOf(user_id);
 };
 
+const userIdsShouldNotSuggestForUser = async (user_id) => {
+  const listFriendIds = await banbeHelper.getListFriendIdsOfUser(user_id);
+  const userIdsHaveWaittingResponse =
+    await loiMoiKetBanHelper.getIdsOfReceiverInPendingAddFriendRequestOf(
+      user_id
+    );
+
+  const userIdsHaveSendRequest =
+    await loiMoiKetBanHelper.getIdsOfSenderInPendingAddFriendRequestTo(user_id);
+  const unSuggestedFriendIds = [
+    ...listFriendIds,
+    ...userIdsHaveWaittingResponse,
+    ...userIdsHaveSendRequest,
+  ];
+  unSuggestedFriendIds.push(user_id);
+  return unSuggestedFriendIds;
+};
+
+const preProcessSuggestFriendNavMid = async (req, res, next) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const suggestRecord = await suggestFriendModel
+    .getSuggestedFriendForUser(user_id)
+    .then((data) => data.payload);
+  const listFriendIds = req.body.FRIEND_IDS;
+  const danhsachMaGiong = req.body.DANH_SACH_MA_GIONG;
+
+  req.body.ACTION = {
+    returnSuggested: "OLD_RECORD",
+    evaluateNew: false,
+  };
+
+  if (suggestRecord === null) {
+    req.body.ACTION.returnSuggested = "RANDOM";
+    req.body.ACTION.evaluateNew = true;
+  } else if (
+    !areTwoSetsEqual(
+      new Set(suggestRecord.friendIdsList),
+      new Set(listFriendIds)
+    ) ||
+    !areTwoSetsEqual(
+      new Set(suggestRecord.breedIdsList),
+      new Set(danhsachMaGiong)
+    )
+  ) {
+    req.body.ACTION.returnSuggested = "OLD_RECORD";
+    req.body.ACTION.evaluateNew = true;
+  } else if (suggestRecord.expireAt < new Date()) {
+    req.body.ACTION.returnSuggested = "OLD_RECORD";
+    req.body.ACTION.evaluateNew = true;
+  }
+  // console.log(req.body.ACTION);
+  next();
+};
+
+const preProccessSuggestFriendMid_v2 = async (req, res, next) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  req.body.FRIEND_IDS = await banbeHelper.getListFriendIdsOfUser(user_id);
+  req.body.UN_SUGGESTED_FRIEND_IDS = await userIdsShouldNotSuggestForUser(
+    user_id
+  );
+  req.body.DANH_SACH_MA_GIONG = await petHelper
+    .getAllGiongOfPetsOwnedByUser(user_id)
+    .then((data) => [...new Set(data)]);
+
+  next();
+};
+
 module.exports = {
   AddByUserNameMid,
   AddByUserIdMid,
@@ -148,4 +217,6 @@ module.exports = {
   hasReceiveRequestAddFriendFromMid,
   hasSendRequestAddFriendToMid,
   preProccessSuggestFriendMid,
+  preProccessSuggestFriendMid_v2,
+  preProcessSuggestFriendNavMid,
 };

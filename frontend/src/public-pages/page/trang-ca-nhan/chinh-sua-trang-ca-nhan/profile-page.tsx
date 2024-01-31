@@ -30,7 +30,7 @@ import { uploadTaskPromise } from '../../../../api/upload';
 import Loading from '../../../../components/loading';
 import ProfileHeader from './profile-header';
 import { UserActions } from '../../../../redux/user';
-import { profile } from 'console';
+
 import { UserProfile } from '../../../../models/user-profile';
 
 const defaultState = {
@@ -55,7 +55,7 @@ function UpdateProfilePage() {
   });
   useEffect(() => {
     profileApi.getMyProfile().then((data) => {
-      console.log(data);
+   
       setProfile({
         name: data?.thong_tin_profile_user?.ten,
         id: data?.thong_tin_profile_user?.ma_nguoi_dung,
@@ -74,7 +74,6 @@ function UpdateProfilePage() {
     e
   ) => {
     e.preventDefault();
-    console.log(profile, ' profile');
     setLoading(true);
     let url = profile?.url;
     if (file) {
@@ -101,7 +100,7 @@ function UpdateProfilePage() {
           const newProfile: UserProfile = {
             id: profile?.id,
             name: profile?.name,
-            email:profile?.email || '',
+            email: profile?.email || '',
             age: profile?.ngay_sinh || '',
             photoURL: url,
           };
@@ -124,7 +123,6 @@ function UpdateProfilePage() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-
         }}
       >
         <Box
@@ -207,7 +205,6 @@ function UpdateProfilePage() {
                           size="small"
                           label="Tên hiển thị"
                           name="display-name"
-                          placeholder="Tên hiển thị"
                           color="info"
                           value={profile.name}
                           onChange={(e) => {
@@ -227,21 +224,20 @@ function UpdateProfilePage() {
                         xs={12}
                         md={6}
                       >
+                        {' '}
                         <StyledTextField
                           fullWidth
                           size="small"
                           label="Số điện thoại"
-                          name="alias-name"
-                          placeholder="Số điện thoại"
+                          name="so-dien-thoai"
                           color="info"
-                          value={profile?.so_dien_thoai}
+                          value={profile.so_dien_thoai || ""}
                           onChange={(e) => {
                             setProfile({
                               ...profile,
                               so_dien_thoai: e.target.value as string,
                             });
                           }}
-                          required
                         />
                       </Grid>
                       <Grid item xs={12} md={6}>
@@ -250,11 +246,11 @@ function UpdateProfilePage() {
                           label="Giới tính"
                           options={[
                             {
-                              value: 1,
+                              value: 0,
                               label: 'Nam',
                             },
                             {
-                              value: 0,
+                              value: 1,
                               label: 'Nữ',
                             },
                           ]}
@@ -286,7 +282,7 @@ function UpdateProfilePage() {
                               )}
                               onChange={(newValue) => {
                                 if (newValue) {
-                                  console.log(newValue.format('YYYY-MM-DD'));
+                    
                                   setProfile({
                                     ...profile,
                                     ngay_sinh: newValue.format('YYYY-MM-DD'),

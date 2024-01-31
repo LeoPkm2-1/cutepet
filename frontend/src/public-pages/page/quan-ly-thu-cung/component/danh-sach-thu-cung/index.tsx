@@ -22,16 +22,20 @@ export function DanhSachThuCung(props: {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (e: any) => {
+    e.stopPropagation();
     setAnchorEl(null);
   };
 
   const showDialog = useShowDialog();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  function handleDelete() {
+  function handleDelete(e: any) {
+    e.stopPropagation();
+
     showDialog({
       content: `Bạn chắc chắn xóa thú cưng ${props?.pet?.ten_thu_cung} ?`,
       onOk: () => {
@@ -44,7 +48,7 @@ export function DanhSachThuCung(props: {
                   variant: 'info',
                 });
 
-                handleClose();
+                handleClose(e);
                 props?.onRemove?.();
               }
             })
@@ -58,12 +62,22 @@ export function DanhSachThuCung(props: {
   return (
     <>
       <Box
+        // onClick={
+        //   props?.isManager
+        //     ? () => {}
+        //     : () =>
+        //         navigate(`/home/thong-tin-thu-cung/${props?.pet?.ma_thu_cung}`)
+        // }
+        onClick={() =>
+          navigate(`/home/thong-tin-thu-cung/${props?.pet?.ma_thu_cung}`)
+        }
         sx={{
           position: 'relative',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           marginBottom: '20px',
+          cursor: 'pointer',
         }}
       >
         <img
@@ -120,7 +134,7 @@ export function DanhSachThuCung(props: {
               alignItems: 'center',
             }}
           >
-            {!props?.pet?.gioi_tinh ? <FemaleIcon /> : <MaleIcon />}
+            {props?.pet?.gioi_tinh ? <FemaleIcon /> : <MaleIcon />}
             <StyledTypography
               sx={{
                 fontSize: '13px',
@@ -140,7 +154,7 @@ export function DanhSachThuCung(props: {
                 right: '0px',
                 // backgroundColor:"#fff"
               }}
-              onClick={handleClick}
+              onClick={(e: any) => handleClick(e)}
             >
               <MoreVertIcon />
             </IconButton>
@@ -148,7 +162,7 @@ export function DanhSachThuCung(props: {
               id="basic-menu"
               anchorEl={anchorEl}
               open={open}
-              onClose={handleClose}
+              onClose={(e: any) => handleClose(e)}
               sx={{
                 fontFamily: 'quicksand',
               }}
@@ -171,7 +185,7 @@ export function DanhSachThuCung(props: {
                   justifyContent: 'space-between',
                   minWidth: '150px',
                 }}
-                onClick={handleDelete}
+                onClick={(e: any) => handleDelete(e)}
               >
                 <span>Xóa</span>{' '}
                 <DeleteOutlineIcon
@@ -187,7 +201,12 @@ export function DanhSachThuCung(props: {
                   justifyContent: 'space-between',
                   minWidth: '150px',
                 }}
-                onClick={handleDelete}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(
+                    `/home/chinh-sua-thu-cung/${props?.pet?.ma_thu_cung}`
+                  );
+                }}
               >
                 <span> Chỉnh sửa </span>{' '}
                 <BuildIcon
@@ -196,7 +215,8 @@ export function DanhSachThuCung(props: {
                   }}
                 />
               </MenuItem>
-              <MenuItem
+
+              {/* <MenuItem
                 sx={{
                   fontFamily: 'quicksand',
                   display: 'flex',
@@ -205,7 +225,7 @@ export function DanhSachThuCung(props: {
                 }}
                 onClick={() => {
                   navigate(
-                    `/home/bai-viet-thu-cung/${props?.pet?.ma_thu_cung}`
+                    `/home/thong-tin-thu-cung/${props?.pet?.ma_thu_cung}`
                   );
                 }}
               >
@@ -215,7 +235,7 @@ export function DanhSachThuCung(props: {
                     color: 'gray',
                   }}
                 />
-              </MenuItem>
+              </MenuItem> */}
             </Menu>
           </>
         )}

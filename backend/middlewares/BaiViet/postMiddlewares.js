@@ -552,6 +552,7 @@ const checkRightToReadPostMid = async (req, res, next) => {
 
 const preProcessReportPost = async (req, res, next) => {
   let { report_Reason } = req.body;
+  report_Reason = report_Reason || "";
   req.body.report_Reason = report_Reason.trim();
   next();
 };

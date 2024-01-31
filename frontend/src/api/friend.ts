@@ -77,6 +77,13 @@ const getListSuggestedFriends = () => {
   });
 };
 
+const getListOfAllUserrecievedRequestAddFriendFromMe = () => {
+  return authRequest<any>({
+    url: `/friend/getListOfAllUserrecievedRequestAddFriendFromMe`,
+    method: 'POST',
+  });
+};
+
 
 
 const friendApi = {
@@ -87,7 +94,8 @@ const friendApi = {
   getRequestAddFriendList,
   responeAddFriend,
   removeRequestAddFriendById,
-  getListSuggestedFriends
+  getListSuggestedFriends,
+  getListOfAllUserrecievedRequestAddFriendFromMe
 };
 
 export default friendApi;

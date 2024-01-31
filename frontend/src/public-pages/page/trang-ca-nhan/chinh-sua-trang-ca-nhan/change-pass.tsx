@@ -53,12 +53,36 @@ function ChangePasswordPage() {
     if (data.currentPassword.length < 3) {
       errors.currentPassword = 'Bạn phải nhập mật khẩu cũ';
     }
-    if (data.newPassword.length < 6) {
-      errors.newPassword = 'Mật khẩu ít nhất 6 kí tự';
-    }
+    // if (data.newPassword.length < 6) {
+    //   errors.newPassword = 'Mật khẩu ít nhất 6 kí tự';
+    // }
     if (data.newPassword !== data.confirmPassword) {
       errors.confirmPassword = 'Mật khẩu xác nhận không trùng';
     }
+
+     if (!data.newPassword) {
+      errors.newPassword = 'Mật khẩu không được để trống.';
+    }else if (
+      data.newPassword?.length < 8
+    ){
+      errors.newPassword = 'Mật khẩu tối thiểu 8 kí tự';
+    }else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/.test(data.newPassword)){
+      errors.newPassword = 'Mật khẩu phải bao gôm kí tự hoa, thường, chữ số và kí tự đặc biệt';
+    }
+
+    if (!data.confirmPassword) {
+      errors.confirmPassword = 'Mật khẩu xác thực không được để trống.';
+    }else if (
+      data.confirmPassword?.length < 8
+    ){
+      errors.confirmPassword = 'Mật khẩu xác nhận tối thiểu 8 kí tự';
+    }else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/.test(data.confirmPassword)){
+      errors.confirmPassword = 'Mật khẩu phải bao gôm kí tự hoa, thường, chữ số và kí tự đặc biệt';
+    }else if(!(data.confirmPassword== data.newPassword)){
+      errors.confirmPassword = 'Mật khẩu xác nhận không khớp';
+
+    }
+
     if (Object.keys(errors).length) {
       return errors;
     }

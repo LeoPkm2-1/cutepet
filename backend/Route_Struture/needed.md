@@ -1,42 +1,57 @@
+## 145. ==OK== Kết bạn tại trang chủ bằng gợi ý kết bạn  sau đó KHÔNG CHUYỂN SANG TAB KHÁC, KHÔNG RELOAD LẠI TRẠNG và đăng bài thì trong danh sách bạn bè không có bạn bè mới kết bạn
+
+`Phát Mai đứng tại trang chủ kết bạn với Dũng Trần và chờ Dũng Trần đồng ý. Vẫn đứng tại trang chủ không di chuyển đến tab khác, không reload lại trang cho đến khi được đồng ý kết bạn`
+
+`Tương tự cho đứng tại trang chủ chấp nhận lời mời kết bạn mà không di chuyển đến tab khác, thì danh sách bạn bè mới nhấn vấn chưa được cập nhật`
+
+![](./../media/img/err/img59.png)
+
+`Sau khi được đồng ý kết bạn, Phát Mai đăng trạng thái tag bạn bè thì không thấy có Dũng Trần trong danh sách bạn bè ở phần tag bạn bè`
+
+![](./../media/img/err/img60.png)
+
+## 146. ==OK== khi đăng một status không có hình ảnh và bài viết ngay dưới đó có hình ảnh thì khi chỉnh sửa status ở trên hình ảnh bên dưới sẽ tự động nhảy lên phần chỉnh sửa.
+
+`đăng một status không có hình ảnh ngay dưới đó là một status có hình ảnh (của bất kỳ ai), `
+
+![](./../media/img/err/img61.png)
+
+`Khi bấm vào chỉnh sửa status không có hình ảnh ở trên thì hình ảnh ở bên dưới sẽ tự động nhảy lên phần chỉnh sửa`
+
+![](./../media/img/err/img62.png)
 
 
+## 147. ==OK== khi tên và email quá dài sẽ lấn sang phần tương tác của bài viết chia sẻ kiến thức
 
-## ---DONE--- || ==ERR== 72. load bài viết chia sẻ trạng thái theo thú cưng được tags
+![](./../media/img/err/img63.png)
 
-   thông tin về người chủ và bài viết không chính xác, do BE quên trả về thông tin người dùng nên là sai => đã sửa lại ở BE => cập nhật lại.
+## 148. ==OK== và trang cá nhân của người khác kết bạn sau đó về trang chủ đang status có tag người bạn đó và ngày sau đó edit tag bạn bè trong status thì danh sách bạn bè của phần tag không có người đó
 
+`1. vào trang cá nhân của người dùng khác để gửi lời mời kết bạn và chờ cho đến khi được đồng ý rồi quay lại trang chủ đăng status và tag người dùng đó`
 
-## 84. khi đã đứng ở trong bài viết chia sẻ trạng thái mà có bấm vào thông báo navigate đến bài viết đó thì không cập nhật lại danh sách mới nhất
+![](./../media/img/err/img64.png)
 
+`2. chờ cho đến khi đươc đồng ý kết bạn, không reload lại trang, mà quay lại trang chủ đăng status có tag bạn bè mới đó`
 
-## Xem sét lại có sửa ko --- 86. hiển thị trả lời bình luận bị ngược
+![](./../media/img/err/img65.png)
 
-(tham khảo ý kiến của cô)
+`3. bấm vào chỉnh sửa và tiến hình edit tag bạn bè thì không xuất hiện người dùng mới đó`
 
-![](../media/img/err/img25.png)
+![](./../media/img/err/img66.png)
 
-
-## 88. khi bấm vào con thú thì thông tin chủ nhân của nó bị sai backend đã sửa lại API cũ
-
-chi tiết: **[Route_Struture/pet.md](./post.md#18-lấy-bài-viết-có-tag-con-thú-cụ-thể)** và **postman số 71**
-
-## 89. them6 trang chi tiết thú cưng.
-
-## 90. thêm đoạn mô tả ở flag cả ở trang mạng xã hội lẫn chia sẻ kiến thức
-
-## ---DOEN--- 91. sửa lại state khi cập nhật.
-
-## 92. chấp nhận hay xóa lời mời kết bạn khi đã bị thu hồi.
-
-## 93. người dùng truy cập vào bài viết không phù hợp
+`không còn người dùng mới trong danh sách`
+![](./../media/img/err/img67.png)
 
 
-## 94. phản hồi bình luận phải theo thứ tự thời gian
+## 149 ==OK== bài viết đăng xong xóa ở trang mạng xã hội chưa được xóa trong trang cá nhân
 
-## ----DONE---- 95. thú cưng của mình thì mới dc xóa còn của bạn bè là chỉ xem thôi.
+`1. đăng một bài viết ở trang mạng xã hội và ngay lập tức xóa bài viết đó`
 
-## 96. làm trang chi tiết thú cưng, có loading .
+![](./../media/img/err/img68_a.png)
 
-## 97. khi xem chi tiết của 1 bài viết, nếu là người chủ thì phải cho họ có thể chỉnh sửa hoặc xóa bài viết đó.
+![](./../media/img/err/img68_b.png)
 
-![](../media/img/err/img28.png)
+`2. tuy nhiên trong trang cá nhân thì vẫn còn bài viết đó`
+
+![](./../media/img/err/img68_c.png)
+

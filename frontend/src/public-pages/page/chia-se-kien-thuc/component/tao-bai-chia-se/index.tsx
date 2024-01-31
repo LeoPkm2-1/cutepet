@@ -30,10 +30,8 @@ export function TaoBaiChiaSe() {
       .createArticle(title, urlPhoto, decrition, content, tag)
       .then((data) => {
         if (data?.status == 200) {
-          console.log('Thanh cong');
           enqueueSnackbar('Tạo bài viết thành công', { variant: "info" });
           setIsLoading(false);
-          console.log(data);
           
           if(data?.payload[0]?._id){
             navigate(`/home/trang-chia-se/${data?.payload[0]?._id}`);
@@ -177,18 +175,14 @@ export function TaoBaiChiaSe() {
             data={content}
             onReady={(editor) => {
               // You can store the "editor" and use when it is needed.
-              console.log('Editor is ready to use!', editor);
             }}
             onChange={(event, editor) => {
               const data = editor.getData();
-              console.log({ event, editor, data });
               setContent(data);
             }}
             onBlur={(event, editor) => {
-              console.log('Blur.', editor);
             }}
             onFocus={(event, editor) => {
-              console.log('Focus.', editor);
             }}
           />
         </Box>

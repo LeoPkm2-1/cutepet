@@ -17,7 +17,7 @@ import { TaoBaiChiaSe } from './chia-se-kien-thuc/component/tao-bai-chia-se';
 import { TrangChiaSe } from './chia-se-kien-thuc/component/trang-chia-se';
 import BaiChiaSe from './chia-se-kien-thuc/component/bai-chia-se';
 // import { socket } from '../../socket';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { NotifycationItem } from '../../components/NotificationItem';
 import { NotiActions } from '../../redux/noti';
@@ -34,12 +34,16 @@ import MeRouting from './trang-ca-nhan/chinh-sua-trang-ca-nhan';
 import ChangePasswordPage from './trang-ca-nhan/chinh-sua-trang-ca-nhan/change-pass';
 import BaiVietThuCung from './quan-ly-thu-cung/component/bai-viet-thu-cung';
 import UpdatePost from './mang-xa-hoi/component/chinh-sua-bai-viet';
+import ChinhSuaThuCung from './quan-ly-thu-cung/component/chinh-sua-thu-cung';
+import { FriendActions } from '../../redux/friend';
+import { RootState } from '../../redux';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
   const [drawerOpen, setDrawerOpen] = useState(matches);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const isChange = useSelector((state:RootState) => state.friend.isChangeFriend);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
   useEffect(() => {
     window.requestAnimationFrame(() => {
@@ -47,12 +51,9 @@ export default function PageRouting() {
     });
   }, [matches]);
 
-  console.log('Vaof Thuyen ne');
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    console.log(token, 'token ne lay socket: ');
-    console.log('Vào conect fe');
     if (token) {
       const socket = io(`http://localhost:3000/norm_user`, {
         extraHeaders: {
@@ -63,7 +64,6 @@ export default function PageRouting() {
 
       // 1
       socket.on('COMMENT_STATUS_POST', (data) => {
-        console.log(data, ' Data comment from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -79,7 +79,6 @@ export default function PageRouting() {
 
       // 2
       socket.on('LIKE_STATUS_POST', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -95,7 +94,6 @@ export default function PageRouting() {
 
       // 3
       socket.on('LIKE_COMMENT_IN_STATUS_POST', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -110,7 +108,6 @@ export default function PageRouting() {
       });
       // 4
       socket.on('REPLY_COMMENT_IN_STATUS_POST', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -126,19 +123,20 @@ export default function PageRouting() {
 
       // 5
       socket.on('USER_IS_ONLINE', (data) => {
-        console.log(data, ' Data online nè:');
         dispatch(SocketActions.setOnline(data?.user_id));
+        console.log("Có online");
+        
       });
 
       // 6
       socket.on('USER_IS_OFFLINE', (data) => {
-        console.log(data, ' Data chat from server:');
+        console.log("Có offline");
+
         dispatch(SocketActions.setOffline(data?.user_id));
       });
 
       // 7
       socket.on('TAG_USER_IN_STATUS_POST', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -154,7 +152,6 @@ export default function PageRouting() {
 
       // 8
       socket.on('REQUEST_ADD_FRIEND', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         const loiMoi: LoiMoiType = {
           name: data?.requestUser?.ten,
@@ -176,16 +173,12 @@ export default function PageRouting() {
       });
       // 9
       socket.on('ACCEPT_ADD_FRIEND', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
-        console.log(
-          data?.acceptUser?.ma_nguoi_dung,
-          ' data?.acceptUser?.ma_nguoi_dung'
-        );
 
         dispatch(
           SocketActions.setAcceptFriend(data?.acceptUser?.ma_nguoi_dung)
         );
+        dispatch(FriendActions.setChangeFriend(!isChange));
         enqueueSnackbar(
           <NotifycationItem
             name={data?.acceptUser?.ten}
@@ -199,7 +192,6 @@ export default function PageRouting() {
       });
       // 10
       socket.on('NEW_STATUS_POST_APPEAR', (data) => {
-        console.log(data, ' Data chat from server:');
         if (data?.areYouOwner) {
           const item = data?.postInfor;
           const post: StatusType = {
@@ -238,7 +230,6 @@ export default function PageRouting() {
       });
       // 11
       socket.on('UPVOTE_ARTICLE', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -253,7 +244,6 @@ export default function PageRouting() {
       });
       // 12
       socket.on('DOWNVOTE_ARTICLE', (data) => {
-        console.log(data, ' Data chat from server:');
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -268,7 +258,7 @@ export default function PageRouting() {
       });
       // 13
       socket.on('COMMENT_ARTICLE', (data) => {
-        console.log(data, ' Data chat from server:');
+
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -308,7 +298,7 @@ export default function PageRouting() {
               <Route path="mang-xa-hoi" element={<MangXaHoi />} />
               {/* <Route path="chinh-sua-bai-viet-trang-thai/:id" element={<UpdatePost />} /> */}
               <Route
-                path="bai-viet-thu-cung/:id"
+                path="thong-tin-thu-cung/:id"
                 element={<BaiVietThuCung />}
               />
               <Route path="trang-ca-nhan" element={<TrangCaNhan />} />
@@ -326,6 +316,7 @@ export default function PageRouting() {
                 element={<TrangCaNhanMoiNguoi />}
               />
               <Route path="quan-ly-thu-cung" element={<QuanLyThuCung />} />
+              <Route path="chinh-sua-thu-cung/:id" element={<ChinhSuaThuCung />} />
               <Route path="them-thu-cung" element={<ThemThuCung />} />
               <Route path="ban-be" element={<FriendList />} />
               <Route path="trang-chia-se" element={<TrangChiaSe />} />

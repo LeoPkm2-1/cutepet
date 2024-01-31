@@ -12,4 +12,8 @@ export interface ArticleType {
   isDownVote?: boolean;
   numUpVote?: number;
   numDownVote?: number;
+  owner_id?: number;
+  createAt?: string;
+  numOfComment?: number;
+
 }

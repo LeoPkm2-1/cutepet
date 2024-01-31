@@ -13,9 +13,16 @@
 ```javascript
 {
   searchKey: String;
+  index: number;
+  num:number
+
 }
 ```
 
+- trong đó:
+  - **searchKey**: là từ khóa tìm kiếm người dùng
+  - **index**: là vị trí bắt đầu lấy dữ liệu
+  - **num**: là số lượng dữ liệu cần lấy
 3. cấu trúc data trả về:
    - khi có dữ liệu:
 
@@ -24,38 +31,40 @@
     "status": 200,
     "payload": [
         {
-            "ma_nguoi_dung": 10,
-            "ten": "Thanh",
-            "ngay_sinh": "1991-10-07T17:00:00.000Z",
-            "tai_khoan": "thanh",
-            "email": "thanh@gmail.com",
-            "so_dien_thoai": "0912345687",
-            "gioi_tinh": 0,
-            "anh": {
-                "ma_anh": null,
-                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
-                "ngay_cap_nhat": null,
-                "ma_nguoi_dung": "10",
-                "is_active": null
-            },
-            "isFriend": true
-        },
-        {
-            "ma_nguoi_dung": 15,
-            "ten": "Thuy",
-            "ngay_sinh": "1991-10-11T17:00:00.000Z",
-            "tai_khoan": "thuy",
-            "email": "thuy@gmail.com",
-            "so_dien_thoai": "0912345691",
+            "ma_nguoi_dung": 3,
+            "ten": "Teo",
+            "ngay_sinh": "1991-09-30T17:00:00.000Z",
+            "tai_khoan": "teo",
+            "email": "teo@gmail.com",
+            "so_dien_thoai": "0912345680",
             "gioi_tinh": 1,
             "anh": {
                 "ma_anh": null,
-                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FUser-avatar.svg.png?alt=media&token=8fc5e517-78a1-4f12-84fa-2f18245f1dc9",
                 "ngay_cap_nhat": null,
-                "ma_nguoi_dung": "15",
+                "ma_nguoi_dung": "3",
                 "is_active": null
             },
-            "isFriend": false
+            "isFriend": false,
+            "requestAddFriendStatus": "HAS_SEND_REQUEST_ADD_FRIEND"
+        },
+        {
+            "ma_nguoi_dung": 4,
+            "ten": "Ty",
+            "ngay_sinh": "1991-10-01T17:00:00.000Z",
+            "tai_khoan": "ty",
+            "email": "ty@gmail.com",
+            "so_dien_thoai": "0912345681",
+            "gioi_tinh": 1,
+            "anh": {
+                "ma_anh": null,
+                "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FUser-avatar.svg.png?alt=media&token=8fc5e517-78a1-4f12-84fa-2f18245f1dc9",
+                "ngay_cap_nhat": null,
+                "ma_nguoi_dung": "4",
+                "is_active": null
+            },
+            "isFriend": false,
+            "requestAddFriendStatus": null
         }
     ],
     "message": "",
