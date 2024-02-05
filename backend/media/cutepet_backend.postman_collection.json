@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "karendurham",
+							"value": "thanh",
 							"type": "text"
 						},
 						{
@@ -1262,7 +1262,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjo1LCJ0ZW4iOiJMZW8iLCJuZ2F5X3NpbmgiOiIxOTkxLTEwLTAyVDE3OjAwOjAwLjAwMFoiLCJ0YWlfa2hvYW4iOiJsZW8iLCJlbWFpbCI6Imxlb0BnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY4MiIsImdpb2lfdGluaCI6MSwiaWF0IjoxNzA0MzQwODQ3LCJleHAiOjE3MDczNDA4NDd9.y36qKvh24uVb1z66eDj1m8t-6xXS0DdbH4e32wFgjOzD792sJlxLR9lMpRsuLLmDpgiNPHFGrMsn1HqAcKdKPg",
 							"type": "string"
 						}
 					]
@@ -3440,6 +3440,45 @@
 						"post",
 						"article",
 						"filterArticles_v2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "81_chat_sendMessage",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"receiver_id\":\"1\",\n    \"message_type\":\"TEXT_MESSAGE\",\n    \"message_content\":\"   b hhhhh\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/chatting/sendMessage",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"chatting",
+						"sendMessage"
 					]
 				}
 			},

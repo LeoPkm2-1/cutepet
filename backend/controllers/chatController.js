@@ -14,8 +14,7 @@ const sendMessage = async (req, res) => {
     false
   );
   const message_id = insertProcess.payload.insertedId.toString();
-  // console.log(insertProcess);
-  res.send("ok chat send" + " " + message_id);
+
   const messageObj = await chatModel
     .getMessageByMessageID(message_id)
     .then((data) => data.payload)
@@ -23,8 +22,20 @@ const sendMessage = async (req, res) => {
       data._id = data._id.toString();
       return data;
     });
-  // console.log(messageObj);
+
   await notifySendingMessage(messageObj);
+  res.status(200).json(
+    new Response(
+      200,
+      {
+        isSent: true,
+        msg: "Message sent successfully",
+        message_id: message_id,
+        message_Obj: messageObj,
+      },
+      "success"
+    )
+  );
 };
 
 module.exports = { sendMessage };
