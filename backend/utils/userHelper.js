@@ -154,8 +154,10 @@ function randomGetUserIdInlistId(listId, numOfRandomNumbers = 0) {
   return chosenValues;
 }
 
-// const data = getSomeUserIdInRangeOf10(3);
-// console.log(data);
+const isUserIdExist = async (user_id) => {
+  const data = await userId2Username(user_id);
+  return typeof data === "undefined" ? false : true;
+};
 
 module.exports = {
   isFriend,
@@ -169,4 +171,5 @@ module.exports = {
   extractListIdFromListUser,
   getSomeUserIdInRangeOf10,
   randomGetUserIdInlistId,
+  isUserIdExist,
 };

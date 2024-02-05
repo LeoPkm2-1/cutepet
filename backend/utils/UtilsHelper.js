@@ -31,28 +31,6 @@ function generateNumRandomNumbersInRangeOf10(numOfRandomNumbers) {
   return randomNumbers;
 }
 
-// const data = generateNumRandomNumbersInRangeOf10(5);
-// console.log({ data });
-
-// (async function () {
-// 	const data = extracValuesOfFieldFromListObjs([
-// 	  { key: 1 },
-// 	  { key: 2 },
-// 	],'key');
-// 	console.log(data);
-//   })();
-
-// ( ()=> {
-// 	const arr = [
-// 		{name: 'a', age: 1,class:'a-1'},
-// 		{name: 'b', age: 2,class:'b-2'},
-// 		{name: 'c', age: 3,class:'c-3'},
-// 		{name: 'd', age: 3,class:'d-3'},
-// 	];
-// 	const data = filter_keys_in_list_Objs(arr,['class','age']);
-// 	console.log(data);
-// })()
-
 const isDateValid = (date) => {
   return date.toString() !== "Invalid Date";
 };
@@ -72,6 +50,11 @@ const areTwoSetsEqual = (setA, setB) => {
   return [...setA].every((value) => setB.has(value)) && setA.size === setB.size;
 };
 
+const isVaildInt = (value) => {
+  value = parseInt(value);
+  return !isNaN(value);
+};
+
 module.exports = {
   filter_keys_in_Obj,
   filter_keys_in_list_Objs,
@@ -81,36 +64,5 @@ module.exports = {
   isValidVietnameseName,
   generateNumRandomNumbersInRangeOf10,
   areTwoSetsEqual,
+  isVaildInt,
 };
-
-// let obj = {
-// 	_id: '652b43613183518b824f22b0',
-// 	type: 'FOLOW_STATUS_POST',
-// 	followed_Obj_Id: '652a98e062b2b7eaf6d45126',
-// 	follower_Id: 4,
-// 	createAt: '2023-10-15T01:41:53.812Z',
-// 	dependOn: null,
-// 	modifiedAt: null,
-// };
-// const list_Obj = [
-//   {
-//     _id: '652b43613183518b824f22b0',
-//     type: 'FOLOW_STATUS_POST',
-//     followed_Obj_Id: '652a98e062b2b7eaf6d45126',
-//     follower_Id: 4,
-//     createAt: '2023-10-15T01:41:53.812Z',
-//     dependOn: null,
-//     modifiedAt: null,
-//   },
-//   {
-//     _id: 'undefined',
-//     type: 'FOLOW_STATUS_POST',
-//     followed_Obj_Id: 'undefined',
-//     follower_Id: 4,
-//     createAt: '812Z',
-//     dependOn: undefined,
-//     modifiedAt: null,
-//   }
-// ]
-
-// console.log(filter_keys_in_list_Objs(list_Obj,['_id','createAt']));
