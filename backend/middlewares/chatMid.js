@@ -78,7 +78,7 @@ const sendMessageMid = async (req, res, next) => {
               300
             )
           );
-          return;
+        return;
 
       default:
         break;
@@ -86,4 +86,61 @@ const sendMessageMid = async (req, res, next) => {
   }
 };
 
-module.exports = { sendMessageMid };
+async function preProcessGetMessagesBeforeTime(req, res, next) {
+  const VALID_PARAM = "tham số không hợp lệ";
+  let { before, num, chatter_id } = req.body;
+  try {
+    // default before
+    if (
+      (typeof before == "string" && before == "") ||
+      typeof before == "undefined" ||
+      before == null
+    ) {
+      before = new Date().toString();
+    }
+    // default num
+    if (
+      (typeof num == "string" && num == "") ||
+      typeof num == "undefined" ||
+      num == null
+    ) {
+      num = 10;
+    }
+    // check not valid date
+    if (!UtilsHelper.isDateValid(new Date(before))) {
+      throw new Error(VALID_PARAM);
+    }
+    // check not valid num
+    if (typeof num != "undefined" && Number.isNaN(parseInt(num))) {
+      throw new Error(VALID_PARAM);
+    }
+    // check chatter exist
+    if (!UtilsHelper.isVaildInt(chatter_id)) {
+      throw new Error("chatter_id is not valid");
+    }
+    console.log({ num });
+    num = typeof num == "undefined" ? undefined : parseInt(num);
+    if (num <= 0) throw new Error(VALID_PARAM);
+    req.body.chatter_id = parseInt(chatter_id);
+    req.body.before = new Date(before);
+    req.body.num = num;
+  } catch (error) {
+    switch (error.message) {
+      case "chatter_id is not valid":
+        res
+          .status(400)
+          .json(new Response(400, [], "Người dùng không tồn tại", 300, 300));
+        return;
+
+      default:
+        res.status(400).json(new Response(400, [], VALID_PARAM, 300, 300));
+        return;
+    }
+  }
+  next();
+}
+
+module.exports = {
+  sendMessageMid,
+  preProcessGetMessagesBeforeTime,
+};

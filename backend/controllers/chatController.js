@@ -38,4 +38,15 @@ const sendMessage = async (req, res) => {
   );
 };
 
-module.exports = { sendMessage };
+const getMessagesBeforeTime = async (req, res) => {
+  const { before, num, chatter_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const messages = await chatModel
+    .getMessagesInConversationBeforeTime(user_id, chatter_id, before, num)
+    .then((data) => data.payload)
+    .catch((err) => []);
+  console.log(messages);
+  res.status(200).json(new Response(200, messages, ""));
+};
+
+module.exports = { sendMessage, getMessagesBeforeTime };

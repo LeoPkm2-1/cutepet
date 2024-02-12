@@ -8,4 +8,9 @@ router.post("/test", (req, res) => {
 });
 
 router.post("/sendMessage", chatMid.sendMessageMid, chatController.sendMessage);
+router.post(
+  "/getMessagesBeforeTime",
+  chatMid.preProcessGetMessagesBeforeTime,
+  chatController.getMessagesBeforeTime
+);
 module.exports = router;
