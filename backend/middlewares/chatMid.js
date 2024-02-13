@@ -87,7 +87,7 @@ const sendMessageMid = async (req, res, next) => {
 };
 
 async function preProcessGetMessagesBeforeTime(req, res, next) {
-  const VALID_PARAM = "tham số không hợp lệ";
+  const VALID_PARAM = "Tham số không hợp lệ";
   let { before, num, chatter_id } = req.body;
   try {
     // default before
