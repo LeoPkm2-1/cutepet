@@ -1,3 +1,4 @@
+const chatModel = require("../models/chat/chatModel");
 const UtilsHelper = require("../utils/UtilsHelper");
 const { userId2Username, isUserIdExist } = require("../utils/userHelper");
 const { Response } = require("./../utils");
@@ -140,7 +141,33 @@ async function preProcessGetMessagesBeforeTime(req, res, next) {
   next();
 }
 
+const preMarkMessagesAsRead = async (req, res, next) => {
+  let { message_ids } = req.body;
+  const data = await chatModel
+    .getMessagesByListOfId(message_ids)
+    .then((data) => data.payload);
+  const messageBelongToUser = data.every(
+    (message) => message.receiverID == req.auth_decoded.ma_nguoi_dung
+  );
+  if (!messageBelongToUser) {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          [],
+          "Không thể đánh dấu đã đọc tin nhắn mà người nhận không phải là bạn",
+          300,
+          300
+        )
+      );
+    return;
+  }
+  next();
+};
+
 module.exports = {
   sendMessageMid,
   preProcessGetMessagesBeforeTime,
+  preMarkMessagesAsRead,
 };

@@ -3730,6 +3730,45 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "83_chat_markMessagesAsRead",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"message_ids\":[\"65c9c368941df28c3d518bdb\",\"65c9c382941df28c3d518bdc\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/chatting/markMessagesAsRead",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"chatting",
+						"markMessagesAsRead"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

@@ -49,4 +49,25 @@ const getMessagesBeforeTime = async (req, res) => {
   res.status(200).json(new Response(200, messages, ""));
 };
 
-module.exports = { sendMessage, getMessagesBeforeTime };
+const markMessagesAsRead = async (req, res) => {
+  const message_ids = req.body.message_ids;
+  const data = await chatModel
+    .updateMessagesReadStatus(message_ids, true)
+    .then((data) => {
+      if (data.status === 200) return { status: 200, payload: "success"};
+      else if (data.status === 400)
+        return { status: 400, payload: data.payload };
+    });
+
+  res
+    .status(200)
+    .json(
+      new Response(
+        data.status,
+        data.payload,
+        data.status == 200 ? "success" : "error"
+      )
+    );
+};
+
+module.exports = { sendMessage, getMessagesBeforeTime, markMessagesAsRead };

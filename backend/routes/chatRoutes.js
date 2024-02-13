@@ -13,4 +13,10 @@ router.post(
   chatMid.preProcessGetMessagesBeforeTime,
   chatController.getMessagesBeforeTime
 );
+
+router.post(
+  "/markMessagesAsRead",
+  chatMid.preMarkMessagesAsRead,
+  chatController.markMessagesAsRead
+);
 module.exports = router;
