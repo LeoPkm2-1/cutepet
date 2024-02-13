@@ -109,21 +109,24 @@ const updateMessagesReadStatus = async (message_ids, is_seen) => {
 };
 
 const getMessagesByListOfId = async (message_ids) => {
-  const listOfObjectID = message_ids.map(
-    (messageIdString) => new ObjectId(String(messageIdString))
-  );
-  async function executor(collection) {
-    return await collection
-      .find({
-        _id: { $in: listOfObjectID },
-      })
-      .toArray();
+  try {
+    const listOfObjectID = message_ids.map(
+      (messageIdString) => new ObjectId(String(messageIdString))
+    );
+    async function executor(collection) {
+      return await collection
+        .find({
+          _id: { $in: listOfObjectID },
+        })
+        .toArray();
+    }
+    return await nonSQLQuery(executor, "ChatMessage")
+      .then((data) => new Response(200, data, ""))
+      .catch((err) => new Response(400, err, "", 300, 300));
+  } catch (error) {
+    return new Response(200, [], "");
   }
-  return await nonSQLQuery(executor, "ChatMessage")
-    .then((data) => new Response(200, data, ""))
-    .catch((err) => new Response(400, err, "", 300, 300));
 };
-
 
 // (async ()=>{
 //   const data = await getMessagesByListOfId(["65c9c336941df28c3d518bd9","65c9c336941df28c3d518bd2"]);
