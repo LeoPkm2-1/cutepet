@@ -528,9 +528,9 @@ const checkRightToReadPostMid = async (req, res, next) => {
   const userTaggedIdList = req.body.STATUS_POST_INFOR.taggedUsers.map(
     (user) => user.ma_nguoi_dung
   );
-  console.log({ userTaggedIdList });
+  // console.log({ userTaggedIdList });
   const isTagged = userTaggedIdList.includes(reader_id);
-  console.log({ isTagged });
+  // console.log({ isTagged });
 
   const isFriend = await banBeHelper.haveFriendShipBetween(reader_id, owner_id);
   if (reader_id == owner_id || visibility == "PUBLIC") {

@@ -7,6 +7,7 @@ const postRoutes = require("./postRouters/index");
 const friendRoutes = require("./friendRoutes");
 const notificationRoutes = require("./noticationRouters");
 const profileRoutes = require("./profileRoutes");
+const chatRoutes = require("./chatRoutes");
 const performanceTestingRoutes = require("./performanceTestingRoutes");
 const { requireLogined, nonRequireLogined } = require("../middlewares/auth");
 const { handlLogin } = require("./../controllers/loginController");
@@ -29,6 +30,7 @@ router.use("/post", requireLogined, postRoutes);
 router.use("/friend", requireLogined, friendRoutes);
 router.use("/notification", requireLogined, notificationRoutes);
 router.use("/profile", requireLogined, profileRoutes);
+router.use("/chatting", requireLogined, chatRoutes);
 router.use("/performance_testing_purpose", performanceTestingRoutes);
 router.post("/test_api", (req, res) => {
   const temp = req.body.temp;
