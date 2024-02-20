@@ -1,6 +1,7 @@
 const { Response } = require("../utils");
 const chatModel = require("../models/chat/chatModel");
 const { notifySendingMessage } = require("../notificationHandler/chat");
+const userHelper = require("../utils/userHelper");
 
 const sendMessage = async (req, res) => {
   const { receiver_id, sender_id, message_type, message_content } = req.body;
@@ -88,7 +89,22 @@ const getMyConversationsList = async (req, res) => {
         .then((data) => data.payload[0])
     )
   );
-  res.status(200).json(new Response(200, data, ""));
+  const data_withUser_infor = await Promise.all(
+    data.map(async (conversation) => {
+      const senderInfor = await userHelper.getUserPublicInforByUserId(
+        conversation.senderID
+      );
+      const receiverInfor = await userHelper.getUserPublicInforByUserId(
+        conversation.receiverID
+      );
+      return {
+        ...conversation,
+        senderInfor,
+        receiverInfor,
+      };
+    })
+  );
+  res.status(200).json(new Response(200, data_withUser_infor, ""));
 };
 
 module.exports = {
