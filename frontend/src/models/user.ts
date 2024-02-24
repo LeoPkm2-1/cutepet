@@ -148,3 +148,12 @@ export interface LoiMoiType {
   time?: string;
   senderID?: number;
 }
+
+export interface FriendChatType {
+  name: string;
+  id: number;
+  user: string;
+  url: string;
+  isOnline: boolean;
+  text?: string;
+}

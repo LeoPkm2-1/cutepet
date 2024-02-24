@@ -56,12 +56,12 @@ const menu: IMenuItemData[] = [
     icon: mdiViewDashboard,
     link: '/home/quan-ly-thu-cung',
   },
-  // {
-  //   key: '/admin/dat-lich',
-  //   title: 'Đặt lịch',
-  //   icon: mdiAccountMultiple,
-  //   link: '/home/dat-lich',
-  // },
+  {
+    key: '/home/trang-chia-se',
+    title: 'Bài chia sẽ kiến thức',
+    icon: mdiAccountMultiple,
+    link: '/home/trang-chia-se',
+  },
   // {
   //   key: '/admin/su-kien',
   //   title: 'Sự kiện',
