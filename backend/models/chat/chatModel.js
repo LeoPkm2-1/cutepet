@@ -128,14 +128,53 @@ const getMessagesByListOfId = async (message_ids) => {
   }
 };
 
-// (async ()=>{
-//   const data = await getMessagesByListOfId(["65c9c336941df28c3d518bd9","65c9c336941df28c3d518bd2"]);
-//   console.log(data);
+const getListUserIdHasSentMessageToMe = async (my_id) => {
+  async function executor(collection) {
+    return await collection.distinct("senderID", { receiverID: my_id });
+  }
+  return await nonSQLQuery(executor, "ChatMessage")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getListUserIdHasReceivedMessageFromMe = async (my_id) => {
+  async function executor(collection) {
+    return await collection.distinct("receiverID", { senderID: my_id });
+  }
+  return await nonSQLQuery(executor, "ChatMessage")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+const getLatestMessageBetweenTwoUser = async (user1_id, user2_id) => {
+  const nameOfConversation =
+    chatComposStructure.Message.getNameOfConversationBetween(
+      user1_id,
+      user2_id
+    );
+  async function executor(collection) {
+    return await collection
+      .find({ conversationBetween: nameOfConversation })
+      .sort({ createAt: -1 })
+      .limit(1)
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "ChatMessage")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+// (async function () {
+//   const message = await getLatestMessageBetweenTwoUser(1, 2);
+//   console.log(message);
 // })()
+
 module.exports = {
   insertMessageToDB,
   getMessageByMessageID,
   getMessagesInConversationBeforeTime,
   updateMessagesReadStatus,
   getMessagesByListOfId,
+  getListUserIdHasSentMessageToMe,
+  getListUserIdHasReceivedMessageFromMe,
+  getLatestMessageBetweenTwoUser,
 };

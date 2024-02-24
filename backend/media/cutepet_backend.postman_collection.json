@@ -3492,7 +3492,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_0}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -3501,7 +3501,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"receiver_id\":\"2\",\n    \"message_type\":\"TEXT_MESSAGE\",\n    \"message_content\":\"i'm fire thank you. And you?\"\n}",
+					"raw": "{\n    \"receiver_id\":\"8\",\n    \"message_type\":\"TEXT_MESSAGE\",\n    \"message_content\":\"tôi là Tý, xin chào Sussan\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3549,7 +3549,7 @@
 						},
 						{
 							"key": "num",
-							"value": "3",
+							"value": "-3",
 							"type": "text"
 						},
 						{
@@ -3569,6 +3569,75 @@
 					"path": [
 						"chatting",
 						"getMessagesBeforeTime"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "83_chat_markMessagesAsRead",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"message_ids\":[\"65c9c368941df28c3d51bdb\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/chatting/markMessagesAsRead",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"chatting",
+						"markMessagesAsRead"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "84_chatting_getMyConversationsList",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/chatting/getMyConversationsList",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"chatting",
+						"getMyConversationsList"
 					]
 				}
 			},
@@ -3726,45 +3795,6 @@
 							"value": "2",
 							"disabled": true
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "83_chat_markMessagesAsRead",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token_user_0}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"message_ids\":[\"65c9c368941df28c3d518bdb\",\"65c9c382941df28c3d518bdc\"]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/chatting/markMessagesAsRead",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"chatting",
-						"markMessagesAsRead"
 					]
 				}
 			},

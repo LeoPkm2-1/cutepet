@@ -19,4 +19,9 @@ router.post(
   chatMid.preMarkMessagesAsRead,
   chatController.markMessagesAsRead
 );
+
+router.post(
+  "/getMyConversationsList",
+  chatController.getMyConversationsList
+);
 module.exports = router;

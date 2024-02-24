@@ -1,6 +1,7 @@
 const { Response } = require("../utils");
 const chatModel = require("../models/chat/chatModel");
 const { notifySendingMessage } = require("../notificationHandler/chat");
+const userHelper = require("../utils/userHelper");
 
 const sendMessage = async (req, res) => {
   const { receiver_id, sender_id, message_type, message_content } = req.body;
@@ -54,7 +55,7 @@ const markMessagesAsRead = async (req, res) => {
   const data = await chatModel
     .updateMessagesReadStatus(message_ids, true)
     .then((data) => {
-      if (data.status === 200) return { status: 200, payload: "success"};
+      if (data.status === 200) return { status: 200, payload: "success" };
       else if (data.status === 400)
         return { status: 400, payload: data.payload };
     });
@@ -70,4 +71,45 @@ const markMessagesAsRead = async (req, res) => {
     );
 };
 
-module.exports = { sendMessage, getMessagesBeforeTime, markMessagesAsRead };
+const getMyConversationsList = async (req, res) => {
+  const my_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const list_User_1 = await chatModel
+    .getListUserIdHasSentMessageToMe(my_id)
+    .then((data) => data.payload);
+  const list_User_2 = await chatModel
+    .getListUserIdHasReceivedMessageFromMe(my_id)
+    .then((data) => data.payload);
+  const listUserId = [...new Set(list_User_1.concat(list_User_2))].map((id) =>
+    parseInt(id)
+  );
+  const data = await Promise.all(
+    listUserId.map((id) =>
+      chatModel
+        .getLatestMessageBetweenTwoUser(my_id, id)
+        .then((data) => data.payload[0])
+    )
+  );
+  const data_withUser_infor = await Promise.all(
+    data.map(async (conversation) => {
+      const senderInfor = await userHelper.getUserPublicInforByUserId(
+        conversation.senderID
+      );
+      const receiverInfor = await userHelper.getUserPublicInforByUserId(
+        conversation.receiverID
+      );
+      return {
+        ...conversation,
+        senderInfor,
+        receiverInfor,
+      };
+    })
+  );
+  res.status(200).json(new Response(200, data_withUser_infor, ""));
+};
+
+module.exports = {
+  sendMessage,
+  getMessagesBeforeTime,
+  markMessagesAsRead,
+  getMyConversationsList,
+};

@@ -79,6 +79,13 @@ db.BangTheoDoi.createIndex({
   followed_Obj_Id: -1,
 });
 
+// ====================== chat ==============================
+db.ChatMessage.createIndex({
+  conversationBetween: -1,
+  createAt: -1,
+});
+db.ChatMessage.createIndex({ senderID: -1 });
+db.ChatMessage.createIndex({ receiverID: -1 });
 // ======================= NOTE ============================
 //   1: indicating ascending order (tăng dần)
 //  -1: indicating descending order (giảm dần)
