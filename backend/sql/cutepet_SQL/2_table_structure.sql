@@ -46,7 +46,7 @@ CREATE TABLE NguoiDung(
     mat_khau VARCHAR(100) not null DEFAULT '',
     email VARCHAR(100),
     so_dien_thoai VARCHAR(100),
-    is_admin BOOLEAN DEFAULT false,
+    user_type tinyint(4) DEFAULT NULL,
     gioi_tinh BOOLEAN DEFAULT NULL,
     token TEXT DEFAULT '',
     PRIMARY KEY(ma_nguoi_dung)

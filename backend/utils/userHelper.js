@@ -49,7 +49,7 @@ async function getUserPublicInforByUserName(
   // remove sensitive infor
   delete userInfor.mat_khau;
   delete userInfor.token;
-  delete userInfor.is_admin;
+  delete userInfor.user_type;
   // infor of avatar
   const anh = await anhNguoiDungModel
     .getAnhDaiDienHienTai(userInfor.ma_nguoi_dung)

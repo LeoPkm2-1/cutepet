@@ -12,13 +12,20 @@ const performanceTestingRoutes = require("./performanceTestingRoutes");
 const { requireLogined, nonRequireLogined } = require("../middlewares/auth");
 const { handlLogin } = require("./../controllers/loginController");
 const { handleLogout } = require("./../controllers/logoutController");
-const { handleRegister } = require("./../controllers/registerController");
-const { registerMid } = require("../middlewares/registerMid");
+const {
+  handleRegister,
+  handleShopRegister,
+} = require("./../controllers/registerController");
+const {
+  registerMid,
+  shopRegistrationMid,
+} = require("../middlewares/registerMid");
 
 // đăng nhập - dăng ký
-// router.use(["/login", "/register"], nonRequireLogined);
+router.use(["/login", "/register", "/shopRegistration"], nonRequireLogined);
 router.post("/login", handlLogin);
 router.post("/register", registerMid, handleRegister);
+router.post("/shopRegistration", shopRegistrationMid, handleShopRegister);
 // đăng xuất
 router.get("/logout", requireLogined, handleLogout);
 
