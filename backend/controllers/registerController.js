@@ -118,7 +118,7 @@ const handleConfirmRegister = async (req, res) => {
   const active_code = req.body.active_code;
   // console.log({active_code});
   const user = await getNonActiveUserByValidActiveCode(active_code);
-  // console.log( {user});
+  // console.log({ user });
   if (Object.keys(user).length === 0) {
     res
       .status(400)
@@ -131,6 +131,7 @@ const handleConfirmRegister = async (req, res) => {
       tai_khoan: user.tai_khoan,
       mat_khau: user.mat_khau,
       email: user.email,
+      user_type: user.user_type,
     })
     .then((data) => Number(data.message.insertId));
   await userModel.deleteNonActiveUserByActiveCode(active_code);
@@ -219,4 +220,16 @@ const handleShopRegister = async (req, res) => {
   }
 };
 
-module.exports = { handleRegister, handleConfirmRegister, handleShopRegister };
+const handleConfirmRegisterForShop = async (req, res) => {
+  const ACTIVE_CODE_NOT_VALID = "mã xác thực không đúng";
+  const CONFIRM_SUCSECC_MESSAGE = "hoàn tất xác thực đăng ký";
+  const active_code = req.body.active_code;
+  res.send("ahihi");
+};
+
+module.exports = {
+  handleRegister,
+  handleConfirmRegister,
+  handleShopRegister,
+  handleConfirmRegisterForShop,
+};

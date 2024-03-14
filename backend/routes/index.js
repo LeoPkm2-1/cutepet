@@ -7,6 +7,7 @@ const postRoutes = require("./postRouters/index");
 const friendRoutes = require("./friendRoutes");
 const notificationRoutes = require("./noticationRouters");
 const profileRoutes = require("./profileRoutes");
+const shopRoutes = require('./shopRoutes')
 const chatRoutes = require("./chatRoutes");
 const performanceTestingRoutes = require("./performanceTestingRoutes");
 const { requireLogined, nonRequireLogined } = require("../middlewares/auth");
@@ -32,6 +33,7 @@ router.get("/logout", requireLogined, handleLogout);
 // định tuyến cho người dùng
 router.use("/user", userRoutes);
 router.use("/pet", petRoutes);
+router.use("/shop", shopRoutes);
 router.use("/giongloai", giongLoaiRoutes);
 router.use("/post", requireLogined, postRoutes);
 router.use("/friend", requireLogined, friendRoutes);
