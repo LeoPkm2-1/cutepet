@@ -61,7 +61,7 @@ function genDueTime() {
   return current;
 }
 
-async function sendActiveAccountMail({
+async function sendActiveAccountMailForNormUser({
   nameOfUser,
   emailAddress,
   active_code,
@@ -81,7 +81,7 @@ async function sendActiveAccountMail({
       intro: "Chào mừng bạn đã đến với 🦴 CutePet 🦴",
       action: {
         instructions:
-          "Để hoàn thành đăng ky vui lòng xác nhận bằng cách bấm vào nút bên dưới",
+          "Để hoàn thành đăng ký vui lòng xác nhận bằng cách bấm vào nút bên dưới",
         button: {
           color: "#22BC66",
           text: "Xác nhận đăng ký",
@@ -103,6 +103,48 @@ async function sendActiveAccountMail({
   });
 }
 
+async function sendActiveAccountMailForShop({
+  nameOfShop,
+  emailAddress,
+  active_code,
+}) {
+  const mailGenerator = new Mailgen({
+    theme: "salted",
+    product: {
+      name: "🦴 CutePet 🦴 ",
+      link: "https://cutepet.com.js/",
+      logo: "https://petcube.com/blog/content/images/2018/04/boo-the-dog-3.jpg",
+    },
+  });
+  const linkAddress = `http://localhost:3001/user/confirmRegister/${active_code}`;
+  const email = {
+    body: {
+      name: `${nameOfShop} (${emailAddress})`,
+      intro: "Chào mừng cửa hàng đã đến với 🦴 CutePet 🦴",
+      action: {
+        instructions:
+          "Để hoàn thành đăng ký vui lòng xác nhận bằng cách bấm vào nút bên dưới",
+        button: {
+          color: "#22BC66",
+          text: "Xác nhận đăng ký",
+          link: `${linkAddress}`,
+        },
+      },
+      outro: [
+        `Nếu Nút xác nhận không hoạt động vui lòng bấm vào liên kết này: ${linkAddress}`,
+        "Nếu có bất kỳ thắc mắc nào xin hãy liên lạc với chúng tui qua: abc@gmail.com",
+      ],
+    },
+  };
+  // Generate an HTML email with the provided contents
+  const emailBody = mailGenerator.generate(email);
+
+  return await sendMail(`${emailAddress}`, {
+    subject: "Xác thực đăng ký tài khoản cho cửa hàng trên hệ thống CutePet 🐾", // Subject line
+    html: emailBody,
+  });
+}
+
 const isEmailSyntaxValid = (email) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -120,7 +162,8 @@ module.exports = {
   usernameSuitableForRegister,
   genVertificationString,
   genDueTime,
-  sendActiveAccountMail,
+  sendActiveAccountMailForNormUser,
   getNonActiveUserByValidActiveCode,
   isEmailSyntaxValid,
+  sendActiveAccountMailForShop,
 };

@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "thanh",
+							"value": "dung",
 							"type": "text"
 						},
 						{
@@ -83,7 +83,7 @@
 						},
 						{
 							"key": "email",
-							"value": "tony@gmail.com",
+							"value": "thinhphatmai@gmail.com",
 							"type": "text"
 						}
 					]
@@ -3638,6 +3638,55 @@
 					"path": [
 						"chatting",
 						"getMyConversationsList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "85_shop_Registration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ten_cua_hang",
+							"value": "shop hihi",
+							"type": "text"
+						},
+						{
+							"key": "tai_khoan",
+							"value": "dung22222",
+							"type": "text"
+						},
+						{
+							"key": "mat_khau",
+							"value": "1111",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "phat.maileo2001k19@hcmut.edu.vn",
+							"type": "text"
+						},
+						{
+							"key": "dia_chi",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shopRegistration",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shopRegistration"
 					]
 				}
 			},
