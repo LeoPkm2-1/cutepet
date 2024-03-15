@@ -8,7 +8,7 @@ const {
 } = require("./../controllers/registerController");
 
 // router.get("/all", userControler.getAllUser);
-router.post("/confirmRegister", handleConfirmRegister);
+// router.post("/confirmRegister", handleConfirmRegister);
 router.use(requireLogined);
 // get user infor by username
 router.get("/infor/:username", userControler.userPublicInforByUserName);

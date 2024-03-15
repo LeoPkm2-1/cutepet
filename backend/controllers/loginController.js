@@ -11,6 +11,7 @@ const {
   checkUsernameAndPass,
   // storeToken,
 } = require("./../utils/loginHelper");
+const diaChiModel = require("../models/diaChi/diaChiModel");
 
 const handlLogin = async (req, res) => {
   const INFOR_NOT_MATCH_MES = "thông tin đăng nhập không đúng";
@@ -30,33 +31,19 @@ const handlLogin = async (req, res) => {
     const lastTimeJWT = parseInt(readENV("JWT_LAST_TIME"));
     const token = genJWT(user, lastTimeJWT);
     // don't need to store jwt tokkent to db
-    // const storeStatus = await storeToken(token, user.ma_nguoi_dung);
-    // if (storeStatus.status === 200) {
-    const userPublicInfor = await userHelper.getUserPublicInforByUserId(
+    let userPublicInfor = await userHelper.getUserPublicInforByUserId(
       user.ma_nguoi_dung
     );
+    userPublicInfor = { ...userPublicInfor, token };
+    if (userPublicInfor.vai_tro.roleDescription == "cua_hang") {
+      const diaChi = await diaChiModel.getAddressOfShopById(
+        userPublicInfor.ma_nguoi_dung
+      );
+      userPublicInfor = { ...userPublicInfor, diaChi };
+    }
     res
       .status(200)
-      .send(
-        new Response(
-          200,
-          [{ ...userPublicInfor, token }],
-          "Đăng nhập thành công"
-        )
-      );
-    // } else {
-    //   res
-    //     .status(400)
-    //     .json(
-    //       new Response(
-    //         400,
-    //         [],
-    //         storeStatus.message,
-    //         storeStatus.errno,
-    //         storeStatus.errcode
-    //       )
-    //     );
-    // }
+      .send(new Response(200, [userPublicInfor], "Đăng nhập thành công"));
   } catch (error) {
     switch (error.message) {
       case INFOR_NOT_MATCH_MES:

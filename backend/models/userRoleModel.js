@@ -32,6 +32,24 @@ const getFullRoleByIndex = (index_role) => {
   }
 };
 
+const getRoleNameByIndex = (index_role) => {
+  index_role = parseInt(index_role);
+  switch (index_role) {
+    case 0:
+      return "nguoi_dung_binh_thuong";
+
+    case 1:
+      return "cua_hang";
+
+    case 2:
+      return "admin";
+
+    default:
+      return null;
+  }
+};
+
 module.exports = {
   getFullRoleByIndex,
+  getRoleNameByIndex,
 };

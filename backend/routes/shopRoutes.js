@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { requireLogined, nonRequireLogined } = require("../middlewares/auth");
-const { handleConfirmRegisterForShop } = require("../controllers/registerController");
+const shopController = require("./../controllers/shopController");
 
-
-router.post("/confirmRegisterForShop",handleConfirmRegisterForShop)
-
+router.use(requireLogined);
+router.post("/getShopInforById", shopController.getShopInforByIdController);
 
 module.exports = router;

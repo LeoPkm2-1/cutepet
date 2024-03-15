@@ -25,12 +25,12 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "dung",
+							"value": "string",
 							"type": "text"
 						},
 						{
 							"key": "mat_khau",
-							"value": "123",
+							"value": "string",
 							"type": "text"
 						},
 						{
@@ -2401,7 +2401,7 @@
 			"response": []
 		},
 		{
-			"name": "56_user_confirmRegister",
+			"name": "56_confirmRegister",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -2416,14 +2416,13 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:3000/user/confirmRegister",
+					"raw": "http://localhost:3000/confirmRegister",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"user",
 						"confirmRegister"
 					]
 				}
@@ -3649,34 +3648,13 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "ten_cua_hang",
-							"value": "shop hihi",
-							"type": "text"
-						},
-						{
-							"key": "tai_khoan",
-							"value": "dung22222",
-							"type": "text"
-						},
-						{
-							"key": "mat_khau",
-							"value": "1111",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "phat.maileo2001k19@hcmut.edu.vn",
-							"type": "text"
-						},
-						{
-							"key": "dia_chi",
-							"value": "1",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n    \"ten_cua_hang\": \"string\",\n    \"tai_khoan\":\"string\",\n    \"mat_khau\":\"string\",\n    \"email\":\"phat.maileo2001k19@hcmut.edu.vn\",\n    \"dia_chi\": {\n        \"so_nha\":1,\n        \"thanh_pho\":\"HCM\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
 					"raw": "http://localhost:3000/shopRegistration",
@@ -3687,6 +3665,46 @@
 					"port": "3000",
 					"path": [
 						"shopRegistration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "86_shop_getShopInforById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "shop_id",
+							"value": "528",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/getShopInforById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getShopInforById"
 					]
 				}
 			},
