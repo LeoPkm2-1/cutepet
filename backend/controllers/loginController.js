@@ -4,6 +4,7 @@ const { checkPassword, readENV, Response } = require("./../utils");
 const userHelper = require("./../utils/userHelper");
 const laBanBeModel = require("./../models/laBanBeModel");
 const socketHelper = require("./../utils/socketHelper");
+const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
 
 const {
   genJWT,
@@ -11,7 +12,6 @@ const {
   checkUsernameAndPass,
   // storeToken,
 } = require("./../utils/loginHelper");
-const diaChiModel = require("../models/diaChi/diaChiModel");
 
 const handlLogin = async (req, res) => {
   const INFOR_NOT_MATCH_MES = "thông tin đăng nhập không đúng";
@@ -27,7 +27,7 @@ const handlLogin = async (req, res) => {
     if (!match) {
       throw new Error(INFOR_NOT_MATCH_MES);
     }
-    let user = deleteProperties(userInfor, "mat_khau", "user_type", "token");
+    let user = deleteProperties(userInfor, "mat_khau", "token");
     const lastTimeJWT = parseInt(readENV("JWT_LAST_TIME"));
     const token = genJWT(user, lastTimeJWT);
     // don't need to store jwt tokkent to db
@@ -36,10 +36,10 @@ const handlLogin = async (req, res) => {
     );
     userPublicInfor = { ...userPublicInfor, token };
     if (userPublicInfor.vai_tro.roleDescription == "cua_hang") {
-      const diaChi = await diaChiModel.getAddressOfShopById(
-        userPublicInfor.ma_nguoi_dung
+      const shopInfor = await shopDescriptionModel.getDescriptionInforOfShop(
+        userInfor.ma_nguoi_dung
       );
-      userPublicInfor = { ...userPublicInfor, diaChi };
+      userPublicInfor = { ...userPublicInfor, shopInfor };
     }
     res
       .status(200)

@@ -16,7 +16,8 @@ const {
 } = require("./../utils/registerHelper");
 const { getUserPublicInforByUserName } = require("../utils/userHelper");
 const userRoleModel = require("../models/userRoleModel");
-const diaChiModel = require("../models/diaChi/diaChiModel");
+
+const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
 
 // handl add new user to database
 const handleRegister = async (req, res) => {
@@ -240,7 +241,11 @@ const handleConfirmRegisterForShop = async (req, res, user) => {
   await userModel.deleteNonActiveUserByActiveCode(active_code);
   // add address for shop
   const userAdded = await getUserPublicInforByUserName(user.tai_khoan);
-  await diaChiModel.addAddressForShop(userAdded.ma_nguoi_dung, dia_chi);
+
+  await shopDescriptionModel.addDescriptionInforOfShop(
+    userAdded.ma_nguoi_dung,
+    dia_chi
+  );
   res.status(200).json(new Response(200, userAdded, CONFIRM_SUCSECC_MESSAGE));
 };
 

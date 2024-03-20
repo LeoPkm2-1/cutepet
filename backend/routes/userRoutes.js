@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { requireLogined, nonRequireLogined } = require("../middlewares/auth");
+const { requireLoginedForNormUser, nonRequireLogined } = require("../middlewares/auth");
 const userMid = require("./../middlewares/userMid");
 const userControler = require("../controllers/userControllers");
 const {
@@ -9,7 +9,7 @@ const {
 
 // router.get("/all", userControler.getAllUser);
 // router.post("/confirmRegister", handleConfirmRegister);
-router.use(requireLogined);
+router.use(requireLoginedForNormUser);
 // get user infor by username
 router.get("/infor/:username", userControler.userPublicInforByUserName);
 // search user by username or name

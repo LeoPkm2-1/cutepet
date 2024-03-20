@@ -1,5 +1,4 @@
-// const { use } = require("../routes");
-const diaChiModel = require("../models/diaChi/diaChiModel");
+const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
 const { Response } = require("./../utils/index");
 const userHelper = require("./../utils/userHelper");
 const getShopInforByIdController = async (req, res) => {
@@ -17,12 +16,8 @@ const getShopInforByIdController = async (req, res) => {
         .json(new Response(400, {}, SHOP_NOT_EXISTS_MSG, 300, 300));
       return;
     } else {
-      const diaChi = await diaChiModel.getAddressOfShopById(
-        shopInfor.ma_nguoi_dung
-      );
-      res
-        .status(200)
-        .json(new Response(200, { ...shopInfor, diaChi }, "", 300, 300));
+      res.status(200).json(new Response(200, { ...shopInfor }, "", 300, 300));
+      return;
     }
   } catch (error) {
     res
@@ -31,6 +26,40 @@ const getShopInforByIdController = async (req, res) => {
   }
 };
 
+const updateCoverImgForShop = async (req, res) => {
+  const shop_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  let url_cover_anh = req.body.url_cover_anh;
+  if (typeof url_cover_anh != "string" || url_cover_anh.trim() == "") {
+    res
+      .status(400)
+      .json(
+        new Response(400, "", "Vui lòng nhập url của ảnh bìa hợp lệ", 300, 300)
+      );
+    return;
+  }
+  const data = await shopDescriptionModel
+    .updateCoverImageForShop(shop_id, url_cover_anh.trim())
+    .then((data) => data.payload)
+    .catch((err) => err);
+  res.status(200).json(new Response(200, {}, "cập nhật thành công"));
+};
+
+const updateInforForShopController = async (req, res) => {
+  const {
+    ten_cua_hang,
+    dia_chi,
+    so_dien_thoai,
+    khau_hieu,
+    mo_ta_cua_hang,
+    thoi_gian_lam_viec,
+  } = req.body;
+
+  console.log(req.body);
+  res.send("hihi");
+};
+
 module.exports = {
   getShopInforByIdController,
+  updateInforForShopController,
+  updateCoverImgForShop,
 };
