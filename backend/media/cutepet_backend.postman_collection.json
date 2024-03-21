@@ -1354,7 +1354,7 @@
 					"urlencoded": [
 						{
 							"key": "user_id",
-							"value": "8",
+							"value": "531",
 							"type": "text"
 						}
 					]
@@ -3678,7 +3678,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_0}}",
 							"type": "string"
 						}
 					]
@@ -3690,7 +3690,7 @@
 					"urlencoded": [
 						{
 							"key": "shop_id",
-							"value": "528",
+							"value": "531",
 							"type": "text"
 						}
 					]
@@ -3705,6 +3705,86 @@
 					"path": [
 						"shop",
 						"getShopInforById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "88_shop_updateShopCoverImage",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "url_anh_bia",
+							"value": "https://i.pinimg.com/736x/6b/f3/10/6bf310f84df29ec23b0f76ca1ed0edfd.jpg",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/updateShopCoverImage",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"updateShopCoverImage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "89_shop_updateShopMainImage",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "url_anh_chinh",
+							"value": "https://bizweb.dktcdn.net/100/467/317/themes/881347/assets/logo.png?1701914025229",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/updateShopMainImage",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"updateShopMainImage"
 					]
 				}
 			},
@@ -3862,6 +3942,45 @@
 							"value": "2",
 							"disabled": true
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "87_shop_updateShopInfor",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ten_cua_hang\":\"cua hàng xịn                  \",\n    \"dia_chi\":{\n        \"so_nha\":1,\n        \"duong\":\"NYC\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":\"thu2:7:00am-7:30pm\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/updateShopInfor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"updateShopInfor"
 					]
 				}
 			},

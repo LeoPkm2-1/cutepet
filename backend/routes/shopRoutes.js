@@ -19,4 +19,5 @@ router.post(
 );
 
 router.post("/updateShopCoverImage", shopController.updateCoverImgForShop);
+router.post('/updateShopMainImage',shopController.updateMainImgForShop)
 module.exports = router;

@@ -1,22 +1,38 @@
+const anhNguoiDungModel = require("../models/anhNguoiDungModel");
 const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
 const { Response } = require("./../utils/index");
 const userHelper = require("./../utils/userHelper");
+
 const getShopInforByIdController = async (req, res) => {
   try {
     const shop_id = parseInt(req.body.shop_id);
     // console.log({ shop_id });
-    const shopInfor = await userHelper.getUserPublicInforByUserId(shop_id);
+    const shop_basic_infor = await userHelper.getUserPublicInforByUserId(
+      shop_id
+    );
     const SHOP_NOT_EXISTS_MSG = "Cửa hàng không tồn tại";
     if (
-      Object.keys(shopInfor).length == 0 ||
-      shopInfor.vai_tro.roleDescription != "cua_hang"
+      Object.keys(shop_basic_infor).length == 0 ||
+      shop_basic_infor.vai_tro.roleDescription != "cua_hang"
     ) {
       res
         .status(400)
         .json(new Response(400, {}, SHOP_NOT_EXISTS_MSG, 300, 300));
       return;
     } else {
-      res.status(200).json(new Response(200, { ...shopInfor }, "", 300, 300));
+      const shop_detail_infor =
+        await shopDescriptionModel.getDescriptionInforOfShop(shop_id);
+      res
+        .status(200)
+        .json(
+          new Response(
+            200,
+            { ...shop_basic_infor, shopInfor: shop_detail_infor },
+            "",
+            300,
+            300
+          )
+        );
       return;
     }
   } catch (error) {
@@ -28,8 +44,8 @@ const getShopInforByIdController = async (req, res) => {
 
 const updateCoverImgForShop = async (req, res) => {
   const shop_id = parseInt(req.auth_decoded.ma_nguoi_dung);
-  let url_cover_anh = req.body.url_cover_anh;
-  if (typeof url_cover_anh != "string" || url_cover_anh.trim() == "") {
+  let url_anh_bia = req.body.url_anh_bia;
+  if (typeof url_anh_bia != "string" || url_anh_bia.trim() == "") {
     res
       .status(400)
       .json(
@@ -38,10 +54,38 @@ const updateCoverImgForShop = async (req, res) => {
     return;
   }
   const data = await shopDescriptionModel
-    .updateCoverImageForShop(shop_id, url_cover_anh.trim())
+    .updateCoverImageForShop(shop_id, url_anh_bia.trim())
     .then((data) => data.payload)
     .catch((err) => err);
   res.status(200).json(new Response(200, {}, "cập nhật thành công"));
+};
+
+const updateMainImgForShop = async (req, res) => {
+  const shop_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  let url_anh_chinh = req.body.url_anh_chinh;
+  if (typeof url_anh_chinh != "string" || url_anh_chinh.trim() == "") {
+    res
+      .status(400)
+      .json(
+        new Response(400, "", "Vui lòng nhập url của ảnh hợp lệ", 300, 300)
+      );
+    return;
+  }
+
+  const updateAvatarProcess = await anhNguoiDungModel
+    .CapNhatAnhDaiDienNguoiDung(url_anh_chinh.trim(), shop_id)
+    .then((data) => data.payload);
+  updateAvatarProcess.insertId = Number(updateAvatarProcess.insertId);
+  // console.log(updateAvatarProcess);
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        updateAvatarProcess,
+        "Cập nhật ảnh đại diện thành công cho cửa hàng"
+      )
+    );
 };
 
 const updateInforForShopController = async (req, res) => {
@@ -62,4 +106,5 @@ module.exports = {
   getShopInforByIdController,
   updateInforForShopController,
   updateCoverImgForShop,
+  updateMainImgForShop,
 };
