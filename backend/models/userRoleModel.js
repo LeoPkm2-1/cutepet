@@ -8,23 +8,32 @@
 const { sqlQuery } = require("./index");
 const { Response } = require("./../utils/index");
 
+const NORM_USER_ROLE_STRING = "nguoi_dung_binh_thuong";
+const NORM_USER_ROLE_INDEX = 0;
+
+const SHOP_ROLE_STRING = "cua_hang";
+const SHOP_ROLE_INDEX = 1;
+
+const ADMIN_ROLE_STRING = "admin";
+const ADMIN_ROLE_INDEX = 2;
+
 const getFullRoleByIndex = (index_role) => {
   index_role = parseInt(index_role);
   switch (index_role) {
-    case 0:
+    case NORM_USER_ROLE_INDEX:
       return {
-        indexRole: 0,
-        roleDescription: "nguoi_dung_binh_thuong",
+        indexRole: NORM_USER_ROLE_INDEX,
+        roleDescription: NORM_USER_ROLE_STRING,
       };
-    case 1:
+    case SHOP_ROLE_INDEX:
       return {
-        indexRole: 1,
-        roleDescription: "cua_hang",
+        indexRole: SHOP_ROLE_INDEX,
+        roleDescription: SHOP_ROLE_STRING,
       };
-    case 2:
+    case ADMIN_ROLE_INDEX:
       return {
-        indexRole: 2,
-        roleDescription: "admin",
+        indexRole: ADMIN_ROLE_INDEX,
+        roleDescription: ADMIN_ROLE_STRING,
       };
 
     default:
@@ -38,14 +47,14 @@ const getFullRoleByIndex = (index_role) => {
 const getRoleNameByIndex = (index_role) => {
   index_role = parseInt(index_role);
   switch (index_role) {
-    case 0:
-      return "nguoi_dung_binh_thuong";
+    case NORM_USER_ROLE_INDEX:
+      return NORM_USER_ROLE_STRING;
 
-    case 1:
-      return "cua_hang";
+    case SHOP_ROLE_INDEX:
+      return SHOP_ROLE_STRING;
 
-    case 2:
-      return "admin";
+    case ADMIN_ROLE_INDEX:
+      return ADMIN_ROLE_STRING;
 
     default:
       return null;
@@ -70,4 +79,10 @@ module.exports = {
   getFullRoleByIndex,
   getRoleNameByIndex,
   getRoleIndexByUserId,
+  NORM_USER_ROLE_STRING,
+  SHOP_ROLE_STRING,
+  ADMIN_ROLE_STRING,
+  NORM_USER_ROLE_INDEX,
+  SHOP_ROLE_INDEX,
+  ADMIN_ROLE_INDEX,
 };

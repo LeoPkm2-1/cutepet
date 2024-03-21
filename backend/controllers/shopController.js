@@ -54,7 +54,7 @@ const updateInforForShopController = async (req, res) => {
     thoi_gian_lam_viec,
   } = req.body;
 
-  console.log(req.body);
+  // console.log(req.body);
   res.send("hihi");
 };
 

@@ -12,6 +12,10 @@ const {
   checkUsernameAndPass,
   // storeToken,
 } = require("./../utils/loginHelper");
+const {
+  getFullRoleByIndex,
+  SHOP_ROLE_STRING,
+} = require("../models/userRoleModel");
 
 const handlLogin = async (req, res) => {
   const INFOR_NOT_MATCH_MES = "thông tin đăng nhập không đúng";
@@ -28,6 +32,7 @@ const handlLogin = async (req, res) => {
       throw new Error(INFOR_NOT_MATCH_MES);
     }
     let user = deleteProperties(userInfor, "mat_khau", "token");
+    user = { ...user, vai_tro: getFullRoleByIndex(user.user_type) };
     const lastTimeJWT = parseInt(readENV("JWT_LAST_TIME"));
     const token = genJWT(user, lastTimeJWT);
     // don't need to store jwt tokkent to db
@@ -35,7 +40,7 @@ const handlLogin = async (req, res) => {
       user.ma_nguoi_dung
     );
     userPublicInfor = { ...userPublicInfor, token };
-    if (userPublicInfor.vai_tro.roleDescription == "cua_hang") {
+    if (userPublicInfor.vai_tro.roleDescription == SHOP_ROLE_STRING) {
       const shopInfor = await shopDescriptionModel.getDescriptionInforOfShop(
         userInfor.ma_nguoi_dung
       );
@@ -58,29 +63,6 @@ const handlLogin = async (req, res) => {
     }
   }
 };
-
-// const checkUsernameAndPass = async (username_email, drawPassword) => {
-//   let response = isEmailForm(username_email)
-//     ? await userModel.getUserByEmail(username_email)
-//     : await userModel.getUserByUsername(username_email);
-//   if (response.status != 200) throw new Error(response.message);
-
-//   const userExisted = true ? response.payload.length > 0 : false;
-
-//   if (userExisted) {
-//     const hashedPass = response.payload[0].mat_khau;
-//     const match = await checkPassword(drawPassword, hashedPass);
-//     const data = match
-//       ? { match, userInfor: response.payload[0] }
-//       : { match, userInfor: {} };
-//     return data;
-//   }
-//   return { match: false, userInfor: {} };
-// };
-
-// const isEmailForm = (username) => {
-//   return username.includes("@");
-// };
 
 const markUserOnline = async (user_id, socketToSend) => {
   // update the number of devices that user online

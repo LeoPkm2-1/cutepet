@@ -10,6 +10,7 @@ const shopMid = require("./../middlewares/shopMid");
 
 router.use("/requireLoginedForNormUser", requireLoginedForNormUser);
 router.post("/getShopInforById", shopController.getShopInforByIdController);
+
 router.use(requireLoginedForShop);
 router.post(
   "/updateShopInfor",
