@@ -67,13 +67,41 @@ const updateCoverImageForShop = async (shop_id, cover_image_url) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const updateShopInforNotCoverImage = async (
+  shop_id,
+  dia_chi,
+  khau_hieu,
+  mo_ta_cua_hang,
+  thoi_gian_lam_viec
+) => {
+  shop_id = parseInt(shop_id);
+  async function executor(collection) {
+    return await collection.updateOne(
+      { shopId: shop_id },
+      {
+        $set: {
+          addressInfor: dia_chi,
+          sologan: khau_hieu,
+          descriptionMsg: mo_ta_cua_hang,
+          timeServing: thoi_gian_lam_viec,
+        },
+      }
+    );
+  }
+  return await nonSQLQuery(executor, "ThongTinMoTaCuaHang")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // (async () => {
-  // const data = await updateCoverImageForShop(531, "https://i.pinimg.com/originals/f2/e2/5f/f2e25fa89ad3e970aeb994db60a81303.jpg");
-  // console.log(data);
-// })();
+//   const data = await updateShopInforNotCoverImage(531,
+//     {sonha:100,tinh:'HN'},"test","pet",1)
+//     console.log(data);
+// })()
 
 module.exports = {
   addDescriptionInforOfShop,
   getDescriptionInforOfShop,
   updateCoverImageForShop,
+  updateShopInforNotCoverImage,
 };

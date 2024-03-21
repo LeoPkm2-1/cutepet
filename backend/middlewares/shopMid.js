@@ -60,7 +60,7 @@ const updateInforMid = async (req, res, next) => {
       !mo_ta_cua_hang || typeof mo_ta_cua_hang != "string"
         ? ""
         : mo_ta_cua_hang.trim(),
-    thoi_gian_lam_viec: thoi_gian_lam_viec.trim(),
+    thoi_gian_lam_viec,
   };
   next();
 };

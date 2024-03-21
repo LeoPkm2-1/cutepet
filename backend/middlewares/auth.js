@@ -69,7 +69,7 @@ const requireLoginedForShop = async (req, res, next) => {
         throw new Error(IS_NOT_SHOP_MSG);
       }
       req.auth_decoded = {
-        ma_cua_hang: decoded.ma_nguoi_dung,
+        ma_cua_hang: parseInt(decoded.ma_nguoi_dung),
         ...decoded,
       };
       next();

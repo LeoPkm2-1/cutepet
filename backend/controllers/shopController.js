@@ -1,5 +1,6 @@
 const anhNguoiDungModel = require("../models/anhNguoiDungModel");
 const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
+const userModel = require("../models/userModel");
 const { Response } = require("./../utils/index");
 const userHelper = require("./../utils/userHelper");
 
@@ -97,9 +98,35 @@ const updateInforForShopController = async (req, res) => {
     mo_ta_cua_hang,
     thoi_gian_lam_viec,
   } = req.body;
+  const shop_id = req.auth_decoded.ma_cua_hang;
+  // cập nhật thông tin cơ bản của cửa hàng
 
-  // console.log(req.body);
-  res.send("hihi");
+  const updateBasicInforProcess = await userModel
+    .updateUserBasicInfor(shop_id, {
+      ten: ten_cua_hang,
+      ngay_sinh: null,
+      so_dien_thoai,
+      gioi_tinh: null,
+    })
+    .then((data) => data)
+    .catch((err) => err);
+  
+
+  // cập nhật thông tin mô tả chi tiết của cửa hàng
+  const updateDescriptInforProcess = await shopDescriptionModel
+    .updateShopInforNotCoverImage(
+      shop_id,
+      dia_chi,
+      khau_hieu,
+      mo_ta_cua_hang,
+      thoi_gian_lam_viec
+    )
+    .then((data) => data)
+    .catch((err) => err);
+  // console.log(updateDescriptInforProcess);
+  res
+    .status(200)
+    .json(new Response(200, {}, "Cập nhật thành công thông tin cửa hàng"));
 };
 
 module.exports = {
