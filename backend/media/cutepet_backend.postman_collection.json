@@ -3955,7 +3955,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_temp}}",
 							"type": "string"
 						}
 					]
@@ -3964,7 +3964,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_cua_hang\":\"cua hàng xịn                  \",\n    \"dia_chi\":{\n        \"so_nha\":1,\n        \"duong\":\"NYC\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":\"thu2:7:00am-7:30pm\"\n  }",
+					"raw": "{\n    \"ten_cua_hang\":\"cua hàng xịn                  \",\n    \"dia_chi\":{\n        \"so_nha\":1,\n        \"duong\":\"NYC\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":{\n        \"thu2\":\"07:00-11:59_14:00-18:00\",\n        \"thu3\":\"06:11-17:59\",\n        \"thu4\":\"06:11-17:59\",\n        \"thu5\":\"06:11-17:59\",\n        \"thu6\":\"06:11-17:59\",\n        \"thu7\":\"06:11-17:59\",\n        \"chunhat\":\"08:00-11:00_14:00-22:00\"\n    }\n  }",
 					"options": {
 						"raw": {
 							"language": "json"
