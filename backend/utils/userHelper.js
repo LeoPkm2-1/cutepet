@@ -4,6 +4,7 @@ const anhNguoiDungModel = require("../models/anhNguoiDungModel");
 const banbeHelper = require("./banbeHelper");
 const UtilsHelper = require("./UtilsHelper");
 const { getFullRoleByIndex } = require("../models/userRoleModel");
+// const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
 
 // return true if person 1 is friend of person 2
 async function isFriend(person_id_1, person_id_2) {
@@ -50,8 +51,6 @@ async function getUserPublicInforByUserName(
   // remove sensitive infor
   delete userInfor.mat_khau;
   delete userInfor.token;
-  // delete userInfor.user_type;
-  // infor of avatar
   const anh = await anhNguoiDungModel
     .getAnhDaiDienHienTai(userInfor.ma_nguoi_dung)
     .then((data) =>
@@ -68,6 +67,7 @@ async function getUserPublicInforByUserName(
   // not check is friend with ....
   const vai_tro = getFullRoleByIndex(userInfor.user_type);
   const userPubInfor = { ...userInfor, vai_tro, anh };
+
   if (typeof checkIsFriendWith == "undefined") {
     return userPubInfor;
   }

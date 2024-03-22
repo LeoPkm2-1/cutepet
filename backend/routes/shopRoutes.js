@@ -1,10 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const { requireLogined, nonRequireLogined } = require("../middlewares/auth");
-const { handleConfirmRegisterForShop } = require("../controllers/registerController");
+const {
+  requireLoginedForShop,
+  nonRequireLogined,
+  requireLoginedForNormUser,
+} = require("../middlewares/auth");
+const shopController = require("./../controllers/shopController");
+const shopMid = require("./../middlewares/shopMid");
 
+router.use("/requireLoginedForNormUser", requireLoginedForNormUser);
+router.post("/getShopInforById", shopController.getShopInforByIdController);
 
-router.post("/confirmRegisterForShop",handleConfirmRegisterForShop)
+router.use(requireLoginedForShop);
+router.post(
+  "/updateShopInfor",
+  shopMid.updateInforMid,
+  shopController.updateInforForShopController
+);
 
-
+router.post("/updateShopCoverImage", shopController.updateCoverImgForShop);
+router.post('/updateShopMainImage',shopController.updateMainImgForShop)
 module.exports = router;

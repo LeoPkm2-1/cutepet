@@ -1,6 +1,7 @@
 const { vertifyJWT } = require("./../utils/loginHelper");
 const userModel = require("./../models/userModel");
 const { Response } = require("./../utils");
+const userRoleModel = require("../models/userRoleModel");
 
 const NOT_HAVING_AUTH_INFOR = "not having authentication infor";
 const NOT_VERTIFIED = "NOT VERTIFIED";
@@ -14,7 +15,7 @@ const getToken = (req) => {
   return token;
 };
 
-const requireLogined = async (req, res, next) => {
+const requireLoginedForNormUser = async (req, res, next) => {
   try {
     const jwtToken = getToken(req);
     let [decodeStatus, decoded] = [true, []];
@@ -27,11 +28,6 @@ const requireLogined = async (req, res, next) => {
     if (decodeStatus === false) {
       throw new Error(NOT_VERTIFIED);
     } else {
-      // const user = await userModel.getUserById(decoded.ma_nguoi_dung);
-      //   if (user.payload[0].token !== jwtToken) {
-      //     [decodeStatus, decoded] = [false, []];
-      //     throw new Error(TOKEN_NOT_MATCH);
-      //   }
       req.auth_decoded = {
         ...decoded,
       };
@@ -39,13 +35,56 @@ const requireLogined = async (req, res, next) => {
       return;
     }
   } catch (error) {
-    console.log("err:", error);
     if (
       error.message === NOT_HAVING_AUTH_INFOR ||
       error.message === NOT_VERTIFIED
       //   || error.message === TOKEN_NOT_MATCH
     ) {
       res.status(301).json(new Response(301, [], REDIRECT_TO_LOGIN_MESS));
+    } else {
+      throw error;
+    }
+  }
+};
+
+const requireLoginedForShop = async (req, res, next) => {
+  const IS_NOT_SHOP_MSG = "Không phải là cửa hàng không có quyền truy cập";
+  try {
+    const jwtToken = getToken(req);
+    let [decodeStatus, decoded] = [true, []];
+    if (!jwtToken) {
+      decodeStatus = false;
+      throw new Error(NOT_HAVING_AUTH_INFOR);
+    }
+    [decodeStatus, decoded] = vertifyJWT(jwtToken);
+
+    // token is not valid
+    if (decodeStatus === false) {
+      throw new Error(NOT_VERTIFIED);
+    } else {
+      const roleIndex = await userRoleModel.getRoleIndexByUserId(
+        decoded.ma_nguoi_dung
+      );
+      if (roleIndex != userRoleModel.SHOP_ROLE_INDEX) {
+        throw new Error(IS_NOT_SHOP_MSG);
+      }
+      req.auth_decoded = {
+        ma_cua_hang: parseInt(decoded.ma_nguoi_dung),
+        ...decoded,
+      };
+      next();
+      return;
+    }
+  } catch (error) {
+    if (
+      error.message === NOT_HAVING_AUTH_INFOR ||
+      error.message === NOT_VERTIFIED
+      //   || error.message === TOKEN_NOT_MATCH
+    ) {
+      res.status(301).json(new Response(301, [], REDIRECT_TO_LOGIN_MESS));
+    } else if (error.message == IS_NOT_SHOP_MSG) {
+      res.status(400).json(new Response(400, [], IS_NOT_SHOP_MSG, 300, 300));
+      return;
     } else {
       throw error;
     }
@@ -97,4 +136,9 @@ const socketAuthenMid = (socket, next) => {
   }
 };
 
-module.exports = { requireLogined, nonRequireLogined, socketAuthenMid };
+module.exports = {
+  requireLoginedForNormUser,
+  nonRequireLogined,
+  socketAuthenMid,
+  requireLoginedForShop,
+};

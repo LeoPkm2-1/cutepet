@@ -15,6 +15,9 @@ const {
   isEmailSyntaxValid,
 } = require("./../utils/registerHelper");
 const { getUserPublicInforByUserName } = require("../utils/userHelper");
+const userRoleModel = require("../models/userRoleModel");
+
+const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
 
 // handl add new user to database
 const handleRegister = async (req, res) => {
@@ -112,20 +115,20 @@ const handleRegister = async (req, res) => {
   }
 };
 
-const handleConfirmRegister = async (req, res) => {
-  const ACTIVE_CODE_NOT_VALID = "mã xác thực không đúng";
+const handleConfirmRegisterForUser = async (req, res, user) => {
+  // const ACTIVE_CODE_NOT_VALID = "mã xác thực không đúng";
   const CONFIRM_SUCSECC_MESSAGE = "hoàn tất xác thực đăng ký";
   const active_code = req.body.active_code;
-  // console.log({active_code});
-  const user = await getNonActiveUserByValidActiveCode(active_code);
-  // console.log({ user });
-  if (Object.keys(user).length === 0) {
-    res
-      .status(400)
-      .json(new Response(400, {}, ACTIVE_CODE_NOT_VALID, 300, 300));
-    return;
-  }
-  const userAddedID = await userModel
+  // // console.log({active_code});
+  // const user = await getNonActiveUserByValidActiveCode(active_code);
+  // // console.log({ user });
+  // if (Object.keys(user).length === 0) {
+  //   res
+  //     .status(400)
+  //     .json(new Response(400, {}, ACTIVE_CODE_NOT_VALID, 300, 300));
+  //   return;
+  // }
+  await userModel
     .addUser({
       ten: user.ten,
       tai_khoan: user.tai_khoan,
@@ -174,6 +177,7 @@ const handleShopRegister = async (req, res) => {
       user_type: 1, // cửa hàng
       active_code,
       thoi_han,
+      dia_chi,
     };
 
     // thêm người dùng vào cột người dùng chờ xác thực
@@ -220,11 +224,53 @@ const handleShopRegister = async (req, res) => {
   }
 };
 
-const handleConfirmRegisterForShop = async (req, res) => {
-  const ACTIVE_CODE_NOT_VALID = "mã xác thực không đúng";
+const handleConfirmRegisterForShop = async (req, res, user) => {
   const CONFIRM_SUCSECC_MESSAGE = "hoàn tất xác thực đăng ký";
   const active_code = req.body.active_code;
-  res.send("ahihi");
+  const dia_chi = user.dia_chi;
+  // console.log(dia_chi);
+  await userModel
+    .addUser({
+      ten: user.ten,
+      tai_khoan: user.tai_khoan,
+      mat_khau: user.mat_khau,
+      email: user.email,
+      user_type: user.user_type,
+    })
+    .then((data) => Number(data.message.insertId));
+  await userModel.deleteNonActiveUserByActiveCode(active_code);
+  // add address for shop
+  const userAdded = await getUserPublicInforByUserName(user.tai_khoan);
+
+  await shopDescriptionModel.addDescriptionInforOfShop(
+    userAdded.ma_nguoi_dung,
+    dia_chi
+  );
+  res.status(200).json(new Response(200, userAdded, CONFIRM_SUCSECC_MESSAGE));
+};
+
+const handleConfirmRegister = async (req, res) => {
+  const ACTIVE_CODE_NOT_VALID = "mã xác thực không đúng";
+  // const CONFIRM_SUCSECC_MESSAGE = "hoàn tất xác thực đăng ký";
+  const active_code = req.body.active_code;
+  // console.log({ active_code });
+  const user = await getNonActiveUserByValidActiveCode(active_code);
+  // console.log({ user });
+  if (Object.keys(user).length === 0) {
+    res
+      .status(400)
+      .json(new Response(400, {}, ACTIVE_CODE_NOT_VALID, 300, 300));
+    return;
+  }
+  // getRoleNameByIndex;
+  if (
+    userRoleModel.getRoleNameByIndex(user.user_type) == "nguoi_dung_binh_thuong"
+  ) {
+    await handleConfirmRegisterForUser(req, res, user);
+    return;
+  } else if (userRoleModel.getRoleNameByIndex(user.user_type) == "cua_hang") {
+    await handleConfirmRegisterForShop(req, res, user);
+  }
 };
 
 module.exports = {
