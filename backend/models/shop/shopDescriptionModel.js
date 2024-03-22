@@ -1,6 +1,7 @@
 const { sqlQuery, nonSQLQuery } = require("../index");
 const { Response } = require("../../utils/index");
 const { ShopDescription } = require("./shopStructure");
+
 const addDescriptionInforOfShop = async (
   shop_id,
   address_object = {},

@@ -3711,6 +3711,45 @@
 			"response": []
 		},
 		{
+			"name": "87_shop_updateShopInfor",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ten_cua_hang\":\"cua hàng xịn                  \",\n    \"dia_chi\":{\n        \"so_nha\":1,\n        \"duong\":\"NYC\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":{\n        \"thu2\":\"07:00-11:59_14:00-18:00\",\n        \"thu3\":\"06:11-17:59\",\n        \"thu4\":\"06:11-17:59\",\n        \"thu5\":\"06:11-17:59\",\n        \"thu6\":\"06:11-17:59\",\n        \"thu7\":\"06:11-17:59\",\n        \"chunhat\":\"08:00-11:00_14:00-22:00\"\n    }\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/updateShopInfor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"updateShopInfor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "88_shop_updateShopCoverImage",
 			"request": {
 				"auth": {
@@ -3785,6 +3824,45 @@
 					"path": [
 						"shop",
 						"updateShopMainImage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "90_shop_addService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ten_dich_vu\":\" dịch vụ ok\",\n    \"ma_cua_hang\":531,\n    \"mo_ta_dich_vu\":\"tốt \",\n    \"anh_dich_vu\":\"anh.com\",\n    \"the_loai_dich_vu\":[1,2,3],\n    \"don_gia\":2,\n    \"thoi_luong_dich_vu\":7\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/addService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"addService"
 					]
 				}
 			},
@@ -3942,45 +4020,6 @@
 							"value": "2",
 							"disabled": true
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "87_shop_updateShopInfor",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token_temp}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"ten_cua_hang\":\"cua hàng xịn                  \",\n    \"dia_chi\":{\n        \"so_nha\":1,\n        \"duong\":\"NYC\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":{\n        \"thu2\":\"07:00-11:59_14:00-18:00\",\n        \"thu3\":\"06:11-17:59\",\n        \"thu4\":\"06:11-17:59\",\n        \"thu5\":\"06:11-17:59\",\n        \"thu6\":\"06:11-17:59\",\n        \"thu7\":\"06:11-17:59\",\n        \"chunhat\":\"08:00-11:00_14:00-22:00\"\n    }\n  }",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/shop/updateShopInfor",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"shop",
-						"updateShopInfor"
 					]
 				}
 			},

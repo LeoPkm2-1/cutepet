@@ -1,3 +1,4 @@
+const shopHelper = require("../utils/Shop/shopHelper");
 const UtilsHelper = require("../utils/UtilsHelper");
 const { Response } = require("./../utils");
 
@@ -65,4 +66,50 @@ const updateInforMid = async (req, res, next) => {
   next();
 };
 
-module.exports = { updateInforMid };
+const addServiceMid = async (req, res, next) => {
+  const {
+    ten_dich_vu,
+    ma_cua_hang,
+    mo_ta_dich_vu,
+    anh_dich_vu,
+    the_loai_dich_vu,
+    don_gia,
+    thoi_luong_dich_vu,
+  } = req.body;
+
+  const checkShopExist = await shopHelper.isShopExist(ma_cua_hang);
+  if (!(don_gia >= 0 && thoi_luong_dich_vu >= 0)) {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          {},
+          "Tham số thời lượng và giá tiền có thể không hợp lệ",
+          300,
+          300
+        )
+      );
+    return;
+  }
+
+  if (!checkShopExist) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Cửa hàng không tồn tại", 300, 300));
+    return;
+  }
+  req.body = {
+    ten_dich_vu: ten_dich_vu.trim(),
+    ma_cua_hang: parseInt(ma_cua_hang),
+    mo_ta_dich_vu: mo_ta_dich_vu.trim(),
+    anh_dich_vu: anh_dich_vu.trim(),
+    the_loai_dich_vu: the_loai_dich_vu,
+    don_gia,
+    thoi_luong_dich_vu,
+    ...req.body,
+  };
+  next();
+};
+
+module.exports = { updateInforMid, addServiceMid };

@@ -19,5 +19,11 @@ router.post(
 );
 
 router.post("/updateShopCoverImage", shopController.updateCoverImgForShop);
-router.post('/updateShopMainImage',shopController.updateMainImgForShop)
+router.post("/updateShopMainImage", shopController.updateMainImgForShop);
+router.post(
+  "/addService",
+  shopMid.addServiceMid,
+  shopController.addServiceForShop
+);
+
 module.exports = router;

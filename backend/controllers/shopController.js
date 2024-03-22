@@ -1,5 +1,6 @@
 const anhNguoiDungModel = require("../models/anhNguoiDungModel");
 const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
+const shopServiceModel = require("../models/shop/shopServiceModel");
 const userModel = require("../models/userModel");
 const { Response } = require("./../utils/index");
 const userHelper = require("./../utils/userHelper");
@@ -110,7 +111,6 @@ const updateInforForShopController = async (req, res) => {
     })
     .then((data) => data)
     .catch((err) => err);
-  
 
   // cập nhật thông tin mô tả chi tiết của cửa hàng
   const updateDescriptInforProcess = await shopDescriptionModel
@@ -129,9 +129,41 @@ const updateInforForShopController = async (req, res) => {
     .json(new Response(200, {}, "Cập nhật thành công thông tin cửa hàng"));
 };
 
+const addServiceForShop = async (req, res) => {
+  const {
+    ten_dich_vu,
+    ma_cua_hang,
+    mo_ta_dich_vu,
+    anh_dich_vu,
+    the_loai_dich_vu,
+    don_gia,
+    thoi_luong_dich_vu,
+  } = req.body;
+
+  const processStatus = await shopServiceModel.addServiceForShop(
+    ten_dich_vu,
+    ma_cua_hang,
+    mo_ta_dich_vu,
+    anh_dich_vu,
+    the_loai_dich_vu,
+    don_gia,
+    thoi_luong_dich_vu
+  );
+  if (processStatus.status == 400) {
+    res
+      .status(400)
+      .json(
+        new Response(400, {}, "Thêm cửa hàng thất bại do lỗi nào đó", 300, 300)
+      );
+    return;
+  }
+  res.status(200).json(new Response(200, {}, "Thêm cửa hàng thành công"));
+};
+
 module.exports = {
   getShopInforByIdController,
   updateInforForShopController,
   updateCoverImgForShop,
   updateMainImgForShop,
+  addServiceForShop,
 };
