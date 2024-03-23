@@ -156,4 +156,5 @@ export interface FriendChatType {
   url: string;
   isOnline: boolean;
   text?: string;
+  createAt?: string;
 }

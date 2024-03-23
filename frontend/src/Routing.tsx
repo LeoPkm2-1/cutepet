@@ -14,6 +14,7 @@ import MangXaHoi from './public-pages/page/mang-xa-hoi';
 import { useSnackbar } from 'notistack';
 import { NotifycationItem } from './components/NotificationItem';
 import { NotiActions } from './redux/noti';
+import RegisterShop from './public-pages/register-shop';
 
 type Props = {};
 
@@ -67,6 +68,7 @@ export default function Routing(props: Props) {
         {/* <Route path="/home/*" element={<PageRouting />}></Route> */}
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register-shop" element={<RegisterShop />} />
         {/* <Route path="/mang-xa-hoi" element={<MangXaHoi />} /> */}
         <Route path={`/user/confirmRegister/:id`} element={<XacThucPage/>} />
 

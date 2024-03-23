@@ -9,6 +9,7 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { FriendChatType } from '../../../models/user';
 import { MessageType } from '../../../models/message';
 import { userInfo } from 'os';
+import { timeAgo } from '../../../helper/post';
 
 export default function ChattingPage() {
   const profile = useSelector((state: RootState) => state.user.profile);
@@ -45,6 +46,7 @@ export default function ChattingPage() {
               item?.senderID == profile?.id
                 ? item?.receiverInfor?.tai_khoan
                 : item?.senderInfor?.tai_khoan,
+            createAt: item?.createAt,
           };
         });
         setListChatUser(list);
@@ -71,6 +73,14 @@ export default function ChattingPage() {
             borderRight: '0.5px solid #dbdbdb',
           }}
         >
+          <Box sx={{
+            minHeight:"64px",
+            display:"flex",
+            justifyContent:"space-between",
+            paddingBottom:"10px",
+            paddingTop:"10px"
+          }}>
+
           <Typography
             sx={{
               fontFamily: 'quicksand',
@@ -83,6 +93,19 @@ export default function ChattingPage() {
           >
             Tin nhắn
           </Typography>
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              fontSize: '15px',
+              mb: '16px',
+              mt: '20px',
+              mr: '20px',
+            }}
+          >
+            Tất cả tin nhắn
+          </Typography>
+          </Box>
           <Box
             sx={{
               maxHeight: '400px',
@@ -195,7 +218,7 @@ function ChatUserBox(props: {
             }}
           >
             <span>{props?.userInfo?.text || 'no.name'}</span>
-            <span style={{}}>10 giờ trước</span>
+            <span style={{}}>{timeAgo(props?.userInfo?.createAt || '')}</span>
           </Typography>
         </Box>
 
@@ -254,18 +277,16 @@ function ChattingDetail(props: { userInfo: FriendChatType }) {
     }
   }, [newMes]);
 
-//   new message
-useEffect(() => {
+  //   new message
+  useEffect(() => {
     if (messageRef.current) {
-      messageRef.current?.scrollIntoView(
-        {
-          behavior: 'smooth',
-          block: 'end',
-          inline: 'nearest'
-        })
+      messageRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest',
+      });
     }
-  },
-  [])
+  }, []);
 
   function handleSentMessage() {
     messageApi
@@ -394,9 +415,10 @@ useEffect(() => {
               <Message
                 text={item?.messageContent}
                 isMine={item?.senderID !== friendInfo?.id}
+                time={item?.createAt}
               />
             );
-          })} 
+          })}
         </Box>
         <Box>
           <Box
@@ -427,8 +449,8 @@ useEffect(() => {
                 width: '100%',
                 position: 'relative',
                 border: '1px solid #dbdbdb',
-                display:"flex",
-                alignItems:"center"
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
               <InputBase
@@ -521,6 +543,19 @@ function Message(props: {
           }}
         >
           {props.text}
+        </Typography>
+        <Typography
+          sx={{
+            fontFamily: 'quicksand',
+            fontWeight: '500',
+            fontSize: '11px',
+            marginBottom: '5px',
+            color: 'gray',
+            padding: '8px 10px',
+            borderRadius: '20px',
+          }}
+        >
+          {timeAgo(props?.time || "")}
         </Typography>
       </Box>
     </>

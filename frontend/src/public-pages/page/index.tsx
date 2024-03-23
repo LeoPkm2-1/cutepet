@@ -40,6 +40,9 @@ import { RootState } from '../../redux';
 import ChattingPage from './chat';
 import { MessageType } from '../../models/message';
 import { MessageActions } from '../../redux/message';
+import CuaHangCuaToi from './cua-hang/cua-hang-cua-toi';
+import DichVuDetail from './cua-hang/dich-vu-detail';
+import { UpdateStore } from './cua-hang/chinh-sua-cua-hang';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -343,6 +346,9 @@ export default function PageRouting() {
               <Route path="trang-chia-se" element={<TrangChiaSe />} />
               <Route path="trang-chia-se/:id" element={<BaiChiaSe />} />
               <Route path="tao-bai-chia-se" element={<TaoBaiChiaSe />} />
+              <Route path="cua-hang" element={<CuaHangCuaToi />} />
+              <Route path="update-cua-hang" element={<UpdateStore />} />
+              <Route path="cua-hang/:idCuaHang/dich-vu/:idDichVu" element={<DichVuDetail />} />
               <Route path="sua-bai-chia-se/:id" element={<SuaBaiChiaSe />} />
               <Route path="post/:id" element={<PostDetail />} />
               <Route path="chat" element={<ChattingPage />} />
