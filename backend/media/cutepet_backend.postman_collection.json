@@ -3846,7 +3846,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_dich_vu\":\" dịch vụ ok\",\n    \"ma_cua_hang\":531,\n    \"mo_ta_dich_vu\":\"tốt \",\n    \"anh_dich_vu\":\"anh.com\",\n    \"the_loai_dich_vu\":[1,2,3],\n    \"don_gia\":2,\n    \"thoi_luong_dich_vu\":7\n}",
+					"raw": "{\n    \"ten_dich_vu\":\"  dịch vụ tốt\",\n    \"ma_cua_hang\":531,\n    \"mo_ta_dich_vu\":\"tốt \",\n    \"anh_dich_vu\":\"anh.com\",\n    \"the_loai_dich_vu\":[1,2,3],\n    \"don_gia\":2,\n    \"thoi_luong_dich_vu\":7\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3863,6 +3863,46 @@
 					"path": [
 						"shop",
 						"addService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "91_shop_getAllAvailableServiceOfShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "shop_id",
+							"value": "531",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/getAllAvailableServiceOfShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getAllAvailableServiceOfShop"
 					]
 				}
 			},
