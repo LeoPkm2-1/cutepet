@@ -1,6 +1,7 @@
 const { sqlQuery, nonSQLQuery } = require("../index");
 const { Response } = require("../../utils/index");
 const { ShopDescription } = require("./shopStructure");
+const { ObjectId } = require("mongodb");
 
 const getAllServicesOfShop = async (shop_id) => {
   shop_id = parseInt(shop_id);
@@ -8,7 +9,11 @@ const getAllServicesOfShop = async (shop_id) => {
     return await collection.find({ shopId: shop_id }).toArray();
   }
   return await nonSQLQuery(executor, "DichVuCuaCuaHang")
-    .then((data) => data)
+    .then((data) =>
+      data.map((service) => {
+        return { ...service, _id: service._id.toString() };
+      })
+    )
     .catch((err) => []);
 };
 
@@ -21,12 +26,26 @@ const getServiceOfShopByServiceName = async (service_name, shop_id) => {
       .toArray();
   }
   return await nonSQLQuery(executor, "DichVuCuaCuaHang")
-    .then((data) => data)
+    .then((data) =>
+      data.map((service) => {
+        return { ...service, _id: service._id.toString() };
+      })
+    )
     .catch((err) => []);
 };
 
+const getServiceById = async (service_id) => {
+  service_id = service_id.trim();
+  async function executor(collection) {
+    return await collection.findOne({ _id: new ObjectId(service_id) });
+  }
+  return await nonSQLQuery(executor, "DichVuCuaCuaHang")
+    .then((data) => data)
+    .catch((err) => {});
+};
+
 // (async () => {
-//   const data = await getServiceOfShopByServiceName("dịch vụ tốt", 531);
+//   const data = await getServiceById("65fe53fb707c456043b02744");
 //   console.log(data);
 // })();
 

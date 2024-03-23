@@ -21,6 +21,10 @@ const isNameServiceExistsInShop = async (service_name, shop_id) => {
   console.log({ length: serviceslist.length });
 };
 
+const checkServiceBelongToShopById = async (service_id,shop_id) => {
+  
+}
+
 module.exports = {
   isShopExist,
   isNameServiceExistsInShop,

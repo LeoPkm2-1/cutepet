@@ -88,8 +88,6 @@ const addServiceMid = async (req, res, next) => {
     thoi_luong_dich_vu,
   } = req.body;
 
-  
-
   if (!(don_gia >= 0 && thoi_luong_dich_vu >= 0)) {
     res
       .status(400)
@@ -113,9 +111,12 @@ const addServiceMid = async (req, res, next) => {
     the_loai_dich_vu: the_loai_dich_vu,
     don_gia,
     thoi_luong_dich_vu,
-    
   };
   next();
+};
+
+const checkRightToChangeServiceMid = async (req, res, next) => {
+  const service_id = req.body.service_id.trim();
 };
 
 module.exports = { updateInforMid, addServiceMid, checkShopExistsMid };

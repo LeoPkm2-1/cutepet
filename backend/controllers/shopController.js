@@ -188,6 +188,8 @@ const getAllAvailableServicesOfShop = async (req, res) => {
   res.status(200).json(new Response(200, services_list, "lấy thành công"));
 };
 
+const deleteServiceOfShop = async (req, res) => {};
+
 module.exports = {
   getShopInforByIdController,
   updateInforForShopController,
