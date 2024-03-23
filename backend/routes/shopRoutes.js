@@ -8,8 +8,20 @@ const {
 const shopController = require("./../controllers/shopController");
 const shopMid = require("./../middlewares/shopMid");
 
-router.use("/requireLoginedForNormUser", requireLoginedForNormUser);
+router.use(
+  ["/getShopInforById", "/getAllAvailableServiceOfShop"],
+  requireLoginedForNormUser
+);
+
 router.post("/getShopInforById", shopController.getShopInforByIdController);
+router.post(
+  "/getAllAvailableServiceOfShop",
+  requireLoginedForNormUser,
+  shopMid.checkShopExistsMid,
+  shopController.getAllAvailableServicesOfShop
+);
+
+
 
 router.use(requireLoginedForShop);
 router.post(
@@ -19,5 +31,11 @@ router.post(
 );
 
 router.post("/updateShopCoverImage", shopController.updateCoverImgForShop);
-router.post('/updateShopMainImage',shopController.updateMainImgForShop)
+router.post("/updateShopMainImage", shopController.updateMainImgForShop);
+router.post(
+  "/addService",
+  shopMid.addServiceMid,
+  shopController.addServiceForShop
+);
+
 module.exports = router;
