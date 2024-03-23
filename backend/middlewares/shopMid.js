@@ -66,10 +66,21 @@ const updateInforMid = async (req, res, next) => {
   next();
 };
 
+const checkShopExistsMid = async (req, res, next) => {
+  const shop_id = parseInt(req.body.shop_id);
+  const checkShopExist = await shopHelper.isShopExist(shop_id);
+  if (!checkShopExist) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Cửa hàng không tồn tại", 300, 300));
+    return;
+  }
+  next();
+};
+
 const addServiceMid = async (req, res, next) => {
   const {
     ten_dich_vu,
-    ma_cua_hang,
     mo_ta_dich_vu,
     anh_dich_vu,
     the_loai_dich_vu,
@@ -77,7 +88,8 @@ const addServiceMid = async (req, res, next) => {
     thoi_luong_dich_vu,
   } = req.body;
 
-  const checkShopExist = await shopHelper.isShopExist(ma_cua_hang);
+  
+
   if (!(don_gia >= 0 && thoi_luong_dich_vu >= 0)) {
     res
       .status(400)
@@ -93,23 +105,17 @@ const addServiceMid = async (req, res, next) => {
     return;
   }
 
-  if (!checkShopExist) {
-    res
-      .status(400)
-      .json(new Response(400, {}, "Cửa hàng không tồn tại", 300, 300));
-    return;
-  }
   req.body = {
+    ...req.body,
     ten_dich_vu: ten_dich_vu.trim(),
-    ma_cua_hang: parseInt(ma_cua_hang),
     mo_ta_dich_vu: mo_ta_dich_vu.trim(),
     anh_dich_vu: anh_dich_vu.trim(),
     the_loai_dich_vu: the_loai_dich_vu,
     don_gia,
     thoi_luong_dich_vu,
-    ...req.body,
+    
   };
   next();
 };
 
-module.exports = { updateInforMid, addServiceMid };
+module.exports = { updateInforMid, addServiceMid, checkShopExistsMid };

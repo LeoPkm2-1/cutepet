@@ -1,7 +1,9 @@
 const anhNguoiDungModel = require("../models/anhNguoiDungModel");
 const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
+const shopModel = require("../models/shop/shopModel");
 const shopServiceModel = require("../models/shop/shopServiceModel");
 const userModel = require("../models/userModel");
+const shopHelper = require("../utils/Shop/shopHelper");
 const { Response } = require("./../utils/index");
 const userHelper = require("./../utils/userHelper");
 
@@ -132,17 +134,36 @@ const updateInforForShopController = async (req, res) => {
 const addServiceForShop = async (req, res) => {
   const {
     ten_dich_vu,
-    ma_cua_hang,
     mo_ta_dich_vu,
     anh_dich_vu,
     the_loai_dich_vu,
     don_gia,
     thoi_luong_dich_vu,
   } = req.body;
+  const shop_id = req.auth_decoded.ma_cua_hang;
+
+  const isNameExist = await shopHelper.isNameServiceExistsInShop(
+    ten_dich_vu,
+    shop_id
+  );
+  if (isNameExist) {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          {},
+          "Không thể thêm được dịch vụ do đã tồn tại trong cửa hàng",
+          300,
+          300
+        )
+      );
+    return;
+  }
 
   const processStatus = await shopServiceModel.addServiceForShop(
     ten_dich_vu,
-    ma_cua_hang,
+    shop_id,
     mo_ta_dich_vu,
     anh_dich_vu,
     the_loai_dich_vu,
@@ -157,7 +178,14 @@ const addServiceForShop = async (req, res) => {
       );
     return;
   }
+
   res.status(200).json(new Response(200, {}, "Thêm cửa hàng thành công"));
+};
+
+const getAllAvailableServicesOfShop = async (req, res) => {
+  const shop_id = parseInt(req.body.shop_id);
+  const services_list = await shopModel.getAllServicesOfShop(shop_id);
+  res.status(200).json(new Response(200, services_list, "lấy thành công"));
 };
 
 module.exports = {
@@ -166,4 +194,5 @@ module.exports = {
   updateCoverImgForShop,
   updateMainImgForShop,
   addServiceForShop,
+  getAllAvailableServicesOfShop,
 };
