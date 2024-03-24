@@ -36,17 +36,26 @@ const getServiceOfShopByServiceName = async (service_name, shop_id) => {
 
 const getServiceById = async (service_id) => {
   service_id = service_id.trim();
+  // console.log({ service_id });
   async function executor(collection) {
     return await collection.findOne({ _id: new ObjectId(service_id) });
   }
   return await nonSQLQuery(executor, "DichVuCuaCuaHang")
-    .then((data) => data)
+    .then((data) => {
+      if (typeof data == "undefined" || data == null) return {};
+      // console.log({ data });
+      return { ...data, _id: data._id.toString() };
+    })
     .catch((err) => {});
 };
 
 // (async () => {
-//   const data = await getServiceById("65fe53fb707c456043b02744");
+//   const data = await getServiceById("660061e055f0ed139ca9eb81222");
 //   console.log(data);
 // })();
 
-module.exports = { getAllServicesOfShop, getServiceOfShopByServiceName };
+module.exports = {
+  getAllServicesOfShop,
+  getServiceOfShopByServiceName,
+  getServiceById,
+};

@@ -134,6 +134,7 @@ const updateInforForShopController = async (req, res) => {
 const addServiceForShop = async (req, res) => {
   const {
     ten_dich_vu,
+    mo_ta_ngan,
     mo_ta_dich_vu,
     anh_dich_vu,
     the_loai_dich_vu,
@@ -164,6 +165,7 @@ const addServiceForShop = async (req, res) => {
   const processStatus = await shopServiceModel.addServiceForShop(
     ten_dich_vu,
     shop_id,
+    mo_ta_ngan,
     mo_ta_dich_vu,
     anh_dich_vu,
     the_loai_dich_vu,
@@ -188,7 +190,11 @@ const getAllAvailableServicesOfShop = async (req, res) => {
   res.status(200).json(new Response(200, services_list, "lấy thành công"));
 };
 
-const deleteServiceOfShop = async (req, res) => {};
+const deleteServiceOfShop = async (req, res) => {
+  let { service_id } = req.body;
+  const data = await shopServiceModel.deleteServiceForShop(service_id);
+  res.status(200).json(new Response(200, data.payload, "Xóa thành công"));
+};
 
 module.exports = {
   getShopInforByIdController,
@@ -197,4 +203,5 @@ module.exports = {
   updateMainImgForShop,
   addServiceForShop,
   getAllAvailableServicesOfShop,
+  deleteServiceOfShop,
 };

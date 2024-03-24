@@ -1,3 +1,4 @@
+const shopModel = require("../models/shop/shopModel");
 const shopHelper = require("../utils/Shop/shopHelper");
 const UtilsHelper = require("../utils/UtilsHelper");
 const { Response } = require("./../utils");
@@ -81,6 +82,7 @@ const checkShopExistsMid = async (req, res, next) => {
 const addServiceMid = async (req, res, next) => {
   const {
     ten_dich_vu,
+    mo_ta_ngan,
     mo_ta_dich_vu,
     anh_dich_vu,
     the_loai_dich_vu,
@@ -106,6 +108,7 @@ const addServiceMid = async (req, res, next) => {
   req.body = {
     ...req.body,
     ten_dich_vu: ten_dich_vu.trim(),
+    mo_ta_ngan: typeof mo_ta_ngan != "string" ? "" : mo_ta_ngan.trim(),
     mo_ta_dich_vu: mo_ta_dich_vu.trim(),
     anh_dich_vu: anh_dich_vu.trim(),
     the_loai_dich_vu: the_loai_dich_vu,
@@ -116,7 +119,35 @@ const addServiceMid = async (req, res, next) => {
 };
 
 const checkRightToChangeServiceMid = async (req, res, next) => {
-  const service_id = req.body.service_id.trim();
+  let { service_id } = req.body;
+  if (typeof service_id != "string" || service_id.trim() == "") {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Mã dịch vụ không hợp lệ", 300, 300));
+    return;
+  }
+  req.body.service_id = service_id = service_id.trim();
+  const shop_id = req.auth_decoded.ma_cua_hang;
+  const service_infor = await shopModel.getServiceById(service_id);
+  if (Object.keys(service_infor).length === 0) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Dịch vụ không tồn tại", 300, 300));
+    return;
+  }
+
+  if (parseInt(service_infor.shopId) != shop_id) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Không có quyền thay đổi dịch vụ", 300, 300));
+    return;
+  }
+  next();
 };
 
-module.exports = { updateInforMid, addServiceMid, checkShopExistsMid };
+module.exports = {
+  updateInforMid,
+  addServiceMid,
+  checkShopExistsMid,
+  checkRightToChangeServiceMid,
+};

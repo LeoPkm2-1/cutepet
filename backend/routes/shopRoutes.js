@@ -21,8 +21,6 @@ router.post(
   shopController.getAllAvailableServicesOfShop
 );
 
-
-
 router.use(requireLoginedForShop);
 router.post(
   "/updateShopInfor",
@@ -36,6 +34,12 @@ router.post(
   "/addService",
   shopMid.addServiceMid,
   shopController.addServiceForShop
+);
+
+router.post(
+  "/deleteService",
+  shopMid.checkRightToChangeServiceMid,
+  shopController.deleteServiceOfShop
 );
 
 module.exports = router;

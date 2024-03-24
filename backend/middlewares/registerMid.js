@@ -37,8 +37,19 @@ const shopRegistrationMid = (req, res, next) => {
   const NOT_HAVE_PASSWORD = "Vui lòng nhập mật khẩu";
   const NOT_HAVE_EMAIL = "Vui lòng nhập email";
   const NOT_HAVE_ADDRESS = "Vui lòng điền thông tin về địa chỉ";
+  const NOT_HAVE_TAX_IDENTIFICATION_NUMBER = "Vui lòng nhập mã số thuế";
 
-  const { ten_cua_hang, tai_khoan, mat_khau, email, dia_chi } = req.body;
+  const { ma_so_thue, ten_cua_hang, tai_khoan, mat_khau, email, dia_chi } =
+    req.body;
+  // kiểm tra mã số thuế
+  if (typeof ma_so_thue !== "string" || ma_so_thue.trim() == "") {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], NOT_HAVE_TAX_IDENTIFICATION_NUMBER, 300, 300)
+      );
+    return;
+  } else req.body.ma_so_thue = ma_so_thue.trim();
   //   kiểm tra việc nhập tên
   if (typeof ten_cua_hang !== "string" || ten_cua_hang.trim() == "") {
     res.status(400).json(new Response(400, [], NOT_HAVE_NAME, 300, 300));

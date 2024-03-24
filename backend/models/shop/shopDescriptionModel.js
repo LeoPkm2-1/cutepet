@@ -4,19 +4,23 @@ const { ShopDescription } = require("./shopStructure");
 
 const addDescriptionInforOfShop = async (
   shop_id,
+  tax_number_code,
   address_object = {},
   sologan = "",
   description_msg = "",
   time_serving = "",
-  cover_image_Url = "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fanh_bia_shop.jpg?alt=media&token=3ce38cb4-2ae7-4548-9aee-375b1d2584cb"
+  cover_image_Url = "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fanh_bia_shop.jpg?alt=media&token=3ce38cb4-2ae7-4548-9aee-375b1d2584cb",
+  is_block = false
 ) => {
   const descriptionInfor = new ShopDescription(
     shop_id,
+    tax_number_code,
     address_object,
     sologan,
     description_msg,
     time_serving,
-    cover_image_Url
+    cover_image_Url,
+    is_block
   );
 
   async function executor(collection) {

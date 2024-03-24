@@ -2,6 +2,7 @@ class ShopService {
   constructor(
     service_name,
     shop_id,
+    short_description,
     service_description,
     service_img_url,
     service_type,
@@ -10,6 +11,7 @@ class ShopService {
   ) {
     this.serviceName = service_name;
     this.shopId = shop_id;
+    this.shortDescription = short_description;
     this.serviceDescription = service_description;
     this.serviceImgUrl = service_img_url;
     this.serviceType = service_type;
@@ -23,6 +25,7 @@ module.exports = { ShopService };
 /*
     ten_dich_vu,
     ma_cua_hang,
+    mo_ta_ngan,
     mo_ta_dich_vu,
     anh_dich_vu,
     the_loai_dich_vu,
