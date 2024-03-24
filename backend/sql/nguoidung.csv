@@ -1,4 +1,4 @@
-ma_nguoi_dung,ten,ngay_sinh,tai_khoan,mat_khau,email,so_dien_thoai,is_admin,gioi_tinh
+ma_nguoi_dung,ten,ngay_sinh,tai_khoan,mat_khau,email,so_dien_thoai,user_type,gioi_tinh
 1,Nam,1991-09-29,nam,$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6,nam@gmail.com,0912345678,0,1
 2,Dung,1991-09-30,dung,$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6,dung@gmail.com,0912345679,0,1
 3,Teo,1991-10-01,teo,$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6,teo@gmail.com,0912345680,0,1

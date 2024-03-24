@@ -88,9 +88,7 @@ export default function PostComponent(props: Props) {
     if (props?.idStatus) {
       postApi.getStatusById(props.idStatus).then((data: any) => {
         if (data?.status == 200) {
-          console.log('có vào lấy lại data nè');
           dispatch(NotiActions.setNewId(''));
-
           const sta: StatusType = {
             id: data?.payload?._id,
             media: data?.payload?.media,
@@ -130,19 +128,21 @@ export default function PostComponent(props: Props) {
     }
 
     // get comment
-  }, [props?.idStatus, props?.status?.id, reload]);
+  }, [props?.idStatus, props?.status?.id, props?.status, reload]);
 
   useEffect(() => {
     if (props?.status?.id || props?.idStatus) {
-      postApi?.getIsUserFollowedPost(props?.status?.id || props?.idStatus || "").then((data) => {
-        if (data?.status == 200) {
-          if (data?.payload?.isFollowed) {
-            setIsFollow(true);
-          } else {
-            setIsFollow(false);
+      postApi
+        ?.getIsUserFollowedPost(props?.status?.id || props?.idStatus || '')
+        .then((data) => {
+          if (data?.status == 200) {
+            if (data?.payload?.isFollowed) {
+              setIsFollow(true);
+            } else {
+              setIsFollow(false);
+            }
           }
-        }
-      });
+        });
     }
   }, [props?.status?.id, reload]);
 

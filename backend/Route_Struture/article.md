@@ -563,7 +563,7 @@ trong đó:
             "gioi_tinh": 0,
             "anh": {
                 "ma_anh": null,
-                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FUser-avatar.svg.png?alt=media&token=8fc5e517-78a1-4f12-84fa-2f18245f1dc9",
                 "ngay_cap_nhat": null,
                 "ma_nguoi_dung": "8",
                 "is_active": null
@@ -1061,7 +1061,7 @@ trong đó:
                 "gioi_tinh": 0,
                 "anh": {
                     "ma_anh": null,
-                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                    "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FUser-avatar.svg.png?alt=media&token=8fc5e517-78a1-4f12-84fa-2f18245f1dc9",
                     "ngay_cap_nhat": null,
                     "ma_nguoi_dung": "10",
                     "is_active": null
@@ -1315,7 +1315,7 @@ trong đó:
                     "gioi_tinh": 0,
                     "anh": {
                         "ma_anh": null,
-                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                        "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FUser-avatar.svg.png?alt=media&token=8fc5e517-78a1-4f12-84fa-2f18245f1dc9",
                         "ngay_cap_nhat": null,
                         "ma_nguoi_dung": "8",
                         "is_active": null
@@ -1491,7 +1491,7 @@ trong đó:
             "gioi_tinh": 1,
             "anh": {
                 "ma_anh": null,
-                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FUser-avatar.svg.png?alt=media&token=8fc5e517-78a1-4f12-84fa-2f18245f1dc9",
                 "ngay_cap_nhat": null,
                 "ma_nguoi_dung": "3",
                 "is_active": null

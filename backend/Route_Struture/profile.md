@@ -70,7 +70,7 @@
             "gioi_tinh": 1,
             "anh": {
                 "ma_anh": null,
-                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FUser-avatar.svg.png?alt=media&token=8fc5e517-78a1-4f12-84fa-2f18245f1dc9",
                 "ngay_cap_nhat": null,
                 "ma_nguoi_dung": "7",
                 "is_active": null
@@ -93,7 +93,7 @@
             },
             "anh": {
                 "ma_anh": null,
-                "url": "https://img.freepik.com/free-photo/view-adorable-3d-cat_23-2150473746.jpg",
+                "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fmycat.png?alt=media&token=e19c4ba8-70af-4717-bac5-966fd6d19223",
                 "ngay_cap_nhat": null,
                 "ma_thu_cung": 2,
                 "is_active": null
@@ -121,7 +121,7 @@
             },
             "anh": {
                 "ma_anh": null,
-                "url": "https://img.freepik.com/free-photo/view-adorable-3d-cat_23-2150473746.jpg",
+                "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fmycat.png?alt=media&token=e19c4ba8-70af-4717-bac5-966fd6d19223",
                 "ngay_cap_nhat": null,
                 "ma_thu_cung": 4,
                 "is_active": null
@@ -244,7 +244,7 @@
         "gioi_tinh": 0,
         "anh": {
             "ma_anh": null,
-            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+            "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FUser-avatar.svg.png?alt=media&token=8fc5e517-78a1-4f12-84fa-2f18245f1dc9",
             "ngay_cap_nhat": null,
             "ma_nguoi_dung": "10",
             "is_active": null
@@ -322,7 +322,7 @@
                     "gioi_tinh": 1,
                     "anh": {
                         "ma_anh": null,
-                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                        "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FUser-avatar.svg.png?alt=media&token=8fc5e517-78a1-4f12-84fa-2f18245f1dc9",
                         "ngay_cap_nhat": null,
                         "ma_nguoi_dung": "9",
                         "is_active": null
@@ -359,7 +359,7 @@
                     "gioi_tinh": 1,
                     "anh": {
                         "ma_anh": null,
-                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",
+                        "url": "https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FUser-avatar.svg.png?alt=media&token=8fc5e517-78a1-4f12-84fa-2f18245f1dc9",
                         "ngay_cap_nhat": null,
                         "ma_nguoi_dung": "9",
                         "is_active": null
