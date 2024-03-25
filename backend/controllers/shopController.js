@@ -196,6 +196,41 @@ const deleteServiceOfShop = async (req, res) => {
   res.status(200).json(new Response(200, data.payload, "Xóa thành công"));
 };
 
+const updateServiceOfShop = async (req, res) => {
+  let {
+    service_id,
+    ten_dich_vu,
+    mo_ta_ngan,
+    mo_ta_dich_vu,
+    anh_dich_vu,
+    the_loai_dich_vu,
+    don_gia,
+    thoi_luong_dich_vu,
+  } = req.body;
+  if (typeof ten_dich_vu != "string" || ten_dich_vu.trim() == "") {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Tên dịch vụ không được để trống", 300, 300));
+    return;
+  }
+  const update_process = await shopServiceModel.updateServiceForShop(
+    service_id,
+    ten_dich_vu,
+    mo_ta_ngan,
+    mo_ta_dich_vu,
+    anh_dich_vu,
+    the_loai_dich_vu,
+    don_gia,
+    thoi_luong_dich_vu
+  );
+  res
+    .status(200)
+    .json(
+      new Response(200, update_process.payload, "Cập nhật thành công dịch vụ")
+    );
+  return;
+};
+
 module.exports = {
   getShopInforByIdController,
   updateInforForShopController,
@@ -204,4 +239,5 @@ module.exports = {
   addServiceForShop,
   getAllAvailableServicesOfShop,
   deleteServiceOfShop,
+  updateServiceOfShop,
 };

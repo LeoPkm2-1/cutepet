@@ -42,4 +42,10 @@ router.post(
   shopController.deleteServiceOfShop
 );
 
+router.post(
+  "/updateService",
+  shopMid.checkRightToChangeServiceMid,
+  shopController.updateServiceOfShop
+);
+
 module.exports = router;

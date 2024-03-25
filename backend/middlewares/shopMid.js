@@ -90,20 +90,27 @@ const addServiceMid = async (req, res, next) => {
     thoi_luong_dich_vu,
   } = req.body;
 
-  if (!(don_gia >= 0 && thoi_luong_dich_vu >= 0)) {
+  if (typeof ten_dich_vu != "string" || ten_dich_vu.trim() == "") {
     res
       .status(400)
-      .json(
-        new Response(
-          400,
-          {},
-          "Tham số thời lượng và giá tiền có thể không hợp lệ",
-          300,
-          300
-        )
-      );
+      .json(new Response(400, {}, "Tên dịch vụ không được để trống", 300, 300));
     return;
   }
+
+  // if (!(don_gia >= 0 && thoi_luong_dich_vu >= 0)) {
+  //   res
+  //     .status(400)
+  //     .json(
+  //       new Response(
+  //         400,
+  //         {},
+  //         "Tham số thời lượng và giá tiền có thể không hợp lệ",
+  //         300,
+  //         300
+  //       )
+  //     );
+  //   return;
+  // }
 
   req.body = {
     ...req.body,
@@ -126,6 +133,7 @@ const checkRightToChangeServiceMid = async (req, res, next) => {
       .json(new Response(400, {}, "Mã dịch vụ không hợp lệ", 300, 300));
     return;
   }
+  // console.log({service_id});
   req.body.service_id = service_id = service_id.trim();
   const shop_id = req.auth_decoded.ma_cua_hang;
   const service_infor = await shopModel.getServiceById(service_id);
