@@ -9,7 +9,12 @@ const shopController = require("./../controllers/shopController");
 const shopMid = require("./../middlewares/shopMid");
 
 router.use(
-  ["/getShopInforById", "/getAllAvailableServiceOfShop", "/voteService"],
+  [
+    "/getShopInforById",
+    "/getAllAvailableServiceOfShop",
+    "/voteService",
+    "/getServiceById",
+  ],
   requireLoginedForNormUser
 );
 
@@ -19,6 +24,12 @@ router.post(
   requireLoginedForNormUser,
   shopMid.checkShopExistsMid,
   shopController.getAllAvailableServicesOfShop
+);
+
+router.post(
+  "/getServiceById",
+  shopMid.checkServiceExistsMid,
+  shopController.getServiceByIdController
 );
 
 router.post(

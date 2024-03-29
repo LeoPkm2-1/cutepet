@@ -231,6 +231,12 @@ const updateServiceOfShop = async (req, res) => {
   return;
 };
 
+const getServiceByIdController = async (req, res) => {
+  let { service_id } = req.body;
+  const serviceInfor = await shopServiceModel.getServiceById(service_id);
+  // const shopInfor = await 
+};
+
 const addVote = async (req, res) => {
   const { action, user_Voting_id, service_id, num_of_star, content } =
     req.body.VOTE_PAGELOAD;
@@ -297,4 +303,5 @@ module.exports = {
   deleteServiceOfShop,
   updateServiceOfShop,
   votingServiceController,
+  getServiceByIdController,
 };
