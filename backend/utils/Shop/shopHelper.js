@@ -1,5 +1,6 @@
 const shopDescriptionModel = require("../../models/shop/shopDescriptionModel");
 const shopModel = require("../../models/shop/shopModel");
+const shopServiceModel = require("../../models/shop/shopServiceModel");
 
 const isShopExist = async (shop_id) => {
   const data = await shopDescriptionModel.getDescriptionInforOfShop(shop_id);
@@ -9,7 +10,7 @@ const isShopExist = async (shop_id) => {
 const isNameServiceExistsInShop = async (service_name, shop_id) => {
   shop_id = parseInt(shop_id);
   service_name = service_name.trim();
-  const serviceslist = await shopModel.getServiceOfShopByServiceName(
+  const serviceslist = await shopServiceModel.getServiceOfShopByServiceName(
     service_name,
     shop_id
   );
@@ -21,9 +22,7 @@ const isNameServiceExistsInShop = async (service_name, shop_id) => {
   console.log({ length: serviceslist.length });
 };
 
-const checkServiceBelongToShopById = async (service_id,shop_id) => {
-  
-}
+const checkServiceBelongToShopById = async (service_id, shop_id) => {};
 
 module.exports = {
   isShopExist,

@@ -2,6 +2,9 @@ const shopModel = require("../models/shop/shopModel");
 const shopHelper = require("../utils/Shop/shopHelper");
 const UtilsHelper = require("../utils/UtilsHelper");
 const { Response } = require("./../utils");
+const shopServiceModel = require("../models/shop/shopServiceModel");
+const serviceHelper = require("../utils/Shop/serviceHelper");
+const userRoleModel = require("../models/userRoleModel");
 
 const updateInforMid = async (req, res, next) => {
   let {
@@ -136,7 +139,7 @@ const checkRightToChangeServiceMid = async (req, res, next) => {
   // console.log({service_id});
   req.body.service_id = service_id = service_id.trim();
   const shop_id = req.auth_decoded.ma_cua_hang;
-  const service_infor = await shopModel.getServiceById(service_id);
+  const service_infor = await shopServiceModel.getServiceById(service_id);
   if (Object.keys(service_infor).length === 0) {
     res
       .status(400)
@@ -153,9 +156,91 @@ const checkRightToChangeServiceMid = async (req, res, next) => {
   next();
 };
 
+const checkServiceExistsMid = async (req, res, next) => {
+  let { service_id } = req.body;
+  if (typeof service_id != "string" || service_id.trim() == "") {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Mã dịch vụ không hợp lệ", 300, 300));
+    return;
+  }
+  req.body.service_id = service_id = req.body.service_id.trim();
+  const isServiceExist = await serviceHelper.checkServiceExistById(service_id);
+  // console.log({ isServiceExist });
+  if (!isServiceExist) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Dịch vụ không tồn tại", 300, 300));
+    return;
+  }
+  next();
+};
+
+const preProcessVotingService = async (req, res, next) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const vai_tro = req.auth_decoded.vai_tro;
+  let { service_id, num_of_star, content } = req.body;
+  // console.log({
+    // service_id,
+    // num_of_star,
+    // content,
+  // });
+  // res.send("hihi");
+  // return;
+  if (!UtilsHelper.isVaildInt(num_of_star) || parseInt(num_of_star) <= 0) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Số lượng sao không hợp lệ", 300, 300));
+    return;
+  }
+  if (
+    typeof content != "string" &&
+    typeof content != "undefined" &&
+    content != null
+  ) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Nội dung đánh giá không hợp lệ", 300, 300));
+    return;
+  }
+  if (vai_tro.roleDescription == userRoleModel.SHOP_ROLE_STRING) {
+    res
+      .status(400)
+      .json(
+        new Response(400, {}, "Cửa hàng không có quyền đánh giá", 300, 300)
+      );
+    return;
+  }
+
+  const isVoted = await shopServiceModel.hasUserVoteService(
+    user_id,
+    service_id
+  );
+  const data = {
+    user_Voting_id: user_id,
+    num_of_star: parseInt(num_of_star),
+    content: !content ? "" : content.trim(),
+    service_id: req.body.service_id,
+  };
+  if (!isVoted) {
+    req.body.VOTE_PAGELOAD = {
+      action: "ADD_VOTE",
+      ...data,
+    };
+  } else {
+    req.body.VOTE_PAGELOAD = {
+      action: "UPDATE_VOTE",
+      ...data,
+    };
+  }
+  next();
+};
+
 module.exports = {
   updateInforMid,
   addServiceMid,
   checkShopExistsMid,
   checkRightToChangeServiceMid,
+  checkServiceExistsMid,
+  preProcessVotingService,
 };

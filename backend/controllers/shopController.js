@@ -186,7 +186,7 @@ const addServiceForShop = async (req, res) => {
 
 const getAllAvailableServicesOfShop = async (req, res) => {
   const shop_id = parseInt(req.body.shop_id);
-  const services_list = await shopModel.getAllServicesOfShop(shop_id);
+  const services_list = await shopServiceModel.getAllServicesOfShop(shop_id);
   res.status(200).json(new Response(200, services_list, "lấy thành công"));
 };
 
@@ -231,6 +231,62 @@ const updateServiceOfShop = async (req, res) => {
   return;
 };
 
+const addVote = async (req, res) => {
+  const { action, user_Voting_id, service_id, num_of_star, content } =
+    req.body.VOTE_PAGELOAD;
+  const addVoteProcess = await shopServiceModel.addVoteForService(
+    service_id,
+    user_Voting_id,
+    num_of_star,
+    content
+  );
+  // console.log({ addVoteProcess });
+  if (addVoteProcess.status == 200) {
+    res.status(200).json(new Response(200, {}, "Thêm đánh giá thành công"));
+    return;
+  } else {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Đã có lỗi xảy ra khi đánh giá"));
+    return;
+  }
+};
+
+const updateVote = async (req, res) => {
+  const { action, user_Voting_id, service_id, num_of_star, content } =
+    req.body.VOTE_PAGELOAD;
+  const updateProcess = await shopServiceModel.updateVoteForService(
+    service_id,
+    user_Voting_id,
+    num_of_star,
+    content
+  );
+  // console.log({ updateProcess });
+  if (updateProcess.status == 200) {
+    res.status(200).json(new Response(200, {}, "Cập nhật đánh giá thành công"));
+    return;
+  } else {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Đã có lỗi xảy ra khi cập nhật đánh giá"));
+    return;
+  }
+};
+
+const votingServiceController = async (req, res) => {
+  const { action, user_Voting_id, service_id, num_of_star, content } =
+    req.body.VOTE_PAGELOAD;
+
+  console.log({
+    a: req.body.VOTE_PAGELOAD,
+  });
+  if (action == "ADD_VOTE") {
+    await addVote(req, res);
+  } else if (action == "UPDATE_VOTE") {
+    await updateVote(req, res);
+  }
+};
+
 module.exports = {
   getShopInforByIdController,
   updateInforForShopController,
@@ -240,4 +296,5 @@ module.exports = {
   getAllAvailableServicesOfShop,
   deleteServiceOfShop,
   updateServiceOfShop,
+  votingServiceController,
 };

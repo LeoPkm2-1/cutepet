@@ -79,22 +79,125 @@ const updateServiceForShop = async (
     });
 };
 
-// (async () => {
-//   const data = await updateServiceForShop(
-//     "6600679ddf4746e55b1e81eb",
-//     "Dịch vụ tốt s1_1",
-//     "dịch vụ siêu tốt nha",
-//     "dịch vụ tốt giá rẻ",
-//     "ảnh .com",
-//     [1, 2, 3],
-//     1,
-//     55
-//   );
-//   console.log(data);
-// })();
+const getServiceById = async (service_id) => {
+  service_id = service_id.trim();
+  // console.log({ service_id });
+  async function executor(collection) {
+    return await collection.findOne({ _id: new ObjectId(service_id) });
+  }
+  return await nonSQLQuery(executor, "DichVuCuaCuaHang")
+    .then((data) => {
+      if (typeof data == "undefined" || data == null) return {};
+      // console.log({ data });
+      return { ...data, _id: data._id.toString() };
+    })
+    .catch((err) => {});
+};
+
+const getAllServicesOfShop = async (shop_id) => {
+  shop_id = parseInt(shop_id);
+  async function executor(collection) {
+    return await collection.find({ shopId: shop_id }).toArray();
+  }
+  return await nonSQLQuery(executor, "DichVuCuaCuaHang")
+    .then((data) =>
+      data.map((service) => {
+        return { ...service, _id: service._id.toString() };
+      })
+    )
+    .catch((err) => []);
+};
+
+const getServiceOfShopByServiceName = async (service_name, shop_id) => {
+  shop_id = parseInt(shop_id);
+  service_name = service_name.trim();
+  async function executor(collection) {
+    return await collection
+      .find({ shopId: shop_id, serviceName: service_name })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "DichVuCuaCuaHang")
+    .then((data) =>
+      data.map((service) => {
+        return { ...service, _id: service._id.toString() };
+      })
+    )
+    .catch((err) => []);
+};
+
+const addVoteForService = async (
+  service_id,
+  user_Voting_id,
+  num_of_star = 1,
+  content = ""
+) => {
+  const voteObject = new shopServiceStructure.VoteForService(
+    service_id,
+    user_Voting_id,
+    num_of_star,
+    content
+  );
+  async function executor(collection) {
+    return await collection.insertOne(voteObject);
+  }
+  return await nonSQLQuery(executor, "DanhGiaDichVu")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const updateVoteForService = async (
+  service_id,
+  user_Voting_id,
+  num_of_star = 1,
+  content = ""
+) => {
+  async function executor(collection) {
+    return await collection.updateOne(
+      { serviceId: service_id, userVotingId: user_Voting_id },
+      {
+        $set: { numOfStar: num_of_star, content: content },
+      }
+    );
+  }
+  return await nonSQLQuery(executor, "DanhGiaDichVu")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getUserVotingServiceInfor = async (user_Voting_id, service_id) => {
+  async function executor(collection) {
+    return await collection.findOne({
+      serviceId: service_id,
+      userVotingId: user_Voting_id,
+    });
+  }
+  return await nonSQLQuery(executor, "DanhGiaDichVu")
+    .then((data) => {
+      if (typeof data == "undefined" || data == null) return {};
+      return { ...data, _id: data._id.toString() };
+    })
+    .catch((err) => {});
+};
+
+const hasUserVoteService = async (user_Voting_id, service_id) => {
+  const votingInfor = await getUserVotingServiceInfor(
+    user_Voting_id,
+    service_id
+  );
+  // console.log({ votingInfor });
+  if (Object.keys(votingInfor).length === 0) return false;
+  return true;
+};
 
 module.exports = {
   addServiceForShop,
   deleteServiceForShop,
   updateServiceForShop,
+  getServiceById,
+  getAllServicesOfShop,
+  getServiceOfShopByServiceName,
+  addVoteForService,
+  getUserVotingServiceInfor,
+  hasUserVoteService,
+  updateVoteForService,
 };

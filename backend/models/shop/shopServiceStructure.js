@@ -20,7 +20,16 @@ class ShopService {
   }
 }
 
-module.exports = { ShopService };
+class VoteForService {
+  constructor(service_id, user_Voting_id, num_of_star = 1, content = "") {
+    this.serviceId = service_id;
+    this.userVotingId = user_Voting_id;
+    this.numOfStar = num_of_star;
+    this.content = content;
+  }
+}
+
+module.exports = { ShopService, VoteForService };
 
 /*
     ten_dich_vu,

@@ -3649,7 +3649,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_cua_hang\": \"string\",\n    \"tai_khoan\":\"string\",\n    \"mat_khau\":\"string\",\n    \"email\":\"phat.maileo2001k19@hcmut.edu.vn\",\n    \"dia_chi\": {\n        \"so_nha\":1,\n        \"thanh_pho\":\"HCM\"\n    }\n}",
+					"raw": "{\n    \"ma_so_thue\": \"string\",\n    \"ten_cua_hang\": \"string\",\n    \"tai_khoan\":\"string\",\n    \"mat_khau\":\"string\",\n    \"email\":\"phat.maileo2001k19@hcmut.edu.vn\",\n    \"dia_chi\": {\n        \"so_nha\":1,\n        \"thanh_pho\":\"HCM\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3846,7 +3846,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_dich_vu\":\"  dịch vụ tốt\",\n    \"ma_cua_hang\":531,\n    \"mo_ta_dich_vu\":\"tốt \",\n    \"anh_dich_vu\":\"anh.com\",\n    \"the_loai_dich_vu\":[1,2,3],\n    \"don_gia\":2,\n    \"thoi_luong_dich_vu\":7\n}",
+					"raw": "{\n    \"ten_dich_vu\":\"          dịch vụ s0_2  \",\n    // \"ma_cua_hang\":531,\n    \"mo_ta_dich_vu\":\"tốt \",\n    \"anh_dich_vu\":\"anh.com\",\n    \"the_loai_dich_vu\":[1,2,3],\n    \"don_gia\":2,\n    \"thoi_luong_dich_vu\":7\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3903,6 +3903,125 @@
 					"path": [
 						"shop",
 						"getAllAvailableServiceOfShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "92_shop_deleteService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "service_id",
+							"value": "6600679ddf4746e55b1e81eb",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/deleteService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"deleteService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "93_shop_updateService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"service_id\":\"6600679ddf4746e55b1e81eb\",\n    \"ten_dich_vu\":\"1\",\n    \"mo_ta_ngan\":\"\",\n    \"mo_ta_dich_vu\":\"\",\n    \"anh_dich_vu\":\"\",\n    \"the_loai_dich_vu\":\"\",\n    \"don_gia\":\"\",\n    \"thoi_luong_dich_vu\":\"\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/updateService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"updateService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "94_shop_voteService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "service_id",
+							"value": "a6006779df4746e55b1e81e8",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/voteService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"voteService"
 					]
 				}
 			},
