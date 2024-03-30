@@ -24,19 +24,24 @@ const getShopInforByIdController = async (req, res) => {
         .json(new Response(400, {}, SHOP_NOT_EXISTS_MSG, 300, 300));
       return;
     } else {
-      const shop_detail_infor =
-        await shopDescriptionModel.getDescriptionInforOfShop(shop_id);
+      // const shop_detail_infor =
+      //   await shopDescriptionModel.getDescriptionInforOfShop(shop_id);
+      // res
+      //   .status(200)
+      //   .json(
+      //     new Response(
+      //       200,
+      //       { ...shop_basic_infor, shopInfor: shop_detail_infor },
+      //       "",
+      //       300,
+      //       300
+      //     )
+      //   );
+      // return;
+      const shop_infor = await shopHelper.getPublicInforForShopById(shop_id);
       res
         .status(200)
-        .json(
-          new Response(
-            200,
-            { ...shop_basic_infor, shopInfor: shop_detail_infor },
-            "",
-            300,
-            300
-          )
-        );
+        .json(new Response(200, shop_infor, "Lấy thông tin thành công"));
       return;
     }
   } catch (error) {
@@ -234,7 +239,20 @@ const updateServiceOfShop = async (req, res) => {
 const getServiceByIdController = async (req, res) => {
   let { service_id } = req.body;
   const serviceInfor = await shopServiceModel.getServiceById(service_id);
-  // const shopInfor = await 
+  console.log({ serviceInfor });
+  const thong_tin_cua_hang = await shopHelper.getPublicInforForShopById(
+    serviceInfor.shopId
+  );
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        { ...serviceInfor, thong_tin_cua_hang },
+        "Lấy thông tin dịch vụ thành công"
+      )
+    );
+  return;
 };
 
 const addVote = async (req, res) => {

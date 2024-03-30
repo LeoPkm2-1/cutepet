@@ -54,24 +54,28 @@ const getPublicInforForShopById = async (shop_id) => {
             is_active: null,
           }
     );
-  // console.log({ shopBasicInfor });
-  // const shop_basic_infor = await userHelper.getUserPublicInforByUserId(shop_id);
-  const shopInfor = await shopDescriptionModel
+
+  const shopAdditionInfor = await shopDescriptionModel
     .getDescriptionInforOfShop(shop_id)
     .then((data) => {
       return {
         ...data,
         _id: data._id.toString(),
-
       };
     });
-  console.log({ shopInfor });
+
+  return {
+    ...shopBasicInfor,
+    vai_tro,
+    anh,
+    shopAdditionInfor,
+  };
 };
 
-(async function () {
-  const a = await getPublicInforForShopById(533);
-  console.log({ a });
-})();
+// (async function () {
+//   const a = await getPublicInforForShopById(533);
+//   console.log({ a });
+// })();
 
 const checkServiceBelongToShopById = async (service_id, shop_id) => {};
 
