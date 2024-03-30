@@ -14,11 +14,13 @@ router.use(
     "/getAllAvailableServiceOfShop",
     "/voteService",
     "/getServiceById",
+    "/categoriesForService",
   ],
   requireLoginedForNormUser
 );
 
 router.post("/getShopInforById", shopController.getShopInforByIdController);
+router.post("/categoriesForService", shopController.categoriesForService);
 router.post(
   "/getAllAvailableServiceOfShop",
   requireLoginedForNormUser,
@@ -37,6 +39,12 @@ router.post(
   shopMid.checkServiceExistsMid,
   shopMid.preProcessVotingService,
   shopController.votingServiceController
+);
+router.post(
+  "/getVoteInforBefore",
+  shopMid.checkServiceExistsMid,
+  shopMid.getVoteInforBeforeTime,
+  shopController.getVoteInforBeforeController
 );
 
 router.use(requireLoginedForShop);

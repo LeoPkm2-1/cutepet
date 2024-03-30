@@ -166,7 +166,6 @@ const checkServiceExistsMid = async (req, res, next) => {
   }
   req.body.service_id = service_id = req.body.service_id.trim();
   const isServiceExist = await serviceHelper.checkServiceExistById(service_id);
-  // console.log({ isServiceExist });
   if (!isServiceExist) {
     res
       .status(400)
@@ -181,9 +180,9 @@ const preProcessVotingService = async (req, res, next) => {
   const vai_tro = req.auth_decoded.vai_tro;
   let { service_id, num_of_star, content } = req.body;
   // console.log({
-    // service_id,
-    // num_of_star,
-    // content,
+  // service_id,
+  // num_of_star,
+  // content,
   // });
   // res.send("hihi");
   // return;
@@ -236,6 +235,28 @@ const preProcessVotingService = async (req, res, next) => {
   next();
 };
 
+const getVoteInforBeforeTime = async (req, res, next) => {
+  const VALID_PARAM = "Tham số không hợp lệ";
+  const DEFAUT_NUM = 5;
+  let { before, num } = req.body;
+  try {
+    if (!UtilsHelper.isDateValid(new Date(before))) {
+      throw new Error(VALID_PARAM);
+    }
+    if (typeof num != "undefined" && Number.isNaN(parseInt(num))) {
+      throw new Error(VALID_PARAM);
+    }
+    num = typeof num == "undefined" ? DEFAUT_NUM : parseInt(num);
+    if (num <= 0) throw new Error(VALID_PARAM);
+    req.body.before = new Date(before);
+    req.body.num = num;
+  } catch (error) {
+    res.status(400).json(new Response(400, [], VALID_PARAM, 300, 300));
+    return;
+  }
+  next();
+};
+
 module.exports = {
   updateInforMid,
   addServiceMid,
@@ -243,4 +264,5 @@ module.exports = {
   checkRightToChangeServiceMid,
   checkServiceExistsMid,
   preProcessVotingService,
+  getVoteInforBeforeTime,
 };

@@ -3876,7 +3876,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_0}}",
 							"type": "string"
 						}
 					]
@@ -3995,7 +3995,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -4017,7 +4017,7 @@
 						},
 						{
 							"key": "content",
-							"value": "tệ lắm",
+							"value": "ok",
 							"type": "text"
 						}
 					]
@@ -4072,6 +4072,84 @@
 					"path": [
 						"shop",
 						"getServiceById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "96_shop_categoriesForService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/categoriesForService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"categoriesForService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "97_shop_getVoteInforBefore",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"service_id\":\"66006779df4746e55b1e81e8\",\n    \"before\":\"2024-03-30T15:18:55.218+00:00\",\n    \"num\":3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/getVoteInforBefore",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getVoteInforBefore"
 					]
 				}
 			},

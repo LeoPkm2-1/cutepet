@@ -129,13 +129,17 @@ const addVoteForService = async (
   service_id,
   user_Voting_id,
   num_of_star = 1,
-  content = ""
+  content = "",
+  create_at = new Date(),
+  modified_at = null
 ) => {
   const voteObject = new shopServiceStructure.VoteForService(
     service_id,
     user_Voting_id,
     num_of_star,
-    content
+    content,
+    create_at,
+    modified_at
   );
   async function executor(collection) {
     return await collection.insertOne(voteObject);
@@ -189,6 +193,28 @@ const hasUserVoteService = async (user_Voting_id, service_id) => {
   return true;
 };
 
+const getVoteInforBeforeTime = async (service_id, before, num) => {
+  async function executor(collection) {
+    return await collection
+      .find({
+        $and: [
+          { serviceId: service_id },
+          {
+            createAt: {
+              $lte: before,
+            },
+          },
+        ],
+      })
+      .limit(num)
+      .sort({ createAt: -1 })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "DanhGiaDichVu")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 module.exports = {
   addServiceForShop,
   deleteServiceForShop,
@@ -200,4 +226,5 @@ module.exports = {
   getUserVotingServiceInfor,
   hasUserVoteService,
   updateVoteForService,
+  getVoteInforBeforeTime,
 };

@@ -21,11 +21,20 @@ class ShopService {
 }
 
 class VoteForService {
-  constructor(service_id, user_Voting_id, num_of_star = 1, content = "") {
+  constructor(
+    service_id,
+    user_Voting_id,
+    num_of_star = 1,
+    content = "",
+    create_at = new Date(),
+    modified_at = null
+  ) {
     this.serviceId = service_id;
     this.userVotingId = user_Voting_id;
     this.numOfStar = num_of_star;
     this.content = content;
+    this.createAt = create_at;
+    this.modifiedAt = modified_at;
   }
 }
 

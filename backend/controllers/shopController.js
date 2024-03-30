@@ -311,6 +311,43 @@ const votingServiceController = async (req, res) => {
   }
 };
 
+const categoriesForService = (req, res) => {
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        [
+          "CHĂM SÓC",
+          "TẮM",
+          "LÀM ĐẸP",
+          "CẮT TỈA LÔNG",
+          "NHUỘM LÔNG",
+          "VỆ SINH TAI",
+          "LÀM MÓNG",
+          "KHÁM BỆNH",
+          "CHỮA BỆNH",
+          "KHÁC",
+        ],
+        "Lấy thành công"
+      )
+    );
+  return;
+};
+
+const getVoteInforBeforeController = async (req, res) => {
+  const { before, num, service_id } = req.body;
+  const data = await shopServiceModel
+    .getVoteInforBeforeTime(service_id, before, num)
+    .then((data) =>
+      data.payload.map((vote) => {
+        return { ...vote, _id: vote._id.toString() };
+      })
+    );
+  // console.log({ data });
+  res.status(200).json(new Response(200, data, "Lấy thành công"));
+};
+
 module.exports = {
   getShopInforByIdController,
   updateInforForShopController,
@@ -322,4 +359,6 @@ module.exports = {
   updateServiceOfShop,
   votingServiceController,
   getServiceByIdController,
+  categoriesForService,
+  getVoteInforBeforeController,
 };
