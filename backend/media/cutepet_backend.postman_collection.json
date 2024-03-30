@@ -25,12 +25,12 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "string",
+							"value": "nam",
 							"type": "text"
 						},
 						{
 							"key": "mat_khau",
-							"value": "string",
+							"value": "123",
 							"type": "text"
 						},
 						{
@@ -3649,7 +3649,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ma_so_thue\": \"string\",\n    \"ten_cua_hang\": \"string\",\n    \"tai_khoan\":\"string\",\n    \"mat_khau\":\"string\",\n    \"email\":\"phat.maileo2001k19@hcmut.edu.vn\",\n    \"dia_chi\": {\n        \"so_nha\":1,\n        \"thanh_pho\":\"HCM\"\n    }\n}",
+					"raw": "{\n    \"ma_so_thue\": \"mst_test_000\",\n    \"ten_cua_hang\": \"cửa hàng tạm test\",\n    \"tai_khoan\":\"store_test_1\",\n    \"mat_khau\":\"store_test_1\",\n    \"email\":\"mehab30596@mnsaf.com\",\n    \"dia_chi\": {\n        \"so_nha\":1,\n        \"thanh_pho\":\"HCM\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3678,7 +3678,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_0}}",
+							"value": "{{token_user_0}}",
 							"type": "string"
 						}
 					]
@@ -3690,7 +3690,7 @@
 					"urlencoded": [
 						{
 							"key": "shop_id",
-							"value": "531",
+							"value": "534",
 							"type": "text"
 						}
 					]
@@ -3846,7 +3846,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_dich_vu\":\"          dịch vụ s0_2  \",\n    // \"ma_cua_hang\":531,\n    \"mo_ta_dich_vu\":\"tốt \",\n    \"anh_dich_vu\":\"anh.com\",\n    \"the_loai_dich_vu\":[1,2,3],\n    \"don_gia\":2,\n    \"thoi_luong_dich_vu\":7\n}",
+					"raw": "{\n    \"ten_dich_vu\":\"dịch vụ s1_1\",\n    \"mo_ta_ngan\":\"tốt\",\n    \"mo_ta_dich_vu\":\"tốt \",\n    \"anh_dich_vu\":\"anh.com\",\n    \"the_loai_dich_vu\":[1,2,3],\n    \"don_gia\":2,\n    \"thoi_luong_dich_vu\":7\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3888,7 +3888,7 @@
 					"urlencoded": [
 						{
 							"key": "shop_id",
-							"value": "531",
+							"value": "534",
 							"type": "text"
 						}
 					]
@@ -3916,7 +3916,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -3965,7 +3965,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"service_id\":\"6600679ddf4746e55b1e81eb\",\n    \"ten_dich_vu\":\"1\",\n    \"mo_ta_ngan\":\"\",\n    \"mo_ta_dich_vu\":\"\",\n    \"anh_dich_vu\":\"\",\n    \"the_loai_dich_vu\":\"\",\n    \"don_gia\":\"\",\n    \"thoi_luong_dich_vu\":\"\"\n  }",
+					"raw": "{\n    \"service_id\":\"6601b6b7f9491e20eaf48075\",\n    \"ten_dich_vu\":\"s02 ok\",\n    \"mo_ta_ngan\":\"tốt\",\n    \"mo_ta_dich_vu\":\"rẻ\",\n    \"anh_dich_vu\":\"ảnh.com\",\n    \"the_loai_dich_vu\":[2,3,4,5,6,7,8,9],\n    \"don_gia\":10.2,\n    \"thoi_luong_dich_vu\":5\n  }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3995,7 +3995,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -4007,7 +4007,17 @@
 					"urlencoded": [
 						{
 							"key": "service_id",
-							"value": "a6006779df4746e55b1e81e8",
+							"value": "66006779df4746e55b1e81e8",
+							"type": "text"
+						},
+						{
+							"key": "num_of_star",
+							"value": "8",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "tệ lắm",
 							"type": "text"
 						}
 					]
@@ -4022,6 +4032,46 @@
 					"path": [
 						"shop",
 						"voteService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "95_shop_getServiceById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "service_id",
+							"value": "660671445b8417a87bbae46a",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/getServiceById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getServiceById"
 					]
 				}
 			},
