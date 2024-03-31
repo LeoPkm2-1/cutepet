@@ -13,35 +13,60 @@ import { mdiToolboxOutline } from '@mdi/js';
 import { mdiStoreOutline } from '@mdi/js';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useNavigate } from 'react-router-dom';
-import { ShopType } from '../../../../models/shop';
+import { DichVuType, ShopType } from '../../../../models/shop';
 import shopApi from '../../../../api/shop';
 import parse from 'html-react-parser';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../redux';
+import { log } from 'console';
+import { Grid } from 'react-virtualized';
 
 export default function CuaHangCuaToi() {
   const [tab, setTab] = useState('dich-vu');
   const navigate = useNavigate();
+  const shopIdIn = useSelector((state: RootState) => state.user.profile?.id);
   const [shop, setShop] = useState<ShopType>({
-    shopId: 0,
+    shopId: shopIdIn || 0,
   });
+  const [listDichVu, setListDichVu] = useState<DichVuType[]>([]);
   useEffect(() => {
-    shopApi.getMyShop(532).then((data) => {
-      console.log(data, ' shop nè');
-      const shopIn: ShopType = {
-        shopId: data?.payload?.shopInfor?.shopId,
-        sologan: data?.payload?.shopInfor?.sologan,
-        descriptionMsg: data?.payload?.shopInfor?.descriptionMsg,
-        coverImageUrl: data?.payload?.shopInfor?.coverImageUrl,
-        timeServing: data?.payload?.shopInfor?.timeServing,
-        ten: data?.payload?.ten,
-        so_dien_thoai: data?.payload?.so_dien_thoai,
-        tai_khoan: data?.payload?.tai_khoan,
-        avatarImageUrl: data?.payload?.anh?.url,
-      };
-      console.log(shopIn, 'shopIn');
+    if (shopIdIn) {
+      shopApi.getMyShop(shopIdIn).then((data) => {
+        console.log(data, ' shop nè');
+        const shopIn: ShopType = {
+          shopId: data?.payload?.shopInfor?.shopId,
+          sologan: data?.payload?.shopInfor?.sologan,
+          descriptionMsg: data?.payload?.shopInfor?.descriptionMsg,
+          coverImageUrl: data?.payload?.shopInfor?.coverImageUrl,
+          timeServing: data?.payload?.shopInfor?.timeServing,
+          ten: data?.payload?.ten,
+          so_dien_thoai: data?.payload?.so_dien_thoai,
+          tai_khoan: data?.payload?.tai_khoan,
+          avatarImageUrl: data?.payload?.anh?.url,
+        };
+        console.log(shopIn, 'shopIn');
 
-      setShop(shopIn);
-    });
-  }, []);
+        setShop(shopIn);
+      });
+      shopApi.getAllAvailableServiceOfShop(shopIdIn).then((data) => {
+        console.log(data, 'dich vu');
+        const list: DichVuType[] = data?.payload?.map((item: any) => {
+          return {
+            idDichVu: item?._id,
+            ma_cua_hang: item?.shopId,
+            ten_dich_vu: item?.serviceName,
+            mo_ta_dich_vu: item?.serviceDescription,
+            anh_dich_vu: item?.serviceImgUrl,
+            the_loai_dich_vu: item?.serviceType,
+            don_gia: item?.priceQuotation,
+            thoi_luong_dich_vu: item?.duration,
+          } as DichVuType;
+        });
+        setListDichVu(list);
+      });
+    }
+  }, [shopIdIn]);
+
   return (
     <>
       <Box>
@@ -353,15 +378,17 @@ export default function CuaHangCuaToi() {
       {tab == 'loi-moi-da-gui' && <LoiMoiDaGui isPageFriend />} */}
         </Box>
         {tab == 'dich-vu' && (
+  
           <Box
             sx={{
               display: 'flex',
             }}
           >
-            <DichVuBox />
-            <DichVuBox />
-            <DichVuBox />
+            {listDichVu.map((item) => {
+              return <DichVuBox dichVu={item} />;
+            })}
           </Box>
+      
         )}
         {tab == 'gioi-thieu' && (
           <>

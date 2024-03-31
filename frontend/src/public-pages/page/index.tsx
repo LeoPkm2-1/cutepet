@@ -43,6 +43,7 @@ import { MessageActions } from '../../redux/message';
 import CuaHangCuaToi from './cua-hang/cua-hang-cua-toi';
 import DichVuDetail from './cua-hang/dich-vu-detail';
 import { UpdateStore } from './cua-hang/chinh-sua-cua-hang';
+import { ThemDichVu } from './cua-hang/cua-hang-cua-toi/dich-vu/them-dich-vu';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -347,6 +348,7 @@ export default function PageRouting() {
               <Route path="trang-chia-se/:id" element={<BaiChiaSe />} />
               <Route path="tao-bai-chia-se" element={<TaoBaiChiaSe />} />
               <Route path="cua-hang" element={<CuaHangCuaToi />} />
+              <Route path="them-dich-vu" element={<ThemDichVu/>} />
               <Route path="update-cua-hang" element={<UpdateStore />} />
               <Route path="cua-hang/:idCuaHang/dich-vu/:idDichVu" element={<DichVuDetail />} />
               <Route path="sua-bai-chia-se/:id" element={<SuaBaiChiaSe />} />

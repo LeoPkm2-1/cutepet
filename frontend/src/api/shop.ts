@@ -50,11 +50,49 @@ const updateShopInfor = (
   });
 };
 
+const addService = (
+  ten_dich_vu: string,
+  ma_cua_hang: any,
+  mo_ta_dich_vu: string,
+  anh_dich_vu: string,
+  the_loai_dich_vu: string,
+  don_gia: number | string,
+  thoi_luong_dich_vu: number | string
+) => {
+  return authRequest<any>({
+    url: `/shop/addService`,
+    method: 'POST',
+    body: {
+      ten_dich_vu,
+      ma_cua_hang,
+      mo_ta_dich_vu,
+      anh_dich_vu,
+      the_loai_dich_vu,
+      don_gia,
+      thoi_luong_dich_vu,
+    },
+  });
+};
+
+const getAllAvailableServiceOfShop = (shop_id: string | number) => {
+    return authRequest<any>({
+      url: `/shop/getAllAvailableServiceOfShop`,
+      method: 'POST',
+      body: {
+        shop_id,
+      },
+    });
+  };
+
+
+
 const shopApi = {
   getMyShop,
   updateAvatarShop,
   updateShopInfor,
-  updateCoverShop
+  updateCoverShop,
+  addService,
+  getAllAvailableServiceOfShop
 };
 
 export default shopApi;

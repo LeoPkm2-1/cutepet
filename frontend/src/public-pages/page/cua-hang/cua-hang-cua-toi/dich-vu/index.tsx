@@ -1,12 +1,16 @@
 import { Box, Typography } from '@mui/material';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import { useNavigate } from 'react-router-dom';
-export function DichVuBox() {
+import { DichVuType } from '../../../../../models/shop';
+type PropsDichVu = {
+  dichVu: DichVuType;
+};
+export function DichVuBox(props: PropsDichVu) {
   const navigate = useNavigate();
   return (
     <>
       <Box
-      onClick ={() => navigate("/home/cua-hang/1/dich-vu/1")}
+       onClick ={() => navigate("/home/cua-hang/1/dich-vu/1")}
         sx={{
           background: '#fff',
           width: '200px',
@@ -19,9 +23,11 @@ export function DichVuBox() {
             height: '200px',
             width: '200px',
             objectFit: 'cover',
+            borderTopRightRadius:"4px",
+            borderTopLeftRadius:"4px",
           }}
           src={
-            'https://www.petmart.vn/wp-content/uploads/2023/09/grooming2.jpg'
+            props?.dichVu?.anh_dich_vu
           }
         />
         <Box
@@ -39,7 +45,7 @@ export function DichVuBox() {
               fontWeight: '600',
             }}
           >
-            Dịch vụ tắm cho thú cưng
+           {props?.dichVu?.ten_dich_vu}
           </Typography>
           <Typography
             sx={{
@@ -52,7 +58,7 @@ export function DichVuBox() {
               color: 'red',
             }}
           >
-            250.000 vnd
+            {props?.dichVu?.don_gia} vnd
           </Typography>
           <Box>
             <StarRoundedIcon

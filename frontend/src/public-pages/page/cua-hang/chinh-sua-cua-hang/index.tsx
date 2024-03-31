@@ -93,7 +93,7 @@ export function UpdateStore() {
         )
         .then((data) => {
           if (data?.status == 200) {
-            enqueueSnackbar('Cập nhật bài viết thành công', {
+            enqueueSnackbar('Cập nhật cửa hàng thành công', {
               variant: 'info',
             });
             setIsLoading(false);
@@ -114,6 +114,7 @@ export function UpdateStore() {
   return (
     <>
       <Loading open={isLoading} />
+      {shop?.shopId && (
       <Box
         sx={{
           paddingBottom: '30px',
@@ -344,6 +345,7 @@ export function UpdateStore() {
           </Button>
         </Box>
       </Box>
+      )}
     </>
   );
 }
