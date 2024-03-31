@@ -23,6 +23,7 @@ import { AspectRatioImg } from '../../components/Image';
 import { ScrollView } from '../../components/ScrollView';
 import {
   StyledHref,
+  StyledHrefRegister,
   StyledLink,
   StyledTypography,
 } from '../../components/styled';
@@ -245,7 +246,7 @@ const RegisterPage = (props: P) => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent:"space-around"
+                justifyContent: 'space-around',
               },
             }}
           >
@@ -279,8 +280,7 @@ const RegisterPage = (props: P) => {
                     borderRadius: '6px',
                     margin: '0 10px',
                     fontSize: '18px !important',
-                    mt:"100px",
-                    
+                    mt: '100px',
                   }}
                   textAlign="center"
                 >
@@ -422,12 +422,14 @@ const RegisterPage = (props: P) => {
               </Form>
             )}
             <Footer>
-
               <div style={{ textAlign: 'center' }}>
                 Bạn đã có tài khoản ?{' '}
-                <StyledHref style={{
-                  cursor:"pointer"
-                }} onClick={() => navigate('/login')}>
+                <StyledHref
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => navigate('/login')}
+                >
                   Đăng nhập ngay !
                 </StyledHref>
               </div>

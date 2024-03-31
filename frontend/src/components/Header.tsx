@@ -33,6 +33,7 @@ import {
   PersonComponentSearch,
 } from '../public-pages/page/ban-be';
 import ArticleIcon from '@mui/icons-material/Article';
+import MessageIcon from '@mui/icons-material/Message';
 import { NotiActions } from '../redux/noti';
 type Props = ReturnType<typeof mapStateToProps> & {
   onHambuger?: React.MouseEventHandler<HTMLButtonElement>;
@@ -342,13 +343,14 @@ const Header = (props: Props) => {
         >
           <NotifycationComponent onClick={() => handleClose()} />
         </Popover>
+
         <IconButton
           onClick={() => {
-            navigate('/home/trang-chia-se');
+            navigate('/home/chat');
           }}
           sx={{
             color:
-              location.pathname == '/home/trang-chia-se'
+              location.pathname == '/home/chat'
                 ? 'rgb(14, 100, 126)'
                 : 'inherit',
             mx: '20px',
@@ -357,7 +359,7 @@ const Header = (props: Props) => {
           }}
           aria-label="home"
         >
-          <ArticleIcon
+          <MessageIcon
             sx={{
               fontSize: '28px',
             }}

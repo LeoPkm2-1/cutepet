@@ -70,7 +70,7 @@
 
 1. phương thức:
 
-   POST: http://localhost:3000/user/confirmRegister
+   POST: http://localhost:3000/confirmRegister
 
 2. cấu trúc:
 

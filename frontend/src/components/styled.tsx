@@ -67,6 +67,15 @@ export const StyledHref = styled.a`
     color: #0356aa;
   }
 `;
+export const StyledHrefRegister = styled.a`
+  font-size: 14px;
+  color: #ee4d2d;
+  font-weight: 600;
+  :hover {
+    text-decoration: underline;
+    color: #ee4d2d;
+  }
+`;
 
 export const StyledTypography = styled(Typography)`
   font-size: 14px;

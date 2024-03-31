@@ -22,10 +22,12 @@ const AddAnhNguoiDungByURL = async (url_anh, ma_nguoi_dung) => {
 };
 
 const CapNhatAnhDaiDienNguoiDung = async (url_anh, ma_nguoi_dung) => {
+  // first lock all avart now is avaible before update image
   const sqlStmt = `update AnhDaiDien_NguoiDung set is_active = 0 where ma_nguoi_dung = ?`;
   return await sqlQuery(sqlStmt, [ma_nguoi_dung])
     .then((data) => new Response(200, data, ""))
     .then(async (data) => {
+      // insert image to Anh tables and update reference user to new image
       return await AddAnhNguoiDungByURL(url_anh, ma_nguoi_dung);
     })
     .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
@@ -66,7 +68,6 @@ const getDSAnhDaiDienNguoiDung = async (ma_nguoi_dung, isOrder = -1) => {
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, [], err.sqlMessage, err.errno, err.code));
 };
-
 
 // (async function () {
 // 	const data = await getDSAnhDaiDienNguoiDung(1);

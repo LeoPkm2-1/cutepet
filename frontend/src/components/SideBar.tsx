@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import {
   mdiAccount,
   mdiAccountMultiple,
@@ -56,18 +57,18 @@ const menu: IMenuItemData[] = [
     icon: mdiViewDashboard,
     link: '/home/quan-ly-thu-cung',
   },
-  // {
-  //   key: '/admin/dat-lich',
-  //   title: 'Đặt lịch',
-  //   icon: mdiAccountMultiple,
-  //   link: '/home/dat-lich',
-  // },
-  // {
-  //   key: '/admin/su-kien',
-  //   title: 'Sự kiện',
-  //   icon: mdiAccountMultiple,
-  //   link: '/home/su-kien',
-  // },
+  {
+    key: '/home/trang-chia-se',
+    title: 'Bài chia sẽ kiến thức',
+    icon: mdiAccountMultiple,
+    link: '/home/trang-chia-se',
+  },
+  {
+    key: '/home/cua-hang',
+    title: 'Cửa hàng',
+    icon: mdiAccountMultiple,
+    link: '/home/cua-hang',
+  },
 ];
 
 export default function SideBar(props: {
@@ -164,6 +165,32 @@ export default function SideBar(props: {
               >
                 {infoUser?.email}
               </Typography>
+              {infoUser?.user_type && (
+
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '500',
+                  fontSize: '13px',
+                  width:"120px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis", 
+                  whiteSpace: "nowrap",
+                  display:'flex',
+                  alignItems:"center",
+                  mt:'10px',
+                  color:"#ee4d2d"
+                }}
+              >
+                <StorefrontIcon sx={{
+                  fontSize:"17px",
+                  mr:"5px",
+                  color:"#ee4d2d"
+                }} />
+                <span>Cửa hàng</span>
+                
+              </Typography>
+              )}
             </Box>
           </Box>
 

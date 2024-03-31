@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.11.4-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19  Distrib 10.11.6-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: cutepet_sql
 -- ------------------------------------------------------
--- Server version	10.11.4-MariaDB-1
+-- Server version	10.11.6-MariaDB-0ubuntu0.23.10.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -15,10 +15,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-drop DATABASE IF EXISTS cutepet_sql;
-create DATABASE cutepet_sql;
-commit;
-use cutepet_sql;
 --
 -- Table structure for table `Anh`
 --
@@ -31,7 +27,7 @@ CREATE TABLE `Anh` (
   `url` varchar(255) NOT NULL,
   `ngay_cap_nhat` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`ma_anh`)
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,7 +48,30 @@ INSERT INTO `Anh` VALUES
 (91,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fcho13122.jpg?alt=media&token=2256ed62-fbc1-4cce-b089-444807d0a2ae','2023-11-23 23:58:13'),
 (92,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fchomeo.jpg?alt=media&token=d8222591-f0d3-4dde-9da9-67d1650d50aa','2023-11-23 23:59:17'),
 (93,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fhushkyh.jpg?alt=media&token=a73320c7-060b-491f-b0b6-20c6f7f19691','2023-11-24 00:08:45'),
-(94,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fcat_100.jpg?alt=media&token=39a32ee2-0f9f-473c-bf30-46f36e2a896f','2023-11-24 00:13:56');
+(94,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fcat_100.jpg?alt=media&token=39a32ee2-0f9f-473c-bf30-46f36e2a896f','2023-11-24 00:13:56'),
+(97,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fdownload.jpeg?alt=media&token=b1d4187a-028e-49f7-b2c1-8a4056566fc4','2023-11-30 17:47:47'),
+(99,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FF0B28C78-C0D5-4255-B-01.jpeg?alt=media&token=642004ff-13bf-46c6-bfec-0025877721c7','2023-12-02 01:59:54'),
+(100,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fboo-the-dog-2.jpg?alt=media&token=dd69a82c-4a53-45e8-9157-38a757385598','2023-12-02 11:37:15'),
+(101,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fcutecat.png?alt=media&token=ed7cab22-f182-4e3f-975a-0cfb84345dd0','2023-12-02 12:23:39'),
+(102,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fdog.jpeg?alt=media&token=f57cbd77-c16d-421f-8bc9-93935bd9fd42','2023-12-02 12:25:01'),
+(103,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fshiba.jpeg?alt=media&token=3c4b998a-eb11-4cb8-831f-0e1822dc0d78','2023-12-03 09:51:24'),
+(106,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2FScreenshot%20from%202023-12-08%2019-16-11.png?alt=media&token=9d73fa0a-063e-42f5-a832-b4ea9e642ff6','2023-12-08 14:03:27'),
+(108,'test_update','2023-12-11 16:12:53'),
+(109,'https://thientam.vn/wp-content/uploads/2022/12/100-anh-meo-cute-dang-yeu-ngo-nghinh-lam-anh-nen-sieu-dep_2.jpg','2023-12-11 16:14:09'),
+(110,'https://cdn.sforum.vn/sforum/wp-content/uploads/2023/08/hinh-nen-meo-9.jpg','2023-12-11 16:17:31'),
+(111,'https://i.pinimg.com/236x/e4/21/92/e42192b0682ede9d80d92260fb5e17cd.jpg','2023-12-11 16:27:01'),
+(113,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fcongi.jpeg?alt=media&token=8fb8bf96-96f0-4762-91dc-6aced2c8e323','2023-12-13 13:51:42'),
+(114,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fcat_100.jpg?alt=media&token=56169404-c280-4024-9805-46c58983128f','2023-12-13 14:06:16'),
+(115,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fcatanddog.jpg?alt=media&token=7df65090-8ae9-4aaf-9c04-dddf34c07aa9','2023-12-13 14:07:07'),
+(118,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fhushkyh.jpg?alt=media&token=0b54dd54-fa52-40cf-9415-b938b871d7af','2023-12-20 02:41:17'),
+(119,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fpomeranian-dog.jpg?alt=media&token=98a1484a-24e0-4f9d-9815-4ec6aea561d8','2023-12-20 12:50:46'),
+(120,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fg6.jpg?alt=media&token=1ee61b75-a0ad-4ae9-897f-9c8596c8c227','2023-12-20 12:51:08'),
+(121,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fdog2222.jpg?alt=media&token=7d4fe5d3-06be-4963-8816-8f106b8acb81','2023-12-20 14:52:39'),
+(122,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fp1.jpeg?alt=media&token=07487389-44c8-48bf-9492-b6b7d3f6f601','2023-12-20 14:54:05'),
+(123,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fg2.jpg?alt=media&token=759b7956-168b-4df9-a4f8-6705b8ed22c7','2023-12-20 14:59:58'),
+(127,'https://firebasestorage.googleapis.com/v0/b/bkpetcare-e130a.appspot.com/o/images%2Fchowchow2.jpeg?alt=media&token=5189ec90-38f9-4f9b-9a90-042aed37ebe0','2024-01-01 17:13:33'),
+(156,'https://bizweb.dktcdn.net/100/467/317/themes/881347/assets/logo.png?1701914025229','2024-03-21 07:16:59'),
+(157,'https://bizweb.dktcdn.net/100/467/317/themes/881347/assets/logo.png?1701914025229','2024-03-21 07:29:04');
 /*!40000 ALTER TABLE `Anh` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,9 +101,22 @@ LOCK TABLES `AnhDaiDien_NguoiDung` WRITE;
 /*!40000 ALTER TABLE `AnhDaiDien_NguoiDung` DISABLE KEYS */;
 INSERT INTO `AnhDaiDien_NguoiDung` VALUES
 (38,2,0),
-(39,2,1),
+(39,2,0),
 (88,1,0),
-(89,1,1);
+(89,1,0),
+(97,2,0),
+(99,7,1),
+(100,1,0),
+(101,2,0),
+(102,2,0),
+(106,2,0),
+(113,1,0),
+(114,1,0),
+(115,1,0),
+(118,1,1),
+(121,2,1),
+(156,531,0),
+(157,531,1);
 /*!40000 ALTER TABLE `AnhDaiDien_NguoiDung` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -120,7 +152,17 @@ INSERT INTO `AnhDaiDien_ThuCung` VALUES
 (91,43,1),
 (92,44,1),
 (93,45,1),
-(94,46,1);
+(94,46,1),
+(103,50012,0),
+(108,2,0),
+(109,2,0),
+(110,2,0),
+(111,2,1),
+(119,28,0),
+(120,28,1),
+(122,50029,1),
+(123,50012,1),
+(127,50033,1);
 /*!40000 ALTER TABLE `AnhDaiDien_ThuCung` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,10 +314,22 @@ CREATE TABLE `LaBanBe` (
 LOCK TABLES `LaBanBe` WRITE;
 /*!40000 ALTER TABLE `LaBanBe` DISABLE KEYS */;
 INSERT INTO `LaBanBe` VALUES
-(2,8,'2023-11-29 08:12:55'),
-(2,10,'2023-11-29 02:57:23'),
-(8,2,'2023-11-29 08:12:55'),
-(10,2,'2023-11-29 02:57:23');
+(1,2,'2023-12-09 06:52:07'),
+(1,4,'2023-12-04 03:29:47'),
+(1,5,'2023-12-04 05:03:07'),
+(1,8,'2023-12-14 13:20:19'),
+(2,1,'2023-12-09 06:52:07'),
+(2,4,'2024-01-02 18:00:23'),
+(2,5,'2024-01-01 17:23:01'),
+(2,8,'2024-01-01 11:36:36'),
+(2,16,'2024-01-01 17:26:04'),
+(4,1,'2023-12-04 03:29:47'),
+(4,2,'2024-01-02 18:00:23'),
+(5,1,'2023-12-04 05:03:07'),
+(5,2,'2024-01-01 17:23:01'),
+(8,1,'2023-12-14 13:20:19'),
+(8,2,'2024-01-01 11:36:36'),
+(16,2,'2024-01-01 17:26:04');
 /*!40000 ALTER TABLE `LaBanBe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -367,18 +421,13 @@ CREATE TABLE `LoiMoiKetBan` (
 LOCK TABLES `LoiMoiKetBan` WRITE;
 /*!40000 ALTER TABLE `LoiMoiKetBan` DISABLE KEYS */;
 INSERT INTO `LoiMoiKetBan` VALUES
-(1,2,'2023-11-29 03:06:46','REJECT'),
-(1,2,'2023-11-29 03:14:39','REJECT'),
-(2,1,'2023-11-25 01:58:33','REJECT'),
 (2,3,'2023-11-29 08:26:29','PENDING'),
-(2,18,'2023-11-21 15:16:27','PENDING'),
+(2,6,'2023-12-03 13:24:56','PENDING'),
 (2,19,'2023-11-21 15:16:30','PENDING'),
-(4,2,'2023-11-21 14:15:08','REJECT'),
-(4,2,'2023-11-29 08:40:25','PENDING'),
-(5,2,'2023-11-29 08:40:59','PENDING'),
+(4,10,'2024-01-01 05:47:41','PENDING'),
 (8,3,'2023-11-29 07:33:35','PENDING'),
-(23,2,'2023-11-25 02:20:17','REJECT'),
-(23,2,'2023-11-25 02:29:56','REJECT');
+(8,4,'2024-01-01 05:47:07','REJECT'),
+(497,2,'2023-12-07 15:01:20','REJECT');
 /*!40000 ALTER TABLE `LoiMoiKetBan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -397,11 +446,11 @@ CREATE TABLE `NguoiDung` (
   `mat_khau` varchar(100) NOT NULL DEFAULT '',
   `email` varchar(100) DEFAULT NULL,
   `so_dien_thoai` varchar(100) DEFAULT NULL,
-  `is_admin` tinyint(1) DEFAULT 0,
+  `user_type` tinyint(4) DEFAULT 0,
   `gioi_tinh` tinyint(1) DEFAULT NULL,
   `token` text DEFAULT '',
   PRIMARY KEY (`ma_nguoi_dung`)
-) ENGINE=InnoDB AUTO_INCREMENT=503 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=532 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -411,13 +460,13 @@ CREATE TABLE `NguoiDung` (
 LOCK TABLES `NguoiDung` WRITE;
 /*!40000 ALTER TABLE `NguoiDung` DISABLE KEYS */;
 INSERT INTO `NguoiDung` VALUES
-(1,'Nam','2000-10-18','nam','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','nam@gmail.com','01234',0,1,''),
-(2,'Dung','1991-09-30','dung','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','dung@gmail.com','0912345679',0,1,''),
-(3,'Teo','1991-10-01','teo','$2b$10$RKPEI5lKhodO90jeZD3MtO/BHGaPB7Me3XMB6CrlEXggFq/7jc9Z.','teo@gmail.com','0912345680',0,1,''),
+(1,'Nam Tuấn','2002-01-01','nam','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','nam@gmail.com','0987654321',0,0,''),
+(2,'Dũng Trần','2000-10-18','dung','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','dung@gmail.com','0123456789',0,0,''),
+(3,'Teo','1991-10-01','teo','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','teo@gmail.com','0912345680',0,1,''),
 (4,'Ty','1991-10-02','ty','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','ty@gmail.com','0912345681',0,1,''),
 (5,'Leo','1991-10-03','leo','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','leo@gmail.com','0912345682',0,1,''),
 (6,'John','1991-10-04','john','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','john@gmail.com','0912345683',0,1,''),
-(7,'Peter','1991-10-05','peter','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','peter@gmail.com','0912345684',0,1,'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjo3LCJ0ZW4iOiJQZXRlciIsIm5nYXlfc2luaCI6IjE5OTEtMTAtMDRUMTc6MDA6MDAuMDAwWiIsInRhaV9raG9hbiI6InBldGVyIiwiZW1haWwiOiJwZXRlckBnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY4NCIsImdpb2lfdGluaCI6MSwiaWF0IjoxNjk0NjczNDk5LCJleHAiOjE2OTQ2NzY0OTl9.1gZ3pkFFzB8pDvTahjcbblhAddJvITFBcLrT5LsVXrYrLWCYL_1EKcFIA2ombngWdaHENltpleA_o_lTx8eitw'),
+(7,'Peter Nguyễn','1991-10-05','peter','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','peter@gmail.com','0912345684',0,1,''),
 (8,'Susan','1991-10-06','susan','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','susan@gmail.com','0912345685',0,0,''),
 (9,'Hoang','1991-10-07','hoang','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','hoang@gmail.com','0912345686',0,1,''),
 (10,'Thanh','1991-10-08','thanh','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','thanh@gmail.com','0912345687',0,0,''),
@@ -910,7 +959,8 @@ INSERT INTO `NguoiDung` VALUES
 (497,'Brian Martinez','1910-03-01','brianmartinez','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','brianmartinez@gnet.com','11111',0,1,''),
 (498,'Richard Henderson','1915-01-20','richardhenderson','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','richardhenderson@gnet.com','11111',0,1,''),
 (499,'Joy Mack','1947-12-24','joymack','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','joymack@gnet.com','11111',0,0,''),
-(500,'Gary Poole','1983-08-10','garypoole','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','garypoole@gnet.com','11111',0,1,'');
+(500,'Gary Poole','1983-08-10','garypoole','$2b$10$SJCUVhgTtYGYEfPYQWHKmeCMSUhM/vXKGSSEnEFf/0Cp.KI0Z9CR6','garypoole@gnet.com','11111',0,1,''),
+(531,'cua hàng xịn',NULL,'string','$2b$10$UG71/gMqEW9dP8624xB8ZuWxi0bNMsG/DtXMEDsuHGrgk8Mm/Fn5e','phat.maileo2001k19@hcmut.edu.vn','0434322',1,NULL,'');
 /*!40000 ALTER TABLE `NguoiDung` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -953,7 +1003,7 @@ CREATE TABLE `ThongTinSucKhoe` (
   PRIMARY KEY (`ma_suc_khoe`),
   KEY `fk_suckhoe_thucung` (`ma_thu_cung`),
   CONSTRAINT `fk_suckhoe_thucung` FOREIGN KEY (`ma_thu_cung`) REFERENCES `ThuCung` (`ma_thu_cung`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -977,7 +1027,9 @@ INSERT INTO `ThongTinSucKhoe` VALUES
 (29,43,'2023-11-23 23:58:13',NULL,100),
 (30,44,'2023-11-23 23:59:17',4,50),
 (31,45,'2023-11-24 00:08:45',30,80),
-(32,46,'2023-11-24 00:13:56',2.1,30);
+(32,46,'2023-11-24 00:13:56',2.1,30),
+(35,50012,'2023-12-03 09:51:24',40,100),
+(51,50029,'2023-12-20 14:54:05',10,50);
 /*!40000 ALTER TABLE `ThongTinSucKhoe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1001,7 +1053,7 @@ CREATE TABLE `ThuCung` (
   KEY `fk_thucung_ngdung` (`ma_nguoi_chu`),
   CONSTRAINT `fk_thucung_giong` FOREIGN KEY (`ma_giong`) REFERENCES `Giong` (`ma_giong`),
   CONSTRAINT `fk_thucung_ngdung` FOREIGN KEY (`ma_nguoi_chu`) REFERENCES `NguoiDung` (`ma_nguoi_dung`)
-) ENGINE=InnoDB AUTO_INCREMENT=50011 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50055 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1014,14 +1066,14 @@ INSERT INTO `ThuCung` VALUES
 (1,'tom','2019-10-10',1,'chú mèo béo lười',205,1),
 (2,'Charlie','2019-10-11',1,'mèo ú',205,2),
 (3,'Max','2019-10-12',1,'mèo mập',205,1),
-(4,'Luna','2019-10-13',0,'mèo lười',205,2),
+(4,'Luna','2023-12-06',0,'mèo lười',205,2),
 (5,'Bella','2019-10-14',0,'chú mèo béo lười',205,1),
 (8,'Josh','2019-10-01',1,'con chó hay ngủ lười',103,1),
-(18,'Josh2434','2019-10-01',1,'con chó hay ngủ lười',103,1),
-(28,'testpet','2019-10-01',1,'con chó hay ngủ lười',104,1),
+(18,'tony-2','2019-10-14',1,'mập béo lười',202,1),
+(28,'testpet','2019-10-01',0,'con chó hay ngủ lười',104,1),
 (32,'testpet1','2019-10-01',1,'con chó hay ngủ lười',104,1),
 (33,'testpet_2','2019-10-01',1,'con chó hay ngủ lười',104,1),
-(42,'Jacky','2018-11-17',0,'tham ăn ngủ lười',102,2),
+(42,'Jacky','2018-11-07',1,'tham ăn ngủ lười',105,2),
 (43,'tony mập','2022-11-17',0,'',101,8),
 (44,'mèo lười','2022-11-26',1,'',205,8),
 (45,'jack tham ăn','2023-01-18',0,'tham ăn quá',116,8),
@@ -1033,7 +1085,7 @@ INSERT INTO `ThuCung` VALUES
 (1005,'Nicole Martinez','2023-02-19',0,'Professional democratic share positive term full. Institution director most. Admit question them cup out foot.',101,1),
 (1006,'Phillip Thompson','2021-10-05',1,'Money whole charge hold. Nature value age realize national everything.\nImpact chance role once dark. Consumer through pretty other.',401,1),
 (2001,'Kenneth Miller','2023-03-14',1,'Election what minute speak Mrs then. Financial identify heavy tonight matter help available.\nCost I throughout. Family toward medical tend professional. Gas worry science book.',214,2),
-(2002,'Jessica Edwards','2020-07-02',0,'Military increase hair none might rock.\nHow they couple world often. Research know year thousand. Focus culture nature if level approach produce surface.',304,2),
+(2002,'Jessica Edwards','2020-07-09',1,'Military increase hair none might rock.\nHow they couple world often. Research know year thousand. Focus culture nature if level approach produce surface.',304,2),
 (2003,'Jesse Hernandez','2023-10-23',1,'Mean talk through central. Identify bed president he.\nShould us culture I. Mouth according hard listen beautiful south PM.\nIt various him apply.',210,2),
 (2004,'Charles Martinez','2023-11-08',1,'Modern set stand lawyer measure. Already oil down system career.\nTonight population help sort. Bed summer most organization tree.',416,2),
 (2005,'Jason Gonzales','2021-05-05',1,'Theory phone something task much tend environment. Property contain stay probably bill else call. Order will face tree month area. Them receive front suddenly name.',104,2),
@@ -1041,7 +1093,6 @@ INSERT INTO `ThuCung` VALUES
 (2007,'Andrea Duke','2022-07-29',0,'Seek hot book response agency daughter. Within trial particular person someone describe idea. Current church letter.',116,2),
 (2008,'Makayla Hess','2021-06-29',0,'He education various do force sound. Interview guy direction probably. Smile sign either. Require job maybe necessary across spring scene indicate.',101,2),
 (2009,'Eric Frederick','2020-01-03',1,'That such together make.\nFormer skin from wait rise. Marriage recent receive thing poor at. Mr wear financial spend best tough.',311,2),
-(2010,'Marissa Leblanc','2022-01-24',0,'Issue idea a boy. Worry peace top economic law key. President just who require community. True different rate yeah whom.',212,2),
 (3001,'Glen Price','2021-04-05',1,'Free sort environmental ask. Wrong guess should couple fly.\nOnly only yes century international much. Shoulder green box nearly half. Safe why purpose beautiful consumer.',115,3),
 (3002,'Robert Clark','2021-12-09',1,'Guy ability guess still authority pick step ever. Explain join lead save. Physical rock art check up.\nCapital sea watch reason history up local. Draw impact scientist executive those window deep.',115,3),
 (3003,'Jill Smith','2022-08-01',0,'Shake world wrong time example hold too argue. Event behind rule nature from together American task. Window fill pretty bill develop. Particularly sometimes Mrs believe his improve thing star.',111,3),
@@ -1395,7 +1446,10 @@ INSERT INTO `ThuCung` VALUES
 (50002,'Jeremy Ryan','2023-07-25',1,'It vote mention it course. Place another smile stay money thought. Key finally while boy case television west color.\nCar knowledge feeling. Near data cost candidate leader could.',409,50),
 (50003,'Carla Miller','2023-09-11',0,'Per trip throw drive memory. Drop court scientist often treatment.\nAmong before direction beat run also happen. Until interest gun kitchen.\nValue box policy arm pretty table appear.',103,50),
 (50004,'Darrell Munoz','2021-09-07',1,'Exactly practice event involve collection produce course. Hard police no challenge drive particularly.\nRed fall leave ground public detail. Create future option small meeting usually beyond.',211,50),
-(50005,'Brandon Myers','2023-06-09',1,'Drive whatever effort civil. Conference weight responsibility could. Manage measure coach analysis but age relationship.\nSeries raise since thought. Attorney organization pattern market.',209,50);
+(50005,'Brandon Myers','2023-06-09',1,'Drive whatever effort civil. Conference weight responsibility could. Manage measure coach analysis but age relationship.\nSeries raise since thought. Attorney organization pattern market.',209,50),
+(50012,'shiba tham ăn','2021-01-01',1,'hay quậy phá, cắn dép',111,2),
+(50029,'Pub ','2023-01-01',0,'Ngủ lười',105,1),
+(50033,'chou','2023-01-01',0,'',118,4);
 /*!40000 ALTER TABLE `ThuCung` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1408,4 +1462,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-30  8:07:25
+-- Dump completed on 2024-03-23  8:34:22
