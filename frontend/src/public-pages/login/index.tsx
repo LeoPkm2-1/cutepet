@@ -148,6 +148,7 @@ const LoginPage = (props: P) => {
             email: res?.payload[0]?.email || '',
             age: res?.payload[0]?.ngay_sinh || '',
             photoURL: res?.payload[0]?.anh?.url || '',
+            user_type: res?.payload[0]?.user_type,
           };
           dispatch(UserActions.setProfile(profile));
           navigate('/home/mang-xa-hoi');
@@ -311,9 +312,15 @@ const LoginPage = (props: P) => {
               <div style={{ textAlign: 'center' }}>
                 Bạn chưa có tài khoản ?{' '}
                 <StyledHref style={{
-                  cursor:"pointer"
+                  cursor:"pointer",
+                  marginRight: "5px"
                 }} onClick={() => navigate('/register')}>
-                  Đăng ký ngay !
+                  Đăng ký tài khoản cá nhân !
+                </StyledHref>
+                <StyledHref style={{
+                  cursor:"pointer"
+                }} onClick={() => navigate('/register-shop')}>
+                  Đăng ký cửa hàng !
                 </StyledHref>
               </div>
             </Footer>

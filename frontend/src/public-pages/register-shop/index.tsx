@@ -23,7 +23,6 @@ import { AspectRatioImg } from '../../components/Image';
 import { ScrollView } from '../../components/ScrollView';
 import {
   StyledHref,
-  StyledHrefRegister,
   StyledLink,
   StyledTypography,
 } from '../../components/styled';
@@ -51,7 +50,7 @@ interface ErrorObj {
 
 type P = ReturnType<typeof mapStateToProps>;
 
-const RegisterPage = (props: P) => {
+const RegisterShopPage = (props: P) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const from = (useLocation().state as { from?: Location })?.from;
@@ -163,11 +162,12 @@ const RegisterPage = (props: P) => {
     setIsLoading(true);
 
     authApi
-      .register(
+      .registerShop(
         userInfo.ten,
         userInfo.tai_khoan,
         userInfo.mat_khau,
-        userInfo.email
+        userInfo.email,
+        {}
       )
       .then((res) => {
         if (res?.status == 200) {
@@ -246,7 +246,7 @@ const RegisterPage = (props: P) => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'space-around',
+                justifyContent:"space-around"
               },
             }}
           >
@@ -280,7 +280,8 @@ const RegisterPage = (props: P) => {
                     borderRadius: '6px',
                     margin: '0 10px',
                     fontSize: '18px !important',
-                    mt: '100px',
+                    mt:"100px",
+                    
                   }}
                   textAlign="center"
                 >
@@ -289,10 +290,10 @@ const RegisterPage = (props: P) => {
               </>
             ) : (
               <Form onSubmit={handleFormSubmit}>
-                <LoginTitle>Đăng Ký</LoginTitle>
+                <LoginTitle>Tài Khoản Cửa Hàng</LoginTitle>
                 <TextField
                   name="ten"
-                  placeholder="Tên hiển thị"
+                  placeholder="Tên cửa hàng"
                   margin="dense"
                   size="small"
                   error={!!errors.name}
@@ -310,7 +311,7 @@ const RegisterPage = (props: P) => {
                 />
                 <TextField
                   name="ten"
-                  placeholder="Tài khoản"
+                  placeholder="Tài khoản cửa hàng"
                   margin="dense"
                   size="small"
                   error={!!errors.tai_khoan}
@@ -328,7 +329,7 @@ const RegisterPage = (props: P) => {
                 />
                 <TextField
                   name="Email"
-                  placeholder="Email"
+                  placeholder="Email cửa hàng"
                   margin="dense"
                   size="small"
                   error={!!errors.email}
@@ -422,16 +423,15 @@ const RegisterPage = (props: P) => {
               </Form>
             )}
             <Footer>
+
               <div style={{ textAlign: 'center' }}>
                 Bạn đã có tài khoản ?{' '}
-                <StyledHref
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => navigate('/login')}
-                >
+                <StyledHref style={{
+                  cursor:"pointer"
+                }} onClick={() => navigate('/login')}>
                   Đăng nhập ngay !
                 </StyledHref>
+      
               </div>
             </Footer>
           </ScrollView>
@@ -470,7 +470,7 @@ const RegisterPage = (props: P) => {
               minWidth: '500px',
               objectFit: 'cover',
             }}
-            src="https://i.pinimg.com/564x/86/40/8b/86408b9a79d33324ecd281554b80ed57.jpg"
+            src="https://t3.ftcdn.net/jpg/00/47/84/12/360_F_47841206_ml7A5XlGoXqgWybfNPe5vnGKj6RVk1zM.jpg"
           />
         </Box>
       </Box>
@@ -482,4 +482,4 @@ const mapStateToProps = (state: RootState) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps)(RegisterPage);
+export default connect(mapStateToProps)(RegisterShopPage);

@@ -9,6 +9,7 @@ import { friendReducer } from './friend';
 import { notiReducer } from './noti';
 import { socketReducer } from './socket';
 import { scrollReducer } from './scroll';
+import { messageReducer } from './message';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -20,6 +21,7 @@ export const rootReducer = combineReducers({
   noti:notiReducer,
   socket:socketReducer,
   scroll: scrollReducer,
+  message:messageReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

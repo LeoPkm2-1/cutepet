@@ -37,20 +37,28 @@ import UpdatePost from './mang-xa-hoi/component/chinh-sua-bai-viet';
 import ChinhSuaThuCung from './quan-ly-thu-cung/component/chinh-sua-thu-cung';
 import { FriendActions } from '../../redux/friend';
 import { RootState } from '../../redux';
+import ChattingPage from './chat';
+import { MessageType } from '../../models/message';
+import { MessageActions } from '../../redux/message';
+import CuaHangCuaToi from './cua-hang/cua-hang-cua-toi';
+import DichVuDetail from './cua-hang/dich-vu-detail';
+import { UpdateStore } from './cua-hang/chinh-sua-cua-hang';
+import { ThemDichVu } from './cua-hang/cua-hang-cua-toi/dich-vu/them-dich-vu';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
   const [drawerOpen, setDrawerOpen] = useState(matches);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const isChange = useSelector((state:RootState) => state.friend.isChangeFriend);
+  const isChange = useSelector(
+    (state: RootState) => state.friend.isChangeFriend
+  );
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
   useEffect(() => {
     window.requestAnimationFrame(() => {
       setDrawerOpen(matches);
     });
   }, [matches]);
-
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -124,13 +132,12 @@ export default function PageRouting() {
       // 5
       socket.on('USER_IS_ONLINE', (data) => {
         dispatch(SocketActions.setOnline(data?.user_id));
-        console.log("Có online");
-        
+        console.log('Có online');
       });
 
       // 6
       socket.on('USER_IS_OFFLINE', (data) => {
-        console.log("Có offline");
+        console.log('Có offline');
 
         dispatch(SocketActions.setOffline(data?.user_id));
       });
@@ -256,9 +263,24 @@ export default function PageRouting() {
           }
         );
       });
+      // 12
+      socket.on('NEW_MESSAGE_COMMING', (data) => {
+        console.log('có tin nhắn', data);
+        const mes: MessageType = {
+          createAt: data?.createAt,
+          isSeen: data?.isSeen,
+          messageContent: data?.messageContent,
+          receiverID: data?.receiverID,
+          senderID: data?.senderID,
+          id: data?.id,
+        };
+        dispatch(MessageActions.setNewMessage(mes))
+        enqueueSnackbar('Bạn vừa nhận được tin nhắn mới', {
+          variant: 'info',
+        });
+      });
       // 13
       socket.on('COMMENT_ARTICLE', (data) => {
-
         dispatch(NotiActions.setIncreNumNoti());
         enqueueSnackbar(
           <NotifycationItem
@@ -316,14 +338,22 @@ export default function PageRouting() {
                 element={<TrangCaNhanMoiNguoi />}
               />
               <Route path="quan-ly-thu-cung" element={<QuanLyThuCung />} />
-              <Route path="chinh-sua-thu-cung/:id" element={<ChinhSuaThuCung />} />
+              <Route
+                path="chinh-sua-thu-cung/:id"
+                element={<ChinhSuaThuCung />}
+              />
               <Route path="them-thu-cung" element={<ThemThuCung />} />
               <Route path="ban-be" element={<FriendList />} />
               <Route path="trang-chia-se" element={<TrangChiaSe />} />
               <Route path="trang-chia-se/:id" element={<BaiChiaSe />} />
               <Route path="tao-bai-chia-se" element={<TaoBaiChiaSe />} />
+              <Route path="cua-hang" element={<CuaHangCuaToi />} />
+              <Route path="them-dich-vu" element={<ThemDichVu/>} />
+              <Route path="update-cua-hang" element={<UpdateStore />} />
+              <Route path="cua-hang/:idCuaHang/dich-vu/:idDichVu" element={<DichVuDetail />} />
               <Route path="sua-bai-chia-se/:id" element={<SuaBaiChiaSe />} />
               <Route path="post/:id" element={<PostDetail />} />
+              <Route path="chat" element={<ChattingPage />} />
               <Route path="*" element={<MangXaHoi />} />
             </Routes>
           </div>
