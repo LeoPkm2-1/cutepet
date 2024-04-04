@@ -1,11 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const { requireLoginedForNormUser, nonRequireLogined } = require("../middlewares/auth");
+const {
+  requireLoginedForNormUser,
+  nonRequireLogined,
+} = require("../middlewares/auth");
 const userMid = require("./../middlewares/userMid");
 const userControler = require("../controllers/userControllers");
 const {
   handleConfirmRegister,
 } = require("./../controllers/registerController");
+const schedulerController = require("../controllers/schedulerController");
+const shopMid = require("../middlewares/shopMid");
+const schedulerMid = require("../middlewares/schedulerMid");
 
 // router.get("/all", userControler.getAllUser);
 // router.post("/confirmRegister", handleConfirmRegister);
@@ -33,6 +39,19 @@ router.post(
   "/updateInfor",
   userMid.updateBasicInforMid,
   userControler.updateBasicInforController
+);
+
+router.post(
+  "/createSchedule",
+  shopMid.checkServiceExistsMid,
+  schedulerMid.createScheduleMid,
+  schedulerController.createSchedule
+);
+
+router.post(
+  "/getServiceScheduleById",
+  schedulerMid.checkScheduleExistMid,
+  schedulerController.getServiceScheduleByIdController
 );
 
 module.exports = router;
