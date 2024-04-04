@@ -4156,6 +4156,84 @@
 			"response": []
 		},
 		{
+			"name": "95_user_createSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"service_id\":\"66006798df4746e55b1e81ea\"\n    ,\"schedule_name\":\"d\"\n    ,\"pet_id\":4\n    ,\"happen_at\":\"2023-1-02\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/createSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"createSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "96_user_getServiceScheduleById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"660ee3fcc7f791c91d18c5a6\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/getServiceScheduleById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"getServiceScheduleById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user-infor",
 			"request": {
 				"auth": {
