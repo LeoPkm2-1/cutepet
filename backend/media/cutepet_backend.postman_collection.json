@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "nam",
+							"value": "shop_2",
 							"type": "text"
 						},
 						{
@@ -3649,7 +3649,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ma_so_thue\": \"mst_test_000\",\n    \"ten_cua_hang\": \"cửa hàng tạm test\",\n    \"tai_khoan\":\"store_test_1\",\n    \"mat_khau\":\"store_test_1\",\n    \"email\":\"mehab30596@mnsaf.com\",\n    \"dia_chi\": {\n        \"so_nha\":1,\n        \"thanh_pho\":\"HCM\"\n    }\n}",
+					"raw": "{\n    \"ma_so_thue\": \"mst_test_000\",\n    \"ten_cua_hang\": \"cửa hàng số hai\",\n    \"tai_khoan\":\"shop_2\",\n    \"mat_khau\":\"123\",\n    \"email\":\"thinhphatmai@gmail.com\",\n    \"dia_chi\": {\n        \"so_nha\":1,\n        \"thanh_pho\":\"HCM\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3727,7 +3727,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_cua_hang\":\"cua hàng xịn                  \",\n    \"dia_chi\":{\n        \"so_nha\":1,\n        \"duong\":\"NYC\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":{\n        \"thu2\":\"07:00-11:59_14:00-18:00\",\n        \"thu3\":\"06:11-17:59\",\n        \"thu4\":\"06:11-17:59\",\n        \"thu5\":\"06:11-17:59\",\n        \"thu6\":\"06:11-17:59\",\n        \"thu7\":\"06:11-17:59\",\n        \"chunhat\":\"08:00-11:00_14:00-22:00\"\n    }\n  }",
+					"raw": "{\n    \"ten_cua_hang\":\"cửa hàng số một\",\n    \"dia_chi\":{\n        \"so_nha\":1,\n        \"duong\":\"HN\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":{\n        \"thu2\":\"07:00-11:59_14:00-18:00\",\n        \"thu3\":\"06:11-17:59\",\n        \"thu4\":\"06:11-17:59\",\n        \"thu5\":\"06:11-17:59\",\n        \"thu6\":\"06:11-17:59\",\n        \"thu7\":\"06:11-17:59\",\n        \"chunhat\":\"08:00-11:00_14:00-22:00\"\n    }\n  }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3837,7 +3837,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -3846,7 +3846,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_dich_vu\":\"dịch vụ s1_1\",\n    \"mo_ta_ngan\":\"tốt\",\n    \"mo_ta_dich_vu\":\"tốt \",\n    \"anh_dich_vu\":\"anh.com\",\n    \"the_loai_dich_vu\":[1,2,3],\n    \"don_gia\":2,\n    \"thoi_luong_dich_vu\":7\n}",
+					"raw": "{\n    \"ten_dich_vu\":\"dịch vụ 2_02\",\n    \"mo_ta_ngan\":\"OK\",\n    \"mo_ta_dich_vu\":\"ok \",\n    \"anh_dich_vu\":\"cuahang2.com\",\n    \"the_loai_dich_vu\":[1,3],\n    \"don_gia\":9,\n    \"thoi_luong_dich_vu\":8\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3965,7 +3965,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"service_id\":\"6601b6b7f9491e20eaf48075\",\n    \"ten_dich_vu\":\"s02 ok\",\n    \"mo_ta_ngan\":\"tốt\",\n    \"mo_ta_dich_vu\":\"rẻ\",\n    \"anh_dich_vu\":\"ảnh.com\",\n    \"the_loai_dich_vu\":[2,3,4,5,6,7,8,9],\n    \"don_gia\":10.2,\n    \"thoi_luong_dich_vu\":5\n  }",
+					"raw": "{\n    \"service_id\":\"6610e4c2034b2c1379d2b7fc\",\n    \"ten_dich_vu\":\"dịch vụ 1_01\",\n    \"mo_ta_ngan\":\"tốt\",\n    \"mo_ta_dich_vu\":\"tốt\",\n    \"anh_dich_vu\":\"ảnh.com\",\n    \"the_loai_dich_vu\":[2,3,4,5,6,7,8,9],\n    \"don_gia\":10.2,\n    \"thoi_luong_dich_vu\":5\n  }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3995,7 +3995,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token_temp}}",
 							"type": "string"
 						}
 					]
@@ -4007,7 +4007,7 @@
 					"urlencoded": [
 						{
 							"key": "service_id",
-							"value": "66006779df4746e55b1e81e8",
+							"value": "6610e4c2034b2c1379d2b7fc",
 							"type": "text"
 						},
 						{
@@ -4163,7 +4163,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_temp}}",
 							"type": "string"
 						}
 					]
@@ -4172,7 +4172,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"service_id\":\"66006798df4746e55b1e81ea\"\n    ,\"schedule_name\":\"d\"\n    ,\"pet_id\":4\n    ,\"happen_at\":\"2023-1-02\"\n}",
+					"raw": "{\n    \"service_id\":\"6610e55c3c34c7132e0ad405\"\n    ,\"schedule_name\":\"đi vệ sinh lông\"\n    ,\"pet_id\":2\n    ,\"happen_at\":\"2024-6-03\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4180,7 +4180,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/user/createSchedule",
+					"raw": "http://localhost:3000/user/createServiceSchedule",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -4188,7 +4188,7 @@
 					"port": "3000",
 					"path": [
 						"user",
-						"createSchedule"
+						"createServiceSchedule"
 					]
 				}
 			},
@@ -4202,7 +4202,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_1}}",
 							"type": "string"
 						}
 					]
@@ -4228,6 +4228,153 @@
 					"path": [
 						"user",
 						"getServiceScheduleById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "97_user_getAllScheduleForUser",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/user/getAllScheduleForUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"getAllScheduleForUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "98_user_cancelSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e6721d31a037d900d8ec\",\n    \"reason\":\"không thích\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/cancelServiceSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"cancelServiceSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "99_shop_cancelServiceSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e6721d31a037d900d8ec\",\n    \"reason\":\"không thích\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/cancelServiceSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"cancelServiceSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "100_shop_confirmServiceSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e6931d31a037d900d8ed\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/confirmServiceSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"confirmServiceSchedule"
 					]
 				}
 			},

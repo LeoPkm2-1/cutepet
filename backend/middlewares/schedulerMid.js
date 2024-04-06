@@ -110,9 +110,27 @@ const preCancelServiceSchedule = async (req, res, next) => {
   next();
 };
 
+const preConfirmServiceSchedule = async (req, res, next) => {
+  let { schedule_id } = req.body;
+  const schedule_infor = await schedulerModel
+    .getScheduleById(schedule_id)
+    .then((data) => data.payload);
+  if (
+    schedule_infor.scheduleStatus !=
+    schedulerModel.SERVICE_SCHEDULE_PENDING_STATUS_STR
+  ) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Lịch này đã xác nhận rồi", 300, 300));
+    return;
+  }
+  next();
+};
+
 module.exports = {
   createScheduleMid,
   checkScheduleExistMid,
   checkRighToChangeServiceScheduleStatus,
   preCancelServiceSchedule,
+  preConfirmServiceSchedule,
 };

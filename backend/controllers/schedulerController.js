@@ -69,7 +69,7 @@ const getAllScheduleForUserController = async (req, res) => {
   return;
 };
 
-const cancelScheduleOfUser = async (req, res) => {
+const cancelScheduleController = async (req, res) => {
   const { schedule_id, reason, WHO_HANDLING } = req.body;
   const user_id =
     WHO_HANDLING == "USER"
@@ -80,9 +80,6 @@ const cancelScheduleOfUser = async (req, res) => {
       ? await userHelper.getUserPublicInforByUserId(user_id)
       : await shopHelper.getPublicInforForShopById(user_id);
 
-      // console.log({WHO_HANDLING,user_id,user_infor});
-      // res.send('1')
-      // return;
   const cancelProgress = await schedulerModel.updateStatusOfServiceSchedule(
     schedule_id,
     schedulerModel.SERVICE_SCHEDULE_REJECT_STATUS_STR,
@@ -107,9 +104,38 @@ const cancelScheduleOfUser = async (req, res) => {
   }
 };
 
+const confirmServiceScheduleController = async (req, res) => {
+  const { schedule_id } = req.body;
+  const shop_id = req.auth_decoded.ma_cua_hang;
+  const shop_infor = await shopHelper.getPublicInforForShopById(shop_id);
+  const confirmProgress = await schedulerModel.updateStatusOfServiceSchedule(
+    schedule_id,
+    schedulerModel.SERVICE_SCHEDULE_CONFIRM_STATUS_STR,
+    shop_infor,
+    new Date(),
+    ""
+  );
+  if (confirmProgress.status == 200) {
+    res.status(200).json(new Response(200, {}, "Xác nhận lịch thành công"));
+  } else {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          {},
+          "Xác nhận lịch thành thất bại, đã có lỗi xảy ra",
+          300,
+          300
+        )
+      );
+  }
+};
+
 module.exports = {
   createSchedule,
   getServiceScheduleByIdController,
   getAllScheduleForUserController,
-  cancelScheduleOfUser,
+  cancelScheduleController,
+  confirmServiceScheduleController,
 };

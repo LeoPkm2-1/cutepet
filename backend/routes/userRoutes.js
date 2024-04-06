@@ -64,7 +64,7 @@ router.post(
   schedulerMid.checkScheduleExistMid,
   schedulerMid.checkRighToChangeServiceScheduleStatus,
   schedulerMid.preCancelServiceSchedule,
-  schedulerController.cancelScheduleOfUser
+  schedulerController.cancelScheduleController
 );
 
 module.exports = router;
