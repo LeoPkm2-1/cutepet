@@ -3,10 +3,11 @@ const { Response } = require("./../utils/index");
 const { ObjectId } = require("mongodb");
 const SERVICE_SCHEDULE_PENDING_STATUS_STR = "CHO_XAC_NHAN";
 const SERVICE_SCHEDULE_REJECT_STATUS_STR = "DA_HUY";
+const SERVICE_SCHEDULE_MISSING_STATUS_STR = "DA_LO";
 const SERVICE_SCHEDULE_CONFIRM_STATUS_STR = "DA_XAC_NHAN";
 const SERVICE_SCHEDULE_DONE_STATUS_STR = "DA_HOAN_THANH";
 
-class Service_Schedule {
+class ServiceSchedule {
   static type = "SERVICE_SCHEDULE";
   constructor(
     schedule_name,
@@ -26,9 +27,28 @@ class Service_Schedule {
     this.shopInfor = shop_infor;
     this.serviceInfor = service_infor;
     this.happenAt = happen_at;
-    this.scheduleType = this.constructor.type;
+    this.type = this.constructor.type;
     this.createAt = create_at;
     this.modifiedAt = null;
+    this.HistoryHandleProgress = [];
+  }
+}
+
+class UpdateServiceScheduleStatus {
+  static type = "UPDATE_STATUS_SERVICE_SCHEDULE";
+  constructor(
+    new_status,
+    old_status,
+    user_update_infor,
+    update_at = new Date(),
+    reason = ""
+  ) {
+    this.newStatus = new_status;
+    this.oldStatus = old_status;
+    this.userUpdateInfor = user_update_infor;
+    this.updateAt = update_at;
+    this.reason = reason;
+    this.type = this.constructor.type;
   }
 }
 
@@ -42,7 +62,7 @@ const createNewSchedule = async (
   happen_at = new Date(),
   create_at = new Date()
 ) => {
-  const scheduleObj = new Service_Schedule(
+  const scheduleObj = new ServiceSchedule(
     schedule_name,
     service_id,
     pet_id,
@@ -81,11 +101,11 @@ const getScheduleById = async (schedule_id) => {
 };
 
 const getServiceScheduleById = async (service_schedule_id) => {
-  service_schedule_id = service_schedule_id.trim();
+  service_schedule_id = String(service_schedule_id).trim();
   async function executor(collection) {
     return await collection.findOne({
       _id: new ObjectId(service_schedule_id),
-      scheduleType: Service_Schedule.type,
+      type: ServiceSchedule.type,
     });
   }
   return await nonSQLQuery(executor, "Lich")
@@ -109,8 +129,78 @@ const isScheduleExist = async (schedule_id) => {
   return Object.keys(scheduleInfor).length != 0;
 };
 
+const getAllScheduleOfUser = async (user_id) => {
+  user_id = parseInt(user_id);
+  async function executor(collection) {
+    return await collection
+      .find({
+        "userCreate.ma_nguoi_dung": user_id,
+      })
+      .sort({ createAt: -1 })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "Lich")
+    .then(
+      (data) =>
+        new Response(
+          200,
+          data.map((schedule) => {
+            return { ...schedule, _id: schedule._id.toString() };
+          }),
+          ""
+        )
+    )
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const updateStatusOfServiceSchedule = async (
+  service_schedule_id,
+  new_status,
+  user_update_infor,
+  update_at = new Date(),
+  reason = ""
+) => {
+  const service_Schedule_infor = await getServiceScheduleById(
+    service_schedule_id
+  ).then((data) => data.payload);
+  const old_status = service_Schedule_infor.scheduleStatus;
+  const update_status_infor = new UpdateServiceScheduleStatus(
+    new_status,
+    old_status,
+    user_update_infor,
+    update_at,
+    reason
+  );
+
+  async function executor(collection) {
+    return await collection.updateOne(
+      {
+        _id: new ObjectId(service_schedule_id),
+      },
+      {
+        $set: {
+          scheduleStatus: new_status,
+          HistoryHandleProgress: [
+            update_status_infor,
+            ...service_Schedule_infor.HistoryHandleProgress,
+          ],
+        },
+      }
+    );
+  }
+  return await nonSQLQuery(executor, "Lich")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // (async () => {
-//   const data = await isScheduleExist("660ee3fcc7f791c91d18c5a1");
+//   const data = await updateStatusOfServiceSchedule(
+//     "6610e6721d31a037d900d8ec",
+//     "ahihi",
+//     { a: 1 },
+//     new Date(),
+//     ""
+//   );
 //   console.log(data);
 // })();
 
@@ -119,4 +209,11 @@ module.exports = {
   getServiceScheduleById,
   getScheduleById,
   isScheduleExist,
+  getAllScheduleOfUser,
+  SERVICE_SCHEDULE_PENDING_STATUS_STR,
+  SERVICE_SCHEDULE_REJECT_STATUS_STR,
+  SERVICE_SCHEDULE_MISSING_STATUS_STR,
+  SERVICE_SCHEDULE_CONFIRM_STATUS_STR,
+  SERVICE_SCHEDULE_DONE_STATUS_STR,
+  updateStatusOfServiceSchedule,
 };

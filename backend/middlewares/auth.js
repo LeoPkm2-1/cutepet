@@ -8,6 +8,7 @@ const NOT_VERTIFIED = "NOT VERTIFIED";
 // const TOKEN_NOT_MATCH = "TOKEN NOT MATCH";
 const REDIRECT_TO_LOGIN_MESS = "chuyển hướng tới trang đăng nhập";
 const MUST_LOGOUT = "cần đăng xuất ra trước";
+const ONLY_FOR_NORM_USER = "Chỉ dành cho người dùng bình thường";
 
 const getToken = (req) => {
   const authHeader = req.headers["authorization"];
@@ -136,9 +137,48 @@ const socketAuthenMid = (socket, next) => {
   }
 };
 
+const requireOnlyNormUser = async (req, res, next) => {
+  try {
+    const jwtToken = getToken(req);
+    let [decodeStatus, decoded] = [true, []];
+    if (!jwtToken) {
+      decodeStatus = false;
+      throw new Error(NOT_HAVING_AUTH_INFOR);
+    }
+    [decodeStatus, decoded] = vertifyJWT(jwtToken);
+    // token is not valid
+    if (decodeStatus === false) throw new Error(NOT_VERTIFIED);
+
+    req.auth_decoded = {
+      ...decoded,
+    };
+    if (
+      req.auth_decoded.vai_tro.roleDescription !=
+      userRoleModel.NORM_USER_ROLE_STRING
+    )
+      throw new Error(ONLY_FOR_NORM_USER);
+
+    next();
+    return;
+  } catch (error) {
+    if (
+      error.message === NOT_HAVING_AUTH_INFOR ||
+      error.message === NOT_VERTIFIED
+      //   || error.message === TOKEN_NOT_MATCH
+    ) {
+      res.status(301).json(new Response(301, [], REDIRECT_TO_LOGIN_MESS));
+    } else if (error.message === ONLY_FOR_NORM_USER) {
+      res.status(400).json(new Response(400, [], ONLY_FOR_NORM_USER, 300, 300));
+    } else {
+      throw error;
+    }
+  }
+};
+
 module.exports = {
   requireLoginedForNormUser,
   nonRequireLogined,
   socketAuthenMid,
   requireLoginedForShop,
+  requireOnlyNormUser,
 };

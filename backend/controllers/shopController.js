@@ -181,12 +181,12 @@ const addServiceForShop = async (req, res) => {
     res
       .status(400)
       .json(
-        new Response(400, {}, "Thêm cửa hàng thất bại do lỗi nào đó", 300, 300)
+        new Response(400, {}, "Thêm dịch vụ thất bại do lỗi nào đó", 300, 300)
       );
     return;
   }
 
-  res.status(200).json(new Response(200, {}, "Thêm cửa hàng thành công"));
+  res.status(200).json(new Response(200, {}, "Thêm dịch vụ thành công"));
 };
 
 const getAllAvailableServicesOfShop = async (req, res) => {
@@ -348,6 +348,8 @@ const getVoteInforBeforeController = async (req, res) => {
   res.status(200).json(new Response(200, data, "Lấy thành công"));
 };
 
+// const cancelScheduleOfShop = async (req, res) => {};
+
 module.exports = {
   getShopInforByIdController,
   updateInforForShopController,
@@ -361,4 +363,5 @@ module.exports = {
   getServiceByIdController,
   categoriesForService,
   getVoteInforBeforeController,
+  // cancelScheduleOfShop,
 };

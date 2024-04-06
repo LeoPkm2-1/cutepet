@@ -48,10 +48,71 @@ const checkScheduleExistMid = async (req, res, next) => {
     return;
   }
   req.body.schedule_id = schedule_id.trim();
+
+  next();
+};
+
+const checkRighToChangeServiceScheduleStatus = async (req, res, next) => {
+  let { schedule_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const schedule_infor = await schedulerModel
+    .getServiceScheduleById(schedule_id)
+    .then((data) => data.payload);
+  // console.log({ schedule_infor });
+  if (
+    user_id != schedule_infor.userCreate.ma_nguoi_dung &&
+    user_id != schedule_infor.shopInfor.ma_cua_hang
+  ) {
+    res
+      .status(400)
+      .json(
+        new Response(400, {}, "Bạn không có lịch này trong danh sách", 300, 300)
+      );
+    return;
+  }
+  if (user_id == schedule_infor.userCreate.ma_nguoi_dung) {
+    req.body.WHO_HANDLING = "USER";
+  } else if (user_id == schedule_infor.shopInfor.ma_cua_hang) {
+    req.body.WHO_HANDLING = "SHOP";
+  }
+  next();
+};
+
+const preCancelServiceSchedule = async (req, res, next) => {
+  let { schedule_id, reason } = req.body;
+  const schedule_infor = await schedulerModel
+    .getScheduleById(schedule_id)
+    .then((data) => data.payload);
+  // console.log({ schedule_infor });
+  if (
+    schedule_infor.scheduleStatus ==
+      schedulerModel.SERVICE_SCHEDULE_REJECT_STATUS_STR ||
+    schedule_infor.scheduleStatus ==
+      schedulerModel.SERVICE_SCHEDULE_MISSING_STATUS_STR ||
+    schedule_infor.scheduleStatus ==
+      schedulerModel.SERVICE_SCHEDULE_DONE_STATUS_STR
+  ) {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          {},
+          "Lịch này đã ở trạng thái kết thúc không thể thay đổi được",
+          300,
+          300
+        )
+      );
+    return;
+  }
+  if (!reason || reason.trim() == "") req.body.reason = "";
+  else req.body.reason = reason.trim();
   next();
 };
 
 module.exports = {
   createScheduleMid,
   checkScheduleExistMid,
+  checkRighToChangeServiceScheduleStatus,
+  preCancelServiceSchedule,
 };

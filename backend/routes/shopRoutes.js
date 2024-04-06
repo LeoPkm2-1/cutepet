@@ -4,20 +4,24 @@ const {
   requireLoginedForShop,
   nonRequireLogined,
   requireLoginedForNormUser,
+  requireOnlyNormUser,
 } = require("../middlewares/auth");
 const shopController = require("./../controllers/shopController");
 const shopMid = require("./../middlewares/shopMid");
+const schedulerMid = require("../middlewares/schedulerMid");
+const schedulerController = require("../controllers/schedulerController");
 
 router.use(
   [
     "/getShopInforById",
     "/getAllAvailableServiceOfShop",
-    "/voteService",
     "/getServiceById",
     "/categoriesForService",
   ],
   requireLoginedForNormUser
 );
+
+router.use("/voteService", requireOnlyNormUser);
 
 router.post("/getShopInforById", shopController.getShopInforByIdController);
 router.post("/categoriesForService", shopController.categoriesForService);
@@ -72,6 +76,14 @@ router.post(
   "/updateService",
   shopMid.checkRightToChangeServiceMid,
   shopController.updateServiceOfShop
+);
+
+router.post(
+  "/cancelServiceSchedule",
+  schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
+  schedulerMid.preCancelServiceSchedule,
+  schedulerController.cancelScheduleOfUser
 );
 
 module.exports = router;

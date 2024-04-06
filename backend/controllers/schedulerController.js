@@ -43,14 +43,73 @@ const createSchedule = async (req, res) => {
 
 const getServiceScheduleByIdController = async (req, res) => {
   let { schedule_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
   const data = await schedulerModel
     .getServiceScheduleById(schedule_id)
     .then((data) => data.payload);
-    res.status(200).json(new Response(200, data, "Lấy lịch thành cộng"));
+  if (!data) {
+    res.status(200).json(new Response(200, data, "Lấy lịch thành công"));
     return;
+  } else if (parseInt(data.userCreate.ma_nguoi_dung) != user_id) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Bạn không có lịch này", 300, 300));
+    return;
+  }
+  res.status(200).json(new Response(200, data, "Lấy lịch thành công"));
+  return;
+};
+
+const getAllScheduleForUserController = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const schedules = await schedulerModel
+    .getAllScheduleOfUser(user_id)
+    .then((data) => data.payload);
+  res.status(200).json(new Response(200, schedules, "Lấy lịch thành công"));
+  return;
+};
+
+const cancelScheduleOfUser = async (req, res) => {
+  const { schedule_id, reason, WHO_HANDLING } = req.body;
+  const user_id =
+    WHO_HANDLING == "USER"
+      ? parseInt(req.auth_decoded.ma_nguoi_dung)
+      : req.auth_decoded.ma_cua_hang;
+  const user_infor =
+    WHO_HANDLING == "USER"
+      ? await userHelper.getUserPublicInforByUserId(user_id)
+      : await shopHelper.getPublicInforForShopById(user_id);
+
+      // console.log({WHO_HANDLING,user_id,user_infor});
+      // res.send('1')
+      // return;
+  const cancelProgress = await schedulerModel.updateStatusOfServiceSchedule(
+    schedule_id,
+    schedulerModel.SERVICE_SCHEDULE_REJECT_STATUS_STR,
+    user_infor,
+    new Date(),
+    reason
+  );
+  if (cancelProgress.status == 200) {
+    res.status(200).json(new Response(200, {}, "Hủy lịch thành công"));
+  } else {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          {},
+          "Hủy lịch thành không công, đã có lỗi xảy ra",
+          300,
+          300
+        )
+      );
+  }
 };
 
 module.exports = {
   createSchedule,
   getServiceScheduleByIdController,
+  getAllScheduleForUserController,
+  cancelScheduleOfUser,
 };
