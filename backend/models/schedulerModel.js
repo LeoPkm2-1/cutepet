@@ -192,28 +192,46 @@ const updateStatusOfServiceSchedule = async (
     .then((data) => new Response(200, data, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
+const getAllScheduleOfShop = async (shop_id) => {
+  shop_id = parseInt(shop_id);
+  async function executor(collection) {
+    return await collection
+      .find({
+        "shopInfor.ma_cua_hang": shop_id,
+      })
+      .sort({ createAt: -1 })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "Lich")
+    .then(
+      (data) =>
+        new Response(
+          200,
+          data.map((schedule) => {
+            return { ...schedule, _id: schedule._id.toString() };
+          }),
+          ""
+        )
+    )
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
 
 // (async () => {
-//   const data = await updateStatusOfServiceSchedule(
-//     "6610e6721d31a037d900d8ec",
-//     "ahihi",
-//     { a: 1 },
-//     new Date(),
-//     ""
-//   );
+//   const data = await getAllScheduleOfShop(536);
 //   console.log(data);
 // })();
 
 module.exports = {
-  createNewSchedule,
-  getServiceScheduleById,
-  getScheduleById,
-  isScheduleExist,
-  getAllScheduleOfUser,
   SERVICE_SCHEDULE_PENDING_STATUS_STR,
   SERVICE_SCHEDULE_REJECT_STATUS_STR,
   SERVICE_SCHEDULE_MISSING_STATUS_STR,
   SERVICE_SCHEDULE_CONFIRM_STATUS_STR,
   SERVICE_SCHEDULE_DONE_STATUS_STR,
+  createNewSchedule,
+  getServiceScheduleById,
+  getScheduleById,
+  isScheduleExist,
+  getAllScheduleOfUser,
+  getAllScheduleOfShop,
   updateStatusOfServiceSchedule,
 };

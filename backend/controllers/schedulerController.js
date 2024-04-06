@@ -132,10 +132,20 @@ const confirmServiceScheduleController = async (req, res) => {
   }
 };
 
+const getAllScheduleForShopController = async (req, res) => {
+  const shop_id = req.auth_decoded.ma_cua_hang;
+  const schedules = await schedulerModel
+    .getAllScheduleOfShop(shop_id)
+    .then((data) => data.payload);
+  res.status(200).json(new Response(200, schedules, "Lấy lịch thành công"));
+  return;
+};
+
 module.exports = {
   createSchedule,
   getServiceScheduleByIdController,
   getAllScheduleForUserController,
+  getAllScheduleForShopController,
   cancelScheduleController,
   confirmServiceScheduleController,
 };

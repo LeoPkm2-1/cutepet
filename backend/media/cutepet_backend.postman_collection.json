@@ -4381,6 +4381,36 @@
 			"response": []
 		},
 		{
+			"name": "101_shop_getAllScheduleForShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/shop/getAllScheduleForShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getAllScheduleForShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user-infor",
 			"request": {
 				"auth": {

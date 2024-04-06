@@ -93,4 +93,9 @@ router.post(
   schedulerController.confirmServiceScheduleController
 );
 
+router.post(
+  "/getAllScheduleForShop",
+  schedulerController.getAllScheduleForShopController
+);
+
 module.exports = router;
