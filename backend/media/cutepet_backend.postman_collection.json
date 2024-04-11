@@ -4411,6 +4411,117 @@
 			"response": []
 		},
 		{
+			"name": "102_address_hanhchinh_getAllProvinces",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/address/hanhchinh/getAllProvinces",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"address",
+						"hanhchinh",
+						"getAllProvinces"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "103_address_hanhchinh_getAllDistrictsOfProvince",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"province_id\":\"66169cdfcf40fa5369bd57eb\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/address/hanhchinh/getAllDistrictsOfProvince",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"address",
+						"hanhchinh",
+						"getAllDistrictsOfProvince"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "104_address_hanhchinh_getAllWardsOfDistrict",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"district_id\":\"66169cdfcf40fa5369bd582b\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/address/hanhchinh/getAllWardsOfDistrict",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"address",
+						"hanhchinh",
+						"getAllWardsOfDistrict"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user-infor",
 			"request": {
 				"auth": {
