@@ -5,7 +5,7 @@ from pymongo import MongoClient
 MONGO_HOST = "localhost"
 MONGO_PORT = 27017
 DB_NAME = "cutepet_nonsql"
-COLLECTION_NAME = "DiaChi"
+COLLECTION_NAME = "DiaChiHanhChinhVN"
 
 # CSV file path
 # CSV_FILE_PATH = "./wards.csv"
