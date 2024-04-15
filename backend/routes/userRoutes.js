@@ -61,6 +61,7 @@ router.post(
 
 router.post(
   "/cancelServiceSchedule",
+  requireOnlyNormUser,
   schedulerMid.checkScheduleExistMid,
   schedulerMid.checkRighToChangeServiceScheduleStatus,
   schedulerMid.preCancelServiceSchedule,

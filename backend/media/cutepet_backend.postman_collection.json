@@ -1262,7 +1262,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjo1LCJ0ZW4iOiJMZW8iLCJuZ2F5X3NpbmgiOiIxOTkxLTEwLTAyVDE3OjAwOjAwLjAwMFoiLCJ0YWlfa2hvYW4iOiJsZW8iLCJlbWFpbCI6Imxlb0BnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY4MiIsImdpb2lfdGluaCI6MSwiaWF0IjoxNzA0MzQwODQ3LCJleHAiOjE3MDczNDA4NDd9.y36qKvh24uVb1z66eDj1m8t-6xXS0DdbH4e32wFgjOzD792sJlxLR9lMpRsuLLmDpgiNPHFGrMsn1HqAcKdKPg",
+							"value": "{{token_temp}}",
 							"type": "string"
 						}
 					]
@@ -3649,7 +3649,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ma_so_thue\": \"mst_test_000\",\n    \"ten_cua_hang\": \"cửa hàng số hai\",\n    \"tai_khoan\":\"shop_2\",\n    \"mat_khau\":\"123\",\n    \"email\":\"thinhphatmai@gmail.com\",\n    \"dia_chi\": {\n        \"so_nha\":1,\n        \"thanh_pho\":\"HCM\"\n    }\n}",
+					"raw": "{\n    \"ma_so_thue\": \"mst_test_000\",\n    \"ten_cua_hang\": \"cửa hàng số ba\",\n    \"tai_khoan\":\"shop_3\",\n    \"mat_khau\":\"123\",\n    \"email\":\"aaaaaaaaaaaaaaaaa@gmail.com\",\n    \"dia_chi\": {\n        \"house_number\":\"268 Lý Thường kiệt\"\n        ,\"ward_id\":\"66169cdfcf40fa5369bd612a\"\n        ,\"district_id\":\"66169cdfcf40fa5369bd5884\"\n        ,\"province_id\":\"66169cdfcf40fa5369bd57eb\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3690,7 +3690,7 @@
 					"urlencoded": [
 						{
 							"key": "shop_id",
-							"value": "534",
+							"value": "535",
 							"type": "text"
 						}
 					]
@@ -3995,7 +3995,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -4057,7 +4057,7 @@
 					"urlencoded": [
 						{
 							"key": "service_id",
-							"value": "660671445b8417a87bbae46a",
+							"value": "6610e4c2034b2c1379d2b7fc",
 							"type": "text"
 						}
 					]
@@ -4133,7 +4133,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"service_id\":\"66006779df4746e55b1e81e8\",\n    \"before\":\"2024-03-30T15:18:55.218+00:00\",\n    \"num\":3\n}",
+					"raw": "{\n    \"service_id\":\"6610e4c2034b2c1379d2b7fc\",\n    \"before\":\"2024-04-30T15:18:55.218+00:00\",\n    \"num\":3\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4156,14 +4156,14 @@
 			"response": []
 		},
 		{
-			"name": "95_user_createSchedule",
+			"name": "98_user_createSchedule",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -4195,14 +4195,14 @@
 			"response": []
 		},
 		{
-			"name": "96_user_getServiceScheduleById",
+			"name": "99_user_getServiceScheduleById",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_1}}",
+							"value": "{{token_user_2}}",
 							"type": "string"
 						}
 					]
@@ -4211,7 +4211,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"schedule_id\":\"660ee3fcc7f791c91d18c5a6\"\n}",
+					"raw": "{\n    \"schedule_id\":\"6610e6721d31a037d900d8ec\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4234,7 +4234,7 @@
 			"response": []
 		},
 		{
-			"name": "97_user_getAllScheduleForUser",
+			"name": "100_user_getAllScheduleForUser",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -4264,14 +4264,14 @@
 			"response": []
 		},
 		{
-			"name": "98_user_cancelSchedule",
+			"name": "101_user_cancelSchedule",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token_temp}}",
 							"type": "string"
 						}
 					]
@@ -4303,14 +4303,14 @@
 			"response": []
 		},
 		{
-			"name": "99_shop_cancelServiceSchedule",
+			"name": "102_shop_cancelServiceSchedule",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -4319,7 +4319,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"schedule_id\":\"6610e6721d31a037d900d8ec\",\n    \"reason\":\"không thích\"\n}",
+					"raw": "{\n    \"schedule_id\":\"6610e836933b80e9bad54a29\",\n    \"reason\":\"không thích\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4342,7 +4342,7 @@
 			"response": []
 		},
 		{
-			"name": "100_shop_confirmServiceSchedule",
+			"name": "103_shop_confirmServiceSchedule",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -4358,7 +4358,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"schedule_id\":\"6610e6931d31a037d900d8ed\"\n}",
+					"raw": "{\n    \"schedule_id\":\"6610e6721d31a037d900d8ec\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4381,7 +4381,7 @@
 			"response": []
 		},
 		{
-			"name": "101_shop_getAllScheduleForShop",
+			"name": "104_shop_getAllScheduleForShop",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -4411,7 +4411,7 @@
 			"response": []
 		},
 		{
-			"name": "102_address_hanhchinh_getAllProvinces",
+			"name": "105_address_hanhchinh_getAllProvinces",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -4442,7 +4442,7 @@
 			"response": []
 		},
 		{
-			"name": "103_address_hanhchinh_getAllDistrictsOfProvince",
+			"name": "106_address_hanhchinh_getAllDistrictsOfProvince",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -4458,7 +4458,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"province_id\":\"66169cdfcf40fa5369bd57eb\"\n}",
+					"raw": "{\n    \"province_id\":\"66169cdfcf40fa5369bd57f3\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4482,7 +4482,7 @@
 			"response": []
 		},
 		{
-			"name": "104_address_hanhchinh_getAllWardsOfDistrict",
+			"name": "107_address_hanhchinh_getAllWardsOfDistrict",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -4498,7 +4498,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"district_id\":\"66169cdfcf40fa5369bd582b\"\n}",
+					"raw": "{\n    \"district_id\":\"66169cdfcf40fa5369bd58f0\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

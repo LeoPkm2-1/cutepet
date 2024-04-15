@@ -41,6 +41,7 @@ const shopRegistrationMid = (req, res, next) => {
 
   const { ma_so_thue, ten_cua_hang, tai_khoan, mat_khau, email, dia_chi } =
     req.body;
+  const { house_number, ward_id, district_id, province_id } = dia_chi;
   // kiểm tra mã số thuế
   if (typeof ma_so_thue !== "string" || ma_so_thue.trim() == "") {
     res
@@ -74,11 +75,68 @@ const shopRegistrationMid = (req, res, next) => {
     return;
   } else req.body.email = email.trim();
 
-  // kiểm tra việc chọn địa chỉ
-  if (dia_chi == "" || typeof dia_chi == "undefined" || dia_chi === null) {
-    res.status(400).json(new Response(400, [], NOT_HAVE_ADDRESS, 300, 300));
+  if (typeof house_number !== "string" && house_number) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Thông tin nhà không hợp lệ", 300, 300));
     return;
-  }
+  } else if (
+    !house_number ||
+    house_number == undefined ||
+    house_number == null
+  ) {
+    req.body.dia_chi.house_number = "";
+  } else req.body.dia_chi.house_number = house_number.trim();
+
+  if (
+    typeof ward_id != "string" &&
+    typeof ward_id != "undefined" &&
+    ward_id != null
+  ) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Thông tin xã không hợp lệ", 300, 300));
+    return;
+  } else if (!ward_id) {
+    req.body.dia_chi.ward_id = "";
+  } else req.body.dia_chi.ward_id = ward_id.trim();
+
+  if (
+    typeof district_id != "string" &&
+    typeof district_id != "undefined" &&
+    district_id != null
+  ) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Thông tin quận huyện không hợp lệ", 300, 300)
+      );
+    return;
+  } else if (!district_id) {
+    req.body.dia_chi.district_id = "";
+  } else req.body.dia_chi.district_id = district_id.trim();
+  // console.log({ province_id });
+  if (
+    typeof province_id != "string" &&
+    typeof province_id != "undefined" &&
+    province_id != null
+  ) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Thông tin tỉnh thành phố không hợp lệ", 300, 300)
+      );
+    return;
+  } else if (!province_id) {
+    req.body.dia_chi.province_id = "";
+  } else req.body.dia_chi.province_id = province_id.trim();
+  // console.log(req.body.dia_chi);
+
+  // // kiểm tra việc chọn địa chỉ
+  // if (dia_chi == "" || typeof dia_chi == "undefined" || dia_chi === null) {
+  //   res.status(400).json(new Response(400, [], NOT_HAVE_ADDRESS, 300, 300));
+  //   return;
+  // }
   next();
 };
 
