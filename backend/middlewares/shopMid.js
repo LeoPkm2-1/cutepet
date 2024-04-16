@@ -15,6 +15,7 @@ const updateInforMid = async (req, res, next) => {
     mo_ta_cua_hang,
     thoi_gian_lam_viec,
   } = req.body;
+  const { house_number, ward_id, district_id, province_id } = dia_chi;
 
   // kiểm tra tên
   if (typeof ten_cua_hang != "string" || ten_cua_hang.trim() == "") {
@@ -51,6 +52,68 @@ const updateInforMid = async (req, res, next) => {
   } else {
     so_dien_thoai = so_dien_thoai.trim();
   }
+
+  // kiểm tra địa chỉ hợp lệ
+
+  // kiểm tra số nhà
+  if (typeof house_number !== "string" && house_number) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Thông tin nhà không hợp lệ", 300, 300));
+    return;
+  } else if (
+    !house_number ||
+    house_number == undefined ||
+    house_number == null
+  ) {
+    req.body.dia_chi.house_number = "";
+  } else req.body.dia_chi.house_number = house_number.trim();
+
+  // kiểm tra -id  phường
+  if (
+    typeof ward_id != "string" &&
+    typeof ward_id != "undefined" &&
+    ward_id != null
+  ) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Thông tin xã không hợp lệ", 300, 300));
+    return;
+  } else if (!ward_id) {
+    req.body.dia_chi.ward_id = "";
+  } else req.body.dia_chi.ward_id = ward_id.trim();
+
+  // kiểm tra id quận
+  if (
+    typeof district_id != "string" &&
+    typeof district_id != "undefined" &&
+    district_id != null
+  ) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Thông tin quận huyện không hợp lệ", 300, 300)
+      );
+    return;
+  } else if (!district_id) {
+    req.body.dia_chi.district_id = "";
+  } else req.body.dia_chi.district_id = district_id.trim();
+
+  // kiểm tra id tỉnh
+  if (
+    typeof province_id != "string" &&
+    typeof province_id != "undefined" &&
+    province_id != null
+  ) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Thông tin tỉnh thành phố không hợp lệ", 300, 300)
+      );
+    return;
+  } else if (!province_id) {
+    req.body.dia_chi.province_id = "";
+  } else req.body.dia_chi.province_id = province_id.trim();
 
   // check thời gian làm việc hợp lệ
 

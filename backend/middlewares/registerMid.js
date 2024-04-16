@@ -75,6 +75,7 @@ const shopRegistrationMid = (req, res, next) => {
     return;
   } else req.body.email = email.trim();
 
+  // kiểm tra số nhà
   if (typeof house_number !== "string" && house_number) {
     res
       .status(400)
@@ -88,6 +89,7 @@ const shopRegistrationMid = (req, res, next) => {
     req.body.dia_chi.house_number = "";
   } else req.body.dia_chi.house_number = house_number.trim();
 
+  // kiểm tra -id  phường
   if (
     typeof ward_id != "string" &&
     typeof ward_id != "undefined" &&
@@ -101,6 +103,7 @@ const shopRegistrationMid = (req, res, next) => {
     req.body.dia_chi.ward_id = "";
   } else req.body.dia_chi.ward_id = ward_id.trim();
 
+  // kiểm tra id quận
   if (
     typeof district_id != "string" &&
     typeof district_id != "undefined" &&
@@ -115,7 +118,8 @@ const shopRegistrationMid = (req, res, next) => {
   } else if (!district_id) {
     req.body.dia_chi.district_id = "";
   } else req.body.dia_chi.district_id = district_id.trim();
-  // console.log({ province_id });
+
+  // kiểm tra id tỉnh
   if (
     typeof province_id != "string" &&
     typeof province_id != "undefined" &&
@@ -130,7 +134,6 @@ const shopRegistrationMid = (req, res, next) => {
   } else if (!province_id) {
     req.body.dia_chi.province_id = "";
   } else req.body.dia_chi.province_id = province_id.trim();
-  // console.log(req.body.dia_chi);
 
   // // kiểm tra việc chọn địa chỉ
   // if (dia_chi == "" || typeof dia_chi == "undefined" || dia_chi === null) {

@@ -51,6 +51,12 @@ router.post(
   shopController.getVoteInforBeforeController
 );
 
+router.post("/filterServices", (req, res) => {
+  res.send("ahihi");
+});
+
+// shop acess=================================================================
+
 router.use(requireLoginedForShop);
 router.post(
   "/updateShopInfor",

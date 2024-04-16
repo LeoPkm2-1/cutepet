@@ -3727,7 +3727,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_cua_hang\":\"cửa hàng số một\",\n    \"dia_chi\":{\n        \"so_nha\":1,\n        \"duong\":\"HN\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":{\n        \"thu2\":\"07:00-11:59_14:00-18:00\",\n        \"thu3\":\"06:11-17:59\",\n        \"thu4\":\"06:11-17:59\",\n        \"thu5\":\"06:11-17:59\",\n        \"thu6\":\"06:11-17:59\",\n        \"thu7\":\"06:11-17:59\",\n        \"chunhat\":\"08:00-11:00_14:00-22:00\"\n    }\n  }",
+					"raw": "{\n    \"ten_cua_hang\":\"cửa hàng số một\",\n    \"dia_chi\":{\n        \"house_number\":\"128\"\n        ,\"ward_id\":\"66169cdfcf40fa5369bd5b32\"\n        , \"district_id\":\"66169cdfcf40fa5369bd5827\"\n        , \"province_id\":\"66169cdfcf40fa5369bd57e1\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":{\n        \"thu2\":\"07:00-11:59_14:00-18:00\",\n        \"thu3\":\"06:11-17:59\",\n        \"thu4\":\"06:11-17:59\",\n        \"thu5\":\"06:11-17:59\",\n        \"thu6\":\"06:11-17:59\",\n        \"thu7\":\"06:11-17:59\",\n        \"chunhat\":\"08:00-11:00_14:00-22:00\"\n    }\n  }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4516,6 +4516,36 @@
 						"address",
 						"hanhchinh",
 						"getAllWardsOfDistrict"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "108_shop_filterServices",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/shop/filterServices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"filterServices"
 					]
 				}
 			},

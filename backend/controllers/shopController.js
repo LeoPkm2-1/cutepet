@@ -1,4 +1,5 @@
 const anhNguoiDungModel = require("../models/anhNguoiDungModel");
+const diaChiHanhChinhModel = require("../models/diaChi/diaChiHanhChinhModel");
 const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
 const shopModel = require("../models/shop/shopModel");
 const shopServiceModel = require("../models/shop/shopServiceModel");
@@ -106,6 +107,8 @@ const updateInforForShopController = async (req, res) => {
     mo_ta_cua_hang,
     thoi_gian_lam_viec,
   } = req.body;
+
+  const { house_number, ward_id, district_id, province_id } = dia_chi;
   const shop_id = req.auth_decoded.ma_cua_hang;
   // cập nhật thông tin cơ bản của cửa hàng
 
@@ -119,11 +122,26 @@ const updateInforForShopController = async (req, res) => {
     .then((data) => data)
     .catch((err) => err);
 
+  const ward_infor = await diaChiHanhChinhModel.getWardById(ward_id);
+  const district_infor = await diaChiHanhChinhModel.getDistrictById(
+    district_id
+  );
+  const province_infor = await diaChiHanhChinhModel.getProvinceById(
+    province_id
+  );
+
+  const address_infor = {
+    house_number,
+    ward_infor,
+    district_infor,
+    province_infor,
+  };
+
   // cập nhật thông tin mô tả chi tiết của cửa hàng
   const updateDescriptInforProcess = await shopDescriptionModel
     .updateShopInforNotCoverImage(
       shop_id,
-      dia_chi,
+      address_infor,
       khau_hieu,
       mo_ta_cua_hang,
       thoi_gian_lam_viec
