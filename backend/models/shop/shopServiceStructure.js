@@ -7,7 +7,8 @@ class ShopService {
     service_img_url,
     service_type,
     price_quotation,
-    duration
+    duration,
+    num_of_star = 0
   ) {
     this.serviceName = service_name;
     this.shopId = shop_id;
@@ -17,6 +18,7 @@ class ShopService {
     this.serviceType = service_type;
     this.priceQuotation = price_quotation;
     this.duration = duration;
+    this.numOfStar = num_of_star;
   }
 }
 

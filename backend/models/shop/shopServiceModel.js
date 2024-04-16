@@ -215,6 +215,46 @@ const getVoteInforBeforeTime = async (service_id, before, num) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getAllVoteOfService = async (service_id) => {
+  async function executor(collection) {
+    return await collection
+      .find({
+        serviceId: service_id,
+      })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "DanhGiaDichVu")
+    .then((data) => {
+      if (typeof data == "undefined" || data == null || data.length == 0)
+        return [];
+      return data.map((vote_Infor) => {
+        return { ...vote_Infor, _id: vote_Infor._id.toString() };
+      });
+    })
+    .catch((err) => []);
+};
+
+const updateAverageStarForService = async (service_id, average_star) => {
+  async function executor(collection) {
+    return await collection.updateOne(
+      { _id: new ObjectId(service_id) },
+      {
+        $set: {
+          numOfStar: average_star,
+        },
+      }
+    );
+  }
+  return await nonSQLQuery(executor, "DichVuCuaCuaHang")
+    .then((data) => new Response(200, data, "cập nhật thành công"))
+    .catch((err) => new Response(400, err, "đã có lỗi", 300, 300));
+};
+
+// (async () => {
+//   const data = await updateAverageStarForService("6610e4c2034b2c1379d2b7fc",-28);
+//   console.log(data );
+// })();
+
 module.exports = {
   addServiceForShop,
   deleteServiceForShop,
@@ -227,4 +267,6 @@ module.exports = {
   hasUserVoteService,
   updateVoteForService,
   getVoteInforBeforeTime,
+  getAllVoteOfService,
+  updateAverageStarForService,
 };

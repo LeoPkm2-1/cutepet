@@ -249,7 +249,11 @@ const preProcessVotingService = async (req, res, next) => {
   // });
   // res.send("hihi");
   // return;
-  if (!UtilsHelper.isVaildInt(num_of_star) || parseInt(num_of_star) <= 0) {
+  if (
+    !UtilsHelper.isVaildInt(num_of_star) ||
+    parseInt(num_of_star) <= 0 ||
+    parseInt(num_of_star) > 5
+  ) {
     res
       .status(400)
       .json(new Response(400, {}, "Số lượng sao không hợp lệ", 300, 300));

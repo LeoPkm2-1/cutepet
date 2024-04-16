@@ -4,6 +4,7 @@ const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
 const shopModel = require("../models/shop/shopModel");
 const shopServiceModel = require("../models/shop/shopServiceModel");
 const userModel = require("../models/userModel");
+const serviceHelper = require("../utils/Shop/serviceHelper");
 const shopHelper = require("../utils/Shop/shopHelper");
 const { Response } = require("./../utils/index");
 const userHelper = require("./../utils/userHelper");
@@ -319,14 +320,16 @@ const votingServiceController = async (req, res) => {
   const { action, user_Voting_id, service_id, num_of_star, content } =
     req.body.VOTE_PAGELOAD;
 
-  console.log({
-    a: req.body.VOTE_PAGELOAD,
-  });
+  // console.log({
+  //   a: req.body.VOTE_PAGELOAD,
+  // });
   if (action == "ADD_VOTE") {
     await addVote(req, res);
   } else if (action == "UPDATE_VOTE") {
     await updateVote(req, res);
   }
+  // update averageOfNumstart in service
+  await serviceHelper.reUpdateNumOfStarOfService(service_id);
 };
 
 const categoriesForService = (req, res) => {
