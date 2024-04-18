@@ -17,6 +17,7 @@ router.use(
     "/getAllAvailableServiceOfShop",
     "/getServiceById",
     "/categoriesForService",
+    "/filterServices",
   ],
   requireLoginedForNormUser
 );
@@ -51,9 +52,7 @@ router.post(
   shopController.getVoteInforBeforeController
 );
 
-router.post("/filterServices", (req, res) => {
-  res.send("ahihi");
-});
+router.post("/filterServices", shopMid.filterServiceMid);
 
 // shop acess=================================================================
 

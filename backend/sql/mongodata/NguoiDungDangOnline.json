@@ -1,0 +1,3 @@
+{"_id":{"$oid":"65c0a8fe58c4ecc6d817501a"},"userId":1,"isOnline":true,"recordAt":{"$date":"2024-02-05T09:23:10.272Z"},"numOfDevices":3}
+{"_id":{"$oid":"65c0ab152d47d12b067f8a78"},"userId":2,"isOnline":true,"recordAt":{"$date":"2024-02-05T09:32:05.111Z"},"numOfDevices":236}
+{"_id":{"$oid":"660eeaf9b2fa08f555a8b50e"},"userId":533,"isOnline":false,"recordAt":{"$date":"2024-04-04T18:01:48.263Z"},"numOfDevices":0}

@@ -324,6 +324,11 @@ const getVoteInforBeforeTime = async (req, res, next) => {
   next();
 };
 
+const filterServiceMid = async (req, res, next) => {
+  let { service_name, service_type, num_of_star, province_id, district_id } =
+    req.body;
+};
+
 module.exports = {
   updateInforMid,
   addServiceMid,
@@ -332,4 +337,5 @@ module.exports = {
   checkServiceExistsMid,
   preProcessVotingService,
   getVoteInforBeforeTime,
+  filterServiceMid,
 };
