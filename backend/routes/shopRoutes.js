@@ -52,7 +52,11 @@ router.post(
   shopController.getVoteInforBeforeController
 );
 
-router.post("/filterServices", shopMid.filterServiceMid);
+router.post(
+  "/filterServices",
+  shopMid.filterServiceCheckParamMid,
+  shopController.filterServiceController
+);
 
 // shop acess=================================================================
 

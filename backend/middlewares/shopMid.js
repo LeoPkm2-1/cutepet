@@ -5,6 +5,7 @@ const { Response } = require("./../utils");
 const shopServiceModel = require("../models/shop/shopServiceModel");
 const serviceHelper = require("../utils/Shop/serviceHelper");
 const userRoleModel = require("../models/userRoleModel");
+const addressHelper = require("../utils/addressHelper");
 
 const updateInforMid = async (req, res, next) => {
   let {
@@ -324,9 +325,182 @@ const getVoteInforBeforeTime = async (req, res, next) => {
   next();
 };
 
-const filterServiceMid = async (req, res, next) => {
-  let { service_name, service_type, num_of_star, province_id, district_id } =
-    req.body;
+const filterServiceCheckParamMid = async (req, res, next) => {
+  let {
+    service_name,
+    service_type,
+    num_of_star,
+    price_point,
+    price_search,
+    province_id,
+    district_id,
+    num,
+  } = req.body;
+
+  if (
+    !service_name ||
+    typeof service_name != "string" ||
+    service_name.trim() == ""
+  ) {
+    req.body.service_name = service_name = undefined;
+  } else req.body.service_name = service_name.trim();
+
+  if (
+    !service_type ||
+    !Array.isArray(service_type) ||
+    service_type.length == 0
+  ) {
+    req.body.service_type = service_type = undefined;
+  } else {
+    service_type = service_type.map((category) => category.toUpperCase());
+    service_type = [...new Set(service_type)];
+    const allCategories = shopServiceModel.getAllCategoriesForService();
+    req.body.service_type = service_type.filter((category) =>
+      allCategories.includes(category)
+    );
+  }
+
+  if (
+    !num_of_star ||
+    !UtilsHelper.isVaildInt(num_of_star) ||
+    parseInt(num_of_star) < 0
+  ) {
+    req.body.num_of_star = num_of_star = undefined;
+  }
+
+  if (
+    !price_point ||
+    !UtilsHelper.isValidNumber(price_point) ||
+    parseFloat(price_point) < 0
+  ) {
+    req.body.price_point = price_point = undefined;
+  } else {
+    req.body.price_point = price_point = parseFloat(price_point);
+  }
+
+  if (
+    typeof price_search != "undefined" &&
+    price_search != null &&
+    typeof price_search != "string"
+  ) {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          {},
+          "Phương thức lọc theo tiền không hợp lệ",
+          300,
+          300
+        )
+      );
+    return;
+  }
+
+  if (!price_search || price_search.trim() == "") {
+    req.body.price_search = "LESS";
+  } else if (
+    price_search.trim().toUpperCase() == "GREATER" ||
+    price_search.trim().toUpperCase() == "LESS"
+  ) {
+    req.body.price_search = price_search = price_search.trim().toUpperCase();
+  } else {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          {},
+          "Phương thức lọc theo tiền không hợp lệ",
+          300,
+          300
+        )
+      );
+    return;
+  }
+
+  if (
+    !province_id ||
+    typeof province_id != "string" ||
+    province_id.trim() == ""
+  ) {
+    province_id = req.body.province_id = undefined;
+  }
+
+  if (
+    !district_id ||
+    typeof district_id != "string" ||
+    district_id.trim() == ""
+  ) {
+    district_id = req.body.district_id = undefined;
+  }
+
+  if (!num || !UtilsHelper.isVaildInt(num) || parseInt(num) < 0) {
+    req.body.num = num = 2;
+  }
+
+  if (typeof province_id != "undefined") {
+    const isExist = await addressHelper.isProvinceExistById(province_id);
+    if (!isExist) {
+      res
+        .status(400)
+        .json(new Response(400, [], "Tỉnh không tồn tại", 300, 300));
+      return;
+    }
+  }
+
+  if (typeof district_id != "undefined") {
+    const isExist = await addressHelper.isDistrictExistById(district_id);
+    if (!isExist) {
+      res
+        .status(400)
+        .json(new Response(400, [], "Quận huyện không tồn tại", 300, 300));
+      return;
+    }
+  }
+
+  next();
+
+  // db.DanhGiaDichVu.aggregate([
+  //   {
+  //     $addFields: {
+  //       service_id_obj: { $toObjectId: "$serviceId" }, // Convert product_id from string to ObjectId
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "DichVuCuaCuaHang",
+  //       localField: "service_id_obj",
+  //       foreignField: "_id",
+  //       as: "serviceInfor",
+  //     },
+  //   },
+  //   {
+  //     $unwind: "$serviceInfor", // Optional: unwind the product array if you want to work with individual products
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "ThongTinMoTaCuaHang",
+  //       localField: "serviceInfor.shopId",
+  //       foreignField: "shopId",
+  //       as: "shopDescription",
+  //     },
+  //   },
+  //   {
+  //     $unwind: "$shopDescription", // Optional: unwind the product array if you want to work with individual products
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "DiaChiHanhChinhVN",
+  //       localField: "shopDescription.addressInfor.province_infor.code",
+  //       foreignField: "province_code",
+  //       as: "Districts",
+  //     },
+  //   },
+  //   {
+  //     $unwind: "$Districts", // Optional: unwind the product array if you want to work with individual products
+  //   },
+  // ]);
 };
 
 module.exports = {
@@ -337,5 +511,5 @@ module.exports = {
   checkServiceExistsMid,
   preProcessVotingService,
   getVoteInforBeforeTime,
-  filterServiceMid,
+  filterServiceCheckParamMid,
 };

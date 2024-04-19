@@ -338,18 +338,7 @@ const categoriesForService = (req, res) => {
     .json(
       new Response(
         200,
-        [
-          "CHĂM SÓC",
-          "TẮM",
-          "LÀM ĐẸP",
-          "CẮT TỈA LÔNG",
-          "NHUỘM LÔNG",
-          "VỆ SINH TAI",
-          "LÀM MÓNG",
-          "KHÁM BỆNH",
-          "CHỮA BỆNH",
-          "KHÁC",
-        ],
+        shopServiceModel.getAllCategoriesForService(),
         "Lấy thành công"
       )
     );
@@ -368,7 +357,97 @@ const getVoteInforBeforeController = async (req, res) => {
   // console.log({ data });
   res.status(200).json(new Response(200, data, "Lấy thành công"));
 };
+const filterServiceController = async (req, res) => {
+  const {
+    service_name,
+    service_type,
+    num_of_star,
+    price_point,
+    price_search,
+    province_id,
+    district_id,
+    num,
+  } = req.body;
+  let filter = { $match: {} };
+  if (service_name) {
+    filter.$match = {
+      ...filter.$match,
+      serviceName: { $regex: `${service_name}`, $options: "i" },
+    };
+  }
 
+  if (service_type) {
+    filter.$match = {
+      ...filter.$match,
+      serviceType: {
+        $elemMatch: { $in: service_type },
+      },
+    };
+  }
+
+  if (num_of_star) {
+    filter.$match = {
+      ...filter.$match,
+      numOfStar: { $gte: num_of_star },
+    };
+  }
+  if (price_point) {
+    const price_condition =
+      price_search == "GREATER"
+        ? {
+            $gte: price_point,
+          }
+        : {
+            $lte: price_point,
+          };
+    filter.$match = {
+      ...filter.$match,
+      priceQuotation: price_condition,
+    };
+  }
+
+  const joinOp = {
+    $lookup: {
+      from: "ThongTinMoTaCuaHang",
+      localField: "shopId",
+      foreignField: "shopId",
+      as: "shopInfor",
+    },
+  };
+  const shopInforDestructOp = {
+    $unwind: "$shopInfor",
+  };
+  const aggregateArray =
+    typeof district_id != "undefined" || typeof province_id != "undefined"
+      ? [filter, joinOp, shopInforDestructOp]
+      : [filter];
+  if (district_id) {
+    const filterDistrictOp = {
+      $match: {
+        "shopInfor.addressInfor.district_infor._id": district_id,
+      },
+    };
+    aggregateArray.push(filterDistrictOp);
+  } else if (province_id) {
+    const filterProvinceOp = {
+      $match: {
+        "shopInfor.addressInfor.province_infor._id": province_id,
+      },
+    };
+    aggregateArray.push(filterProvinceOp);
+  }
+
+  // console.log({province_id,district_id});
+  // console.log(aggregateArray.length);
+  // console.log(aggregateArray[3]);
+
+  const data = await shopServiceModel
+    .filterServiceByCustomAggregate(aggregateArray)
+    // .filterServiceByCustomAggregate([filter, lookup])
+    .then((data) => data.payload);
+
+  res.status(200).json(new Response(200, data, "Lấy dữ liệu thành công"));
+};
 // const cancelScheduleOfShop = async (req, res) => {};
 
 module.exports = {
@@ -384,5 +463,6 @@ module.exports = {
   getServiceByIdController,
   categoriesForService,
   getVoteInforBeforeController,
+  filterServiceController,
   // cancelScheduleOfShop,
 };

@@ -250,6 +250,30 @@ const updateAverageStarForService = async (service_id, average_star) => {
     .catch((err) => new Response(400, err, "đã có lỗi", 300, 300));
 };
 
+const getAllCategoriesForService = () => {
+  return [
+    "CHĂM SÓC",
+    "TẮM",
+    "LÀM ĐẸP",
+    "CẮT TỈA LÔNG",
+    "NHUỘM LÔNG",
+    "VỆ SINH TAI",
+    "LÀM MÓNG",
+    "KHÁM BỆNH",
+    "CHỮA BỆNH",
+    "KHÁC",
+  ];
+};
+
+const filterServiceByCustomAggregate = async (aggregateArray) => {
+  async function executor(collection) {
+    return await collection.aggregate(aggregateArray).toArray();
+  }
+  return await nonSQLQuery(executor, "DichVuCuaCuaHang")
+    .then((data) => new Response(200, data, "cập nhật thành công"))
+    .catch((err) => new Response(400, err, "đã có lỗi", 300, 300));
+};
+
 // (async () => {
 //   const data = await updateAverageStarForService("6610e4c2034b2c1379d2b7fc",-28);
 //   console.log(data );
@@ -269,4 +293,6 @@ module.exports = {
   getVoteInforBeforeTime,
   getAllVoteOfService,
   updateAverageStarForService,
+  filterServiceByCustomAggregate,
+  getAllCategoriesForService,
 };
