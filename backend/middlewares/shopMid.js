@@ -325,7 +325,7 @@ const getVoteInforBeforeTime = async (req, res, next) => {
   next();
 };
 
-const filterServiceCheckParamMid = async (req, res, next) => {
+const filterServiceCheckParamMid_v1 = async (req, res, next) => {
   let {
     service_name,
     service_type,
@@ -334,7 +334,8 @@ const filterServiceCheckParamMid = async (req, res, next) => {
     price_search,
     province_id,
     district_id,
-    num,
+    pageNumber,
+    pageSize,
   } = req.body;
 
   if (
@@ -419,6 +420,24 @@ const filterServiceCheckParamMid = async (req, res, next) => {
     return;
   }
 
+  next();
+};
+
+const filterServiceCheckParamMid_v2 = async (req, res, next) => {
+  let {
+    service_name,
+    service_type,
+    num_of_star,
+    price_point,
+    price_search,
+    province_id,
+    district_id,
+    pageNumber,
+    pageSize,
+  } = req.body;
+
+  const DEFAUT_NUM = 2;
+
   if (
     !province_id ||
     typeof province_id != "string" ||
@@ -435,9 +454,21 @@ const filterServiceCheckParamMid = async (req, res, next) => {
     district_id = req.body.district_id = undefined;
   }
 
-  if (!num || !UtilsHelper.isVaildInt(num) || parseInt(num) < 0) {
-    req.body.num = num = 2;
-  }
+  if (
+    !pageNumber ||
+    !UtilsHelper.isVaildInt(pageNumber) ||
+    parseInt(pageNumber) < 1
+  ) {
+    req.body.pageNumber = pageNumber = undefined;
+  } else req.body.pageNumber = pageNumber = parseInt(pageNumber);
+
+  if (
+    !pageSize ||
+    !UtilsHelper.isVaildInt(pageSize) ||
+    parseInt(pageSize) < 0
+  ) {
+    req.body.pageSize = pageSize = undefined;
+  } else req.body.pageSize = pageSize = parseInt(pageSize);
 
   if (typeof province_id != "undefined") {
     const isExist = await addressHelper.isProvinceExistById(province_id);
@@ -458,49 +489,7 @@ const filterServiceCheckParamMid = async (req, res, next) => {
       return;
     }
   }
-
   next();
-
-  // db.DanhGiaDichVu.aggregate([
-  //   {
-  //     $addFields: {
-  //       service_id_obj: { $toObjectId: "$serviceId" }, // Convert product_id from string to ObjectId
-  //     },
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "DichVuCuaCuaHang",
-  //       localField: "service_id_obj",
-  //       foreignField: "_id",
-  //       as: "serviceInfor",
-  //     },
-  //   },
-  //   {
-  //     $unwind: "$serviceInfor", // Optional: unwind the product array if you want to work with individual products
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "ThongTinMoTaCuaHang",
-  //       localField: "serviceInfor.shopId",
-  //       foreignField: "shopId",
-  //       as: "shopDescription",
-  //     },
-  //   },
-  //   {
-  //     $unwind: "$shopDescription", // Optional: unwind the product array if you want to work with individual products
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "DiaChiHanhChinhVN",
-  //       localField: "shopDescription.addressInfor.province_infor.code",
-  //       foreignField: "province_code",
-  //       as: "Districts",
-  //     },
-  //   },
-  //   {
-  //     $unwind: "$Districts", // Optional: unwind the product array if you want to work with individual products
-  //   },
-  // ]);
 };
 
 module.exports = {
@@ -511,5 +500,47 @@ module.exports = {
   checkServiceExistsMid,
   preProcessVotingService,
   getVoteInforBeforeTime,
-  filterServiceCheckParamMid,
+  filterServiceCheckParamMid_v1,
+  filterServiceCheckParamMid_v2,
 };
+
+// db.DanhGiaDichVu.aggregate([
+//   {
+//     $addFields: {
+//       service_id_obj: { $toObjectId: "$serviceId" }, // Convert product_id from string to ObjectId
+//     },
+//   },
+//   {
+//     $lookup: {
+//       from: "DichVuCuaCuaHang",
+//       localField: "service_id_obj",
+//       foreignField: "_id",
+//       as: "serviceInfor",
+//     },
+//   },
+//   {
+//     $unwind: "$serviceInfor", // Optional: unwind the product array if you want to work with individual products
+//   },
+//   {
+//     $lookup: {
+//       from: "ThongTinMoTaCuaHang",
+//       localField: "serviceInfor.shopId",
+//       foreignField: "shopId",
+//       as: "shopDescription",
+//     },
+//   },
+//   {
+//     $unwind: "$shopDescription", // Optional: unwind the product array if you want to work with individual products
+//   },
+//   {
+//     $lookup: {
+//       from: "DiaChiHanhChinhVN",
+//       localField: "shopDescription.addressInfor.province_infor.code",
+//       foreignField: "province_code",
+//       as: "Districts",
+//     },
+//   },
+//   {
+//     $unwind: "$Districts", // Optional: unwind the product array if you want to work with individual products
+//   },
+// ]);

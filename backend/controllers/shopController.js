@@ -366,7 +366,8 @@ const filterServiceController = async (req, res) => {
     price_search,
     province_id,
     district_id,
-    num,
+    pageNumber,
+    pageSize,
   } = req.body;
   let filter = { $match: {} };
   if (service_name) {
@@ -437,9 +438,18 @@ const filterServiceController = async (req, res) => {
     aggregateArray.push(filterProvinceOp);
   }
 
+  if (pageNumber && pageSize) {
+    aggregateArray.push(
+      { $skip: (pageNumber - 1) * pageSize },
+      { $limit: pageSize }
+    );
+  }
+  // console.log({ pageNumber });
+  // console.log({ pageSize });
   // console.log({province_id,district_id});
   // console.log(aggregateArray.length);
-  // console.log(aggregateArray[3]);
+  // console.log(aggregateArray[2]);
+  // console.log(aggregateArray);
 
   const data = await shopServiceModel
     .filterServiceByCustomAggregate(aggregateArray)

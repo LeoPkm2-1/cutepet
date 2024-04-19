@@ -3718,7 +3718,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -3846,7 +3846,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_dich_vu\":\"dịch vụ 2_02\",\n    \"mo_ta_ngan\":\"OK\",\n    \"mo_ta_dich_vu\":\"ok \",\n    \"anh_dich_vu\":\"cuahang2.com\",\n    \"the_loai_dich_vu\":[1,3],\n    \"don_gia\":9,\n    \"thoi_luong_dich_vu\":8\n}",
+					"raw": "{\n    \"ten_dich_vu\":\"dịch vụ 2_02\",\n    \"mo_ta_ngan\":\"OK\",\n    \"mo_ta_dich_vu\":\"ok \",\n    \"anh_dich_vu\":\"cuahang2.com\",\n    \"the_loai_dich_vu\":[\n        \"CHĂM SÓC\",\n        \"TẮM\",\n        \"LÀM ĐẸP\",\n        \"CẮT TỈA LÔNG\"\n        ],\n    \"don_gia\":9,\n    \"thoi_luong_dich_vu\":8\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3995,7 +3995,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_user_3}}",
 							"type": "string"
 						}
 					]
@@ -4007,17 +4007,17 @@
 					"urlencoded": [
 						{
 							"key": "service_id",
-							"value": "6610e4c2034b2c1379d2b7fc",
+							"value": "6610e4ea034b2c1379d2b7fd",
 							"type": "text"
 						},
 						{
 							"key": "num_of_star",
-							"value": "8",
+							"value": "2",
 							"type": "text"
 						},
 						{
 							"key": "content",
-							"value": "ok",
+							"value": "tuyệt",
 							"type": "text"
 						}
 					]
@@ -4536,6 +4536,15 @@
 				},
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"service_name\":\"vụ\"\n    , \"service_type\":[\"CẮT TỈA LÔNG\",\"nhuộm lông\"]\n    ,\"num_of_star\":1               // số lượng sao được vote\n    ,\"price_point\":50000            // số tiền cần truy vấn\n    ,\"price_search\":\"less\"          // chỉ định tìm kiếm số tiền tối thiểu hay tối đa vd: price_point = 500 và  price_search = 'LESS' thì mô tả giá tiền tối thiểu là 500, nếu price_search = 'GREATER' thì mô tả số tiền tối đa\n    ,\"province_id\":\"66169cdfcf40fa5369bd57e1\"\n    ,\"district_id\":\"66169cdfcf40fa5369bd5822\"\n    ,\"pageNumber\":1              // số thứ tự của trang ( số thứ tự bắt đầu từ  1 )\n    ,\"pageSize\":2                // số lượng dịch vụ trong 1 trang\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://localhost:3000/shop/filterServices",
 					"protocol": "http",

@@ -54,7 +54,8 @@ router.post(
 
 router.post(
   "/filterServices",
-  shopMid.filterServiceCheckParamMid,
+  shopMid.filterServiceCheckParamMid_v1,
+  shopMid.filterServiceCheckParamMid_v2,
   shopController.filterServiceController
 );
 
