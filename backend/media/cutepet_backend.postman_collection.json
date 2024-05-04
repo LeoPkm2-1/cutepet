@@ -4700,6 +4700,45 @@
 			"response": []
 		},
 		{
+			"name": "113_user_getMyVoteForService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"service_id\":\"6610e4c2034b2c1379d2b7fc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/getMyVoteForService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"getMyVoteForService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user-infor",
 			"request": {
 				"auth": {
