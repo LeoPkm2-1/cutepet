@@ -190,21 +190,37 @@ const userUnFollowShop = async (shop_id, user_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-
 const getListOfShopUserFollow = async (user_id) => {
   async function executor(collection) {
-    return await collection.find({
-      type: followStructure.FollowShop.get_type(),
-      follower_Id: user_id,
-    }).toArray();
+    return await collection
+      .find({
+        type: followStructure.FollowShop.get_type(),
+        follower_Id: user_id,
+      })
+      .toArray();
   }
   return await nonSQLQuery(executor, "BangTheoDoi")
-  .then((data) => new Response(200, data, ""))
-  .catch((err) => new Response(400, err, "", 300, 300));
-}
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
+const getListOfUserFollowShop = async (shop_id) => {
+  shop_id = parseInt(shop_id);
+  async function executor(collection) {
+    return await collection
+      .find({
+        type: followStructure.FollowShop.get_type(),
+        followed_Obj_Id: shop_id,
+      })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "BangTheoDoi")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
 
 // (async () => {
-//   const data = await getListOfShopUserFollow(8)
+//   const data = await getListOfUserFollowShop(537)
 //   console.log(data);
 // })()
 module.exports = {
@@ -220,5 +236,7 @@ module.exports = {
   deleteAllFollowOfArticle,
   deleteAllFollowOfStatusPost,
   userFollowShop,
-  userUnFollowShop,getListOfShopUserFollow
+  userUnFollowShop,
+  getListOfShopUserFollow,
+  getListOfUserFollowShop,
 };

@@ -3,6 +3,7 @@ const diaChiHanhChinhModel = require("../models/diaChi/diaChiHanhChinhModel");
 const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
 const shopModel = require("../models/shop/shopModel");
 const shopServiceModel = require("../models/shop/shopServiceModel");
+const followModel = require("../models/theodoi/followModel");
 const userModel = require("../models/userModel");
 const serviceHelper = require("../utils/Shop/serviceHelper");
 const shopHelper = require("../utils/Shop/shopHelper");
@@ -458,7 +459,19 @@ const filterServiceController = async (req, res) => {
 
   res.status(200).json(new Response(200, data, "Lấy dữ liệu thành công"));
 };
-// const cancelScheduleOfShop = async (req, res) => {};
+const getListUserFollowShop = async (req, res) => {
+  const shop_id = parseInt(req.auth_decoded.ma_cua_hang);
+  // console.log(req.auth_decoded);
+  const followInfor = await followModel
+    .getListOfUserFollowShop(shop_id)
+    .then((data) => data.payload);
+
+  const user_list_id = followInfor.map((infor) => infor.follower_Id);
+  const userListInfor = await userHelper.getUserPublicInforByListIds(
+    user_list_id
+  );
+  res.status(200).json(new Response(200, userListInfor, ""));
+};
 
 module.exports = {
   getShopInforByIdController,
@@ -474,5 +487,5 @@ module.exports = {
   categoriesForService,
   getVoteInforBeforeController,
   filterServiceController,
-  // cancelScheduleOfShop,
+  getListUserFollowShop,
 };

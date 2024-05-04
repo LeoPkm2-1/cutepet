@@ -108,4 +108,6 @@ router.post(
   schedulerController.getAllScheduleForShopController
 );
 
+router.post("/getListUserFollowShop", shopController.getListUserFollowShop);
+
 module.exports = router;
