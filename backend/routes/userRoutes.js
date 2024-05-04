@@ -82,6 +82,10 @@ router.post(
 
 router.post("/getListFollowedShop", userControler.getListOfFollowedShop);
 
-
+router.post(
+  "/getMyVoteForService",
+  shopMid.checkServiceExistsMid,
+  userControler.getMyVoteForServiceController
+);
 
 module.exports = router;

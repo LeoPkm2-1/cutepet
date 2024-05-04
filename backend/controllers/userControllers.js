@@ -8,6 +8,7 @@ const loiMoiKetBanModel = require("../models/loiMoiKetBanModel");
 const followhelper = require("../utils/theodoiHelper");
 const followModel = require("../models/theodoi/followModel");
 const shopHelper = require("../utils/Shop/shopHelper");
+const shopServiceModel = require("../models/shop/shopServiceModel");
 
 // gọi để model để lấy thông tin người dùng trong bảng người dùng
 const getUserByUserName = async (req, res) => {
@@ -220,6 +221,17 @@ const getListOfFollowedShop = async (req, res) => {
   const inforShop = await shopHelper.getShopPublicInforByListIds(listOfShop);
   res.status(200).json(new Response(200, inforShop, ""));
 };
+
+const getMyVoteForServiceController = async (req, res) => {
+  const { service_id } = req.body;
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const votingInfor = await shopServiceModel.getUserVotingServiceInfor(
+    user_id,
+    service_id
+  );
+  // console.log({votingInfor});
+  res.status(200).json(new Response(200, votingInfor, "Lấy thành công"));
+};
 const myProfile = async (params) => {};
 
 module.exports = {
@@ -233,4 +245,5 @@ module.exports = {
   userFollowShopController,
   userUnFollowShopController,
   getListOfFollowedShop,
+  getMyVoteForServiceController,
 };

@@ -134,10 +134,20 @@ const confirmServiceScheduleController = async (req, res) => {
 
 const getAllScheduleForShopController = async (req, res) => {
   const shop_id = req.auth_decoded.ma_cua_hang;
-  const schedules = await schedulerModel
+  let schedules = await schedulerModel
     .getAllScheduleOfShop(shop_id)
     .then((data) => data.payload);
-  res.status(200).json(new Response(200, schedules, "Lấy lịch thành công"));
+  const schedules_2 = await Promise.all(
+    schedules.map(async (schedule_infor) => {
+      const petInfor = await petHelper.publicInforOfPet(schedule_infor.petId);
+      // return petInfor;
+      return {
+        ...schedule_infor,
+        petInfor,
+      };
+    })
+  );
+  res.status(200).json(new Response(200, schedules_2, "Lấy lịch thành công"));
   return;
 };
 
