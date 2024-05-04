@@ -5,6 +5,9 @@ const { getHash } = require("./../utils/hash");
 const { Response } = require("./../utils/index");
 const anhNguoiDungModel = require("../models/anhNguoiDungModel");
 const loiMoiKetBanModel = require("../models/loiMoiKetBanModel");
+const followhelper = require("../utils/theodoiHelper");
+const followModel = require("../models/theodoi/followModel");
+const shopHelper = require("../utils/Shop/shopHelper");
 
 // gọi để model để lấy thông tin người dùng trong bảng người dùng
 const getUserByUserName = async (req, res) => {
@@ -138,7 +141,7 @@ const updateAvatarController = async (req, res) => {
 
 const updateBasicInforController = async (req, res) => {
   const { ten, ngay_sinh, so_dien_thoai, gioi_tinh } = req.body;
-  console.log({gioi_tinh});
+  console.log({ gioi_tinh });
   const update_userId = parseInt(req.auth_decoded.ma_nguoi_dung);
   // console.log({ ten, ngay_sinh, so_dien_thoai, gioi_tinh });
   const process = await userModel
@@ -162,6 +165,61 @@ const updateBasicInforController = async (req, res) => {
     .json(new Response(200, process, "cập nhật thông tin cá nhân thành công"));
 };
 
+const userFollowShopController = async (req, res) => {
+  const shop_id = parseInt(req.body.shop_id);
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const isFollowed = await followhelper.hasUserFollowedShop(shop_id, user_id);
+  if (isFollowed) {
+    res.status(200).json(
+      new Response(
+        200,
+        {
+          shop_id,
+          isFollowed,
+        },
+        "Bạn đã theo dõi shop này rổi"
+      )
+    );
+    return;
+  }
+  const followProcess = await followhelper.followShop(shop_id, user_id, false);
+  res.status(200).json(
+    new Response(
+      200,
+      {
+        shop_id,
+        isFollowed: true,
+      },
+      "Theo dõi thành công"
+    )
+  );
+};
+
+const userUnFollowShopController = async (req, res) => {
+  const shop_id = parseInt(req.body.shop_id);
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const isFollowed = await followhelper.hasUserFollowedShop(shop_id, user_id);
+  if (!isFollowed) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "Bạn chưa theo dõi shop này trước đó"));
+    return;
+  }
+  const followProcess = await followhelper.unFollowShop(shop_id, user_id);
+  res.status(200).json(new Response(200, {}, "Bỏ theo dõi shop thành công"));
+};
+
+const getListOfFollowedShop = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const listFollowInfor = await followModel
+    .getListOfShopUserFollow(user_id)
+    .then((data) => data.payload);
+  const listOfShop = listFollowInfor.map((followInfor) =>
+    parseInt(followInfor.followed_Obj_Id)
+  );
+  const inforShop = await shopHelper.getShopPublicInforByListIds(listOfShop);
+  res.status(200).json(new Response(200, inforShop, ""));
+};
 const myProfile = async (params) => {};
 
 module.exports = {
@@ -172,4 +230,7 @@ module.exports = {
   changePasswordController,
   updateAvatarController,
   updateBasicInforController,
+  userFollowShopController,
+  userUnFollowShopController,
+  getListOfFollowedShop,
 };
