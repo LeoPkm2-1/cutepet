@@ -3,6 +3,7 @@ const diaChiHanhChinhModel = require("../models/diaChi/diaChiHanhChinhModel");
 const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
 const shopModel = require("../models/shop/shopModel");
 const shopServiceModel = require("../models/shop/shopServiceModel");
+const followModel = require("../models/theodoi/followModel");
 const userModel = require("../models/userModel");
 const serviceHelper = require("../utils/Shop/serviceHelper");
 const shopHelper = require("../utils/Shop/shopHelper");
@@ -338,18 +339,7 @@ const categoriesForService = (req, res) => {
     .json(
       new Response(
         200,
-        [
-          "CHĂM SÓC",
-          "TẮM",
-          "LÀM ĐẸP",
-          "CẮT TỈA LÔNG",
-          "NHUỘM LÔNG",
-          "VỆ SINH TAI",
-          "LÀM MÓNG",
-          "KHÁM BỆNH",
-          "CHỮA BỆNH",
-          "KHÁC",
-        ],
+        shopServiceModel.getAllCategoriesForService(),
         "Lấy thành công"
       )
     );
@@ -368,8 +358,120 @@ const getVoteInforBeforeController = async (req, res) => {
   // console.log({ data });
   res.status(200).json(new Response(200, data, "Lấy thành công"));
 };
+const filterServiceController = async (req, res) => {
+  const {
+    service_name,
+    service_type,
+    num_of_star,
+    price_point,
+    price_search,
+    province_id,
+    district_id,
+    pageNumber,
+    pageSize,
+  } = req.body;
+  let filter = { $match: {} };
+  if (service_name) {
+    filter.$match = {
+      ...filter.$match,
+      serviceName: { $regex: `${service_name}`, $options: "i" },
+    };
+  }
 
-// const cancelScheduleOfShop = async (req, res) => {};
+  if (service_type) {
+    filter.$match = {
+      ...filter.$match,
+      serviceType: {
+        $elemMatch: { $in: service_type },
+      },
+    };
+  }
+
+  if (num_of_star) {
+    filter.$match = {
+      ...filter.$match,
+      numOfStar: { $gte: num_of_star },
+    };
+  }
+  if (price_point) {
+    const price_condition =
+      price_search == "GREATER"
+        ? {
+            $gte: price_point,
+          }
+        : {
+            $lte: price_point,
+          };
+    filter.$match = {
+      ...filter.$match,
+      priceQuotation: price_condition,
+    };
+  }
+
+  const joinOp = {
+    $lookup: {
+      from: "ThongTinMoTaCuaHang",
+      localField: "shopId",
+      foreignField: "shopId",
+      as: "shopInfor",
+    },
+  };
+  const shopInforDestructOp = {
+    $unwind: "$shopInfor",
+  };
+  const aggregateArray =
+    typeof district_id != "undefined" || typeof province_id != "undefined"
+      ? [filter, joinOp, shopInforDestructOp]
+      : [filter];
+  if (district_id) {
+    const filterDistrictOp = {
+      $match: {
+        "shopInfor.addressInfor.district_infor._id": district_id,
+      },
+    };
+    aggregateArray.push(filterDistrictOp);
+  } else if (province_id) {
+    const filterProvinceOp = {
+      $match: {
+        "shopInfor.addressInfor.province_infor._id": province_id,
+      },
+    };
+    aggregateArray.push(filterProvinceOp);
+  }
+
+  if (pageNumber && pageSize) {
+    aggregateArray.push(
+      { $skip: (pageNumber - 1) * pageSize },
+      { $limit: pageSize }
+    );
+  }
+  // console.log({ pageNumber });
+  // console.log({ pageSize });
+  // console.log({province_id,district_id});
+  // console.log(aggregateArray.length);
+  // console.log(aggregateArray[2]);
+  // console.log(aggregateArray);
+
+  const data = await shopServiceModel
+    .filterServiceByCustomAggregate(aggregateArray)
+    // .filterServiceByCustomAggregate([filter, lookup])
+    .then((data) => data.payload);
+
+  res.status(200).json(new Response(200, data, "Lấy dữ liệu thành công"));
+};
+const getListUserFollowShop = async (req, res) => {
+  const shop_id = parseInt(req.auth_decoded.ma_cua_hang);
+  // console.log(req.auth_decoded);
+  const followInfor = await followModel
+    .getListOfUserFollowShop(shop_id)
+    .then((data) => data.payload);
+
+  const user_list_id = followInfor.map((infor) => infor.follower_Id);
+  const userListInfor = await userHelper.getUserPublicInforByListIds(
+    user_list_id
+  );
+  res.status(200).json(new Response(200, userListInfor, ""));
+};
 
 module.exports = {
   getShopInforByIdController,
@@ -384,5 +486,6 @@ module.exports = {
   getServiceByIdController,
   categoriesForService,
   getVoteInforBeforeController,
-  // cancelScheduleOfShop,
+  filterServiceController,
+  getListUserFollowShop,
 };

@@ -68,4 +68,24 @@ router.post(
   schedulerController.cancelScheduleController
 );
 
+router.post(
+  "/followShop",
+  shopMid.checkShopExistsMid,
+  userControler.userFollowShopController
+);
+
+router.post(
+  "/unfollowShop",
+  shopMid.checkShopExistsMid,
+  userControler.userUnFollowShopController
+);
+
+router.post("/getListFollowedShop", userControler.getListOfFollowedShop);
+
+router.post(
+  "/getMyVoteForService",
+  shopMid.checkServiceExistsMid,
+  userControler.getMyVoteForServiceController
+);
+
 module.exports = router;
