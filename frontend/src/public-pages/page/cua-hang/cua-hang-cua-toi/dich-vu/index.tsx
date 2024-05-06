@@ -1,27 +1,34 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Rating, Typography } from '@mui/material';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { DichVuType } from '../../../../../models/shop';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../redux';
+import { useEffect, useState } from 'react';
+import shopApi from '../../../../../api/shop';
 type PropsDichVu = {
   dichVu: DichVuType;
 };
 export function DichVuBox(props: PropsDichVu) {
   const navigate = useNavigate();
+  const idShop = useSelector((state:RootState) => state.user.profile?.id);
+
   return (
     <>
       <Box
-       onClick ={() => navigate("/home/cua-hang/1/dich-vu/1")}
+       onClick ={() => navigate(`/home/cua-hang/${props?.dichVu?.ma_cua_hang}/dich-vu/${props?.dichVu?.idDichVu}`)}
         sx={{
           background: '#fff',
-          width: '200px',
+          width: '220px',
           marginRight: '30px',
-          cursor:"pointer"
+          cursor:"pointer",
+          mb:"20px"
         }}
       >
         <img
           style={{
             height: '200px',
-            width: '200px',
+            width: '220px',
             objectFit: 'cover',
             borderTopRightRadius:"4px",
             borderTopLeftRadius:"4px",
@@ -37,12 +44,12 @@ export function DichVuBox(props: PropsDichVu) {
         >
           <Typography
             sx={{
-              fontSize: '16px',
+              fontSize: '15px',
               marginBottom: '22px',
               fontFamily: 'quicksand',
               display: 'flex',
               alignItems: 'center',
-              fontWeight: '600',
+              fontWeight: '500',
             }}
           >
            {props?.dichVu?.ten_dich_vu}
@@ -61,36 +68,9 @@ export function DichVuBox(props: PropsDichVu) {
             {props?.dichVu?.don_gia} vnd
           </Typography>
           <Box>
-            <StarRoundedIcon
-              sx={{
-                color: '#ffce3d',
-                fontSize: '20px',
-              }}
-            />
-            <StarRoundedIcon
-              sx={{
-                color: '#ffce3d',
-                fontSize: '20px',
-              }}
-            />
-            <StarRoundedIcon
-              sx={{
-                color: '#ffce3d',
-                fontSize: '20px',
-              }}
-            />
-            <StarRoundedIcon
-              sx={{
-                color: '#ffce3d',
-                fontSize: '20px',
-              }}
-            />
-            <StarRoundedIcon
-              sx={{
-                color: '#ffce3d',
-                fontSize: '20px',
-              }}
-            />
+            <Rating sx={{
+              fontSize:"18px"
+            }} value={props?.dichVu?.numOfStar} readOnly/>
            
           </Box>
         </Box>

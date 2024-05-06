@@ -44,32 +44,7 @@ interface IMenuItemData {
   items?: IMenuItemData[];
 }
 
-const menu: IMenuItemData[] = [
-  {
-    key: '/home/mang-xa-hoi',
-    title: 'Mạng xã hội',
-    icon: mdiAccountMultiple,
-    link: '/home/mang-xa-hoi',
-  },
-  {
-    key: '/home/quan-ly-thu-cung',
-    title: 'Quản lý thú cưng',
-    icon: mdiViewDashboard,
-    link: '/home/quan-ly-thu-cung',
-  },
-  {
-    key: '/home/trang-chia-se',
-    title: 'Bài chia sẽ kiến thức',
-    icon: mdiAccountMultiple,
-    link: '/home/trang-chia-se',
-  },
-  {
-    key: '/home/cua-hang',
-    title: 'Cửa hàng',
-    icon: mdiAccountMultiple,
-    link: '/home/cua-hang',
-  },
-];
+
 
 export default function SideBar(props: {
   open?: boolean;
@@ -79,6 +54,50 @@ export default function SideBar(props: {
   const { pathname } = useLocation();
   const naviagte = useNavigate();
   const infoUser = useSelector((state: RootState) => state.user.profile);
+  const menu: IMenuItemData[] = [
+    {
+      key: '/home/mang-xa-hoi',
+      title: 'Mạng xã hội',
+      icon: mdiAccountMultiple,
+      link: '/home/mang-xa-hoi',
+    },
+    {
+      key: '/home/quan-ly-thu-cung',
+      title: 'Quản lý thú cưng',
+      icon: mdiViewDashboard,
+      link: '/home/quan-ly-thu-cung',
+    },
+    {
+      key: '/home/trang-chia-se',
+      title: 'Bài chia sẽ kiến thức',
+      icon: mdiAccountMultiple,
+      link: '/home/trang-chia-se',
+    },
+    {
+      key: '/home/cua-hang',
+      title: 'Cửa hàng',
+      icon: mdiAccountMultiple,
+      link: `/home/cua-hang/${infoUser?.id}`,
+    },
+    {
+      key: '/home/danh-sach-dich-vu',
+      title: 'Dịch vụ',
+      icon: mdiAccountMultiple,
+      link: '/home/danh-sach-dich-vu',
+    },
+    {
+      key: '/shop/danh-sach-lich-hen',
+      title: 'Lịch hẹn của shop',
+      icon: mdiAccountMultiple,
+      link: '/shop/danh-sach-lich-hen',
+    },
+    {
+      key: '/user/danh-sach-lich-hen',
+      title: 'Lịch hẹn của tôi',
+      icon: mdiAccountMultiple,
+      link: '/user/danh-sach-lich-hen',
+    },
+  ];
   const dispatch = useDispatch();
   useEffect(() => {
     if (window.innerWidth < 1200) {
@@ -89,7 +108,6 @@ export default function SideBar(props: {
   }, [pathname]);
 
   function logOut() {
-
     authApi
       .logoutUser()
       .then(() => {
@@ -157,47 +175,60 @@ export default function SideBar(props: {
                   fontFamily: 'quicksand',
                   fontWeight: '400',
                   fontSize: '13px',
-                  width:"120px",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis", 
-                  whiteSpace: "nowrap",
+                  width: '120px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {infoUser?.email}
               </Typography>
               {infoUser?.user_type && (
-
-              <Typography
-                sx={{
-                  fontFamily: 'quicksand',
-                  fontWeight: '500',
-                  fontSize: '13px',
-                  width:"120px",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis", 
-                  whiteSpace: "nowrap",
-                  display:'flex',
-                  alignItems:"center",
-                  mt:'10px',
-                  color:"#ee4d2d"
-                }}
-              >
-                <StorefrontIcon sx={{
-                  fontSize:"17px",
-                  mr:"5px",
-                  color:"#ee4d2d"
-                }} />
-                <span>Cửa hàng</span>
-                
-              </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '500',
+                    fontSize: '13px',
+                    width: '120px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    display: 'flex',
+                    alignItems: 'center',
+                    mt: '10px',
+                    color: '#ee4d2d',
+                  }}
+                >
+                  <StorefrontIcon
+                    sx={{
+                      fontSize: '17px',
+                      mr: '5px',
+                      color: '#ee4d2d',
+                    }}
+                  />
+                  <span>Cửa hàng</span>
+                </Typography>
               )}
             </Box>
           </Box>
 
           <ScrollView isSideBar>
-            {menu.map((item) => (
-              <MenuItem key={item.key} data={item} pathname={pathname} />
-            ))}
+            {infoUser?.user_type == 0 &&
+              menu.map((item) => {
+                if (item?.key != '/home/cua-hang' && item?.key != '/shop/danh-sach-lich-hen') {
+                  return (
+                    <MenuItem key={item.key} data={item} pathname={pathname} />
+                  );
+                }
+              })}
+                {infoUser?.user_type == 1 &&
+              menu.map((item) => {
+                if (item?.key != '/home/danh-sach-dich-vu' && item?.key != '/user/danh-sach-lich-hen') {
+                  return (
+                    <MenuItem key={item.key} data={item} pathname={pathname} />
+                  );
+                }
+              })}
           </ScrollView>
           <div className="col pv-16">
             <Button
@@ -209,7 +240,7 @@ export default function SideBar(props: {
                 background: 'rgb(14, 100, 126)',
                 color: '#fff',
                 borderRadius: '20px',
-                fontFamily:"quicksand",
+                fontFamily: 'quicksand',
                 margin: '0 10px',
                 '&:hover': {
                   background: 'rgba(14, 100, 126, 0.9)',

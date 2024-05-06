@@ -11,6 +11,7 @@ export interface ShopType {
     timeServing?: string,
     coverImageUrl?: string;
     avatarImageUrl?:string;
+    numOfStar?: number;
   }
   
 
@@ -24,6 +25,7 @@ export interface ShopType {
     the_loai_dich_vu?: any,
     don_gia?: number | string,
     thoi_luong_dich_vu?: number |string,
+    numOfStar?: number;
 
   }
 

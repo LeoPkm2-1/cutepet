@@ -40,10 +40,16 @@ import { RootState } from '../../redux';
 import ChattingPage from './chat';
 import { MessageType } from '../../models/message';
 import { MessageActions } from '../../redux/message';
-import CuaHangCuaToi from './cua-hang/cua-hang-cua-toi';
 import DichVuDetail from './cua-hang/dich-vu-detail';
 import { UpdateStore } from './cua-hang/chinh-sua-cua-hang';
 import { ThemDichVu } from './cua-hang/cua-hang-cua-toi/dich-vu/them-dich-vu';
+import { ChinhSuaDichVu } from './cua-hang/cua-hang-cua-toi/dich-vu/sua-dich-vu';
+import CuaHang from './cua-hang/cua-hang-cua-toi';
+import { DanhSachDichVu } from './dich-vu/danh-sach-dich-vu';
+import { LichHenCuaToi } from './lich-hen/user';
+import { LichHenCuaShop } from './lich-hen/shop';
+import LichHenChiTietUser from './lich-hen/user/lich-chi-tiet';
+import LichHenChiTietShop from './lich-hen/shop/lich-chi-tiet';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -347,10 +353,16 @@ export default function PageRouting() {
               <Route path="trang-chia-se" element={<TrangChiaSe />} />
               <Route path="trang-chia-se/:id" element={<BaiChiaSe />} />
               <Route path="tao-bai-chia-se" element={<TaoBaiChiaSe />} />
-              <Route path="cua-hang" element={<CuaHangCuaToi />} />
+              <Route path="cua-hang/:idCuaHang" element={<CuaHang />} />
               <Route path="them-dich-vu" element={<ThemDichVu/>} />
               <Route path="update-cua-hang" element={<UpdateStore />} />
+              <Route path="danh-sach-dich-vu" element={<DanhSachDichVu />} />
+              <Route path="user/danh-sach-lich-hen" element={<LichHenCuaToi />} />
+              <Route path="user/lich-hen-chi-tiet/:idLich" element={<LichHenChiTietUser />} />
+              <Route path="shop/lich-hen-chi-tiet/:idLich" element={<LichHenChiTietShop />} />
+              <Route path="shop/danh-sach-lich-hen" element={<LichHenCuaShop />} />
               <Route path="cua-hang/:idCuaHang/dich-vu/:idDichVu" element={<DichVuDetail />} />
+              <Route path="cua-hang/:idCuaHang/sua-dich-vu/:idDichVu" element={<ChinhSuaDichVu />} />
               <Route path="sua-bai-chia-se/:id" element={<SuaBaiChiaSe />} />
               <Route path="post/:id" element={<PostDetail />} />
               <Route path="chat" element={<ChattingPage />} />

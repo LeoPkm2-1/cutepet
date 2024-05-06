@@ -163,6 +163,7 @@ const RegisterShopPage = (props: P) => {
 
     authApi
       .registerShop(
+        "BK0646774GH",
         userInfo.ten,
         userInfo.tai_khoan,
         userInfo.mat_khau,

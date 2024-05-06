@@ -8,7 +8,7 @@ import {
 import FormHelperText from '@mui/material/FormHelperText';
 import { FormControlPropsType } from '../../utils/type';
 
-interface Option {
+export interface OptionSelect {
   label?: string | number;
   value: number | string;
 }
@@ -20,11 +20,11 @@ type P = FormControlPropsType & {
   placeholder?: string;
   id?: string;
   margin?: 'dense' | 'normal' | 'none';
-  options: Option[];
+  options: OptionSelect[];
   readOnly?: boolean;
-  defaultValue?: string | number | Option;
-  value?: string | number | Option;
-  onChange?: (option?: Option) => void;
+  defaultValue?: string | number | OptionSelect;
+  value?: string | number | OptionSelect;
+  onChange?: (option?: OptionSelect) => void;
   fullWidth?: boolean;
   className?: string;
 };
