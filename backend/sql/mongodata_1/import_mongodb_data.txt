@@ -1,0 +1,20 @@
+mongoimport --db cutepet_nonsql --collection BaiViet --file ./BaiViet.json --drop       
+&& mongoimport --db cutepet_nonsql --collection BangTheoDoi --file ./BangTheoDoi.json --drop       
+&& mongoimport --db cutepet_nonsql --collection BinhLuanBaiChiaSeKienThuc --file ./BinhLuanBaiChiaSeKienThuc.json --drop       
+&& mongoimport --db cutepet_nonsql --collection BinhLuanBaiVietTrangThai --file ./BinhLuanBaiVietTrangThai.json --drop     
+&& mongoimport --db cutepet_nonsql --collection ChatMessage --file ./ChatMessage.json --drop       
+&& mongoimport --db cutepet_nonsql --collection DanhGiaDichVu --file ./DanhGiaDichVu.json --drop       
+&& mongoimport --db cutepet_nonsql --collection DiaChiHanhChinhVN --file ./DiaChiHanhChinhVN.json --drop       
+&& mongoimport --db cutepet_nonsql --collection DichVuCuaCuaHang --file ./DichVuCuaCuaHang.json --drop     
+&& mongoimport --db cutepet_nonsql --collection DownVoteBaiChiaSeKienThuc --file ./DownVoteBaiChiaSeKienThuc.json --drop       
+&& mongoimport --db cutepet_nonsql --collection GoiYBanBe --file ./GoiYBanBe.json --drop       
+&& mongoimport --db cutepet_nonsql --collection Lich --file ./Lich.json --drop     
+&& mongoimport --db cutepet_nonsql --collection LikeBaiVietTrangThai --file ./LikeBaiVietTrangThai.json --drop     
+&& mongoimport --db cutepet_nonsql --collection LikeBinhLuanBaiVietTrangThai --file ./LikeBinhLuanBaiVietTrangThai.json --drop     
+&& mongoimport --db cutepet_nonsql --collection NguoiDungChuaChinhThuc --file ./NguoiDungChuaChinhThuc.json --drop     
+&& mongoimport --db cutepet_nonsql --collection NguoiDungDangOnline --file ./NguoiDungDangOnline.json --drop       
+&& mongoimport --db cutepet_nonsql --collection RelyBinhLuanBaiVietTrangThai --file ./RelyBinhLuanBaiVietTrangThai.json --drop     
+&& mongoimport --db cutepet_nonsql --collection Report --file ./Report.json --drop     
+&& mongoimport --db cutepet_nonsql --collection ThongBao --file ./ThongBao.json --drop     
+&& mongoimport --db cutepet_nonsql --collection ThongTinMoTaCuaHang --file ./ThongTinMoTaCuaHang.json --drop       
+&& mongoimport --db cutepet_nonsql --collection UpVoteBaiChiaSeKienThuc --file ./UpVoteBaiChiaSeKienThuc.json --drop
