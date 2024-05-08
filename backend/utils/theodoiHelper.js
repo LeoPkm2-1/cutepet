@@ -8,7 +8,7 @@ const hasFollowExisted = async (followed_Obj_Id, follower_Id, type) => {
   const data = await followModel
     .getOneFollowInforOfUserAndObjByType(followed_Obj_Id, follower_Id, type)
     .then((data) => data.payload);
-  // console.log(data);
+  // console.log({data});
   if (data == null) return false;
   return true;
 };
@@ -152,6 +152,32 @@ async function unFollowArticle(
   }
 }
 
+const hasUserFollowedShop = async (shop_id, user_id) => {
+  user_id = parseInt(user_id);
+  return await hasFollowExisted(shop_id, user_id, "FOLLOW_SHOP");
+};
+
+// (async () => {
+//   const data_22222222 = await hasUserFollowedShop("1111111111111",2);
+//   console.log({data_22222222});
+// })()
+
+async function followShop(shop_id, user_follow_id, isUnique = true) {
+  if (!isUnique) {
+    return await followModel.userFollowShop(shop_id, user_follow_id);
+  }
+  const hasFollowed = await hasUserFollowedShop(shop_id, user_follow_id);
+  if (!hasFollowed) {
+    return await followModel.userFollowShop(shop_id, user_follow_id);
+  } else {
+    return false;
+  }
+}
+
+async function unFollowShop(shop_id, user_follow_id) {
+  return await followModel.userUnFollowShop(shop_id,user_follow_id)
+}
+
 module.exports = {
   followStatusPost,
   hasUserFollowedStatusPost,
@@ -164,4 +190,7 @@ module.exports = {
   hasUserFollowArticle,
   listOfUserUnFollowStatusPost,
   listOfUserFollowStatusPost,
+  followShop,
+  hasUserFollowedShop,
+  unFollowShop
 };

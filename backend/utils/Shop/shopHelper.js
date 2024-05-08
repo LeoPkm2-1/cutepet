@@ -72,8 +72,13 @@ const getPublicInforForShopById = async (shop_id) => {
   };
 };
 
+const getShopPublicInforByListIds = async (list_shop_ids) => {
+  return Promise.all(
+    list_shop_ids.map(async (id) => await getPublicInforForShopById(id))
+  );
+};
 // (async function () {
-//   const a = await getPublicInforForShopById(533);
+//   const a = await getShopPublicInforByListIds([533,536]);
 //   console.log({ a });
 // })();
 
@@ -83,4 +88,5 @@ module.exports = {
   isShopExist,
   isNameServiceExistsInShop,
   getPublicInforForShopById,
+  getShopPublicInforByListIds
 };

@@ -17,6 +17,7 @@ router.use(
     "/getAllAvailableServiceOfShop",
     "/getServiceById",
     "/categoriesForService",
+    "/filterServices",
   ],
   requireLoginedForNormUser
 );
@@ -51,9 +52,12 @@ router.post(
   shopController.getVoteInforBeforeController
 );
 
-router.post("/filterServices", (req, res) => {
-  res.send("ahihi");
-});
+router.post(
+  "/filterServices",
+  shopMid.filterServiceCheckParamMid_v1,
+  shopMid.filterServiceCheckParamMid_v2,
+  shopController.filterServiceController
+);
 
 // shop acess=================================================================
 
@@ -103,5 +107,7 @@ router.post(
   "/getAllScheduleForShop",
   schedulerController.getAllScheduleForShopController
 );
+
+router.post("/getListUserFollowShop", shopController.getListUserFollowShop);
 
 module.exports = router;
