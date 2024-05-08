@@ -1,0 +1,3 @@
+{"_id":{"$oid":"661e2d8c6b08e58eba4d4d33"},"serviceId":"6610e4c2034b2c1379d2b7fc","userVotingId":2,"numOfStar":3,"content":"cũng bình thường","createAt":{"$date":"2024-04-16T07:49:32.235Z"},"modifiedAt":null}
+{"_id":{"$oid":"661e2dae6b08e58eba4d4d34"},"serviceId":"6610e4c2034b2c1379d2b7fc","userVotingId":1,"numOfStar":4,"content":"tốt","createAt":{"$date":"2024-04-16T07:50:06.641Z"},"modifiedAt":null}
+{"_id":{"$oid":"661e53063faf6dedf8efed87"},"serviceId":"6610e4c2034b2c1379d2b7fc","userVotingId":4,"numOfStar":1,"content":"tệ","createAt":{"$date":"2024-04-16T10:29:26.957Z"},"modifiedAt":null}

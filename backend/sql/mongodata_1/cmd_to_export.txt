@@ -1,0 +1,77 @@
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BaiViet --out ~/Desktop/mongodata/BaiViet.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ThongBao --out ~/Desktop/ThongBao.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ThongTinMoTaCuaHang --out ~/Desktop/ThongTinMoTaCuaHang.json
+
+
+6610e406034b2c1379d2b7f9
+6610e406034b2c1379d2b7f9
+
+
+
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BaiViet --out ~/Desktop/mongodata/BaiViet.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BangTheoDoi --out ~/Desktop/mongodata/BangTheoDoi.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BinhLuanBaiChiaSeKienThuc --out ~/Desktop/mongodata/BinhLuanBaiChiaSeKienThuc.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BinhLuanBaiVietTrangThai --out ~/Desktop/mongodata/BinhLuanBaiVietTrangThai.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ChatMessage --out ~/Desktop/mongodata/ChatMessage.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DanhGiaDichVu --out ~/Desktop/mongodata/DanhGiaDichVu.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DiaChiHanhChinhVN --out ~/Desktop/mongodata/DiaChiHanhChinhVN.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DichVuCuaCuaHang --out ~/Desktop/mongodata/DichVuCuaCuaHang.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DownVoteBaiChiaSeKienThuc --out ~/Desktop/mongodata/DownVoteBaiChiaSeKienThuc.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection GoiYBanBe --out ~/Desktop/mongodata/GoiYBanBe.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection Lich --out ~/Desktop/mongodata/Lich.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection LikeBaiVietTrangThai --out ~/Desktop/mongodata/LikeBaiVietTrangThai.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection LikeBinhLuanBaiVietTrangThai --out ~/Desktop/mongodata/LikeBinhLuanBaiVietTrangThai.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection NguoiDungChuaChinhThuc --out ~/Desktop/mongodata/NguoiDungChuaChinhThuc.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection NguoiDungDangOnline --out ~/Desktop/mongodata/NguoiDungDangOnline.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection RelyBinhLuanBaiVietTrangThai --out ~/Desktop/mongodata/RelyBinhLuanBaiVietTrangThai.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection Report --out ~/Desktop/mongodata/Report.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ThongBao --out ~/Desktop/mongodata/ThongBao.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ThongTinMoTaCuaHang --out ~/Desktop/mongodata/ThongTinMoTaCuaHang.json
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection UpVoteBaiChiaSeKienThuc --out ~/Desktop/mongodata/UpVoteBaiChiaSeKienThuc.json
+
+
+
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BaiViet --out ~/Desktop/mongodata/BaiViet.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BangTheoDoi --out ~/Desktop/mongodata/BangTheoDoi.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BinhLuanBaiChiaSeKienThuc --out ~/Desktop/mongodata/BinhLuanBaiChiaSeKienThuc.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BinhLuanBaiVietTrangThai --out ~/Desktop/mongodata/BinhLuanBaiVietTrangThai.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ChatMessage --out ~/Desktop/mongodata/ChatMessage.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DanhGiaDichVu --out ~/Desktop/mongodata/DanhGiaDichVu.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DiaChiHanhChinhVN --out ~/Desktop/mongodata/DiaChiHanhChinhVN.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DichVuCuaCuaHang --out ~/Desktop/mongodata/DichVuCuaCuaHang.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DownVoteBaiChiaSeKienThuc --out ~/Desktop/mongodata/DownVoteBaiChiaSeKienThuc.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection GoiYBanBe --out ~/Desktop/mongodata/GoiYBanBe.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection Lich --out ~/Desktop/mongodata/Lich.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection LikeBaiVietTrangThai --out ~/Desktop/mongodata/LikeBaiVietTrangThai.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection LikeBinhLuanBaiVietTrangThai --out ~/Desktop/mongodata/LikeBinhLuanBaiVietTrangThai.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection NguoiDungChuaChinhThuc --out ~/Desktop/mongodata/NguoiDungChuaChinhThuc.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection NguoiDungDangOnline --out ~/Desktop/mongodata/NguoiDungDangOnline.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection RelyBinhLuanBaiVietTrangThai --out ~/Desktop/mongodata/RelyBinhLuanBaiVietTrangThai.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection Report --out ~/Desktop/mongodata/Report.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ThongBao --out ~/Desktop/mongodata/ThongBao.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ThongTinMoTaCuaHang --out ~/Desktop/mongodata/ThongTinMoTaCuaHang.json && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection UpVoteBaiChiaSeKienThuc --out ~/Desktop/mongodata/UpVoteBaiChiaSeKienThuc.json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BaiViet --out ./Desktop/mongodata_1/BaiViet.json       && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BangTheoDoi --out ./Desktop/mongodata_1/BangTheoDoi.json       && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BinhLuanBaiChiaSeKienThuc --out ./Desktop/mongodata_1/BinhLuanBaiChiaSeKienThuc.json       && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection BinhLuanBaiVietTrangThai --out ./Desktop/mongodata_1/BinhLuanBaiVietTrangThai.json     && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ChatMessage --out ./Desktop/mongodata_1/ChatMessage.json       && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DanhGiaDichVu --out ./Desktop/mongodata_1/DanhGiaDichVu.json       && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DiaChiHanhChinhVN --out ./Desktop/mongodata_1/DiaChiHanhChinhVN.json       && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DichVuCuaCuaHang --out ./Desktop/mongodata_1/DichVuCuaCuaHang.json     && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection DownVoteBaiChiaSeKienThuc --out ./Desktop/mongodata_1/DownVoteBaiChiaSeKienThuc.json       && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection GoiYBanBe --out ./Desktop/mongodata_1/GoiYBanBe.json       && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection Lich --out ./Desktop/mongodata_1/Lich.json     && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection LikeBaiVietTrangThai --out ./Desktop/mongodata_1/LikeBaiVietTrangThai.json     && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection LikeBinhLuanBaiVietTrangThai --out ./Desktop/mongodata_1/LikeBinhLuanBaiVietTrangThai.json     && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection NguoiDungChuaChinhThuc --out ./Desktop/mongodata_1/NguoiDungChuaChinhThuc.json     && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection NguoiDungDangOnline --out ./Desktop/mongodata_1/NguoiDungDangOnline.json       && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection RelyBinhLuanBaiVietTrangThai --out ./Desktop/mongodata_1/RelyBinhLuanBaiVietTrangThai.json     && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection Report --out ./Desktop/mongodata_1/Report.json     && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ThongBao --out ./Desktop/mongodata_1/ThongBao.json     && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection ThongTinMoTaCuaHang --out ./Desktop/mongodata_1/ThongTinMoTaCuaHang.json       && mongoexport --uri "mongodb://localhost:27017/cutepet_nonsql" --collection UpVoteBaiChiaSeKienThuc --out ./Desktop/mongodata_1/UpVoteBaiChiaSeKienThuc.json      
+
+
+
+
+
+
