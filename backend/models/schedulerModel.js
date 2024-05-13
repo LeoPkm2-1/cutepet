@@ -37,7 +37,7 @@ class ServiceSchedule {
 }
 
 class UpdateServiceScheduleStatus {
-  static type = "UPDATE_STATUS_SERVICE_SCHEDULE";
+  static type = "CHANGE_SERVICE_SCHEDULE_STATUS";
   constructor(
     new_status,
     old_status,
@@ -218,8 +218,22 @@ const getAllScheduleOfShop = async (shop_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getInforOfUserCreateServiceSchedule = async (schedule_id) => {
+  const data = await getServiceScheduleById(schedule_id).then(
+    (data) => data.payload
+  );
+  return data.userCreate;
+};
+
+const getInforOfShopCreateServiceSchedule = async (schedule_id) => {
+  const data = await getServiceScheduleById(schedule_id).then(
+    (data) => data.payload
+  );
+  return data.shopInfor;
+};
+
 // (async () => {
-//   const data = await getAllScheduleOfShop(536);
+//   const data = await getInforOfUserCreateServiceSchedule("6610e6721d31a037d900d8ec");
 //   console.log(data);
 // })();
 
@@ -236,4 +250,6 @@ module.exports = {
   getAllScheduleOfUser,
   getAllScheduleOfShop,
   updateStatusOfServiceSchedule,
+  getInforOfUserCreateServiceSchedule,
+  getInforOfShopCreateServiceSchedule,
 };
