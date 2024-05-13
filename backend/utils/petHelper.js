@@ -217,7 +217,7 @@ const getAllGiongOfPetsOwnedByUser = async (user_id) => {
   return petList.map((pet) => pet.ma_giong);
 };
 
-const getOwnPetIdsOfUserInListOfPetIds = async (userid, petid_list=[]) => {
+const getOwnPetIdsOfUserInListOfPetIds = async (userid, petid_list = []) => {
   petid_list = petid_list.map((petid) => parseInt(petid));
   const allPetIdsOfUser = await petModel
     .getAllOwnsPetOf(userid)
@@ -228,6 +228,20 @@ const getOwnPetIdsOfUserInListOfPetIds = async (userid, petid_list=[]) => {
   return petid_list.filter((petId) => allPetIdsOfUser.includes(petId));
 };
 
+const getDanhSachTenLoai = async () => {
+  const danhsachloai = await giongLoaiModel
+    .getLoai()
+    .then((data) => data.payload);
+
+  return danhsachloai.map((loai) => loai.ten_loai);
+};
+const getDanhSachMaLoai = async () => {
+  const danhsachloai = await giongLoaiModel
+    .getLoai()
+    .then((data) => data.payload);
+
+  return danhsachloai.map((loai) => parseInt(loai.ma_loai));
+};
 
 // (async function () {
 //   const data = await getOwnPetIdsOfUserInListOfPetIds(2,[2,40,2001]);
@@ -249,4 +263,6 @@ module.exports = {
   getOwnerIdOfPet,
   getAllGiongOfPetsOwnedByUser,
   getOwnPetIdsOfUserInListOfPetIds,
+  getDanhSachTenLoai,
+  getDanhSachMaLoai,
 };

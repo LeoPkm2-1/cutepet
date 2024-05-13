@@ -16,6 +16,8 @@ const getDanhSachGiongTheoMaLoai = async (req, res) => {
     .then((data) => data.payload);
   res.status(200).json(new Response(200, giong, ""));
 };
+
+
 module.exports = {
   getDanhSachLoai,
   getDanhSachGiong,

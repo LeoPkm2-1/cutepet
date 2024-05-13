@@ -6,6 +6,7 @@ const shopServiceModel = require("../models/shop/shopServiceModel");
 const serviceHelper = require("../utils/Shop/serviceHelper");
 const userRoleModel = require("../models/userRoleModel");
 const addressHelper = require("../utils/addressHelper");
+const petHelper = require("../utils/petHelper");
 
 const updateInforMid = async (req, res, next) => {
   let {
@@ -156,12 +157,29 @@ const addServiceMid = async (req, res, next) => {
     don_gia,
     thoi_luong_dich_vu,
   } = req.body;
+  let { danh_sach_loai_phu_hop } = req.body;
 
   if (typeof ten_dich_vu != "string" || ten_dich_vu.trim() == "") {
     res
       .status(400)
       .json(new Response(400, {}, "Tên dịch vụ không được để trống", 300, 300));
     return;
+  }
+  const danhSachTenCacLoai = await petHelper.getDanhSachTenLoai();
+  if (
+    !danh_sach_loai_phu_hop ||
+    !Array.isArray(danh_sach_loai_phu_hop) ||
+    danh_sach_loai_phu_hop.length <= 0
+  ) {
+    danh_sach_loai_phu_hop = req.body.danh_sach_loai_phu_hop =
+      danhSachTenCacLoai;
+  } else {
+    danh_sach_loai_phu_hop = danh_sach_loai_phu_hop.map((tenloai) =>
+      String(tenloai).toLowerCase()
+    );
+    danh_sach_loai_phu_hop = danh_sach_loai_phu_hop.filter((tenloai) =>
+      danhSachTenCacLoai.includes(tenloai)
+    );
   }
 
   // if (!(don_gia >= 0 && thoi_luong_dich_vu >= 0)) {
@@ -188,6 +206,7 @@ const addServiceMid = async (req, res, next) => {
     the_loai_dich_vu: the_loai_dich_vu,
     don_gia,
     thoi_luong_dich_vu,
+    danh_sach_loai_phu_hop,
   };
   next();
 };

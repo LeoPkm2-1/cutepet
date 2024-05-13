@@ -2,10 +2,14 @@ const { sqlQuery, nonSQLQuery } = require("./index");
 const { Response } = require("./../utils/index");
 const { ObjectId } = require("mongodb");
 const SERVICE_SCHEDULE_PENDING_STATUS_STR = "CHO_XAC_NHAN";
-const SERVICE_SCHEDULE_REJECT_STATUS_STR = "DA_HUY";
-const SERVICE_SCHEDULE_MISSING_STATUS_STR = "DA_LO";
+const SERVICE_SCHEDULE_REJECT_STATUS_STR = "HUY";
+const SERVICE_SCHEDULE_MISSING_STATUS_STR = "BI_TRE";
 const SERVICE_SCHEDULE_CONFIRM_STATUS_STR = "DA_XAC_NHAN";
-const SERVICE_SCHEDULE_DONE_STATUS_STR = "DA_HOAN_THANH";
+const SERVICE_SCHEDULE_DONE_STATUS_STR = "HOAN_THANH";
+
+
+
+""
 
 class ServiceSchedule {
   static type = "SERVICE_SCHEDULE";
