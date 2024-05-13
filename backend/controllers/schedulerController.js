@@ -163,6 +163,72 @@ const getListStatusOfSchedule = async (req, res) => {
     );
 };
 
+const changeScheduleStatusController = async (req, res) => {
+  let { schedule_id, status_change_to, WHO_HANDLING } = req.body;
+  const user_id =
+    WHO_HANDLING == "USER"
+      ? parseInt(req.auth_decoded.ma_nguoi_dung)
+      : req.auth_decoded.ma_cua_hang;
+  const user_infor =
+    WHO_HANDLING == "USER"
+      ? await userHelper.getUserPublicInforByUserId(user_id)
+      : await shopHelper.getPublicInforForShopById(user_id);
+
+  if (!status_change_to || typeof status_change_to != "string") {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Trạng thái thay đổi không hợp lệ", 300, 300)
+      );
+    return;
+  }
+  status_change_to = status_change_to.toUpperCase();
+  const listOfAvaibleStatus = [
+    schedulerModel.SERVICE_SCHEDULE_PENDING_STATUS_STR,
+    schedulerModel.SERVICE_SCHEDULE_REJECT_STATUS_STR,
+    schedulerModel.SERVICE_SCHEDULE_MISSING_STATUS_STR,
+    schedulerModel.SERVICE_SCHEDULE_CONFIRM_STATUS_STR,
+    schedulerModel.SERVICE_SCHEDULE_DONE_STATUS_STR,
+  ];
+
+  if (!listOfAvaibleStatus.includes(status_change_to)) {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          [],
+          "Trạng thái thay đổi không nằm trong danh sách các trạng thái hợp lệ",
+          300,
+          300
+        )
+      );
+    return;
+  }
+  const changeStatus = await schedulerModel.updateStatusOfServiceSchedule(
+    schedule_id,
+    status_change_to,
+    user_infor
+  );
+  if (changeStatus.status == 200) {
+    res
+      .status(200)
+      .json(new Response(200, {}, "Thay đổi trạng thái lịch thành công"));
+  } else {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          {},
+          "Thay đổi trạng thái lịch  không thành công, đã có lỗi xảy ra",
+          300,
+          300
+        )
+      );
+  }
+};
+
 module.exports = {
   createSchedule,
   getServiceScheduleByIdController,
@@ -171,4 +237,5 @@ module.exports = {
   cancelScheduleController,
   confirmServiceScheduleController,
   getListStatusOfSchedule,
+  changeScheduleStatusController,
 };
