@@ -7,9 +7,7 @@ const SERVICE_SCHEDULE_MISSING_STATUS_STR = "BI_TRE";
 const SERVICE_SCHEDULE_CONFIRM_STATUS_STR = "DA_XAC_NHAN";
 const SERVICE_SCHEDULE_DONE_STATUS_STR = "HOAN_THANH";
 
-
-
-""
+("");
 
 class ServiceSchedule {
   static type = "SERVICE_SCHEDULE";
@@ -193,7 +191,7 @@ const updateStatusOfServiceSchedule = async (
     );
   }
   return await nonSQLQuery(executor, "Lich")
-    .then((data) => new Response(200, data, ""))
+    .then((data) => new Response(200, { data, update_status_infor }, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 const getAllScheduleOfShop = async (shop_id) => {
