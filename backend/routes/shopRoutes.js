@@ -18,6 +18,7 @@ router.use(
     "/getServiceById",
     "/categoriesForService",
     "/filterServices",
+    "/getAllStatusOfSchedule"
   ],
   requireLoginedForNormUser
 );
@@ -58,6 +59,8 @@ router.post(
   shopMid.filterServiceCheckParamMid_v2,
   shopController.filterServiceController
 );
+
+router.post('/getAllStatusOfSchedule',schedulerController.getListStatusOfSchedule)
 
 // shop acess=================================================================
 

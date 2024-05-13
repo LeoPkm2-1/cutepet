@@ -151,6 +151,18 @@ const getAllScheduleForShopController = async (req, res) => {
   return;
 };
 
+const getListStatusOfSchedule = async (req, res) => {
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        ["HUY", "HOAN_THANH", "CHO_XAC_NHAN", "BI_TRE"],
+        "Lấy thành công"
+      )
+    );
+};
+
 module.exports = {
   createSchedule,
   getServiceScheduleByIdController,
@@ -158,4 +170,5 @@ module.exports = {
   getAllScheduleForShopController,
   cancelScheduleController,
   confirmServiceScheduleController,
+  getListStatusOfSchedule,
 };
