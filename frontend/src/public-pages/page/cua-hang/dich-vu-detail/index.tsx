@@ -6,21 +6,28 @@ import Tag from '../../../../components/tag';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import shopApi from '../../../../api/shop';
-import { DichVuType } from '../../../../models/shop';
+import { DanhGiatype, DichVuType } from '../../../../models/shop';
 import { RootState } from '../../../../redux';
 import { useSelector } from 'react-redux';
 import { PopUpDatLich } from '../pop-up-dat-lich';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import { propsToClassKey } from '@mui/styles';
+import dichVuApi from '../../../../api/dichVu';
+import moment from 'moment';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
 export default function DichVuDetail() {
   const { idCuaHang } = useParams();
   const { idDichVu } = useParams();
   const [openPopup, setOpenPopup] = useState(false);
   const [dichVu, setDichVu] = useState<DichVuType>({});
+  const [danhGia, setDanhGia] = useState<DanhGiatype[]>([]);
   const user_type = useSelector(
     (state: RootState) => state.user.profile?.user_type
   );
   const navigate = useNavigate();
   console.log(idCuaHang, idDichVu);
+
   useEffect(() => {
     if (idDichVu) {
       shopApi.getServiceById(idDichVu).then((data) => {
@@ -31,30 +38,62 @@ export default function DichVuDetail() {
             idDichVu: data?.payload?._id,
             ten_dich_vu: data?.payload?.serviceName,
             ma_cua_hang: data?.payload?.shopId,
-            mo_ta_ngan: '',
+            mo_ta_ngan: data?.payload?.shortDescription,
             mo_ta_dich_vu: data?.payload?.serviceDescription,
             anh_dich_vu: data?.payload?.serviceImgUrl,
             the_loai_dich_vu: data?.payload?.serviceType,
             don_gia: data?.payload?.priceQuotation,
             thoi_luong_dich_vu: data?.payload?.duration,
+            numOfStar: data?.payload?.numOfStar,
           };
+          console.log(dv, ' dv ne');
+
           setDichVu(dv);
         }
       });
     }
   }, [idDichVu]);
 
+  useEffect(() => {
+    dichVuApi
+      .getVoteInforBefore(idDichVu as string, '2025-05-30', 100)
+      .then((data: any) => {
+        if (data?.status == 200) {
+          console.log(data, ' dich vu danh gia ');
+          const list = data?.payload?.map((item: any) => {
+            return {
+              content: item?.content,
+              createAt: item?.createAt,
+              modifiedAt: item?.modifiedAt,
+              numOfStar: item?.numOfStar,
+              serviceId: item?.serviceId,
+              userInfo: {
+                id: 1,
+                ten: 'Thuyen Nguyen',
+                urlAvatar: '',
+              },
+              id: item?._id,
+            };
+          });
+          setDanhGia(list);
+        }
+      });
+  }, []);
+
   return (
     <>
       <Box
         sx={{
-          padding: '0 100px',
+          padding: '0 0px',
         }}
       >
         <Box
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
+            background: '#fff',
+            padding: '20px',
+            borderRadius: '5px',
           }}
         >
           <Box>
@@ -102,6 +141,33 @@ export default function DichVuDetail() {
                   Chỉnh sửa
                 </Button>
               )}
+              {user_type == 0 && (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    //   justifyContent: 'center',
+                  }}
+                >
+                  <Button
+                    color="inherit"
+                    sx={{
+                      backgroundColor: 'rgb(14, 100, 126)',
+                      color: '#fff',
+                      mt: '30px',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                      },
+                    }}
+                    // disabled={
+                    //   (!file && !urlCover) || !title || !decrition || tag?.length == 0
+                    // }
+                    onClick={() => setOpenPopup(true)}
+                    variant="contained"
+                  >
+                    Đặt Lịch
+                  </Button>
+                </Box>
+              )}
             </Box>
             <Box
               sx={{
@@ -147,10 +213,7 @@ export default function DichVuDetail() {
                   {' '}
                   {dichVu?.mo_ta_ngan ||
                     `
-                Siêu âm là một trong các kỹ thuật hiện đại nhất hiện nay tại các
-                phòng khám thú y. Siêu âm giúp phát hiện các bệnh ở mô mềm như:
-                tim, gan, thận, tụy, túi mật lách, bàng quang, buồng trứng, tử
-                cung và thai.
+                
               `}
                 </Typography>
                 <Typography
@@ -164,39 +227,28 @@ export default function DichVuDetail() {
                     color: 'red',
                   }}
                 >
-                  {dichVu?.don_gia} vnd
+                  {dichVu?.don_gia} vnđ
                 </Typography>
-                <Box>
-                  <StarRoundedIcon
+                <Typography
+                  sx={{
+                    fontSize: '16px',
+                    marginBottom: '22px',
+                    fontFamily: 'quicksand',
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontWeight: '500',
+                    color: 'rgb(14, 100, 126)',
+                  }}
+                >
+                  <AccessTimeFilledIcon
                     sx={{
-                      color: '#ffce3d',
-                      fontSize: '20px',
+                      mr: '10px',
                     }}
-                  />
-                  <StarRoundedIcon
-                    sx={{
-                      color: '#ffce3d',
-                      fontSize: '20px',
-                    }}
-                  />
-                  <StarRoundedIcon
-                    sx={{
-                      color: '#ffce3d',
-                      fontSize: '20px',
-                    }}
-                  />
-                  <StarRoundedIcon
-                    sx={{
-                      color: '#ffce3d',
-                      fontSize: '20px',
-                    }}
-                  />
-                  <StarRoundedIcon
-                    sx={{
-                      color: '#ffce3d',
-                      fontSize: '20px',
-                    }}
-                  />
+                  />{' '}
+                  {dichVu?.thoi_luong_dich_vu}
+                </Typography>
+                <Box sx={{ mb: '20px' }}>
+                  <Rating value={dichVu?.numOfStar || 0} readOnly />
                 </Box>
                 <Box
                   sx={{
@@ -211,60 +263,278 @@ export default function DichVuDetail() {
                       return <Tag text={item} />;
                     })}
                 </Box>
-                {user_type == 0 && (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      //   justifyContent: 'center',
-                    }}
-                  >
-                    <Button
-                      color="inherit"
-                      sx={{
-                        backgroundColor: 'rgb(14, 100, 126)',
-                        color: '#fff',
-                        mt: '30px',
-                        '&:hover': {
-                          backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                        },
-                      }}
-                      // disabled={
-                      //   (!file && !urlCover) || !title || !decrition || tag?.length == 0
-                      // }
-                      onClick={() => setOpenPopup(true)}
-                      variant="contained"
-                    >
-                      Đặt Lịch
-                    </Button>
-                  </Box>
-                )}
               </Box>
             </Box>
           </Box>
         </Box>
-        <Box sx={{}}> {parse(dichVu?.mo_ta_dich_vu || '')} </Box>
         <Box
           sx={{
             backgroundColor: '#fff',
             // boxSizing: 'border-box',
+            padding: '20px',
+            mt: '20px',
+            display: 'flex',
           }}
-        
         >
-           <Typography
+          <Box
+            sx={{
+              display: 'flex',
+              alignContent: 'center',
+            }}
+          >
+            <img
+              style={{
+                height: '80px',
+                width: '80px',
+                objectFit: 'cover',
+                borderRadius: '50px',
+              }}
+              src={dichVu?.anh_dich_vu}
+            />
+            <Box
+              sx={{
+                ml: '16px',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '500',
+                  fontSize: '16px',
+                  pb: '8px',
+                  // color: 'rgb(14, 100, 126)',
+                }}
+              >
+                Petcare Store
+              </Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Button
+                  onClick={() => {
+                    navigate(`/home/cua-hang/${dichVu?.ma_cua_hang}`);
+                  }}
+                  color="inherit"
+                  sx={{
+                    minWidth: '100px',
+                    backgroundColor: 'rgb(14, 100, 126)',
+                    color: '#fff',
+                    mr: '10px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                    },
+                  }}
+                  variant="contained"
+                >
+                  Xem shop
+                </Button>
+                <Button
+                  color="inherit"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    minWidth: '120px',
+                    // backgroundColor: 'rgb(14, 100, 126)',
+                    border: '1px solid rgb(14, 100, 126)',
+                    color: 'rgb(14, 100, 126)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(119, 177, 194, 0.274)',
+                    },
+                  }}
+                  variant="outlined"
+                >
+                  <QuestionAnswerIcon
+                    sx={{
+                      color: 'rgb(14, 100, 126)',
+                      fontSize: '16px',
+                      mr: '5px',
+                    }}
+                  />
+                  Chat ngay
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              borderLeft: '1px solid rgba(0, 0, 0,0.2)',
+              ml: '20px',
+              pl: '20px',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '400',
+                  fontSize: '14px',
+                  pb: '8px',
+                  // color: 'rgb(14, 100, 126)',
+                  color: 'gray',
+                  mt: '16px',
+                  mb: '8px',
+                }}
+              >
+                Đánh giá:{' '}
+                <span style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}>
+                  100
+                </span>
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '400',
+                  fontSize: '14px',
+                  pb: '8px',
+                  // color: 'rgb(14, 100, 126)',
+                  color: 'gray',
+                }}
+              >
+                Dịch vụ :{' '}
+                <span style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}>
+                  10
+                </span>
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                ml: '30px',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '400',
+                  fontSize: '14px',
+                  pb: '8px',
+                  // color: 'rgb(14, 100, 126)',
+                  color: 'gray',
+                  mt: '16px',
+                  mb: '8px',
+                }}
+              >
+                Người theo dõi:{' '}
+                <span style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}>
+                  100
+                </span>
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '400',
+                  fontSize: '14px',
+                  pb: '8px',
+                  // color: 'rgb(14, 100, 126)',
+                  color: 'gray',
+                }}
+              >
+                Trạng thái :{' '}
+                <span style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}>
+                  Đang hoạt động
+                </span>
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                ml: '30px',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '400',
+                  fontSize: '14px',
+                  pb: '8px',
+                  // color: 'rgb(14, 100, 126)',
+                  color: 'gray',
+                  mt: '16px',
+                  mb: '8px',
+                }}
+              >
+                Địa chỉ:{' '}
+                <span style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}>
+                  Thành Phố Hồ Chí Minh
+                </span>
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '400',
+                  fontSize: '14px',
+                  pb: '8px',
+                  // color: 'rgb(14, 100, 126)',
+                  color: 'gray',
+                }}
+              >
+                Số điện thoại :{' '}
+                <span style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}>
+                  0987654321
+                </span>
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: '#fff',
+            overflow: 'hidden',
+            padding: '20px',
+            mt: '20px',
+          }}
+        >
+          {' '}
+          {parse(dichVu?.mo_ta_dich_vu || '')}{' '}
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: '#fff',
+            mt: '20px',
+            padding: '20px',
+            // boxSizing: 'border-box',
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '700',
+              fontSize: '17px',
+
+              // color: 'rgb(14, 100, 126)',
+            }}
+          >
+            ĐÁNH GIÁ DỊCH VỤ
+          </Typography>
+          {danhGia.map((item) => {
+            return <DanhGia danhGia={item} />;
+          })}
+          {danhGia?.length == 0 && (
+            <Typography
               sx={{
                 fontFamily: 'quicksand',
-                fontWeight: '700',
-                fontSize: '17px',
-                padding: '20px',
+                fontWeight: '400',
+                fontSize: '15px',
+
                 // color: 'rgb(14, 100, 126)',
               }}
             >
-              ĐÁNH GIÁ DỊCH VỤ
+              Chưa có đánh giá nào
             </Typography>
-     
-          <DanhGia />
-          <DanhGia />
-          <DanhGia />
+          )}
         </Box>
       </Box>
 
@@ -281,12 +551,14 @@ export default function DichVuDetail() {
   );
 }
 
-function DanhGia() {
+function DanhGia(props: { danhGia: DanhGiatype }) {
   return (
     <>
-      <Box sx={{
-        padding:"20px 20px 0px 20px"
-      }}>
+      <Box
+        sx={{
+          padding: '20px 20px 0px 20px',
+        }}
+      >
         <Box
           sx={{
             display: 'flex',
@@ -298,18 +570,16 @@ function DanhGia() {
               width: '50px',
               height: '50px',
               objectFit: 'cover',
-              marginTop:"16px"
+              marginTop: '16px',
             }}
-            src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+            src={props?.danhGia?.userInfo?.urlAvatar}
           />
           <Box
-            sx={
-              {
-                // display:"flex",
-                // justifyContent:""
-                ml:"8px"
-              }
-            }
+            sx={{
+              // display:"flex",
+              // justifyContent:""
+              ml: '8px',
+            }}
           >
             <Typography
               sx={{
@@ -320,11 +590,15 @@ function DanhGia() {
                 // color: 'rgb(14, 100, 126)',
               }}
             >
-              Thuyen Nguyen
+              {props?.danhGia?.userInfo?.ten}
             </Typography>
-            <Rating sx={{
-              fontSize:"18px"
-            }} value={4} readOnly />
+            <Rating
+              sx={{
+                fontSize: '18px',
+              }}
+              value={props?.danhGia?.numOfStar}
+              readOnly
+            />
             <Typography
               sx={{
                 fontFamily: 'quicksand',
@@ -334,22 +608,24 @@ function DanhGia() {
                 // color: 'rgb(14, 100, 126)',
               }}
             >
-              23-02-2024 20:30
+              {props?.danhGia?.modifiedAt
+                ? moment(props?.danhGia?.modifiedAt).format('DD-MM-YYYY HH:mm')
+                : moment(props?.danhGia?.createAt).format('DD-MM-YYYY HH:mm')}
             </Typography>
           </Box>
         </Box>
         <Typography
-              sx={{
-                fontFamily: 'quicksand',
-                fontWeight: '400',
-                fontSize: '15px',
-                margin: '16px 16px 10px 58px',
-                // color: 'rgb(14, 100, 126)',
-              }}
-            >
-              Dịch vụ này rất  tốt nha cho 10 điểm
-            </Typography>
-            <Divider />
+          sx={{
+            fontFamily: 'quicksand',
+            fontWeight: '400',
+            fontSize: '15px',
+            margin: '16px 16px 10px 58px',
+            // color: 'rgb(14, 100, 126)',
+          }}
+        >
+          {props?.danhGia?.content}
+        </Typography>
+        <Divider />
       </Box>
     </>
   );

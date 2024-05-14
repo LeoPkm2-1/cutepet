@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import PersonIcon from '@mui/icons-material/Person';
 import {
   mdiAccount,
   mdiAccountMultiple,
@@ -183,7 +184,7 @@ export default function SideBar(props: {
               >
                 {infoUser?.email}
               </Typography>
-              {infoUser?.user_type && (
+              {infoUser?.user_type ? (
                 <Typography
                   sx={{
                     fontFamily: 'quicksand',
@@ -207,6 +208,31 @@ export default function SideBar(props: {
                     }}
                   />
                   <span>Cửa hàng</span>
+                </Typography>
+              ) : (
+                <Typography
+                  sx={{
+                    fontFamily: 'quicksand',
+                    fontWeight: '500',
+                    fontSize: '13px',
+                    width: '120px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    display: 'flex',
+                    alignItems: 'center',
+                    mt: '10px',
+                    color: '#ee4d2d',
+                  }}
+                >
+                  <PersonIcon
+                    sx={{
+                      fontSize: '17px',
+                      mr: '5px',
+                      color: '#ee4d2d',
+                    }}
+                  />
+                  <span>Cá nhân</span>
                 </Typography>
               )}
             </Box>

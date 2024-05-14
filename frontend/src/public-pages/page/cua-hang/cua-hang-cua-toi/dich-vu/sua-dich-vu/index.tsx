@@ -36,6 +36,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RootState } from '../../../../../../redux';
 import TagNameSelect from '../../../../../../components/select-tag';
+import DanhMucDichVuSelect from '../../../../../../components/select-danh-muc-dich-vu';
 export function ChinhSuaDichVu() {
   const { idCuaHang } = useParams();
   const { idDichVu } = useParams();
@@ -48,7 +49,7 @@ export function ChinhSuaDichVu() {
             idDichVu: data?.payload?._id,
             ten_dich_vu: data?.payload?.serviceName,
             ma_cua_hang: idCuaHang,
-            mo_ta_ngan: '',
+            mo_ta_ngan: data?.payload?.shortDescription,
             mo_ta_dich_vu: data?.payload?.serviceDescription,
             anh_dich_vu: data?.payload?.serviceImgUrl,
             the_loai_dich_vu: data?.payload?.serviceType,
@@ -246,10 +247,11 @@ export function ChinhSuaDichVu() {
               multiline
               minRows={1}
               maxRows={3}
-              value={dichVu?.don_gia}
+              value={dichVu?.don_gia || null}
+              inputProps={{min: 0}}
               fullWidth
               onChange={(e) => {
-                setDichVu({ ...dichVu, don_gia: e.target.value });
+                setDichVu({ ...dichVu, don_gia: +e.target.value });
               }}
             />
           </Box>
@@ -298,9 +300,9 @@ export function ChinhSuaDichVu() {
                 mb: '12px',
               }}
             >
-              Chọn chuyên mục{' '}
+              Chọn danh  mục{' '}
             </Typography>
-            <TagNameSelect
+            <DanhMucDichVuSelect
               value={dichVu?.the_loai_dich_vu}
               onChange={(value) => {
                 setDichVu({ ...dichVu, the_loai_dich_vu: value });

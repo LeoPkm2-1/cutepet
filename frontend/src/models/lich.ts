@@ -4,7 +4,11 @@ export interface LichType {
   scheduleStatus?: string;
   happenAt?: string;
   imageCover?: string;
-  petId?: string| number;
+  petInfo?: {
+    ma_thu_cung: string;
+    ten_thu_cung: string;
+    anh_thu_cung: string;
+  };
   shopInfo?: {
     ma_cua_hang: string | number;
     ten: string;
@@ -18,7 +22,7 @@ export interface LichType {
     so_sao: number;
   },
   userInfo?:{
-    ten:string,
+    ten:string | number,
     userId: number,
     anh: string,
     so_dien_thoai: string,

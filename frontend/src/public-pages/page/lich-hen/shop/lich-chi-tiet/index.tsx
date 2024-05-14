@@ -48,7 +48,7 @@ export default function LichHenChiTietShop() {
   });
   useEffect(() => {
     if (idLich) {
-      lichApi.getScheduleForUserById(idLich).then((data: any) => {
+      lichApi.getScheduleForShopById(idLich).then((data: any) => {
         if (data?.status == 200) {
           console.log(data, 'data');
           const lichHen: LichType = {
@@ -61,7 +61,7 @@ export default function LichHenChiTietShop() {
               ten: data?.payload?.shopInfor?.ten,
               anh: data?.payload?.shopInfor?.anh?.url,
             },
-            petId: data?.payload?.petId,
+            // petId: data?.payload?.petId,
             dichVuInfo: {
               ma_dich_vu: data?.payload?.serviceInfor?._id,
               ten: data?.payload?.serviceInfor?.serviceName,
@@ -82,8 +82,8 @@ export default function LichHenChiTietShop() {
     }
   }, []);
   useEffect(() => {
-    if (lich?.petId) {
-      petApi?.getPetById(lich?.petId).then((data) => {
+    if (lich?.petInfo?.ma_thu_cung) {
+      petApi?.getPetById(lich?.petInfo?.ma_thu_cung).then((data) => {
         if (data?.status == 200) {
           const pet: PetType = {
             ten_thu_cung: data?.payload?.ten_thu_cung,
@@ -101,7 +101,7 @@ export default function LichHenChiTietShop() {
         }
       });
     }
-  }, [lich?.petId]);
+  }, [lich?.petInfo?.ma_thu_cung]);
 
   // handle huy lich
   function handleHuyLichHen() {
@@ -874,14 +874,12 @@ export function convertStatus(lich: LichType) {
     return 'Đã hủy';
   } else if (lich?.scheduleStatus == 'HOAN_THANH') {
     return 'Đã hoàn thành';
-  } else if (lich?.scheduleStatus == 'DA_TRE') {
+  }else if (lich?.scheduleStatus == 'DA_XAC_NHAN') {
+    return 'Đã xác nhận';
+  }else if (lich?.scheduleStatus == 'BI_TRE') {
     return 'Dã trễ';
   } else if (lich?.scheduleStatus == 'CHO_XAC_NHAN') {
-    if (+moment(lich?.happenAt).format('x') - +moment().format('x') > 0) {
-      return 'Chờ xác nhận';
-    } else {
-      return 'Đã trễ';
-    }
+    return 'Chờ xác nhận';
   } else {
     return lich?.scheduleStatus;
   }

@@ -120,8 +120,8 @@ export function PopUpDatLich(props: { dichVu: DichVuType, onClose: () => void })
           >
             Chọn ngày giờ
           </Typography>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
+          <LocalizationProvider  dateAdapter={AdapterDayjs}>
+            <DemoContainer  components={['DateTimePicker', 'DateTimePicker']}>
               <DateTimePicker
                 value={time}
                 onChange={(newValue) => {

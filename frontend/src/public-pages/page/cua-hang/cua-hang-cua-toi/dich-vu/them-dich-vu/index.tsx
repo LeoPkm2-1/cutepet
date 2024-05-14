@@ -36,6 +36,7 @@ import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../../../../../redux';
 import TagNameSelect from '../../../../../../components/select-tag';
 import Button from '../../../../../../components/Button';
+import DanhMucDichVuSelect from '../../../../../../components/select-danh-muc-dich-vu';
 export function ThemDichVu() {
   const [dichVu, setDichVu] = useState<DichVuType>({
     idDichVu: 0,
@@ -76,6 +77,7 @@ export function ThemDichVu() {
       shopApi
         .addService(
           dichVu?.ten_dich_vu || '',
+          dichVu?.mo_ta_ngan || "",
           shopInfoId,
           dichVu?.mo_ta_dich_vu || '',
           urlPhotoAvatar,
@@ -246,10 +248,11 @@ export function ThemDichVu() {
             // multiline
             // minRows={1}
             // maxRows={3}
-            value={dichVu?.don_gia}
+            value={dichVu?.don_gia || null}
+            inputProps={{min: 0}}
             fullWidth
             onChange={(e) => {
-              setDichVu({ ...dichVu, don_gia: e.target.value });
+              setDichVu({ ...dichVu, don_gia: +e.target.value });
             }}
           />
         </Box>
@@ -297,9 +300,9 @@ export function ThemDichVu() {
               mb: '12px',
             }}
           >
-            Chọn chuyên mục{' '}
+            Chọn danh mục{' '}
           </Typography>
-          <TagNameSelect
+          <DanhMucDichVuSelect
             value={dichVu?.the_loai_dich_vu}
             onChange={(value) => {
               setDichVu({ ...dichVu, the_loai_dich_vu: value });

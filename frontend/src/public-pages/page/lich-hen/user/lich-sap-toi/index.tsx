@@ -9,7 +9,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import PetsIcon from '@mui/icons-material/Pets';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { convertStatus } from '../lich-chi-tiet';
+import { convertStatus } from '../../shop/lich-chi-tiet';
+
 
 export function LichSapToiUser(props: { lich: LichType }) {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ export function LichSapToiUser(props: { lich: LichType }) {
               }}
             />
             {/* {dayjs(props?.lich.happenAt).fromNow(true)} */}
-            {timeLich(props?.lich.happenAt || '')}
+            {moment(props?.lich.happenAt || '').format('DD-MM-YYYY HH:mm')}
           </Typography>
 
           {/* Shop */}

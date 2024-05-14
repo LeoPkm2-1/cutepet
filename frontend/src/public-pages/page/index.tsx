@@ -300,6 +300,21 @@ export default function PageRouting() {
         );
       });
 
+      // 13
+      socket.on('NEW_EVENT', (data) => {
+        // dispatch(NotiActions.setIncreNumNoti());
+        enqueueSnackbar(
+          <NotifycationItem
+            name={data?.userComment?.ten || "hihi"}
+            type="có tahy đổi trạng thái"
+            url={data?.userComment?.anh?.url}
+          />,
+          {
+            variant: 'info',
+          }
+        );
+      });
+
       return () => {
         console.log('Dis conect fe');
         socket.disconnect();

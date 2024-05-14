@@ -62,6 +62,27 @@ export function UpdateStore() {
           so_dien_thoai: data?.payload?.so_dien_thoai,
           tai_khoan: data?.payload?.tai_khoan,
           avatarImageUrl: data?.payload?.anh?.url,
+          dia_chi: {
+            house_number:
+              data?.payload?.shopAdditionInfor?.addressInfor?.house_number,
+            province_id:
+              data?.payload?.shopAdditionInfor?.addressInfor?.province_infor
+                ?._id,
+            fullNameProvince:
+              data?.payload?.shopAdditionInfor?.addressInfor?.province_infor
+                ?.full_name,
+            district_id:
+              data?.payload?.shopAdditionInfor?.addressInfor?.district_infor
+                ?._id,
+            fullNameDistrict:
+              data?.payload?.shopAdditionInfor?.addressInfor?.district_infor
+                ?.full_name,
+            ward_id:
+              data?.payload?.shopAdditionInfor?.addressInfor?.ward_infor?._id,
+            fullNameWard:
+              data?.payload?.shopAdditionInfor?.addressInfor?.ward_infor
+                ?.full_name,
+          },
         };
         console.log(shopIn, 'shopIn');
 
@@ -69,6 +90,7 @@ export function UpdateStore() {
       });
     }
   }, []);
+
   async function handleSubmit() {
     setIsLoading(true);
     if (fileAvatar) {
@@ -91,7 +113,12 @@ export function UpdateStore() {
       shopApi
         .updateShopInfor(
           shop?.ten || '',
-          {},
+          {
+            house_number: shop?.dia_chi?.house_number,
+            province_id: shop?.dia_chi?.province_id,
+            district_id: shop?.dia_chi?.district_id,
+            ward_id: shop?.dia_chi?.ward_id,
+          },
           shop?.so_dien_thoai || '',
           shop?.sologan || '',
           shop?.descriptionMsg || '',
@@ -291,15 +318,38 @@ export function UpdateStore() {
               <StyledTextField
                 fullWidth
                 size="small"
-                value={shop?.ten}
+                value={shop?.dia_chi?.house_number || 'hihii'}
                 onChange={(e) => {
-                  setShop({ ...shop, ten: e.target.value });
+                  setShop({
+                    ...shop,
+                    dia_chi: { ...shop?.dia_chi, house_number: e.target.value },
+                  });
                 }}
                 sx={{
                   mt: '6px',
                 }}
               />
-              <SelectAddress />
+              <SelectAddress
+                valueDefault={{
+                  idP: shop?.dia_chi?.province_id || '',
+                  idD: shop?.dia_chi?.district_id || '',
+                  idW: shop?.dia_chi?.ward_id || '',
+                  nameP: shop?.dia_chi?.fullNameProvince || '',
+                  nameD: shop?.dia_chi?.fullNameDistrict || '',
+                  nameW: shop?.dia_chi?.fullNameWard || '',
+                }}
+                onChange={(idP, idD, idW) => {
+                  setShop({
+                    ...shop,
+                    dia_chi: {
+                      ...shop?.dia_chi,
+                      province_id: idP,
+                      district_id: idD,
+                      ward_id: idW,
+                    },
+                  });
+                }}
+              />
             </Box>
           </Box>
           {/* Slogan */}
@@ -393,12 +443,23 @@ export function UpdateStore() {
   );
 }
 
-function SelectAddress() {
+function SelectAddress(props: {
+  onChange: (idP: string, idD: string, idW: string) => void;
+  valueDefault: {
+    idP: string;
+    idD: string;
+    idW: string;
+    nameP: string;
+    nameD: string;
+    nameW: string;
+  };
+}) {
   const [optionProvice, setOptionProvice] = useState<OptionSelect[]>([]);
   const [provice, setProvice] = useState<OptionSelect>({
-    value: '',
-    label: '',
+    value: props?.valueDefault.idP,
+    label: props?.valueDefault?.nameP,
   });
+
   useEffect(() => {
     addressApi.getAllProvinces().then((data: any) => {
       console.log('data ne', data);
@@ -410,16 +471,18 @@ function SelectAddress() {
       });
       setOptionProvice(opPro);
     });
+    console.log(props?.valueDefault, " dèault");
+    
   }, []);
 
   const [optionDictric, setOptionDictric] = useState<OptionSelect[]>([]);
   const [dictric, setDictric] = useState<OptionSelect>({
-    value: '',
-    label: '',
+    value: props?.valueDefault?.idD,
+    label: props?.valueDefault?.nameD,
   });
 
   useEffect(() => {
-    if (provice.value) {
+    if (provice.value || props?.valueDefault?.idP) {
       addressApi.getAllDistrictsOfProvince(provice.value).then((data: any) => {
         console.log('data ne, dictric', data);
         const opDictric = data?.payload?.map((item: any) => {
@@ -431,30 +494,38 @@ function SelectAddress() {
         setOptionDictric(opDictric);
       });
     }
-  }, [provice.value]);
+  }, [provice.value, props?.valueDefault?.idP]);
 
   // Phuong Xa
 
   const [optionWard, setOptionWard] = useState<OptionSelect[]>([]);
   const [ward, setWard] = useState<OptionSelect>({
-    value: '',
-    label: '',
+    value: props?.valueDefault?.idW,
+    label: props?.valueDefault?.nameW,
   });
 
   useEffect(() => {
-    if (dictric.value) {
+    if (dictric.value || props?.valueDefault?.idD) {
       addressApi.getAllWardsOfDistrict(dictric.value).then((data: any) => {
         console.log('data ne, dictric', data);
         const opWard = data?.payload?.map((item: any) => {
           return {
-            value: item?.code,
+            value: item?._id,
             label: item?.full_name,
           } as OptionSelect;
         });
         setOptionWard(opWard);
       });
     }
-  }, [dictric.value]);
+  }, [dictric.value, props?.valueDefault?.idD]);
+
+  useEffect(() => {
+    props?.onChange(
+      provice?.value as string,
+      dictric?.value as string,
+      ward?.value as string
+    );
+  }, [provice.value, dictric.value, ward.value]);
   return (
     <>
       <Box
@@ -487,6 +558,10 @@ function SelectAddress() {
           }}
           label="Quận (Huyện)"
           fullWidth
+          defaultValue={{
+            label: props?.valueDefault?.nameD,
+            value: props?.valueDefault?.idD,
+          }}
           options={optionDictric}
           value={dictric}
           onChange={(data) => {

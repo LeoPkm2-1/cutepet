@@ -52,6 +52,7 @@ const updateShopInfor = (
 
 const addService = (
   ten_dich_vu: string,
+  mo_ta_ngan: string,
   ma_cua_hang: any,
   mo_ta_dich_vu: string,
   anh_dich_vu: string,
@@ -64,6 +65,7 @@ const addService = (
     method: 'POST',
     body: {
       ten_dich_vu,
+      mo_ta_ngan,
       ma_cua_hang,
       mo_ta_dich_vu,
       anh_dich_vu,

@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux';
 import { Grid3x3 } from '@mui/icons-material';
 import Button from '../../../../components/Button';
+import ThongKeCuaHang from './thong-ke-cua-hang';
 
 export default function CuaHang() {
   const [tab, setTab] = useState('dich-vu');
@@ -44,6 +45,27 @@ export default function CuaHang() {
           so_dien_thoai: data?.payload?.so_dien_thoai,
           tai_khoan: data?.payload?.tai_khoan,
           avatarImageUrl: data?.payload?.anh?.url,
+          dia_chi: {
+            house_number:
+              data?.payload?.shopAdditionInfor?.addressInfor?.house_number,
+            province_id:
+              data?.payload?.shopAdditionInfor?.addressInfor?.province_infor
+                ?._id,
+            fullNameProvince:
+              data?.payload?.shopAdditionInfor?.addressInfor?.province_infor
+                ?.full_name,
+            district_id:
+              data?.payload?.shopAdditionInfor?.addressInfor?.district_infor
+                ?._id,
+            fullNameDistrict:
+              data?.payload?.shopAdditionInfor?.addressInfor?.district_infor
+                ?.full_name,
+            ward_id:
+              data?.payload?.shopAdditionInfor?.addressInfor?.ward_infor?._id,
+            fullNameWard:
+              data?.payload?.shopAdditionInfor?.addressInfor?.ward_infor
+                ?.full_name,
+          },
         };
         console.log(shopIn, 'shopIn');
 
@@ -237,8 +259,8 @@ export default function CuaHang() {
                   fontWeight: '600',
                 }}
               >
-                {' '}
-                20 Lý Thường Kiệt Quận 10{' '}
+              {`${shop?.dia_chi?.house_number} ${shop?.dia_chi?.fullNameDistrict} ${shop?.dia_chi?.fullNameProvince}`}
+              
               </span>
             </Typography>
           </Box>
@@ -352,8 +374,8 @@ export default function CuaHang() {
               label={<span className="tab-label">Dịch vụ</span>}
             />
             <StyledTab
-              onClick={() => setTab('mang-xa-hoi')}
-              value="mang-xa-hoi"
+              onClick={() => setTab('dashboard')}
+              value="dashboard"
               label={<span className="tab-label">Thống kê cửa hàng</span>}
               iconPosition="start"
               icon={
@@ -417,7 +439,7 @@ export default function CuaHang() {
                       },
                     }}
                     // disabled={!tenLich?.trim() || !pet?.ma_thu_cung}
-                    onClick ={() => navigate(`/home/them-dich-vu`)}
+                    onClick={() => navigate(`/home/them-dich-vu`)}
                     variant="contained"
                   >
                     Thêm dịch vụ
@@ -432,6 +454,7 @@ export default function CuaHang() {
             <span>{parse(shop?.descriptionMsg || '')} </span>
           </>
         )}
+        {tab == "dashboard" && <ThongKeCuaHang />}
       </Box>
     </>
   );

@@ -6,7 +6,7 @@ export default function Tag(props: { text: string}) {
       style={{
         fontFamily: 'quicksand',
         fontSize: '10px',
-        fontWeight: '600',
+        fontWeight: '500',
         backgroundColor: '#0e647e',
         color: '#fff',
         borderRadius: '20px',

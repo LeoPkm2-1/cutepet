@@ -43,13 +43,40 @@ const cancelServiceScheduleFromUser = (schedule_id: string, reason: string,) => 
   });
 };
 
+const changeStatusOfServiceScheduleForUser = (schedule_id: string, status_change_to: string, reason: string,) => {
+  return authRequest<any>({
+    url: `user/changeStatusOfServiceSchedule`,
+    method: 'POST',
+    body: {
+      schedule_id,
+      status_change_to,
+      reason,
+    },
+  });
+};
+
+const changeStatusOfServiceScheduleForShop = (schedule_id: string, status_change_to: string, reason: string,) => {
+  return authRequest<any>({
+    url: `shop/changeStatusOfServiceSchedule`,
+    method: 'POST',
+    body: {
+      schedule_id,
+      status_change_to,
+      reason,
+    },
+  });
+};
+
+
 
 const lichApi = {
   getAllScheduleForUser,
   getAllScheduleForShop,
   getScheduleForUserById,
   cancelServiceScheduleFromUser,
-  getScheduleForShopById
+  getScheduleForShopById,
+  changeStatusOfServiceScheduleForUser,
+  changeStatusOfServiceScheduleForShop
 };
 
 export default lichApi;

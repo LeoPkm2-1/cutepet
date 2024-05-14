@@ -25,6 +25,8 @@ import Select, { OptionSelect } from '../../../../../components/Select';
 import { useSnackbar } from 'notistack';
 import Loading from '../../../../../components/loading';
 import dichVuApi from '../../../../../api/dichVu';
+import { DanhGiatype } from '../../../../../models/shop';
+import { convertStatus } from '../../shop/lich-chi-tiet';
 
 export default function LichHenChiTietUser() {
   const { idLich } = useParams();
@@ -34,6 +36,7 @@ export default function LichHenChiTietUser() {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const [danhGia, setDanhGia] = useState<DanhGiatype>({});
 
   const [lyDo, setLyDo] = useState<OptionSelect>({
     label: '',
@@ -61,7 +64,11 @@ export default function LichHenChiTietUser() {
               ten: data?.payload?.shopInfor?.ten,
               anh: data?.payload?.shopInfor?.anh?.url,
             },
-            petId: data?.payload?.petId,
+            petInfo: {
+              ma_thu_cung: data?.payload?.petInfor?.ma_thu_cung,
+              ten_thu_cung: data?.payload?.petInfor?.ten_thu_cung,
+              anh_thu_cung:  data?.payload?.petInfor?.anh?.url,
+            },
             dichVuInfo: {
               ma_dich_vu: data?.payload?.serviceInfor?._id,
               ten: data?.payload?.serviceInfor?.serviceName,
@@ -76,8 +83,8 @@ export default function LichHenChiTietUser() {
     }
   }, []);
   useEffect(() => {
-    if (lich?.petId) {
-      petApi?.getPetById(lich?.petId).then((data) => {
+    if (lich?.petInfo?.ma_thu_cung) {
+      petApi?.getPetById(lich?.petInfo?.ma_thu_cung).then((data) => {
         if (data?.status == 200) {
           const pet: PetType = {
             ten_thu_cung: data?.payload?.ten_thu_cung,
@@ -95,14 +102,43 @@ export default function LichHenChiTietUser() {
         }
       });
     }
-  }, [lich?.petId]);
+  }, [lich?.petInfo?.ma_thu_cung]);
+
+  // Lay danh gia
+  useEffect(() => {
+    if (lich?.dichVuInfo?.ma_dich_vu) {
+      dichVuApi
+        .getMyVoteForService(lich?.dichVuInfo?.ma_dich_vu)
+        .then((data) => {
+          console.log(data, ' dich vu danh gia');
+          const item = data?.payload;
+          if (data?.payload?._id) {
+            setDanhGia({
+              content: item?.content,
+              createAt: item?.createAt,
+              modifiedAt: item?.modifiedAt,
+              numOfStar: item?.numOfStar,
+              serviceId: item?.serviceId,
+            });
+            setRating({
+              numStar: item?.numOfStar,
+              content: item?.content,
+            });
+          }
+        });
+    }
+  }, [lich?.dichVuInfo?.ma_dich_vu]);
 
   // handle huy lich
   function handleHuyLichHen() {
     if (lich?.idLich) {
       setLoading(true);
       lichApi
-        .cancelServiceScheduleFromUser(lich?.idLich, lyDo?.value as string)
+        .changeStatusOfServiceScheduleForUser(
+          lich?.idLich,
+          'HUY',
+          lyDo?.value as string
+        )
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Hủy lịch hẹn thành công`, { variant: 'info' });
@@ -141,6 +177,11 @@ export default function LichHenChiTietUser() {
           if (data?.status == 200) {
             enqueueSnackbar(`${data?.message}`, { variant: 'info' });
             setLoading(false);
+            setDanhGia({
+              ...danhGia,
+              content: rating?.content,
+              numOfStar: rating?.numStar,
+            });
           }
         })
         .catch((err) => {
@@ -149,6 +190,7 @@ export default function LichHenChiTietUser() {
         });
     }
   }
+
   return (
     <>
       <Loading open={loading} />
@@ -205,6 +247,7 @@ export default function LichHenChiTietUser() {
               },
             ]}
           />
+
           <Box
             sx={{
               display: 'flex',
@@ -283,31 +326,34 @@ export default function LichHenChiTietUser() {
               />
               Mã lịch hẹn
             </Typography>
-            <Button
-              onClick={() => setOpenPopup(true)}
-              color="inherit"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                minWidth: '120px',
-                // backgroundColor: 'rgb(14, 100, 126)',
-                border: '1px solid #ee4d2d',
-                color: '#ee4d2d',
-                '&:hover': {
-                  backgroundColor: '#ee4d2d24',
-                },
-              }}
-              variant="outlined"
-            >
-              <DeleteForeverIcon
+            {(lich?.scheduleStatus == 'CHO_XAC_NHAN' ||
+              lich?.scheduleStatus == 'DA_XAC_NHAN') && (
+              <Button
+                onClick={() => setOpenPopup(true)}
+                color="inherit"
                 sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  minWidth: '120px',
+                  // backgroundColor: 'rgb(14, 100, 126)',
+                  border: '1px solid #ee4d2d',
                   color: '#ee4d2d',
-                  fontSize: '20px',
-                  mr: '5px',
+                  '&:hover': {
+                    backgroundColor: '#ee4d2d24',
+                  },
                 }}
-              />
-              Hủy lịch hẹn
-            </Button>
+                variant="outlined"
+              >
+                <DeleteForeverIcon
+                  sx={{
+                    color: '#ee4d2d',
+                    fontSize: '20px',
+                    mr: '5px',
+                  }}
+                />
+                Hủy lịch hẹn
+              </Button>
+            )}
           </Box>
 
           <Typography
@@ -628,16 +674,14 @@ export default function LichHenChiTietUser() {
             }}
           >
             <Box
-             onClick={() => {
-              navigate(
-                `/home/cua-hang/${lich?.shopInfo?.ma_cua_hang}`
-              );
-            }}
+              onClick={() => {
+                navigate(`/home/cua-hang/${lich?.shopInfo?.ma_cua_hang}`);
+              }}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
                 ml: '10px',
-                cursor:"pointer",
+                cursor: 'pointer',
               }}
             >
               <img
@@ -801,7 +845,7 @@ export default function LichHenChiTietUser() {
                 mr: '10px',
               }}
             />
-            Đánh giá dịch vụ
+            Đánh giá của tôi
           </Typography>
           <Box
             sx={{
@@ -844,7 +888,12 @@ export default function LichHenChiTietUser() {
             <Button
               onClick={handleVote}
               color="inherit"
-              disabled={!rating?.numStar}
+              disabled={
+                !rating?.numStar ||
+                ((danhGia?.numOfStar || 0) > 0 &&
+                  danhGia?.content == rating.content &&
+                  danhGia?.numOfStar == rating.numStar)
+              }
               sx={{
                 minWidth: '100px',
                 backgroundColor: 'rgb(14, 100, 126)',
@@ -856,7 +905,7 @@ export default function LichHenChiTietUser() {
               }}
               variant="contained"
             >
-              Đánh giá
+              {danhGia?.numOfStar ? 'Cập nhật' : 'Đánh giá'}
             </Button>
           </Box>
         </Box>
@@ -865,20 +914,4 @@ export default function LichHenChiTietUser() {
   );
 }
 
-export function convertStatus(lich: LichType) {
-  if (lich?.scheduleStatus == 'DA_HUY') {
-    return 'Đã hủy';
-  } else if (lich?.scheduleStatus == 'HOAN_THANH') {
-    return 'Đã hoàn thành';
-  } else if (lich?.scheduleStatus == 'DA_TRE') {
-    return 'Dã trễ';
-  } else if (lich?.scheduleStatus == 'CHO_XAC_NHAN') {
-    if (+moment(lich?.happenAt).format('x') - +moment().format('x') > 0) {
-      return 'Chờ xác nhận';
-    } else {
-      return 'Đã trễ';
-    }
-  } else {
-    return lich?.scheduleStatus;
-  }
-}
+

@@ -50,7 +50,7 @@ export function LichSapToiShop(props: { lich: LichType }) {
               fontFamily: 'quicksand',
               display: 'flex',
               alignItems: 'center',
-              fontWeight: '500',
+              fontWeight: '600',
             }}
           >
             {props?.lich?.scheduleName}
@@ -63,12 +63,14 @@ export function LichSapToiShop(props: { lich: LichType }) {
               display: 'flex',
               alignItems: 'center',
               fontWeight: '500',
-              color: '#2e7d32',
+              // color: '#2e7d32',
+              color: '#000',
             }}
           >
             <AccessTimeFilledIcon
               sx={{
-                color: '#2e7d32',
+                // color: '#2e7d32',
+                color: '#000',
                 fontSize: '16px',
                 mr: '10px',
               }}
@@ -140,7 +142,7 @@ export function LichSapToiShop(props: { lich: LichType }) {
               }}
             />
             <img
-              src={props?.lich?.shopInfo?.anh}
+              src={props?.lich?.petInfo?.anh_thu_cung}
               style={{
                 width: '28px',
                 height: '28px',
@@ -160,7 +162,7 @@ export function LichSapToiShop(props: { lich: LichType }) {
                 //   mt: '30px',
               }}
             >
-              Pubby
+              {props?.lich?.petInfo?.ten_thu_cung}
             </Typography>
           </Box>
           <Box
@@ -198,7 +200,7 @@ export function LichSapToiShop(props: { lich: LichType }) {
                   display: 'flex',
                   alignItems: 'center',
                   ml: '10px',
-                  color:'inherit',
+                  color: 'inherit',
                   //   mt: '30px',
                 }}
               >

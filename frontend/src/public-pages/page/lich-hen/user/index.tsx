@@ -2,7 +2,7 @@ import { Box, Grid, SvgIcon, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { LichType } from '../../../../models/lich';
 import lichApi from '../../../../api/lich';
-import {LichSapToiUser } from './lich-sap-toi';
+import { LichSapToiUser } from './lich-sap-toi';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux';
 import { StyledTab, StyledTabs } from '../../ban-be/styled';
@@ -11,6 +11,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
+import moment from 'moment';
 
 export function LichHenCuaToi() {
   const [tab, setTab] = useState('1');
@@ -39,75 +40,35 @@ export function LichHenCuaToi() {
       setLich(list);
     });
   }, []);
+
+
+  useEffect(() => {
+    console.log(lich, 'lich 1');
+
+    if (lich?.length > 0) {
+      const arrRequest = lich.map(async (item) => {
+        if (
+          item?.scheduleStatus == 'CHO_XAC_NHAN' &&
+          +moment(item?.happenAt).format('x') - +moment().format('x') < 0
+        ) {
+          return await lichApi.changeStatusOfServiceScheduleForUser(
+            item?.idLich as string,
+            'BI_TRE',
+            ''
+          );
+        } else {
+          return;
+        }
+      });
+
+      Promise.all(arrRequest).then((data) => {
+        console.log('change lic bi tre', data);
+      });
+    }
+  }, [lich]);
+
   return (
     <>
-      {/* <Typography
-        sx={{
-          fontFamily: 'quicksand',
-          fontWeight: '600',
-          mb: '12px',
-          fontSize: '17px',
-          mt: '30px',
-        }}
-      >
-        Lịch sắp tới
-      </Typography>
-      <Grid container>
-        {lich.map((item) => {
-          if(item?.scheduleStatus == "CHO_XAC_NHAN"){
-            return (
-              <Grid item xs={4}>
-                <LichSapToi lich={item} />
-              </Grid>
-            );
-          }
-        })}
-      </Grid>
-
-      <Typography
-        sx={{
-          fontFamily: 'quicksand',
-          fontWeight: '600',
-          mb: '12px',
-          fontSize: '17px',
-          mt: '30px',
-        }}
-      >
-        Lịch sắp tới
-      </Typography>
-      <Grid container>
-        {lich.map((item) => {
-          if(item?.scheduleStatus == "DA_HUY"){
-            return (
-              <Grid item xs={4}>
-                <LichSapToi lich={item} />
-              </Grid>
-            );
-          }
-        })}
-      </Grid>
-      <Typography
-        sx={{
-          fontFamily: 'quicksand',
-          fontWeight: '600',
-          mb: '12px',
-          fontSize: '17px',
-          mt: '30px',
-        }}
-      >
-        Lịch đã hoàn thành
-      </Typography>
-      <Grid container>
-        {lich.map((item) => {
-          if(item?.scheduleStatus == "HOAN_THANH"){
-            return (
-              <Grid item xs={4}>
-                <LichSapToi lich={item} />
-              </Grid>
-            );
-          }
-        })}
-      </Grid> */}
 
       <StyledTabs
         value={tab}
@@ -122,27 +83,35 @@ export function LichHenCuaToi() {
           iconPosition="start"
           icon={<DateRangeIcon />}
           value="1"
-          label={<span className="tab-label">Lịch sắp tới</span>}
+          label={<span className="tab-label">Chờ xác nhận</span>}
         />
         <StyledTab
           onClick={() => setTab('2')}
           value="2"
-          label={<span className="tab-label">Lịch đã hoàn thành</span>}
+          label={<span className="tab-label">Đã xác nhận</span>}
           iconPosition="start"
-          icon={<EventAvailableIcon />}
+          icon={<DateRangeIcon />}
         />
         <StyledTab
           onClick={() => setTab('3')}
           value="3"
-          label={<span className="tab-label">Lịch đã hủy</span>}
+          label={<span className="tab-label">Đã hoàn thành</span>}
+          iconPosition="start"
+          icon={<EventAvailableIcon />}
+
+        />
+        <StyledTab
+          onClick={() => setTab('4')}
+          value="4"
+          label={<span className="tab-label">Đã hủy</span>}
           iconPosition="start"
           icon={<EventBusyIcon />}
         />
 
         <StyledTab
-          onClick={() => setTab('4')}
-          value="4"
-          label={<span className="tab-label">Lịch đã trễ</span>}
+          onClick={() => setTab('5')}
+          value="5"
+          label={<span className="tab-label">Đã trễ</span>}
           iconPosition="start"
           icon={<EventRepeatIcon />}
         />
@@ -151,7 +120,10 @@ export function LichHenCuaToi() {
         <Box>
           <Grid container>
             {lich.map((item) => {
-              if (item?.scheduleStatus == 'CHO_XAC_NHAN') {
+              if (
+                item?.scheduleStatus == 'CHO_XAC_NHAN' &&
+                +moment(item?.happenAt).format('x') - +moment().format('x') > 0
+              ) {
                 return (
                   <Grid item xs={4}>
                     <LichSapToiUser lich={item} />
@@ -166,7 +138,7 @@ export function LichHenCuaToi() {
         <Box>
           <Grid container>
             {lich.map((item) => {
-              if (item?.scheduleStatus == 'HOAN_THANH') {
+              if (item?.scheduleStatus == 'DA_XAC_NHAN') {
                 return (
                   <Grid item xs={4}>
                     <LichSapToiUser lich={item} />
@@ -181,7 +153,7 @@ export function LichHenCuaToi() {
         <Box>
           <Grid container>
             {lich.map((item) => {
-              if (item?.scheduleStatus == 'DA_HUY') {
+              if (item?.scheduleStatus == 'HOAN_THANH') {
                 return (
                   <Grid item xs={4}>
                     <LichSapToiUser lich={item} />
@@ -196,7 +168,22 @@ export function LichHenCuaToi() {
         <Box>
           <Grid container>
             {lich.map((item) => {
-              if (item?.scheduleStatus == 'DA_TRE') {
+              if (item?.scheduleStatus == 'DA_HUY') {
+                return (
+                  <Grid item xs={4}>
+                    <LichSapToiUser lich={item} />
+                  </Grid>
+                );
+              }
+            })}
+          </Grid>
+        </Box>
+      )}
+      {tab == '5' && (
+        <Box>
+          <Grid container>
+            {lich.map((item) => {
+              if (item?.scheduleStatus == 'BI_TRE') {
                 return (
                   <Grid item xs={4}>
                     <LichSapToiUser lich={item} />
