@@ -50,6 +50,7 @@ router.post(
 
 router.post(
   "/changeStatusOfServiceSchedule",
+  requireOnlyNormUser,
   schedulerMid.checkScheduleExistMid,
   schedulerMid.checkRighToChangeServiceScheduleStatus,
   schedulerController.changeScheduleStatusController

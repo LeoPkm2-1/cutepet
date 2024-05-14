@@ -168,11 +168,11 @@ const getListStatusOfSchedule = async (req, res) => {
 
 const changeScheduleStatusController = async (req, res) => {
   let { schedule_id, status_change_to, WHO_HANDLING } = req.body;
-  // const user_id =
-  //   WHO_HANDLING == "USER"
-  //     ? parseInt(req.auth_decoded.ma_nguoi_dung)
-  //     : req.auth_decoded.ma_cua_hang;
-  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const user_id =
+    WHO_HANDLING == "USER"
+      ? parseInt(req.auth_decoded.ma_nguoi_dung)
+      : req.auth_decoded.ma_cua_hang;
+  // const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
 
   const user_infor =
     WHO_HANDLING == "USER"

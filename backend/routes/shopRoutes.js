@@ -18,7 +18,7 @@ router.use(
     "/getServiceById",
     "/categoriesForService",
     "/filterServices",
-    "/getAllStatusOfSchedule"
+    "/getAllStatusOfSchedule",
   ],
   requireLoginedForNormUser
 );
@@ -60,7 +60,10 @@ router.post(
   shopController.filterServiceController
 );
 
-router.post('/getAllStatusOfSchedule',schedulerController.getListStatusOfSchedule)
+router.post(
+  "/getAllStatusOfSchedule",
+  schedulerController.getListStatusOfSchedule
+);
 
 // shop acess=================================================================
 
@@ -112,5 +115,12 @@ router.post(
 );
 
 router.post("/getListUserFollowShop", shopController.getListUserFollowShop);
+
+router.post(
+  "/changeStatusOfServiceSchedule",
+  schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
+  schedulerController.changeScheduleStatusController
+);
 
 module.exports = router;
