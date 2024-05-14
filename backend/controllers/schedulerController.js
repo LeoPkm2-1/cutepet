@@ -4,6 +4,9 @@ const shopHelper = require("../utils/Shop/shopHelper");
 const petHelper = require("../utils/petHelper");
 const { Response } = require("../utils/index");
 const userHelper = require("../utils/userHelper");
+const {
+  nofifyChangeStatusServiceSchedule,
+} = require("../notificationHandler/serviceSchedule");
 
 const createSchedule = async (req, res) => {
   let { service_id, schedule_name, pet_id, happen_at } = req.body;
@@ -151,6 +154,104 @@ const getAllScheduleForShopController = async (req, res) => {
   return;
 };
 
+const getListStatusOfSchedule = async (req, res) => {
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        ["HUY", "HOAN_THANH", "CHO_XAC_NHAN", "BI_TRE"],
+        "Lấy thành công"
+      )
+    );
+};
+
+const changeScheduleStatusController = async (req, res) => {
+  let { schedule_id, status_change_to, WHO_HANDLING } = req.body;
+  const user_id =
+    WHO_HANDLING == "USER"
+      ? parseInt(req.auth_decoded.ma_nguoi_dung)
+      : req.auth_decoded.ma_cua_hang;
+  // const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+
+  const user_infor =
+    WHO_HANDLING == "USER"
+      ? await userHelper.getUserPublicInforByUserId(user_id)
+      : await shopHelper.getPublicInforForShopById(user_id);
+  const receiver_infor =
+    WHO_HANDLING == "USER"
+      ? await schedulerModel.getInforOfShopCreateServiceSchedule(schedule_id)
+      : await schedulerModel.getInforOfUserCreateServiceSchedule(schedule_id);
+
+  if (!status_change_to || typeof status_change_to != "string") {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Trạng thái thay đổi không hợp lệ", 300, 300)
+      );
+    return;
+  }
+  status_change_to = status_change_to.toUpperCase();
+  const listOfAvaibleStatus = [
+    schedulerModel.SERVICE_SCHEDULE_PENDING_STATUS_STR,
+    schedulerModel.SERVICE_SCHEDULE_REJECT_STATUS_STR,
+    schedulerModel.SERVICE_SCHEDULE_MISSING_STATUS_STR,
+    schedulerModel.SERVICE_SCHEDULE_CONFIRM_STATUS_STR,
+    schedulerModel.SERVICE_SCHEDULE_DONE_STATUS_STR,
+  ];
+
+  if (!listOfAvaibleStatus.includes(status_change_to)) {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          [],
+          "Trạng thái thay đổi không nằm trong danh sách các trạng thái hợp lệ",
+          300,
+          300
+        )
+      );
+    return;
+  }
+
+  const changeStatus = await schedulerModel.updateStatusOfServiceSchedule(
+    schedule_id,
+    status_change_to,
+    user_infor
+  );
+  changeStatus.payload.update_status_infor;
+  if (changeStatus.status == 200) {
+    res
+      .status(200)
+      .json(
+        new Response(
+          200,
+          { data: changeStatus.payload.update_status_infor },
+          "Thay đổi trạng thái lịch thành công"
+        )
+      );
+
+    nofifyChangeStatusServiceSchedule(
+      receiver_infor.ma_nguoi_dung,
+      changeStatus.payload.update_status_infor
+    );
+    return;
+  } else {
+    res
+      .status(400)
+      .json(
+        new Response(
+          400,
+          {},
+          "Thay đổi trạng thái lịch  không thành công, đã có lỗi xảy ra",
+          300,
+          300
+        )
+      );
+  }
+};
+
 module.exports = {
   createSchedule,
   getServiceScheduleByIdController,
@@ -158,4 +259,6 @@ module.exports = {
   getAllScheduleForShopController,
   cancelScheduleController,
   confirmServiceScheduleController,
+  getListStatusOfSchedule,
+  changeScheduleStatusController,
 };

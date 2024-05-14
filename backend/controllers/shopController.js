@@ -165,6 +165,7 @@ const addServiceForShop = async (req, res) => {
     the_loai_dich_vu,
     don_gia,
     thoi_luong_dich_vu,
+    danh_sach_loai_phu_hop,
   } = req.body;
   const shop_id = req.auth_decoded.ma_cua_hang;
 
@@ -195,7 +196,8 @@ const addServiceForShop = async (req, res) => {
     anh_dich_vu,
     the_loai_dich_vu,
     don_gia,
-    thoi_luong_dich_vu
+    thoi_luong_dich_vu,
+    danh_sach_loai_phu_hop
   );
   if (processStatus.status == 400) {
     res

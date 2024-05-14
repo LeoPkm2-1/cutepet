@@ -12,7 +12,8 @@ const addServiceForShop = async (
   service_img_url = "",
   service_type = [],
   price_quotation = 0,
-  duration = -1
+  duration = -1,
+  petSpecies
 ) => {
   const serviceObj = new shopServiceStructure.ShopService(
     service_name,
@@ -22,7 +23,8 @@ const addServiceForShop = async (
     service_img_url,
     service_type,
     price_quotation,
-    duration
+    duration,
+    petSpecies
   );
   async function executor(collection) {
     return await collection.insertOne(serviceObj);

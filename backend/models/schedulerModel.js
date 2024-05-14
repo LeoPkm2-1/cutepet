@@ -2,10 +2,12 @@ const { sqlQuery, nonSQLQuery } = require("./index");
 const { Response } = require("./../utils/index");
 const { ObjectId } = require("mongodb");
 const SERVICE_SCHEDULE_PENDING_STATUS_STR = "CHO_XAC_NHAN";
-const SERVICE_SCHEDULE_REJECT_STATUS_STR = "DA_HUY";
-const SERVICE_SCHEDULE_MISSING_STATUS_STR = "DA_LO";
+const SERVICE_SCHEDULE_REJECT_STATUS_STR = "HUY";
+const SERVICE_SCHEDULE_MISSING_STATUS_STR = "BI_TRE";
 const SERVICE_SCHEDULE_CONFIRM_STATUS_STR = "DA_XAC_NHAN";
-const SERVICE_SCHEDULE_DONE_STATUS_STR = "DA_HOAN_THANH";
+const SERVICE_SCHEDULE_DONE_STATUS_STR = "HOAN_THANH";
+
+("");
 
 class ServiceSchedule {
   static type = "SERVICE_SCHEDULE";
@@ -35,7 +37,7 @@ class ServiceSchedule {
 }
 
 class UpdateServiceScheduleStatus {
-  static type = "UPDATE_STATUS_SERVICE_SCHEDULE";
+  static type = "CHANGE_SERVICE_SCHEDULE_STATUS";
   constructor(
     new_status,
     old_status,
@@ -189,7 +191,7 @@ const updateStatusOfServiceSchedule = async (
     );
   }
   return await nonSQLQuery(executor, "Lich")
-    .then((data) => new Response(200, data, ""))
+    .then((data) => new Response(200, { data, update_status_infor }, ""))
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 const getAllScheduleOfShop = async (shop_id) => {
@@ -216,8 +218,22 @@ const getAllScheduleOfShop = async (shop_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+const getInforOfUserCreateServiceSchedule = async (schedule_id) => {
+  const data = await getServiceScheduleById(schedule_id).then(
+    (data) => data.payload
+  );
+  return data.userCreate;
+};
+
+const getInforOfShopCreateServiceSchedule = async (schedule_id) => {
+  const data = await getServiceScheduleById(schedule_id).then(
+    (data) => data.payload
+  );
+  return data.shopInfor;
+};
+
 // (async () => {
-//   const data = await getAllScheduleOfShop(536);
+//   const data = await getInforOfUserCreateServiceSchedule("6610e6721d31a037d900d8ec");
 //   console.log(data);
 // })();
 
@@ -234,4 +250,6 @@ module.exports = {
   getAllScheduleOfUser,
   getAllScheduleOfShop,
   updateStatusOfServiceSchedule,
+  getInforOfUserCreateServiceSchedule,
+  getInforOfShopCreateServiceSchedule,
 };

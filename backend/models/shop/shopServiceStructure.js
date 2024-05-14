@@ -8,6 +8,7 @@ class ShopService {
     service_type,
     price_quotation,
     duration,
+    petSpecies,
     num_of_star = 0
   ) {
     this.serviceName = service_name;
@@ -18,6 +19,7 @@ class ShopService {
     this.serviceType = service_type;
     this.priceQuotation = price_quotation;
     this.duration = duration;
+    this.petSpecies = petSpecies;
     this.numOfStar = num_of_star;
   }
 }
