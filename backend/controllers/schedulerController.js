@@ -50,7 +50,7 @@ const getServiceScheduleByIdController = async (req, res) => {
   const data = await schedulerModel
     .getServiceScheduleById(schedule_id)
     .then((data) => data.payload);
-  console.log({ data });
+  // console.log({ data });
   if (!data) {
     res.status(400).json(new Response(400, data, "Lấy lịch không thành công"));
     return;
