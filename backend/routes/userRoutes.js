@@ -59,6 +59,7 @@ router.post(
 router.post(
   "/getServiceScheduleById",
   schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
   schedulerController.getServiceScheduleByIdController
 );
 

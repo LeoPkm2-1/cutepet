@@ -123,4 +123,11 @@ router.post(
   schedulerController.changeScheduleStatusController
 );
 
+router.post(
+  "/getServiceScheduleById",
+  schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
+  schedulerController.getServiceScheduleByIdController
+);
+
 module.exports = router;

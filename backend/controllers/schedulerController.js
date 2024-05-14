@@ -50,10 +50,14 @@ const getServiceScheduleByIdController = async (req, res) => {
   const data = await schedulerModel
     .getServiceScheduleById(schedule_id)
     .then((data) => data.payload);
+  console.log({ data });
   if (!data) {
-    res.status(200).json(new Response(200, data, "Lấy lịch thành công"));
+    res.status(400).json(new Response(400, data, "Lấy lịch không thành công"));
     return;
-  } else if (parseInt(data.userCreate.ma_nguoi_dung) != user_id) {
+  } else if (
+    parseInt(data.userCreate.ma_nguoi_dung) != user_id &&
+    parseInt(data.shopInfor.ma_cua_hang) != user_id
+  ) {
     res
       .status(400)
       .json(new Response(400, {}, "Bạn không có lịch này", 300, 300));
