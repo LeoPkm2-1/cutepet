@@ -4202,7 +4202,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_2}}",
+							"value": "{{token_temp}}",
 							"type": "string"
 						}
 					]
@@ -4211,7 +4211,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"schedule_id\":\"6610e6721d31a037d900d8ec\"\n}",
+					"raw": "{\n    \"schedule_id\":\"6610e836933b80e9bad54a29\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4807,6 +4807,84 @@
 			"response": []
 		},
 		{
+			"name": "116_shop_changeStatusOfServiceSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e836933b80e9bad54a29\"\n    ,\"status_change_to\":\"Huy\"\n    ,\"reason\":\"không thích\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/changeStatusOfServiceSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"changeStatusOfServiceSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "117_shop_getServiceScheduleById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e836933b80e9bad54a29\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/getServiceScheduleById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getServiceScheduleById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user-infor",
 			"request": {
 				"auth": {
@@ -4958,45 +5036,6 @@
 							"value": "2",
 							"disabled": true
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "116_shop_changeStatusOfServiceSchedule",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token_temp}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"schedule_id\":\"6610e836933b80e9bad54a29\"\n    ,\"status_change_to\":\"Huy\"\n    ,\"reason\":\"không thích\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/shop/changeStatusOfServiceSchedule",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"shop",
-						"changeStatusOfServiceSchedule"
 					]
 				}
 			},
