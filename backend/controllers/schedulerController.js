@@ -267,6 +267,18 @@ const changeScheduleStatusController = async (req, res) => {
   }
 };
 
+const getAllServiceScheduleStatusController = async (req,res) => {
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        schedulerModel.getListOfServiceScheduleStatus(),
+        "Lấy dữ liệu thành cộng"
+      )
+    );
+};
+
 module.exports = {
   createSchedule,
   getServiceScheduleByIdController,
@@ -276,4 +288,5 @@ module.exports = {
   confirmServiceScheduleController,
   getListStatusOfSchedule,
   changeScheduleStatusController,
+  getAllServiceScheduleStatusController,
 };
