@@ -50,6 +50,8 @@ import { LichHenCuaToi } from './lich-hen/user';
 import { LichHenCuaShop } from './lich-hen/shop';
 import LichHenChiTietUser from './lich-hen/user/lich-chi-tiet';
 import LichHenChiTietShop from './lich-hen/shop/lich-chi-tiet';
+import CuaHangCuaToi from './cua-hang/cua-hang-cua-toi';
+import CuaHangForUser from './cua-hang/cua-hang-cua-toi/cua-hang-for-user';
 
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
@@ -368,7 +370,8 @@ export default function PageRouting() {
               <Route path="trang-chia-se" element={<TrangChiaSe />} />
               <Route path="trang-chia-se/:id" element={<BaiChiaSe />} />
               <Route path="tao-bai-chia-se" element={<TaoBaiChiaSe />} />
-              <Route path="cua-hang/:idCuaHang" element={<CuaHang />} />
+              <Route path="cua-hang/:idCuaHang" element={<CuaHangForUser />} />
+              <Route path="cua-hang-cua-toi" element={<CuaHangCuaToi />} />
               <Route path="them-dich-vu" element={<ThemDichVu/>} />
               <Route path="update-cua-hang" element={<UpdateStore />} />
               <Route path="danh-sach-dich-vu" element={<DanhSachDichVu />} />

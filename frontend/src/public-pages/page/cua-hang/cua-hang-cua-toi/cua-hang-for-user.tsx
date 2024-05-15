@@ -1,6 +1,7 @@
 import { Box, Grid, IconButton, SvgIcon, Typography } from '@mui/material';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { StyledTab, StyledTabs } from './styled';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import {
   mdiAccountArrowLeft,
@@ -28,10 +29,11 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 
-export default function CuaHangCuaToi() {
+export default function CuaHangForUser() {
   const [tab, setTab] = useState('dich-vu');
   const navigate = useNavigate();
-  const idCuaHang = useSelector((state: RootState) => state.user.profile?.id);
+  const userInfo = useSelector((state: RootState) => state.user.profile);
+  const { idCuaHang } = useParams();
   const [shop, setShop] = useState<ShopType>({
     shopId: 0,
   });
@@ -104,27 +106,9 @@ export default function CuaHangCuaToi() {
             position: 'static',
           }}
         >
-          <IconButton
-            onClick={() => navigate('/home/update-cua-hang')}
-            sx={{
-              position: 'absolute',
-              right: '50px',
-              top: '50px',
-              backgroundColor: '#0e647e',
-              color: '#fff',
-              '&:hover': {
-                backgroundColor: '#0e647eba',
-                color: '#fff',
-              },
-              zIndex: '1000',
-            }}
-          >
-            <SettingsIcon />
-          </IconButton>
-
           <Box
             sx={{
-              background: '#0000003d',
+              background: '#0000003e',
               position: 'absolute',
               top: 30,
               left: 30,
@@ -196,6 +180,57 @@ export default function CuaHangCuaToi() {
           >
             {shop.sologan}
           </Typography>
+          <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                position: "absolute",
+                top:"220px",
+                right:"50px",
+                zIndex:"20"
+              }}
+            >
+              <Button
+                //   onClick={handleAddfriend}
+                color="inherit"
+                sx={{
+                  minWidth: '100px',
+                  backgroundColor: 'rgb(14, 100, 126)',
+                  color: '#fff',
+                  mr: '10px',
+                  '&:hover': {
+                    backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                  },
+                }}
+                variant="contained"
+              >
+                Theo dõi
+              </Button>
+              <Button
+                color="inherit"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  minWidth: '120px',
+                  // backgroundColor: 'rgb(14, 100, 126)',
+                  border: '1px solid #fff',
+                  color: '#fff',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  },
+                }}
+                variant="outlined"
+              >
+                <QuestionAnswerIcon
+                  sx={{
+                    color: '#fff',
+                    fontSize: '16px',
+                    mr: '5px',
+                  }}
+                />
+                Chat ngay
+              </Button>
+            </Box>
         </Box>
         <Box
           sx={{
@@ -404,17 +439,6 @@ export default function CuaHangCuaToi() {
               value="dich-vu"
               label={<span className="tab-label">Dịch vụ</span>}
             />
-            <StyledTab
-              onClick={() => setTab('dashboard')}
-              value="dashboard"
-              label={<span className="tab-label">Thống kê cửa hàng</span>}
-              iconPosition="start"
-              icon={
-                <SvgIcon>
-                  <path d={mdiAccountMultiplePlusOutline} />
-                </SvgIcon>
-              }
-            />
 
             <StyledTab
               onClick={() => setTab('gioi-thieu')}
@@ -440,42 +464,15 @@ export default function CuaHangCuaToi() {
             }}
           >
             <Grid container>
-              <Grid item xs={9}>
-                <Grid container>
-                  {listDichVu.map((item) => {
-                    return (
-                      <Grid item xs={4}>
-                        {' '}
-                        <DichVuBox dichVu={item} />{' '}
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-              </Grid>
-              <Grid item xs={3}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Button
-                    color="inherit"
-                    sx={{
-                      backgroundColor: 'rgb(14, 100, 126)',
-                      color: '#fff',
-                      // mt: '30px',
-                      '&:hover': {
-                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                      },
-                    }}
-                    // disabled={!tenLich?.trim() || !pet?.ma_thu_cung}
-                    onClick={() => navigate(`/home/them-dich-vu`)}
-                    variant="contained"
-                  >
-                    Thêm dịch vụ
-                  </Button>
-                </Box>
+              <Grid container>
+                {listDichVu.map((item) => {
+                  return (
+                    <Grid item xs={3}>
+                      {' '}
+                      <DichVuBox dichVu={item} />{' '}
+                    </Grid>
+                  );
+                })}
               </Grid>
             </Grid>
           </Box>
@@ -485,7 +482,6 @@ export default function CuaHangCuaToi() {
             <span>{parse(shop?.descriptionMsg || '')} </span>
           </>
         )}
-        {tab == 'dashboard' && <ThongKeCuaHang />}
       </Box>
     </>
   );

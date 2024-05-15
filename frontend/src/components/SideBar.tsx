@@ -14,6 +14,10 @@ import {
   mdiMessageAlert,
   mdiPlay,
   mdiViewDashboard,
+  mdiStorefront,
+  mdiStoreClock,
+  mdiViewListOutline,
+  mdiPaw,
 } from '@mdi/js';
 import {
   Backdrop,
@@ -45,8 +49,6 @@ interface IMenuItemData {
   items?: IMenuItemData[];
 }
 
-
-
 export default function SideBar(props: {
   open?: boolean;
   mobile?: boolean;
@@ -65,37 +67,37 @@ export default function SideBar(props: {
     {
       key: '/home/quan-ly-thu-cung',
       title: 'Quản lý thú cưng',
-      icon: mdiViewDashboard,
+      icon: mdiPaw,
       link: '/home/quan-ly-thu-cung',
     },
-    {
-      key: '/home/trang-chia-se',
-      title: 'Bài chia sẽ kiến thức',
-      icon: mdiAccountMultiple,
-      link: '/home/trang-chia-se',
-    },
+    // {
+    //   key: '/home/trang-chia-se',
+    //   title: 'Bài chia sẽ kiến thức',
+    //   icon: mdiAccountMultiple,
+    //   link: '/home/trang-chia-se',
+    // },
     {
       key: '/home/cua-hang',
       title: 'Cửa hàng',
-      icon: mdiAccountMultiple,
-      link: `/home/cua-hang/${infoUser?.id}`,
+      icon: mdiStorefront,
+      link: `/home/cua-hang-cua-toi`,
     },
     {
       key: '/home/danh-sach-dich-vu',
       title: 'Dịch vụ',
-      icon: mdiAccountMultiple,
+      icon: mdiViewListOutline,
       link: '/home/danh-sach-dich-vu',
     },
     {
       key: '/shop/danh-sach-lich-hen',
       title: 'Lịch hẹn của shop',
-      icon: mdiAccountMultiple,
+      icon: mdiStoreClock,
       link: '/shop/danh-sach-lich-hen',
     },
     {
       key: '/user/danh-sach-lich-hen',
       title: 'Lịch hẹn của tôi',
-      icon: mdiAccountMultiple,
+      icon: mdiStoreClock,
       link: '/user/danh-sach-lich-hen',
     },
   ];
@@ -241,15 +243,22 @@ export default function SideBar(props: {
           <ScrollView isSideBar>
             {infoUser?.user_type == 0 &&
               menu.map((item) => {
-                if (item?.key != '/home/cua-hang' && item?.key != '/shop/danh-sach-lich-hen') {
+                if (
+                  item?.key != '/home/cua-hang' &&
+                  item?.key != '/shop/danh-sach-lich-hen'
+                ) {
                   return (
                     <MenuItem key={item.key} data={item} pathname={pathname} />
                   );
                 }
               })}
-                {infoUser?.user_type == 1 &&
+            {infoUser?.user_type == 1 &&
               menu.map((item) => {
-                if (item?.key != '/home/danh-sach-dich-vu' && item?.key != '/user/danh-sach-lich-hen') {
+                if (
+                  item?.key != '/home/danh-sach-dich-vu' &&
+                  item?.key != '/user/danh-sach-lich-hen' &&
+                  item?.key != '/home/quan-ly-thu-cung'
+                ) {
                   return (
                     <MenuItem key={item.key} data={item} pathname={pathname} />
                   );

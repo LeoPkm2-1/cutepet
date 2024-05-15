@@ -122,6 +122,18 @@ const updateService = (
   });
 };
 
+const deleteService = (service_id: string | number) => {
+  return authRequest<any>({
+    url: `shop/deleteService`,
+    method: 'POST',
+    body: {
+      service_id,
+    },
+  });
+};
+
+
+
 const shopApi = {
   getMyShop,
   updateAvatarShop,
@@ -131,6 +143,7 @@ const shopApi = {
   getAllAvailableServiceOfShop,
   getServiceById,
   updateService,
+  deleteService
 };
 
 export default shopApi;

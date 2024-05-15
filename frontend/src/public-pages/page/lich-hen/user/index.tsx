@@ -21,7 +21,7 @@ export function LichHenCuaToi() {
   const [lich, setLich] = useState<LichType[]>([]);
   useEffect(() => {
     lichApi.getAllScheduleForUser().then((data) => {
-      console.log(data, 'data');
+      console.log(data, 'data lich hen');
 
       const list: LichType[] = data?.payload?.map((item: any) => {
         return {
@@ -40,7 +40,6 @@ export function LichHenCuaToi() {
       setLich(list);
     });
   }, []);
-
 
   useEffect(() => {
     console.log(lich, 'lich 1');
@@ -69,7 +68,6 @@ export function LichHenCuaToi() {
 
   return (
     <>
-
       <StyledTabs
         value={tab}
         scrollButtons
@@ -98,7 +96,6 @@ export function LichHenCuaToi() {
           label={<span className="tab-label">Đã hoàn thành</span>}
           iconPosition="start"
           icon={<EventAvailableIcon />}
-
         />
         <StyledTab
           onClick={() => setTab('4')}

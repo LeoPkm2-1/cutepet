@@ -23,7 +23,7 @@ const getScheduleForUserById = (schedule_id: string) => {
 };
 const getScheduleForShopById = (schedule_id: string) => {
   return authRequest<any>({
-    url: `shop/getServiceById`,
+    url: `shop/getServiceScheduleById`,
     method: 'POST',
     body: {
       schedule_id,

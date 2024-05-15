@@ -13,6 +13,16 @@ export interface LichType {
     ma_cua_hang: string | number;
     ten: string;
     anh: string;
+    so_dien_thoai?: string;
+    dia_chi?: {
+      house_number?: string;
+      ward_id?: string;
+      fullNameWard?: string;
+      district_id?: string;
+      fullNameDistrict?: string;
+      province_id?: string;
+      fullNameProvince?: string;
+    };
   };
   dichVuInfo?: {
     ten: string;
@@ -26,5 +36,6 @@ export interface LichType {
     userId: number,
     anh: string,
     so_dien_thoai: string,
+    email?: string,
   }
 }

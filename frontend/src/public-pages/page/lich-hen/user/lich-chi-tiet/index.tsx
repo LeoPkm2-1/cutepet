@@ -67,7 +67,7 @@ export default function LichHenChiTietUser() {
             petInfo: {
               ma_thu_cung: data?.payload?.petInfor?.ma_thu_cung,
               ten_thu_cung: data?.payload?.petInfor?.ten_thu_cung,
-              anh_thu_cung:  data?.payload?.petInfor?.anh?.url,
+              anh_thu_cung: data?.payload?.petInfor?.anh?.url,
             },
             dichVuInfo: {
               ma_dich_vu: data?.payload?.serviceInfor?._id,
@@ -327,7 +327,9 @@ export default function LichHenChiTietUser() {
               Mã lịch hẹn
             </Typography>
             {(lich?.scheduleStatus == 'CHO_XAC_NHAN' ||
-              lich?.scheduleStatus == 'DA_XAC_NHAN') && (
+              (lich?.scheduleStatus == 'DA_XAC_NHAN' &&
+                +moment(lich?.happenAt).format('x') - +moment().format('x') >
+                  0)) && (
               <Button
                 onClick={() => setOpenPopup(true)}
                 color="inherit"
@@ -913,5 +915,3 @@ export default function LichHenChiTietUser() {
     </>
   );
 }
-
-

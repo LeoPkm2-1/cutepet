@@ -25,6 +25,8 @@ import Select, { OptionSelect } from '../../../../../components/Select';
 import { useSnackbar } from 'notistack';
 import Loading from '../../../../../components/loading';
 import dichVuApi from '../../../../../api/dichVu';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useShowDialog } from '../../../../../hooks/dialog';
 
 export default function LichHenChiTietShop() {
   const { idLich } = useParams();
@@ -34,6 +36,7 @@ export default function LichHenChiTietShop() {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const showDialog = useShowDialog();
 
   const [lyDo, setLyDo] = useState<OptionSelect>({
     label: '',
@@ -60,6 +63,8 @@ export default function LichHenChiTietShop() {
               ma_cua_hang: data?.payload?.shopInfor?.ma_cua_hang,
               ten: data?.payload?.shopInfor?.ten,
               anh: data?.payload?.shopInfor?.anh?.url,
+              so_dien_thoai: data?.payload?.shopInfor?.so_dien_thoai,
+              dia_chi: {},
             },
             // petId: data?.payload?.petId,
             dichVuInfo: {
@@ -70,10 +75,11 @@ export default function LichHenChiTietShop() {
               so_sao: 4,
             },
             userInfo: {
-              ten: 'string',
-              userId: 0,
-              anh: 'string',
-              so_dien_thoai: 'string',
+              ten: data?.payload?.userCreate?.ten,
+              userId: data?.payload?.userCreate?.ma_nguoi_dung,
+              anh: data?.payload?.userCreate?.anh?.url,
+              so_dien_thoai: data?.payload?.userCreate?.so_dien_thoai,
+              email: data?.payload?.userCreate?.email,
             },
           };
           setLich(lichHen);
@@ -81,6 +87,8 @@ export default function LichHenChiTietShop() {
       });
     }
   }, []);
+
+
   useEffect(() => {
     if (lich?.petInfo?.ma_thu_cung) {
       petApi?.getPetById(lich?.petInfo?.ma_thu_cung).then((data) => {
@@ -103,12 +111,41 @@ export default function LichHenChiTietShop() {
     }
   }, [lich?.petInfo?.ma_thu_cung]);
 
+    // Lay danh gia
+    // useEffect(() => {
+    //   if (lich?.dichVuInfo?.ma_dich_vu) {
+    //     dichVuApi
+    //       .getMyVoteForService(lich?.dichVuInfo?.ma_dich_vu)
+    //       .then((data) => {
+    //         console.log(data, ' dich vu danh gia');
+    //         const item = data?.payload;
+    //         if (data?.payload?._id) {
+    //           setDanhGia({
+    //             content: item?.content,
+    //             createAt: item?.createAt,
+    //             modifiedAt: item?.modifiedAt,
+    //             numOfStar: item?.numOfStar,
+    //             serviceId: item?.serviceId,
+    //           });
+    //           setRating({
+    //             numStar: item?.numOfStar,
+    //             content: item?.content,
+    //           });
+    //         }
+    //       });
+    //   }
+    // }, [lich?.dichVuInfo?.ma_dich_vu]);
+
   // handle huy lich
   function handleHuyLichHen() {
     if (lich?.idLich) {
       setLoading(true);
       lichApi
-        .cancelServiceScheduleFromUser(lich?.idLich, lyDo?.value as string)
+        .changeStatusOfServiceScheduleForShop(
+          lich?.idLich,
+          'HUY',
+          lyDo?.value as string
+        )
         .then((data) => {
           if (data?.status == 200) {
             enqueueSnackbar(`Hủy lịch hẹn thành công`, { variant: 'info' });
@@ -155,6 +192,115 @@ export default function LichHenChiTietShop() {
         });
     }
   }
+
+  function handleXacNhan() {
+    showDialog({
+      content: `Bạn chắc chắn xác nhận lịch hẹn ?`,
+      onOk: () => {
+        if (lich?.idLich) {
+          setLoading(true);
+          lichApi
+            .changeStatusOfServiceScheduleForShop(
+              lich?.idLich,
+              'DA_XAC_NHAN',
+              ''
+            )
+            .then((data) => {
+              if (data?.status == 200) {
+                enqueueSnackbar(`Xác nhận lịch hẹn thành công`, {
+                  variant: 'info',
+                });
+                setLoading(false);
+                setLich({
+                  ...lich,
+                  scheduleStatus: 'DA_XAC_NHAN',
+                });
+              } else {
+                enqueueSnackbar(`${data?.message}`, { variant: 'error' });
+                setLoading(false);
+              }
+            })
+            .catch((err) => {
+              enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+              setLoading(false);
+            });
+        }
+      },
+    });
+  }
+
+  function handleHoanThanh() {
+    showDialog({
+      content: `Bạn chắc chắn xác nhận hoàn thành lịch hẹn ?`,
+      onOk: () => {
+        if (lich?.idLich) {
+          setLoading(true);
+          lichApi
+            .changeStatusOfServiceScheduleForShop(
+              lich?.idLich,
+              'HOAN_THANH',
+              ''
+            )
+            .then((data) => {
+              if (data?.status == 200) {
+                enqueueSnackbar(` Đã xác nhận hoàn thành lịch hẹn`, {
+                  variant: 'info',
+                });
+                setLoading(false);
+                setLich({
+                  ...lich,
+                  scheduleStatus: 'HOAN_THANH',
+                });
+              } else {
+                enqueueSnackbar(`${data?.message}`, { variant: 'error' });
+                setLoading(false);
+              }
+            })
+            .catch((err) => {
+              enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+              setLoading(false);
+            });
+        }
+      },
+    });
+  }
+
+  function handleLichTre() {
+    showDialog({
+      content: `Bạn chắc chắn chuyển qua lịch bị trễ ?`,
+      onOk: () => {
+        if (lich?.idLich) {
+          setLoading(true);
+          lichApi
+            .changeStatusOfServiceScheduleForShop(
+              lich?.idLich,
+              'BI_TRE',
+              'Khách không đến cửa hàng'
+            )
+            .then((data) => {
+              if (data?.status == 200) {
+                enqueueSnackbar(` Đã chuyển qua lịch bị trễ`, {
+                  variant: 'info',
+                });
+                setLoading(false);
+                setLich({
+                  ...lich,
+                  scheduleStatus: 'BI_TRE',
+                });
+              } else {
+                enqueueSnackbar(`${data?.message}`, { variant: 'error' });
+                setLoading(false);
+              }
+            })
+            .catch((err) => {
+              enqueueSnackbar(`${err?.message}`, { variant: 'error' });
+              setLoading(false);
+            });
+        }
+      },
+    });
+  }
+
   return (
     <>
       <Loading open={loading} />
@@ -190,8 +336,8 @@ export default function LichHenChiTietShop() {
             }}
             options={[
               {
-                value: 'Thay đổi thời gian',
-                label: 'Thay đổi thời gian',
+                value: 'Shop đã hết lịch trống',
+                label: 'Shop đã hết lịch trống',
               },
               {
                 value: 'Đã đặt lịch hẹn mới',
@@ -272,50 +418,162 @@ export default function LichHenChiTietShop() {
             <Typography
               sx={{
                 fontFamily: 'quicksand',
-                fontWeight: '500',
-                mb: '12px',
+                fontWeight: '600',
+                mb: '16px',
                 fontSize: '16px',
                 display: 'flex',
                 alignItems: 'center',
                 //   mt: '30px',
               }}
             >
-              <TagIcon
-                sx={{
-                  color: '#0e647e',
-                  fontSize: '16px',
-                  mr: '10px',
-                }}
-              />
-              Mã lịch hẹn
+              THÔNG TIN LỊCH HẸN
             </Typography>
-            <Button
-              onClick={() => setOpenPopup(true)}
-              color="inherit"
+
+            <Box
               sx={{
                 display: 'flex',
-                alignItems: 'center',
-                minWidth: '120px',
-                // backgroundColor: 'rgb(14, 100, 126)',
-                border: '1px solid #ee4d2d',
-                color: '#ee4d2d',
-                '&:hover': {
-                  backgroundColor: '#ee4d2d24',
-                },
               }}
-              variant="outlined"
             >
-              <DeleteForeverIcon
-                sx={{
-                  color: '#ee4d2d',
-                  fontSize: '20px',
-                  mr: '5px',
-                }}
-              />
-              Hủy lịch hẹn
-            </Button>
-          </Box>
+              {lich?.scheduleStatus == 'CHO_XAC_NHAN' && (
+                <Button
+                  onClick={handleXacNhan}
+                  color="inherit"
+                  sx={{
+                    mr: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    minWidth: '120px',
+                    // backgroundColor: 'rgb(14, 100, 126)',
+                    border: '1px solid rgb(14, 100, 126)',
+                    color: 'rgb(14, 100, 126)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(14, 100, 126, 0.082)',
+                    },
+                  }}
+                  variant="outlined"
+                >
+                  <CheckCircleIcon
+                    sx={{
+                      color: 'rgb(14, 100, 126)',
+                      fontSize: '20px',
+                      mr: '5px',
+                    }}
+                  />
+                  Xác nhận
+                </Button>
+              )}
 
+              {lich?.scheduleStatus == 'DA_XAC_NHAN' &&
+                +moment(lich?.happenAt).format('x') - +moment().format('x') <
+                  0 && (
+                  <Button
+                    onClick={handleHoanThanh}
+                    color="inherit"
+                    sx={{
+                      mr: '10px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      minWidth: '120px',
+                      // backgroundColor: 'rgb(14, 100, 126)',
+                      border: '1px solid rgb(14, 100, 126)',
+                      color: 'rgb(14, 100, 126)',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.082)',
+                      },
+                    }}
+                    variant="outlined"
+                  >
+                    <CheckCircleIcon
+                      sx={{
+                        color: 'rgb(14, 100, 126)',
+                        fontSize: '20px',
+                        mr: '5px',
+                      }}
+                    />
+                    Hoàn thành lịch hẹn
+                  </Button>
+                )}
+              {(lich?.scheduleStatus == 'CHO_XAC_NHAN' ||
+                (lich?.scheduleStatus == 'DA_XAC_NHAN' &&
+                  +moment(lich?.happenAt).format('x') - +moment().format('x') >
+                    0)) && (
+                <Button
+                  onClick={() => setOpenPopup(true)}
+                  color="inherit"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    minWidth: '120px',
+                    // backgroundColor: 'rgb(14, 100, 126)',
+                    border: '1px solid #ee4d2d',
+                    color: '#ee4d2d',
+                    '&:hover': {
+                      backgroundColor: '#ee4d2d24',
+                    },
+                  }}
+                  variant="outlined"
+                >
+                  <DeleteForeverIcon
+                    sx={{
+                      color: '#ee4d2d',
+                      fontSize: '20px',
+                      mr: '5px',
+                    }}
+                  />
+                  Hủy lịch hẹn
+                </Button>
+              )}
+              {lich?.scheduleStatus == 'DA_XAC_NHAN' &&
+                +moment(lich?.happenAt).format('x') - +moment().format('x') <
+                  0 && (
+                  <Button
+                    onClick={handleLichTre}
+                    color="inherit"
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      minWidth: '120px',
+                      // backgroundColor: 'rgb(14, 100, 126)',
+                      border: '1px solid #ee4d2d',
+                      color: '#ee4d2d',
+                      '&:hover': {
+                        backgroundColor: '#ee4d2d24',
+                      },
+                    }}
+                    variant="outlined"
+                  >
+                    <DeleteForeverIcon
+                      sx={{
+                        color: '#ee4d2d',
+                        fontSize: '20px',
+                        mr: '5px',
+                      }}
+                    />
+                    Chuyển qua lịch bị trễ
+                  </Button>
+                )}
+            </Box>
+          </Box>
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              mb: '12px',
+              fontSize: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              //   mt: '30px',
+            }}
+          >
+            <TagIcon
+              sx={{
+                color: '#0e647e',
+                fontSize: '16px',
+                mr: '10px',
+              }}
+            />
+            Mã lịch hẹn
+          </Typography>
           <Typography
             sx={{
               fontFamily: 'quicksand',
@@ -493,6 +751,20 @@ export default function LichHenChiTietShop() {
           <Typography
             sx={{
               fontFamily: 'quicksand',
+              fontWeight: '600',
+              mb: '16px',
+              fontSize: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              //   mt: '30px',
+            }}
+          >
+            THÔNG TIN DỊCH VỤ
+          </Typography>
+
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
               fontWeight: '500',
               mb: '12px',
               fontSize: '16px',
@@ -508,7 +780,7 @@ export default function LichHenChiTietShop() {
                 mr: '10px',
               }}
             />
-            Thông tin dịch vụ
+            Tên dịch vụ
           </Typography>
           <Box
             onClick={() => {
@@ -625,6 +897,20 @@ export default function LichHenChiTietShop() {
             mt: '30px',
           }}
         >
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '600',
+              mb: '16px',
+              fontSize: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              //   mt: '30px',
+            }}
+          >
+            THÔNG TIN NGƯỜI ĐẶT
+          </Typography>
+
           <Box
             sx={{
               display: 'flex',
@@ -634,9 +920,7 @@ export default function LichHenChiTietShop() {
             }}
           >
             <Box
-              onClick={() => {
-                navigate(`/home/cua-hang/${lich?.shopInfo?.ma_cua_hang}`);
-              }}
+              
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -645,7 +929,7 @@ export default function LichHenChiTietShop() {
               }}
             >
               <img
-                src={lich?.shopInfo?.anh}
+                src={lich?.userInfo?.anh}
                 style={{
                   width: '50px',
                   height: '50px',
@@ -664,7 +948,7 @@ export default function LichHenChiTietShop() {
                   //   mt: '30px',
                 }}
               >
-                {lich?.shopInfo?.ten}
+                {lich?.userInfo?.ten}
               </Typography>
             </Box>
             <Box
@@ -674,7 +958,9 @@ export default function LichHenChiTietShop() {
               }}
             >
               <Button
-                //   onClick={handleAddfriend}
+                onClick={() => {
+                  navigate(`/home/trang-ca-nhan-nguoi-dung/${lich?.userInfo?.userId}`);
+                }}
                 color="inherit"
                 sx={{
                   minWidth: '100px',
@@ -687,7 +973,7 @@ export default function LichHenChiTietShop() {
                 }}
                 variant="contained"
               >
-                Theo dõi
+                Xem trang cá nhân
               </Button>
               <Button
                 color="inherit"
@@ -733,7 +1019,7 @@ export default function LichHenChiTietShop() {
                 mr: '10px',
               }}
             />
-            Địa chỉ cửa hàng
+            Email
           </Typography>
           <Typography
             sx={{
@@ -744,7 +1030,7 @@ export default function LichHenChiTietShop() {
               ml: '25px',
             }}
           >
-            231 Lý Thường Kiệt Thủ Đức
+            {lich?.userInfo?.email}
           </Typography>
           <Typography
             sx={{
@@ -764,7 +1050,7 @@ export default function LichHenChiTietShop() {
                 mr: '10px',
               }}
             />
-            Số điện thoại cửa hàng
+            Số điện thoại 
           </Typography>
           <Typography
             sx={{
@@ -775,9 +1061,10 @@ export default function LichHenChiTietShop() {
               ml: '25px',
             }}
           >
-            0865100333
+            {lich?.userInfo?.so_dien_thoai}
           </Typography>
         </Box>
+
         <Box
           sx={{
             backgroundColor: '#fff',
@@ -805,7 +1092,7 @@ export default function LichHenChiTietShop() {
                 mr: '10px',
               }}
             />
-            Đánh giá dịch vụ
+            Đánh giá của người dùng
           </Typography>
           <Box
             sx={{
@@ -826,6 +1113,9 @@ export default function LichHenChiTietShop() {
             />
           </Box>
           <StyledTextField
+            InputProps={{
+              readOnly: true,
+            }}
             multiline
             minRows={2}
             maxRows={5}
@@ -836,7 +1126,7 @@ export default function LichHenChiTietShop() {
               setRating({ ...rating, content: e.target.value });
             }}
           />
-          <Box
+          {/* <Box
             sx={{
               display: 'flex',
 
@@ -862,7 +1152,7 @@ export default function LichHenChiTietShop() {
             >
               Đánh giá
             </Button>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </>
@@ -870,13 +1160,13 @@ export default function LichHenChiTietShop() {
 }
 
 export function convertStatus(lich: LichType) {
-  if (lich?.scheduleStatus == 'DA_HUY') {
+  if (lich?.scheduleStatus == 'HUY' || lich?.scheduleStatus == 'DA_HUY') {
     return 'Đã hủy';
   } else if (lich?.scheduleStatus == 'HOAN_THANH') {
     return 'Đã hoàn thành';
-  }else if (lich?.scheduleStatus == 'DA_XAC_NHAN') {
+  } else if (lich?.scheduleStatus == 'DA_XAC_NHAN') {
     return 'Đã xác nhận';
-  }else if (lich?.scheduleStatus == 'BI_TRE') {
+  } else if (lich?.scheduleStatus == 'BI_TRE') {
     return 'Dã trễ';
   } else if (lich?.scheduleStatus == 'CHO_XAC_NHAN') {
     return 'Chờ xác nhận';
