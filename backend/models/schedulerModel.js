@@ -7,8 +7,6 @@ const SERVICE_SCHEDULE_MISSING_STATUS_STR = "BI_TRE";
 const SERVICE_SCHEDULE_CONFIRM_STATUS_STR = "DA_XAC_NHAN";
 const SERVICE_SCHEDULE_DONE_STATUS_STR = "HOAN_THANH";
 
-("");
-
 class ServiceSchedule {
   static type = "SERVICE_SCHEDULE";
   constructor(
@@ -232,6 +230,16 @@ const getInforOfShopCreateServiceSchedule = async (schedule_id) => {
   return data.shopInfor;
 };
 
+const getListOfServiceScheduleStatus = () => {
+  return [
+    SERVICE_SCHEDULE_PENDING_STATUS_STR,
+    SERVICE_SCHEDULE_REJECT_STATUS_STR,
+    SERVICE_SCHEDULE_MISSING_STATUS_STR,
+    SERVICE_SCHEDULE_CONFIRM_STATUS_STR,
+    SERVICE_SCHEDULE_DONE_STATUS_STR,
+  ];
+};
+
 // (async () => {
 //   const data = await getInforOfUserCreateServiceSchedule("6610e6721d31a037d900d8ec");
 //   console.log(data);
@@ -252,4 +260,5 @@ module.exports = {
   updateStatusOfServiceSchedule,
   getInforOfUserCreateServiceSchedule,
   getInforOfShopCreateServiceSchedule,
+  getListOfServiceScheduleStatus,
 };

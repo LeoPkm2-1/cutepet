@@ -19,6 +19,7 @@ router.use(
     "/categoriesForService",
     "/filterServices",
     "/getAllStatusOfSchedule",
+    "/getAllServiceScheduleStatus",
   ],
   requireLoginedForNormUser
 );
@@ -64,6 +65,8 @@ router.post(
   "/getAllStatusOfSchedule",
   schedulerController.getListStatusOfSchedule
 );
+
+router.post("/getAllServiceScheduleStatus",schedulerController.getAllServiceScheduleStatusController);
 
 // shop acess=================================================================
 

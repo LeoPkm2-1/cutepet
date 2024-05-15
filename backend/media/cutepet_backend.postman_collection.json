@@ -4853,7 +4853,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token}}",
+							"value": "{{token_temp}}",
 							"type": "string"
 						}
 					]
@@ -4879,6 +4879,36 @@
 					"path": [
 						"shop",
 						"getServiceScheduleById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "118_shop_getAllServiceScheduleStatus",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/shop/getAllServiceScheduleStatus",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getAllServiceScheduleStatus"
 					]
 				}
 			},

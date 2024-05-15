@@ -47,7 +47,7 @@ const createSchedule = async (req, res) => {
 const getServiceScheduleByIdController = async (req, res) => {
   let { schedule_id } = req.body;
   const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
-  const data = await schedulerModel
+  let data = await schedulerModel
     .getServiceScheduleById(schedule_id)
     .then((data) => data.payload);
   // console.log({ data });
@@ -63,6 +63,8 @@ const getServiceScheduleByIdController = async (req, res) => {
       .json(new Response(400, {}, "Bạn không có lịch này", 300, 300));
     return;
   }
+  const petInfor = await petHelper.publicInforOfPet(data.petId);
+  data = { ...data, petInfor };
   res.status(200).json(new Response(200, data, "Lấy lịch thành công"));
   return;
 };
@@ -72,7 +74,16 @@ const getAllScheduleForUserController = async (req, res) => {
   const schedules = await schedulerModel
     .getAllScheduleOfUser(user_id)
     .then((data) => data.payload);
-  res.status(200).json(new Response(200, schedules, "Lấy lịch thành công"));
+  const schedules_2 = await Promise.all(
+    schedules.map(async (schedule_infor) => {
+      const petInfor = await petHelper.publicInforOfPet(schedule_infor.petId);
+      return {
+        ...schedule_infor,
+        petInfor,
+      };
+    })
+  );
+  res.status(200).json(new Response(200, schedules_2, "Lấy lịch thành công"));
   return;
 };
 
@@ -256,6 +267,18 @@ const changeScheduleStatusController = async (req, res) => {
   }
 };
 
+const getAllServiceScheduleStatusController = async (req,res) => {
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        schedulerModel.getListOfServiceScheduleStatus(),
+        "Lấy dữ liệu thành cộng"
+      )
+    );
+};
+
 module.exports = {
   createSchedule,
   getServiceScheduleByIdController,
@@ -265,4 +288,5 @@ module.exports = {
   confirmServiceScheduleController,
   getListStatusOfSchedule,
   changeScheduleStatusController,
+  getAllServiceScheduleStatusController,
 };
