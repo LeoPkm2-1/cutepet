@@ -355,6 +355,7 @@ const filterServiceCheckParamMid_v1 = async (req, res, next) => {
     district_id,
     pageNumber,
     pageSize,
+    suitable_species,
   } = req.body;
 
   if (
@@ -453,6 +454,7 @@ const filterServiceCheckParamMid_v2 = async (req, res, next) => {
     district_id,
     pageNumber,
     pageSize,
+    suitable_species,
   } = req.body;
 
   const DEFAUT_NUM = 2;
@@ -507,6 +509,24 @@ const filterServiceCheckParamMid_v2 = async (req, res, next) => {
         .json(new Response(400, [], "Quận huyện không tồn tại", 300, 300));
       return;
     }
+  }
+
+  if (
+    !suitable_species ||
+    !Array.isArray(suitable_species) ||
+    suitable_species.length <= 0
+  ) {
+    req.body.suitable_species = suitable_species = undefined;
+  } else {
+    const danhSachTenCacLoai = await petHelper.getDanhSachTenLoai();
+    suitable_species = suitable_species.map((tenloai) =>
+      String(tenloai).toLowerCase()
+    );
+    suitable_species = suitable_species.filter((tenloai) =>
+      danhSachTenCacLoai.includes(tenloai)
+    );
+    req.body.suitable_species = suitable_species =
+      suitable_species.length > 0 ? suitable_species : undefined;
   }
   next();
 };

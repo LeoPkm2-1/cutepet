@@ -371,7 +371,9 @@ const filterServiceController = async (req, res) => {
     district_id,
     pageNumber,
     pageSize,
+    suitable_species,
   } = req.body;
+
   let filter = { $match: {} };
   if (service_name) {
     filter.$match = {
@@ -385,6 +387,15 @@ const filterServiceController = async (req, res) => {
       ...filter.$match,
       serviceType: {
         $elemMatch: { $in: service_type },
+      },
+    };
+  }
+
+  if (suitable_species) {
+    filter.$match = {
+      ...filter.$match,
+      petSpecies: {
+        $elemMatch: { $in: suitable_species },
       },
     };
   }
