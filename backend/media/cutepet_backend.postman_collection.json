@@ -4538,7 +4538,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"service_name\":\"vụ\"\n    , \"service_type\":[\"CẮT TỈA LÔNG\",\"nhuộm lông\"]\n    ,\"num_of_star\":1               // số lượng sao được vote\n    ,\"price_point\":50000            // số tiền cần truy vấn\n    ,\"price_search\":\"less\"          // chỉ định tìm kiếm số tiền tối thiểu hay tối đa vd: price_point = 500 và  price_search = 'LESS' thì mô tả giá tiền tối thiểu là 500, nếu price_search = 'GREATER' thì mô tả số tiền tối đa\n    ,\"province_id\":\"66169cdfcf40fa5369bd57e1\"\n    ,\"district_id\":\"66169cdfcf40fa5369bd5822\"\n    // ,\"pageNumber\":1              // số thứ tự của trang ( số thứ tự bắt đầu từ  1 )\n    // ,\"pageSize\":2                // số lượng dịch vụ trong 1 trang\n    ,\"suitable_species\":[\"mÈo\",\"Chó\"]\n    \n}",
+					"raw": "{\n    \"service_name\":\"vụ\"\n    , \"service_type\":[\"CẮT TỈA LÔNG\",\"nhuộm lông\"]\n    ,\"num_of_star\":1               // số lượng sao được vote\n    ,\"price_point\":50000            // số tiền cần truy vấn\n    ,\"price_search\":\"less\"          // chỉ định tìm kiếm số tiền tối thiểu hay tối đa vd: price_point = 500 và  price_search = 'LESS' thì mô tả giá tiền tối thiểu là 500, nếu price_search = 'GREATER' thì mô tả số tiền tối đa\n    ,\"province_id\":\"66169cdfcf40fa5369bd57e1\"\n    ,\"district_id\":\"66169cdfcf40fa5369bd5822\"\n    ,\"pageNumber\":1              // số thứ tự của trang ( số thứ tự bắt đầu từ  1 )\n    ,\"pageSize\":1                // số lượng dịch vụ trong 1 trang\n    ,\"suitable_species\":[\"mÈo\",\"Chó\"]\n    \n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4568,7 +4568,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_user_3}}",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -4909,6 +4909,45 @@
 					"path": [
 						"shop",
 						"getAllServiceScheduleStatus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "119_dashboard_numFollowerOfShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shop_id\":5370\n    , \"start_time\":\"2024-03-30T08:02:55.218+07:00\"\n    , \"end_time\":\"2023-03-30T08:02:55.218+07:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/dashboard/numFollowerOfShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"dashboard",
+						"numFollowerOfShop"
 					]
 				}
 			},

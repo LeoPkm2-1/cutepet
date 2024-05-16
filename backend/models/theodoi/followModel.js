@@ -212,6 +212,7 @@ const getListOfUserFollowShop = async (shop_id) => {
         type: followStructure.FollowShop.get_type(),
         followed_Obj_Id: shop_id,
       })
+      .sort({ createAt: -1 })
       .toArray();
   }
   return await nonSQLQuery(executor, "BangTheoDoi")
@@ -219,10 +220,25 @@ const getListOfUserFollowShop = async (shop_id) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
-// (async () => {
-//   const data = await getListOfUserFollowShop(537)
-//   console.log(data);
-// })()
+// const getAllFollerInForOfShop = async (shop_id) => {
+//   shop_id = parseInt(shop_id);
+//   async function executor(collection) {
+//     return await collection
+//       .find({
+//         type: followStructure.FollowShop.get_type(),
+//       })
+//       .toArray();
+//   }
+//   return await nonSQLQuery(executor, "BangTheoDoi")
+//     .then((data) => new Response(200, data, ""))
+//     .catch((err) => new Response(400, err, "", 300, 300));
+// };
+const getFollowerInforOfShopInTimeRange = async () => {};
+
+(async () => {
+  const data = await getListOfUserFollowShop(537)
+  console.log(data);
+})()
 module.exports = {
   userFollowStatusPost,
   userUnFollowStatusPost,
@@ -239,4 +255,5 @@ module.exports = {
   userUnFollowShop,
   getListOfShopUserFollow,
   getListOfUserFollowShop,
+  // getAllFollerInForOfShop,
 };
