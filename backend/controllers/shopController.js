@@ -465,12 +465,26 @@ const filterServiceController = async (req, res) => {
   // console.log(aggregateArray[2]);
   // console.log(aggregateArray);
 
-  const data = await shopServiceModel
+  const listOfServices = await shopServiceModel
     .filterServiceByCustomAggregate(aggregateArray)
     // .filterServiceByCustomAggregate([filter, lookup])
     .then((data) => data.payload);
 
-  res.status(200).json(new Response(200, data, "Lấy dữ liệu thành công"));
+  const data_with_shop_infor = await Promise.all(
+    listOfServices.map(async (filter_service) => {
+      const shopInfor = await shopHelper.getPublicInforForShopById(
+        filter_service.shopId
+      );
+      return {
+        ...filter_service,
+        shopInfor,
+      };
+    })
+  );
+
+  res
+    .status(200)
+    .json(new Response(200, data_with_shop_infor, "Lấy dữ liệu thành công"));
 };
 const getListUserFollowShop = async (req, res) => {
   const shop_id = parseInt(req.auth_decoded.ma_cua_hang);
