@@ -352,10 +352,16 @@ const getVoteInforBeforeController = async (req, res) => {
   const { before, num, service_id } = req.body;
   const data = await shopServiceModel
     .getVoteInforBeforeTime(service_id, before, num)
-    .then((data) =>
-      data.payload.map((vote) => {
-        return { ...vote, _id: vote._id.toString() };
-      })
+    .then(
+      async (data) =>
+        await Promise.all(
+          data.payload.map(async (vote) => {
+            const userVotingInfor = await userHelper.getUserPublicInforByUserId(
+              vote.userVotingId
+            );
+            return { ...vote, _id: vote._id.toString(), userVotingInfor };
+          })
+        )
     );
   // console.log({ data });
   res.status(200).json(new Response(200, data, "Lấy thành công"));
@@ -510,8 +516,10 @@ const getVoteInforOfUserForService = async (req, res) => {
     res.status(200).json(new Response(200, data, "Lấy dữ liệu thành công"));
     return;
   }
-  const userInfor = await userHelper.getUserPublicInforByUserId(user_id);
-  res.status(200).json(new Response(200, {data,userInfor}, "Lấy dữ liệu thành công"));
+  const userVotingInfor = await userHelper.getUserPublicInforByUserId(user_id);
+  res
+    .status(200)
+    .json(new Response(200, { ...data, userVotingInfor }, "Lấy dữ liệu thành công"));
 };
 
 module.exports = {
