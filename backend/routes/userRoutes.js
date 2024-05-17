@@ -97,4 +97,10 @@ router.post(
   userControler.getMyVoteForServiceController
 );
 
+router.post(
+  "/hasFollowedShop",
+  shopMid.checkShopExistsMid,
+  userControler.hasFollowedShopController
+);
+
 module.exports = router;

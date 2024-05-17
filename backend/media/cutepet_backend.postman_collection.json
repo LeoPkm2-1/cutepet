@@ -25,7 +25,7 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "shop_2",
+							"value": "nam",
 							"type": "text"
 						},
 						{
@@ -3956,7 +3956,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -3965,7 +3965,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"service_id\":\"6610e4c2034b2c1379d2b7fc\",\n    \"ten_dich_vu\":\"dịch vụ 1_01\",\n    \"mo_ta_ngan\":\"tốt\",\n    \"mo_ta_dich_vu\":\"tốt\",\n    \"anh_dich_vu\":\"ảnh.com\",\n    \"the_loai_dich_vu\":[2,3,4,5,6,7,8,9],\n    \"don_gia\":10.2,\n    \"thoi_luong_dich_vu\":5\n  }",
+					"raw": "{\n    \"service_id\": \"6610e4c2034b2c1379d2b7fc\"\n    ,\"ten_dich_vu\": \"dịch vụ 1_01\"\n    ,\"mo_ta_ngan\": \"tốt\"\n    ,\"mo_ta_dich_vu\": \"tốt\"\n    ,\"anh_dich_vu\": \"ảnh.com\"\n    ,\"the_loai_dich_vu\": [\n        \"CHĂM SÓC\",\n        \"TẮM\",\n        \"LÀM ĐẸP\",\n        \"CẮT TỈA LÔNG\"\n    ]\n    ,\"don_gia\": 10.2\n    ,\"thoi_luong_dich_vu\": 5\n    ,\"danh_sach_loai_phu_hop\": [\"MèO\",\"Cá\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4987,6 +4987,123 @@
 					"path": [
 						"dashboard",
 						"getListFollowersOfShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "121_shop_getVoteInforOfUserForService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \n    \"user_id\":1\n    ,\"service_id\":\"6610e4c2034b2c1379d2b7fc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/getVoteInforOfUserForService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getVoteInforOfUserForService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "122_shop_checkOnlineStatusOfShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shop_id\":537\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/checkOnlineStatusOfShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"checkOnlineStatusOfShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "123_user_hasFollowedShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shop_id\":536\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/hasFollowedShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"hasFollowedShop"
 					]
 				}
 			},

@@ -21,11 +21,17 @@ router.use(
     "/filterServices",
     "/getAllStatusOfSchedule",
     "/getAllServiceScheduleStatus",
+    "/checkOnlineStatusOfShop",
   ],
   requireLoginedForNormUser
 );
 
 router.use("/voteService", requireOnlyNormUser);
+router.post(
+  "/checkOnlineStatusOfShop",
+  shopMid.checkShopExistsMid,
+  shopController.checkOnlineStatusController
+);
 
 router.post("/getShopInforById", shopController.getShopInforByIdController);
 router.post("/categoriesForService", shopController.categoriesForService);

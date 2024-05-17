@@ -236,6 +236,15 @@ const getMyVoteForServiceController = async (req, res) => {
   // console.log({votingInfor});
   res.status(200).json(new Response(200, votingInfor, "Lấy thành công"));
 };
+const hasFollowedShopController = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const shop_id = parseInt(req.body.shop_id);
+  const data = await followhelper.hasUserFollowedShop(shop_id, user_id);
+  res
+    .status(200)
+    .json(new Response(200, { isFollowed: data }, "Lấy dữ liệu thành công"));
+  return;
+};
 const myProfile = async (params) => {};
 
 module.exports = {
@@ -250,4 +259,5 @@ module.exports = {
   userUnFollowShopController,
   getListOfFollowedShop,
   getMyVoteForServiceController,
+  hasFollowedShopController,
 };

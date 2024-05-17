@@ -55,7 +55,8 @@ const updateServiceForShop = async (
   service_img_url = "",
   service_type = [],
   price_quotation = 0,
-  duration = 0
+  duration = 0,
+  petSpecies
 ) => {
   async function executor(collection) {
     return await collection.updateOne(
@@ -69,6 +70,7 @@ const updateServiceForShop = async (
           serviceType: service_type,
           priceQuotation: price_quotation,
           duration: duration,
+          petSpecies: petSpecies,
         },
       }
     );
