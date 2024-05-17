@@ -17,12 +17,12 @@ router.post(
   dashBoardController.getNumOfFollewrsForShop
 );
 
-// router.post(
-//   "/numFollowerOfShop",
-//   requireLoginedForNormUser,
-//   shopMid.checkShopExistsMid,
-//   dashboardMid.preGetNumFollowerOfShop,
-//   dashBoardController.getNumOfFollewrsForShop
-// );
+router.post(
+  "/getListFollowersOfShop",
+  requireLoginedForNormUser,
+  shopMid.checkShopExistsMid,
+  dashboardMid.preGetFollowerOfShop,
+  dashBoardController.getFollowerInforOfShopByTimeRange
+);
 
 module.exports = router;

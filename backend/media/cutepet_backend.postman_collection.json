@@ -4931,7 +4931,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"shop_id\":5370\n    , \"start_time\":\"2024-03-30T08:02:55.218+07:00\"\n    , \"end_time\":\"2023-03-30T08:02:55.218+07:00\"\n}",
+					"raw": "{\n    \"shop_id\":537\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -4948,6 +4948,45 @@
 					"path": [
 						"dashboard",
 						"numFollowerOfShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "120_dashboard_getListFollowersOfShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shop_id\":537\n    ,\"start_time\":\"2024-05-04T08:52:07.243+07:00\"       // nếu không gửi hoặc gửi với giá trị là undefined sẽ lấy dử liệu từ đầu\n    , \"end_time\":\"2025-05-16T17:47:07.922+00:00\"        // nếu không gửi hoặc gửi với giá trị là undefined sẽ lấy dử liệu đến cuối\n                                                        // nếu cả start_time và end_time đều là undefined sẽ lấy dữ liệu từ đầu cho đến cuối.\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/dashboard/getListFollowersOfShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"dashboard",
+						"getListFollowersOfShop"
 					]
 				}
 			},
