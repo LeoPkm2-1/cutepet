@@ -276,9 +276,32 @@ const filterServiceByCustomAggregate = async (aggregateArray) => {
     .catch((err) => new Response(400, err, "đã có lỗi", 300, 300));
 };
 
+const getVoteInforOfUserForServiceById = async (user_id, service_id) => {
+  user_id = parseInt(user_id);
+  async function executor(collection) {
+    return await collection.findOne({
+      serviceId: service_id,
+      userVotingId: user_id,
+    });
+  }
+  return await nonSQLQuery(executor, "DanhGiaDichVu")
+    .then((data) => {
+      return data
+        ? {
+            ...data,
+            _id: data._id.toString(),
+          }
+        : {};
+    })
+    .catch((err) => new Response(400, err, "đã có lỗi", 300, 300));
+};
+
 // (async () => {
-//   const data = await updateAverageStarForService("6610e4c2034b2c1379d2b7fc",-28);
-//   console.log(data );
+//   const data = await getVoteInforOfUserForServiceById(
+//     1,
+//     "1"
+//   );
+//   console.log(data);
 // })();
 
 module.exports = {
@@ -297,4 +320,5 @@ module.exports = {
   updateAverageStarForService,
   filterServiceByCustomAggregate,
   getAllCategoriesForService,
+  getVoteInforOfUserForServiceById,
 };

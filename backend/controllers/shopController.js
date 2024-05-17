@@ -500,6 +500,20 @@ const getListUserFollowShop = async (req, res) => {
   res.status(200).json(new Response(200, userListInfor, ""));
 };
 
+const getVoteInforOfUserForService = async (req, res) => {
+  const { user_id, service_id } = req.body;
+  const data = await shopServiceModel.getVoteInforOfUserForServiceById(
+    user_id,
+    service_id
+  );
+  if (!data) {
+    res.status(200).json(new Response(200, data, "Lấy dữ liệu thành công"));
+    return;
+  }
+  const userInfor = await userHelper.getUserPublicInforByUserId(user_id);
+  res.status(200).json(new Response(200, {data,userInfor}, "Lấy dữ liệu thành công"));
+};
+
 module.exports = {
   getShopInforByIdController,
   updateInforForShopController,
@@ -515,4 +529,5 @@ module.exports = {
   getVoteInforBeforeController,
   filterServiceController,
   getListUserFollowShop,
+  getVoteInforOfUserForService,
 };
