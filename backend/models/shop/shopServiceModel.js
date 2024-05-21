@@ -297,12 +297,31 @@ const getVoteInforOfUserForServiceById = async (user_id, service_id) => {
     })
     .catch((err) => new Response(400, err, "đã có lỗi", 300, 300));
 };
-
+const getAllVoteForServicesList = async (list_of_service_id) => {
+  async function executor(collection) {
+    return await collection
+      .find({
+        serviceId: {
+          $in: list_of_service_id,
+        },
+      })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "DanhGiaDichVu")
+    .then((data) => {
+      if (typeof data == "undefined" || data == null || data.length == 0)
+        return [];
+      return data.map((vote_Infor) => {
+        return { ...vote_Infor, _id: vote_Infor._id.toString() };
+      });
+    })
+    .catch((err) => []);
+};
 // (async () => {
-//   const data = await getVoteInforOfUserForServiceById(
-//     1,
-//     "1"
-//   );
+//   const data = await getAllVoteForServicesList([
+//     "6610e4c2034b2c1379d2b7fc",
+//     "6610e4ea034b2c1379d2b7fd",
+//   ]);
 //   console.log(data);
 // })();
 
@@ -323,4 +342,5 @@ module.exports = {
   filterServiceByCustomAggregate,
   getAllCategoriesForService,
   getVoteInforOfUserForServiceById,
+  getAllVoteForServicesList,
 };

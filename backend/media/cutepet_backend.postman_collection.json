@@ -5110,6 +5110,84 @@
 			"response": []
 		},
 		{
+			"name": "124_user_getAllVoteOfShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shop_id\":535\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/getAllVoteOfShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"getAllVoteOfShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "125_dashboard_filterSchedulesListForShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n    \"schedule_status\" : \"Huy\"\n    ,\"start_time\" : \"2024-05-04T08:52:07.243+07:00\"\n    ,\"end_time\" : \"2025-05-16T17:47:07.922+00:00\"\n    ,\"service_id\" : \"6610e55c3c34c7132e0ad405\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/dashboard/filterSchedulesListForShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"dashboard",
+						"filterSchedulesListForShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user-infor",
 			"request": {
 				"auth": {

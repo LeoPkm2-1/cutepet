@@ -25,4 +25,11 @@ router.post(
   dashBoardController.getFollowerInforOfShopByTimeRange
 );
 
+router.post(
+  "/filterSchedulesListForShop",
+  requireLoginedForShop,
+  shopMid.preFilterScheduleForShop,
+  dashBoardController.filterSchedulesListForShopController
+);
+
 module.exports = router;

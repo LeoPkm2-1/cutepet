@@ -560,6 +560,18 @@ const checkOnlineStatusController = async (req, res) => {
     );
 };
 
+const getAllVoteOfAllServiceInShop = async (req, res) => {
+  const { shop_id } = req.body;
+  const service_id_list = await shopServiceModel
+    .getAllServicesOfShop(shop_id)
+    .then((servicesList) => servicesList.map((service) => service._id));
+  const AllVotes = await shopServiceModel.getAllVoteForServicesList(
+    service_id_list
+  );
+  res.status(200).json(new Response(200, AllVotes, "Lấy dữ liệu thành công"));
+  return;
+};
+
 module.exports = {
   getShopInforByIdController,
   updateInforForShopController,
@@ -577,4 +589,5 @@ module.exports = {
   getListUserFollowShop,
   getVoteInforOfUserForService,
   checkOnlineStatusController,
+  getAllVoteOfAllServiceInShop,
 };

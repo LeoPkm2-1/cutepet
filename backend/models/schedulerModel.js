@@ -240,6 +240,35 @@ const getListOfServiceScheduleStatus = () => {
   ];
 };
 
+const filterSchedule = async (
+  shop_id,
+  schedule_status,
+  start_time,
+  end_time,
+  service_id
+) => {
+  let filterObj = {
+    "shopInfor.ma_cua_hang": shop_id,
+    ...(schedule_status != undefined && { scheduleStatus: schedule_status }),
+    ...(start_time != undefined && {
+      happenAt: { $gte: new Date(start_time) },
+    }),
+    ...(end_time != undefined
+      ? start_time != undefined
+        ? { happenAt: { $gte: new Date(start_time), $lt: new Date(end_time) } }
+        : { happenAt: { $lt: new Date(end_time) } }
+      : {}),
+    ...(service_id != undefined && { serviceId: service_id }),
+  };
+
+  async function executor(collection) {
+    return await collection.find({ ...filterObj }).toArray();
+  }
+  return await nonSQLQuery(executor, "Lich")
+    .then((data) => new Response(200, data, ""))
+    .catch((err) => new Response(400, err, "", 300, 300));
+};
+
 // (async () => {
 //   const data = await getInforOfUserCreateServiceSchedule("6610e6721d31a037d900d8ec");
 //   console.log(data);
@@ -261,4 +290,5 @@ module.exports = {
   getInforOfUserCreateServiceSchedule,
   getInforOfShopCreateServiceSchedule,
   getListOfServiceScheduleStatus,
+  filterSchedule,
 };
