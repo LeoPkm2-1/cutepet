@@ -1,3 +1,4 @@
+const userOnlineModel = require("../models/UserOnline/userOnlineModel");
 const anhNguoiDungModel = require("../models/anhNguoiDungModel");
 const diaChiHanhChinhModel = require("../models/diaChi/diaChiHanhChinhModel");
 const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
@@ -7,6 +8,7 @@ const followModel = require("../models/theodoi/followModel");
 const userModel = require("../models/userModel");
 const serviceHelper = require("../utils/Shop/serviceHelper");
 const shopHelper = require("../utils/Shop/shopHelper");
+const petHelper = require("../utils/petHelper");
 const { Response } = require("./../utils/index");
 const userHelper = require("./../utils/userHelper");
 
@@ -233,6 +235,7 @@ const updateServiceOfShop = async (req, res) => {
     the_loai_dich_vu,
     don_gia,
     thoi_luong_dich_vu,
+    danh_sach_loai_phu_hop,
   } = req.body;
   if (typeof ten_dich_vu != "string" || ten_dich_vu.trim() == "") {
     res
@@ -240,6 +243,24 @@ const updateServiceOfShop = async (req, res) => {
       .json(new Response(400, {}, "Tên dịch vụ không được để trống", 300, 300));
     return;
   }
+  const danhSachTenCacLoai = await petHelper.getDanhSachTenLoai();
+
+  if (
+    !danh_sach_loai_phu_hop ||
+    !Array.isArray(danh_sach_loai_phu_hop) ||
+    danh_sach_loai_phu_hop.length <= 0
+  ) {
+    danh_sach_loai_phu_hop = req.body.danh_sach_loai_phu_hop =
+      danhSachTenCacLoai;
+  } else {
+    danh_sach_loai_phu_hop = danh_sach_loai_phu_hop.map((tenloai) =>
+      String(tenloai).toLowerCase()
+    );
+    danh_sach_loai_phu_hop = danh_sach_loai_phu_hop.filter((tenloai) =>
+      danhSachTenCacLoai.includes(tenloai)
+    );
+  }
+
   const update_process = await shopServiceModel.updateServiceForShop(
     service_id,
     ten_dich_vu,
@@ -248,7 +269,8 @@ const updateServiceOfShop = async (req, res) => {
     anh_dich_vu,
     the_loai_dich_vu,
     don_gia,
-    thoi_luong_dich_vu
+    thoi_luong_dich_vu,
+    danh_sach_loai_phu_hop
   );
   res
     .status(200)
@@ -352,10 +374,16 @@ const getVoteInforBeforeController = async (req, res) => {
   const { before, num, service_id } = req.body;
   const data = await shopServiceModel
     .getVoteInforBeforeTime(service_id, before, num)
-    .then((data) =>
-      data.payload.map((vote) => {
-        return { ...vote, _id: vote._id.toString() };
-      })
+    .then(
+      async (data) =>
+        await Promise.all(
+          data.payload.map(async (vote) => {
+            const userVotingInfor = await userHelper.getUserPublicInforByUserId(
+              vote.userVotingId
+            );
+            return { ...vote, _id: vote._id.toString(), userVotingInfor };
+          })
+        )
     );
   // console.log({ data });
   res.status(200).json(new Response(200, data, "Lấy thành công"));
@@ -500,6 +528,50 @@ const getListUserFollowShop = async (req, res) => {
   res.status(200).json(new Response(200, userListInfor, ""));
 };
 
+const getVoteInforOfUserForService = async (req, res) => {
+  const { user_id, service_id } = req.body;
+  const data = await shopServiceModel.getVoteInforOfUserForServiceById(
+    user_id,
+    service_id
+  );
+  if (!data) {
+    res.status(200).json(new Response(200, data, "Lấy dữ liệu thành công"));
+    return;
+  }
+  const userVotingInfor = await userHelper.getUserPublicInforByUserId(user_id);
+  res
+    .status(200)
+    .json(
+      new Response(200, { ...data, userVotingInfor }, "Lấy dữ liệu thành công")
+    );
+};
+
+const checkOnlineStatusController = async (req, res) => {
+  const { shop_id } = req.body;
+  const data = await userOnlineModel.isUserOnline(shop_id);
+  res
+    .status(200)
+    .json(
+      new Response(
+        200,
+        { isOnline: data ? true : false },
+        "Lấy dữ liệu thành công"
+      )
+    );
+};
+
+const getAllVoteOfAllServiceInShop = async (req, res) => {
+  const { shop_id } = req.body;
+  const service_id_list = await shopServiceModel
+    .getAllServicesOfShop(shop_id)
+    .then((servicesList) => servicesList.map((service) => service._id));
+  const AllVotes = await shopServiceModel.getAllVoteForServicesList(
+    service_id_list
+  );
+  res.status(200).json(new Response(200, AllVotes, "Lấy dữ liệu thành công"));
+  return;
+};
+
 module.exports = {
   getShopInforByIdController,
   updateInforForShopController,
@@ -515,4 +587,7 @@ module.exports = {
   getVoteInforBeforeController,
   filterServiceController,
   getListUserFollowShop,
+  getVoteInforOfUserForService,
+  checkOnlineStatusController,
+  getAllVoteOfAllServiceInShop,
 };

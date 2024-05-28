@@ -10,6 +10,7 @@ const shopController = require("./../controllers/shopController");
 const shopMid = require("./../middlewares/shopMid");
 const schedulerMid = require("../middlewares/schedulerMid");
 const schedulerController = require("../controllers/schedulerController");
+const userMid = require("../middlewares/userMid");
 
 router.use(
   [
@@ -20,11 +21,17 @@ router.use(
     "/filterServices",
     "/getAllStatusOfSchedule",
     "/getAllServiceScheduleStatus",
+    "/checkOnlineStatusOfShop",
   ],
   requireLoginedForNormUser
 );
 
 router.use("/voteService", requireOnlyNormUser);
+router.post(
+  "/checkOnlineStatusOfShop",
+  shopMid.checkShopExistsMid,
+  shopController.checkOnlineStatusController
+);
 
 router.post("/getShopInforById", shopController.getShopInforByIdController);
 router.post("/categoriesForService", shopController.categoriesForService);
@@ -66,7 +73,10 @@ router.post(
   schedulerController.getListStatusOfSchedule
 );
 
-router.post("/getAllServiceScheduleStatus",schedulerController.getAllServiceScheduleStatusController);
+router.post(
+  "/getAllServiceScheduleStatus",
+  schedulerController.getAllServiceScheduleStatusController
+);
 
 // shop acess=================================================================
 
@@ -131,6 +141,13 @@ router.post(
   schedulerMid.checkScheduleExistMid,
   schedulerMid.checkRighToChangeServiceScheduleStatus,
   schedulerController.getServiceScheduleByIdController
+);
+
+router.post(
+  "/getVoteInforOfUserForService",
+  shopMid.checkServiceExistsMid,
+  userMid.checkUserExistMid,
+  shopController.getVoteInforOfUserForService
 );
 
 module.exports = router;

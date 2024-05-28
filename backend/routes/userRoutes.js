@@ -13,6 +13,7 @@ const {
 const schedulerController = require("../controllers/schedulerController");
 const shopMid = require("../middlewares/shopMid");
 const schedulerMid = require("../middlewares/schedulerMid");
+const shopController = require("../controllers/shopController");
 
 router.use(requireLoginedForNormUser);
 // get user infor by username
@@ -95,6 +96,18 @@ router.post(
   "/getMyVoteForService",
   shopMid.checkServiceExistsMid,
   userControler.getMyVoteForServiceController
+);
+
+router.post(
+  "/hasFollowedShop",
+  shopMid.checkShopExistsMid,
+  userControler.hasFollowedShopController
+);
+
+router.post(
+  "/getAllVoteOfShop",
+  shopMid.checkShopExistsMid,
+  shopController.getAllVoteOfAllServiceInShop
 );
 
 module.exports = router;

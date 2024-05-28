@@ -55,7 +55,8 @@ const updateServiceForShop = async (
   service_img_url = "",
   service_type = [],
   price_quotation = 0,
-  duration = 0
+  duration = 0,
+  petSpecies
 ) => {
   async function executor(collection) {
     return await collection.updateOne(
@@ -69,6 +70,7 @@ const updateServiceForShop = async (
           serviceType: service_type,
           priceQuotation: price_quotation,
           duration: duration,
+          petSpecies: petSpecies,
         },
       }
     );
@@ -276,9 +278,51 @@ const filterServiceByCustomAggregate = async (aggregateArray) => {
     .catch((err) => new Response(400, err, "đã có lỗi", 300, 300));
 };
 
+const getVoteInforOfUserForServiceById = async (user_id, service_id) => {
+  user_id = parseInt(user_id);
+  async function executor(collection) {
+    return await collection.findOne({
+      serviceId: service_id,
+      userVotingId: user_id,
+    });
+  }
+  return await nonSQLQuery(executor, "DanhGiaDichVu")
+    .then((data) => {
+      return data
+        ? {
+            ...data,
+            _id: data._id.toString(),
+          }
+        : {};
+    })
+    .catch((err) => new Response(400, err, "đã có lỗi", 300, 300));
+};
+const getAllVoteForServicesList = async (list_of_service_id) => {
+  async function executor(collection) {
+    return await collection
+      .find({
+        serviceId: {
+          $in: list_of_service_id,
+        },
+      })
+      .toArray();
+  }
+  return await nonSQLQuery(executor, "DanhGiaDichVu")
+    .then((data) => {
+      if (typeof data == "undefined" || data == null || data.length == 0)
+        return [];
+      return data.map((vote_Infor) => {
+        return { ...vote_Infor, _id: vote_Infor._id.toString() };
+      });
+    })
+    .catch((err) => []);
+};
 // (async () => {
-//   const data = await updateAverageStarForService("6610e4c2034b2c1379d2b7fc",-28);
-//   console.log(data );
+//   const data = await getAllVoteForServicesList([
+//     "6610e4c2034b2c1379d2b7fc",
+//     "6610e4ea034b2c1379d2b7fd",
+//   ]);
+//   console.log(data);
 // })();
 
 module.exports = {
@@ -297,4 +341,6 @@ module.exports = {
   updateAverageStarForService,
   filterServiceByCustomAggregate,
   getAllCategoriesForService,
+  getVoteInforOfUserForServiceById,
+  getAllVoteForServicesList,
 };

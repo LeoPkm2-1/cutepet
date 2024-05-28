@@ -225,12 +225,25 @@ const getListOfFollowedShop = async (req, res) => {
 const getMyVoteForServiceController = async (req, res) => {
   const { service_id } = req.body;
   const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
-  const votingInfor = await shopServiceModel.getUserVotingServiceInfor(
-    user_id,
-    service_id
-  );
+  const votingInfor = await shopServiceModel
+    .getUserVotingServiceInfor(user_id, service_id)
+    .then(async (data) => {
+      const userVotingInfor = await userHelper.getUserPublicInforByUserId(
+        data.userVotingId
+      );
+      return { ...data, userVotingInfor };
+    });
   // console.log({votingInfor});
   res.status(200).json(new Response(200, votingInfor, "Lấy thành công"));
+};
+const hasFollowedShopController = async (req, res) => {
+  const user_id = parseInt(req.auth_decoded.ma_nguoi_dung);
+  const shop_id = parseInt(req.body.shop_id);
+  const data = await followhelper.hasUserFollowedShop(shop_id, user_id);
+  res
+    .status(200)
+    .json(new Response(200, { isFollowed: data }, "Lấy dữ liệu thành công"));
+  return;
 };
 const myProfile = async (params) => {};
 
@@ -246,4 +259,5 @@ module.exports = {
   userUnFollowShopController,
   getListOfFollowedShop,
   getMyVoteForServiceController,
+  hasFollowedShopController,
 };

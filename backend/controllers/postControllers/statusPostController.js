@@ -17,6 +17,7 @@ const {
 const laBanBeModel = require("../../models/laBanBeModel");
 const petHelper = require("../../utils/petHelper");
 const banbeHelper = require("../../utils/banbeHelper");
+const shopServiceModel = require("../../models/shop/shopServiceModel");
 
 const addPostController = async (req, res) => {
   const { text, media, visibility, taggedUsersId, myPetIds } = req.body;
@@ -1039,6 +1040,59 @@ const getPostHavePetController = async (req, res) => {
   }
 };
 
+const addShareServicePostController = async (req, res) => {
+  const { text, media, visibility, taggedUsersId, myPetIds, service_id } =
+    req.body;
+  // const taggedUsers = await userHelper.getUserPublicInforByListIds(
+  //   taggedUsersId
+  // );
+  const withPets = await petHelper.publicInforOfListPet(myPetIds);
+  const service_infor = await shopServiceModel.getServiceById(service_id);
+  const postStatus = new StatusPostComposStructure.ShareSchedulePost(
+    text,
+    visibility,
+    media,
+    [],
+    withPets,
+    req.auth_decoded.ma_nguoi_dung,
+    service_id,
+    service_infor
+  );
+
+  const addProcess = await StatusPostModel.addPost(postStatus);
+  if (addProcess.status != 200) {
+    res.status(400).json(new Response(400, [], "đã có lỗi xảy ra", 300, 300));
+    return;
+  }
+  const insertedPost = await statusAndArticleModel.getPostById(
+    addProcess.payload.insertedId
+  );
+  const idOfPost = insertedPost.payload[0]._id.toString();
+  const owner_id = insertedPost.payload[0].owner_id;
+
+  // thêm người tạo bài viết vào danh sách theo dõi của bài viết
+  await followhelper.followStatusPost(idOfPost, owner_id);
+  // // xử lý tag
+  // if (taggedUsersId.length > 0) {
+  //   // thêm các người dùng được tag vào danh sách người theo dõi bài viết
+  //   const data = await Promise.all(
+  //     taggedUsersId.map((userId) =>
+  //       followhelper.followStatusPost(idOfPost, userId)
+  //     )
+  //   );
+  //   // thông báo nếu có tag
+  //   notifyTaggedUserInStatusPost(idOfPost, owner_id, taggedUsersId);
+  //   // thông báo để front-end cập nhật bài viết mới nhất lên giao diện
+  // }
+
+  res
+    .status(200)
+    .json(new Response(200, insertedPost.payload, "thêm thành công"));
+
+  notifyHaveNewStatusPost(idOfPost, owner_id);
+  return;
+};
+
 module.exports = {
   addPostController,
   toggleLikePostController,
@@ -1064,4 +1118,5 @@ module.exports = {
   getPostForNewsfeedController,
   getPostHavePetController,
   getPostForNewsfeedController_2,
+  addShareServicePostController,
 };

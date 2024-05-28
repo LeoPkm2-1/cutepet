@@ -7,6 +7,7 @@ const serviceHelper = require("../utils/Shop/serviceHelper");
 const userRoleModel = require("../models/userRoleModel");
 const addressHelper = require("../utils/addressHelper");
 const petHelper = require("../utils/petHelper");
+const schedulerModel = require("../models/schedulerModel");
 
 const updateInforMid = async (req, res, next) => {
   let {
@@ -531,6 +532,56 @@ const filterServiceCheckParamMid_v2 = async (req, res, next) => {
   next();
 };
 
+const preFilterScheduleForShop = async (req, res, next) => {
+  let { schedule_status, start_time, end_time, service_id } = req.body;
+  const shop_id = parseInt(req.auth_decoded.ma_cua_hang);
+
+  if (!schedule_status) schedule_status = undefined;
+  else schedule_status = schedule_status.toUpperCase();
+  const listOfAvaibleStatus = schedulerModel.getListOfServiceScheduleStatus();
+
+  if (schedule_status) {
+    schedule_status = listOfAvaibleStatus.includes(schedule_status)
+      ? schedule_status
+      : undefined;
+  }
+
+  if (start_time && !UtilsHelper.isDateValid(new Date(start_time))) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "THời gian bắt đầu không hợp lệ"));
+    return;
+  } else if (!start_time) {
+    start_time = undefined;
+  }
+
+  if (end_time && !UtilsHelper.isDateValid(new Date(end_time))) {
+    res
+      .status(400)
+      .json(new Response(400, {}, "THời gian kết thúc không hợp lệ"));
+    return;
+  } else if (!end_time) {
+    end_time = undefined;
+  }
+
+  if (!service_id || typeof service_id != "string") service_id = undefined;
+  else {
+    const allServiceOfShop = await shopServiceModel
+      .getAllServicesOfShop(shop_id)
+      .then((servicesList) => servicesList.map((service) => service._id));
+    service_id = allServiceOfShop.includes(service_id) ? service_id : undefined;
+  }
+  req.body = {
+    ...req.body,
+    schedule_status,
+    start_time,
+    end_time,
+    service_id,
+    shop_id,
+  };
+  next();
+};
+
 module.exports = {
   updateInforMid,
   addServiceMid,
@@ -541,6 +592,7 @@ module.exports = {
   getVoteInforBeforeTime,
   filterServiceCheckParamMid_v1,
   filterServiceCheckParamMid_v2,
+  preFilterScheduleForShop,
 };
 
 // db.DanhGiaDichVu.aggregate([
