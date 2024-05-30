@@ -1,0 +1,9 @@
+id,name,name_en,code_name,code_name_en,type
+1,"Đông Bắc Bộ",Northeast,dong_bac_bo,northest,ADMINISTRATIVE_REGION
+2,"Tây Bắc Bộ",Northwest,tay_bac_bo,northwest,ADMINISTRATIVE_REGION
+3,"Đồng bằng sông Hồng","Red River Delta",dong_bang_song_hong,red_river_delta,ADMINISTRATIVE_REGION
+4,"Bắc Trung Bộ","North Central Coast",bac_trung_bo,north_central_coast,ADMINISTRATIVE_REGION
+5,"Duyên hải Nam Trung Bộ","South Central Coast",duyen_hai_nam_trung_bo,south_central_coast,ADMINISTRATIVE_REGION
+6,"Tây Nguyên","Central Highlands",tay_nguyen,central_highlands,ADMINISTRATIVE_REGION
+7,"Đông Nam Bộ",Southeast,dong_nam_bo,southeast,ADMINISTRATIVE_REGION
+8,"Đồng bằng sông Cửu Long","Mekong River Delta",dong_bang_song_cuu_long,southwest,ADMINISTRATIVE_REGION

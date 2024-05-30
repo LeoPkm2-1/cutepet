@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CircularProgress,
@@ -36,6 +35,9 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../../../../../redux';
 import TagNameSelect from '../../../../../../components/select-tag';
+import Button from '../../../../../../components/Button';
+import DanhMucDichVuSelect from '../../../../../../components/select-danh-muc-dich-vu';
+import LoaiSelect from '../../../../../../components/select-loai';
 export function ThemDichVu() {
   const [dichVu, setDichVu] = useState<DichVuType>({
     idDichVu: 0,
@@ -69,21 +71,19 @@ export function ThemDichVu() {
     setIsLoading(true);
     let urlPhotoAvatar: string = '';
     if (fileAvatar) {
-      console.log('Update ảnh đại diện');
-
       urlPhotoAvatar = (await uploadTaskPromise(fileAvatar)) as string;
     }
 
     if (shopInfoId) {
-      console.log('Update info');
-
       shopApi
         .addService(
           dichVu?.ten_dich_vu || '',
+          dichVu?.mo_ta_ngan || "",
           shopInfoId,
           dichVu?.mo_ta_dich_vu || '',
           urlPhotoAvatar,
           dichVu?.the_loai_dich_vu || [],
+          dichVu?.danh_sach_loai_phu_hop || [],
           dichVu?.don_gia || '',
           dichVu?.thoi_luong_dich_vu || ''
         )
@@ -92,11 +92,14 @@ export function ThemDichVu() {
             enqueueSnackbar('Thêm dịch vụ thành công', {
               variant: 'info',
             });
+            console.log(data, " data ne");
+            
             setIsLoading(false);
+            // navigate(`/home/cua-hang/${shopInfoId}/dich-vu/65fe843e9a4e3710367b313e`)
 
-            // if (shop.shopId) {
-            //   navigate(`/home/cua-hang`);
-            // }
+            if (shopInfoId) {
+              navigate(`/home/cua-hang/${shopInfoId}`);
+            }
           }
         })
         .catch((err) => {
@@ -135,7 +138,9 @@ export function ThemDichVu() {
           }}
         >
           <Label>
-            <span className="text text-bold text-5">Ảnh bìa</span>
+            <span className="text text-bold text-5">
+              Ảnh bìa <span style={{ color: 'red' }}>*</span>
+            </span>
           </Label>
           <Box
             sx={{
@@ -180,7 +185,7 @@ export function ThemDichVu() {
               mb: '12px',
             }}
           >
-            Tên dịch vụ
+            Tên dịch vụ <span style={{ color: 'red' }}>*</span>
           </Typography>
           <StyledTextField
             multiline
@@ -193,7 +198,7 @@ export function ThemDichVu() {
             }}
           />
         </Box>
-        
+
         <Box
           sx={{
             backgroundColor: '#fff',
@@ -238,17 +243,18 @@ export function ThemDichVu() {
               mb: '12px',
             }}
           >
-            Giá dịch vụ
+            Giá dịch vụ (vnđ)
           </Typography>
           <StyledTextField
             type="number"
-            multiline
-            minRows={1}
-            maxRows={3}
-            value={dichVu?.don_gia}
+            // multiline
+            // minRows={1}
+            // maxRows={3}
+            value={dichVu?.don_gia || null}
+            inputProps={{min: 0}}
             fullWidth
             onChange={(e) => {
-              setDichVu({ ...dichVu, don_gia: e.target.value });
+              setDichVu({ ...dichVu, don_gia: +e.target.value });
             }}
           />
         </Box>
@@ -272,7 +278,6 @@ export function ThemDichVu() {
           </Typography>
           <StyledTextField
             multiline
-            type="number"
             minRows={1}
             maxRows={3}
             value={dichVu?.thoi_luong_dich_vu}
@@ -297,13 +302,36 @@ export function ThemDichVu() {
               mb: '12px',
             }}
           >
-            Chọn chuyên mục{' '}
-
+            Chọn danh mục{' '}
           </Typography>
-          <TagNameSelect
+          <DanhMucDichVuSelect
             value={dichVu?.the_loai_dich_vu}
             onChange={(value) => {
-              setDichVu({...dichVu, the_loai_dich_vu: value});
+              setDichVu({ ...dichVu, the_loai_dich_vu: value });
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: '#fff',
+            mb: '20px',
+            borderRadius: '4px',
+            padding: '10px 20px',
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '700',
+              mb: '12px',
+            }}
+          >
+            Chọn loài phù hợp{' '}
+          </Typography>
+          <LoaiSelect
+            value={dichVu?.the_loai_dich_vu}
+            onChange={(value) => {
+              setDichVu({ ...dichVu, the_loai_dich_vu: value });
             }}
           />
         </Box>
@@ -323,7 +351,6 @@ export function ThemDichVu() {
             }}
           >
             Trang giới thiệu dịch vụ{' '}
-            
           </Typography>
           <CKEditor
             editor={ClassicEditor}
@@ -354,14 +381,13 @@ export function ThemDichVu() {
               '&:hover': {
                 backgroundColor: 'rgba(14, 100, 126, 0.9)',
               },
+              minWidth: '120px',
             }}
-            // disabled={
-            //   (!file && !urlCover) || !title || !decrition || tag?.length == 0
-            // }
+            disabled={!fileAvatar || !dichVu?.ten_dich_vu}
             onClick={handleSubmit}
             variant="contained"
           >
-            Thêm
+            Thêm dịch vụ
           </Button>
         </Box>
       </Box>

@@ -37,8 +37,20 @@ const shopRegistrationMid = (req, res, next) => {
   const NOT_HAVE_PASSWORD = "Vui lòng nhập mật khẩu";
   const NOT_HAVE_EMAIL = "Vui lòng nhập email";
   const NOT_HAVE_ADDRESS = "Vui lòng điền thông tin về địa chỉ";
+  const NOT_HAVE_TAX_IDENTIFICATION_NUMBER = "Vui lòng nhập mã số thuế";
 
-  const { ten_cua_hang, tai_khoan, mat_khau, email, dia_chi } = req.body;
+  const { ma_so_thue, ten_cua_hang, tai_khoan, mat_khau, email, dia_chi } =
+    req.body;
+  const { house_number, ward_id, district_id, province_id } = dia_chi;
+  // kiểm tra mã số thuế
+  if (typeof ma_so_thue !== "string" || ma_so_thue.trim() == "") {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], NOT_HAVE_TAX_IDENTIFICATION_NUMBER, 300, 300)
+      );
+    return;
+  } else req.body.ma_so_thue = ma_so_thue.trim();
   //   kiểm tra việc nhập tên
   if (typeof ten_cua_hang !== "string" || ten_cua_hang.trim() == "") {
     res.status(400).json(new Response(400, [], NOT_HAVE_NAME, 300, 300));
@@ -63,11 +75,71 @@ const shopRegistrationMid = (req, res, next) => {
     return;
   } else req.body.email = email.trim();
 
-  // kiểm tra việc chọn địa chỉ
-  if (dia_chi == "" || typeof dia_chi == "undefined" || dia_chi === null) {
-    res.status(400).json(new Response(400, [], NOT_HAVE_ADDRESS, 300, 300));
+  // kiểm tra số nhà
+  if (typeof house_number !== "string" && house_number) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Thông tin nhà không hợp lệ", 300, 300));
     return;
-  }
+  } else if (
+    !house_number ||
+    house_number == undefined ||
+    house_number == null
+  ) {
+    req.body.dia_chi.house_number = "";
+  } else req.body.dia_chi.house_number = house_number.trim();
+
+  // kiểm tra -id  phường
+  if (
+    typeof ward_id != "string" &&
+    typeof ward_id != "undefined" &&
+    ward_id != null
+  ) {
+    res
+      .status(400)
+      .json(new Response(400, [], "Thông tin xã không hợp lệ", 300, 300));
+    return;
+  } else if (!ward_id) {
+    req.body.dia_chi.ward_id = "";
+  } else req.body.dia_chi.ward_id = ward_id.trim();
+
+  // kiểm tra id quận
+  if (
+    typeof district_id != "string" &&
+    typeof district_id != "undefined" &&
+    district_id != null
+  ) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Thông tin quận huyện không hợp lệ", 300, 300)
+      );
+    return;
+  } else if (!district_id) {
+    req.body.dia_chi.district_id = "";
+  } else req.body.dia_chi.district_id = district_id.trim();
+
+  // kiểm tra id tỉnh
+  if (
+    typeof province_id != "string" &&
+    typeof province_id != "undefined" &&
+    province_id != null
+  ) {
+    res
+      .status(400)
+      .json(
+        new Response(400, [], "Thông tin tỉnh thành phố không hợp lệ", 300, 300)
+      );
+    return;
+  } else if (!province_id) {
+    req.body.dia_chi.province_id = "";
+  } else req.body.dia_chi.province_id = province_id.trim();
+
+  // // kiểm tra việc chọn địa chỉ
+  // if (dia_chi == "" || typeof dia_chi == "undefined" || dia_chi === null) {
+  //   res.status(400).json(new Response(400, [], NOT_HAVE_ADDRESS, 300, 300));
+  //   return;
+  // }
   next();
 };
 

@@ -1,55 +1,83 @@
-import { Box, IconButton, SvgIcon, Typography } from '@mui/material';
+import { Box, Grid, IconButton, SvgIcon, Typography } from '@mui/material';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { StyledTab, StyledTabs } from './styled';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import {
   mdiAccountArrowLeft,
   mdiAccountArrowRightOutline,
   mdiAccountMultipleOutline,
   mdiAccountMultiplePlusOutline,
 } from '@mdi/js';
+import BusinessIcon from '@mui/icons-material/Business';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import { useEffect, useState } from 'react';
 import { DichVuBox } from './dich-vu';
 import { mdiToolboxOutline } from '@mdi/js';
 import { mdiStoreOutline } from '@mdi/js';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { DichVuType, ShopType } from '../../../../models/shop';
 import shopApi from '../../../../api/shop';
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux';
-import { log } from 'console';
-import { Grid } from 'react-virtualized';
+import { Grid3x3 } from '@mui/icons-material';
+import Button from '../../../../components/Button';
+import ThongKeCuaHang from './thong-ke-cua-hang';
+import ReviewsIcon from '@mui/icons-material/Reviews';
+import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
+import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 
 export default function CuaHangCuaToi() {
   const [tab, setTab] = useState('dich-vu');
   const navigate = useNavigate();
-  const shopIdIn = useSelector((state: RootState) => state.user.profile?.id);
+  const idCuaHang = useSelector((state: RootState) => state.user.profile?.id);
   const [shop, setShop] = useState<ShopType>({
-    shopId: shopIdIn || 0,
+    shopId: 0,
   });
   const [listDichVu, setListDichVu] = useState<DichVuType[]>([]);
   useEffect(() => {
-    if (shopIdIn) {
-      shopApi.getMyShop(shopIdIn).then((data) => {
+    if (idCuaHang) {
+      shopApi.getMyShop(idCuaHang).then((data) => {
         console.log(data, ' shop nè');
         const shopIn: ShopType = {
-          shopId: data?.payload?.shopInfor?.shopId,
-          sologan: data?.payload?.shopInfor?.sologan,
-          descriptionMsg: data?.payload?.shopInfor?.descriptionMsg,
-          coverImageUrl: data?.payload?.shopInfor?.coverImageUrl,
-          timeServing: data?.payload?.shopInfor?.timeServing,
+          shopId: data?.payload?.shopAdditionInfor?.shopId,
+          sologan: data?.payload?.shopAdditionInfor?.sologan,
+          descriptionMsg: data?.payload?.shopAdditionInfor?.descriptionMsg,
+          coverImageUrl: data?.payload?.shopAdditionInfor?.coverImageUrl,
+          timeServing: data?.payload?.shopAdditionInfor?.timeServing,
           ten: data?.payload?.ten,
           so_dien_thoai: data?.payload?.so_dien_thoai,
           tai_khoan: data?.payload?.tai_khoan,
           avatarImageUrl: data?.payload?.anh?.url,
+          dia_chi: {
+            house_number:
+              data?.payload?.shopAdditionInfor?.addressInfor?.house_number,
+            province_id:
+              data?.payload?.shopAdditionInfor?.addressInfor?.province_infor
+                ?._id,
+            fullNameProvince:
+              data?.payload?.shopAdditionInfor?.addressInfor?.province_infor
+                ?.full_name,
+            district_id:
+              data?.payload?.shopAdditionInfor?.addressInfor?.district_infor
+                ?._id,
+            fullNameDistrict:
+              data?.payload?.shopAdditionInfor?.addressInfor?.district_infor
+                ?.full_name,
+            ward_id:
+              data?.payload?.shopAdditionInfor?.addressInfor?.ward_infor?._id,
+            fullNameWard:
+              data?.payload?.shopAdditionInfor?.addressInfor?.ward_infor
+                ?.full_name,
+          },
         };
-        console.log(shopIn, 'shopIn');
 
         setShop(shopIn);
       });
-      shopApi.getAllAvailableServiceOfShop(shopIdIn).then((data) => {
-        console.log(data, 'dich vu');
+
+      shopApi.getAllAvailableServiceOfShop(idCuaHang).then((data) => {
+        console.log(data, 'dich vu ne');
         const list: DichVuType[] = data?.payload?.map((item: any) => {
           return {
             idDichVu: item?._id,
@@ -60,12 +88,13 @@ export default function CuaHangCuaToi() {
             the_loai_dich_vu: item?.serviceType,
             don_gia: item?.priceQuotation,
             thoi_luong_dich_vu: item?.duration,
+            numOfStar: item?.numOfStar,
           } as DichVuType;
         });
         setListDichVu(list);
       });
     }
-  }, [shopIdIn]);
+  }, [idCuaHang]);
 
   return (
     <>
@@ -92,6 +121,22 @@ export default function CuaHangCuaToi() {
           >
             <SettingsIcon />
           </IconButton>
+
+          <Box
+            sx={{
+              background: '#0000003d',
+              position: 'absolute',
+              top: 30,
+              left: 30,
+              right: 30,
+              zIndex: '2',
+              // width: '100%',
+              height: '300px',
+              borderTopLeftRadius: '20px',
+              borderTopRightRadius: '20px',
+              // filter: 'blur(1px)',
+            }}
+          ></Box>
           <img
             style={{
               height: '300px',
@@ -99,7 +144,6 @@ export default function CuaHangCuaToi() {
               objectFit: 'cover',
               borderTopLeftRadius: '20px',
               borderTopRightRadius: '20px',
-              filter: 'blur(1px)',
             }}
             src={shop?.coverImageUrl}
           />
@@ -113,9 +157,11 @@ export default function CuaHangCuaToi() {
               top: '150px',
               borderRadius: '100%',
               border: '2px solid #fff',
+              zIndex: '20',
             }}
             src={shop?.avatarImageUrl}
           />
+
           <Typography
             sx={{
               fontSize: '28px',
@@ -128,6 +174,7 @@ export default function CuaHangCuaToi() {
               position: 'absolute',
               left: '230px',
               top: '200px',
+              zIndex: '10',
             }}
           >
             {shop.ten}
@@ -144,6 +191,7 @@ export default function CuaHangCuaToi() {
               position: 'absolute',
               left: '230px',
               top: '240px',
+              zIndex: '10',
             }}
           >
             {shop.sologan}
@@ -181,7 +229,7 @@ export default function CuaHangCuaToi() {
                 }}
               >
                 {' '}
-                10{' '}
+                {listDichVu?.length}
               </span>
             </Typography>
             <Typography
@@ -193,7 +241,7 @@ export default function CuaHangCuaToi() {
                 alignItems: 'center',
               }}
             >
-              <StorefrontIcon
+              <PhoneAndroidIcon
                 sx={{
                   color: 'gray',
                   mr: '10px',
@@ -220,7 +268,7 @@ export default function CuaHangCuaToi() {
                 alignItems: 'center',
               }}
             >
-              <StorefrontIcon
+              <BusinessIcon
                 sx={{
                   color: 'gray',
                   mr: '10px',
@@ -234,8 +282,7 @@ export default function CuaHangCuaToi() {
                   fontWeight: '600',
                 }}
               >
-                {' '}
-                20 Lý Thường Kiệt Quận 10{' '}
+                {`${shop?.dia_chi?.house_number} ${shop?.dia_chi?.fullNameDistrict} ${shop?.dia_chi?.fullNameProvince}`}
               </span>
             </Typography>
           </Box>
@@ -249,7 +296,7 @@ export default function CuaHangCuaToi() {
                 alignItems: 'center',
               }}
             >
-              <StorefrontIcon
+              <ReviewsIcon
                 sx={{
                   color: 'gray',
                   mr: '10px',
@@ -276,7 +323,7 @@ export default function CuaHangCuaToi() {
                 alignItems: 'center',
               }}
             >
-              <StorefrontIcon
+              <OnlinePredictionIcon
                 sx={{
                   color: 'gray',
                   mr: '10px',
@@ -288,9 +335,18 @@ export default function CuaHangCuaToi() {
                   color: '#0e647e',
                   marginLeft: '10px',
                   fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
                 {' '}
+                <FiberManualRecordIcon
+                  sx={{
+                    color: '#0e647e',
+                    fontSize: '15px',
+                    mr: '6px',
+                  }}
+                />
                 Đang hoạt động{' '}
               </span>
             </Typography>
@@ -303,7 +359,7 @@ export default function CuaHangCuaToi() {
                 alignItems: 'center',
               }}
             >
-              <StorefrontIcon
+              <FollowTheSignsIcon
                 sx={{
                   color: 'gray',
                   mr: '10px',
@@ -349,9 +405,9 @@ export default function CuaHangCuaToi() {
               label={<span className="tab-label">Dịch vụ</span>}
             />
             <StyledTab
-              onClick={() => setTab('mang-xa-hoi')}
-              value="mang-xa-hoi"
-              label={<span className="tab-label">Mạng xã hội</span>}
+              onClick={() => setTab('dashboard')}
+              value="dashboard"
+              label={<span className="tab-label">Thống kê cửa hàng</span>}
               iconPosition="start"
               icon={
                 <SvgIcon>
@@ -378,23 +434,58 @@ export default function CuaHangCuaToi() {
       {tab == 'loi-moi-da-gui' && <LoiMoiDaGui isPageFriend />} */}
         </Box>
         {tab == 'dich-vu' && (
-  
           <Box
             sx={{
               display: 'flex',
             }}
           >
-            {listDichVu.map((item) => {
-              return <DichVuBox dichVu={item} />;
-            })}
+            <Grid container>
+              <Grid item xs={9}>
+                <Grid container>
+                  {listDichVu.map((item) => {
+                    return (
+                      <Grid item xs={4}>
+                        {' '}
+                        <DichVuBox dichVu={item} />{' '}
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Grid>
+              <Grid item xs={3}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Button
+                    color="inherit"
+                    sx={{
+                      backgroundColor: 'rgb(14, 100, 126)',
+                      color: '#fff',
+                      // mt: '30px',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                      },
+                    }}
+                    // disabled={!tenLich?.trim() || !pet?.ma_thu_cung}
+                    onClick={() => navigate(`/home/them-dich-vu`)}
+                    variant="contained"
+                  >
+                    Thêm dịch vụ
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
           </Box>
-      
         )}
         {tab == 'gioi-thieu' && (
           <>
             <span>{parse(shop?.descriptionMsg || '')} </span>
           </>
         )}
+        {tab == 'dashboard' && <ThongKeCuaHang />}
       </Box>
     </>
   );

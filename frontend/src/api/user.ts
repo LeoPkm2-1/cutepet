@@ -64,6 +64,25 @@ const postCreateAccount = (data: Partial<CreateAccountPayload>) => {
   });
 };
 
+const followShop = (shop_id: number|string) => {
+  return authRequest<any>({
+    url: "/user/followShop",
+    method: "POST",
+    body: {
+      shop_id
+    },
+  });
+};
+const unfollowShop = (shop_id: number|string) => {
+  return authRequest<any>({
+    url: "/user/unfollowShop",
+    method: "POST",
+    body: {
+      shop_id
+    },
+  });
+};
+
 const patchUser = async (userId: number | string, info: Partial<User>) => {
   const data = new FormData();
   [
@@ -104,12 +123,16 @@ const patchUser = async (userId: number | string, info: Partial<User>) => {
   });
 };
 
+
+
 const userApis = {
   getUserInfo,
   getMultiUserInfo,
   postCreateAccount,
   getUsers,
   patchUser,
+  followShop,
+  unfollowShop
 };
 
 export default userApis;

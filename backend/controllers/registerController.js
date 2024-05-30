@@ -18,6 +18,7 @@ const { getUserPublicInforByUserName } = require("../utils/userHelper");
 const userRoleModel = require("../models/userRoleModel");
 
 const shopDescriptionModel = require("../models/shop/shopDescriptionModel");
+const diaChiHanhChinhModel = require("../models/diaChi/diaChiHanhChinhModel");
 
 // handl add new user to database
 const handleRegister = async (req, res) => {
@@ -149,7 +150,9 @@ const handleShopRegister = async (req, res) => {
   const EMAIL_EXISTED_MESS = "Email đã tồn tại";
   const INVALID_NAME_MESS = "Tên cửa hàng chứa các ký tự không hợp lệ";
   try {
-    let { ten_cua_hang, tai_khoan, mat_khau, email, dia_chi } = req.body;
+    let { ma_so_thue, ten_cua_hang, tai_khoan, mat_khau, email, dia_chi } =
+      req.body;
+
     if (!UtilsHelper.isValidVietnameseName(ten_cua_hang))
       throw new Error(INVALID_NAME_MESS);
 
@@ -170,6 +173,7 @@ const handleShopRegister = async (req, res) => {
     const active_code = genVertificationString();
     const thoi_han = genDueTime();
     const nonActiveUserInfor = {
+      ma_so_thue: ma_so_thue,
       ten: ten_cua_hang,
       tai_khoan: tai_khoan,
       mat_khau: hashedPass,
@@ -228,7 +232,27 @@ const handleConfirmRegisterForShop = async (req, res, user) => {
   const CONFIRM_SUCSECC_MESSAGE = "hoàn tất xác thực đăng ký";
   const active_code = req.body.active_code;
   const dia_chi = user.dia_chi;
+  const { house_number, ward_id, district_id, province_id } = dia_chi;
+  const ma_so_thue = user.ma_so_thue;
   // console.log(dia_chi);
+  // // return;
+  const ward_infor = await diaChiHanhChinhModel.getWardById(ward_id);
+  const district_infor = await diaChiHanhChinhModel.getDistrictById(
+    district_id
+  );
+  const province_infor = await diaChiHanhChinhModel.getProvinceById(
+    province_id
+  );
+
+  const address_infor = {
+    house_number,
+    ward_infor,
+    district_infor,
+    province_infor,
+  };
+
+  // console.log(address_infor);
+  // return
   await userModel
     .addUser({
       ten: user.ten,
@@ -244,7 +268,8 @@ const handleConfirmRegisterForShop = async (req, res, user) => {
 
   await shopDescriptionModel.addDescriptionInforOfShop(
     userAdded.ma_nguoi_dung,
-    dia_chi
+    ma_so_thue,
+    address_infor
   );
   res.status(200).json(new Response(200, userAdded, CONFIRM_SUCSECC_MESSAGE));
 };

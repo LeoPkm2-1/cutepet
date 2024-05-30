@@ -3,6 +3,7 @@ const statusPostMiddle = require("../../middlewares/BaiViet/postMiddlewares");
 const petMid = require("../../middlewares/petMid");
 const statusPostController = require("../../controllers/postControllers/statusPostController");
 const { requireLoginedForNormUser } = require("../../middlewares/auth");
+const shopMid = require("../../middlewares/shopMid");
 const router = express.Router();
 
 // router.use(requireLoginedForNormUser);
@@ -10,6 +11,13 @@ router.post(
   "/addPost",
   statusPostMiddle.preProcessAddPost,
   statusPostController.addPostController
+);
+
+router.post(
+  "/addShareServicePost",
+  shopMid.checkServiceExistsMid,
+  statusPostMiddle.preProcessAddPost,
+  statusPostController.addShareServicePostController
 );
 
 router.post(

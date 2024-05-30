@@ -10,7 +10,12 @@ const profileRoutes = require("./profileRoutes");
 const shopRoutes = require("./shopRoutes");
 const chatRoutes = require("./chatRoutes");
 const performanceTestingRoutes = require("./performanceTestingRoutes");
-const { requireLoginedForNormUser, nonRequireLogined } = require("../middlewares/auth");
+const addressRoutes = require("./addressRoutes");
+const dashBoardRoutes = require("./dashboardRoutes");
+const {
+  requireLoginedForNormUser,
+  nonRequireLogined,
+} = require("../middlewares/auth");
 const { handlLogin } = require("./../controllers/loginController");
 const { handleLogout } = require("./../controllers/logoutController");
 const {
@@ -43,6 +48,8 @@ router.use("/notification", requireLoginedForNormUser, notificationRoutes);
 router.use("/profile", requireLoginedForNormUser, profileRoutes);
 router.use("/chatting", requireLoginedForNormUser, chatRoutes);
 router.use("/performance_testing_purpose", performanceTestingRoutes);
+router.use("/address", requireLoginedForNormUser, addressRoutes);
+router.use("/dashboard",dashBoardRoutes);
 router.post("/test_api", (req, res) => {
   const temp = req.body.temp;
   res.status(200).json({ temp: temp + " 111" });

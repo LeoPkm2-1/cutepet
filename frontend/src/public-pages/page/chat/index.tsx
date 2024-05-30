@@ -232,13 +232,13 @@ function ChatUserBox(props: {
   );
 }
 
-function ChattingDetail(props: { userInfo: FriendChatType }) {
+export function ChattingDetail(props: { userInfo: FriendChatType }) {
   const [friendInfo, setFriendInfo] = useState<FriendChatType>({
     id: props?.userInfo?.id || 0,
-    url: props?.userInfo.url || '',
-    isOnline: props?.userInfo.isOnline || false,
-    name: props?.userInfo.name || 'Noname',
-    text: props?.userInfo.text || '@Ty',
+    url: props?.userInfo?.url || '',
+    isOnline: props?.userInfo?.isOnline || false,
+    name: props?.userInfo?.name || 'Noname',
+    text: props?.userInfo?.text || '@Ty',
     user: props?.userInfo?.user,
   });
   const infoUser = useSelector((state: RootState) => state.user.profile);
@@ -379,7 +379,7 @@ function ChattingDetail(props: { userInfo: FriendChatType }) {
                   marginBottom: '5px',
                 }}
               >
-                {friendInfo.name}
+                {friendInfo?.name}
               </Typography>
               <Typography
                 sx={{
@@ -392,7 +392,7 @@ function ChattingDetail(props: { userInfo: FriendChatType }) {
                   justifyContent: 'space-between',
                 }}
               >
-                <span>@{friendInfo.user || 'no.name'}</span>
+                <span>@{friendInfo?.user || 'no.name'}</span>
               </Typography>
             </Box>
 
