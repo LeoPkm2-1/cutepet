@@ -1,13 +1,13 @@
 import { Typography } from '@mui/material';
 
-export default function Tag(props: { text: string}) {
+export default function TagLoai(props: { text: string}) {
   return (
     <span
       style={{
         fontFamily: 'quicksand',
         fontSize: '10px',
         fontWeight: '500',
-        backgroundColor: '#0e647e',
+        backgroundColor: '#ee4d2d',
         color: '#fff',
         borderRadius: '20px',
         padding:"4px 8px",

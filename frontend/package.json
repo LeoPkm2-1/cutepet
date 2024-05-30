@@ -12,6 +12,7 @@
     "@mui/lab": "^5.0.0-alpha.72",
     "@mui/material": "^5.4.3",
     "@mui/styles": "^5.5.0",
+    "@mui/x-charts": "^7.3.2",
     "@mui/x-date-pickers": "^6.18.1",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",

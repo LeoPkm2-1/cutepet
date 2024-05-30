@@ -1,18 +1,18 @@
 import { Box, Rating, Typography } from '@mui/material';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DichVuType } from '../../../../../models/shop';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../redux';
 import { useEffect, useState } from 'react';
-import shopApi from '../../../../../api/shop';
-import Tag from '../../../../../components/tag';
+import { DichVuType } from '../../../../models/shop';
+import { RootState } from '../../../../redux';
+import Tag from '../../../../components/tag';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+
 type PropsDichVu = {
   dichVu: DichVuType;
 };
-export function DichVuBox(props: PropsDichVu) {
+export function DichVuFilter(props: PropsDichVu) {
   const navigate = useNavigate();
-  const idShop = useSelector((state: RootState) => state.user.profile?.id);
 
   return (
     <>
@@ -60,7 +60,7 @@ export function DichVuBox(props: PropsDichVu) {
           <Typography
             sx={{
               fontSize: '14px',
-              marginBottom: '22px',
+              marginBottom: '10px',
               fontFamily: 'quicksand',
               display: 'flex',
               alignItems: 'center',
@@ -69,6 +69,25 @@ export function DichVuBox(props: PropsDichVu) {
             }}
           >
             {props?.dichVu?.don_gia} vnđ
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: '15px',
+              marginBottom: '10px',
+              fontFamily: 'quicksand',
+              display: 'flex',
+              alignItems: 'center',
+              fontWeight: '600',
+              color: 'rgb(14, 100, 126)',
+            }}
+          >
+            <StorefrontIcon
+              sx={{
+                mr: '8px',
+              }}
+            />
+            {props?.dichVu?.ten_cua_hang}
           </Typography>
           <Box
             sx={{
