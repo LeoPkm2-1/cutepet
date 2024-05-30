@@ -27,6 +27,7 @@ import Loading from '../../../../../components/loading';
 import dichVuApi from '../../../../../api/dichVu';
 import { DanhGiatype } from '../../../../../models/shop';
 import { convertStatus } from '../../shop/lich-chi-tiet';
+import PopUpChat from '../../../../../components/pop-up-chat';
 
 export default function LichHenChiTietUser() {
   const { idLich } = useParams();
@@ -37,6 +38,7 @@ export default function LichHenChiTietUser() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [danhGia, setDanhGia] = useState<DanhGiatype>({});
+  const [isShowChat, setIsShowChat] = useState(false);
 
   const [lyDo, setLyDo] = useState<OptionSelect>({
     label: '',
@@ -63,6 +65,21 @@ export default function LichHenChiTietUser() {
               ma_cua_hang: data?.payload?.shopInfor?.ma_cua_hang,
               ten: data?.payload?.shopInfor?.ten,
               anh: data?.payload?.shopInfor?.anh?.url,
+              so_dien_thoai: data?.payload?.shopInfor?.so_dien_thoai,
+              dia_chi: {
+                house_number:
+                  data?.payload?.shopInfor?.shopAdditionInfor?.addressInfor
+                    ?.house_number,
+                fullNameWard:
+                  data?.payload?.shopInfor?.shopAdditionInfor?.addressInfor
+                    ?.ward_infor?.full_name,
+                fullNameDistrict:
+                  data?.payload?.shopInfor?.shopAdditionInfor?.addressInfor
+                    ?.district_infor?.full_name,
+                fullNameProvince:
+                  data?.payload?.shopInfor?.shopAdditionInfor?.addressInfor
+                    ?.province_infor?.full_name,
+              },
             },
             petInfo: {
               ma_thu_cung: data?.payload?.petInfor?.ma_thu_cung,
@@ -82,6 +99,7 @@ export default function LichHenChiTietUser() {
       });
     }
   }, []);
+
   useEffect(() => {
     if (lich?.petInfo?.ma_thu_cung) {
       petApi?.getPetById(lich?.petInfo?.ma_thu_cung).then((data) => {
@@ -290,7 +308,7 @@ export default function LichHenChiTietUser() {
       </Dialog>
       <Box
         sx={{
-          padding: '0 100px',
+          padding: '0 30px',
         }}
       >
         <Box
@@ -309,22 +327,15 @@ export default function LichHenChiTietUser() {
             <Typography
               sx={{
                 fontFamily: 'quicksand',
-                fontWeight: '500',
-                mb: '12px',
+                fontWeight: '600',
+                mb: '16px',
                 fontSize: '16px',
                 display: 'flex',
                 alignItems: 'center',
                 //   mt: '30px',
               }}
             >
-              <TagIcon
-                sx={{
-                  color: '#0e647e',
-                  fontSize: '16px',
-                  mr: '10px',
-                }}
-              />
-              Mã lịch hẹn
+              THÔNG TIN LỊCH HẸN
             </Typography>
             {(lich?.scheduleStatus == 'CHO_XAC_NHAN' ||
               (lich?.scheduleStatus == 'DA_XAC_NHAN' &&
@@ -357,6 +368,26 @@ export default function LichHenChiTietUser() {
               </Button>
             )}
           </Box>
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              mb: '12px',
+              fontSize: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              //   mt: '30px',
+            }}
+          >
+            <TagIcon
+              sx={{
+                color: '#0e647e',
+                fontSize: '16px',
+                mr: '10px',
+              }}
+            />
+            Mã lịch hẹn
+          </Typography>
 
           <Typography
             sx={{
@@ -535,6 +566,19 @@ export default function LichHenChiTietUser() {
           <Typography
             sx={{
               fontFamily: 'quicksand',
+              fontWeight: '600',
+              mb: '16px',
+              fontSize: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              //   mt: '30px',
+            }}
+          >
+            THÔNG TIN DỊCH VỤ
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
               fontWeight: '500',
               mb: '12px',
               fontSize: '16px',
@@ -550,7 +594,7 @@ export default function LichHenChiTietUser() {
                 mr: '10px',
               }}
             />
-            Thông tin dịch vụ
+            Tên dịch vụ
           </Typography>
           <Box
             onClick={() => {
@@ -667,6 +711,19 @@ export default function LichHenChiTietUser() {
             mt: '30px',
           }}
         >
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '600',
+              mb: '16px',
+              fontSize: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              //   mt: '30px',
+            }}
+          >
+            THÔNG TIN CỬA HÀNG
+          </Typography>
           <Box
             sx={{
               display: 'flex',
@@ -716,7 +773,9 @@ export default function LichHenChiTietUser() {
               }}
             >
               <Button
-                //   onClick={handleAddfriend}
+                onClick={() => {
+                  navigate(`/home/cua-hang/${lich?.shopInfo?.ma_cua_hang}`);
+                }}
                 color="inherit"
                 sx={{
                   minWidth: '100px',
@@ -729,9 +788,10 @@ export default function LichHenChiTietUser() {
                 }}
                 variant="contained"
               >
-                Theo dõi
+                Xem cửa hàng
               </Button>
               <Button
+                onClick={() => setIsShowChat(true)}
                 color="inherit"
                 sx={{
                   display: 'flex',
@@ -786,7 +846,7 @@ export default function LichHenChiTietUser() {
               ml: '25px',
             }}
           >
-            231 Lý Thường Kiệt Thủ Đức
+            {`${lich?.shopInfo?.dia_chi?.house_number} ${lich?.shopInfo?.dia_chi?.fullNameWard} ${lich?.shopInfo?.dia_chi?.fullNameDistrict} ${lich?.shopInfo?.dia_chi?.fullNameProvince} `}
           </Typography>
           <Typography
             sx={{
@@ -817,7 +877,7 @@ export default function LichHenChiTietUser() {
               ml: '25px',
             }}
           >
-            0865100333
+            {lich?.shopInfo?.so_dien_thoai}
           </Typography>
         </Box>
         <Box
@@ -912,6 +972,18 @@ export default function LichHenChiTietUser() {
           </Box>
         </Box>
       </Box>
+      <PopUpChat
+        isShow={isShowChat}
+        onChange={() => setIsShowChat(true)}
+        friendInfo={{
+          id: (lich?.shopInfo?.ma_cua_hang as number) || 0,
+          url: lich?.shopInfo?.anh || '',
+          isOnline: false,
+          name: lich?.shopInfo?.ten || '',
+          text: '@Ty',
+          user: '',
+        }}
+      />
     </>
   );
 }

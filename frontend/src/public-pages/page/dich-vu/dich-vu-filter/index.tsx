@@ -68,7 +68,7 @@ export function DichVuFilter(props: PropsDichVu) {
               color: 'red',
             }}
           >
-            {props?.dichVu?.don_gia} vnd
+            {props?.dichVu?.don_gia} vnđ
           </Typography>
 
           <Typography
@@ -87,7 +87,7 @@ export function DichVuFilter(props: PropsDichVu) {
                 mr: '8px',
               }}
             />
-            Petcare Store
+            {props?.dichVu?.ten_cua_hang}
           </Typography>
           <Box
             sx={{

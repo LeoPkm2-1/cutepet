@@ -35,6 +35,11 @@ export function LichHenCuaToi() {
             ten: item?.shopInfor?.ten,
             anh: item?.shopInfor?.anh?.url,
           },
+          petInfo: {
+            ma_thu_cung: item?.petInfor?.ma_thu_cung,
+            ten_thu_cung: item?.petInfor?.ten_thu_cung,
+            anh_thu_cung: item?.petInfor?.anh?.url,
+          },
         } as LichType;
       });
       setLich(list);
@@ -165,7 +170,7 @@ export function LichHenCuaToi() {
         <Box>
           <Grid container>
             {lich.map((item) => {
-              if (item?.scheduleStatus == 'DA_HUY') {
+              if (item?.scheduleStatus == 'DA_HUY' || item?.scheduleStatus == 'HUY') {
                 return (
                   <Grid item xs={4}>
                     <LichSapToiUser lich={item} />

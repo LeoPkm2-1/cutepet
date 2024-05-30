@@ -37,6 +37,7 @@ import { RootState } from '../../../../../../redux';
 import TagNameSelect from '../../../../../../components/select-tag';
 import Button from '../../../../../../components/Button';
 import DanhMucDichVuSelect from '../../../../../../components/select-danh-muc-dich-vu';
+import LoaiSelect from '../../../../../../components/select-loai';
 export function ThemDichVu() {
   const [dichVu, setDichVu] = useState<DichVuType>({
     idDichVu: 0,
@@ -82,6 +83,7 @@ export function ThemDichVu() {
           dichVu?.mo_ta_dich_vu || '',
           urlPhotoAvatar,
           dichVu?.the_loai_dich_vu || [],
+          dichVu?.danh_sach_loai_phu_hop || [],
           dichVu?.don_gia || '',
           dichVu?.thoi_luong_dich_vu || ''
         )
@@ -303,6 +305,30 @@ export function ThemDichVu() {
             Chọn danh mục{' '}
           </Typography>
           <DanhMucDichVuSelect
+            value={dichVu?.the_loai_dich_vu}
+            onChange={(value) => {
+              setDichVu({ ...dichVu, the_loai_dich_vu: value });
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: '#fff',
+            mb: '20px',
+            borderRadius: '4px',
+            padding: '10px 20px',
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '700',
+              mb: '12px',
+            }}
+          >
+            Chọn loài phù hợp{' '}
+          </Typography>
+          <LoaiSelect
             value={dichVu?.the_loai_dich_vu}
             onChange={(value) => {
               setDichVu({ ...dichVu, the_loai_dich_vu: value });

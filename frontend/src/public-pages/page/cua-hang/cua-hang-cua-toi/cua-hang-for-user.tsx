@@ -28,10 +28,12 @@ import ThongKeCuaHang from './thong-ke-cua-hang';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
+import userApis from '../../../../api/user';
 
 export default function CuaHangForUser() {
   const [tab, setTab] = useState('dich-vu');
   const navigate = useNavigate();
+  const [isFollow, setIsFollow] = useState(false);
   const userInfo = useSelector((state: RootState) => state.user.profile);
   const { idCuaHang } = useParams();
   const [shop, setShop] = useState<ShopType>({
@@ -181,17 +183,27 @@ export default function CuaHangForUser() {
             {shop.sologan}
           </Typography>
           <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                position: "absolute",
-                top:"220px",
-                right:"50px",
-                zIndex:"20"
-              }}
-            >
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              position: 'absolute',
+              top: '220px',
+              right: '50px',
+              zIndex: '20',
+            }}
+          >
+            {!isFollow ? (
               <Button
-                //   onClick={handleAddfriend}
+                onClick={() => {
+                  if (shop?.shopId) {
+                    userApis.followShop(shop?.shopId).then((data) => {
+                      if (data?.status == 200) {
+                        setIsFollow(!isFollow);
+                        
+                      }
+                    });
+                  }
+                }}
                 color="inherit"
                 sx={{
                   minWidth: '100px',
@@ -206,31 +218,58 @@ export default function CuaHangForUser() {
               >
                 Theo dõi
               </Button>
+            ) : (
               <Button
+              onClick={() => {
+                if (shop?.shopId) {
+                  userApis.unfollowShop(shop?.shopId).then((data) => {
+                    if (data?.status == 200) {
+                      setIsFollow(!isFollow);
+                    }
+                  });
+                }
+              }}
                 color="inherit"
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  minWidth: '120px',
-                  // backgroundColor: 'rgb(14, 100, 126)',
-                  border: '1px solid #fff',
+                  minWidth: '100px',
+                  backgroundColor: 'rgb(14, 100, 126)',
                   color: '#fff',
+                  mr: '10px',
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    backgroundColor: 'rgba(14, 100, 126, 0.9)',
                   },
                 }}
-                variant="outlined"
+                variant="contained"
               >
-                <QuestionAnswerIcon
-                  sx={{
-                    color: '#fff',
-                    fontSize: '16px',
-                    mr: '5px',
-                  }}
-                />
-                Chat ngay
+                Bỏ theo dõi
               </Button>
-            </Box>
+            )}
+
+            <Button
+              color="inherit"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                minWidth: '120px',
+                // backgroundColor: 'rgb(14, 100, 126)',
+                border: '1px solid #fff',
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                },
+              }}
+              variant="outlined"
+            >
+              <QuestionAnswerIcon
+                sx={{
+                  color: '#fff',
+                  fontSize: '16px',
+                  mr: '5px',
+                }}
+              />
+              Chat ngay
+            </Button>
+          </Box>
         </Box>
         <Box
           sx={{

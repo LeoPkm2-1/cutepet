@@ -27,12 +27,15 @@ import Loading from '../../../../../components/loading';
 import dichVuApi from '../../../../../api/dichVu';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useShowDialog } from '../../../../../hooks/dialog';
+import PopUpChat from '../../../../../components/pop-up-chat';
 
 export default function LichHenChiTietShop() {
   const { idLich } = useParams();
   const [lich, setLich] = useState<LichType>({});
-  const [pet, setPet] = useState<PetType>({});
+
+  // const [pet, setPet] = useState<PetType>({});
   const [openPopUp, setOpenPopup] = useState(false);
+  const [isShowChat, setIsShowChat] = useState(false);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -49,6 +52,7 @@ export default function LichHenChiTietShop() {
     numStar: 0,
     content: '',
   });
+
   useEffect(() => {
     if (idLich) {
       lichApi.getScheduleForShopById(idLich).then((data: any) => {
@@ -81,6 +85,11 @@ export default function LichHenChiTietShop() {
               so_dien_thoai: data?.payload?.userCreate?.so_dien_thoai,
               email: data?.payload?.userCreate?.email,
             },
+            petInfo: {
+              ma_thu_cung: data?.payload?.petInfor?.ma_thu_cung,
+              ten_thu_cung: data?.payload?.petInfor?.ten_thu_cung,
+              anh_thu_cung: data?.payload?.petInfor?.anh?.url,
+            },
           };
           setLich(lichHen);
         }
@@ -88,53 +97,52 @@ export default function LichHenChiTietShop() {
     }
   }, []);
 
+  // useEffect(() => {
+  //   if (lich?.petInfo?.ma_thu_cung) {
+  //     petApi?.getPetById(lich?.petInfo?.ma_thu_cung).then((data) => {
+  //       if (data?.status == 200) {
+  //         const pet: PetType = {
+  //           ten_thu_cung: data?.payload?.ten_thu_cung,
+  //           gioi_tinh: data?.payload?.gioi_tinh,
+  //           ghi_chu: data?.payload?.ghi_chu,
+  //           url_anh: data?.payload?.anh?.url,
+  //           chieu_cao: data?.payload?.chieu_cao,
+  //           can_nang: data?.payload?.can_nang,
+  //           ma_thu_cung: data?.payload?.ma_thu_cung || 0,
+  //           ma_loai: data?.payload?.giong_loai?.ma_loai,
+  //           ma_giong: data?.payload?.giong_loai?.ma_giong,
+  //           ma_nguoi_chu: data?.payload?.ma_nguoi_chu || 0,
+  //         };
+  //         setPet(pet);
+  //       }
+  //     });
+  //   }
+  // }, [lich?.petInfo?.ma_thu_cung]);
 
-  useEffect(() => {
-    if (lich?.petInfo?.ma_thu_cung) {
-      petApi?.getPetById(lich?.petInfo?.ma_thu_cung).then((data) => {
-        if (data?.status == 200) {
-          const pet: PetType = {
-            ten_thu_cung: data?.payload?.ten_thu_cung,
-            gioi_tinh: data?.payload?.gioi_tinh,
-            ghi_chu: data?.payload?.ghi_chu,
-            url_anh: data?.payload?.anh?.url,
-            chieu_cao: data?.payload?.chieu_cao,
-            can_nang: data?.payload?.can_nang,
-            ma_thu_cung: data?.payload?.ma_thu_cung || 0,
-            ma_loai: data?.payload?.giong_loai?.ma_loai,
-            ma_giong: data?.payload?.giong_loai?.ma_giong,
-            ma_nguoi_chu: data?.payload?.ma_nguoi_chu || 0,
-          };
-          setPet(pet);
-        }
-      });
-    }
-  }, [lich?.petInfo?.ma_thu_cung]);
-
-    // Lay danh gia
-    // useEffect(() => {
-    //   if (lich?.dichVuInfo?.ma_dich_vu) {
-    //     dichVuApi
-    //       .getMyVoteForService(lich?.dichVuInfo?.ma_dich_vu)
-    //       .then((data) => {
-    //         console.log(data, ' dich vu danh gia');
-    //         const item = data?.payload;
-    //         if (data?.payload?._id) {
-    //           setDanhGia({
-    //             content: item?.content,
-    //             createAt: item?.createAt,
-    //             modifiedAt: item?.modifiedAt,
-    //             numOfStar: item?.numOfStar,
-    //             serviceId: item?.serviceId,
-    //           });
-    //           setRating({
-    //             numStar: item?.numOfStar,
-    //             content: item?.content,
-    //           });
-    //         }
-    //       });
-    //   }
-    // }, [lich?.dichVuInfo?.ma_dich_vu]);
+  // Lay danh gia
+  // useEffect(() => {
+  //   if (lich?.dichVuInfo?.ma_dich_vu) {
+  //     dichVuApi
+  //       .getMyVoteForService(lich?.dichVuInfo?.ma_dich_vu)
+  //       .then((data) => {
+  //         console.log(data, ' dich vu danh gia');
+  //         const item = data?.payload;
+  //         if (data?.payload?._id) {
+  //           setDanhGia({
+  //             content: item?.content,
+  //             createAt: item?.createAt,
+  //             modifiedAt: item?.modifiedAt,
+  //             numOfStar: item?.numOfStar,
+  //             serviceId: item?.serviceId,
+  //           });
+  //           setRating({
+  //             numStar: item?.numOfStar,
+  //             content: item?.content,
+  //           });
+  //         }
+  //       });
+  //   }
+  // }, [lich?.dichVuInfo?.ma_dich_vu]);
 
   // handle huy lich
   function handleHuyLichHen() {
@@ -669,7 +677,9 @@ export default function LichHenChiTietShop() {
           </Typography>
           <Box
             onClick={() => {
-              navigate(`/home/thong-tin-thu-cung/${pet?.ma_thu_cung}`);
+              navigate(
+                `/home/thong-tin-thu-cung/${lich?.petInfo?.ma_thu_cung}`
+              );
             }}
             sx={{
               display: 'flex',
@@ -680,7 +690,7 @@ export default function LichHenChiTietShop() {
             }}
           >
             <img
-              src={pet?.url_anh}
+              src={lich?.petInfo?.anh_thu_cung}
               style={{
                 width: '50px',
                 height: '50px',
@@ -699,7 +709,7 @@ export default function LichHenChiTietShop() {
                 //   mt: '30px',
               }}
             >
-              {pet?.ten_thu_cung}
+              {lich?.petInfo?.ten_thu_cung}
             </Typography>
           </Box>
           <Typography
@@ -920,7 +930,6 @@ export default function LichHenChiTietShop() {
             }}
           >
             <Box
-              
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -959,7 +968,9 @@ export default function LichHenChiTietShop() {
             >
               <Button
                 onClick={() => {
-                  navigate(`/home/trang-ca-nhan-nguoi-dung/${lich?.userInfo?.userId}`);
+                  navigate(
+                    `/home/trang-ca-nhan-nguoi-dung/${lich?.userInfo?.userId}`
+                  );
                 }}
                 color="inherit"
                 sx={{
@@ -976,6 +987,7 @@ export default function LichHenChiTietShop() {
                 Xem trang cá nhân
               </Button>
               <Button
+                onClick={() => setIsShowChat(true)}
                 color="inherit"
                 sx={{
                   display: 'flex',
@@ -1050,7 +1062,7 @@ export default function LichHenChiTietShop() {
                 mr: '10px',
               }}
             />
-            Số điện thoại 
+            Số điện thoại
           </Typography>
           <Typography
             sx={{
@@ -1155,6 +1167,18 @@ export default function LichHenChiTietShop() {
           </Box> */}
         </Box>
       </Box>
+      <PopUpChat
+        isShow={isShowChat}
+        onChange={() => setIsShowChat(false)}
+        friendInfo={{
+          id: (lich?.userInfo?.userId as number) || 0,
+          url: lich?.userInfo?.anh || '',
+          isOnline: false,
+          name: lich?.userInfo?.ten || '',
+          text: '@Ty',
+          user: '',
+        }}
+      />
     </>
   );
 }

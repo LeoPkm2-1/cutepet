@@ -20,6 +20,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Button from '../../../../components/Button';
 import { Page404 } from '../../mang-xa-hoi/component/post-detail';
 import NotInterestedOutlinedIcon from '@mui/icons-material/NotInterestedOutlined';
+import LoaiSelect from '../../../../components/select-loai';
 
 type FilterType = {
   service_name: string | null;
@@ -39,6 +40,7 @@ export function DanhSachDichVu() {
   const [search, setSearch] = useState<string>('');
   const [service_name, setService_name] = useState<string | null>(null);
   const [service_type, setService_type] = useState<string[] | null>(null);
+  const [service_loai, setService_loai] = useState<string[] | null>(null);
   const [num_of_star, setNum_of_star] = useState<number | null>(null);
   const [price_point, setPrice_point] = useState<number | null>(null);
   const [price_search, setPrice_search] = useState<string | null>(null);
@@ -84,7 +86,8 @@ export function DanhSachDichVu() {
         province_id,
         district_id,
         null,
-        null
+        null,
+        service_loai
       )
       .then((data) => {
         console.log('data total', data);
@@ -99,6 +102,7 @@ export function DanhSachDichVu() {
     price_point,
     price_search,
     num_of_star,
+    service_loai,
   ]);
 
   useEffect(() => {
@@ -112,7 +116,8 @@ export function DanhSachDichVu() {
         province_id,
         district_id,
         pageNumber,
-        pageSize
+        pageSize,
+        service_loai
       )
       .then((data) => {
         console.log('data filter', data);
@@ -127,6 +132,7 @@ export function DanhSachDichVu() {
             don_gia: item?.priceQuotation,
             thoi_luong_dich_vu: item?.duration,
             numOfStar: item?.numOfStar,
+            ten_cua_hang: item?.shopInfor?.ten
           } as DichVuType;
         });
         setListDichVu(list);
@@ -140,6 +146,7 @@ export function DanhSachDichVu() {
     price_search,
     num_of_star,
     pageNumber,
+    service_loai,
   ]);
 
   return (
@@ -294,6 +301,36 @@ export function DanhSachDichVu() {
                 setService_type(value);
               } else {
                 setService_type(null);
+              }
+            }}
+          />
+          <Divider
+            sx={{
+              mt: '20px',
+            }}
+          />
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              flex: 1,
+              fontSize: '15px',
+              mb: '16px',
+              mt: '16px',
+              color: 'gray',
+            }}
+          >
+            Theo loài
+          </Typography>
+
+          <LoaiSelect
+            value={service_loai || []}
+            onChange={(value) => {
+              setPageNumber(1);
+              if (value) {
+                setService_loai(value);
+              } else {
+                setService_loai(null);
               }
             }}
           />

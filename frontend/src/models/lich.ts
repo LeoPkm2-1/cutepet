@@ -32,7 +32,7 @@ export interface LichType {
     so_sao: number;
   },
   userInfo?:{
-    ten:string | number,
+    ten:string ,
     userId: number,
     anh: string,
     so_dien_thoai: string,

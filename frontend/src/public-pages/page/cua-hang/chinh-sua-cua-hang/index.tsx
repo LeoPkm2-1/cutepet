@@ -89,7 +89,7 @@ export function UpdateStore() {
         setShop(shopIn);
       });
     }
-  }, []);
+  }, [userInfo]);
 
   async function handleSubmit() {
     setIsLoading(true);
@@ -132,7 +132,7 @@ export function UpdateStore() {
             setIsLoading(false);
 
             if (shop.shopId) {
-              navigate(`/home/cua-hang/${shop.shopId}`);
+              navigate(`/home/cua-hang-cua-toi`);
             }
           }
         })

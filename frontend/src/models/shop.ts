@@ -31,9 +31,11 @@ export interface DichVuType {
   mo_ta_dich_vu?: string;
   anh_dich_vu?: string;
   the_loai_dich_vu?: any;
+  danh_sach_loai_phu_hop?: any;
   don_gia?: number | string;
   thoi_luong_dich_vu?: number | string;
   numOfStar?: number;
+  ten_cua_hang?: string;
 }
 
 export interface DanhGiatype {

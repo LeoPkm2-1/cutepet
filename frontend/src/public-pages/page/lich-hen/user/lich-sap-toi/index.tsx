@@ -140,7 +140,7 @@ export function LichSapToiUser(props: { lich: LichType }) {
               }}
             />
             <img
-              src={props?.lich?.shopInfo?.anh}
+              src={props?.lich?.petInfo?.anh_thu_cung}
               style={{
                 width: '28px',
                 height: '28px',
@@ -160,7 +160,7 @@ export function LichSapToiUser(props: { lich: LichType }) {
                 //   mt: '30px',
               }}
             >
-              Pubby
+              {props?.lich?.petInfo?.ten_thu_cung}
             </Typography>
           </Box>
           <Box
@@ -187,14 +187,14 @@ export function LichSapToiUser(props: { lich: LichType }) {
               <CheckCircleIcon
                 sx={{
                   color: 'inherit',
-                  fontSize: '20px',
+                  fontSize: '18px',
                 }}
               />
               <Typography
                 sx={{
                   fontFamily: 'quicksand',
                   fontWeight: '500',
-                  fontSize: '16px',
+                  fontSize: '15px',
                   display: 'flex',
                   alignItems: 'center',
                   ml: '10px',

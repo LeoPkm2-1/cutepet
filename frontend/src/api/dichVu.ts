@@ -57,6 +57,7 @@ const filterServices = (
   district_id:string | null,
   pageNumber:number | null,
   pageSize:number | null,
+  suitable_species:string[] | null,
 ) => {
   return authRequest<any>({
     url: `shop/filterServices`,
@@ -71,6 +72,7 @@ const filterServices = (
       district_id,
       pageNumber,
       pageSize,
+      suitable_species
     },
   });
 };

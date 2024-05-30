@@ -50,7 +50,7 @@ export function PopUpDatLich(props: { dichVu: DichVuType, onClose: () => void })
       <Box
         sx={{
           width: '600px',
-          height: '70vh',
+          height: '77vh',
           padding: '20px',
           boxSizing: 'border-box',
         }}

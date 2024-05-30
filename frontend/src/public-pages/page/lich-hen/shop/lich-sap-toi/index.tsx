@@ -189,14 +189,14 @@ export function LichSapToiShop(props: { lich: LichType }) {
               <CheckCircleIcon
                 sx={{
                   color: 'inherit',
-                  fontSize: '20px',
+                  fontSize: '18px',
                 }}
               />
               <Typography
                 sx={{
                   fontFamily: 'quicksand',
                   fontWeight: '500',
-                  fontSize: '16px',
+                  fontSize: '15px',
                   display: 'flex',
                   alignItems: 'center',
                   ml: '10px',

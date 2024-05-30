@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useShowDialog } from '../../../../hooks/dialog';
 import { useSnackbar } from 'notistack';
 import Loading from '../../../../components/loading';
+import TagLoai from '../../../../components/tag/tag-loai';
 export default function DichVuDetail() {
   const showDialog = useShowDialog();
   const { idCuaHang } = useParams();
@@ -52,6 +53,8 @@ export default function DichVuDetail() {
             don_gia: data?.payload?.priceQuotation,
             thoi_luong_dich_vu: data?.payload?.duration,
             numOfStar: data?.payload?.numOfStar,
+            danh_sach_loai_phu_hop: data?.payload?.petSpecies
+            
           };
           console.log(dv, ' dv ne');
 
@@ -102,7 +105,7 @@ export default function DichVuDetail() {
                 });
                 setIsLoading(false);
 
-                navigate(`/home/cua-hang/${dichVu?.ma_cua_hang}`);
+                navigate(`/home/cua-hang-cua-toi`);
               }
             })
             .catch((err) => {
@@ -343,6 +346,19 @@ export default function DichVuDetail() {
                   {dichVu?.the_loai_dich_vu &&
                     dichVu?.the_loai_dich_vu.map((item: string) => {
                       return <Tag text={item} />;
+                    })}
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    marginTop: '8px',
+                  }}
+                >
+                  {dichVu?.danh_sach_loai_phu_hop &&
+                    dichVu?.danh_sach_loai_phu_hop.map((item: string) => {
+                      return <TagLoai text={item} />
                     })}
                 </Box>
               </Box>

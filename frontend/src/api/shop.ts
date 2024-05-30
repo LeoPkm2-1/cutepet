@@ -57,6 +57,7 @@ const addService = (
   mo_ta_dich_vu: string,
   anh_dich_vu: string,
   the_loai_dich_vu: string,
+  danh_sach_loai_phu_hop: string[],
   don_gia: number | string,
   thoi_luong_dich_vu: number | string
 ) => {
@@ -70,6 +71,7 @@ const addService = (
       mo_ta_dich_vu,
       anh_dich_vu,
       the_loai_dich_vu,
+      danh_sach_loai_phu_hop,
       don_gia,
       thoi_luong_dich_vu,
     },
@@ -103,6 +105,7 @@ const updateService = (
   mo_ta_dich_vu: string,
   anh_dich_vu: string,
   the_loai_dich_vu: string[],
+  danh_sach_loai_phu_hop: string[],
   don_gia: string | number,
   thoi_luong_dich_vu: string | number,
 ) => {
@@ -116,6 +119,7 @@ const updateService = (
       mo_ta_dich_vu,
       anh_dich_vu,
       the_loai_dich_vu,
+      danh_sach_loai_phu_hop,
       don_gia,
       thoi_luong_dich_vu,
     },
