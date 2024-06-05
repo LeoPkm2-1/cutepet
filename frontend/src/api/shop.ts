@@ -1,6 +1,6 @@
 import { authRequest } from './base';
 
-const getMyShop = (shop_id: number|string) => {
+const getMyShop = (shop_id: number | string) => {
   return authRequest<any>({
     url: `/shop/getShopInforById`,
     method: 'POST',
@@ -107,7 +107,7 @@ const updateService = (
   the_loai_dich_vu: string[],
   danh_sach_loai_phu_hop: string[],
   don_gia: string | number,
-  thoi_luong_dich_vu: string | number,
+  thoi_luong_dich_vu: string | number
 ) => {
   return authRequest<any>({
     url: `/shop/updateService`,
@@ -136,6 +136,95 @@ const deleteService = (service_id: string | number) => {
   });
 };
 
+const numFollowerOfShop = (shop_id: string | number) => {
+  return authRequest<any>({
+    url: `/dashboard/numFollowerOfShop`,
+    method: 'POST',
+    body: {
+      shop_id,
+    },
+  });
+};
+
+const getAllVoteOfShop = (shop_id: string | number) => {
+  return authRequest<any>({
+    url: `/user/getAllVoteOfShop`,
+    method: 'POST',
+    body: {
+      shop_id,
+    },
+  });
+};
+
+const checkOnlineStatusOfShop = (shop_id: string | number) => {
+  return authRequest<any>({
+    url: `/shop/checkOnlineStatusOfShop`,
+    method: 'POST',
+    body: {
+      shop_id,
+    },
+  });
+};
+
+const hasFollowedShop = (shop_id: string | number) => {
+  return authRequest<any>({
+    url: `/user/hasFollowedShop`,
+    method: 'POST',
+    body: {
+      shop_id,
+    },
+  });
+};
+
+const getVoteInforOfUserForService = (
+  user_id: string | number,
+  service_id: string | number
+) => {
+  return authRequest<any>({
+    url: `shop/getVoteInforOfUserForService`,
+    method: 'POST',
+    body: {
+      user_id,
+      service_id,
+    },
+  });
+};
+
+const filterSchedulesListForShop = (
+  schedule_status: string | null,
+  start_time: string | null,
+  end_time: string | null,
+  service_id: string | null
+) => {
+  return authRequest<any>({
+    url: `dashboard/filterSchedulesListForShop`,
+    method: 'POST',
+    body: {
+      schedule_status,
+      start_time,
+      end_time,
+      service_id,
+    },
+  });
+};
+
+const getListFollowersOfShop = (
+  shop_id: string | number | null,
+  start_time: string | null,
+  end_time: string | null,
+) => {
+  return authRequest<any>({
+    url: `/dashboard/getListFollowersOfShop`,
+    method: 'POST',
+    body: {
+      shop_id,
+      start_time,
+      end_time,
+
+    },
+  });
+};
+
 
 
 const shopApi = {
@@ -147,7 +236,14 @@ const shopApi = {
   getAllAvailableServiceOfShop,
   getServiceById,
   updateService,
-  deleteService
+  deleteService,
+  numFollowerOfShop,
+  getAllVoteOfShop,
+  checkOnlineStatusOfShop,
+  hasFollowedShop,
+  getVoteInforOfUserForService,
+  filterSchedulesListForShop,
+  getListFollowersOfShop
 };
 
 export default shopApi;

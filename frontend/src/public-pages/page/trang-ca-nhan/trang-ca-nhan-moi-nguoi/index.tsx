@@ -24,6 +24,7 @@ import moment from 'moment';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import { Page404 } from '../../mang-xa-hoi/component/post-detail';
+import PopUpChat from '../../../../components/pop-up-chat';
 export default function TrangCaNhanMoiNguoi() {
   // const profile = useSelector((state: RootState) => state.user.profile);
   const { id } = useParams();
@@ -31,6 +32,7 @@ export default function TrangCaNhanMoiNguoi() {
   const [tab, setTab] = useState('post');
   const userProfile = useSelector((state: RootState) => state.user.profile);
   const [isNotPage, setIsNotPage] = useState(false);
+  const [isShowChat, setIsShowChat] = useState(false);
 
   const [profile, setProfile] = useState<PeopleType>({
     name: '',
@@ -410,13 +412,14 @@ export default function TrangCaNhanMoiNguoi() {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              padding: '0 200px',
+              padding: '0 50px',
               justifyContent: 'center',
             }}
           >
             <img
               style={{
                 borderRadius: '100%',
+                objectFit: 'cover',
               }}
               src={profile?.url}
               height={200}
@@ -444,96 +447,123 @@ export default function TrangCaNhanMoiNguoi() {
                 >
                   {profile?.name}
                 </Typography>
-                {isFriend == 1 && (
-                  <Button
-                    onClick={handleUnfriend}
-                    variant="contained"
-                    color="inherit"
-                    sx={{
-                      backgroundColor: 'rgb(14, 100, 126)',
-                      color: '#fff',
-                      '&:hover': {
-                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                      },
-                    }}
-                  >
-                    Hủy kết bạn
-                  </Button>
-                )}
-                {isFriend == 0 && (
-                  <Button
-                    onClick={handleAddfriend}
-                    variant="contained"
-                    color="inherit"
-                    sx={{
-                      backgroundColor: 'rgb(14, 100, 126)',
-                      color: '#fff',
-                      '&:hover': {
-                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                      },
-                    }}
-                  >
-                    Kết bạn
-                  </Button>
-                )}
+                {userProfile?.user_type == 0 && (
+                  <Box>
+                    {isFriend == 1 && (
+                      <Button
+                        onClick={handleUnfriend}
+                        variant="contained"
+                        color="inherit"
+                        sx={{
+                          backgroundColor: 'rgb(14, 100, 126)',
+                          color: '#fff',
+                          '&:hover': {
+                            backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                          },
+                        }}
+                      >
+                        Hủy kết bạn
+                      </Button>
+                    )}
+                    {isFriend == 0 && (
+                      <Button
+                        onClick={handleAddfriend}
+                        variant="contained"
+                        color="inherit"
+                        sx={{
+                          backgroundColor: 'rgb(14, 100, 126)',
+                          color: '#fff',
+                          '&:hover': {
+                            backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                          },
+                        }}
+                      >
+                        Kết bạn
+                      </Button>
+                    )}
 
-                {isFriend == -1 && (
-                  <>
-                    <Button disabled variant="contained" color="info">
-                      Đang chờ phản hồi
-                    </Button>
-                    <Button
-                      onClick={thuHoiLoiMoi}
-                      variant="contained"
-                      color="inherit"
-                      sx={{
-                        ml: '12px',
-                        backgroundColor: 'rgb(14, 100, 126)',
-                        color: '#fff',
-                        '&:hover': {
-                          backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                        },
-                      }}
-                    >
-                      Thu hồi
-                    </Button>
-                  </>
-                )}
-                {isFriend == -2 && (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                    }}
-                  >
-                    <Button
-                      onClick={() => handleSubmit('accept')}
-                      color="inherit"
-                      sx={{
-                        minWidth: '100px',
-                        backgroundColor: 'rgb(14, 100, 126)',
-                        color: '#fff',
-                        '&:hover': {
-                          backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                        },
-                      }}
-                      variant="contained"
-                    >
-                      Xác Nhận
-                    </Button>
-                    <Button
-                      onClick={() => handleSubmit('reject')}
-                      variant="contained"
-                      color="inherit"
-                      sx={{
-                        minWidth: '100px',
-                        color: 'gray',
-                        ml: '20px',
-                      }}
-                    >
-                      Xóa
-                    </Button>
+                    {isFriend == -1 && (
+                      <>
+                        <Button disabled variant="contained" color="info">
+                          Đang chờ phản hồi
+                        </Button>
+                        <Button
+                          onClick={thuHoiLoiMoi}
+                          variant="contained"
+                          color="inherit"
+                          sx={{
+                            ml: '12px',
+                            backgroundColor: 'rgb(14, 100, 126)',
+                            color: '#fff',
+                            '&:hover': {
+                              backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                            },
+                          }}
+                        >
+                          Thu hồi
+                        </Button>
+                      </>
+                    )}
+                    {isFriend == -2 && (
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          ml: '10px',
+                        }}
+                      >
+                        <Button
+                          onClick={() => handleSubmit('accept')}
+                          color="inherit"
+                          sx={{
+                            minWidth: '100px',
+                            backgroundColor: 'rgb(14, 100, 126)',
+                            color: '#fff',
+                            '&:hover': {
+                              backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                            },
+                          }}
+                          variant="contained"
+                        >
+                          Xác Nhận
+                        </Button>
+                        <Button
+                          onClick={() => handleSubmit('reject')}
+                          variant="contained"
+                          color="inherit"
+                          sx={{
+                            minWidth: '100px',
+                            color: 'gray',
+                            ml: '20px',
+                          }}
+                        >
+                          Xóa
+                        </Button>
+                      </Box>
+                    )}
                   </Box>
                 )}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    ml: '10px',
+                  }}
+                >
+                  <Button
+                    onClick={() => setIsShowChat(true)}
+                    color="inherit"
+                    sx={{
+                      minWidth: '100px',
+                      backgroundColor: 'rgb(14, 100, 126)',
+                      color: '#fff',
+                      '&:hover': {
+                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
+                      },
+                    }}
+                    variant="contained"
+                  >
+                    Chat ngay
+                  </Button>
+                </Box>
               </Box>
               <Typography
                 sx={{
@@ -844,6 +874,20 @@ export default function TrangCaNhanMoiNguoi() {
             </Typography>
           )}
         </Box>
+      )}
+      {profile?.id && (
+        <PopUpChat
+          isShow={isShowChat}
+          onChange={() => setIsShowChat(false)}
+          friendInfo={{
+            id: (profile?.id as number) || 0,
+            url: profile?.url || '',
+            isOnline: false,
+            name: profile?.name || '',
+            text: profile?.user || '',
+            user: profile?.user || '',
+          }}
+        />
       )}
     </>
   );

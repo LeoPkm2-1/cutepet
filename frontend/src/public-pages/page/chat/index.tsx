@@ -9,7 +9,8 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { FriendChatType } from '../../../models/user';
 import { MessageType } from '../../../models/message';
 import { userInfo } from 'os';
-import { timeAgo } from '../../../helper/post';
+import { timeAgo, timeLich } from '../../../helper/post';
+import moment from 'moment';
 
 export default function ChattingPage() {
   const profile = useSelector((state: RootState) => state.user.profile);
@@ -25,7 +26,7 @@ export default function ChattingPage() {
   useEffect(() => {
     messageApi.getMyConversationsList().then((data: any) => {
       if (data?.status == 200) {
-        console.log(data, 'dtaa');
+        console.log(data, 'getMyConversationsList');
         const list: FriendChatType[] = data?.payload?.map((item: any) => {
           return {
             id:
@@ -47,10 +48,26 @@ export default function ChattingPage() {
                 ? item?.receiverInfor?.tai_khoan
                 : item?.senderInfor?.tai_khoan,
             createAt: item?.createAt,
+            isSeen: item?.isSeen,
           };
         });
-        setListChatUser(list);
-        setCurUser(list[0]);
+        const newList = list.sort((a, b) => {
+          if (
+            +moment(a.createAt).format('x') - +moment(b.createAt).format('x') >
+            0
+          ) {
+            return -1;
+          }
+          if (
+            +moment(a.createAt).format('x') - +moment(b.createAt).format('x') <
+            0
+          ) {
+            return 1;
+          }
+          return 0;
+        });
+        setListChatUser(newList);
+        setCurUser(newList[0]);
       }
     });
   }, []);
@@ -73,38 +90,39 @@ export default function ChattingPage() {
             borderRight: '0.5px solid #dbdbdb',
           }}
         >
-          <Box sx={{
-            minHeight:"64px",
-            display:"flex",
-            justifyContent:"space-between",
-            paddingBottom:"10px",
-            paddingTop:"10px"
-          }}>
-
-          <Typography
+          <Box
             sx={{
-              fontFamily: 'quicksand',
-              fontWeight: '700',
-              fontSize: '17px',
-              mb: '16px',
-              mt: '20px',
-              ml: '20px',
+              minHeight: '64px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              paddingBottom: '10px',
+              paddingTop: '10px',
             }}
           >
-            Tin nhắn
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: 'quicksand',
-              fontWeight: '500',
-              fontSize: '15px',
-              mb: '16px',
-              mt: '20px',
-              mr: '20px',
-            }}
-          >
-            Tất cả tin nhắn
-          </Typography>
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontWeight: '700',
+                fontSize: '17px',
+                mb: '16px',
+                mt: '20px',
+                ml: '20px',
+              }}
+            >
+              Tin nhắn
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: 'quicksand',
+                fontWeight: '500',
+                fontSize: '15px',
+                mb: '16px',
+                mt: '20px',
+                mr: '20px',
+              }}
+            >
+              Tất cả tin nhắn
+            </Typography>
           </Box>
           <Box
             sx={{
@@ -118,6 +136,7 @@ export default function ChattingPage() {
                   isActive={curUser?.id == item?.id}
                   onClick={() => setCurUser(item)}
                   userInfo={item}
+                  isSeen={item?.isSeen || false}
                 />
               );
             })}
@@ -139,6 +158,7 @@ function ChatUserBox(props: {
   userInfo: FriendChatType;
   onClick: () => void;
   isActive: boolean;
+  isSeen: boolean;
 }) {
   return (
     <Box
@@ -163,6 +183,8 @@ function ChatUserBox(props: {
         style={{
           objectFit: 'cover',
           borderRadius: '50px',
+          minHeight: '50px',
+          minWidth: '50px',
         }}
         src={
           props?.userInfo.url ||
@@ -217,8 +239,19 @@ function ChatUserBox(props: {
               justifyContent: 'space-between',
             }}
           >
-            <span>{props?.userInfo?.text || 'no.name'}</span>
-            <span style={{}}>{timeAgo(props?.userInfo?.createAt || '')}</span>
+            {props?.isSeen ? (
+              <span>{props?.userInfo?.text || 'no.name'}</span>
+            ) : (
+              <span
+                style={{
+                  fontWeight: '700',
+                  color: '#000',
+                }}
+              >
+                {props?.userInfo?.text || 'no.name'}
+              </span>
+            )}
+            <span style={{}}>{timeLich(props?.userInfo?.createAt || '')}</span>
           </Typography>
         </Box>
 
@@ -241,14 +274,16 @@ export function ChattingDetail(props: { userInfo: FriendChatType }) {
     text: props?.userInfo?.text || '@Ty',
     user: props?.userInfo?.user,
   });
+
   const infoUser = useSelector((state: RootState) => state.user.profile);
   const newMes = useSelector((state: RootState) => state.message.mes);
   const [value, setValue] = useState('');
   const [mes, setMes] = useState<MessageType[]>([]);
   const messageRef = useRef<any>();
+
   useEffect(() => {
     if (friendInfo?.id) {
-      messageApi.getMessagesBeforeTime('', 10, friendInfo?.id).then((data) => {
+      messageApi.getMessagesBeforeTime('', 100, friendInfo?.id).then((data) => {
         if (data?.status == 200) {
           console.log('tin nhăn ne', data);
           const list: MessageType[] = data?.payload?.map((item: any) => {
@@ -266,6 +301,23 @@ export function ChattingDetail(props: { userInfo: FriendChatType }) {
       });
     }
   }, [friendInfo?.id]);
+
+  useEffect(() => {
+    if (mes?.length > 0) {
+      const listId: string[] = [];
+      mes?.map((item) => {
+        if (!item?.isSeen && item?.receiverID == infoUser?.id) {
+          listId.push(item?.id);
+        }
+      });
+      console.log('list id', listId);
+
+      messageApi.markMessagesAsRead(listId).then((data) => {
+        console.log('mark all nfef');
+      });
+    }
+  }, [mes]);
+
   useEffect(() => {
     setFriendInfo(props?.userInfo);
     console.log('Thay doi user ne', props?.userInfo);
@@ -341,6 +393,8 @@ export function ChattingDetail(props: { userInfo: FriendChatType }) {
             style={{
               objectFit: 'cover',
               borderRadius: '50px',
+              minHeight: '50px',
+              minWidth: '50px',
             }}
             src={friendInfo?.url}
           />
@@ -413,6 +467,11 @@ export function ChattingDetail(props: { userInfo: FriendChatType }) {
           {mes?.map((item) => {
             return (
               <Message
+                url={
+                  item?.senderID !== friendInfo?.id
+                    ? infoUser?.photoURL
+                    : friendInfo?.url
+                }
                 text={item?.messageContent}
                 isMine={item?.senderID !== friendInfo?.id}
                 time={item?.createAt}
@@ -555,7 +614,7 @@ function Message(props: {
             borderRadius: '20px',
           }}
         >
-          {timeAgo(props?.time || "")}
+          {timeLich(props?.time || '')}
         </Typography>
       </Box>
     </>

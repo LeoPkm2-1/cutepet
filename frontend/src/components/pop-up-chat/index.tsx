@@ -1,4 +1,4 @@
-import { Box, IconButton, InputBase, Typography } from '@mui/material';
+import { Box, Fade, IconButton, InputBase, Tooltip, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { FriendChatType } from '../../models/user';
 import { useEffect, useRef, useState } from 'react';
@@ -8,13 +8,19 @@ import messageApi from '../../api/message';
 import { RootState } from '../../redux';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import { timeAgo } from '../../helper/post';
+import { timeAgo, timeLich } from '../../helper/post';
+import { timeFormat } from '../../utils/formatter';
+import moment from 'moment';
 
-export default function PopUpChat(props: {friendInfo: FriendChatType, isShow: boolean, onChange: (isShow: boolean) => void}) {
+export default function PopUpChat(props: {
+  friendInfo: FriendChatType;
+  isShow: boolean;
+  onChange: (isShow: boolean) => void;
+}) {
   const [isShowed, setIsShowed] = useState(props?.isShow);
   useEffect(() => {
     setIsShowed(props?.isShow);
-  }, [props?.isShow])
+  }, [props?.isShow]);
   return (
     <Box
       sx={{
@@ -28,7 +34,8 @@ export default function PopUpChat(props: {friendInfo: FriendChatType, isShow: bo
         borderTopLeftRadius: '10px',
         borderTopRightRadius: '10px',
         boxSizing: 'border-box',
-        display: isShowed ? "block" : "none"
+        display: isShowed ? 'block' : 'none',
+        zIndex: '10000',
       }}
     >
       <Box
@@ -79,9 +86,9 @@ export default function PopUpChat(props: {friendInfo: FriendChatType, isShow: bo
             </Typography>
           </Box>
           <IconButton
-          onClick={() => {
-            props?.onChange?.(false);
-          }}
+            onClick={() => {
+              props?.onChange?.(false);
+            }}
             sx={{
               padding: '1px',
             }}
@@ -95,15 +102,12 @@ export default function PopUpChat(props: {friendInfo: FriendChatType, isShow: bo
           </IconButton>
         </Box>
       </Box>
-      <ChattingDetail
-        userInfo={props?.friendInfo}
-      />
+      <ChattingDetail userInfo={props?.friendInfo} />
     </Box>
   );
 }
 
 export function ChattingDetail(props: { userInfo: FriendChatType }) {
-
   const [friendInfo, setFriendInfo] = useState<FriendChatType>({
     id: props?.userInfo?.id || 0,
     url: props?.userInfo?.url || '',
@@ -292,7 +296,11 @@ export function ChattingDetail(props: { userInfo: FriendChatType }) {
                 text={item?.messageContent}
                 isMine={item?.senderID !== friendInfo?.id}
                 time={item?.createAt}
-                url= {item?.senderID !== friendInfo?.id ? infoUser?.photoURL : friendInfo?.url}
+                url={
+                  item?.senderID !== friendInfo?.id
+                    ? infoUser?.photoURL
+                    : friendInfo?.url
+                }
               />
             );
           })}
@@ -372,7 +380,6 @@ function Message(props: {
   time?: string;
   isMine?: boolean;
 }) {
-
   return (
     <>
       <Box
@@ -386,7 +393,7 @@ function Message(props: {
           // '&:hover': {
           //   backgroundColor: '#c1d6e0',
           // },
-          padding: '0 10px',
+          padding: '10px 10px 0 10px',
           boxSizing: 'border-box',
           justifyContent: props?.isMine ? 'right' : 'left',
         }}
@@ -397,42 +404,51 @@ function Message(props: {
           style={{
             objectFit: 'cover',
             borderRadius: '50px',
+            marginBottom:'20px'
           }}
           src={
             props?.url ||
             'https://mega.com.vn/media/news/0406_anh-gai-xinh-115.jpg'
           }
         />
+
+       <Box sx={{
+        
+       }}>
+
+          <Typography
+            sx={{
+              fontFamily: 'quicksand',
+              fontWeight: '500',
+              fontSize: '14px',
+              marginBottom: '0px',
+              backgroundColor: props?.isMine ? '#3797f0' : '#efefef',
+              padding: '8px 10px',
+              borderRadius: '20px',
+              color: props?.isMine ? '#fff' : '#000',
+              ml: '10px',
+              maxWidth: '200px',
+              wordWrap: 'break-word',
+            }}
+          >
+            {props.text}
+          </Typography>
+    
         <Typography
           sx={{
             fontFamily: 'quicksand',
             fontWeight: '500',
-            fontSize: '14px',
-            marginBottom: '5px',
-            backgroundColor: props?.isMine ? '#3797f0' : '#efefef',
-            padding: '8px 10px',
-            borderRadius: '20px',
-            color: props?.isMine ? '#fff' : '#000',
-            ml: '10px',
-            maxWidth: '200px',
-            wordWrap: 'break-word',
-          }}
-        >
-          {props.text}
-        </Typography>
-        {/* <Typography
-          sx={{
-            fontFamily: 'quicksand',
-            fontWeight: '500',
-            fontSize: '11px',
+            fontSize: '10px',
             marginBottom: '5px',
             color: 'gray',
-            padding: '8px 10px',
+            padding: '0px 10px',
             borderRadius: '20px',
+            ml:"10px"
           }}
         >
-          {timeAgo(props?.time || '')}
-        </Typography> */}
+          {timeLich(props?.time || '')}
+        </Typography>
+       </Box>
       </Box>
     </>
   );

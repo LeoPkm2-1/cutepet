@@ -828,6 +828,27 @@ function NotifycationComponent(props: { onClick: () => void }) {
               isArticle: boolean;
             };
           }
+
+            //11
+            if (noti?.type == 'CHANGE_SERVICE_SCHEDULE_STATUS') {
+              return {
+                name: "",
+                url: noti?.payload?.userUpdateInfor?.anh?.url,
+                idPost: noti?.payload?.articleInfor?._id,
+                hasRead: noti?.payload?.hasRead,
+                type: 'thay đổi trạng thái',
+                idNoti: noti?._id,
+                isArticle: true,
+              } as {
+                name?: string;
+                url?: string;
+                idPost?: string;
+                type?: string;
+                hasRead: boolean;
+                idNoti?: string;
+                isArticle: boolean;
+              };
+            }
         });
 
         setNoti([...noti, ...list]);

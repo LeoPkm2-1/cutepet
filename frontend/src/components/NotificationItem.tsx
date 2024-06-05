@@ -85,35 +85,22 @@ export function NotifycationItemClick(props: Props) {
 
   return (
     <>
-      <Link
-        onClick={() => {
-          if (props?.idNoti) {
-            props?.onClick?.();
-            notiApi.postNotificationHasReaded(props?.idNoti).then((data) => {
-              dispatch(NotiActions.setNumNoti(numNoti - 1));
-              if (props?.idPost) {
-                dispatch(SocketActions.setHasPostId(props?.idPost));
-                dispatch(NotiActions.setNewId(props?.idPost));
-              }
-              setIsReaded(true);
-            });
-          }
-        }}
-        to={naviga()}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            padding: '10px 16px',
-            alignItems: 'center',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            '&:hover': {
-              backgroundColor: '#e0e0e073',
-            },
-            transition: '0.3s',
-            justifyContent: 'space-between',
+      {props?.name && (
+        <Link
+          onClick={() => {
+            if (props?.idNoti) {
+              props?.onClick?.();
+              notiApi.postNotificationHasReaded(props?.idNoti).then((data) => {
+                dispatch(NotiActions.setNumNoti(numNoti - 1));
+                if (props?.idPost) {
+                  dispatch(SocketActions.setHasPostId(props?.idPost));
+                  dispatch(NotiActions.setNewId(props?.idPost));
+                }
+                setIsReaded(true);
+              });
+            }
           }}
+          to={naviga()}
         >
           <Box
             sx={{
@@ -121,44 +108,59 @@ export function NotifycationItemClick(props: Props) {
               padding: '10px 16px',
               alignItems: 'center',
               borderRadius: '4px',
+              cursor: 'pointer',
+              '&:hover': {
+                backgroundColor: '#e0e0e073',
+              },
+              transition: '0.3s',
+              justifyContent: 'space-between',
             }}
           >
-            <img
-              height={50}
-              width={50}
-              style={{
-                objectFit: 'cover',
-                borderRadius: '50px',
-              }}
-              src={
-                props?.url ||
-                'https://mega.com.vn/media/news/0406_anh-gai-xinh-115.jpg'
-              }
-            />
-
-            <Typography
+            <Box
               sx={{
-                fontFamily: 'quicksand',
-                fontWeight: '500',
-                fontSize: '15px',
-                marginLeft: '10px',
+                display: 'flex',
+                padding: '10px 16px',
+                alignItems: 'center',
+                borderRadius: '4px',
               }}
             >
-              <span style={{ fontWeight: '700' }}>
-                {props?.name || 'No name'}
-              </span>{' '}
-              đã {props?.type}
-            </Typography>
+              <img
+                height={50}
+                width={50}
+                style={{
+                  objectFit: 'cover',
+                  borderRadius: '50px',
+                }}
+                src={
+                  props?.url ||
+                  'https://mega.com.vn/media/news/0406_anh-gai-xinh-115.jpg'
+                }
+              />
+
+              <Typography
+                sx={{
+                  fontFamily: 'quicksand',
+                  fontWeight: '500',
+                  fontSize: '15px',
+                  marginLeft: '10px',
+                }}
+              >
+                <span style={{ fontWeight: '700' }}>
+                  {props?.name || 'No name'}
+                </span>{' '}
+                đã {props?.type}
+              </Typography>
+            </Box>
+            {!isReaded && (
+              <FiberManualRecordRoundedIcon
+                sx={{
+                  color: 'rgb(14, 100, 126)',
+                }}
+              />
+            )}
           </Box>
-          {!isReaded && (
-            <FiberManualRecordRoundedIcon
-              sx={{
-                color: 'rgb(14, 100, 126)',
-              }}
-            />
-          )}
-        </Box>
-      </Link>
+        </Link>
+      )}
     </>
   );
 }

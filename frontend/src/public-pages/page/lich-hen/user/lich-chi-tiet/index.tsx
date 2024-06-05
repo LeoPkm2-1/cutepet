@@ -165,7 +165,7 @@ export default function LichHenChiTietUser() {
             setLyDo({ value: '', label: '' });
             setLich({
               ...lich,
-              scheduleStatus: 'DA_HUY',
+              scheduleStatus: 'HUY',
             });
           } else {
             enqueueSnackbar(`${data?.message}`, { variant: 'error' });
@@ -974,7 +974,7 @@ export default function LichHenChiTietUser() {
       </Box>
       <PopUpChat
         isShow={isShowChat}
-        onChange={() => setIsShowChat(true)}
+        onChange={() => setIsShowChat(false)}
         friendInfo={{
           id: (lich?.shopInfo?.ma_cua_hang as number) || 0,
           url: lich?.shopInfo?.anh || '',

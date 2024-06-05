@@ -178,6 +178,7 @@ export function DanhSachDichVu() {
                 }
               }}
               onClick={() => {
+                setPageNumber(1);
                 setService_name(search);
               }}
             />
@@ -419,7 +420,7 @@ export function DanhSachDichVu() {
                 ml: '16px',
               }}
               type="number"
-              value={price || null}
+              value={price || 0}
               fullWidth
               size="small"
               inputProps={{ min: 0 }}
@@ -463,7 +464,7 @@ export function DanhSachDichVu() {
               onClick={() => {
                 setPrice_point(null);
                 setPrice_search(null);
-                setPrice(null);
+                setPrice(0);
                 setTypePrice({
                   value: '',
                   label: '',

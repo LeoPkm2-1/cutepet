@@ -20,7 +20,7 @@ type Props = {
 
 const defaultDateRange: DateRange<Moment> = [null, null];
 
-export default function (props: Props) {
+export default function DateRangeCustom (props: Props) {
   const [value, setValue] = useState<DateRange<Moment> | undefined>(
     props.value
   );
@@ -36,7 +36,7 @@ export default function (props: Props) {
     if (!start && !end) {
       return (
         <span className="expanded">
-          <ValueText>Select Date Range</ValueText>
+          <ValueText>Chọn thời gian</ValueText>
         </span>
       );
     }

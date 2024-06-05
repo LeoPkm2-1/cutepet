@@ -2,6 +2,7 @@ import { Box, Grid, IconButton, SvgIcon, Typography } from '@mui/material';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { StyledTab, StyledTabs } from './styled';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import {
   mdiAccountArrowLeft,
   mdiAccountArrowRightOutline,
@@ -27,10 +28,15 @@ import ThongKeCuaHang from './thong-ke-cua-hang';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
+import ChangePasswordPage from '../../trang-ca-nhan/chinh-sua-trang-ca-nhan/change-pass';
+import ChangePasswordPageShop from '../../trang-ca-nhan/chinh-sua-trang-ca-nhan/change-pass-shop';
 
 export default function CuaHangCuaToi() {
   const [tab, setTab] = useState('dich-vu');
   const navigate = useNavigate();
+  const [isOnline, setIsOnline] = useState(false);
+  const [numFl, setNumFl] = useState(0);
+  const [numVote, setNumVote] = useState(0);
   const idCuaHang = useSelector((state: RootState) => state.user.profile?.id);
   const [shop, setShop] = useState<ShopType>({
     shopId: 0,
@@ -93,6 +99,21 @@ export default function CuaHangCuaToi() {
         });
         setListDichVu(list);
       });
+      shopApi.numFollowerOfShop(idCuaHang).then((data) => {
+        setNumFl(data?.payload?.num || 0);
+      });
+      shopApi.getAllVoteOfShop(idCuaHang).then((data) => {
+        if (data?.payload?.length > 0) {
+          let sum: number = 0;
+          data?.payload?.map((item: any) => {
+            sum = sum + item?.numOfStar;
+          });
+          setNumVote(sum / data?.payload?.length);
+        }
+      });
+      shopApi.checkOnlineStatusOfShop(idCuaHang).then((data) => {
+        setIsOnline(data?.payload?.isOnline || false);
+      });
     }
   }, [idCuaHang]);
 
@@ -116,7 +137,7 @@ export default function CuaHangCuaToi() {
                 backgroundColor: '#0e647eba',
                 color: '#fff',
               },
-              zIndex: '1000',
+              zIndex: '100',
             }}
           >
             <SettingsIcon />
@@ -310,8 +331,7 @@ export default function CuaHangCuaToi() {
                   fontWeight: '600',
                 }}
               >
-                {' '}
-                5 sao{' '}
+                {numVote} / 5
               </span>
             </Typography>
             <Typography
@@ -373,8 +393,7 @@ export default function CuaHangCuaToi() {
                   fontWeight: '600',
                 }}
               >
-                {' '}
-                200.000{' '}
+                {numFl}
               </span>
             </Typography>
           </Box>
@@ -425,6 +444,15 @@ export default function CuaHangCuaToi() {
                 <SvgIcon>
                   <path d={mdiStoreOutline} />
                 </SvgIcon>
+              }
+            />
+             <StyledTab
+              onClick={() => setTab('change-pass')}
+              value="change-pass"
+              label={<span className="tab-label">Thay đổi mật khẩu</span>}
+              iconPosition="start"
+              icon={
+                <LockOpenIcon />
               }
             />
           </StyledTabs>
@@ -486,6 +514,8 @@ export default function CuaHangCuaToi() {
           </>
         )}
         {tab == 'dashboard' && <ThongKeCuaHang />}
+        {tab == 'change-pass' && <ChangePasswordPageShop />}
+        
       </Box>
     </>
   );

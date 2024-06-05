@@ -40,7 +40,7 @@ import { AuthActions } from '../redux/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux';
 // import { socket } from '../socket';
-
+import { mdiApplication } from '@mdi/js';
 interface IMenuItemData {
   key: string;
   title: string;
@@ -70,12 +70,12 @@ export default function SideBar(props: {
       icon: mdiPaw,
       link: '/home/quan-ly-thu-cung',
     },
-    // {
-    //   key: '/home/trang-chia-se',
-    //   title: 'Bài chia sẽ kiến thức',
-    //   icon: mdiAccountMultiple,
-    //   link: '/home/trang-chia-se',
-    // },
+    {
+      key: '/home/trang-chia-se',
+      title: 'Bài chia sẽ kiến thức',
+      icon: mdiApplication,
+      link: '/home/trang-chia-se',
+    },
     {
       key: '/home/cua-hang',
       title: 'Cửa hàng',

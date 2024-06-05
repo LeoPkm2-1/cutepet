@@ -100,9 +100,9 @@ export function ChinhSuaDichVu() {
             });
             setIsLoading(false);
 
-            // if (shop.shopId) {
-            //   navigate(`/home/cua-hang`);
-            // }
+            if (dichVu?.ma_cua_hang) {
+              navigate(`/home/cua-hang/${dichVu?.ma_cua_hang}/dich-vu/${dichVu?.idDichVu}`);
+            }
           }
         })
         .catch((err: any) => {
@@ -276,7 +276,7 @@ export function ChinhSuaDichVu() {
                 mb: '12px',
               }}
             >
-              Thời gian làm dịch vụ (phút)
+              Thời gian làm dịch vụ
             </Typography>
             <StyledTextField
               multiline

@@ -25,7 +25,7 @@ export interface ShopType {
 
 export interface DichVuType {
   idDichVu?: any;
-  ma_cua_hang?: string;
+  ma_cua_hang?: string | number;
   ten_dich_vu?: string;
   mo_ta_ngan?: string;
   mo_ta_dich_vu?: string;

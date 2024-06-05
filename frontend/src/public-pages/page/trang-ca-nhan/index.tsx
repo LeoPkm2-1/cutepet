@@ -211,7 +211,7 @@ export default function TrangCaNhan() {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            padding: '0 200px',
+            padding: '0 30px',
             justifyContent: 'center',
           }}
         >
@@ -427,7 +427,7 @@ export default function TrangCaNhan() {
             }}
             variant="contained"
           >
-            Chỉnh sửa trang cá nhân
+            Chỉnh sửa 
           </Button>
         </Box>
         <Divider
