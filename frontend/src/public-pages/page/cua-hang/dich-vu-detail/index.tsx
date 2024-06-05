@@ -21,6 +21,7 @@ import { useShowDialog } from '../../../../hooks/dialog';
 import { useSnackbar } from 'notistack';
 import Loading from '../../../../components/loading';
 import TagLoai from '../../../../components/tag/tag-loai';
+import ShopInfor from './shopInfor';
 export default function DichVuDetail() {
   const showDialog = useShowDialog();
   const { idCuaHang } = useParams();
@@ -66,7 +67,7 @@ export default function DichVuDetail() {
 
   useEffect(() => {
     dichVuApi
-      .getVoteInforBefore(idDichVu as string, '2025-05-30', 100)
+      .getVoteInforBefore(idDichVu as string, '2025-08-30', 100)
       .then((data: any) => {
         if (data?.status == 200) {
           console.log(data, ' dich vu danh gia ');
@@ -78,9 +79,9 @@ export default function DichVuDetail() {
               numOfStar: item?.numOfStar,
               serviceId: item?.serviceId,
               userInfo: {
-                id: 1,
-                ten: 'Thuyen Nguyen',
-                urlAvatar: '',
+                id: item?.userVotingInfor?.ma_nguoi_dung,
+                ten: item?.userVotingInfor?.ten,
+                urlAvatar: item?.userVotingInfor?.anh?.url,
               },
               id: item?._id,
             };
@@ -164,7 +165,7 @@ export default function DichVuDetail() {
                   cursor: 'pointer',
                 }}
                 onClick={() => {
-                  navigate(`/home/cua-hang/${dichVu?.ma_cua_hang}`);
+                  navigate( user_type == 0 ? `/home/cua-hang/${dichVu?.ma_cua_hang}` : `/home/cua-hang-cua-toi` );
                 }}
               >
                 Quay lại cửa hàng
@@ -367,240 +368,7 @@ export default function DichVuDetail() {
         </Box>
 
         {user_type == 0 && (
-          <Box
-            sx={{
-              backgroundColor: '#fff',
-              // boxSizing: 'border-box',
-              padding: '20px',
-              mt: '20px',
-              display: 'flex',
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                alignContent: 'center',
-              }}
-            >
-              <img
-                style={{
-                  height: '80px',
-                  width: '80px',
-                  objectFit: 'cover',
-                  borderRadius: '50px',
-                }}
-                src={dichVu?.anh_dich_vu}
-              />
-              <Box
-                sx={{
-                  ml: '16px',
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '500',
-                    fontSize: '16px',
-                    pb: '8px',
-                    // color: 'rgb(14, 100, 126)',
-                  }}
-                >
-                  Petcare Store
-                </Typography>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Button
-                    onClick={() => {
-                      navigate(`/home/cua-hang/${dichVu?.ma_cua_hang}`);
-                    }}
-                    color="inherit"
-                    sx={{
-                      minWidth: '100px',
-                      backgroundColor: 'rgb(14, 100, 126)',
-                      color: '#fff',
-                      mr: '10px',
-                      '&:hover': {
-                        backgroundColor: 'rgba(14, 100, 126, 0.9)',
-                      },
-                    }}
-                    variant="contained"
-                  >
-                    Xem shop
-                  </Button>
-                  <Button
-                    color="inherit"
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      minWidth: '120px',
-                      // backgroundColor: 'rgb(14, 100, 126)',
-                      border: '1px solid rgb(14, 100, 126)',
-                      color: 'rgb(14, 100, 126)',
-                      '&:hover': {
-                        backgroundColor: 'rgba(119, 177, 194, 0.274)',
-                      },
-                    }}
-                    variant="outlined"
-                  >
-                    <QuestionAnswerIcon
-                      sx={{
-                        color: 'rgb(14, 100, 126)',
-                        fontSize: '16px',
-                        mr: '5px',
-                      }}
-                    />
-                    Chat ngay
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-
-            <Box
-              sx={{
-                borderLeft: '1px solid rgba(0, 0, 0,0.2)',
-                ml: '20px',
-                pl: '20px',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '400',
-                    fontSize: '14px',
-                    pb: '8px',
-                    // color: 'rgb(14, 100, 126)',
-                    color: 'gray',
-                    mt: '16px',
-                    mb: '8px',
-                  }}
-                >
-                  Đánh giá:{' '}
-                  <span
-                    style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}
-                  >
-                    100
-                  </span>
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '400',
-                    fontSize: '14px',
-                    pb: '8px',
-                    // color: 'rgb(14, 100, 126)',
-                    color: 'gray',
-                  }}
-                >
-                  Dịch vụ :{' '}
-                  <span
-                    style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}
-                  >
-                    10
-                  </span>
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  ml: '30px',
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '400',
-                    fontSize: '14px',
-                    pb: '8px',
-                    // color: 'rgb(14, 100, 126)',
-                    color: 'gray',
-                    mt: '16px',
-                    mb: '8px',
-                  }}
-                >
-                  Người theo dõi:{' '}
-                  <span
-                    style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}
-                  >
-                    100
-                  </span>
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '400',
-                    fontSize: '14px',
-                    pb: '8px',
-                    // color: 'rgb(14, 100, 126)',
-                    color: 'gray',
-                  }}
-                >
-                  Trạng thái :{' '}
-                  <span
-                    style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}
-                  >
-                    Đang hoạt động
-                  </span>
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  ml: '30px',
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '400',
-                    fontSize: '14px',
-                    pb: '8px',
-                    // color: 'rgb(14, 100, 126)',
-                    color: 'gray',
-                    mt: '16px',
-                    mb: '8px',
-                  }}
-                >
-                  Địa chỉ:{' '}
-                  <span
-                    style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}
-                  >
-                    Thành Phố Hồ Chí Minh
-                  </span>
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: 'quicksand',
-                    fontWeight: '400',
-                    fontSize: '14px',
-                    pb: '8px',
-                    // color: 'rgb(14, 100, 126)',
-                    color: 'gray',
-                  }}
-                >
-                  Số điện thoại :{' '}
-                  <span
-                    style={{ color: 'rgb(14, 100, 126)', fontWeight: '600' }}
-                  >
-                    0987654321
-                  </span>
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
+         <ShopInfor idShop={dichVu?.ma_cua_hang as number} />
         )}
 
         <Box
@@ -676,7 +444,7 @@ export default function DichVuDetail() {
   );
 }
 
-function DanhGia(props: { danhGia: DanhGiatype }) {
+export function DanhGia(props: { danhGia: DanhGiatype }) {
   return (
     <>
       <Box
@@ -691,12 +459,14 @@ function DanhGia(props: { danhGia: DanhGiatype }) {
           }}
         >
           <img
-            style={{
+             style={{
               width: '50px',
               height: '50px',
               objectFit: 'cover',
+              borderRadius: '5px',
               marginTop: '16px',
-            }}
+
+             }}
             src={props?.danhGia?.userInfo?.urlAvatar}
           />
           <Box
@@ -721,7 +491,7 @@ function DanhGia(props: { danhGia: DanhGiatype }) {
               sx={{
                 fontSize: '18px',
               }}
-              value={props?.danhGia?.numOfStar}
+              value={props?.danhGia?.numOfStar || 0}
               readOnly
             />
             <Typography
@@ -755,3 +525,5 @@ function DanhGia(props: { danhGia: DanhGiatype }) {
     </>
   );
 }
+
+

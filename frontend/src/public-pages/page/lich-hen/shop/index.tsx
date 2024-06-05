@@ -63,6 +63,8 @@ export function LichHenCuaShop() {
           item?.scheduleStatus == 'CHO_XAC_NHAN' &&
           +moment(item?.happenAt).format('x') - +moment().format('x') < 0
         ) {
+          console.log(item);
+          
           return await lichApi.changeStatusOfServiceScheduleForShop(
             item?.idLich as string,
             'BI_TRE',
@@ -179,7 +181,7 @@ export function LichHenCuaShop() {
         <Box>
           <Grid container>
             {lich.map((item) => {
-              if (item?.scheduleStatus == 'DA_HUY') {
+              if (item?.scheduleStatus == 'HUY') {
                 return (
                   <Grid item xs={4}>
                     <LichSapToiShop lich={item} />

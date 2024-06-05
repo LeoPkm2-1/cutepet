@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux';
 import { deepCopy } from '@firebase/util';
 import GoiYKetBan from './component/goi-y-ket-ban';
+import PostShareServiceComponent from './component/bai-viet/post-share-service';
 
 // Our app
 export default function MangXaHoi() {
@@ -67,6 +68,14 @@ export default function MangXaHoi() {
                 name: tagPet?.ten_thu_cung,
               };
             }),
+            serviceId: item?.serviceId,
+            serviceInfo: {
+              serviceName: item?.serviceInfor?.serviceName || "",
+              shopId: item?.serviceInfor?.shopId || 0,
+              serviceType: item?.serviceInfor?.serviceType || [],
+              numOfStar: item?.serviceInfor?.numOfStar || 5,
+              shortDescription: item?.serviceInfor?.shortDescription || ''
+            }
           } as StatusType;
         });
         setListPost(list);
@@ -118,6 +127,14 @@ export default function MangXaHoi() {
                     name: tagPet?.ten_thu_cung,
                   };
                 }),
+                serviceId: item?.serviceId,
+                serviceInfo: {
+                  serviceName: item?.serviceInfor?.serviceName || "",
+                  shopId: item?.serviceInfor?.shopId || 0,
+                  serviceType: item?.serviceInfor?.serviceType || [],
+                  numOfStar: item?.serviceInfor?.numOfStar || 0,
+                  shortDescription: item?.serviceInfor?.shortDescription || ''
+                }
               } as StatusType;
             });
             // setListPost(list);
@@ -142,7 +159,6 @@ export default function MangXaHoi() {
     }
   }, [newPostFromStore?.id]);
 
-
   useEffect(() => {
     if (endPageHome && isPost) {
       setIndexPost(indexPost + 1);
@@ -162,18 +178,33 @@ export default function MangXaHoi() {
           <CreatePost />
           {listPost &&
             listPost?.map((status, index) => {
-              return (
-                <PostComponent
-                  onRemove={() => {
-                    let list: StatusType[] = deepCopy(listPost);
-                    list.splice(index, 1);
-                    setListPost(list);
-                    // }} idStatus={status?.id} />;
-                  }}
-                  // status={status}
-                  idStatus={status?.id}
-                />
-              );
+              if (status?.serviceId) {
+                return (
+                  <PostShareServiceComponent
+                    onRemove={() => {
+                      let list: StatusType[] = deepCopy(listPost);
+                      list.splice(index, 1);
+                      setListPost(list);
+                      // }} idStatus={status?.id} />;
+                    }}
+                    // status={status}
+                    idStatus={status?.id}
+                  />
+                );
+              } else {
+                return (
+                  <PostComponent
+                    onRemove={() => {
+                      let list: StatusType[] = deepCopy(listPost);
+                      list.splice(index, 1);
+                      setListPost(list);
+                      // }} idStatus={status?.id} />;
+                    }}
+                    // status={status}
+                    idStatus={status?.id}
+                  />
+                );
+              }
             })}
           {isPost && (
             <Typography

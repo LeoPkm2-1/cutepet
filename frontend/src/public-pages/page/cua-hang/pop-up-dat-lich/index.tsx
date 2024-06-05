@@ -13,6 +13,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import dichVuApi from '../../../../api/dichVu';
 import { useSnackbar } from 'notistack';
 import Loading from '../../../../components/loading';
+import postApi from '../../../../api/post';
 
 export function PopUpDatLich(props: { dichVu: DichVuType, onClose: () => void }) {
   const [tenLich, setTenLich] = useState('');
@@ -36,6 +37,14 @@ export function PopUpDatLich(props: { dichVu: DichVuType, onClose: () => void })
         console.log('thành cong', data);
         enqueueSnackbar(`Đặt lịch hẹn thành công`, { variant: 'info' });
         props?.onClose?.();
+        postApi.addShareServicePost(
+          "",
+          "PUBLIC",
+          [pet?.ma_thu_cung as number],
+          'images',
+          [props?.dichVu?.anh_dich_vu as string],
+          props?.dichVu?.idDichVu
+        )
       })
       .catch((err) => {
         enqueueSnackbar(`${err?.message}`, { variant: 'error' });
@@ -123,6 +132,7 @@ export function PopUpDatLich(props: { dichVu: DichVuType, onClose: () => void })
           <LocalizationProvider  dateAdapter={AdapterDayjs}>
             <DemoContainer  components={['DateTimePicker', 'DateTimePicker']}>
               <DateTimePicker
+                disablePast
                 value={time}
                 onChange={(newValue) => {
                   console.log(newValue, ' newValue');

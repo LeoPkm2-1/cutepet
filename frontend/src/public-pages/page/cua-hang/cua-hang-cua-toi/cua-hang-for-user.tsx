@@ -29,6 +29,7 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 import userApis from '../../../../api/user';
+import PopUpChat from '../../../../components/pop-up-chat';
 
 export default function CuaHangForUser() {
   const [tab, setTab] = useState('dich-vu');
@@ -36,11 +37,19 @@ export default function CuaHangForUser() {
   const [isFollow, setIsFollow] = useState(false);
   const userInfo = useSelector((state: RootState) => state.user.profile);
   const { idCuaHang } = useParams();
+  const [isOnline, setIsOnline] = useState(false);
+  const [isShowChat, setIsShowChat] = useState(false);
+  const [numFl, setNumFl] = useState(0);
+  const [numVote, setNumVote] = useState(0);
   const [shop, setShop] = useState<ShopType>({
     shopId: 0,
   });
   const [listDichVu, setListDichVu] = useState<DichVuType[]>([]);
+
   useEffect(() => {
+    if (idCuaHang == userInfo?.id) {
+      navigate('/home/cua-hang-cua-toi');
+    }
     if (idCuaHang) {
       shopApi.getMyShop(idCuaHang).then((data) => {
         console.log(data, ' shop nè');
@@ -96,6 +105,27 @@ export default function CuaHangForUser() {
           } as DichVuType;
         });
         setListDichVu(list);
+      });
+
+      shopApi.numFollowerOfShop(idCuaHang).then((data) => {
+        setNumFl(data?.payload?.num || 0);
+      });
+      shopApi.getAllVoteOfShop(idCuaHang).then((data) => {
+        if (data?.payload?.length > 0) {
+          let sum: number = 0;
+          data?.payload?.map((item: any) => {
+            sum = sum + item?.numOfStar;
+          });
+          setNumVote(sum / data?.payload?.length);
+        }
+      });
+      shopApi.checkOnlineStatusOfShop(idCuaHang).then((data) => {
+        setIsOnline(data?.payload?.isOnline || false);
+      });
+      shopApi.hasFollowedShop(idCuaHang).then((data) => {
+        if (data?.payload?.isFollowed) {
+          setIsFollow(true);
+        }
       });
     }
   }, [idCuaHang]);
@@ -199,7 +229,7 @@ export default function CuaHangForUser() {
                     userApis.followShop(shop?.shopId).then((data) => {
                       if (data?.status == 200) {
                         setIsFollow(!isFollow);
-                        
+                        setNumFl(numFl + 1);
                       }
                     });
                   }
@@ -220,15 +250,16 @@ export default function CuaHangForUser() {
               </Button>
             ) : (
               <Button
-              onClick={() => {
-                if (shop?.shopId) {
-                  userApis.unfollowShop(shop?.shopId).then((data) => {
-                    if (data?.status == 200) {
-                      setIsFollow(!isFollow);
-                    }
-                  });
-                }
-              }}
+                onClick={() => {
+                  if (shop?.shopId) {
+                    userApis.unfollowShop(shop?.shopId).then((data) => {
+                      if (data?.status == 200) {
+                        setIsFollow(!isFollow);
+                        setNumFl(numFl - 1);
+                      }
+                    });
+                  }
+                }}
                 color="inherit"
                 sx={{
                   minWidth: '100px',
@@ -246,6 +277,7 @@ export default function CuaHangForUser() {
             )}
 
             <Button
+              onClick={() => setIsShowChat(true)}
               color="inherit"
               sx={{
                 display: 'flex',
@@ -385,7 +417,7 @@ export default function CuaHangForUser() {
                 }}
               >
                 {' '}
-                5 sao{' '}
+                {numVote.toFixed(2)} / 5
               </span>
             </Typography>
             <Typography
@@ -421,7 +453,7 @@ export default function CuaHangForUser() {
                     mr: '6px',
                   }}
                 />
-                Đang hoạt động{' '}
+                {isOnline ? 'Đang hoạt động' : 'Đang offline'}
               </span>
             </Typography>
             <Typography
@@ -447,8 +479,7 @@ export default function CuaHangForUser() {
                   fontWeight: '600',
                 }}
               >
-                {' '}
-                200.000{' '}
+                {numFl}
               </span>
             </Typography>
           </Box>
@@ -522,6 +553,20 @@ export default function CuaHangForUser() {
           </>
         )}
       </Box>
+      {shop?.shopId && (
+        <PopUpChat
+          isShow={isShowChat}
+          onChange={() => setIsShowChat(false)}
+          friendInfo={{
+            id: (shop?.shopId as number) || 0,
+            url: shop?.avatarImageUrl || '',
+            isOnline: false,
+            name: shop?.ten || '',
+            text: shop?.tai_khoan,
+            user: shop?.email || '',
+          }}
+        />
+      )}
     </>
   );
 }

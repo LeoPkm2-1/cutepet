@@ -28,6 +28,9 @@ import dichVuApi from '../../../../../api/dichVu';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useShowDialog } from '../../../../../hooks/dialog';
 import PopUpChat from '../../../../../components/pop-up-chat';
+import { DanhGia } from '../../../cua-hang/dich-vu-detail';
+import { DanhGiatype } from '../../../../../models/shop';
+import shopApi from '../../../../../api/shop';
 
 export default function LichHenChiTietShop() {
   const { idLich } = useParams();
@@ -40,6 +43,7 @@ export default function LichHenChiTietShop() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const showDialog = useShowDialog();
+  const [danhGia, setDanhGia] = useState<DanhGiatype>({});
 
   const [lyDo, setLyDo] = useState<OptionSelect>({
     label: '',
@@ -96,6 +100,33 @@ export default function LichHenChiTietShop() {
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (lich?.userInfo?.userId && lich?.dichVuInfo?.ma_dich_vu) {
+      shopApi
+        .getVoteInforOfUserForService(
+          lich?.userInfo?.userId,
+          lich?.dichVuInfo?.ma_dich_vu
+        )
+        .then((data) => {
+          const item = data?.payload;
+          const dG: DanhGiatype = {
+            content: item?.content,
+            createAt: item?.createAt,
+            modifiedAt: item?.modifiedAt,
+            numOfStar: item?.numOfStar,
+            serviceId: item?.serviceId,
+            userInfo: {
+              id: item?.userVotingInfor?.ma_nguoi_dung,
+              ten: item?.userVotingInfor?.ten,
+              urlAvatar: item?.userVotingInfor?.anh?.url,
+            },
+            id: item?._id,
+          };
+          setDanhGia(dG);
+        });
+    }
+  }, [lich?.userInfo?.userId, lich?.dichVuInfo?.ma_dich_vu]);
 
   // useEffect(() => {
   //   if (lich?.petInfo?.ma_thu_cung) {
@@ -162,7 +193,7 @@ export default function LichHenChiTietShop() {
             setLyDo({ value: '', label: '' });
             setLich({
               ...lich,
-              scheduleStatus: 'DA_HUY',
+              scheduleStatus: 'HUY',
             });
           } else {
             enqueueSnackbar(`${data?.message}`, { variant: 'error' });
@@ -1106,38 +1137,7 @@ export default function LichHenChiTietShop() {
             />
             Đánh giá của người dùng
           </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-
-              justifyContent: 'center',
-              mb: '20px',
-            }}
-          >
-            <Rating
-              name="simple-controlled"
-              value={rating.numStar}
-              onChange={(event, newValue) => {
-                if (newValue) {
-                  setRating({ ...rating, numStar: newValue });
-                }
-              }}
-            />
-          </Box>
-          <StyledTextField
-            InputProps={{
-              readOnly: true,
-            }}
-            multiline
-            minRows={2}
-            maxRows={5}
-            value={rating.content}
-            placeholder="Đánh giá ..."
-            fullWidth
-            onChange={(e) => {
-              setRating({ ...rating, content: e.target.value });
-            }}
-          />
+          <DanhGia danhGia={danhGia} />;
           {/* <Box
             sx={{
               display: 'flex',

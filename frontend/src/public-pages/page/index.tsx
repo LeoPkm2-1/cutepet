@@ -53,6 +53,7 @@ import LichHenChiTietShop from './lich-hen/shop/lich-chi-tiet';
 import CuaHangCuaToi from './cua-hang/cua-hang-cua-toi';
 import CuaHangForUser from './cua-hang/cua-hang-cua-toi/cua-hang-for-user';
 
+
 export default function PageRouting() {
   const matches = useMediaQuery('(min-width:1200px)');
   const [drawerOpen, setDrawerOpen] = useState(matches);
@@ -303,13 +304,15 @@ export default function PageRouting() {
       });
 
       // 13
-      socket.on('NEW_EVENT', (data) => {
+      socket.on('NEW_EVENT', (data:any) => {
         // dispatch(NotiActions.setIncreNumNoti());
+        console.log(data, " new event mới nè");
+        
         enqueueSnackbar(
           <NotifycationItem
-            name={data?.userComment?.ten || "hihi"}
-            type="có tahy đổi trạng thái"
-            url={data?.userComment?.anh?.url}
+            name={data?.payload?.userUpdateInfor?.ten || "Bạn"}
+            type="đã thay đổi trạng thái lịch hẹn"
+            url={data?.payload?.userUpdateInfor?.anh?.url}
           />,
           {
             variant: 'info',

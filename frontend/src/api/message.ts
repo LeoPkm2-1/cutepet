@@ -1,7 +1,7 @@
 import { authRequest } from './base';
 
 const sentMessage = (
-  receiver_id: number ,
+  receiver_id: number,
   message_type: string,
   message_content: string
 ) => {
@@ -21,6 +21,7 @@ const getMyConversationsList = () => {
     method: 'POST',
   });
 };
+
 const getMessagesBeforeTime = (
   before: string,
   num: number,
@@ -29,15 +30,29 @@ const getMessagesBeforeTime = (
   return authRequest<any>({
     url: `chatting/getMessagesBeforeTime`,
     method: 'POST',
-    body:{
+    body: {
       before,
       num,
-      chatter_id
-    }
+      chatter_id,
+    },
   });
 };
 
+const markMessagesAsRead = (message_ids: string[]) => {
+  return authRequest<any>({
+    url: `chatting/markMessagesAsRead`,
+    method: 'POST',
+    body: {
+      message_ids,
+    },
+  });
+};
 
-const messageApi = { sentMessage, getMyConversationsList,getMessagesBeforeTime};
+const messageApi = {
+  sentMessage,
+  getMyConversationsList,
+  getMessagesBeforeTime,
+  markMessagesAsRead,
+};
 
 export default messageApi;

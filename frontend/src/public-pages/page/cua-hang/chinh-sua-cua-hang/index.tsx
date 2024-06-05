@@ -37,11 +37,13 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../../components/Button';
 import addressApi from '../../../../api/address';
 import { OptionalEventProperties } from 'react-dom/test-utils';
+import { UserProfile } from '../../../../models/user-profile';
 
 export function UpdateStore() {
   const [shop, setShop] = useState<ShopType>({
     shopId: 0,
   });
+  const dispatch = useDispatch();
   const [fileAvatar, setFileAvatar] = useState<File | null>(null);
   const [fileCover, setFileCover] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -93,12 +95,16 @@ export function UpdateStore() {
 
   async function handleSubmit() {
     setIsLoading(true);
+    let urlAvatar = shop?.avatarImageUrl;
+
     if (fileAvatar) {
       console.log('Update ảnh đại diện');
 
       const urlPhotoAvatar = (await uploadTaskPromise(fileAvatar)) as string;
+      urlAvatar = urlPhotoAvatar;
       await shopApi.updateAvatarShop(urlPhotoAvatar);
     }
+
     if (fileCover) {
       console.log('Update ảnh bìa');
 
@@ -130,6 +136,15 @@ export function UpdateStore() {
               variant: 'info',
             });
             setIsLoading(false);
+            const profile: UserProfile = {
+              id: userInfo?.id || 0,
+              name: shop?.ten || "",
+              email: userInfo?.email || '',
+              age: userInfo?.age || '',
+              photoURL: urlAvatar || '',
+              user_type: userInfo?.user_type || 0,
+            };
+            dispatch(UserActions.setProfile(profile));
 
             if (shop.shopId) {
               navigate(`/home/cua-hang-cua-toi`);
@@ -147,7 +162,7 @@ export function UpdateStore() {
   return (
     <>
       <Loading open={isLoading} />
-      {shop?.shopId && (
+      {(shop?.shopId || 0) > 0 && (
         <Box
           sx={{
             paddingBottom: '30px',

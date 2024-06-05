@@ -23,6 +23,34 @@ const createStatus = (
     },
   });
 };
+
+
+const addShareServicePost = (
+  text: string,
+  visibility: string,
+  myPetIds: string[] | number[],
+  type: string,
+  data: string[],
+  service_id:string,
+
+) => {
+  return authRequest<any>({
+    url: '/post/statusPost/addShareServicePost',
+    method: 'POST',
+    body: {
+      text: text,
+      visibility,
+      myPetIds,
+      media: {
+        type: type,
+        data: data,
+      },
+      service_id
+    },
+  });
+};
+
+
 const likeOrUnlikeStatus = (post_id: string) => {
   return authRequest<any>({
     url: '/post/statusPost/likePost',
@@ -267,7 +295,8 @@ const postApi = {
   updateComment,
   updateReply,
   updatePost,
-  getCommentStartFrom
+  getCommentStartFrom,
+  addShareServicePost
 };
 
 export default postApi;

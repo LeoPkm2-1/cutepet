@@ -24,6 +24,14 @@ export interface StatusType {
     name: string;
   }[];
   owner_id?: number;
+  serviceId?: string;
+  serviceInfo?: {
+    serviceName: string,
+    shopId: number,
+    serviceType: string[],
+    shortDescription: string,
+    numOfStar: number,
+  }
 }
 
 export interface CommentType {
