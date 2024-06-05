@@ -25,12 +25,12 @@
 						},
 						{
 							"key": "tai_khoan",
-							"value": "string",
+							"value": "nam",
 							"type": "text"
 						},
 						{
 							"key": "mat_khau",
-							"value": "string",
+							"value": "123",
 							"type": "text"
 						},
 						{
@@ -1262,7 +1262,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJtYV9uZ3VvaV9kdW5nIjo1LCJ0ZW4iOiJMZW8iLCJuZ2F5X3NpbmgiOiIxOTkxLTEwLTAyVDE3OjAwOjAwLjAwMFoiLCJ0YWlfa2hvYW4iOiJsZW8iLCJlbWFpbCI6Imxlb0BnbWFpbC5jb20iLCJzb19kaWVuX3Rob2FpIjoiMDkxMjM0NTY4MiIsImdpb2lfdGluaCI6MSwiaWF0IjoxNzA0MzQwODQ3LCJleHAiOjE3MDczNDA4NDd9.y36qKvh24uVb1z66eDj1m8t-6xXS0DdbH4e32wFgjOzD792sJlxLR9lMpRsuLLmDpgiNPHFGrMsn1HqAcKdKPg",
+							"value": "{{token_temp}}",
 							"type": "string"
 						}
 					]
@@ -1426,7 +1426,7 @@
 			"response": []
 		},
 		{
-			"name": "33_danhsachloai",
+			"name": "33_pet_danhsachloai",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -3649,7 +3649,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_cua_hang\": \"string\",\n    \"tai_khoan\":\"string\",\n    \"mat_khau\":\"string\",\n    \"email\":\"phat.maileo2001k19@hcmut.edu.vn\",\n    \"dia_chi\": {\n        \"so_nha\":1,\n        \"thanh_pho\":\"HCM\"\n    }\n}",
+					"raw": "{\n    \"ma_so_thue\": \"mst_test_000\",\n    \"ten_cua_hang\": \"cửa hàng số ba\",\n    \"tai_khoan\":\"shop_3\",\n    \"mat_khau\":\"123\",\n    \"email\":\"aaaaaaaaaaaaaaaaa@gmail.com\",\n    \"dia_chi\": {\n        \"house_number\":\"268 Lý Thường kiệt\"\n        ,\"ward_id\":\"66169cdfcf40fa5369bd612a\"\n        ,\"district_id\":\"66169cdfcf40fa5369bd5884\"\n        ,\"province_id\":\"66169cdfcf40fa5369bd57eb\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3678,7 +3678,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_0}}",
+							"value": "{{token_user_0}}",
 							"type": "string"
 						}
 					]
@@ -3690,7 +3690,7 @@
 					"urlencoded": [
 						{
 							"key": "shop_id",
-							"value": "531",
+							"value": "535",
 							"type": "text"
 						}
 					]
@@ -3718,7 +3718,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -3727,7 +3727,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_cua_hang\":\"cua hàng xịn                  \",\n    \"dia_chi\":{\n        \"so_nha\":1,\n        \"duong\":\"NYC\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":{\n        \"thu2\":\"07:00-11:59_14:00-18:00\",\n        \"thu3\":\"06:11-17:59\",\n        \"thu4\":\"06:11-17:59\",\n        \"thu5\":\"06:11-17:59\",\n        \"thu6\":\"06:11-17:59\",\n        \"thu7\":\"06:11-17:59\",\n        \"chunhat\":\"08:00-11:00_14:00-22:00\"\n    }\n  }",
+					"raw": "{\n    \"ten_cua_hang\":\"cửa hàng số một\",\n    \"dia_chi\":{\n        \"house_number\":\"128\"\n        ,\"ward_id\":\"66169cdfcf40fa5369bd5b32\"   \n        , \"district_id\":\"66169cdfcf40fa5369bd5827\"\n        , \"province_id\":\"66169cdfcf40fa5369bd57e1\"\n    },\n    \"so_dien_thoai\":\"0434322\",\n    \"khau_hieu\":\"hàng xịn giá tốt\",\n    \"mo_ta_cua_hang\":\"dịch vụ 10 điểm\",\n    \"thoi_gian_lam_viec\":{\n        \"thu2\":\"07:00-11:59_14:00-18:00\",\n        \"thu3\":\"06:11-17:59\",\n        \"thu4\":\"06:11-17:59\",\n        \"thu5\":\"06:11-17:59\",\n        \"thu6\":\"06:11-17:59\",\n        \"thu7\":\"06:11-17:59\",\n        \"chunhat\":\"08:00-11:00_14:00-22:00\"\n    }\n  }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3837,7 +3837,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_5}}",
 							"type": "string"
 						}
 					]
@@ -3846,7 +3846,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ten_dich_vu\":\"  dịch vụ tốt\",\n    \"ma_cua_hang\":531,\n    \"mo_ta_dich_vu\":\"tốt \",\n    \"anh_dich_vu\":\"anh.com\",\n    \"the_loai_dich_vu\":[1,2,3],\n    \"don_gia\":2,\n    \"thoi_luong_dich_vu\":7\n}",
+					"raw": "{\n    // \"ten_dich_vu\":\"dịch vụ 2_02\",\n    \"ten_dich_vu\":\"dịch vụ test hahahahahhaha\",\n    \"mo_ta_ngan\":\"OK\",\n    \"mo_ta_dich_vu\":\"ok \",\n    \"anh_dich_vu\":\"cuahang2.com\"\n    ,\"the_loai_dich_vu\":[\n        \"CHĂM SÓC\",\n        \"TẮM\",\n        \"LÀM ĐẸP\",\n        \"CẮT TỈA LÔNG\"\n        ]\n    ,\"danh_sach_loai_phu_hop\": [\"Chó\",\"mèo\"]        // nếu muốn là tất cả các loài thì có thể không truyên hoặc truyền undefined, danh sách tên các loài lấy ở postman số 33\n    ,\"don_gia\":9,\n    \"thoi_luong_dich_vu\":8\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -3876,7 +3876,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token_temp}}",
+							"value": "{{token_user_0}}",
 							"type": "string"
 						}
 					]
@@ -3888,7 +3888,7 @@
 					"urlencoded": [
 						{
 							"key": "shop_id",
-							"value": "531",
+							"value": "534",
 							"type": "text"
 						}
 					]
@@ -3903,6 +3903,1332 @@
 					"path": [
 						"shop",
 						"getAllAvailableServiceOfShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "92_shop_deleteService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "service_id",
+							"value": "6600679ddf4746e55b1e81eb",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/deleteService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"deleteService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "93_shop_updateService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"service_id\": \"6610e4c2034b2c1379d2b7fc\"\n    ,\"ten_dich_vu\": \"dịch vụ 1_01\"\n    ,\"mo_ta_ngan\": \"tốt\"\n    ,\"mo_ta_dich_vu\": \"tốt\"\n    ,\"anh_dich_vu\": \"ảnh.com\"\n    ,\"the_loai_dich_vu\": [\n        \"CHĂM SÓC\",\n        \"TẮM\",\n        \"LÀM ĐẸP\",\n        \"CẮT TỈA LÔNG\"\n    ]\n    ,\"don_gia\": 10.2\n    ,\"thoi_luong_dich_vu\": 5\n    ,\"danh_sach_loai_phu_hop\": [\"MèO\",\"Cá\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/updateService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"updateService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "94_shop_voteService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "service_id",
+							"value": "6610e4c2034b2c1379d2b7fc",
+							"type": "text"
+						},
+						{
+							"key": "num_of_star",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "tệ",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/voteService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"voteService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "95_shop_getServiceById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "service_id",
+							"value": "6610e4c2034b2c1379d2b7fc",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/getServiceById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getServiceById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "96_shop_categoriesForService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/categoriesForService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"categoriesForService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "97_shop_getVoteInforBefore",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_0}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"service_id\":\"6610e4c2034b2c1379d2b7fc\",\n    \"before\":\"2024-04-30T15:18:55.218+00:00\",\n    \"num\":3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/getVoteInforBefore",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getVoteInforBefore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "98_user_createSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"service_id\":\"6610e55c3c34c7132e0ad405\"\n    ,\"schedule_name\":\"đi test 1\"\n    ,\"pet_id\":2\n    ,\"happen_at\":\"2024-6-03\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/createServiceSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"createServiceSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "99_user_getServiceScheduleById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e836933b80e9bad54a29\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/getServiceScheduleById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"getServiceScheduleById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "100_user_getAllScheduleForUser",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/user/getAllScheduleForUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"getAllScheduleForUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "101_user_cancelSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e6721d31a037d900d8ec\",\n    \"reason\":\"không thích\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/cancelServiceSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"cancelServiceSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "102_shop_cancelServiceSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e836933b80e9bad54a29\",\n    \"reason\":\"không thích\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/cancelServiceSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"cancelServiceSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "103_shop_confirmServiceSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e6721d31a037d900d8ec\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/confirmServiceSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"confirmServiceSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "104_shop_getAllScheduleForShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/shop/getAllScheduleForShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getAllScheduleForShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "105_address_hanhchinh_getAllProvinces",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/address/hanhchinh/getAllProvinces",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"address",
+						"hanhchinh",
+						"getAllProvinces"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "106_address_hanhchinh_getAllDistrictsOfProvince",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"province_id\":\"66169cdfcf40fa5369bd57f3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/address/hanhchinh/getAllDistrictsOfProvince",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"address",
+						"hanhchinh",
+						"getAllDistrictsOfProvince"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "107_address_hanhchinh_getAllWardsOfDistrict",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"district_id\":\"66169cdfcf40fa5369bd58f0\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/address/hanhchinh/getAllWardsOfDistrict",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"address",
+						"hanhchinh",
+						"getAllWardsOfDistrict"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "108_shop_filterServices",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"service_name\":\"vụ\"\n    , \"service_type\":[\"CẮT TỈA LÔNG\",\"nhuộm lông\"]\n    ,\"num_of_star\":1               // số lượng sao được vote\n    ,\"price_point\":50000            // số tiền cần truy vấn\n    ,\"price_search\":\"less\"          // chỉ định tìm kiếm số tiền tối thiểu hay tối đa vd: price_point = 500 và  price_search = 'LESS' thì mô tả giá tiền tối thiểu là 500, nếu price_search = 'GREATER' thì mô tả số tiền tối đa\n    ,\"province_id\":\"66169cdfcf40fa5369bd57e1\"\n    ,\"district_id\":\"66169cdfcf40fa5369bd5822\"\n    ,\"pageNumber\":1              // số thứ tự của trang ( số thứ tự bắt đầu từ  1 )\n    ,\"pageSize\":1                // số lượng dịch vụ trong 1 trang\n    ,\"suitable_species\":[\"mÈo\",\"Chó\"]\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/filterServices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"filterServices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "109_user_followShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"shop_id\":537\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/followShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"followShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "110_user_unfollowShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"shop_id\":536\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/unfollowShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"unfollowShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "111_user_getListFollowedShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/user/getListFollowedShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"getListFollowedShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "112_shop_getListUserFollowShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/shop/getListUserFollowShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getListUserFollowShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "113_user_getMyVoteForService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"service_id\":\"6610e4c2034b2c1379d2b7fc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/getMyVoteForService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"getMyVoteForService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "114_shop_getAllStatusOfSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/shop/getAllStatusOfSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getAllStatusOfSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "115_user_changeStatusOfServiceSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e836933b80e9bad54a29\"\n    ,\"status_change_to\":\"Huy\"\n    ,\"reason\":\"không thích\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/changeStatusOfServiceSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"changeStatusOfServiceSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "116_shop_changeStatusOfServiceSchedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e836933b80e9bad54a29\"\n    ,\"status_change_to\":\"Huy\"\n    ,\"reason\":\"không thích\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/changeStatusOfServiceSchedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"changeStatusOfServiceSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "117_shop_getServiceScheduleById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"schedule_id\":\"6610e836933b80e9bad54a29\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/getServiceScheduleById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getServiceScheduleById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "118_shop_getAllServiceScheduleStatus",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/shop/getAllServiceScheduleStatus",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getAllServiceScheduleStatus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "119_dashboard_numFollowerOfShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shop_id\":537\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/dashboard/numFollowerOfShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"dashboard",
+						"numFollowerOfShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "120_dashboard_getListFollowersOfShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shop_id\":537\n    ,\"start_time\":\"2024-05-04T08:52:07.243+07:00\"       // nếu không gửi hoặc gửi với giá trị là undefined sẽ lấy dử liệu từ đầu\n    , \"end_time\":\"2025-05-16T17:47:07.922+00:00\"        // nếu không gửi hoặc gửi với giá trị là undefined sẽ lấy dử liệu đến cuối\n                                                        // nếu cả start_time và end_time đều là undefined sẽ lấy dữ liệu từ đầu cho đến cuối.\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/dashboard/getListFollowersOfShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"dashboard",
+						"getListFollowersOfShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "121_shop_getVoteInforOfUserForService",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \n    \"user_id\":1\n    ,\"service_id\":\"6610e4c2034b2c1379d2b7fc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/getVoteInforOfUserForService",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"getVoteInforOfUserForService"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "122_shop_checkOnlineStatusOfShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shop_id\":537\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/shop/checkOnlineStatusOfShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"shop",
+						"checkOnlineStatusOfShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "123_user_hasFollowedShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shop_id\":536\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/hasFollowedShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"hasFollowedShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "124_user_getAllVoteOfShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_5}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shop_id\":535\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/getAllVoteOfShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"getAllVoteOfShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "125_dashboard_filterSchedulesListForShop",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_temp}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n    \"schedule_status\" : \"Huy\"\n    ,\"start_time\" : \"2024-05-04T08:52:07.243+07:00\"\n    ,\"end_time\" : \"2025-05-16T17:47:07.922+00:00\"\n    ,\"service_id\" : \"6610e55c3c34c7132e0ad405\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/dashboard/filterSchedulesListForShop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"dashboard",
+						"filterSchedulesListForShop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "126_addShareSchedulePost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user_3}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \" hôm nay vui quá nha 6\"\n    ,\"visibility\":\"PUBLIC\"\n//    ,\"taggedUsersId\":[]           // Thuộc tính này bỏ\n   ,\"myPetIds\":[46,45]\n    ,\"media\": {\n        \"type\":\"images\",\n        \"data\":[\"https://pbs.twimg.com/media/D7dBfozUEAEkItp.jpg\"]\n    }\n    ,\"service_id\":\"6610e4c2034b2c1379d2b7fc\"\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/post/statusPost/addShareServicePost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"statusPost",
+						"addShareServicePost"
 					]
 				}
 			},

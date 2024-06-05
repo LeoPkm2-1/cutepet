@@ -15,6 +15,26 @@ class StatusPost {
   }
 }
 
+class ShareSchedulePost extends StatusPost {
+  constructor(
+    text,
+    visibility,
+    media,
+    taggedUsers,
+    withPets,
+    owner_id,
+    service_id,
+    service_infor
+  ) {
+    super(text, visibility, media, taggedUsers, withPets, owner_id);
+    this.serviceId = service_id;
+    this.serviceInfor = service_infor;
+  }
+  getType() {
+    return ShareSchedulePost.type;
+  }
+}
+
 class CommentPost {
   constructor(post_id, comment, commentBy) {
     this.postId = post_id;
@@ -67,4 +87,5 @@ module.exports = {
   ReplyComment,
   LikeComment,
   ReportPost,
+  ShareSchedulePost,
 };

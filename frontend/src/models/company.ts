@@ -11,5 +11,4 @@ export interface Company {
 export interface Option {
   label: string;
   value: number | string;
-  items?: Option[];
 }

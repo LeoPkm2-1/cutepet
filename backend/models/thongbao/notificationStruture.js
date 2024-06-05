@@ -270,6 +270,31 @@ class CommentArticleNotification extends GeneralNotification {
   }
 }
 
+class ServiceScheduleChangeStatus extends GeneralNotification {
+  static NOTIFICATION_TYPE = "CHANGE_SERVICE_SCHEDULE_STATUS";
+  static getNotificationType() {
+    return ServiceScheduleChangeStatus.NOTIFICATION_TYPE;
+  }
+  constructor(
+    receiver_id,
+    payload,
+    createAt = new Date(),
+    title = "",
+    message = "",
+    hasRead = false
+  ) {
+    super(
+      ServiceScheduleChangeStatus.NOTIFICATION_TYPE,
+      receiver_id,
+      payload,
+      createAt,
+      title,
+      message,
+      hasRead
+    );
+  }
+}
+
 module.exports = {
   LikeStatusPostNotification,
   CommentStatusPostNotification,
@@ -281,4 +306,5 @@ module.exports = {
   UpvoteArticleNotification,
   DownvoteArticleNotification,
   CommentArticleNotification,
+  ServiceScheduleChangeStatus,
 };

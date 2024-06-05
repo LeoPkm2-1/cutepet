@@ -55,6 +55,14 @@ const isVaildInt = (value) => {
   return !isNaN(value);
 };
 
+const isValidNumber = (value) => {
+  // console.log(parseFloat(value));
+  // return typeof value == "number" || !isNaN(parseFloat(value));
+  return /^-?\d+(\.\d+)?$/.test(value) && Number.isFinite(parseFloat(value));
+};
+
+
+
 module.exports = {
   filter_keys_in_Obj,
   filter_keys_in_list_Objs,
@@ -65,4 +73,5 @@ module.exports = {
   generateNumRandomNumbersInRangeOf10,
   areTwoSetsEqual,
   isVaildInt,
+  isValidNumber,
 };

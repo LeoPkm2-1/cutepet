@@ -7,7 +7,9 @@ class ShopService {
     service_img_url,
     service_type,
     price_quotation,
-    duration
+    duration,
+    petSpecies,
+    num_of_star = 0
   ) {
     this.serviceName = service_name;
     this.shopId = shop_id;
@@ -17,10 +19,30 @@ class ShopService {
     this.serviceType = service_type;
     this.priceQuotation = price_quotation;
     this.duration = duration;
+    this.petSpecies = petSpecies;
+    this.numOfStar = num_of_star;
   }
 }
 
-module.exports = { ShopService };
+class VoteForService {
+  constructor(
+    service_id,
+    user_Voting_id,
+    num_of_star = 1,
+    content = "",
+    create_at = new Date(),
+    modified_at = null
+  ) {
+    this.serviceId = service_id;
+    this.userVotingId = user_Voting_id;
+    this.numOfStar = num_of_star;
+    this.content = content;
+    this.createAt = create_at;
+    this.modifiedAt = modified_at;
+  }
+}
+
+module.exports = { ShopService, VoteForService };
 
 /*
     ten_dich_vu,

@@ -1,0 +1,11 @@
+id,full_name,full_name_en,short_name,short_name_en,code_name,code_name_en,type
+1,"Thành phố trực thuộc trung ương",Municipality,"Thành phố",City,thanh_pho_truc_thuoc_trung_uong,municipality,ADMINISTRATIVE_UNIT
+2,Tỉnh,Province,Tỉnh,Province,tinh,province,ADMINISTRATIVE_UNIT
+3,"Thành phố thuộc thành phố trực thuộc trung ương","Municipal city","Thành phố",City,thanh_pho_thuoc_thanh_pho_truc_thuoc_trung_uong,municipal_city,ADMINISTRATIVE_UNIT
+4,"Thành phố thuộc tỉnh","Provincial city","Thành phố",City,thanh_pho_thuoc_tinh,provincial_city,ADMINISTRATIVE_UNIT
+5,Quận,"Urban district",Quận,District,quan,urban_district,ADMINISTRATIVE_UNIT
+6,"Thị xã","District-level town","Thị xã",Town,thi_xa,district_level_town,ADMINISTRATIVE_UNIT
+7,Huyện,District,Huyện,District,huyen,district,ADMINISTRATIVE_UNIT
+8,Phường,Ward,Phường,Ward,phuong,ward,ADMINISTRATIVE_UNIT
+9,"Thị trấn","Commune-level town","Thị trấn",Township,thi_tran,commune_level_town,ADMINISTRATIVE_UNIT
+10,Xã,Commune,Xã,Commune,xa,commune,ADMINISTRATIVE_UNIT

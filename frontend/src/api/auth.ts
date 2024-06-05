@@ -58,6 +58,20 @@ const register = (ten:string, tai_khoan: string, mat_khau: string, email:string)
     },
   });
 };
+const registerShop = (ma_so_thue:string,ten_cua_hang:string, tai_khoan: string, mat_khau: string, email:string, dia_chi: any) => {
+  return request<any>({
+    url: '/shopRegistration',
+    method: 'POST',
+    body: {
+      ma_so_thue,
+      ten_cua_hang,
+      tai_khoan,
+      mat_khau,
+      email,
+      dia_chi
+    },
+  });
+};
 
 const logoutUser = () => {
   return authRequest<any>({
@@ -68,7 +82,7 @@ const logoutUser = () => {
 
 const xacThucUser = (active_code:string) => {
   return request<any>({
-    url: '/user/confirmRegister',
+    url: '/confirmRegister',
     method: 'POST',
     body:{
       active_code
@@ -81,7 +95,8 @@ const authApi = {
   register,
   // login,
   logoutUser,
-  xacThucUser
+  xacThucUser,
+  registerShop
 };
 
 export default authApi;

@@ -1,3 +1,4 @@
+const userModel = require("../models/userModel");
 const UtilsHelper = require("../utils/UtilsHelper");
 const { Response } = require("./../utils");
 const changePasswordMid = async (req, res, next) => {
@@ -83,7 +84,7 @@ const updateBasicInforMid = async (req, res, next) => {
     req.body.so_dien_thoai = so_dien_thoai = so_dien_thoai.trim();
   }
   // kiểm tra giới tính
-  if (!gioi_tinh && gioi_tinh != 0 ) {
+  if (!gioi_tinh && gioi_tinh != 0) {
     req.body.gioi_tinh = gioi_tinh = null;
   } else if (
     Number.isNaN(parseInt(gioi_tinh)) ||
@@ -101,8 +102,30 @@ const updateBasicInforMid = async (req, res, next) => {
   next();
 };
 
+const checkUserExistMid = async (req, res, next) => {
+  const user_id = parseInt(req.body.user_id);
+  if (Number.isNaN(user_id)) {
+    res
+      .status(400)
+      .json(new Response(400, [], "tham số không hợp lệ", 300, 300));
+    return;
+  }
+  const username_of_user = await userModel
+    .getUsernameByUserId(user_id)
+    .then((data) => data.tai_khoan);
+  if (typeof username_of_user == "undefined") {
+    res
+      .status(400)
+      .json(new Response(400, [], "Người dùng không tồn tại", 300, 300));
+    return;
+  }
+  req.body.user_id = user_id;
+  next();
+};
+
 module.exports = {
   changePasswordMid,
   updateAvatarMid,
   updateBasicInforMid,
+  checkUserExistMid,
 };

@@ -1,6 +1,7 @@
 backend/node_modules/
 # backend/test/
 backend/test_code/
+backend/sql/diaChi_csv/project_env/
 backend/.env
 frontend/node_modules
 .prettierignore

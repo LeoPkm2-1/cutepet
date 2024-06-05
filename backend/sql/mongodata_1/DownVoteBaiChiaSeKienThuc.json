@@ -1,0 +1,10 @@
+{"_id":{"$oid":"655ef4794d4c52cbbdc0d3a4"},"articleId":"654f9e8f479ad1da822047b4","userDownVote":2,"downVoteAt":{"$date":"2023-11-23T06:43:05.713Z"}}
+{"_id":{"$oid":"6568b35bc2bf3f37057094f2"},"articleId":"6568a9734553e966920759f7","userDownVote":2,"downVoteAt":{"$date":"2023-11-30T16:07:55.523Z"}}
+{"_id":{"$oid":"6569445d05d313086764d4b4"},"articleId":"6568a9734553e966920759f9","userDownVote":2,"downVoteAt":{"$date":"2023-12-01T02:26:37.883Z"}}
+{"_id":{"$oid":"655f0ca584b962c5b5ce0297"},"articleId":"654f9e8f479ad1da822047b4","userDownVote":8,"downVoteAt":{"$date":"2023-11-23T08:26:13.153Z"}}
+{"_id":{"$oid":"656a058e173617a7008cbaa5"},"articleId":"6568a9734553e966920759d1","userDownVote":1,"downVoteAt":{"$date":"2023-12-01T16:10:54.515Z"}}
+{"_id":{"$oid":"65804c192a120879969575ff"},"articleId":"6568a9704553e96692074b9f","userDownVote":2,"downVoteAt":{"$date":"2023-12-18T13:41:45.731Z"}}
+{"_id":{"$oid":"657869d01b462426b6c6b39d"},"articleId":"6568a9734553e96692075977","userDownVote":2,"downVoteAt":{"$date":"2023-12-12T14:10:24.938Z"}}
+{"_id":{"$oid":"65824cff855adfcccd99df5f"},"articleId":"6568a9734553e9669207598a","userDownVote":507,"downVoteAt":{"$date":"2023-12-20T02:10:07.241Z"}}
+{"_id":{"$oid":"6582e18ee07ff43742a6e11e"},"articleId":"6568a9734553e9669207598a","userDownVote":2,"downVoteAt":{"$date":"2023-12-20T12:43:58.333Z"}}
+{"_id":{"$oid":"65981b9183aa1191bb599dcf"},"articleId":"65825220855adfcccd99df67","userDownVote":2,"downVoteAt":{"$date":"2024-01-05T15:09:05.343Z"}}

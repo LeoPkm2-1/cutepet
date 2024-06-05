@@ -182,6 +182,10 @@ const getOnlineUsersByListIds = async (userListIds) => {
     .catch((err) => new Response(400, err, "", 300, 300));
 };
 
+// (async () => {
+//   const data = await isUserOnline(536);
+//   console.log({data});
+// })()
 
 module.exports = {
   isUserRecordedInDB,

@@ -6,6 +6,7 @@ export interface UserProfile {
   email: string;
   age?: string;
   photoURL?: string;
+  user_type?: number;
 }
 
 

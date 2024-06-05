@@ -14,7 +14,7 @@ const notifySendingMessage = async (messageObject) => {
   } = messageObject;
 
   const isReceiverOnline = await userOnlineModel.isUserOnline(receiverID);
-  console.log({ isReceiverOnline });
+  // console.log({ isReceiverOnline });
   if (isReceiverOnline) {
     const socketNameOfRecipient =
       socketHelper.getPrivateRoomNameOfUser(receiverID);

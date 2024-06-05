@@ -4,22 +4,81 @@ const {
   requireLoginedForShop,
   nonRequireLogined,
   requireLoginedForNormUser,
+  requireOnlyNormUser,
 } = require("../middlewares/auth");
 const shopController = require("./../controllers/shopController");
 const shopMid = require("./../middlewares/shopMid");
+const schedulerMid = require("../middlewares/schedulerMid");
+const schedulerController = require("../controllers/schedulerController");
+const userMid = require("../middlewares/userMid");
 
 router.use(
-  ["/getShopInforById", "/getAllAvailableServiceOfShop"],
+  [
+    "/getShopInforById",
+    "/getAllAvailableServiceOfShop",
+    "/getServiceById",
+    "/categoriesForService",
+    "/filterServices",
+    "/getAllStatusOfSchedule",
+    "/getAllServiceScheduleStatus",
+    "/checkOnlineStatusOfShop",
+  ],
   requireLoginedForNormUser
 );
 
+router.use("/voteService", requireOnlyNormUser);
+router.post(
+  "/checkOnlineStatusOfShop",
+  shopMid.checkShopExistsMid,
+  shopController.checkOnlineStatusController
+);
+
 router.post("/getShopInforById", shopController.getShopInforByIdController);
+router.post("/categoriesForService", shopController.categoriesForService);
 router.post(
   "/getAllAvailableServiceOfShop",
   requireLoginedForNormUser,
   shopMid.checkShopExistsMid,
   shopController.getAllAvailableServicesOfShop
 );
+
+router.post(
+  "/getServiceById",
+  shopMid.checkServiceExistsMid,
+  shopController.getServiceByIdController
+);
+
+router.post(
+  "/voteService",
+  shopMid.checkServiceExistsMid,
+  shopMid.preProcessVotingService,
+  shopController.votingServiceController
+);
+router.post(
+  "/getVoteInforBefore",
+  shopMid.checkServiceExistsMid,
+  shopMid.getVoteInforBeforeTime,
+  shopController.getVoteInforBeforeController
+);
+
+router.post(
+  "/filterServices",
+  shopMid.filterServiceCheckParamMid_v1,
+  shopMid.filterServiceCheckParamMid_v2,
+  shopController.filterServiceController
+);
+
+router.post(
+  "/getAllStatusOfSchedule",
+  schedulerController.getListStatusOfSchedule
+);
+
+router.post(
+  "/getAllServiceScheduleStatus",
+  schedulerController.getAllServiceScheduleStatusController
+);
+
+// shop acess=================================================================
 
 router.use(requireLoginedForShop);
 router.post(
@@ -40,6 +99,55 @@ router.post(
   "/deleteService",
   shopMid.checkRightToChangeServiceMid,
   shopController.deleteServiceOfShop
+);
+
+router.post(
+  "/updateService",
+  shopMid.checkRightToChangeServiceMid,
+  shopController.updateServiceOfShop
+);
+
+router.post(
+  "/cancelServiceSchedule",
+  schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
+  schedulerMid.preCancelServiceSchedule,
+  schedulerController.cancelScheduleController
+);
+router.post(
+  "/confirmServiceSchedule",
+  schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
+  schedulerMid.preConfirmServiceSchedule,
+  schedulerController.confirmServiceScheduleController
+);
+
+router.post(
+  "/getAllScheduleForShop",
+  schedulerController.getAllScheduleForShopController
+);
+
+router.post("/getListUserFollowShop", shopController.getListUserFollowShop);
+
+router.post(
+  "/changeStatusOfServiceSchedule",
+  schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
+  schedulerController.changeScheduleStatusController
+);
+
+router.post(
+  "/getServiceScheduleById",
+  schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
+  schedulerController.getServiceScheduleByIdController
+);
+
+router.post(
+  "/getVoteInforOfUserForService",
+  shopMid.checkServiceExistsMid,
+  userMid.checkUserExistMid,
+  shopController.getVoteInforOfUserForService
 );
 
 module.exports = router;

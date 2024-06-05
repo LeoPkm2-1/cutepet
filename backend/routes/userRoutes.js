@@ -1,14 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const { requireLoginedForNormUser, nonRequireLogined } = require("../middlewares/auth");
+const {
+  requireLoginedForNormUser,
+  nonRequireLogined,
+  requireOnlyNormUser,
+} = require("../middlewares/auth");
 const userMid = require("./../middlewares/userMid");
 const userControler = require("../controllers/userControllers");
 const {
   handleConfirmRegister,
 } = require("./../controllers/registerController");
+const schedulerController = require("../controllers/schedulerController");
+const shopMid = require("../middlewares/shopMid");
+const schedulerMid = require("../middlewares/schedulerMid");
+const shopController = require("../controllers/shopController");
 
-// router.get("/all", userControler.getAllUser);
-// router.post("/confirmRegister", handleConfirmRegister);
 router.use(requireLoginedForNormUser);
 // get user infor by username
 router.get("/infor/:username", userControler.userPublicInforByUserName);
@@ -33,6 +39,75 @@ router.post(
   "/updateInfor",
   userMid.updateBasicInforMid,
   userControler.updateBasicInforController
+);
+
+router.post(
+  "/createServiceSchedule",
+  requireOnlyNormUser,
+  shopMid.checkServiceExistsMid,
+  schedulerMid.createScheduleMid,
+  schedulerController.createSchedule
+);
+
+router.post(
+  "/changeStatusOfServiceSchedule",
+  requireOnlyNormUser,
+  schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
+  schedulerController.changeScheduleStatusController
+);
+
+router.post(
+  "/getServiceScheduleById",
+  schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
+  schedulerController.getServiceScheduleByIdController
+);
+
+router.post(
+  "/getAllScheduleForUser",
+  schedulerController.getAllScheduleForUserController
+);
+
+router.post(
+  "/cancelServiceSchedule",
+  requireOnlyNormUser,
+  schedulerMid.checkScheduleExistMid,
+  schedulerMid.checkRighToChangeServiceScheduleStatus,
+  schedulerMid.preCancelServiceSchedule,
+  schedulerController.cancelScheduleController
+);
+
+router.post(
+  "/followShop",
+  shopMid.checkShopExistsMid,
+  userControler.userFollowShopController
+);
+
+router.post(
+  "/unfollowShop",
+  shopMid.checkShopExistsMid,
+  userControler.userUnFollowShopController
+);
+
+router.post("/getListFollowedShop", userControler.getListOfFollowedShop);
+
+router.post(
+  "/getMyVoteForService",
+  shopMid.checkServiceExistsMid,
+  userControler.getMyVoteForServiceController
+);
+
+router.post(
+  "/hasFollowedShop",
+  shopMid.checkShopExistsMid,
+  userControler.hasFollowedShopController
+);
+
+router.post(
+  "/getAllVoteOfShop",
+  shopMid.checkShopExistsMid,
+  shopController.getAllVoteOfAllServiceInShop
 );
 
 module.exports = router;

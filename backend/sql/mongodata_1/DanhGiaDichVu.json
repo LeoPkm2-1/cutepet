@@ -1,0 +1,6 @@
+{"_id":{"$oid":"661e2dae6b08e58eba4d4d34"},"serviceId":"6610e4c2034b2c1379d2b7fc","userVotingId":1,"numOfStar":4,"content":"tốt","createAt":{"$date":"2024-04-16T07:50:06.641Z"},"modifiedAt":null}
+{"_id":{"$oid":"661e53063faf6dedf8efed87"},"serviceId":"6610e4c2034b2c1379d2b7fc","userVotingId":4,"numOfStar":1,"content":"tệ","createAt":{"$date":"2024-04-16T10:29:26.957Z"},"modifiedAt":null}
+{"_id":{"$oid":"661e2d8c6b08e58eba4d4d33"},"serviceId":"6610e4c2034b2c1379d2b7fc","userVotingId":2,"numOfStar":3,"content":"cũng bình thường","createAt":{"$date":"2024-04-16T07:49:32.235Z"},"modifiedAt":null}
+{"_id":{"$oid":"6622724c2b9ad5ec1026a80a"},"serviceId":"6610e4ea034b2c1379d2b7fd","userVotingId":1,"numOfStar":3,"content":"ok","createAt":{"$date":"2024-04-19T13:31:56.214Z"},"modifiedAt":null}
+{"_id":{"$oid":"662272582b9ad5ec1026a80b"},"serviceId":"6610e4ea034b2c1379d2b7fd","userVotingId":4,"numOfStar":2,"content":"ok","createAt":{"$date":"2024-04-19T13:32:08.916Z"},"modifiedAt":null}
+{"_id":{"$oid":"662272662b9ad5ec1026a80c"},"serviceId":"6610e4ea034b2c1379d2b7fd","userVotingId":8,"numOfStar":2,"content":"tuyệt","createAt":{"$date":"2024-04-19T13:32:22.902Z"},"modifiedAt":null}
